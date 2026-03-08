@@ -6,7 +6,6 @@ import { error } from 'app/redux/reducers/error';
 import { groupDetails } from 'app/redux/reducers/group/details';
 import { groupGlobal } from 'app/redux/reducers/group/global';
 import { groupsList } from 'app/redux/reducers/group/list';
-import { importExport } from 'app/redux/reducers/import-export/import-export';
 import { mediaItemDetails } from 'app/redux/reducers/media-item/details';
 import { mediaItemsList } from 'app/redux/reducers/media-item/list';
 import { ownPlatformDetails } from 'app/redux/reducers/own-platform/details';
@@ -38,8 +37,7 @@ export const allReduces = combineReducers({
 	groupsList,
 	groupDetails,
 	ownPlatformsList,
-	ownPlatformDetails,
-	importExport
+	ownPlatformDetails
 });
 
 /**

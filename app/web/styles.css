@@ -1109,10 +1109,6 @@ input {
 	font-size: 0.9rem;
 }
 
-.settings-file-input {
-	display: none;
-}
-
 .credits-paragraph {
 	margin: 14px 0 0;
 	color: var(--color-text);

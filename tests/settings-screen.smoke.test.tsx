@@ -4,24 +4,10 @@ import userEvent from '@testing-library/user-event';
 import { SettingsScreenComponent } from 'app/components/presentational/settings/screen';
 
 describe('SettingsScreenComponent', () => {
-	test('supports logout and old app import confirmation flow', async() => {
+	test('supports logout confirmation flow', async() => {
 		const logout = jest.fn();
-		const importOldAppExport = jest.fn();
-		const originalCreateObjectUrl = URL.createObjectURL;
-		const originalRevokeObjectUrl = URL.revokeObjectURL;
-		const createObjectUrlMock = jest.fn().mockReturnValue('blob:test-old-export');
-		const revokeObjectUrlMock = jest.fn();
 
-		Object.defineProperty(URL, 'createObjectURL', {
-			writable: true,
-			value: createObjectUrlMock
-		});
-		Object.defineProperty(URL, 'revokeObjectURL', {
-			writable: true,
-			value: revokeObjectUrlMock
-		});
-
-		const { container } = render(
+		render(
 			<SettingsScreenComponent
 				user={{
 					id: 'user-id',
@@ -29,7 +15,6 @@ describe('SettingsScreenComponent', () => {
 				}}
 				isLoading={false}
 				logout={logout}
-				importOldAppExport={importOldAppExport}
 			/>
 		);
 
@@ -37,22 +22,5 @@ describe('SettingsScreenComponent', () => {
 		await user.click(screen.getByRole('button', { name: /Logout/i }));
 		await user.click(screen.getByRole('button', { name: 'OK' }));
 		expect(logout).toHaveBeenCalledTimes(1);
-
-		await user.click(screen.getByRole('button', { name: /Import previous app version data/i }));
-		await user.click(screen.getByRole('button', { name: 'OK' }));
-		const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement;
-		await user.upload(fileInput, new File([ '{}' ], 'old-export.json', { type: 'application/json' }));
-		await user.click(screen.getByRole('button', { name: 'OK' }));
-
-		expect(importOldAppExport).toHaveBeenCalledWith('blob:test-old-export');
-
-		Object.defineProperty(URL, 'createObjectURL', {
-			writable: true,
-			value: originalCreateObjectUrl
-		});
-		Object.defineProperty(URL, 'revokeObjectURL', {
-			writable: true,
-			value: originalRevokeObjectUrl
-		});
 	});
 });

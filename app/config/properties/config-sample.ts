@@ -4,14 +4,6 @@ const config: Config = {
 	backEnd: {
 		defaultTimeoutMilliseconds: 5000,
 		baseUrl: '<backend_server_url>',
-		bulkImport: {
-			timeoutMilliseconds: 60000,
-			defaultOwnPlatform: {
-				name: 'Default',
-				color: '#6e6d66',
-				icon: 'default'
-			}
-		},
 		assumeWellFormedResponse: true
 	},
 	ui: {
@@ -48,8 +40,7 @@ const config: Config = {
 		categories: false,
 		groups: false,
 		ownPlatforms: false,
-		mediaItems: false,
-		import: false
+		mediaItems: false
 	},
 	external: {
 		googleSearch: (term: string): string => {

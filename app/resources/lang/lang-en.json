@@ -25,8 +25,6 @@
 				"backendOwnPlatformFetch": "Cannot fetch platforms from the server",
 				"backendOwnPlatformSave": "Cannot save the platform to the server",
 				"backendOwnPlatformDelete": "Cannot delete the platform from the server",
-				"backendOldAppImport": "Cannot import the old Media Tracker data",
-				"importFileNotValid": "File is not valid. Make sure it's a valid export from the old Media Tracker app, with .json extension",
 				"saveTvShowSeasonNumber": "A season with the same number already exists for this TV show"
 			}
 		}
@@ -424,33 +422,18 @@
 		"screen": {
 			"title": "Settings",
 			"sections": {
-				"user": "User",
-				"data": "Data"
+				"user": "User"
 			},
 			"rows": {
 				"logout": {
 					"title": "Logout",
 					"subtitle": "Logged in as {{username}}"
-				},
-				"oldAppImport": {
-					"title": "Import previous app version data",
-					"subtitle": "Select the export (.json file) from the original Android Media Tracker app"
 				}
 			},
 			"alert": {
 				"logout": {
 					"title": "Logout",
 					"message": "Are you sure you want to logout? All your data will be kept and will be available after you login again."
-				},
-				"oldAppImport": {
-					"prePicker": {
-						"title": "Import",
-						"message": "This will delete all your current categories, media items, groups, etc., replacing them with the file contents. Are you sure?"
-					}, 
-					"postPicker": {
-						"title": "Import",
-						"message": "Delete all categories, media items, groups, etc. and import {{filename}}? This might take a few minutes."
-					}
 				}
 			}
 		}

@@ -5,7 +5,6 @@ import { watchSaveCategorySaga } from 'app/redux/sagas/category/save';
 import { watchDeleteGroupSaga } from 'app/redux/sagas/group/delete';
 import { watchFetchGroupsSaga } from 'app/redux/sagas/group/fetch';
 import { watchSaveGroupSaga } from 'app/redux/sagas/group/save';
-import { watchImportOldAppExportSaga } from 'app/redux/sagas/import-export/import-old-app';
 import { watchGetMediaItemCatalogDetailsSaga } from 'app/redux/sagas/media-item/catalog-details';
 import { watchSearchMediaItemsCatalogSaga } from 'app/redux/sagas/media-item/catalog-search';
 import { watchDeleteMediaItemSaga } from 'app/redux/sagas/media-item/delete';
@@ -59,8 +58,6 @@ export const rootSaga = function * (): SagaIterator {
 
 		call(watchFetchOwnPlatformsSaga),
 		call(watchSaveOwnPlatformSaga),
-		call(watchDeleteOwnPlatformSaga),
-
-		call(watchImportOldAppExportSaga)
+		call(watchDeleteOwnPlatformSaga)
 	]);
 };

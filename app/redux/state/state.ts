@@ -1,7 +1,6 @@
 import { CategoriesListState, CategoryDetailsState, CategoryGlobalState } from 'app/redux/state/category';
 import { ErrorState } from 'app/redux/state/error';
 import { GroupDetailsState, GroupGlobalState, GroupsListState } from 'app/redux/state/group';
-import { ImportExportState } from 'app/redux/state/import-export';
 import { MediaItemDetailsState, MediaItemsListState } from 'app/redux/state/media-item';
 import { OwnPlatformDetailsState, OwnPlatformGlobalState, OwnPlatformsListState } from 'app/redux/state/own-platform';
 import { UserGlobalState, UserOperationsState } from 'app/redux/state/user';
@@ -92,8 +91,4 @@ export class State {
 	 */
 	public readonly ownPlatformDetails!: OwnPlatformDetailsState;
 
-	/**
-	 * Portion of the state with the bulk import-export information
-	 */
-	public readonly importExport!: ImportExportState;
 }

@@ -1,5 +1,3 @@
-import { OwnPlatform } from 'app/data/models/api/own-platform';
-
 /**
  * Type for configuration files
  */
@@ -7,10 +5,6 @@ export type Config = {
 	backEnd: {
 		defaultTimeoutMilliseconds: number;
 		baseUrl: string;
-		bulkImport: {
-			timeoutMilliseconds: number;
-			defaultOwnPlatform: Required<OwnPlatform>;
-		};
 		assumeWellFormedResponse: boolean;
 	};
 	ui: {
@@ -54,7 +48,6 @@ export type Config = {
 		groups: boolean;
 		ownPlatforms: boolean;
 		mediaItems: boolean;
-		import: boolean;
 	};
 	logging: {
 		logInvocations: boolean;

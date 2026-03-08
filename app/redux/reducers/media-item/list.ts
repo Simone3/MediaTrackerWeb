@@ -1,7 +1,6 @@
 import { mediaItemDefinitionsControllerFactory } from 'app/factories/controller-factories';
 import { SELECT_CATEGORY } from 'app/redux/actions/category/const';
 import { SelectCategoryAction } from 'app/redux/actions/category/types';
-import { COMPLETE_IMPORTING_OLD_APP_EXPORT } from 'app/redux/actions/import-export/const';
 import { COMPLETE_DELETING_MEDIA_ITEM, COMPLETE_FETCHING_MEDIA_ITEMS, COMPLETE_INLINE_UPDATING_MEDIA_ITEM, COMPLETE_SAVING_MEDIA_ITEM, FAIL_DELETING_MEDIA_ITEM, FAIL_FETCHING_MEDIA_ITEMS, FAIL_INLINE_UPDATING_MEDIA_ITEM, HIGHLIGHT_MEDIA_ITEM, INVALIDATE_MEDIA_ITEMS, REMOVE_MEDIA_ITEM_HIGHLIGHT, SEARCH_MEDIA_ITEMS, START_DELETING_MEDIA_ITEM, START_FETCHING_MEDIA_ITEMS, START_INLINE_UPDATING_MEDIA_ITEM, START_MEDIA_ITEMS_SEARCH_MODE, START_MEDIA_ITEMS_SET_FILTERS_MODE, START_MEDIA_ITEMS_VIEW_GROUP_MODE, STOP_MEDIA_ITEMS_SEARCH_MODE, STOP_MEDIA_ITEMS_SET_FILTERS_MODE, STOP_MEDIA_ITEMS_VIEW_GROUP_MODE, SUBMIT_MEDIA_ITEMS_FILTERS } from 'app/redux/actions/media-item/const';
 import { CompleteFetchingMediaItemsAction, HighlightMediaItemAction, SearchMediaItemsAction, StartMediaItemsViewGroupModeAction, SubmitMediaItemsFiltersAction } from 'app/redux/actions/media-item/types';
 import { MediaItemsListState } from 'app/redux/state/media-item';
@@ -254,14 +253,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 			return {
 				...state,
 				mode: 'NORMAL'
-			};
-		}
-
-		// When a bulk import completes, the list is reset
-		case COMPLETE_IMPORTING_OLD_APP_EXPORT: {
-
-			return {
-				...initialState
 			};
 		}
 

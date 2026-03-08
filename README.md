@@ -8,8 +8,8 @@ This repository is being migrated from React Native to a plain React web app (Ty
   - Deliverables: webpack app shell, React Router navigation, web-safe config/storage/auth adapters, working Auth + Categories flows, minimal tests.
 - Phase 2: migrate media details and list flows
   - Deliverables: media item list/details, category details, groups/platforms selection flows.
-- Phase 3: migrate settings, import/export, and remaining forms
-  - Deliverables: settings actions (logout/import), credits screen, TV season management.
+- Phase 3: migrate settings and remaining forms
+  - Deliverables: settings actions, credits screen, TV season management.
 - Phase 4: hardening
   - Deliverables: test coverage extension, accessibility pass, cleanup of RN-only files/deps.
 
@@ -43,7 +43,6 @@ Implemented end-to-end:
   - Redux filter/sort submission wiring
 - Settings section:
   - Logout action with confirmation
-  - Old-app JSON import (browser file picker + confirmation flow)
 - Shared web confirmation modal:
   - In-app confirm dialog used by category/media/group/platform/settings/season migrated flows
 - Credits section:
@@ -146,5 +145,4 @@ If these are missing and prod user auth is enabled, auth calls will fail with an
 
 ## TODOs (explicitly deferred)
 
-- Complete web-native import/export file workflow (currently URI/object-URL and data-URL fallback in prod import controller).
 - Replace remaining RN-only style/component files as each screen is migrated.

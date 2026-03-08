@@ -31,9 +31,6 @@ export class AppError extends Error {
 	public static BACKEND_OWN_PLATFORM_SAVE = new AppError('backend.ownPlatform.save', 'error.flash.messages.backendOwnPlatformSave');
 	public static BACKEND_OWN_PLATFORM_DELETE = new AppError('backend.ownPlatform.delete', 'error.flash.messages.backendOwnPlatformDelete');
 
-	public static BACKEND_IMPORT_OLD_APP = new AppError('backend.import.oldApp', 'error.flash.messages.backendOldAppImport');
-	public static IMPORT_FILE = new AppError('import.fileNotValid', 'error.flash.messages.importFileNotValid');
-
 	public static TV_SHOW_SEASON_SAME_NUMBER = new AppError('tvShowSeason.sameNumber', 'error.flash.messages.saveTvShowSeasonNumber');
 
 	private _errorCode: string;

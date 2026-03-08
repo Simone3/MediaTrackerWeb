@@ -1,6 +1,5 @@
 import { COMPLETE_DELETING_CATEGORY, COMPLETE_FETCHING_CATEGORIES, COMPLETE_SAVING_CATEGORY, FAIL_DELETING_CATEGORY, FAIL_FETCHING_CATEGORIES, HIGHLIGHT_CATEGORY, INVALIDATE_CATEGORIES, REMOVE_CATEGORY_HIGHLIGHT, START_DELETING_CATEGORY, START_FETCHING_CATEGORIES } from 'app/redux/actions/category/const';
 import { CompleteFetchingCategoriesAction, HighlightCategoryAction } from 'app/redux/actions/category/types';
-import { COMPLETE_IMPORTING_OLD_APP_EXPORT } from 'app/redux/actions/import-export/const';
 import { CategoriesListState } from 'app/redux/state/category';
 import { Action } from 'redux';
 
@@ -111,14 +110,6 @@ export const categoriesList = (state: CategoriesListState = initialState, action
 			};
 		}
 
-		// When a bulk import completes, the list is reset
-		case COMPLETE_IMPORTING_OLD_APP_EXPORT: {
-
-			return {
-				...initialState
-			};
-		}
-		
 		default:
 			return state;
 	}
