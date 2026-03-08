@@ -621,6 +621,34 @@ input {
 	resize: vertical;
 }
 
+.media-item-details-inline-button {
+	width: fit-content;
+}
+
+.media-item-details-inline-hint {
+	margin: 0;
+	color: var(--color-muted);
+	font-size: 0.9rem;
+}
+
+.media-item-details-checkbox-row {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-weight: 700;
+	color: var(--color-muted);
+}
+
+.media-item-details-checkbox {
+	width: 16px;
+	height: 16px;
+}
+
+.media-item-details-checkbox-label {
+	font-size: 0.95rem;
+	color: var(--color-text);
+}
+
 .media-item-details-input:focus,
 .media-item-details-select:focus,
 .media-item-details-textarea:focus {
