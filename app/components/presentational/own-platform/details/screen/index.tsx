@@ -1,5 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { config } from 'app/config/config';
+import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { OWN_PLATFORM_ICON_INTERNAL_VALUES, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { i18n } from 'app/utilities/i18n';
@@ -15,7 +16,8 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 			name: '',
 			color: config.ui.colors.availableOwnPlatformColors[0],
 			icon: 'default'
-		}
+		},
+		confirmSameNameVisible: false
 	};
 
 	/**
@@ -35,7 +37,9 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 		}
 
 		if(!prevProps.sameNameConfirmationRequested && this.props.sameNameConfirmationRequested) {
-			this.handleSameNameConfirmation();
+			this.setState({
+				confirmSameNameVisible: true
+			});
 		}
 
 		if(prevState.formValues !== this.state.formValues) {
@@ -51,7 +55,8 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 			isLoading
 		} = this.props;
 		const {
-			formValues
+			formValues,
+			confirmSameNameVisible
 		} = this.state;
 		const isValid = this.isFormValid(formValues);
 
@@ -143,6 +148,25 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 						}}
 					/>
 				</form>
+				<ConfirmDialogComponent
+					visible={confirmSameNameVisible}
+					title={i18n.t('ownPlatform.common.alert.addSameName.title')}
+					message={i18n.t('ownPlatform.common.alert.addSameName.message')}
+					confirmLabel={i18n.t('common.alert.default.okButton')}
+					cancelLabel={i18n.t('common.alert.default.cancelButton')}
+					onConfirm={() => {
+						this.setState({
+							confirmSameNameVisible: false
+						}, () => {
+							this.submitForm(true);
+						});
+					}}
+					onCancel={() => {
+						this.setState({
+							confirmSameNameVisible: false
+						});
+					}}
+				/>
 				<LoadingIndicatorComponent
 					visible={isLoading}
 					fullScreen={false}
@@ -162,22 +186,6 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 		}, () => {
 			this.notifyFormStatus();
 		});
-	}
-
-	/**
-	 * Handles same-name confirmation flow
-	 */
-	private handleSameNameConfirmation(): void {
-		const title = i18n.t('ownPlatform.common.alert.addSameName.title');
-		const message = i18n.t('ownPlatform.common.alert.addSameName.message');
-
-		// Keep native confirm for phase 2 to preserve existing blocking UX with minimal migration risk.
-		// eslint-disable-next-line no-alert
-		const confirmed = window.confirm(`${title}\n\n${message}`);
-
-		if(confirmed) {
-			this.submitForm(true);
-		}
 	}
 
 	/**
@@ -295,4 +303,5 @@ export type OwnPlatformDetailsScreenComponentOutput = {
 
 type OwnPlatformDetailsScreenComponentState = {
 	formValues: OwnPlatformInternal;
+	confirmSameNameVisible: boolean;
 }

@@ -1,4 +1,5 @@
 import React, { Component, ReactNode } from 'react';
+import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { i18n } from 'app/utilities/i18n';
@@ -12,7 +13,8 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 		formValues: {
 			id: '',
 			name: ''
-		}
+		},
+		confirmSameNameVisible: false
 	};
 
 	/**
@@ -32,7 +34,9 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 		}
 
 		if(!prevProps.sameNameConfirmationRequested && this.props.sameNameConfirmationRequested) {
-			this.handleSameNameConfirmation();
+			this.setState({
+				confirmSameNameVisible: true
+			});
 		}
 
 		if(prevState.formValues !== this.state.formValues) {
@@ -48,7 +52,8 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 			isLoading
 		} = this.props;
 		const {
-			formValues
+			formValues,
+			confirmSameNameVisible
 		} = this.state;
 		const isValid = this.isFormValid(formValues);
 
@@ -90,6 +95,25 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 						}}
 					/>
 				</form>
+				<ConfirmDialogComponent
+					visible={confirmSameNameVisible}
+					title={i18n.t('group.common.alert.addSameName.title')}
+					message={i18n.t('group.common.alert.addSameName.message')}
+					confirmLabel={i18n.t('common.alert.default.okButton')}
+					cancelLabel={i18n.t('common.alert.default.cancelButton')}
+					onConfirm={() => {
+						this.setState({
+							confirmSameNameVisible: false
+						}, () => {
+							this.submitForm(true);
+						});
+					}}
+					onCancel={() => {
+						this.setState({
+							confirmSameNameVisible: false
+						});
+					}}
+				/>
 				<LoadingIndicatorComponent
 					visible={isLoading}
 					fullScreen={false}
@@ -109,22 +133,6 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 		}, () => {
 			this.notifyFormStatus();
 		});
-	}
-
-	/**
-	 * Handles same-name confirmation flow
-	 */
-	private handleSameNameConfirmation(): void {
-		const title = i18n.t('group.common.alert.addSameName.title');
-		const message = i18n.t('group.common.alert.addSameName.message');
-
-		// Keep native confirm for phase 2 to preserve existing blocking UX with minimal migration risk.
-		// eslint-disable-next-line no-alert
-		const confirmed = window.confirm(`${title}\n\n${message}`);
-
-		if(confirmed) {
-			this.submitForm(true);
-		}
 	}
 
 	/**
@@ -242,4 +250,5 @@ export type GroupDetailsScreenComponentOutput = {
 
 type GroupDetailsScreenComponentState = {
 	formValues: GroupInternal;
+	confirmSameNameVisible: boolean;
 }

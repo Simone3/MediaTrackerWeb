@@ -1,4 +1,5 @@
 import React, { Component, ReactNode } from 'react';
+import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { GroupInternal } from 'app/data/models/internal/group';
@@ -7,7 +8,11 @@ import { i18n } from 'app/utilities/i18n';
 /**
  * Presentational component that contains the whole "groups list" screen, that lists all user groups
  */
-export class GroupsListScreenComponent extends Component<GroupsListScreenComponentInput & GroupsListScreenComponentOutput> {
+export class GroupsListScreenComponent extends Component<GroupsListScreenComponentInput & GroupsListScreenComponentOutput, GroupsListScreenComponentState> {
+	public state: GroupsListScreenComponentState = {
+		pendingDeleteGroup: undefined
+	};
+
 	/**
 	 * @override
 	 */
@@ -31,6 +36,9 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 			selectedGroupId,
 			isLoading
 		} = this.props;
+		const {
+			pendingDeleteGroup
+		} = this.state;
 
 		return (
 			<section className='groups-screen'>
@@ -105,6 +113,26 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 					visible={isLoading}
 					fullScreen={false}
 				/>
+				<ConfirmDialogComponent
+					visible={Boolean(pendingDeleteGroup)}
+					title={i18n.t('group.common.alert.delete.title')}
+					message={pendingDeleteGroup ? i18n.t('group.common.alert.delete.message', { name: pendingDeleteGroup.name }) : ''}
+					confirmLabel={i18n.t('common.alert.default.okButton')}
+					cancelLabel={i18n.t('common.alert.default.cancelButton')}
+					onConfirm={() => {
+						if(pendingDeleteGroup) {
+							this.props.deleteGroup(pendingDeleteGroup);
+						}
+						this.setState({
+							pendingDeleteGroup: undefined
+						});
+					}}
+					onCancel={() => {
+						this.setState({
+							pendingDeleteGroup: undefined
+						});
+					}}
+				/>
 			</section>
 		);
 	}
@@ -123,15 +151,9 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 	 * @param group the group
 	 */
 	private requestDeleteGroup(group: GroupInternal): void {
-		const title = i18n.t('group.common.alert.delete.title');
-		const message = i18n.t('group.common.alert.delete.message', { name: group.name });
-
-		// Keep native confirm for phase 2 to preserve existing blocking UX with minimal migration risk.
-		// eslint-disable-next-line no-alert
-		const confirmed = window.confirm(`${title}\n\n${message}`);
-		if(confirmed) {
-			this.props.deleteGroup(group);
-		}
+		this.setState({
+			pendingDeleteGroup: group
+		});
 	}
 }
 
@@ -198,4 +220,8 @@ export type GroupsListScreenComponentOutput = {
 	 * Callback to navigate back
 	 */
 	goBack: () => void;
+}
+
+type GroupsListScreenComponentState = {
+	pendingDeleteGroup?: GroupInternal;
 }

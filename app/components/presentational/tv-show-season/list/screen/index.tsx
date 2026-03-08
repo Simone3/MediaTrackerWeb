@@ -1,4 +1,5 @@
 import React, { Component, ReactNode } from 'react';
+import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { i18n } from 'app/utilities/i18n';
@@ -6,7 +7,11 @@ import { i18n } from 'app/utilities/i18n';
 /**
  * Presentational component that contains the whole "TV show seasons list" screen, that lists all seasons of a TV show
  */
-export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsListScreenComponentInput & TvShowSeasonsListScreenComponentOutput> {
+export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsListScreenComponentInput & TvShowSeasonsListScreenComponentOutput, TvShowSeasonsListScreenComponentState> {
+	public state: TvShowSeasonsListScreenComponentState = {
+		pendingDeleteTvShowSeason: undefined
+	};
+
 	/**
 	 * @override
 	 */
@@ -14,6 +19,9 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 		const {
 			tvShowSeasons
 		} = this.props;
+		const {
+			pendingDeleteTvShowSeason
+		} = this.state;
 
 		return (
 			<section className='tv-show-seasons-screen'>
@@ -84,6 +92,26 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 						this.props.loadNewTvShowSeasonDetails();
 					}}
 				/>
+				<ConfirmDialogComponent
+					visible={Boolean(pendingDeleteTvShowSeason)}
+					title={i18n.t('tvShowSeason.common.alert.delete.title')}
+					message={pendingDeleteTvShowSeason ? i18n.t('tvShowSeason.common.alert.delete.message', { seasonNumber: pendingDeleteTvShowSeason.number }) : ''}
+					confirmLabel={i18n.t('common.alert.default.okButton')}
+					cancelLabel={i18n.t('common.alert.default.cancelButton')}
+					onConfirm={() => {
+						if(pendingDeleteTvShowSeason) {
+							this.props.deleteTvShowSeason(pendingDeleteTvShowSeason);
+						}
+						this.setState({
+							pendingDeleteTvShowSeason: undefined
+						});
+					}}
+					onCancel={() => {
+						this.setState({
+							pendingDeleteTvShowSeason: undefined
+						});
+					}}
+				/>
 			</section>
 		);
 	}
@@ -93,15 +121,9 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 	 * @param tvShowSeason the season
 	 */
 	private requestDeleteTvShowSeason(tvShowSeason: TvShowSeasonInternal): void {
-		const title = i18n.t('tvShowSeason.common.alert.delete.title');
-		const message = i18n.t('tvShowSeason.common.alert.delete.message', { seasonNumber: tvShowSeason.number });
-
-		// Keep native confirm for phase 2 to preserve existing blocking UX with minimal migration risk.
-		// eslint-disable-next-line no-alert
-		const confirmed = window.confirm(`${title}\n\n${message}`);
-		if(confirmed) {
-			this.props.deleteTvShowSeason(tvShowSeason);
-		}
+		this.setState({
+			pendingDeleteTvShowSeason: tvShowSeason
+		});
 	}
 }
 
@@ -148,4 +170,8 @@ export type TvShowSeasonsListScreenComponentOutput = {
 	 * Callback to navigate back
 	 */
 	goBack: () => void;
+}
+
+type TvShowSeasonsListScreenComponentState = {
+	pendingDeleteTvShowSeason?: TvShowSeasonInternal;
 }

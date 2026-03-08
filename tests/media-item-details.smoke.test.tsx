@@ -49,7 +49,6 @@ describe('MediaItemDetailsScreenComponent', () => {
 			status: 'ACTIVE',
 			importance: '300'
 		};
-		const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
 
 		const { rerender } = render(
 			<MediaItemDetailsScreenComponent
@@ -73,11 +72,11 @@ describe('MediaItemDetailsScreenComponent', () => {
 			/>
 		);
 
+		const user = userEvent.setup();
+		await user.click(screen.getByRole('button', { name: 'OK' }));
+
 		await waitFor(() => {
-			expect(confirmSpy).toHaveBeenCalledTimes(1);
 			expect(saveMediaItem).toHaveBeenCalledWith(mediaItem, true);
 		});
-
-		confirmSpy.mockRestore();
 	});
 });

@@ -47,7 +47,6 @@ describe('CategoryDetailsScreenComponent', () => {
 			color: '#3f51b5',
 			mediaType: 'BOOK'
 		};
-		const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
 
 		const { rerender } = render(
 			<CategoryDetailsScreenComponent
@@ -71,11 +70,11 @@ describe('CategoryDetailsScreenComponent', () => {
 			/>
 		);
 
+		const user = userEvent.setup();
+		await user.click(screen.getByRole('button', { name: 'OK' }));
+
 		await waitFor(() => {
-			expect(confirmSpy).toHaveBeenCalledTimes(1);
 			expect(saveCategory).toHaveBeenCalledWith(category, true);
 		});
-
-		confirmSpy.mockRestore();
 	});
 });

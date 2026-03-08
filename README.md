@@ -41,6 +41,8 @@ Implemented end-to-end:
 - Settings section:
   - Logout action with confirmation
   - Old-app JSON import (browser file picker + confirmation flow)
+- Shared web confirmation modal:
+  - In-app confirm dialog used by category/media/group/platform/settings/season migrated flows
 - Credits section:
   - Full migrated credits screen with external links
 - Web adapters:
@@ -142,8 +144,5 @@ If these are missing and prod user auth is enabled, auth calls will fail with an
 ## TODOs (explicitly deferred)
 
 - Migrate media item type-specific details fields (book/movie/tv/videogame) and advanced filter modal.
-- Replace temporary `window.confirm` in category details with app-level modal/dialog component.
-- Replace temporary `window.confirm` in media item details with app-level modal/dialog component.
-- Replace temporary `window.confirm` in groups/platforms/seasons/settings with app-level modal/dialog component.
 - Complete web-native import/export file workflow (currently URI/object-URL and data-URL fallback in prod import controller).
 - Replace remaining RN-only style/component files as each screen is migrated.

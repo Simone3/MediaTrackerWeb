@@ -1,5 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { CategoryInternal, DEFAULT_CATEGORY, MEDIA_TYPES_INTERNAL } from 'app/data/models/internal/category';
+import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { config } from 'app/config/config';
 import { i18n } from 'app/utilities/i18n';
@@ -10,7 +11,8 @@ import { i18n } from 'app/utilities/i18n';
  */
 export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScreenComponentInput & CategoryDetailsScreenComponentOutput, CategoryDetailsScreenComponentState> {
 	public state: CategoryDetailsScreenComponentState = {
-		formValues: DEFAULT_CATEGORY
+		formValues: DEFAULT_CATEGORY,
+		confirmSameNameVisible: false
 	};
 
 	/**
@@ -30,7 +32,9 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 		}
 
 		if(!prevProps.sameNameConfirmationRequested && this.props.sameNameConfirmationRequested) {
-			this.handleSameNameConfirmation();
+			this.setState({
+				confirmSameNameVisible: true
+			});
 		}
 
 		if(prevState.formValues !== this.state.formValues) {
@@ -47,7 +51,8 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 		} = this.props;
 
 		const {
-			formValues
+			formValues,
+			confirmSameNameVisible
 		} = this.state;
 
 		const isValid = this.isFormValid(formValues);
@@ -142,6 +147,25 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 						}}
 					/>
 				</form>
+				<ConfirmDialogComponent
+					visible={confirmSameNameVisible}
+					title={i18n.t('category.common.alert.addSameName.title')}
+					message={i18n.t('category.common.alert.addSameName.message')}
+					confirmLabel={i18n.t('common.alert.default.okButton')}
+					cancelLabel={i18n.t('common.alert.default.cancelButton')}
+					onConfirm={() => {
+						this.setState({
+							confirmSameNameVisible: false
+						}, () => {
+							this.submitForm(true);
+						});
+					}}
+					onCancel={() => {
+						this.setState({
+							confirmSameNameVisible: false
+						});
+					}}
+				/>
 				<LoadingIndicatorComponent visible={isLoading} fullScreen={false} />
 			</section>
 		);
@@ -158,22 +182,6 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 		}, () => {
 			this.notifyFormStatus();
 		});
-	}
-
-	/**
-	 * Handles same-name confirmation flow
-	 */
-	private handleSameNameConfirmation(): void {
-		const title = i18n.t('category.common.alert.addSameName.title');
-		const message = i18n.t('category.common.alert.addSameName.message');
-
-		// Keep native confirm for phase 2 to preserve existing blocking UX with minimal migration risk.
-		// eslint-disable-next-line no-alert
-		const confirmed = window.confirm(`${title}\n\n${message}`);
-
-		if(confirmed) {
-			this.submitForm(true);
-		}
 	}
 
 	/**
@@ -291,4 +299,5 @@ export type CategoryDetailsScreenComponentOutput = {
 
 type CategoryDetailsScreenComponentState = {
 	formValues: CategoryInternal;
+	confirmSameNameVisible: boolean;
 }

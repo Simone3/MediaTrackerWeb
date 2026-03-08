@@ -1,4 +1,5 @@
 import React, { Component, ReactNode } from 'react';
+import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
@@ -7,7 +8,11 @@ import { i18n } from 'app/utilities/i18n';
 /**
  * Presentational component that contains the whole "own platforms list" screen, that lists all user own platforms
  */
-export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListScreenComponentInput & OwnPlatformsListScreenComponentOutput> {
+export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListScreenComponentInput & OwnPlatformsListScreenComponentOutput, OwnPlatformsListScreenComponentState> {
+	public state: OwnPlatformsListScreenComponentState = {
+		pendingDeleteOwnPlatform: undefined
+	};
+
 	/**
 	 * @override
 	 */
@@ -31,6 +36,9 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 			selectedOwnPlatformId,
 			isLoading
 		} = this.props;
+		const {
+			pendingDeleteOwnPlatform
+		} = this.state;
 
 		return (
 			<section className='own-platforms-screen'>
@@ -105,6 +113,26 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 					visible={isLoading}
 					fullScreen={false}
 				/>
+				<ConfirmDialogComponent
+					visible={Boolean(pendingDeleteOwnPlatform)}
+					title={i18n.t('ownPlatform.common.alert.delete.title')}
+					message={pendingDeleteOwnPlatform ? i18n.t('ownPlatform.common.alert.delete.message', { name: pendingDeleteOwnPlatform.name }) : ''}
+					confirmLabel={i18n.t('common.alert.default.okButton')}
+					cancelLabel={i18n.t('common.alert.default.cancelButton')}
+					onConfirm={() => {
+						if(pendingDeleteOwnPlatform) {
+							this.props.deleteOwnPlatform(pendingDeleteOwnPlatform);
+						}
+						this.setState({
+							pendingDeleteOwnPlatform: undefined
+						});
+					}}
+					onCancel={() => {
+						this.setState({
+							pendingDeleteOwnPlatform: undefined
+						});
+					}}
+				/>
 			</section>
 		);
 	}
@@ -123,15 +151,9 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 	 * @param ownPlatform the own platform
 	 */
 	private requestDeleteOwnPlatform(ownPlatform: OwnPlatformInternal): void {
-		const title = i18n.t('ownPlatform.common.alert.delete.title');
-		const message = i18n.t('ownPlatform.common.alert.delete.message', { name: ownPlatform.name });
-
-		// Keep native confirm for phase 2 to preserve existing blocking UX with minimal migration risk.
-		// eslint-disable-next-line no-alert
-		const confirmed = window.confirm(`${title}\n\n${message}`);
-		if(confirmed) {
-			this.props.deleteOwnPlatform(ownPlatform);
-		}
+		this.setState({
+			pendingDeleteOwnPlatform: ownPlatform
+		});
 	}
 }
 
@@ -198,4 +220,8 @@ export type OwnPlatformsListScreenComponentOutput = {
 	 * Callback to navigate back
 	 */
 	goBack: () => void;
+}
+
+type OwnPlatformsListScreenComponentState = {
+	pendingDeleteOwnPlatform?: OwnPlatformInternal;
 }

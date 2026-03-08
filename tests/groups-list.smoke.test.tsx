@@ -19,7 +19,6 @@ describe('GroupsListScreenComponent', () => {
 		const selectGroup = jest.fn();
 		const editGroup = jest.fn();
 		const deleteGroup = jest.fn();
-		const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
 
 		render(
 			<GroupsListScreenComponent
@@ -41,11 +40,11 @@ describe('GroupsListScreenComponent', () => {
 		await user.click(screen.getByRole('button', { name: 'Saga' }));
 		await user.click(screen.getByRole('button', { name: 'Edit Saga' }));
 		await user.click(screen.getByRole('button', { name: 'Delete Saga' }));
+		expect(deleteGroup).toHaveBeenCalledTimes(0);
+		await user.click(screen.getByRole('button', { name: 'OK' }));
 
 		expect(selectGroup).toHaveBeenCalledWith(groups[0]);
 		expect(editGroup).toHaveBeenCalledWith(groups[0]);
 		expect(deleteGroup).toHaveBeenCalledWith(groups[0]);
-
-		confirmSpy.mockRestore();
 	});
 });

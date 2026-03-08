@@ -7,7 +7,6 @@ describe('SettingsScreenComponent', () => {
 	test('supports logout and old app import confirmation flow', async() => {
 		const logout = jest.fn();
 		const importOldAppExport = jest.fn();
-		const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
 		const originalCreateObjectUrl = URL.createObjectURL;
 		const originalRevokeObjectUrl = URL.revokeObjectURL;
 		const createObjectUrlMock = jest.fn().mockReturnValue('blob:test-old-export');
@@ -36,14 +35,16 @@ describe('SettingsScreenComponent', () => {
 
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: /Logout/i }));
+		await user.click(screen.getByRole('button', { name: 'OK' }));
 		expect(logout).toHaveBeenCalledTimes(1);
 
 		await user.click(screen.getByRole('button', { name: /Import previous app version data/i }));
+		await user.click(screen.getByRole('button', { name: 'OK' }));
 		const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement;
 		await user.upload(fileInput, new File([ '{}' ], 'old-export.json', { type: 'application/json' }));
+		await user.click(screen.getByRole('button', { name: 'OK' }));
 
 		expect(importOldAppExport).toHaveBeenCalledWith('blob:test-old-export');
-		expect(confirmSpy).toHaveBeenCalledTimes(3);
 
 		Object.defineProperty(URL, 'createObjectURL', {
 			writable: true,
@@ -53,6 +54,5 @@ describe('SettingsScreenComponent', () => {
 			writable: true,
 			value: originalRevokeObjectUrl
 		});
-		confirmSpy.mockRestore();
 	});
 });

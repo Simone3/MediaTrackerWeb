@@ -1,6 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { DEFAULT_BOOK } from 'app/data/models/internal/media-items/book';
 import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MEDIA_ITEM_STATUS_INTERNAL_VALUES, MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
+import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { i18n } from 'app/utilities/i18n';
 
@@ -10,7 +11,8 @@ import { i18n } from 'app/utilities/i18n';
  */
 export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsScreenComponentInput & MediaItemDetailsScreenComponentOutput, MediaItemDetailsScreenComponentState> {
 	public state: MediaItemDetailsScreenComponentState = {
-		formValues: DEFAULT_BOOK
+		formValues: DEFAULT_BOOK,
+		confirmSameNameVisible: false
 	};
 
 	/**
@@ -30,7 +32,9 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 		}
 
 		if(!prevProps.sameNameConfirmationRequested && this.props.sameNameConfirmationRequested) {
-			this.handleSameNameConfirmation();
+			this.setState({
+				confirmSameNameVisible: true
+			});
 		}
 
 		if(prevState.formValues !== this.state.formValues) {
@@ -47,7 +51,8 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 		} = this.props;
 
 		const {
-			formValues
+			formValues,
+			confirmSameNameVisible
 		} = this.state;
 
 		const isValid = this.isFormValid(formValues);
@@ -166,6 +171,25 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 						}}
 					/>
 				</form>
+				<ConfirmDialogComponent
+					visible={confirmSameNameVisible}
+					title={i18n.t('mediaItem.common.alert.addSameName.title')}
+					message={i18n.t(`mediaItem.common.alert.addSameName.message.${formValues.mediaType}`)}
+					confirmLabel={i18n.t('common.alert.default.okButton')}
+					cancelLabel={i18n.t('common.alert.default.cancelButton')}
+					onConfirm={() => {
+						this.setState({
+							confirmSameNameVisible: false
+						}, () => {
+							this.submitForm(true);
+						});
+					}}
+					onCancel={() => {
+						this.setState({
+							confirmSameNameVisible: false
+						});
+					}}
+				/>
 				<LoadingIndicatorComponent
 					visible={isLoading}
 					fullScreen={false}
@@ -185,25 +209,6 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 		}, () => {
 			this.notifyFormStatus();
 		});
-	}
-
-	/**
-	 * Handles same-name confirmation flow
-	 */
-	private handleSameNameConfirmation(): void {
-		const {
-			formValues
-		} = this.state;
-		const title = i18n.t('mediaItem.common.alert.addSameName.title');
-		const message = i18n.t(`mediaItem.common.alert.addSameName.message.${formValues.mediaType}`);
-
-		// Keep native confirm for phase 2 to preserve existing blocking UX with minimal migration risk.
-		// eslint-disable-next-line no-alert
-		const confirmed = window.confirm(`${title}\n\n${message}`);
-
-		if(confirmed) {
-			this.submitForm(true);
-		}
 	}
 
 	/**
@@ -368,4 +373,5 @@ export type MediaItemDetailsScreenComponentOutput = {
 
 type MediaItemDetailsScreenComponentState = {
 	formValues: MediaItemInternal;
+	confirmSameNameVisible: boolean;
 }
