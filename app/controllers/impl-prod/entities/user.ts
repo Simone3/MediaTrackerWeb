@@ -1,38 +1,55 @@
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { UserController } from 'app/controllers/core/entities/user';
 import { AppError } from 'app/data/models/internal/error';
 import { UserInternal, UserSecretInternal } from 'app/data/models/internal/user';
+import { FirebaseOptions, getApps, initializeApp } from 'firebase/app';
+import { Auth, User, createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+
+const FIREBASE_APP_NAME = 'media-tracker-web';
+
+/* eslint-disable no-process-env */
+const firebaseConfig: FirebaseOptions = {
+	apiKey: process.env.MEDIA_TRACKER_FIREBASE_API_KEY,
+	authDomain: process.env.MEDIA_TRACKER_FIREBASE_AUTH_DOMAIN,
+	projectId: process.env.MEDIA_TRACKER_FIREBASE_PROJECT_ID,
+	appId: process.env.MEDIA_TRACKER_FIREBASE_APP_ID
+};
+/* eslint-enable no-process-env */
 
 /**
- * Implementation of the UserController that uses the Firebase API
+ * Implementation of the UserController that uses the Firebase Web Auth SDK
  * @see UserController
  */
 export class UserFirebaseController implements UserController {
+	private getAuthClient(): Auth {
+		if(!firebaseConfig.apiKey || !firebaseConfig.authDomain || !firebaseConfig.projectId || !firebaseConfig.appId) {
+			throw AppError.BACKEND_USER_LOGIN.withDetails('Missing Firebase web auth configuration. Set MEDIA_TRACKER_FIREBASE_API_KEY, MEDIA_TRACKER_FIREBASE_AUTH_DOMAIN, MEDIA_TRACKER_FIREBASE_PROJECT_ID, MEDIA_TRACKER_FIREBASE_APP_ID');
+		}
+
+		const existingApp = getApps().find((app) => {
+			return app.name === FIREBASE_APP_NAME;
+		});
+
+		const app = existingApp || initializeApp(firebaseConfig, FIREBASE_APP_NAME);
+		return getAuth(app);
+	}
 
 	/**
 	 * @override
 	 */
 	public async getCurrentUser(): Promise<UserInternal | undefined> {
-
-		const firebaseUser = auth().currentUser;
+		const firebaseUser = this.getAuthClient().currentUser;
 		if(firebaseUser) {
-
 			return this.mapFirebaseUser(firebaseUser);
 		}
-		else {
-
-			return undefined;
-		}
+		return undefined;
 	}
 
 	/**
 	 * @override
 	 */
 	public async getCurrentUserAccessToken(): Promise<string> {
-
-		const firebaseUser = auth().currentUser;
+		const firebaseUser = this.getAuthClient().currentUser;
 		if(!firebaseUser) {
-
 			throw AppError.GENERIC.withDetails('Cannot get the access token if no user is logged in');
 		}
 		return firebaseUser.getIdToken();
@@ -42,17 +59,17 @@ export class UserFirebaseController implements UserController {
 	 * @override
 	 */
 	public async signup(user: UserSecretInternal): Promise<UserInternal> {
-
-		const firebaseData = await auth().createUserWithEmailAndPassword(user.email, user.password);
+		const auth = this.getAuthClient();
+		const firebaseData = await createUserWithEmailAndPassword(auth, user.email, user.password);
 		return this.mapFirebaseUser(firebaseData.user);
 	}
-	
+
 	/**
 	 * @override
 	 */
 	public async login(user: UserSecretInternal): Promise<UserInternal> {
-
-		const firebaseData = await auth().signInWithEmailAndPassword(user.email, user.password);
+		const auth = this.getAuthClient();
+		const firebaseData = await signInWithEmailAndPassword(auth, user.email, user.password);
 		return this.mapFirebaseUser(firebaseData.user);
 	}
 
@@ -60,8 +77,8 @@ export class UserFirebaseController implements UserController {
 	 * @override
 	 */
 	public async logout(): Promise<void> {
-
-		await auth().signOut();
+		const auth = this.getAuthClient();
+		await signOut(auth);
 	}
 
 	/**
@@ -69,12 +86,10 @@ export class UserFirebaseController implements UserController {
 	 * @param firebaseUser the Firebase user model
 	 * @returns the internal model
 	 */
-	private mapFirebaseUser(firebaseUser: FirebaseAuthTypes.User): UserInternal {
-
+	private mapFirebaseUser(firebaseUser: User): UserInternal {
 		const id = firebaseUser.uid;
 		const email = firebaseUser.email;
 		if(!email) {
-
 			throw AppError.GENERIC.withDetails('Firebase user should always have an email');
 		}
 

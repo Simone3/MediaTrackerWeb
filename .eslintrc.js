@@ -1,7 +1,8 @@
 module.exports = {
 	env: {
 		node: true,
-		es6: true
+		es6: true,
+		browser: true
 	},
 	parserOptions: {
 		ecmaVersion: 6
@@ -345,7 +346,7 @@ module.exports = {
 		'import/no-absolute-path': 'off',
 		'import/no-dynamic-require': 1,
 		'import/no-internal-modules': [ 1, {
-			allow: [ 'request-promise-native/errors', '@redux-saga/**', 'react-navigation-stack/lib/typescript/types' ]
+			allow: [ 'request-promise-native/errors', '@redux-saga/**', 'react-navigation-stack/lib/typescript/types', 'react-dom/client', 'firebase/**' ]
 		}],
 		'import/no-webpack-loader-syntax': 'off',
 		'import/no-self-import': 'off',
@@ -375,7 +376,7 @@ module.exports = {
 		'import/newline-after-import': 1,
 		'import/prefer-default-export': 'off',
 		'import/max-dependencies': 'off',
-		'import/no-unassigned-import': 1,
+		'import/no-unassigned-import': [ 1, { allow: [ '**/*.css' ] }],
 		'import/no-named-default': 1,
 		'import/no-default-export': 1,
 		'import/no-named-export': 'off',
@@ -388,4 +389,3 @@ module.exports = {
 		'react/display-name': 'off'
 	}
 };
-

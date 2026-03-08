@@ -1,35 +1,52 @@
 import React, { Component, ReactNode } from 'react';
 import { AppError } from 'app/data/models/internal/error';
-import FlashMessage from 'react-native-flash-message';
-import { View } from 'react-native';
-import { styles } from 'app/components/presentational/generic/error-handler/styles';
 import { i18n } from 'app/utilities/i18n';
-import { FlashError } from 'app/components/presentational/generic/error-flash';
 
 /**
  * Simple wrapper presentational component that handles global errors
  */
-export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps> {
-	
+export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps, ErrorHandlerComponentState> {
+	public state: ErrorHandlerComponentState = {
+		visibleError: undefined
+	};
+
+	private clearTimeoutId?: ReturnType<typeof setTimeout>;
+
 	/**
 	 * @override
 	 */
-	public componentDidUpdate(): void {
-
+	public componentDidUpdate(prevProps: Readonly<ErrorHandlerComponentProps>): void {
 		const {
 			error
 		} = this.props;
 
-		if(error) {
+		if(!error || error === prevProps.error) {
+			return;
+		}
 
-			console.log('ErrorHandlerComponent: error intercepted');
-			console.log(error);
+		const messageDescription = typeof error === 'string' ? error : this.getAppErrorDescription(error);
+		this.setState({
+			visibleError: messageDescription
+		});
+		this.props.clearError();
 
-			const messageDescription = typeof error === 'string' ? error : this.getAppErrorDescription(error);
+		if(this.clearTimeoutId) {
+			clearTimeout(this.clearTimeoutId);
+		}
 
-			FlashError.showError(messageDescription);
+		this.clearTimeoutId = setTimeout(() => {
+			this.setState({
+				visibleError: undefined
+			});
+		}, 3000);
+	}
 
-			this.props.clearError();
+	/**
+	 * @override
+	 */
+	public componentWillUnmount(): void {
+		if(this.clearTimeoutId) {
+			clearTimeout(this.clearTimeoutId);
 		}
 	}
 
@@ -37,12 +54,22 @@ export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps>
 	 * @override
 	 */
 	public render(): ReactNode {
+		const {
+			visibleError
+		} = this.state;
 
 		return (
-			<View style={styles.container}>
+			<div className='error-handler-container'>
 				{this.props.children}
-				<FlashMessage position='bottom' />
-			</View>
+				{visibleError ?
+					(
+					<div className='error-handler-toast' role='alert'>
+						<strong className='error-handler-toast-title'>{i18n.t('error.flash.title')}</strong>
+						<span className='error-handler-toast-description'>{visibleError}</span>
+					</div>
+					) :
+					null}
+			</div>
 		);
 	}
 
@@ -52,14 +79,10 @@ export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps>
 	 * @returns the description to be shown
 	 */
 	private getAppErrorDescription(error: AppError): string {
-		
 		let originalAppError: AppError = error;
-
 		while(originalAppError.errorDetails && originalAppError.errorDetails instanceof AppError) {
-
 			originalAppError = originalAppError.errorDetails;
 		}
-
 		return i18n.t(originalAppError.errorDescription);
 	}
 }
@@ -68,7 +91,6 @@ export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps>
  * ErrorHandlerComponent's input props
  */
 export type ErrorHandlerComponentInput = {
-
 	/**
 	 * The error to be displayed, if any
 	 */
@@ -84,7 +106,6 @@ export type ErrorHandlerComponentInput = {
  * ErrorHandlerComponent's output props
  */
 export type ErrorHandlerComponentOutput = {
-
 	/**
 	 * Callback to clear the error from the global state
 	 */
@@ -95,3 +116,10 @@ export type ErrorHandlerComponentOutput = {
  * ErrorHandlerComponent's props
  */
 export type ErrorHandlerComponentProps = ErrorHandlerComponentInput & ErrorHandlerComponentOutput;
+
+/**
+ * ErrorHandlerComponent's state
+ */
+type ErrorHandlerComponentState = {
+	visibleError?: string;
+};

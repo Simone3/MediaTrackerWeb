@@ -1,35 +1,27 @@
-import { styles } from 'app/components/presentational/auth/common/app-title/styles';
-import React, { ReactNode, Component } from 'react';
-import { View, Image, Text, ViewProps, StyleSheet, ViewStyle } from 'react-native';
-import { images } from 'app/utilities/images';
+import React, { Component, ReactNode } from 'react';
 import { i18n } from 'app/utilities/i18n';
+import appLogo from 'app/resources/images/ic_app_logo.png';
 
 /**
  * Presentational component to display the app title with the app logo
  */
 export class AppTitleComponent extends Component<AppTitleComponentProps> {
-	
 	/**
 	 * @override
 	 */
 	public render(): ReactNode {
+		const {
+			className,
+			style
+		} = this.props;
+
+		const resolvedClassName = className ? `auth-title ${className}` : 'auth-title';
 
 		return (
-			<View
-				{...this.props}
-				style={StyleSheet.compose<ViewStyle, ViewStyle, ViewStyle>(styles.container, this.props.style)}>
-				<View style={styles.logoContainer}>
-					<Image
-						source={images.appLogo()}
-						style={styles.logo}
-					/>
-				</View>
-				<View style={styles.titleContainer}>
-					<Text style={styles.title}>
-						{i18n.t('common.app.name')}
-					</Text>
-				</View>
-			</View>
+			<div className={resolvedClassName} style={style}>
+				<img src={appLogo} alt={i18n.t('common.app.name')} className='auth-title-logo' />
+				<h1 className='auth-title-text'>{i18n.t('common.app.name')}</h1>
+			</div>
 		);
 	}
 }
@@ -37,4 +29,7 @@ export class AppTitleComponent extends Component<AppTitleComponentProps> {
 /**
  * AppTitleComponent's props
  */
-export type AppTitleComponentProps = ViewProps;
+export type AppTitleComponentProps = {
+	className?: string;
+	style?: React.CSSProperties;
+};

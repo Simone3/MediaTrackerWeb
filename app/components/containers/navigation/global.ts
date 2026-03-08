@@ -1,24 +1,11 @@
-import { NavigationHelpers, ParamListBase } from '@react-navigation/native';
-import { StackNavigationOptions } from '@react-navigation/stack';
-import { config } from 'app/config/config';
+/**
+ * Helper type for navigation properties used by navigationService
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Navigation = any;
 
 /**
- * Helper type for navigation properties
+ * Placeholder for legacy navigators not migrated yet.
+ * TODO phase2: remove once old RN stack/drawer screens are fully migrated.
  */
-export type Navigation = NavigationHelpers<ParamListBase>;
-
-/**
- * Default screen options
- */
-export const defaultScreenOptions: StackNavigationOptions = {
-	headerStyle: {
-		backgroundColor: config.ui.colors.colorPrimary
-	},
-	headerTintColor: config.ui.colors.colorContrastText,
-	headerTitleStyle: {
-		fontWeight: 'bold'
-	},
-	headerLeft: () => {
-		return null;
-	}
-};
+export const defaultScreenOptions = {};

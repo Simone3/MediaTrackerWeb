@@ -1,6 +1,4 @@
 import React, { Component, ReactNode } from 'react';
-import { View } from 'react-native';
-import { styles } from 'app/components/presentational/auth/signup/screen/styles';
 import { AuthTextInputComponent } from 'app/components/presentational/auth/common/auth-input';
 import { UserSecretInternal } from 'app/data/models/internal/user';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
@@ -14,7 +12,6 @@ import { AuthLinkComponent } from 'app/components/presentational/auth/common/aut
  * Presentational component that contains the add new user form
  */
 export class UserSignupScreenComponent extends Component<UserSignupScreenComponentProps, UserSecretInternal> {
-
 	public state: UserSecretInternal = {
 		email: '',
 		password: ''
@@ -24,15 +21,14 @@ export class UserSignupScreenComponent extends Component<UserSignupScreenCompone
 	 * @override
 	 */
 	public render(): ReactNode {
-		
 		return (
-			<View style={styles.container}>
+			<section className='auth-screen'>
 				{this.renderForm()}
 				<LoadingIndicatorComponent
 					visible={this.props.isLoading}
 					fullScreen={true}
 				/>
-			</View>
+			</section>
 		);
 	}
 
@@ -41,11 +37,10 @@ export class UserSignupScreenComponent extends Component<UserSignupScreenCompone
 	 * @returns the component
 	 */
 	private renderForm(): ReactNode {
-
 		return (
-			<View style={styles.formContainer}>
-				<AppTitleComponent style={styles.titleSectionContainer} />
-				<View style={styles.inputsContainer}>
+			<div className='auth-form'>
+				<AppTitleComponent className='auth-form-title' />
+				<div className='auth-form-inputs'>
 					<AuthTextInputComponent
 						onChangeText={(value) => {
 							this.setState({
@@ -54,9 +49,8 @@ export class UserSignupScreenComponent extends Component<UserSignupScreenCompone
 						}}
 						value={this.state.email}
 						placeholder={i18n.t('auth.signup.placeholders.email')}
-						textContentType='username'
 						autoComplete='email'
-						keyboardType='email-address'
+						inputMode='email'
 					/>
 					<AuthTextInputComponent
 						onChangeText={(value) => {
@@ -67,11 +61,10 @@ export class UserSignupScreenComponent extends Component<UserSignupScreenCompone
 						value={this.state.password}
 						placeholder={i18n.t('auth.signup.placeholders.password')}
 						secureTextEntry={true}
-						textContentType='password'
-						autoComplete='password'
+						autoComplete='new-password'
 					/>
-				</View>
-				<View style={styles.submitContainer}>
+				</div>
+				<div className='auth-form-submit'>
 					<AuthSubmitComponent
 						text={i18n.t('auth.signup.buttons.submit')}
 						disabled={!this.state.email || !this.state.password}
@@ -85,8 +78,8 @@ export class UserSignupScreenComponent extends Component<UserSignupScreenCompone
 							navigationService.back();
 						}}
 					/>
-				</View>
-			</View>
+				</div>
+			</div>
 		);
 	}
 }
@@ -95,7 +88,6 @@ export class UserSignupScreenComponent extends Component<UserSignupScreenCompone
  * UserSignupScreenComponent's input props
  */
 export type UserSignupScreenComponentInput = {
-
 	/**
 	 * Flag to tell if the component is currently waiting on an async operation. If true, shows the loading screen.
 	 */
@@ -106,7 +98,6 @@ export type UserSignupScreenComponentInput = {
  * UserSignupScreenComponent's output props
  */
 export type UserSignupScreenComponentOutput = {
-
 	/**
 	 * Callback for the signup attempt
 	 */

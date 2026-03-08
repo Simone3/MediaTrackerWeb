@@ -1,10 +1,21 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "baseUrl": "./",
-    "paths" : {
+    "paths": {
       "app/*": ["./app/*"]
-    }
-  }
+    },
+    "types": ["jest", "node"],
+    "noEmit": true
+  },
+  "include": ["index.tsx", "app/**/*", "tests/**/*", "webpack.config.js"]
 }

@@ -1,5 +1,21 @@
 module.exports = {
-  presets: [ 'module:@react-native/babel-preset' ],
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        targets: {
+          esmodules: true
+        }
+      }
+    ],
+    [
+      '@babel/preset-react',
+      {
+        runtime: 'automatic'
+      }
+    ],
+    '@babel/preset-typescript'
+  ],
   plugins: [
     [
       '@babel/plugin-proposal-decorators',
@@ -15,7 +31,6 @@ module.exports = {
           app: './app'
         }
       }
-    ],
-    'react-native-reanimated/plugin'
+    ]
   ]
 };

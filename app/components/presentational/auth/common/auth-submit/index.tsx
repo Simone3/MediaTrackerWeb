@@ -1,23 +1,37 @@
-import { styles } from 'app/components/presentational/auth/common/auth-submit/styles';
-import React, { ReactNode, Component } from 'react';
-import { TouchableOpacity, Text, TouchableOpacityProps } from 'react-native';
+import React, { Component, MouseEvent, ReactNode } from 'react';
 
 /**
  * Presentational component to display a submit button for the auth screens
  */
 export class AuthSubmitComponent extends Component<AuthSubmitComponentProps> {
-	
 	/**
 	 * @override
 	 */
 	public render(): ReactNode {
+		const {
+			text,
+			onPress,
+			className,
+			...otherProps
+		} = this.props;
+
+		const resolvedClassName = className ? `auth-submit ${className}` : 'auth-submit';
 
 		return (
-			<TouchableOpacity {...this.props}>
-				<Text style={this.props.disabled ? [ styles.submit, styles.submitDisabled ] : styles.submit}>
-					{this.props.text}
-				</Text>
-			</TouchableOpacity>
+			<button
+				{...otherProps}
+				type='button'
+				className={resolvedClassName}
+				onClick={(event: MouseEvent<HTMLButtonElement>) => {
+					if(otherProps.onClick) {
+						otherProps.onClick(event);
+					}
+					if(onPress) {
+						onPress(event);
+					}
+				}}>
+				{text}
+			</button>
 		);
 	}
 }
@@ -25,10 +39,12 @@ export class AuthSubmitComponent extends Component<AuthSubmitComponentProps> {
 /**
  * AuthSubmitComponent's props
  */
-export type AuthSubmitComponentProps = TouchableOpacityProps & {
-
+export type AuthSubmitComponentProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> & {
 	/**
 	 * The button text
 	 */
 	text: string;
+
+	onClick?: React.MouseEventHandler<HTMLButtonElement>;
+	onPress?: React.MouseEventHandler<HTMLButtonElement>;
 };

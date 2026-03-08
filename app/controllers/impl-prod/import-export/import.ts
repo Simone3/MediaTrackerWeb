@@ -4,30 +4,27 @@ import { ImportController } from 'app/controllers/core/import-export/import';
 import { ImportOldAppExportRequest, ImportOldAppExportResponse } from 'app/data/models/api/import/old-app/export';
 import { AppError } from 'app/data/models/internal/error';
 import { miscUtils } from 'app/utilities/misc-utils';
-import { readFile } from 'react-native-fs';
 
 /**
  * Implementation of the ImportController that queries the back-end APIs
  * @see ImportController
  */
 export class ImportBackEndController implements ImportController {
-	
 	/**
 	 * @override
 	 */
 	public async importOldAppExport(userId: string, jsonFileUri: string): Promise<void> {
-	
-		// Read the file contents as a string
-		const content = await readFile(jsonFileUri);
+		// Read the file contents as a string.
+		// Phase2 note: replace URI based import with a first-class web File picker flow.
+		const response = await fetch(jsonFileUri);
+		const content = await response.text();
 		if(!content || !content.trim()) {
-
 			throw AppError.IMPORT_FILE.withDetails(`JSON file is empty: ${content}`);
 		}
 
 		// Parse the file contents as a JavaScript object
 		const parsedContent = JSON.parse(content);
 		if(!parsedContent || typeof parsedContent !== 'object') {
-
 			throw AppError.IMPORT_FILE.withDetails(`Parsed JSON file is not an object: ${parsedContent}`);
 		}
 

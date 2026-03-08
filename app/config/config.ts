@@ -2,7 +2,6 @@ import { devConfig } from 'app/config/properties/config-dev';
 import { prodConfig } from 'app/config/properties/config-prod';
 import { Config } from 'app/config/type-config';
 import { AppError } from 'app/data/models/internal/error';
-import ReactNativeConfig from 'react-native-config';
 
 /**
  * The application expects to find several configuration files:
@@ -15,12 +14,12 @@ import ReactNativeConfig from 'react-native-config';
  * the helper config-sample.ts
  */
 
-const environment = ReactNativeConfig.MEDIA_TRACKER_APP_ENV;
+// eslint-disable-next-line no-process-env
+const environment = process.env.MEDIA_TRACKER_APP_ENV || 'dev';
 
 // Get config based on environment
 let envConfig: Config;
 switch(environment) {
-
 	case 'dev':
 		envConfig = devConfig;
 		break;

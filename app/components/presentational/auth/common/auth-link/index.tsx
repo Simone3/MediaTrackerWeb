@@ -1,23 +1,37 @@
-import { styles } from 'app/components/presentational/auth/common/auth-link/styles';
-import React, { ReactNode, Component } from 'react';
-import { TouchableOpacity, Text, TouchableOpacityProps } from 'react-native';
+import React, { Component, MouseEvent, ReactNode } from 'react';
 
 /**
  * Presentational component to display a redirect link for the auth screens
  */
 export class AuthLinkComponent extends Component<AuthLinkComponentProps> {
-	
 	/**
 	 * @override
 	 */
 	public render(): ReactNode {
+		const {
+			text,
+			onPress,
+			className,
+			...otherProps
+		} = this.props;
+
+		const resolvedClassName = className ? `auth-link ${className}` : 'auth-link';
 
 		return (
-			<TouchableOpacity {...this.props}>
-				<Text style={styles.link}>
-					{this.props.text}
-				</Text>
-			</TouchableOpacity>
+			<button
+				{...otherProps}
+				type='button'
+				className={resolvedClassName}
+				onClick={(event: MouseEvent<HTMLButtonElement>) => {
+					if(otherProps.onClick) {
+						otherProps.onClick(event);
+					}
+					if(onPress) {
+						onPress(event);
+					}
+				}}>
+				{text}
+			</button>
 		);
 	}
 }
@@ -25,10 +39,12 @@ export class AuthLinkComponent extends Component<AuthLinkComponentProps> {
 /**
  * AuthLinkComponent's props
  */
-export type AuthLinkComponentProps = TouchableOpacityProps & {
-
+export type AuthLinkComponentProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> & {
 	/**
 	 * The button text
 	 */
 	text: string;
+
+	onClick?: React.MouseEventHandler<HTMLButtonElement>;
+	onPress?: React.MouseEventHandler<HTMLButtonElement>;
 };

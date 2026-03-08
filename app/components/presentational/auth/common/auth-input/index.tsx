@@ -1,21 +1,37 @@
-import { styles } from 'app/components/presentational/auth/common/auth-input/styles';
-import React, { ReactNode, Component } from 'react';
-import { TextInput, TextInputProps, StyleSheet, TextStyle } from 'react-native';
+import React, { ChangeEvent, Component, ReactNode } from 'react';
 
 /**
  * Presentational component to display a text input for the auth screens
  */
 export class AuthTextInputComponent extends Component<AuthTextInputComponentProps> {
-	
 	/**
 	 * @override
 	 */
 	public render(): ReactNode {
+		const {
+			onChangeText,
+			secureTextEntry,
+			className,
+			type,
+			...otherProps
+		} = this.props;
+
+		const resolvedType = secureTextEntry ? 'password' : type || 'text';
+		const resolvedClassName = className ? `auth-input ${className}` : 'auth-input';
 
 		return (
-			<TextInput
-				{...this.props}
-				style={StyleSheet.compose<TextStyle, TextStyle, TextStyle>(styles.input, this.props.style)}
+			<input
+				{...otherProps}
+				type={resolvedType}
+				className={resolvedClassName}
+				onChange={(event: ChangeEvent<HTMLInputElement>) => {
+					if(otherProps.onChange) {
+						otherProps.onChange(event);
+					}
+					if(onChangeText) {
+						onChangeText(event.target.value);
+					}
+				}}
 			/>
 		);
 	}
@@ -24,4 +40,8 @@ export class AuthTextInputComponent extends Component<AuthTextInputComponentProp
 /**
  * AuthTextInputComponent's props
  */
-export type AuthTextInputComponentProps = TextInputProps;
+export type AuthTextInputComponentProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
+	onChange?: React.ChangeEventHandler<HTMLInputElement>;
+	onChangeText?: (value: string) => void;
+	secureTextEntry?: boolean;
+};

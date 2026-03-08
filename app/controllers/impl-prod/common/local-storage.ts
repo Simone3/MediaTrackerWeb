@@ -1,33 +1,36 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LocalStorage } from 'app/controllers/core/common/local-storage';
+import { AppError } from 'app/data/models/internal/error';
 
 /**
- * Implementation of the LocalStorage that uses AsyncStorage to access the device data
+ * Implementation of the LocalStorage that uses browser localStorage
  * @see LocalStorage
  */
 export class LocalStorageAsync implements LocalStorage {
+	private getBrowserStorage(): Storage {
+		if(typeof window === 'undefined' || !window.localStorage) {
+			throw AppError.GENERIC.withDetails('Browser localStorage is not available in this environment');
+		}
+		return window.localStorage;
+	}
 
 	/**
 	 * @override
 	 */
 	public async getValue(key: string): Promise<string | null> {
-
-		return AsyncStorage.getItem(key);
+		return this.getBrowserStorage().getItem(key);
 	}
 
 	/**
 	 * @override
 	 */
 	public async setValue(key: string, value: string): Promise<void> {
-
-		return AsyncStorage.setItem(key, value);
+		this.getBrowserStorage().setItem(key, value);
 	}
 
 	/**
 	 * @override
 	 */
 	public async removeValue(key: string): Promise<void> {
-
-		return AsyncStorage.removeItem(key);
+		this.getBrowserStorage().removeItem(key);
 	}
 }
