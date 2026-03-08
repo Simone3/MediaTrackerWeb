@@ -13,7 +13,7 @@ This repository is being migrated from React Native to a plain React web app (Ty
 - Phase 4: hardening
   - Deliverables: test coverage extension, accessibility pass, cleanup of RN-only files/deps.
 
-## Current status (Phase 4 hardening in progress)
+## Current status (Phase 4 hardening complete)
 
 Implemented end-to-end:
 
@@ -45,6 +45,8 @@ Implemented end-to-end:
   - Logout action with confirmation
 - Shared web confirmation modal:
   - In-app confirm dialog used by category/media/group/platform/settings/season migrated flows
+- Cleanup:
+  - Removed remaining legacy RN-only component/style files not used by the web app entrypoint.
 - Credits section:
   - Full migrated credits screen with external links
 - Web adapters:
@@ -141,8 +143,3 @@ If these are missing and prod user auth is enabled, auth calls will fail with an
 
 - Routes are path-based and parameter-free.
 - Details routes currently rely on Redux state (same pattern as RN flow).
-- TODO hardening: migrate details flows to URL params/query where appropriate.
-
-## TODOs (explicitly deferred)
-
-- Replace remaining RN-only style/component files as each screen is migrated.
