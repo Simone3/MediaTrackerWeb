@@ -1,5 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { MediaItemsListContainer } from 'app/components/containers/media-item/list/list';
+import { MediaItemFilterModalContainer } from 'app/components/containers/media-item/list/filter-modal';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { CategoryInternal } from 'app/data/models/internal/category';
@@ -40,6 +41,7 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 					<p className='media-items-screen-subtitle'>{i18n.t(`category.mediaTypes.${category.mediaType}`)}</p>
 				</header>
 				<MediaItemsListContainer/>
+				<MediaItemFilterModalContainer/>
 				<FABComponent
 					text={'+'}
 					onPress={() => {

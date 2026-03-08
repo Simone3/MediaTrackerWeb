@@ -26,7 +26,7 @@ Implemented end-to-end:
   - Categories list with refresh and category selection wiring.
   - Category details
   - Media items list
-  - Media item details (generic fields)
+  - Media item details (generic + type-specific fields)
   - Groups list/details (select + add/edit/delete)
   - Own platforms list/details (select + add/edit/delete)
   - TV show seasons list/details (add/edit/delete/complete)
@@ -35,9 +35,12 @@ Implemented end-to-end:
   - Save + duplicate-name confirmation flow
   - Back navigation wiring
 - Media item details flow:
-  - Generic create/edit form (name, status, importance, dates/notes)
+  - Generic + type-specific create/edit form (book/movie/tv/videogame)
   - Save + duplicate-name confirmation flow
   - Back navigation wiring
+- Media item list filter flow:
+  - Web modal with status/importance/group/own platform/sort options
+  - Redux filter/sort submission wiring
 - Settings section:
   - Logout action with confirmation
   - Old-app JSON import (browser file picker + confirmation flow)
@@ -143,6 +146,5 @@ If these are missing and prod user auth is enabled, auth calls will fail with an
 
 ## TODOs (explicitly deferred)
 
-- Migrate media item type-specific details fields (book/movie/tv/videogame) and advanced filter modal.
 - Complete web-native import/export file workflow (currently URI/object-URL and data-URL fallback in prod import controller).
 - Replace remaining RN-only style/component files as each screen is migrated.

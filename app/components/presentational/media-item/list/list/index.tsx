@@ -15,6 +15,7 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 			mediaItems,
 			category,
 			refreshMediaItems,
+			openFilters,
 			selectMediaItem,
 			highlightMediaItem
 		} = this.props;
@@ -26,6 +27,9 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 					<h2 className='media-items-list-title'>{i18n.t(`category.mediaTypes.${category.mediaType}`)}</h2>
 					<button type='button' className='media-items-list-refresh' onClick={refreshMediaItems}>
 						Refresh
+					</button>
+					<button type='button' className='media-items-list-refresh' onClick={openFilters}>
+						Filter
 					</button>
 				</div>
 				{mediaItems.length === 0 && (
@@ -120,4 +124,9 @@ export type MediaItemsListComponentOutput = {
 	 * Callback to refresh the media items list
 	 */
 	refreshMediaItems: () => void;
+
+	/**
+	 * Callback to open filter modal
+	 */
+	openFilters: () => void;
 }

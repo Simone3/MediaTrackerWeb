@@ -21,6 +21,7 @@ describe('MediaItemsListComponent', () => {
 			importance: '300'
 		};
 		const refreshMediaItems = jest.fn();
+		const openFilters = jest.fn();
 		const selectMediaItem = jest.fn();
 		const highlightMediaItem = jest.fn();
 
@@ -29,6 +30,7 @@ describe('MediaItemsListComponent', () => {
 				category={category}
 				mediaItems={[ mediaItem ]}
 				refreshMediaItems={refreshMediaItems}
+				openFilters={openFilters}
 				selectMediaItem={selectMediaItem}
 				highlightMediaItem={highlightMediaItem}
 			/>
@@ -36,10 +38,12 @@ describe('MediaItemsListComponent', () => {
 
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: 'Refresh' }));
+		await user.click(screen.getByRole('button', { name: 'Filter' }));
 		await user.click(screen.getByText('Dune'));
 		await user.click(screen.getByRole('button', { name: 'Options for Dune' }));
 
 		expect(refreshMediaItems).toHaveBeenCalledTimes(1);
+		expect(openFilters).toHaveBeenCalledTimes(1);
 		expect(selectMediaItem).toHaveBeenCalledWith(mediaItem);
 		expect(highlightMediaItem).toHaveBeenCalledWith(mediaItem);
 	});
