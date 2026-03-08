@@ -1,96 +1,89 @@
-import React, { Component, ReactElement, ReactNode } from 'react';
-import { FlatList, Text, View, Dimensions, RefreshControl } from 'react-native';
+import React, { Component, ReactNode } from 'react';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
-import { MediaItemRowComponent } from 'app/components/presentational/media-item/list/row';
 import { i18n } from 'app/utilities/i18n';
-import { styles } from 'app/components/presentational/media-item/list/list/styles';
 import { CategoryInternal } from 'app/data/models/internal/category';
-import { MediaItemContextMenuContainer } from 'app/components/containers/media-item/list/context-menu';
-import { config } from 'app/config/config';
 
 /**
  * Presentational component to display the list of user media items
  */
 export class MediaItemsListComponent extends Component<MediaItemsListComponentInput & MediaItemsListComponentOutput> {
-	
 	/**
 	 * @override
 	 */
 	public render(): ReactNode {
-
-		return (
-			<View>
-				{this.renderMediaItems()}
-			</View>
-		);
-	}
-
-	/**
-	 * Helper method to render the main list
-	 * @returns the node portion
-	 */
-	private renderMediaItems(): ReactNode {
-
-		return this.renderList();
-	}
-
-	/**
-	 * Helper method to render the no media items message
-	 * @returns the node portion
-	 */
-	private renderNone(): ReactElement {
-
-		return <Text style={styles.emptyMessage}>{i18n.t(`mediaItem.list.empty.${this.props.category.mediaType}`)}</Text>;
-	}
-
-	/**
-	 * Helper method to render media items list
-	 * @returns the node portion
-	 */
-	private renderList(): ReactNode {
-
 		const {
 			mediaItems,
-			highlightMediaItem,
+			category,
+			refreshMediaItems,
 			selectMediaItem,
-			refreshMediaItems
+			highlightMediaItem
 		} = this.props;
+		const emptyMessage = i18n.t(`mediaItem.list.empty.${category.mediaType}`);
 
 		return (
-			<View>
-				<FlatList
-					style={[ styles.list, { width: Dimensions.get('window').width }]}
-					contentContainerStyle={styles.listContentContainer}
-					data={mediaItems}
-					refreshControl={
-						<RefreshControl
-							refreshing={false}
-							onRefresh={refreshMediaItems}
-							colors={[ config.ui.colors.colorPrimaryDark ]}
-							tintColor={config.ui.colors.colorPrimaryDark}
-						/>
-					}
-					ListEmptyComponent={this.renderNone()}
-					renderItem={({ item }) => {
-						return (
-							<MediaItemRowComponent
-								mediaItem={item}
-								open={() => {
-									selectMediaItem(item);
-								}}
-								showOptionsMenu={() => {
-									highlightMediaItem(item);
-								}}
-							/>
-						);
-					}}
-					keyExtractor={(item) => {
-						return item.id;
-					}}
-				/>
-				<MediaItemContextMenuContainer />
-			</View>
+			<section className='media-items-list'>
+				<div className='media-items-list-header'>
+					<h2 className='media-items-list-title'>{i18n.t(`category.mediaTypes.${category.mediaType}`)}</h2>
+					<button type='button' className='media-items-list-refresh' onClick={refreshMediaItems}>
+						Refresh
+					</button>
+				</div>
+				{mediaItems.length === 0 && (
+					<p className='media-items-list-empty'>{emptyMessage}</p>
+				)}
+				{mediaItems.length > 0 && (
+					<ul className='media-items-list-items'>
+						{mediaItems.map((mediaItem) => {
+							return (
+								<li key={mediaItem.id} className='media-item-row'>
+									<button
+										type='button'
+										className='media-item-row-main'
+										onClick={() => {
+											selectMediaItem(mediaItem);
+										}}>
+										<span className='media-item-row-name'>{mediaItem.name}</span>
+										<span className='media-item-row-meta'>{this.getMediaItemMetadata(mediaItem)}</span>
+									</button>
+									<button
+										type='button'
+										className='media-item-row-options'
+										onClick={() => {
+											highlightMediaItem(mediaItem);
+										}}
+										aria-label={`Options for ${mediaItem.name}`}>
+										⋮
+									</button>
+								</li>
+							);
+						})}
+					</ul>
+				)}
+			</section>
 		);
+	}
+
+	/**
+	 * Helper method to build row metadata text for a media item
+	 * @param mediaItem the media item
+	 * @returns the metadata text
+	 */
+	private getMediaItemMetadata(mediaItem: MediaItemInternal): string {
+		const metadata: string[] = [];
+		if(mediaItem.importance) {
+			metadata.push(i18n.t(`mediaItem.common.importance.${mediaItem.importance}`));
+		}
+		if(mediaItem.status) {
+			metadata.push(mediaItem.status);
+		}
+		if(mediaItem.group && mediaItem.group.name) {
+			metadata.push(mediaItem.group.name);
+		}
+		if(mediaItem.ownPlatform && mediaItem.ownPlatform.name) {
+			metadata.push(mediaItem.ownPlatform.name);
+		}
+
+		return metadata.join(' • ');
 	}
 }
 
@@ -98,7 +91,6 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
  * MediaItemsListComponent's input props
  */
 export type MediaItemsListComponentInput = {
-
 	/**
 	 * The linked category
 	 */
@@ -114,7 +106,6 @@ export type MediaItemsListComponentInput = {
  * MediaItemsListComponent's output props
  */
 export type MediaItemsListComponentOutput = {
-
 	/**
 	 * Callback to select a media item, e.g. to open its details
 	 */

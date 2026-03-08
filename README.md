@@ -13,7 +13,7 @@ This repository is being migrated from React Native to a plain React web app (Ty
 - Phase 4: hardening
   - Deliverables: test coverage extension, accessibility pass, cleanup of RN-only files/deps.
 
-## Current status (Phase 1 complete)
+## Current status (Phase 2 in progress)
 
 Implemented end-to-end:
 
@@ -24,6 +24,14 @@ Implemented end-to-end:
   - Auth loading
 - First authenticated screen:
   - Categories list with refresh and category selection wiring.
+- Category details flow:
+  - Create/edit form
+  - Save + duplicate-name confirmation flow
+  - Back navigation wiring
+- Media items list flow:
+  - List rendering for selected category
+  - Refresh + open-item actions
+  - "Add new media item" action wiring
 - Placeholder routes for non-migrated screens (with explicit TODO messages).
 - Web adapters:
   - `react-native-config` -> `process.env`
@@ -120,7 +128,9 @@ If these are missing and prod user auth is enabled, auth calls will fail with an
 
 ## TODOs (explicitly deferred)
 
-- Migrate media item, groups, own platforms, TV seasons screens from placeholders.
+- Migrate media item details + filters, groups, own platforms, TV seasons screens from placeholders.
 - Migrate settings operations UI and credits page content.
+- Replace temporary `window.confirm` in category details with app-level modal/dialog component.
+- Replace TODO media-item filter modal with a web modal + form.
 - Complete web-native import/export file workflow (currently URI fetch-based fallback in prod import controller).
 - Replace remaining RN-only style/component files as each screen is migrated.

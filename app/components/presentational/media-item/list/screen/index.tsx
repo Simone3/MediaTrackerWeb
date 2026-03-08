@@ -1,22 +1,18 @@
 import React, { Component, ReactNode } from 'react';
-import { View } from 'react-native';
 import { MediaItemsListContainer } from 'app/components/containers/media-item/list/list';
-import { styles } from 'app/components/presentational/media-item/list/screen/styles';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
-import { MediaItemFilterModalContainer } from 'app/components/containers/media-item/list/filter-modal';
 import { CategoryInternal } from 'app/data/models/internal/category';
+import { i18n } from 'app/utilities/i18n';
 
 /**
  * Presentational component that contains the whole "media items list" screen, that lists all media items of the current category
  */
 export class MediaItemsListScreenComponent extends Component<MediaItemsListScreenComponentInput & MediaItemsListScreenComponentOutput> {
-
 	/**
 	 * @override
 	 */
 	public componentDidMount(): void {
-
 		this.requestFetchIfRequired();
 	}
 
@@ -24,7 +20,6 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 	 * @override
 	 */
 	public componentDidUpdate(): void {
-
 		this.requestFetchIfRequired();
 	}
 
@@ -32,7 +27,6 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 	 * @override
 	 */
 	public render(): ReactNode {
-
 		const {
 			category,
 			loadNewMediaItemDetails,
@@ -40,7 +34,11 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 		} = this.props;
 
 		return (
-			<View style={styles.container}>
+			<section className='media-items-screen'>
+				<header className='media-items-screen-header'>
+					<h1 className='media-items-screen-title'>{category.name}</h1>
+					<p className='media-items-screen-subtitle'>{i18n.t(`category.mediaTypes.${category.mediaType}`)}</p>
+				</header>
 				<MediaItemsListContainer/>
 				<FABComponent
 					text={'+'}
@@ -48,12 +46,11 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 						loadNewMediaItemDetails(category);
 					}}
 				/>
-				<MediaItemFilterModalContainer />
 				<LoadingIndicatorComponent
 					visible={isLoading}
 					fullScreen={false}
 				/>
-			</View>
+			</section>
 		);
 	}
 
@@ -61,9 +58,7 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 	 * Helper to invoke the fetch callback if the input fetch flag is true
 	 */
 	private requestFetchIfRequired(): void {
-		
 		if(this.props.requiresFetch) {
-
 			this.props.fetchMediaItems();
 		}
 	}
@@ -73,7 +68,6 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
  * MediaItemsListScreenComponent's input props
  */
 export type MediaItemsListScreenComponentInput = {
-	
 	/**
 	 * The category linked with this media items list
 	 */
@@ -94,7 +88,6 @@ export type MediaItemsListScreenComponentInput = {
  * MediaItemsListScreenComponent's output props
  */
 export type MediaItemsListScreenComponentOutput = {
-
 	/**
 	 * Callback to request the media items list (re)load
 	 */
