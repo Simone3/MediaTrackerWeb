@@ -13,7 +13,7 @@ This repository is being migrated from React Native to a plain React web app (Ty
 - Phase 4: hardening
   - Deliverables: test coverage extension, accessibility pass, cleanup of RN-only files/deps.
 
-## Current status (Phase 2 in progress)
+## Current status (Phase 4 hardening in progress)
 
 Implemented end-to-end:
 
@@ -22,25 +22,34 @@ Implemented end-to-end:
   - Login
   - Signup
   - Auth loading
-- First authenticated screen:
+- Media section screens:
   - Categories list with refresh and category selection wiring.
+  - Category details
+  - Media items list
+  - Media item details (generic fields)
+  - Groups list/details (select + add/edit/delete)
+  - Own platforms list/details (select + add/edit/delete)
+  - TV show seasons list/details (add/edit/delete/complete)
 - Category details flow:
   - Create/edit form
   - Save + duplicate-name confirmation flow
   - Back navigation wiring
-- Media items list flow:
-  - List rendering for selected category
-  - Refresh + open-item actions
-  - "Add new media item" action wiring
 - Media item details flow:
   - Generic create/edit form (name, status, importance, dates/notes)
   - Save + duplicate-name confirmation flow
   - Back navigation wiring
-- Placeholder routes for non-migrated screens (with explicit TODO messages).
+- Settings section:
+  - Logout action with confirmation
+  - Old-app JSON import (browser file picker + confirmation flow)
+- Credits section:
+  - Full migrated credits screen with external links
 - Web adapters:
   - `react-native-config` -> `process.env`
   - AsyncStorage -> browser `localStorage`
   - RN Firebase Auth -> Firebase Web SDK
+- Tests:
+  - Unit + smoke tests for auth/categories/media details/routes
+  - Smoke tests for groups and settings flows
 
 ## Run the web app
 
@@ -126,16 +135,15 @@ If these are missing and prod user auth is enabled, auth calls will fail with an
 
 ### Deep links and params
 
-- Phase 1 routes are path-based and parameter-free.
+- Routes are path-based and parameter-free.
 - Details routes currently rely on Redux state (same pattern as RN flow).
-- TODO phase 2: migrate details flows to URL params/query where appropriate.
+- TODO hardening: migrate details flows to URL params/query where appropriate.
 
 ## TODOs (explicitly deferred)
 
-- Migrate media item type-specific details fields (book/movie/tv/videogame), filters, groups, own platforms, TV seasons screens from placeholders.
-- Migrate settings operations UI and credits page content.
+- Migrate media item type-specific details fields (book/movie/tv/videogame) and advanced filter modal.
 - Replace temporary `window.confirm` in category details with app-level modal/dialog component.
 - Replace temporary `window.confirm` in media item details with app-level modal/dialog component.
-- Replace TODO media-item filter modal with a web modal + form.
-- Complete web-native import/export file workflow (currently URI fetch-based fallback in prod import controller).
+- Replace temporary `window.confirm` in groups/platforms/seasons/settings with app-level modal/dialog component.
+- Complete web-native import/export file workflow (currently URI/object-URL and data-URL fallback in prod import controller).
 - Replace remaining RN-only style/component files as each screen is migrated.

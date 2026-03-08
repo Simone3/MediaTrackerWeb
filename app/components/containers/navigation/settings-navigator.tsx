@@ -1,5 +1,4 @@
-import { PlaceholderScreenComponent } from 'app/components/presentational/generic/placeholder-screen';
-import { i18n } from 'app/utilities/i18n';
+import { UserSettingsScreenContainer } from 'app/components/containers/settings/screen';
 import React, { Component, ReactNode } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
@@ -13,9 +12,7 @@ export class SettingsNavigator extends Component {
 	public render(): ReactNode {
 		return (
 			<Routes>
-				<Route
-					index={true}
-					element={<PlaceholderScreenComponent title={i18n.t('settings.screen.title')} message='TODO phase2: settings migration in progress.' />} />
+				<Route index={true} element={<UserSettingsScreenContainer />} />
 				<Route path='*' element={<Navigate to='.' replace={true} />} />
 			</Routes>
 		);

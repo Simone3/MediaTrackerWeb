@@ -1,28 +1,37 @@
 import React, { Component, ReactNode } from 'react';
-import { View, Text } from 'react-native';
-import { styles } from 'app/components/presentational/category/list/screen/styles';
-import { HyperlinkComponent } from 'app/components/presentational/generic/hyperlink';
+import { i18n } from 'app/utilities/i18n';
 
 /**
  * Presentational component that contains the whole credits screen
  */
 export class CreditsScreenComponent extends Component<CreditsScreenComponentProps> {
-
 	/**
 	 * @override
 	 */
 	public render(): ReactNode {
-		
 		return (
-			<View style={styles.container}>
-				<Text style={styles.text}>
-					Movies and TV Shows data provided by <HyperlinkComponent url='https://www.themoviedb.org'>The Movie Database (TMDb)</HyperlinkComponent> (this product uses the TMDb API but is not endorsed or certified by TMDb).
-					{'\n\n'}
-					Videogames data provided by <HyperlinkComponent url='http://www.giantbomb.com'>Giant Bomb</HyperlinkComponent>.
-					{'\n\n'}
-					Books data provided by <HyperlinkComponent url='https://books.google.com'>Google Books</HyperlinkComponent>.
-				</Text>
-			</View>
+			<section className='credits-screen'>
+				<h1 className='credits-title'>{i18n.t('credits.screen.title')}</h1>
+				<p className='credits-paragraph'>
+					Movies and TV Shows data provided by{' '}
+					<a href='https://www.themoviedb.org' target='_blank' rel='noreferrer' className='credits-link'>
+						The Movie Database (TMDb)
+					</a>{' '}
+					(this product uses the TMDb API but is not endorsed or certified by TMDb).
+				</p>
+				<p className='credits-paragraph'>
+					Videogames data provided by{' '}
+					<a href='http://www.giantbomb.com' target='_blank' rel='noreferrer' className='credits-link'>
+						Giant Bomb
+					</a>.
+				</p>
+				<p className='credits-paragraph'>
+					Books data provided by{' '}
+					<a href='https://books.google.com' target='_blank' rel='noreferrer' className='credits-link'>
+						Google Books
+					</a>.
+				</p>
+			</section>
 		);
 	}
 }
@@ -30,16 +39,12 @@ export class CreditsScreenComponent extends Component<CreditsScreenComponentProp
 /**
  * CreditsScreenComponent's input props
  */
-export type CreditsScreenComponentInput = {
-
-}
+export type CreditsScreenComponentInput = Record<string, never>;
 
 /**
  * CreditsScreenComponent's output props
  */
-export type CreditsScreenComponentOutput = {
-
-}
+export type CreditsScreenComponentOutput = Record<string, never>;
 
 /**
  * CreditsScreenComponent's props

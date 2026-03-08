@@ -629,6 +629,397 @@ input {
 	box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.15);
 }
 
+.groups-screen,
+.own-platforms-screen,
+.tv-show-seasons-screen {
+	position: relative;
+	min-height: calc(100vh - 56px);
+}
+
+.groups-list,
+.own-platforms-list,
+.tv-show-seasons-list {
+	max-width: 920px;
+}
+
+.groups-list-header,
+.own-platforms-list-header,
+.tv-show-seasons-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 14px;
+	gap: 10px;
+}
+
+.groups-list-title,
+.own-platforms-list-title,
+.tv-show-seasons-title {
+	margin: 0;
+	font-size: 1.7rem;
+	color: var(--color-primary-dark);
+}
+
+.groups-list-header-actions,
+.own-platforms-list-header-actions,
+.tv-show-seasons-actions {
+	display: flex;
+	gap: 8px;
+}
+
+.groups-list-secondary,
+.groups-list-refresh,
+.own-platforms-list-secondary,
+.own-platforms-list-refresh,
+.tv-show-seasons-button,
+.settings-row {
+	border: 1px solid var(--color-border);
+	background: #ffffff;
+	color: var(--color-primary-dark);
+	border-radius: 999px;
+	padding: 9px 14px;
+	cursor: pointer;
+}
+
+.groups-list-refresh,
+.own-platforms-list-refresh {
+	border-color: var(--color-primary);
+	color: var(--color-primary);
+}
+
+.tv-show-seasons-button-primary {
+	background: var(--color-accent);
+	border-color: var(--color-accent);
+	color: #ffffff;
+}
+
+.tv-show-seasons-button-secondary {
+	background: #eef2ff;
+}
+
+.groups-list-items,
+.own-platforms-list-items {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.groups-list-item,
+.own-platforms-list-item {
+	display: flex;
+	gap: 8px;
+}
+
+.groups-list-row,
+.own-platforms-list-row {
+	flex: 1;
+	border: 1px solid var(--color-border);
+	background: #ffffff;
+	color: var(--color-text);
+	border-radius: 12px;
+	padding: 12px 14px;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-weight: 600;
+	text-align: left;
+}
+
+.groups-list-row-selected,
+.own-platforms-list-row-selected {
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.14);
+}
+
+.groups-list-item-none .groups-list-row,
+.own-platforms-list-item-none .own-platforms-list-row {
+	font-weight: 700;
+	color: var(--color-muted);
+}
+
+.own-platforms-list-row-color {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.groups-list-options,
+.own-platforms-list-options {
+	border: 0;
+	background: #edf2ff;
+	color: var(--color-primary-dark);
+	border-radius: 10px;
+	padding: 0 12px;
+	cursor: pointer;
+	font-weight: 700;
+}
+
+.groups-list-options-danger,
+.own-platforms-list-options-danger {
+	background: #ffe8e8;
+	color: #af1f1f;
+}
+
+.groups-list-empty,
+.own-platforms-list-empty,
+.tv-show-seasons-empty {
+	margin: 20px 0;
+	color: var(--color-muted);
+}
+
+.group-details-screen,
+.own-platform-details-screen,
+.tv-show-season-details-screen,
+.settings-screen,
+.credits-screen {
+	position: relative;
+	max-width: 860px;
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: 16px;
+	padding: 24px;
+	box-shadow: var(--shadow-soft);
+}
+
+.group-details-header,
+.own-platform-details-header,
+.tv-show-season-details-header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 20px;
+}
+
+.group-details-title,
+.own-platform-details-title,
+.tv-show-season-details-title,
+.settings-title,
+.credits-title {
+	margin: 0;
+	font-size: 1.5rem;
+	color: var(--color-primary-dark);
+}
+
+.group-details-actions,
+.own-platform-details-actions,
+.tv-show-season-details-actions {
+	display: flex;
+	gap: 8px;
+}
+
+.group-details-button,
+.own-platform-details-button,
+.tv-show-season-details-button {
+	border: 0;
+	border-radius: 999px;
+	padding: 10px 16px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.group-details-button-secondary,
+.own-platform-details-button-secondary,
+.tv-show-season-details-button-secondary {
+	background: #eef2ff;
+	color: var(--color-primary-dark);
+}
+
+.group-details-button-primary,
+.own-platform-details-button-primary,
+.tv-show-season-details-button-primary {
+	background: var(--color-accent);
+	color: #ffffff;
+}
+
+.group-details-button[disabled],
+.own-platform-details-button[disabled],
+.tv-show-season-details-button[disabled],
+.settings-row[disabled],
+.groups-list-secondary[disabled],
+.groups-list-refresh[disabled],
+.own-platforms-list-secondary[disabled],
+.own-platforms-list-refresh[disabled] {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.group-details-form,
+.own-platform-details-form,
+.tv-show-season-details-form {
+	display: grid;
+	gap: 10px;
+}
+
+.group-details-label,
+.own-platform-details-label,
+.tv-show-season-details-label {
+	font-size: 0.92rem;
+	font-weight: 700;
+	color: var(--color-muted);
+}
+
+.group-details-input,
+.own-platform-details-input,
+.own-platform-details-select,
+.own-platform-details-color-input,
+.tv-show-season-details-input {
+	width: 100%;
+	border: 1px solid var(--color-border);
+	border-radius: 10px;
+	padding: 10px 12px;
+	background: #ffffff;
+}
+
+.group-details-input:focus,
+.own-platform-details-input:focus,
+.own-platform-details-select:focus,
+.own-platform-details-color-input:focus,
+.tv-show-season-details-input:focus {
+	outline: none;
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.15);
+}
+
+.own-platform-details-colors {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 6px;
+}
+
+.own-platform-details-color {
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	border: 2px solid #ffffff;
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+	cursor: pointer;
+}
+
+.own-platform-details-color-selected {
+	box-shadow: 0 0 0 2px var(--color-primary-dark);
+}
+
+.tv-show-seasons-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.tv-show-seasons-row {
+	display: flex;
+	gap: 8px;
+	border: 1px solid var(--color-border);
+	border-radius: 12px;
+	background: #ffffff;
+	padding: 10px;
+}
+
+.tv-show-seasons-row-main {
+	flex: 1;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 4px 6px;
+}
+
+.tv-show-seasons-row-title {
+	font-weight: 700;
+}
+
+.tv-show-seasons-row-subtitle {
+	color: var(--color-muted);
+	font-size: 0.9rem;
+}
+
+.tv-show-seasons-row-actions {
+	display: flex;
+	gap: 8px;
+}
+
+.tv-show-seasons-row-action {
+	border: 1px solid var(--color-border);
+	border-radius: 10px;
+	background: #f6f8ff;
+	color: var(--color-primary-dark);
+	padding: 0 12px;
+	cursor: pointer;
+	font-weight: 700;
+}
+
+.tv-show-seasons-row-action[disabled] {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.settings-header {
+	margin-bottom: 8px;
+}
+
+.settings-section {
+	margin-top: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.settings-section-title {
+	margin: 0;
+	font-size: 1rem;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--color-muted);
+}
+
+.settings-row {
+	border-radius: 12px;
+	padding: 12px 14px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	text-align: left;
+	gap: 2px;
+}
+
+.settings-row-title {
+	font-weight: 700;
+}
+
+.settings-row-subtitle {
+	color: var(--color-muted);
+	font-size: 0.9rem;
+}
+
+.settings-file-input {
+	display: none;
+}
+
+.credits-paragraph {
+	margin: 14px 0 0;
+	color: var(--color-text);
+	line-height: 1.55;
+}
+
+.credits-link {
+	color: var(--color-primary);
+	font-weight: 700;
+}
+
 .placeholder-screen {
 	background: var(--color-surface);
 	border: 1px dashed var(--color-border);
@@ -692,5 +1083,36 @@ input {
 
 	.media-item-details-screen {
 		padding: 18px;
+	}
+
+	.group-details-screen,
+	.own-platform-details-screen,
+	.tv-show-season-details-screen,
+	.settings-screen,
+	.credits-screen {
+		padding: 18px;
+	}
+
+	.groups-list-item,
+	.own-platforms-list-item,
+	.tv-show-seasons-row {
+		flex-direction: column;
+	}
+
+	.groups-list-options,
+	.own-platforms-list-options,
+	.tv-show-seasons-row-action {
+		padding: 8px 12px;
+	}
+
+	.groups-list-header,
+	.own-platforms-list-header,
+	.tv-show-seasons-header {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+
+	.tv-show-seasons-row-actions {
+		width: 100%;
 	}
 }

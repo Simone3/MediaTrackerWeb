@@ -5,7 +5,6 @@
 export type Navigation = any;
 
 /**
- * Placeholder for legacy navigators not migrated yet.
- * TODO phase2: remove once old RN stack/drawer screens are fully migrated.
+ * Legacy exported value kept for compatibility with existing imports.
  */
 export const defaultScreenOptions = {};

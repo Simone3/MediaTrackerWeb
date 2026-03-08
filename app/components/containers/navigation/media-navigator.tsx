@@ -2,14 +2,17 @@ import { CategoriesListScreenContainer } from 'app/components/containers/categor
 import { CategoryDetailsScreenContainer } from 'app/components/containers/category/details/screen';
 import { MediaItemsListScreenContainer } from 'app/components/containers/media-item/list/screen';
 import { MediaItemDetailsScreenContainer } from 'app/components/containers/media-item/details/screen';
-import { PlaceholderScreenComponent } from 'app/components/presentational/generic/placeholder-screen';
-import { i18n } from 'app/utilities/i18n';
+import { GroupsListScreenContainer } from 'app/components/containers/group/list/screen';
+import { GroupDetailsScreenContainer } from 'app/components/containers/group/details/screen';
+import { OwnPlatformsListScreenContainer } from 'app/components/containers/own-platform/list/screen';
+import { OwnPlatformDetailsScreenContainer } from 'app/components/containers/own-platform/details/screen';
+import { TvShowSeasonsListScreenContainer } from 'app/components/containers/tv-show-season/list/screen';
+import { TvShowSeasonDetailsScreenContainer } from 'app/components/containers/tv-show-season/details/screen';
 import { screenToPath } from 'app/utilities/navigation-routes';
 import { AppScreens, AppSections } from 'app/utilities/screens';
 import React, { Component, ReactNode } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-const phase2Message = 'TODO phase2: this screen is not migrated yet. Navigation and state wiring are ready.';
 const mediaSectionPath = screenToPath(AppSections.Media);
 
 /**
@@ -43,22 +46,22 @@ export class MediaNavigator extends Component {
 					element={<MediaItemDetailsScreenContainer />} />
 				<Route
 					path={mediaRelativePath(AppScreens.GroupsList)}
-					element={<PlaceholderScreenComponent title={i18n.t('group.list.title')} message={phase2Message} />} />
+					element={<GroupsListScreenContainer />} />
 				<Route
 					path={mediaRelativePath(AppScreens.GroupDetails)}
-					element={<PlaceholderScreenComponent title='Group Details' message={phase2Message} />} />
+					element={<GroupDetailsScreenContainer />} />
 				<Route
 					path={mediaRelativePath(AppScreens.OwnPlatformsList)}
-					element={<PlaceholderScreenComponent title={i18n.t('ownPlatform.list.title')} message={phase2Message} />} />
+					element={<OwnPlatformsListScreenContainer />} />
 				<Route
 					path={mediaRelativePath(AppScreens.OwnPlatformDetails)}
-					element={<PlaceholderScreenComponent title='Own Platform Details' message={phase2Message} />} />
+					element={<OwnPlatformDetailsScreenContainer />} />
 				<Route
 					path={mediaRelativePath(AppScreens.TvShowSeasonsList)}
-					element={<PlaceholderScreenComponent title={i18n.t('tvShowSeason.list.title')} message={phase2Message} />} />
+					element={<TvShowSeasonsListScreenContainer />} />
 				<Route
 					path={mediaRelativePath(AppScreens.TvShowSeasonDetails)}
-					element={<PlaceholderScreenComponent title='TV Show Season Details' message={phase2Message} />} />
+					element={<TvShowSeasonDetailsScreenContainer />} />
 				<Route path='*' element={<Navigate to={mediaRelativePath(AppScreens.CategoriesList)} replace={true} />} />
 			</Routes>
 		);
