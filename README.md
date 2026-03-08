@@ -32,6 +32,10 @@ Implemented end-to-end:
   - List rendering for selected category
   - Refresh + open-item actions
   - "Add new media item" action wiring
+- Media item details flow:
+  - Generic create/edit form (name, status, importance, dates/notes)
+  - Save + duplicate-name confirmation flow
+  - Back navigation wiring
 - Placeholder routes for non-migrated screens (with explicit TODO messages).
 - Web adapters:
   - `react-native-config` -> `process.env`
@@ -128,9 +132,10 @@ If these are missing and prod user auth is enabled, auth calls will fail with an
 
 ## TODOs (explicitly deferred)
 
-- Migrate media item details + filters, groups, own platforms, TV seasons screens from placeholders.
+- Migrate media item type-specific details fields (book/movie/tv/videogame), filters, groups, own platforms, TV seasons screens from placeholders.
 - Migrate settings operations UI and credits page content.
 - Replace temporary `window.confirm` in category details with app-level modal/dialog component.
+- Replace temporary `window.confirm` in media item details with app-level modal/dialog component.
 - Replace TODO media-item filter modal with a web modal + form.
 - Complete web-native import/export file workflow (currently URI fetch-based fallback in prod import controller).
 - Replace remaining RN-only style/component files as each screen is migrated.

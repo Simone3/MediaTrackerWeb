@@ -1,6 +1,7 @@
 import { CategoriesListScreenContainer } from 'app/components/containers/category/list/screen';
 import { CategoryDetailsScreenContainer } from 'app/components/containers/category/details/screen';
 import { MediaItemsListScreenContainer } from 'app/components/containers/media-item/list/screen';
+import { MediaItemDetailsScreenContainer } from 'app/components/containers/media-item/details/screen';
 import { PlaceholderScreenComponent } from 'app/components/presentational/generic/placeholder-screen';
 import { i18n } from 'app/utilities/i18n';
 import { screenToPath } from 'app/utilities/navigation-routes';
@@ -39,7 +40,7 @@ export class MediaNavigator extends Component {
 					element={<MediaItemsListScreenContainer />} />
 				<Route
 					path={mediaRelativePath(AppScreens.MediaItemDetails)}
-					element={<PlaceholderScreenComponent title='Media Item Details' message={phase2Message} />} />
+					element={<MediaItemDetailsScreenContainer />} />
 				<Route
 					path={mediaRelativePath(AppScreens.GroupsList)}
 					element={<PlaceholderScreenComponent title={i18n.t('group.list.title')} message={phase2Message} />} />
