@@ -2,6 +2,7 @@ import { devConfig } from 'app/config/properties/config-dev';
 import { prodConfig } from 'app/config/properties/config-prod';
 import { Config } from 'app/config/type-config';
 import { AppError } from 'app/data/models/internal/error';
+import { getEnvValue } from 'app/utilities/env';
 
 /**
  * The application expects to find several configuration files:
@@ -14,8 +15,7 @@ import { AppError } from 'app/data/models/internal/error';
  * the helper config-sample.ts
  */
 
-// eslint-disable-next-line no-process-env
-const environment = process.env.MEDIA_TRACKER_APP_ENV || 'dev';
+const environment = getEnvValue('MEDIA_TRACKER_APP_ENV') || 'dev';
 
 // Get config based on environment
 let envConfig: Config;

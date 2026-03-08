@@ -1,19 +1,18 @@
 import { UserController } from 'app/controllers/core/entities/user';
 import { AppError } from 'app/data/models/internal/error';
 import { UserInternal, UserSecretInternal } from 'app/data/models/internal/user';
+import { getEnvValue } from 'app/utilities/env';
 import { FirebaseOptions, getApps, initializeApp } from 'firebase/app';
 import { Auth, User, createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 const FIREBASE_APP_NAME = 'media-tracker-web';
 
-/* eslint-disable no-process-env */
 const firebaseConfig: FirebaseOptions = {
-	apiKey: process.env.MEDIA_TRACKER_FIREBASE_API_KEY,
-	authDomain: process.env.MEDIA_TRACKER_FIREBASE_AUTH_DOMAIN,
-	projectId: process.env.MEDIA_TRACKER_FIREBASE_PROJECT_ID,
-	appId: process.env.MEDIA_TRACKER_FIREBASE_APP_ID
+	apiKey: getEnvValue('MEDIA_TRACKER_FIREBASE_API_KEY'),
+	authDomain: getEnvValue('MEDIA_TRACKER_FIREBASE_AUTH_DOMAIN'),
+	projectId: getEnvValue('MEDIA_TRACKER_FIREBASE_PROJECT_ID'),
+	appId: getEnvValue('MEDIA_TRACKER_FIREBASE_APP_ID')
 };
-/* eslint-enable no-process-env */
 
 /**
  * Implementation of the UserController that uses the Firebase Web Auth SDK

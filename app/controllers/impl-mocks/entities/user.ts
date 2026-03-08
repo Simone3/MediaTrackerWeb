@@ -24,19 +24,26 @@ export class UserMockedController extends MockControllerHelper implements UserCo
 	 * @override
 	 */
 	public async getCurrentUser(): Promise<UserInternal | undefined> {
-
 		const value = await localStorage.getValue(UserMockedController.LOCAL_STORAGE_KEY);
-		return value ? JSON.parse(value) : undefined;
+		if(!value) {
+			return undefined;
+		}
+
+		try {
+			return JSON.parse(value);
+		}
+		catch(error) {
+			await localStorage.removeValue(UserMockedController.LOCAL_STORAGE_KEY);
+			throw AppError.BACKEND_USER_CHECK_LOGIN_STATUS.withDetails(`Invalid stored mocked user payload: ${error}`);
+		}
 	}
 
 	/**
 	 * @override
 	 */
 	public async getCurrentUserAccessToken(): Promise<string> {
-
 		const user = await this.getCurrentUser();
 		if(!user) {
-
 			throw AppError.GENERIC.withDetails('Cannot get the access token if no user is logged in');
 		}
 		return '-fake-access-token-';
@@ -46,14 +53,11 @@ export class UserMockedController extends MockControllerHelper implements UserCo
 	 * @override
 	 */
 	public async signup(user: UserSecretInternal): Promise<UserInternal> {
-
 		return this.resolveResult(async() => {
-
 			const sameNameUser = this.users.find((existingUser) => {
 				return existingUser.email === user.email;
 			});
 			if(sameNameUser) {
-
 				throw AppError.BACKEND_USER_SIGNUP.withDetails('Mocked user with same name already exists');
 			}
 			
@@ -69,20 +73,17 @@ export class UserMockedController extends MockControllerHelper implements UserCo
 			return newUser;
 		});
 	}
-	
+
 	/**
 	 * @override
 	 */
 	public async login(user: UserSecretInternal): Promise<UserInternal> {
-
 		return this.resolveResult(async() => {
-
 			const matchingUser = this.users.find((existingUser) => {
 				return existingUser.email === user.email;
 			});
 
 			if(!matchingUser) {
-
 				throw AppError.BACKEND_USER_LOGIN.withDetails('No matching mocked user');
 			}
 
@@ -96,7 +97,6 @@ export class UserMockedController extends MockControllerHelper implements UserCo
 	 * @override
 	 */
 	public async logout(): Promise<void> {
-
 		localStorage.removeValue(UserMockedController.LOCAL_STORAGE_KEY);
 	}
 }
