@@ -1,0 +1,463 @@
+{
+	"error": {
+		"flash": {
+			"title": "Error",
+			"messages": {
+				"genericApplication": "A generic application error occurred",
+				"backendTimeout": "A connection with the server cannot be established, check your connection and try again later",
+				"backendGeneric": "The server returned a generic error",
+				"backendParse": "The server returned an unknown response",
+				"localCheckLoginStatus": "Cannot check local storage for user credentials",
+				"backendSignup": "An error occurred during signup",
+				"backendLogin": "An error occurred during login",
+				"backendLogout": "An error occurred during logout",
+				"backendCategoryFetch": "Cannot fetch categories from the server",
+				"backendCategorySave": "Cannot save the category to the server",
+				"backendCategoryDelete": "Cannot delete the category from the server",
+				"backendMediaItemFetch": "Cannot fetch media items from the server",
+				"backendMediaItemSave": "Cannot save the media item to the server",
+				"backendMediaItemDelete": "Cannot delete the media item from the server",
+				"backendMediaItemCatalogSearch": "Cannot search the media item catalog",
+				"backendMediaItemCatalogDetails": "Cannot get the media item catalog details",
+				"backendGroupFetch": "Cannot fetch groups from the server",
+				"backendGroupSave": "Cannot save the group to the server",
+				"backendGroupDelete": "Cannot delete the group from the server",
+				"backendOwnPlatformFetch": "Cannot fetch platforms from the server",
+				"backendOwnPlatformSave": "Cannot save the platform to the server",
+				"backendOwnPlatformDelete": "Cannot delete the platform from the server",
+				"backendOldAppImport": "Cannot import the old Media Tracker data",
+				"importFileNotValid": "File is not valid. Make sure it's a valid export from the old Media Tracker app, with .json extension",
+				"saveTvShowSeasonNumber": "A season with the same number already exists for this TV show"
+			}
+		}
+	},
+	"category": {
+		"common": {
+			"alert": {
+				"delete": {
+					"title": "Delete Category",
+					"message": "Are you sure you want to delete {{name}}? You won't be able to restore it. This will also remove all its media items, groups and platforms."
+				},
+				"addSameName": {
+					"title": "Possible Duplicate",
+					"message": "Category(es) with the same name were found. Are you sure you want to create it anyway?"
+				}
+			}
+		},
+		"list": {
+			"title": "Media Tracker",
+			"empty": "No categories",
+			"edit": "Edit category",
+			"delete": "Delete category"
+		},
+		"details": {
+			"title": {
+				"new": "New Category"
+			},
+			"placeholders": {
+				"name": "Name"
+			},
+			"prompts": {
+				"mediaType": "Media"
+			}
+		},
+		"mediaTypes": {
+			"BOOK": "Books",
+			"MOVIE": "Movies",
+			"TV_SHOW": "TV Shows",
+			"VIDEOGAME": "Videogames"
+		}
+	},
+	"mediaItem": {
+		"common": {
+			"alert": {
+				"delete": {
+					"title": {
+						"BOOK": "Delete Book",
+						"MOVIE": "Delete Movie",
+						"TV_SHOW": "Delete Show",
+						"VIDEOGAME": "Delete Game"
+					},
+					"message": "Are you sure you want to delete {{name}}? You won't be able to restore it."
+				},
+				"reloadCatalog": {
+					"title": "Reload Data",
+					"message": "Are you sure you want to reload the catalog data? This will overwrite any manual changes to the fields linked with the catalog."
+				},
+				"addSameName": {
+					"title": "Possible Duplicate",
+					"message": {
+						"BOOK": "Book(s) with the same name were found in this category. Are you sure you want to create it anyway?",
+						"MOVIE": "Movie(s) with the same name were found in this category. Are you sure you want to create it anyway?",
+						"TV_SHOW": "TV show(s) with the same name were found in this category. Are you sure you want to create it anyway?",
+						"VIDEOGAME": "Videogame(s) with the same name were found in this category. Are you sure you want to create it anyway?"
+					}
+				}
+			},
+			"importance": {
+				"400": "Very important",
+				"300": "Important",
+				"200" : "Fairly important",
+				"100": "Unimportant"
+			}
+		},
+		"list": {
+			"empty": {
+				"BOOK": "No books",
+				"MOVIE": "No movies",
+				"TV_SHOW": "No shows",
+				"VIDEOGAME": "No games"
+			},
+			"duration": {
+				"BOOK": "{{duration}}pp.",
+				"MOVIE": "{{duration}}'",
+				"TV_SHOW": "{{duration}}'",
+				"VIDEOGAME": "{{duration}}h"
+			},
+			"edit": {
+				"BOOK": "Edit book",
+				"MOVIE": "Edit movie",
+				"TV_SHOW": "Edit show",
+				"VIDEOGAME": "Edit game"
+			},
+			"delete": {
+				"BOOK": "Delete book",
+				"MOVIE": "Delete movie",
+				"TV_SHOW": "Delete show",
+				"VIDEOGAME": "Delete game"
+			},
+			"markActive": {
+				"BOOK": "I'm reading this",
+				"MOVIE": "I'm watching this",
+				"TV_SHOW": "I'm following this",
+				"VIDEOGAME": "I'm playing this"
+			},
+			"markComplete": {
+				"BOOK": "I've read this",
+				"MOVIE": "I've watched this",
+				"TV_SHOW": "I've completed this",
+				"VIDEOGAME": "I've played this"
+			},
+			"markRedo": {
+				"BOOK": "I could reread this",
+				"MOVIE": "I could rewatch this",
+				"TV_SHOW": "I could rewatch this",
+				"VIDEOGAME": "I could replay this"
+			},
+			"viewGroup": "View Group",
+			"search": {
+				"BOOK": "Search books...",
+				"MOVIE": "Search movies...",
+				"TV_SHOW": "Search shows...",
+				"VIDEOGAME": "Search games..."
+			},
+			"group": "{{groupName}}, #{{order}}",
+			"completed": {
+				"single": "Completed on {{date}}",
+				"multiple": "Completed {{times}} times, last on {{date}}"
+			},
+			"production": "P",
+			"filter": {
+				"title": "Filter",
+				"prompts": {
+					"status": "Status",
+					"group": "Group",
+					"ownPlatform": "Owned",
+					"importance": "Importance",
+					"sort": "Order"
+				},
+				"values": {
+					"status": {
+						"ALL": "Any status",
+						"CURRENT": "Current",
+						"COMPLETE" : "Completed"
+					},
+					"group": {
+						"ALL": "With or without group",
+						"ANY": "Only with group",
+						"NONE": "Only without group"
+					},
+					"ownPlatform": {
+						"ALL": "Owned or not",
+						"ANY": "Only owned",
+						"NONE": "Only not owned"
+					},
+					"sort": {
+						"DEFAULT": "Default order",
+						"NAME": "Order by name",
+						"RELEASE_DATE" : "Order by release date",
+						"COMPLETION_DATE": "Order by completion date"
+					},
+					"importance": {
+						"all": "Any importance"
+					}
+				}
+			}
+		},
+		"details": {
+			"title": {
+				"new": {
+					"BOOK": "New Book",
+					"MOVIE": "New Movie",
+					"TV_SHOW": "New TV Show",
+					"VIDEOGAME": "New Videogame"
+				}
+			},
+			"placeholders": {
+				"name": "Search or type name",
+				"description": "Summary",
+				"releaseDate": "Release date",
+				"duration": {
+					"BOOK": "Number of pages",
+					"MOVIE": "Runtime (minutes)",
+					"TV_SHOW": "Average episode runtime (minutes)",
+					"VIDEOGAME": "Average length (hours)"
+				},
+				"userComment": "Your notes",
+				"genres": "Genres",
+				"group": "Group",
+				"orderInGroup": "Order in group",
+				"ownPlatform": "Owned at",
+				"creators": {
+					"BOOK": "Authors",
+					"MOVIE": "Directors",
+					"TV_SHOW": "Created by",
+					"VIDEOGAME": "Developers"
+				},
+				"completedOn": "Completed on",
+				"seasons": "Seasons",
+				"inProduction": "In production",
+				"nextEpisodeAirDate": "Next episode air date",
+				"publishers": "Publishers",
+				"platforms": "Platforms"
+			},
+			"prompts": {
+				"importance": "Importance"
+			},
+			"catalog": {
+				"result": {
+					"fullLabel": "{{name}} [{{releaseDate}}]"
+				}
+			},
+			"buttons": {
+				"modalTitle": "Actions",
+				"google": "Google Search",
+				"wikipedia": "Wikipedia Search",
+				"justWatch": "Just Watch Search",
+				"howLongToBeat": "How Long To Beat Search",
+				"downloadCatalog": "Reload Catalog"
+			},
+			"labels": {
+				"seasons": "{{seasonsNumber}} seasons, watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes"
+			}
+		}
+	},
+	"tvShowSeason": {
+		"common": {
+			"alert": {
+				"delete": {
+					"title": "Delete Season",
+					"message": "Are you sure you want to delete season {{seasonNumber}}?"
+				}
+			}
+		},
+		"list": {
+			"title": "Seasons",
+			"empty": "No seasons",
+			"row": {
+				"main": "Season {{seasonNumber}}",
+				"secondary": "Watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes"
+			},
+			"contextMenuTitle": "Season {{seasonNumber}}",
+			"edit": "Edit season",
+			"delete": "Delete season",
+			"complete": "Complete season"
+		},
+		"details": {
+			"title": {
+				"new": "New Season",
+				"existing": "Season {{seasonNumber}}"
+			},
+			"placeholders": {
+				"number": "Season number",
+				"episodesNumber": "Number of episodes",
+				"watchedEpisodesNumber": "Number of watched episodes"
+			}
+		}
+	},
+	"group": {
+		"common": {
+			"alert": {
+				"delete": {
+					"title": "Delete Group",
+					"message": "Are you sure you want to delete {{name}}? You won't be able to restore it. This will also remove all its media items."
+				},
+				"addSameName": {
+					"title": "Possible Duplicate",
+					"message": "Group(s) with the same name were found in this category. Are you sure you want to create it anyway?"
+				}
+			}
+		},
+		"list": {
+			"title": "Select Group",
+			"empty": "No groups",
+			"none": "None",
+			"edit": "Edit group",
+			"delete": "Delete group"
+		},
+		"details": {
+			"title": {
+				"new": "New Group"
+			},
+			"placeholders": {
+				"name": "Name"
+			}
+		}
+	},
+	"ownPlatform": {
+		"common": {
+			"alert": {
+				"delete": {
+					"title": "Delete Platform",
+					"message": "Are you sure you want to delete {{name}}? You won't be able to restore it. This will also remove all its media items."
+				},
+				"addSameName": {
+					"title": "Possible Duplicate",
+					"message": "Platform(s) with the same name were found in this category. Are you sure you want to create it anyway?"
+				}
+			}
+		},
+		"list": {
+			"title": "Select Own Platform",
+			"empty": "No platforms",
+			"none": "None",
+			"edit": "Edit platform",
+			"delete": "Delete platform"
+		},
+		"details": {
+			"title": {
+				"new": "New Platform"
+			},
+			"placeholders": {
+				"name": "Name"
+			},
+			"prompts": {
+				"icon": "Icon"
+			}
+		},
+		"icons": {
+			"android": "Android",
+			"apple": "Apple",
+			"book": "Book",
+			"default": "Generic",
+			"disc": "Disc",
+			"disney": "Disney",
+			"download": "Download",
+			"epic": "Epic Games",
+			"gog": "GOG",
+			"hulu": "Hulu",
+			"kindle": "Kindle",
+			"netflix": "Netflix",
+			"origin": "Origin",
+			"playstation": "PlayStation",
+			"steam": "Steam",
+			"switch": "Nintendo Switch",
+			"uplay": "Uplay"
+		}
+	},
+	"common": {
+		"app": {
+			"name": "Media Tracker"
+		},
+		"alert": {
+			"default": {
+				"okButton": "OK",
+				"cancelButton": "Cancel",
+				"applyButton": "Apply"
+			},
+			"form": {
+				"exit": {
+					"title": "Unsaved Changes",
+					"message": "You have unsaved changes, are you sure you want to exit?"
+				}
+			}
+		},
+		"form": {
+			"input": {
+				"multiText": {
+					"placeholder": "Insert text"
+				},
+				"multiDate": {
+					"placeholder": "Insert date"
+				}
+			}
+		},
+		"drawer": {
+			"home": "Media",
+			"settings": "Settings",
+			"credits": "Credits"
+		}
+	},
+	"auth": {
+		"signup": {
+			"placeholders": {
+				"email": "E-mail",
+				"password": "Password"
+			},
+			"buttons": {
+				"submit": "Signup",
+				"alreadyUser": "Already have an account?"
+			}
+		},
+		"login": {
+			"placeholders": {
+				"email": "E-mail",
+				"password": "Password"
+			},
+			"buttons": {
+				"submit": "Login",
+				"notUser": "New user?"
+			}
+		}
+	},
+	"settings": {
+		"screen": {
+			"title": "Settings",
+			"sections": {
+				"user": "User",
+				"data": "Data"
+			},
+			"rows": {
+				"logout": {
+					"title": "Logout",
+					"subtitle": "Logged in as {{username}}"
+				},
+				"oldAppImport": {
+					"title": "Import previous app version data",
+					"subtitle": "Select the export (.json file) from the original Android Media Tracker app"
+				}
+			},
+			"alert": {
+				"logout": {
+					"title": "Logout",
+					"message": "Are you sure you want to logout? All your data will be kept and will be available after you login again."
+				},
+				"oldAppImport": {
+					"prePicker": {
+						"title": "Import",
+						"message": "This will delete all your current categories, media items, groups, etc., replacing them with the file contents. Are you sure?"
+					}, 
+					"postPicker": {
+						"title": "Import",
+						"message": "Delete all categories, media items, groups, etc. and import {{filename}}? This might take a few minutes."
+					}
+				}
+			}
+		}
+	},
+	"credits": {
+		"screen": {
+			"title": "Credits"
+		}
+	}
+}
