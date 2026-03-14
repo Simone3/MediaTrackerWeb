@@ -135,6 +135,14 @@
   - `app/web/styles.css`
   - `tests/media-item-context-menu.smoke.test.tsx`
   - `tests/media-items-list-container.smoke.test.tsx`
+- Inline media-item completion had an immutability bug on web:
+  - `MARK_MEDIA_ITEM_AS_COMPLETE` reused the existing `completedOn` array reference
+  - pushing the new completion date mutated Redux state during dispatch
+  - the safe version now lives in a tiny helper that clones the completion history first
+- Relevant files:
+  - `app/redux/sagas/media-item/inline-update.ts`
+  - `app/redux/sagas/media-item/inline-update-helper.ts`
+  - `tests/media-item-inline-update.test.ts`
 
 ## Testing notes
 - Jest setup is lightweight and mostly smoke-test oriented.
