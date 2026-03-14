@@ -5,12 +5,13 @@
 - In the Git history you can find the original RN code (commit d06c1ed109c400087b408e28816a603adfb4d2f8 is the complete original code).
 
 ## Constraints
+- README.md is just for me for now, you should NOT read it and you must NOT change it.
 - Work only in this repository and only on the current branch.
 - Do NOT introduce extra libraries unless you justify them briefly and they clearly reduce work or risk.
 - Just use plain React with Typescript and CSS; no frameworks like Vite or NextJS.
 - Keep the code style consistent (spacing, new lines, etc.). However, do remove any empty line just after the start of code blocks (functions, ifs, etc. but NOT classes).
 - Testing: add/keep a minimal but meaningful test setup (unit for key logic + at least 1-2 smoke tests for critical flows). All tests must pass before closing a feature or fix.
-- You can commit the code when a feature or fix is done, but all commits must start with "Codex: ".
+- You must commit the code when a feature or fix is done, but all commits must start with "Codex: ".
 
 ## Dev environment
 1. Install dependencies:
