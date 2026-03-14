@@ -144,6 +144,7 @@
   - switches creator/genre/platform multi-value fields back to single-line inputs instead of textareas
   - reconnects catalog search/details loading plus group/platform selection wiring in the details screen
   - preserves staged group/platform/catalog form state when returning from picker/detail sub-screens on web remount
+  - preserves arbitrary unsaved main-form edits when opening and backing out of group/platform picker screens
 - Relevant files:
   - `app/components/containers/media-item/details/screen.ts`
   - `app/components/presentational/media-item/details/screen/index.tsx`

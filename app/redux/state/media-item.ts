@@ -58,6 +58,11 @@ export type MediaItemDetailsState = {
 	readonly mediaItem?: MediaItemInternal;
 
 	/**
+	 * The current unsaved form draft, preserved across picker navigation on web
+	 */
+	readonly formDraft?: MediaItemInternal;
+
+	/**
 	 * If the currently loaded media item is valid (no validation error occurred)
 	 */
 	readonly valid: boolean;

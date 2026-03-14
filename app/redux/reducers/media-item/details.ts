@@ -1,6 +1,6 @@
 import { mediaItemDefinitionsControllerFactory } from 'app/factories/controller-factories';
-import { ASK_CONFIRMATION_BEFORE_SAVING_MEDIA_ITEM, COMPLETE_GETTING_MEDIA_ITEM_CATALOG_DETAILS, COMPLETE_SAVING_MEDIA_ITEM, COMPLETE_SEARCHING_MEDIA_ITEMS_CATALOG, FAIL_GETTING_MEDIA_ITEM_CATALOG_DETAILS, FAIL_SAVING_MEDIA_ITEM, FAIL_SEARCHING_MEDIA_ITEMS_CATALOG, LOAD_MEDIA_ITEM_DETAILS, LOAD_NEW_MEDIA_ITEM_DETAILS, REQUEST_MEDIA_ITEM_SAVE, RESET_MEDIA_ITEMS_CATALOG_SEARCH, RESET_MEDIA_ITEM_CATALOG_DETAILS, SET_MEDIA_ITEM_FORM_STATUS, START_GETTING_MEDIA_ITEM_CATALOG_DETAILS, START_SAVING_MEDIA_ITEM, START_SEARCHING_MEDIA_ITEMS_CATALOG } from 'app/redux/actions/media-item/const';
-import { CompleteGettingMediaItemCatalogDetailsAction, CompleteSearchingMediaItemsCatalogAction, LoadMediaItemDetailsAction, LoadNewMediaItemDetailsAction, SetMediaItemFormStatusAction, StartSavingMediaItemAction } from 'app/redux/actions/media-item/types';
+import { ASK_CONFIRMATION_BEFORE_SAVING_MEDIA_ITEM, COMPLETE_GETTING_MEDIA_ITEM_CATALOG_DETAILS, COMPLETE_SAVING_MEDIA_ITEM, COMPLETE_SEARCHING_MEDIA_ITEMS_CATALOG, FAIL_GETTING_MEDIA_ITEM_CATALOG_DETAILS, FAIL_SAVING_MEDIA_ITEM, FAIL_SEARCHING_MEDIA_ITEMS_CATALOG, LOAD_MEDIA_ITEM_DETAILS, LOAD_NEW_MEDIA_ITEM_DETAILS, REQUEST_MEDIA_ITEM_SAVE, RESET_MEDIA_ITEMS_CATALOG_SEARCH, RESET_MEDIA_ITEM_CATALOG_DETAILS, SET_MEDIA_ITEM_FORM_DRAFT, SET_MEDIA_ITEM_FORM_STATUS, START_GETTING_MEDIA_ITEM_CATALOG_DETAILS, START_SAVING_MEDIA_ITEM, START_SEARCHING_MEDIA_ITEMS_CATALOG } from 'app/redux/actions/media-item/const';
+import { CompleteGettingMediaItemCatalogDetailsAction, CompleteSearchingMediaItemsCatalogAction, LoadMediaItemDetailsAction, LoadNewMediaItemDetailsAction, SetMediaItemFormDraftAction, SetMediaItemFormStatusAction, StartSavingMediaItemAction } from 'app/redux/actions/media-item/types';
 import { MediaItemDetailsState } from 'app/redux/state/media-item';
 import { Action } from 'redux';
 
@@ -9,6 +9,7 @@ import { Action } from 'redux';
  */
 const initialState: MediaItemDetailsState = {
 	mediaItem: undefined,
+	formDraft: undefined,
 	valid: false,
 	dirty: false,
 	saveStatus: 'IDLE',
@@ -37,6 +38,7 @@ export const mediaItemDetails = (state: MediaItemDetailsState = initialState, ac
 				...state,
 				saveStatus: 'IDLE',
 				mediaItem: definitionsController.getDefaultMediaItem(),
+				formDraft: undefined,
 				catalogSearchResults: undefined,
 				catalogDetails: undefined,
 				catalogStatus: 'IDLE'
@@ -52,9 +54,21 @@ export const mediaItemDetails = (state: MediaItemDetailsState = initialState, ac
 				...state,
 				saveStatus: 'IDLE',
 				mediaItem: loadMediaItemAction.mediaItem,
+				formDraft: undefined,
 				catalogSearchResults: undefined,
 				catalogDetails: undefined,
 				catalogStatus: 'IDLE'
+			};
+		}
+
+		// When the local form changes, the current unsaved draft is persisted
+		case SET_MEDIA_ITEM_FORM_DRAFT: {
+
+			const setMediaItemFormDraftAction = action as SetMediaItemFormDraftAction;
+
+			return {
+				...state,
+				formDraft: setMediaItemFormDraftAction.mediaItem
 			};
 		}
 	
@@ -87,6 +101,7 @@ export const mediaItemDetails = (state: MediaItemDetailsState = initialState, ac
 			return {
 				...state,
 				mediaItem: startSavingMediaItemAction.mediaItem,
+				formDraft: startSavingMediaItemAction.mediaItem,
 				saveStatus: 'SAVING'
 			};
 		}
@@ -105,6 +120,7 @@ export const mediaItemDetails = (state: MediaItemDetailsState = initialState, ac
 
 			return {
 				...state,
+				formDraft: undefined,
 				saveStatus: 'SAVED'
 			};
 		}

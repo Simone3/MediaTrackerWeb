@@ -74,6 +74,7 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 
 		if(prevState.formValues !== this.state.formValues) {
 			this.notifyFormStatus();
+			this.props.persistFormDraft(this.state.formValues);
 		}
 	}
 
@@ -192,8 +193,6 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 
 		this.setState({
 			formValues: this.buildFormValuesFromProps()
-		}, () => {
-			this.notifyFormStatus();
 		});
 	}
 
@@ -202,15 +201,17 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 	 * @returns initial form values
 	 */
 	private buildFormValuesFromProps(): MediaItemDetailsFormValues {
+		const hasDraft = Boolean(this.props.draftMediaItem);
+		const sourceMediaItem = this.props.draftMediaItem || this.props.mediaItem;
 		let formValues: MediaItemDetailsFormValues = {
-			...this.props.mediaItem
+			...sourceMediaItem
 		};
 
-		if(this.props.catalogDetails) {
+		if(!hasDraft && this.props.catalogDetails) {
 			formValues = this.mergeCatalogDetails(formValues, this.props.catalogDetails);
 		}
 
-		if(formValues.mediaType === 'TV_SHOW' && this.props.tvShowSeasonsLoadTimestamp) {
+		if(!hasDraft && formValues.mediaType === 'TV_SHOW' && this.props.tvShowSeasonsLoadTimestamp) {
 			formValues = {
 				...formValues,
 				seasons: this.props.tvShowSeasons.length > 0 ? [ ...this.props.tvShowSeasons ] : undefined
@@ -1603,6 +1604,11 @@ export type MediaItemDetailsScreenComponentInput = {
 	mediaItem: MediaItemInternal;
 
 	/**
+	 * Current unsaved form draft, if any
+	 */
+	draftMediaItem?: MediaItemInternal;
+
+	/**
 	 * If true, the user must confirm save with duplicated name
 	 */
 	sameNameConfirmationRequested: boolean;
@@ -1651,6 +1657,11 @@ export type MediaItemDetailsScreenComponentOutput = {
 	 * Callback to notify form validity and dirty status
 	 */
 	notifyFormStatus: (valid: boolean, dirty: boolean) => void;
+
+	/**
+	 * Callback to persist the current unsaved form draft
+	 */
+	persistFormDraft: (mediaItem: MediaItemInternal) => void;
 
 	/**
 	 * Callback to open TV show seasons flow

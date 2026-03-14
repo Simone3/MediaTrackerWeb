@@ -1,7 +1,7 @@
 import { MediaItemDetailsScreenComponent, MediaItemDetailsScreenComponentInput, MediaItemDetailsScreenComponentOutput } from 'app/components/presentational/media-item/details/screen';
 import { DEFAULT_BOOK } from 'app/data/models/internal/media-items/book';
 import { requestGroupSelection } from 'app/redux/actions/group/generators';
-import { getMediaItemCatalogDetails, resetMediaItemsCatalogSearch, saveMediaItem, searchMediaItemsCatalog, setMediaItemFormStatus } from 'app/redux/actions/media-item/generators';
+import { getMediaItemCatalogDetails, resetMediaItemsCatalogSearch, saveMediaItem, searchMediaItemsCatalog, setMediaItemFormDraft, setMediaItemFormStatus } from 'app/redux/actions/media-item/generators';
 import { requestOwnPlatformSelection } from 'app/redux/actions/own-platform/generators';
 import { startTvShowSeasonsHandling } from 'app/redux/actions/tv-show-season/generators';
 import { State } from 'app/redux/state/state';
@@ -22,6 +22,7 @@ const mapStateToProps = (state: State): MediaItemDetailsScreenComponentInput => 
 		sameNameConfirmationRequested: details.saveStatus === 'REQUIRES_CONFIRMATION',
 		tvShowSeasons: state.tvShowSeasonsList.tvShowSeasons,
 		tvShowSeasonsLoadTimestamp: state.tvShowSeasonsList.completeHandlingTimestamp,
+		draftMediaItem: details.formDraft,
 		catalogSearchResults: details.catalogSearchResults,
 		catalogDetails: details.catalogDetails,
 		selectedGroup: state.groupGlobal.selectedGroup,
@@ -36,6 +37,9 @@ const mapDispatchToProps = (dispatch: Dispatch): MediaItemDetailsScreenComponent
 		},
 		notifyFormStatus: (valid, dirty) => {
 			dispatch(setMediaItemFormStatus(valid, dirty));
+		},
+		persistFormDraft: (mediaItem) => {
+			dispatch(setMediaItemFormDraft(mediaItem));
 		},
 		handleTvShowSeasons: (currentSeasons) => {
 			dispatch(startTvShowSeasonsHandling(currentSeasons || []));

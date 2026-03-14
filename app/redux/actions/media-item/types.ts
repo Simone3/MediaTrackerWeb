@@ -214,6 +214,13 @@ export type SetMediaItemFormStatusAction = Action & {
 };
 
 /**
+ * The set media item form draft action
+ */
+export type SetMediaItemFormDraftAction = Action & {
+	mediaItem: MediaItemInternal;
+};
+
+/**
  * The request media item save action
  */
 export type RequestMediaItemSaveAction = Action & {

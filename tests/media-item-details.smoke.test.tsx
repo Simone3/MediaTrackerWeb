@@ -3,15 +3,48 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MediaItemDetailsScreenComponent } from 'app/components/presentational/media-item/details/screen';
 import { DEFAULT_BOOK } from 'app/data/models/internal/media-items/book';
-import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { GroupInternal } from 'app/data/models/internal/group';
+import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { TvShowInternal } from 'app/data/models/internal/media-items/tv-show';
+
+type DetailsProps = React.ComponentProps<typeof MediaItemDetailsScreenComponent>;
+
+const buildProps = (overrides: Partial<DetailsProps> = {}): DetailsProps => {
+	return {
+		isLoading: false,
+		mediaItem: DEFAULT_BOOK,
+		draftMediaItem: undefined,
+		sameNameConfirmationRequested: false,
+		tvShowSeasons: [],
+		tvShowSeasonsLoadTimestamp: undefined,
+		catalogSearchResults: undefined,
+		catalogDetails: undefined,
+		selectedGroup: undefined,
+		selectedOwnPlatform: undefined,
+		saveMediaItem: jest.fn(),
+		notifyFormStatus: jest.fn(),
+		persistFormDraft: jest.fn(),
+		handleTvShowSeasons: jest.fn(),
+		requestGroupSelection: jest.fn(),
+		requestOwnPlatformSelection: jest.fn(),
+		searchMediaItemsCatalog: jest.fn(),
+		loadMediaItemCatalogDetails: jest.fn(),
+		resetMediaItemsCatalogSearch: jest.fn(),
+		goBack: jest.fn(),
+		...overrides
+	};
+};
+
+const createScreen = (overrides: Partial<DetailsProps> = {}): React.ReactElement => {
+	return React.createElement(MediaItemDetailsScreenComponent, buildProps(overrides));
+};
 
 describe('MediaItemDetailsScreenComponent', () => {
 	test('submits a valid media item from form input', async() => {
 		const saveMediaItem = jest.fn();
 		const notifyFormStatus = jest.fn();
+		const persistFormDraft = jest.fn();
 		const handleTvShowSeasons = jest.fn();
 		const requestGroupSelection = jest.fn();
 		const requestOwnPlatformSelection = jest.fn();
@@ -19,28 +52,17 @@ describe('MediaItemDetailsScreenComponent', () => {
 		const loadMediaItemCatalogDetails = jest.fn();
 		const resetMediaItemsCatalogSearch = jest.fn();
 
-		render(
-			<MediaItemDetailsScreenComponent
-				isLoading={false}
-				mediaItem={DEFAULT_BOOK}
-				sameNameConfirmationRequested={false}
-				tvShowSeasons={[]}
-				tvShowSeasonsLoadTimestamp={undefined}
-				catalogSearchResults={undefined}
-				catalogDetails={undefined}
-				selectedGroup={undefined}
-				selectedOwnPlatform={undefined}
-				saveMediaItem={saveMediaItem}
-				notifyFormStatus={notifyFormStatus}
-				handleTvShowSeasons={handleTvShowSeasons}
-				requestGroupSelection={requestGroupSelection}
-				requestOwnPlatformSelection={requestOwnPlatformSelection}
-				searchMediaItemsCatalog={searchMediaItemsCatalog}
-				loadMediaItemCatalogDetails={loadMediaItemCatalogDetails}
-				resetMediaItemsCatalogSearch={resetMediaItemsCatalogSearch}
-				goBack={jest.fn()}
-			/>
-		);
+		render(createScreen({
+			saveMediaItem,
+			notifyFormStatus,
+			persistFormDraft,
+			handleTvShowSeasons,
+			requestGroupSelection,
+			requestOwnPlatformSelection,
+			searchMediaItemsCatalog,
+			loadMediaItemCatalogDetails,
+			resetMediaItemsCatalogSearch
+		}));
 
 		const user = userEvent.setup();
 		const nameInput = screen.getByLabelText('Search or type name');
@@ -65,6 +87,7 @@ describe('MediaItemDetailsScreenComponent', () => {
 			authors: [ 'Frank Herbert' ]
 		}, false);
 		expect(notifyFormStatus).toHaveBeenCalled();
+		expect(persistFormDraft).toHaveBeenCalled();
 		expect(handleTvShowSeasons).not.toHaveBeenCalled();
 		expect(requestGroupSelection).not.toHaveBeenCalled();
 		expect(requestOwnPlatformSelection).not.toHaveBeenCalled();
@@ -83,51 +106,16 @@ describe('MediaItemDetailsScreenComponent', () => {
 			importance: '300'
 		};
 
-		const { rerender } = render(
-			<MediaItemDetailsScreenComponent
-				isLoading={false}
-				mediaItem={mediaItem}
-				sameNameConfirmationRequested={false}
-				tvShowSeasons={[]}
-				tvShowSeasonsLoadTimestamp={undefined}
-				catalogSearchResults={undefined}
-				catalogDetails={undefined}
-				selectedGroup={undefined}
-				selectedOwnPlatform={undefined}
-				saveMediaItem={saveMediaItem}
-				notifyFormStatus={jest.fn()}
-				handleTvShowSeasons={jest.fn()}
-				requestGroupSelection={jest.fn()}
-				requestOwnPlatformSelection={jest.fn()}
-				searchMediaItemsCatalog={jest.fn()}
-				loadMediaItemCatalogDetails={jest.fn()}
-				resetMediaItemsCatalogSearch={jest.fn()}
-				goBack={jest.fn()}
-			/>
-		);
+		const { rerender } = render(createScreen({
+			mediaItem,
+			saveMediaItem
+		}));
 
-		rerender(
-			<MediaItemDetailsScreenComponent
-				isLoading={false}
-				mediaItem={mediaItem}
-				sameNameConfirmationRequested={true}
-				tvShowSeasons={[]}
-				tvShowSeasonsLoadTimestamp={undefined}
-				catalogSearchResults={undefined}
-				catalogDetails={undefined}
-				selectedGroup={undefined}
-				selectedOwnPlatform={undefined}
-				saveMediaItem={saveMediaItem}
-				notifyFormStatus={jest.fn()}
-				handleTvShowSeasons={jest.fn()}
-				requestGroupSelection={jest.fn()}
-				requestOwnPlatformSelection={jest.fn()}
-				searchMediaItemsCatalog={jest.fn()}
-				loadMediaItemCatalogDetails={jest.fn()}
-				resetMediaItemsCatalogSearch={jest.fn()}
-				goBack={jest.fn()}
-			/>
-		);
+		rerender(createScreen({
+			mediaItem,
+			sameNameConfirmationRequested: true,
+			saveMediaItem
+		}));
 
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: 'OK' }));
@@ -154,28 +142,10 @@ describe('MediaItemDetailsScreenComponent', () => {
 			]
 		};
 
-		render(
-			<MediaItemDetailsScreenComponent
-				isLoading={false}
-				mediaItem={tvShow}
-				sameNameConfirmationRequested={false}
-				tvShowSeasons={[]}
-				tvShowSeasonsLoadTimestamp={undefined}
-				catalogSearchResults={undefined}
-				catalogDetails={undefined}
-				selectedGroup={undefined}
-				selectedOwnPlatform={undefined}
-				saveMediaItem={jest.fn()}
-				notifyFormStatus={jest.fn()}
-				handleTvShowSeasons={handleTvShowSeasons}
-				requestGroupSelection={jest.fn()}
-				requestOwnPlatformSelection={jest.fn()}
-				searchMediaItemsCatalog={jest.fn()}
-				loadMediaItemCatalogDetails={jest.fn()}
-				resetMediaItemsCatalogSearch={jest.fn()}
-				goBack={jest.fn()}
-			/>
-		);
+		render(createScreen({
+			mediaItem: tvShow,
+			handleTvShowSeasons
+		}));
 
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: 'Seasons' }));
@@ -204,28 +174,9 @@ describe('MediaItemDetailsScreenComponent', () => {
 			icon: 'kindle'
 		};
 
-		const { rerender } = render(
-			<MediaItemDetailsScreenComponent
-				isLoading={false}
-				mediaItem={mediaItem}
-				sameNameConfirmationRequested={false}
-				tvShowSeasons={[]}
-				tvShowSeasonsLoadTimestamp={undefined}
-				catalogSearchResults={undefined}
-				catalogDetails={undefined}
-				selectedGroup={undefined}
-				selectedOwnPlatform={undefined}
-				saveMediaItem={jest.fn()}
-				notifyFormStatus={jest.fn()}
-				handleTvShowSeasons={jest.fn()}
-				requestGroupSelection={jest.fn()}
-				requestOwnPlatformSelection={jest.fn()}
-				searchMediaItemsCatalog={jest.fn()}
-				loadMediaItemCatalogDetails={jest.fn()}
-				resetMediaItemsCatalogSearch={jest.fn()}
-				goBack={jest.fn()}
-			/>
-		);
+		const { rerender } = render(createScreen({
+			mediaItem
+		}));
 
 		expect(screen.queryByText('Status')).not.toBeInTheDocument();
 		expect(screen.getByRole('button', { name: 'Google Search' })).toBeInTheDocument();
@@ -235,28 +186,11 @@ describe('MediaItemDetailsScreenComponent', () => {
 		expect(screen.getByLabelText('Group')).toHaveTextContent('None');
 		expect(screen.getByText('Completed on')).toBeInTheDocument();
 
-		rerender(
-			<MediaItemDetailsScreenComponent
-				isLoading={false}
-				mediaItem={mediaItem}
-				sameNameConfirmationRequested={false}
-				tvShowSeasons={[]}
-				tvShowSeasonsLoadTimestamp={undefined}
-				catalogSearchResults={undefined}
-				catalogDetails={undefined}
-				selectedGroup={selectedGroup}
-				selectedOwnPlatform={selectedOwnPlatform}
-				saveMediaItem={jest.fn()}
-				notifyFormStatus={jest.fn()}
-				handleTvShowSeasons={jest.fn()}
-				requestGroupSelection={jest.fn()}
-				requestOwnPlatformSelection={jest.fn()}
-				searchMediaItemsCatalog={jest.fn()}
-				loadMediaItemCatalogDetails={jest.fn()}
-				resetMediaItemsCatalogSearch={jest.fn()}
-				goBack={jest.fn()}
-			/>
-		);
+		rerender(createScreen({
+			mediaItem,
+			selectedGroup,
+			selectedOwnPlatform
+		}));
 
 		expect(screen.getByLabelText('Owned at')).toHaveTextContent('Kindle');
 		expect(screen.getByLabelText('Group')).toHaveTextContent('Sci-Fi Saga');
@@ -271,28 +205,10 @@ describe('MediaItemDetailsScreenComponent', () => {
 			icon: 'kindle'
 		};
 
-		render(
-			<MediaItemDetailsScreenComponent
-				isLoading={false}
-				mediaItem={DEFAULT_BOOK}
-				sameNameConfirmationRequested={false}
-				tvShowSeasons={[]}
-				tvShowSeasonsLoadTimestamp={undefined}
-				catalogSearchResults={undefined}
-				catalogDetails={undefined}
-				selectedGroup={undefined}
-				selectedOwnPlatform={selectedOwnPlatform}
-				saveMediaItem={saveMediaItem}
-				notifyFormStatus={jest.fn()}
-				handleTvShowSeasons={jest.fn()}
-				requestGroupSelection={jest.fn()}
-				requestOwnPlatformSelection={jest.fn()}
-				searchMediaItemsCatalog={jest.fn()}
-				loadMediaItemCatalogDetails={jest.fn()}
-				resetMediaItemsCatalogSearch={jest.fn()}
-				goBack={jest.fn()}
-			/>
-		);
+		render(createScreen({
+			selectedOwnPlatform,
+			saveMediaItem
+		}));
 
 		expect(screen.getByLabelText('Owned at')).toHaveTextContent('Kindle');
 
@@ -305,5 +221,37 @@ describe('MediaItemDetailsScreenComponent', () => {
 			name: 'Dune',
 			ownPlatform: selectedOwnPlatform
 		}, false);
+	});
+
+	test('restores unsaved draft after remounting from picker navigation', async() => {
+		let savedDraft: MediaItemInternal | undefined;
+		const persistFormDraft = jest.fn((mediaItem: MediaItemInternal) => {
+			savedDraft = mediaItem;
+		});
+
+		const { unmount } = render(createScreen({
+			persistFormDraft
+		}));
+
+		const user = userEvent.setup();
+		await user.type(screen.getByLabelText('Search or type name'), 'Dune');
+		await user.type(screen.getByLabelText('Number of pages'), '412');
+		await user.type(screen.getByLabelText('Your notes'), 'Keep this draft');
+
+		expect(savedDraft).toMatchObject({
+			name: 'Dune',
+			pagesNumber: 412,
+			userComment: 'Keep this draft'
+		});
+
+		unmount();
+
+		render(createScreen({
+			draftMediaItem: savedDraft
+		}));
+
+		expect(screen.getByLabelText('Search or type name')).toHaveValue('Dune');
+		expect(screen.getByLabelText('Number of pages')).toHaveValue(412);
+		expect(screen.getByLabelText('Your notes')).toHaveValue('Keep this draft');
 	});
 });
