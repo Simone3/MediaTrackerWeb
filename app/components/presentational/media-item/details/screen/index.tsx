@@ -188,15 +188,40 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 	 * Syncs local form values from the Redux source media item
 	 */
 	private syncFormValuesWithProps(): void {
-		this.loadedTvShowSeasonsTimestamp = undefined;
+		this.loadedTvShowSeasonsTimestamp = this.props.tvShowSeasonsLoadTimestamp;
 
 		this.setState({
-			formValues: {
-				...this.props.mediaItem
-			}
+			formValues: this.buildFormValuesFromProps()
 		}, () => {
 			this.notifyFormStatus();
 		});
+	}
+
+	/**
+	 * Builds form values from Redux props, including staged selections and unsaved catalog data
+	 * @returns initial form values
+	 */
+	private buildFormValuesFromProps(): MediaItemDetailsFormValues {
+		let formValues: MediaItemDetailsFormValues = {
+			...this.props.mediaItem
+		};
+
+		if(this.props.catalogDetails) {
+			formValues = this.mergeCatalogDetails(formValues, this.props.catalogDetails);
+		}
+
+		if(formValues.mediaType === 'TV_SHOW' && this.props.tvShowSeasonsLoadTimestamp) {
+			formValues = {
+				...formValues,
+				seasons: this.props.tvShowSeasons.length > 0 ? [ ...this.props.tvShowSeasons ] : undefined
+			};
+		}
+
+		return {
+			...formValues,
+			group: this.props.selectedGroup,
+			ownPlatform: this.props.selectedOwnPlatform
+		};
 	}
 
 	/**

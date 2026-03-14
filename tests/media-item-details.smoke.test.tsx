@@ -261,4 +261,49 @@ describe('MediaItemDetailsScreenComponent', () => {
 		expect(screen.getByLabelText('Owned at')).toHaveTextContent('Kindle');
 		expect(screen.getByLabelText('Group')).toHaveTextContent('Sci-Fi Saga');
 	});
+
+	test('hydrates selected own platform on mount and saves it', async() => {
+		const saveMediaItem = jest.fn();
+		const selectedOwnPlatform: OwnPlatformInternal = {
+			id: 'platform-id',
+			name: 'Kindle',
+			color: '#f5a623',
+			icon: 'kindle'
+		};
+
+		render(
+			<MediaItemDetailsScreenComponent
+				isLoading={false}
+				mediaItem={DEFAULT_BOOK}
+				sameNameConfirmationRequested={false}
+				tvShowSeasons={[]}
+				tvShowSeasonsLoadTimestamp={undefined}
+				catalogSearchResults={undefined}
+				catalogDetails={undefined}
+				selectedGroup={undefined}
+				selectedOwnPlatform={selectedOwnPlatform}
+				saveMediaItem={saveMediaItem}
+				notifyFormStatus={jest.fn()}
+				handleTvShowSeasons={jest.fn()}
+				requestGroupSelection={jest.fn()}
+				requestOwnPlatformSelection={jest.fn()}
+				searchMediaItemsCatalog={jest.fn()}
+				loadMediaItemCatalogDetails={jest.fn()}
+				resetMediaItemsCatalogSearch={jest.fn()}
+				goBack={jest.fn()}
+			/>
+		);
+
+		expect(screen.getByLabelText('Owned at')).toHaveTextContent('Kindle');
+
+		const user = userEvent.setup();
+		await user.type(screen.getByLabelText('Search or type name'), 'Dune');
+		await user.click(screen.getByRole('button', { name: 'Save' }));
+
+		expect(saveMediaItem).toHaveBeenCalledWith({
+			...DEFAULT_BOOK,
+			name: 'Dune',
+			ownPlatform: selectedOwnPlatform
+		}, false);
+	});
 });
