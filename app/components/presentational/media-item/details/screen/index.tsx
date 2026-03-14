@@ -211,7 +211,7 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 			formValues = this.mergeCatalogDetails(formValues, this.props.catalogDetails);
 		}
 
-		if(!hasDraft && formValues.mediaType === 'TV_SHOW' && this.props.tvShowSeasonsLoadTimestamp) {
+		if(formValues.mediaType === 'TV_SHOW' && this.props.tvShowSeasonsLoadTimestamp) {
 			formValues = {
 				...formValues,
 				seasons: this.props.tvShowSeasons.length > 0 ? [ ...this.props.tvShowSeasons ] : undefined

@@ -145,6 +145,7 @@
   - reconnects catalog search/details loading plus group/platform selection wiring in the details screen
   - preserves staged group/platform/catalog form state when returning from picker/detail sub-screens on web remount
   - preserves arbitrary unsaved main-form edits when opening and backing out of group/platform picker screens
+  - preserves handled TV show season edits when returning from the seasons sub-flow
 - Relevant files:
   - `app/components/containers/media-item/details/screen.ts`
   - `app/components/presentational/media-item/details/screen/index.tsx`

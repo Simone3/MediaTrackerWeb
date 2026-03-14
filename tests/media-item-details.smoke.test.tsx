@@ -254,4 +254,42 @@ describe('MediaItemDetailsScreenComponent', () => {
 		expect(screen.getByLabelText('Number of pages')).toHaveValue(412);
 		expect(screen.getByLabelText('Your notes')).toHaveValue('Keep this draft');
 	});
+
+	test('restores handled tv show seasons after remounting from the seasons flow', () => {
+		const draftMediaItem: TvShowInternal = {
+			id: 'tv-show-id',
+			name: 'Dark',
+			mediaType: 'TV_SHOW',
+			status: 'ACTIVE',
+			importance: '300',
+			seasons: [
+				{
+					number: 1,
+					episodesNumber: 10,
+					watchedEpisodesNumber: 8
+				}
+			]
+		};
+		const handledSeasons = [
+			{
+				number: 1,
+				episodesNumber: 10,
+				watchedEpisodesNumber: 10
+			},
+			{
+				number: 2,
+				episodesNumber: 8,
+				watchedEpisodesNumber: 4
+			}
+		];
+
+		render(createScreen({
+			mediaItem: draftMediaItem,
+			draftMediaItem: draftMediaItem,
+			tvShowSeasons: handledSeasons,
+			tvShowSeasonsLoadTimestamp: new Date('2026-03-14T12:00:00.000Z')
+		}));
+
+		expect(screen.getByText('2 seasons, watched 14 out of 18 episodes')).toBeInTheDocument();
+	});
 });
