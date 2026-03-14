@@ -1,0 +1,44 @@
+
+## Recap
+- Remember that this was an old React Native mobile app that you transformed into a React webapp.
+- Our goal is to have exactly the same logic as the old RN app, except for the "Import from old app" functionality, which was removed.
+- In the Git history you can find the original RN code (commit d06c1ed109c400087b408e28816a603adfb4d2f8 is the complete original code).
+
+## Constraints
+- Work only in this repository and only on the current branch.
+- Do NOT introduce extra libraries unless you justify them briefly and they clearly reduce work or risk.
+- Just use plain React with Typescript and CSS; no frameworks like Vite or NextJS.
+- Keep the code style consistent (spacing, new lines, etc.). However, do remove any empty line just after the start of code blocks (functions, ifs, etc. but NOT classes).
+- Testing: add/keep a minimal but meaningful test setup (unit for key logic + at least 1-2 smoke tests for critical flows). All tests must pass before closing a feature or fix.
+- You can commit the code when a feature or fix is done, but all commits must start with "Codex: ".
+
+## Dev environment
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Start dev server:
+```bash
+npm start
+```
+The app runs on `http://localhost:5173`.
+
+3. Build production bundle:
+```bash
+npm run build
+```
+
+4. Quality checks:
+```bash
+npm run lint
+npm run typecheck
+npm test
+```
+
+
+
+
+
+
+
