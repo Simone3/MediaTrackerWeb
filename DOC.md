@@ -135,6 +135,19 @@
   - `app/web/styles.css`
   - `tests/media-item-context-menu.smoke.test.tsx`
   - `tests/media-items-list-container.smoke.test.tsx`
+- Media item details form had drifted far from the old RN flow.
+- Correct behavior on web now:
+  - restores the old shared field order on the details screen
+  - removes the stray editable `status` field
+  - brings back the top image/action row with Google/Wikipedia and catalog reload actions
+  - restores `group`, `own platform`, `order in group`, and `completed on` handling
+  - switches creator/genre/platform multi-value fields back to single-line inputs instead of textareas
+  - reconnects catalog search/details loading plus group/platform selection wiring in the details screen
+- Relevant files:
+  - `app/components/containers/media-item/details/screen.ts`
+  - `app/components/presentational/media-item/details/screen/index.tsx`
+  - `app/web/styles.css`
+  - `tests/media-item-details.smoke.test.tsx`
 - Inline media-item completion had an immutability bug on web:
   - `MARK_MEDIA_ITEM_AS_COMPLETE` reused the existing `completedOn` array reference
   - pushing the new completion date mutated Redux state during dispatch

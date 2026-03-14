@@ -4,6 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { MediaItemDetailsScreenComponent } from 'app/components/presentational/media-item/details/screen';
 import { DEFAULT_BOOK } from 'app/data/models/internal/media-items/book';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
+import { GroupInternal } from 'app/data/models/internal/group';
+import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { TvShowInternal } from 'app/data/models/internal/media-items/tv-show';
 
 describe('MediaItemDetailsScreenComponent', () => {
@@ -11,6 +13,11 @@ describe('MediaItemDetailsScreenComponent', () => {
 		const saveMediaItem = jest.fn();
 		const notifyFormStatus = jest.fn();
 		const handleTvShowSeasons = jest.fn();
+		const requestGroupSelection = jest.fn();
+		const requestOwnPlatformSelection = jest.fn();
+		const searchMediaItemsCatalog = jest.fn();
+		const loadMediaItemCatalogDetails = jest.fn();
+		const resetMediaItemsCatalogSearch = jest.fn();
 
 		render(
 			<MediaItemDetailsScreenComponent
@@ -19,9 +26,18 @@ describe('MediaItemDetailsScreenComponent', () => {
 				sameNameConfirmationRequested={false}
 				tvShowSeasons={[]}
 				tvShowSeasonsLoadTimestamp={undefined}
+				catalogSearchResults={undefined}
+				catalogDetails={undefined}
+				selectedGroup={undefined}
+				selectedOwnPlatform={undefined}
 				saveMediaItem={saveMediaItem}
 				notifyFormStatus={notifyFormStatus}
 				handleTvShowSeasons={handleTvShowSeasons}
+				requestGroupSelection={requestGroupSelection}
+				requestOwnPlatformSelection={requestOwnPlatformSelection}
+				searchMediaItemsCatalog={searchMediaItemsCatalog}
+				loadMediaItemCatalogDetails={loadMediaItemCatalogDetails}
+				resetMediaItemsCatalogSearch={resetMediaItemsCatalogSearch}
 				goBack={jest.fn()}
 			/>
 		);
@@ -50,6 +66,11 @@ describe('MediaItemDetailsScreenComponent', () => {
 		}, false);
 		expect(notifyFormStatus).toHaveBeenCalled();
 		expect(handleTvShowSeasons).not.toHaveBeenCalled();
+		expect(requestGroupSelection).not.toHaveBeenCalled();
+		expect(requestOwnPlatformSelection).not.toHaveBeenCalled();
+		expect(searchMediaItemsCatalog).not.toHaveBeenCalled();
+		expect(loadMediaItemCatalogDetails).not.toHaveBeenCalled();
+		expect(resetMediaItemsCatalogSearch).not.toHaveBeenCalled();
 	});
 
 	test('asks confirmation and retries save when same-name warning is requested', async() => {
@@ -69,9 +90,18 @@ describe('MediaItemDetailsScreenComponent', () => {
 				sameNameConfirmationRequested={false}
 				tvShowSeasons={[]}
 				tvShowSeasonsLoadTimestamp={undefined}
+				catalogSearchResults={undefined}
+				catalogDetails={undefined}
+				selectedGroup={undefined}
+				selectedOwnPlatform={undefined}
 				saveMediaItem={saveMediaItem}
 				notifyFormStatus={jest.fn()}
 				handleTvShowSeasons={jest.fn()}
+				requestGroupSelection={jest.fn()}
+				requestOwnPlatformSelection={jest.fn()}
+				searchMediaItemsCatalog={jest.fn()}
+				loadMediaItemCatalogDetails={jest.fn()}
+				resetMediaItemsCatalogSearch={jest.fn()}
 				goBack={jest.fn()}
 			/>
 		);
@@ -83,9 +113,18 @@ describe('MediaItemDetailsScreenComponent', () => {
 				sameNameConfirmationRequested={true}
 				tvShowSeasons={[]}
 				tvShowSeasonsLoadTimestamp={undefined}
+				catalogSearchResults={undefined}
+				catalogDetails={undefined}
+				selectedGroup={undefined}
+				selectedOwnPlatform={undefined}
 				saveMediaItem={saveMediaItem}
 				notifyFormStatus={jest.fn()}
 				handleTvShowSeasons={jest.fn()}
+				requestGroupSelection={jest.fn()}
+				requestOwnPlatformSelection={jest.fn()}
+				searchMediaItemsCatalog={jest.fn()}
+				loadMediaItemCatalogDetails={jest.fn()}
+				resetMediaItemsCatalogSearch={jest.fn()}
 				goBack={jest.fn()}
 			/>
 		);
@@ -122,9 +161,18 @@ describe('MediaItemDetailsScreenComponent', () => {
 				sameNameConfirmationRequested={false}
 				tvShowSeasons={[]}
 				tvShowSeasonsLoadTimestamp={undefined}
+				catalogSearchResults={undefined}
+				catalogDetails={undefined}
+				selectedGroup={undefined}
+				selectedOwnPlatform={undefined}
 				saveMediaItem={jest.fn()}
 				notifyFormStatus={jest.fn()}
 				handleTvShowSeasons={handleTvShowSeasons}
+				requestGroupSelection={jest.fn()}
+				requestOwnPlatformSelection={jest.fn()}
+				searchMediaItemsCatalog={jest.fn()}
+				loadMediaItemCatalogDetails={jest.fn()}
+				resetMediaItemsCatalogSearch={jest.fn()}
 				goBack={jest.fn()}
 			/>
 		);
@@ -134,5 +182,83 @@ describe('MediaItemDetailsScreenComponent', () => {
 
 		expect(handleTvShowSeasons).toHaveBeenCalledWith(tvShow.seasons);
 		expect(screen.getByText('1 seasons, watched 8 out of 10 episodes')).toBeInTheDocument();
+	});
+
+	test('renders the old shared book form controls and syncs selected entities', () => {
+		const mediaItem: MediaItemInternal = {
+			...DEFAULT_BOOK,
+			id: 'book-id',
+			name: 'Dune',
+			importance: '300',
+			catalogId: 'catalog-1',
+			imageUrl: 'https://example.com/dune.jpg'
+		};
+		const selectedGroup: GroupInternal = {
+			id: 'group-id',
+			name: 'Sci-Fi Saga'
+		};
+		const selectedOwnPlatform: OwnPlatformInternal = {
+			id: 'platform-id',
+			name: 'Kindle',
+			color: '#f5a623',
+			icon: 'kindle'
+		};
+
+		const { rerender } = render(
+			<MediaItemDetailsScreenComponent
+				isLoading={false}
+				mediaItem={mediaItem}
+				sameNameConfirmationRequested={false}
+				tvShowSeasons={[]}
+				tvShowSeasonsLoadTimestamp={undefined}
+				catalogSearchResults={undefined}
+				catalogDetails={undefined}
+				selectedGroup={undefined}
+				selectedOwnPlatform={undefined}
+				saveMediaItem={jest.fn()}
+				notifyFormStatus={jest.fn()}
+				handleTvShowSeasons={jest.fn()}
+				requestGroupSelection={jest.fn()}
+				requestOwnPlatformSelection={jest.fn()}
+				searchMediaItemsCatalog={jest.fn()}
+				loadMediaItemCatalogDetails={jest.fn()}
+				resetMediaItemsCatalogSearch={jest.fn()}
+				goBack={jest.fn()}
+			/>
+		);
+
+		expect(screen.queryByText('Status')).not.toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'Google Search' })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'Wikipedia Search' })).toBeInTheDocument();
+		expect(screen.getByAltText('Dune cover')).toBeInTheDocument();
+		expect(screen.getByLabelText('Owned at')).toHaveTextContent('None');
+		expect(screen.getByLabelText('Group')).toHaveTextContent('None');
+		expect(screen.getByText('Completed on')).toBeInTheDocument();
+
+		rerender(
+			<MediaItemDetailsScreenComponent
+				isLoading={false}
+				mediaItem={mediaItem}
+				sameNameConfirmationRequested={false}
+				tvShowSeasons={[]}
+				tvShowSeasonsLoadTimestamp={undefined}
+				catalogSearchResults={undefined}
+				catalogDetails={undefined}
+				selectedGroup={selectedGroup}
+				selectedOwnPlatform={selectedOwnPlatform}
+				saveMediaItem={jest.fn()}
+				notifyFormStatus={jest.fn()}
+				handleTvShowSeasons={jest.fn()}
+				requestGroupSelection={jest.fn()}
+				requestOwnPlatformSelection={jest.fn()}
+				searchMediaItemsCatalog={jest.fn()}
+				loadMediaItemCatalogDetails={jest.fn()}
+				resetMediaItemsCatalogSearch={jest.fn()}
+				goBack={jest.fn()}
+			/>
+		);
+
+		expect(screen.getByLabelText('Owned at')).toHaveTextContent('Kindle');
+		expect(screen.getByLabelText('Group')).toHaveTextContent('Sci-Fi Saga');
 	});
 });

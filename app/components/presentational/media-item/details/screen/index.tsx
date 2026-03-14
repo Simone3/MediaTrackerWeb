@@ -1,15 +1,32 @@
-import React, { Component, ReactNode } from 'react';
-import { DEFAULT_BOOK, BookInternal } from 'app/data/models/internal/media-items/book';
-import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MEDIA_ITEM_STATUS_INTERNAL_VALUES, MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
-import { MovieInternal } from 'app/data/models/internal/media-items/movie';
-import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
-import { VideogameInternal } from 'app/data/models/internal/media-items/videogame';
+import React, { Component, KeyboardEvent, ReactNode } from 'react';
+import { config } from 'app/config/config';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
+import { DEFAULT_CATALOG_BOOK, DEFAULT_BOOK, BookInternal } from 'app/data/models/internal/media-items/book';
+import { GroupInternal } from 'app/data/models/internal/group';
+import { CatalogMediaItemInternal, MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
+import { DEFAULT_CATALOG_MOVIE, MovieInternal } from 'app/data/models/internal/media-items/movie';
+import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
+import { DEFAULT_CATALOG_TV_SHOW, TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
+import { DEFAULT_CATALOG_VIDEOGAME, VideogameInternal } from 'app/data/models/internal/media-items/videogame';
+import downloadIcon from 'app/resources/images/ic_download.png';
+import googleIcon from 'app/resources/images/ic_google.png';
+import howLongToBeatIcon from 'app/resources/images/ic_howlongtobeat.png';
+import justWatchIcon from 'app/resources/images/ic_justwatch.png';
+import defaultMediaItemImage from 'app/resources/images/im_media_item_form_default.png';
+import wikipediaIcon from 'app/resources/images/ic_wikipedia.png';
 import { i18n } from 'app/utilities/i18n';
 import { mediaItemUtils } from 'app/utilities/media-item-utils';
 
 type MediaItemDetailsFormValues = MediaItemInternal & Partial<BookInternal & MovieInternal & TvShowInternal & VideogameInternal>;
+
+type MediaItemActionButton = {
+	key: string;
+	label: string;
+	icon: string;
+	disabled: boolean;
+	onClick: () => void;
+};
 
 /**
  * Presentational component that contains the whole "media item details" screen, that works as the "add new media item", "update media item" and
@@ -18,7 +35,9 @@ type MediaItemDetailsFormValues = MediaItemInternal & Partial<BookInternal & Mov
 export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsScreenComponentInput & MediaItemDetailsScreenComponentOutput, MediaItemDetailsScreenComponentState> {
 	public state: MediaItemDetailsScreenComponentState = {
 		formValues: DEFAULT_BOOK,
-		confirmSameNameVisible: false
+		confirmSameNameVisible: false,
+		confirmReloadCatalogVisible: false,
+		pendingReloadCatalogId: undefined
 	};
 
 	private loadedTvShowSeasonsTimestamp?: Date;
@@ -33,13 +52,19 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 	/**
 	 * @override
 	 */
-	public componentDidUpdate(prevProps: Readonly<MediaItemDetailsScreenComponentInput & MediaItemDetailsScreenComponentOutput>, prevState: Readonly<MediaItemDetailsScreenComponentState>): void {
+	public componentDidUpdate(
+		prevProps: Readonly<MediaItemDetailsScreenComponentInput & MediaItemDetailsScreenComponentOutput>,
+		prevState: Readonly<MediaItemDetailsScreenComponentState>
+	): void {
 		if(this.areMediaItemsDifferent(prevProps.mediaItem, this.props.mediaItem)) {
 			this.syncFormValuesWithProps();
 			return;
 		}
 
 		this.checkLoadTvShowSeasons();
+		this.checkLoadCatalogDetails(prevProps.catalogDetails);
+		this.checkLoadSelectedGroup(prevProps.selectedGroup);
+		this.checkLoadSelectedOwnPlatform(prevProps.selectedOwnPlatform);
 
 		if(!prevProps.sameNameConfirmationRequested && this.props.sameNameConfirmationRequested) {
 			this.setState({
@@ -61,7 +86,8 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 		} = this.props;
 		const {
 			formValues,
-			confirmSameNameVisible
+			confirmSameNameVisible,
+			confirmReloadCatalogVisible
 		} = this.state;
 		const isValid = this.isFormValid(formValues);
 		const title = formValues.id ? formValues.name : i18n.t(`mediaItem.details.title.new.${formValues.mediaType}`);
@@ -91,95 +117,18 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 						event.preventDefault();
 						this.submitForm(false);
 					}}>
-					<label className='media-item-details-label' htmlFor='media-item-name'>
-						{i18n.t('mediaItem.details.placeholders.name')}
-					</label>
-					<input
-						id='media-item-name'
-						className='media-item-details-input'
-						type='text'
-						value={formValues.name}
-						onChange={(event) => {
-							this.setFormField('name', event.target.value);
-						}}
-					/>
-
-					<label className='media-item-details-label' htmlFor='media-item-status'>
-						Status
-					</label>
-					<select
-						id='media-item-status'
-						className='media-item-details-select'
-						value={formValues.status}
-						onChange={(event) => {
-							this.setFormField('status', event.target.value as MediaItemInternal['status']);
-						}}>
-						{MEDIA_ITEM_STATUS_INTERNAL_VALUES.map((status) => {
-							return (
-								<option key={status} value={status}>
-									{status}
-								</option>
-							);
-						})}
-					</select>
-
-					<label className='media-item-details-label' htmlFor='media-item-importance'>
-						{i18n.t('mediaItem.details.prompts.importance')}
-					</label>
-					<select
-						id='media-item-importance'
-						className='media-item-details-select'
-						value={formValues.importance}
-						onChange={(event) => {
-							this.setFormField('importance', event.target.value as MediaItemInternal['importance']);
-						}}>
-						{MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES.map((importance) => {
-							return (
-								<option key={importance} value={importance}>
-									{i18n.t(`mediaItem.common.importance.${importance}`)}
-								</option>
-							);
-						})}
-					</select>
-
-					<label className='media-item-details-label' htmlFor='media-item-release-date'>
-						{i18n.t('mediaItem.details.placeholders.releaseDate')}
-					</label>
-					<input
-						id='media-item-release-date'
-						className='media-item-details-input'
-						type='date'
-						value={this.dateToInputValue(formValues.releaseDate)}
-						onChange={(event) => {
-							this.setFormField('releaseDate', this.inputValueToDate(event.target.value));
-						}}
-					/>
-
-					{this.renderTypeSpecificFields(formValues)}
-
-					<label className='media-item-details-label' htmlFor='media-item-description'>
-						{i18n.t('mediaItem.details.placeholders.description')}
-					</label>
-					<textarea
-						id='media-item-description'
-						className='media-item-details-textarea'
-						value={formValues.description || ''}
-						onChange={(event) => {
-							this.setFormField('description', event.target.value || undefined);
-						}}
-					/>
-
-					<label className='media-item-details-label' htmlFor='media-item-user-comment'>
-						{i18n.t('mediaItem.details.placeholders.userComment')}
-					</label>
-					<textarea
-						id='media-item-user-comment'
-						className='media-item-details-textarea'
-						value={formValues.userComment || ''}
-						onChange={(event) => {
-							this.setFormField('userComment', event.target.value || undefined);
-						}}
-					/>
+					{this.renderImageButtonsRow(formValues)}
+					{this.renderNameField(formValues)}
+					{this.renderDescriptionField(formValues)}
+					{this.renderReleaseDateField(formValues)}
+					{this.renderTypeSpecificPrimaryFields(formValues)}
+					{this.renderGenresField(formValues)}
+					{this.renderImportanceField(formValues)}
+					{this.renderOwnPlatformField(formValues)}
+					{this.renderGroupField(formValues)}
+					{this.renderOrderInGroupField(formValues)}
+					{this.renderUserCommentField(formValues)}
+					{this.renderCompletionDatesField(formValues)}
 				</form>
 				<ConfirmDialogComponent
 					visible={confirmSameNameVisible}
@@ -197,6 +146,33 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 					onCancel={() => {
 						this.setState({
 							confirmSameNameVisible: false
+						});
+					}}
+				/>
+				<ConfirmDialogComponent
+					visible={confirmReloadCatalogVisible}
+					title={i18n.t('mediaItem.common.alert.reloadCatalog.title')}
+					message={i18n.t('mediaItem.common.alert.reloadCatalog.message')}
+					confirmLabel={i18n.t('common.alert.default.okButton')}
+					cancelLabel={i18n.t('common.alert.default.cancelButton')}
+					onConfirm={() => {
+						const {
+							pendingReloadCatalogId
+						} = this.state;
+
+						this.setState({
+							confirmReloadCatalogVisible: false,
+							pendingReloadCatalogId: undefined
+						}, () => {
+							if(pendingReloadCatalogId) {
+								this.props.loadMediaItemCatalogDetails(pendingReloadCatalogId);
+							}
+						});
+					}}
+					onCancel={() => {
+						this.setState({
+							confirmReloadCatalogVisible: false,
+							pendingReloadCatalogId: undefined
 						});
 					}}
 				/>
@@ -244,11 +220,456 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 	}
 
 	/**
+	 * Checks if catalog details must be merged into the current form
+	 * @param prevCatalogDetails previous catalog details
+	 */
+	private checkLoadCatalogDetails(prevCatalogDetails?: CatalogMediaItemInternal): void {
+		const {
+			catalogDetails
+		} = this.props;
+
+		if(!catalogDetails || prevCatalogDetails?.catalogLoadId === catalogDetails.catalogLoadId) {
+			return;
+		}
+
+		this.setState((prevState) => {
+			return {
+				formValues: this.mergeCatalogDetails(prevState.formValues, catalogDetails)
+			};
+		});
+	}
+
+	/**
+	 * Checks if the selected group has changed in Redux
+	 * @param prevSelectedGroup previous selected group
+	 */
+	private checkLoadSelectedGroup(prevSelectedGroup?: GroupInternal): void {
+		if(prevSelectedGroup?.id === this.props.selectedGroup?.id) {
+			return;
+		}
+
+		this.setState((prevState) => {
+			const group = this.props.selectedGroup;
+			return {
+				formValues: {
+					...prevState.formValues,
+					group: group,
+					orderInGroup: group ? prevState.formValues.orderInGroup : undefined
+				}
+			};
+		});
+	}
+
+	/**
+	 * Checks if the selected own platform has changed in Redux
+	 * @param prevSelectedOwnPlatform previous selected own platform
+	 */
+	private checkLoadSelectedOwnPlatform(prevSelectedOwnPlatform?: OwnPlatformInternal): void {
+		if(prevSelectedOwnPlatform?.id === this.props.selectedOwnPlatform?.id) {
+			return;
+		}
+
+		this.setState((prevState) => {
+			return {
+				formValues: {
+					...prevState.formValues,
+					ownPlatform: this.props.selectedOwnPlatform
+				}
+			};
+		});
+	}
+
+	/**
+	 * Renders the image and its action buttons
+	 * @param mediaItem current media item
+	 * @returns the component
+	 */
+	private renderImageButtonsRow(mediaItem: MediaItemDetailsFormValues): ReactNode {
+		if(!mediaItem.id && !mediaItem.catalogId) {
+			return null;
+		}
+
+		const buttons = this.getActionButtons(mediaItem);
+
+		return (
+			<div className='media-item-details-image-row'>
+				<div className='media-item-details-image-wrapper'>
+					<img
+						className='media-item-details-image'
+						src={mediaItem.imageUrl || defaultMediaItemImage}
+						alt={`${mediaItem.name || i18n.t(`category.mediaTypes.${mediaItem.mediaType}`)} cover`}
+					/>
+				</div>
+				<div className='media-item-details-image-actions'>
+					{buttons.map((button) => {
+						return (
+							<button
+								key={button.key}
+								type='button'
+								className='media-item-details-image-action'
+								disabled={button.disabled}
+								aria-label={button.label}
+								title={button.label}
+								onClick={button.onClick}>
+								<img className='media-item-details-image-action-icon' src={button.icon} alt='' />
+							</button>
+						);
+					})}
+				</div>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the catalog-aware name field
+	 * @param mediaItem current media item
+	 * @returns the component
+	 */
+	private renderNameField(mediaItem: MediaItemDetailsFormValues): ReactNode {
+		return (
+			<>
+				<label className='media-item-details-label' htmlFor='media-item-name'>
+					{i18n.t('mediaItem.details.placeholders.name')}
+				</label>
+				<div className='media-item-details-search-row'>
+					<input
+						id='media-item-name'
+						className='media-item-details-input'
+						type='text'
+						value={mediaItem.name}
+						onChange={(event) => {
+							if(this.props.catalogSearchResults && this.props.catalogSearchResults.length > 0) {
+								this.props.resetMediaItemsCatalogSearch();
+							}
+
+							this.setFormField('name', event.target.value);
+						}}
+						onKeyDown={(event) => {
+							this.handleNameFieldKeyDown(event);
+						}}
+					/>
+					<button
+						type='button'
+						className='media-item-details-button media-item-details-button-secondary media-item-details-search-button'
+						disabled={!mediaItem.name.trim()}
+						onClick={() => {
+							this.submitCatalogSearch();
+						}}>
+						Search
+					</button>
+				</div>
+				{this.renderCatalogSearchResults()}
+			</>
+		);
+	}
+
+	/**
+	 * Renders catalog search suggestions
+	 * @returns the component
+	 */
+	private renderCatalogSearchResults(): ReactNode {
+		const {
+			catalogSearchResults
+		} = this.props;
+
+		if(!catalogSearchResults || catalogSearchResults.length === 0) {
+			return null;
+		}
+
+		return (
+			<div className='media-item-details-search-results'>
+				{catalogSearchResults.map((result) => {
+					return (
+						<button
+							key={result.catalogId}
+							type='button'
+							className='media-item-details-search-result'
+							onClick={() => {
+								this.props.resetMediaItemsCatalogSearch();
+								this.props.loadMediaItemCatalogDetails(result.catalogId);
+							}}>
+							{this.formatCatalogSearchResult(result)}
+						</button>
+					);
+				})}
+			</div>
+		);
+	}
+
+	/**
+	 * Formats a catalog search result label
+	 * @param result catalog search result
+	 * @returns label
+	 */
+	private formatCatalogSearchResult(result: SearchMediaItemCatalogResultInternal): string {
+		if(!result.releaseDate) {
+			return result.name;
+		}
+
+		return i18n.t('mediaItem.details.catalog.result.fullLabel', {
+			name: result.name,
+			releaseDate: result.releaseDate.getFullYear()
+		});
+	}
+
+	/**
+	 * Renders the description field
+	 * @param mediaItem current media item
+	 * @returns the component
+	 */
+	private renderDescriptionField(mediaItem: MediaItemDetailsFormValues): ReactNode {
+		return (
+			<>
+				<label className='media-item-details-label' htmlFor='media-item-description'>
+					{i18n.t('mediaItem.details.placeholders.description')}
+				</label>
+				<textarea
+					id='media-item-description'
+					className='media-item-details-textarea'
+					value={mediaItem.description || ''}
+					onChange={(event) => {
+						this.setFormField('description', event.target.value || undefined);
+					}}
+				/>
+			</>
+		);
+	}
+
+	/**
+	 * Renders the release date field
+	 * @param mediaItem current media item
+	 * @returns the component
+	 */
+	private renderReleaseDateField(mediaItem: MediaItemDetailsFormValues): ReactNode {
+		return (
+			<>
+				<label className='media-item-details-label' htmlFor='media-item-release-date'>
+					{i18n.t('mediaItem.details.placeholders.releaseDate')}
+				</label>
+				<input
+					id='media-item-release-date'
+					className='media-item-details-input'
+					type='date'
+					value={this.dateToInputValue(mediaItem.releaseDate)}
+					onChange={(event) => {
+						this.setFormField('releaseDate', this.inputValueToDate(event.target.value));
+					}}
+				/>
+			</>
+		);
+	}
+
+	/**
+	 * Renders the common genres field
+	 * @param mediaItem current media item
+	 * @returns the component
+	 */
+	private renderGenresField(mediaItem: MediaItemDetailsFormValues): ReactNode {
+		return this.renderArrayTextInputField(
+			'media-item-genres',
+			i18n.t('mediaItem.details.placeholders.genres'),
+			mediaItem.genres,
+			(values) => {
+				this.setFormField('genres', values);
+			}
+		);
+	}
+
+	/**
+	 * Renders the importance field
+	 * @param mediaItem current media item
+	 * @returns the component
+	 */
+	private renderImportanceField(mediaItem: MediaItemDetailsFormValues): ReactNode {
+		return (
+			<>
+				<label className='media-item-details-label' htmlFor='media-item-importance'>
+					{i18n.t('mediaItem.details.prompts.importance')}
+				</label>
+				<select
+					id='media-item-importance'
+					className='media-item-details-select'
+					value={mediaItem.importance}
+					onChange={(event) => {
+						this.setFormField('importance', event.target.value as MediaItemInternal['importance']);
+					}}>
+					{MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES.map((importance) => {
+						return (
+							<option key={importance} value={importance}>
+								{i18n.t(`mediaItem.common.importance.${importance}`)}
+							</option>
+						);
+					})}
+				</select>
+			</>
+		);
+	}
+
+	/**
+	 * Renders the own platform field
+	 * @param mediaItem current media item
+	 * @returns the component
+	 */
+	private renderOwnPlatformField(mediaItem: MediaItemDetailsFormValues): ReactNode {
+		const ownPlatform = mediaItem.ownPlatform;
+
+		return (
+			<>
+				<label className='media-item-details-label' htmlFor='media-item-own-platform'>
+					{i18n.t('mediaItem.details.placeholders.ownPlatform')}
+				</label>
+				<button
+					id='media-item-own-platform'
+					type='button'
+					className='media-item-details-picker-button'
+					onClick={this.props.requestOwnPlatformSelection}>
+					<span className='media-item-details-picker-value'>
+						{ownPlatform && (
+							<span className='media-item-details-picker-swatch' style={{ backgroundColor: ownPlatform.color }} />
+						)}
+						<span>{ownPlatform?.name || i18n.t('ownPlatform.list.none')}</span>
+					</span>
+					<span className='media-item-details-picker-action'>Select</span>
+				</button>
+			</>
+		);
+	}
+
+	/**
+	 * Renders the group field
+	 * @param mediaItem current media item
+	 * @returns the component
+	 */
+	private renderGroupField(mediaItem: MediaItemDetailsFormValues): ReactNode {
+		return (
+			<>
+				<label className='media-item-details-label' htmlFor='media-item-group'>
+					{i18n.t('mediaItem.details.placeholders.group')}
+				</label>
+				<button
+					id='media-item-group'
+					type='button'
+					className='media-item-details-picker-button'
+					onClick={this.props.requestGroupSelection}>
+					<span className='media-item-details-picker-value'>
+						{mediaItem.group?.name || i18n.t('group.list.none')}
+					</span>
+					<span className='media-item-details-picker-action'>Select</span>
+				</button>
+			</>
+		);
+	}
+
+	/**
+	 * Renders the order-in-group field only when a group is selected
+	 * @param mediaItem current media item
+	 * @returns the component
+	 */
+	private renderOrderInGroupField(mediaItem: MediaItemDetailsFormValues): ReactNode {
+		if(!mediaItem.group) {
+			return null;
+		}
+
+		return (
+			<>
+				<label className='media-item-details-label' htmlFor='media-item-order-in-group'>
+					{i18n.t('mediaItem.details.placeholders.orderInGroup')}
+				</label>
+				<input
+					id='media-item-order-in-group'
+					className='media-item-details-input'
+					type='number'
+					value={this.numberToInputValue(mediaItem.orderInGroup)}
+					onChange={(event) => {
+						this.setFormField('orderInGroup', this.inputValueToNumber(event.target.value));
+					}}
+				/>
+			</>
+		);
+	}
+
+	/**
+	 * Renders the user comment field
+	 * @param mediaItem current media item
+	 * @returns the component
+	 */
+	private renderUserCommentField(mediaItem: MediaItemDetailsFormValues): ReactNode {
+		return (
+			<>
+				<label className='media-item-details-label' htmlFor='media-item-user-comment'>
+					{i18n.t('mediaItem.details.placeholders.userComment')}
+				</label>
+				<textarea
+					id='media-item-user-comment'
+					className='media-item-details-textarea'
+					value={mediaItem.userComment || ''}
+					onChange={(event) => {
+						this.setFormField('userComment', event.target.value || undefined);
+					}}
+				/>
+			</>
+		);
+	}
+
+	/**
+	 * Renders the completion dates field
+	 * @param mediaItem current media item
+	 * @returns the component
+	 */
+	private renderCompletionDatesField(mediaItem: MediaItemDetailsFormValues): ReactNode {
+		const completionDates = mediaItem.completedOn ? mediaItem.completedOn : [];
+
+		return (
+			<>
+				<label className='media-item-details-label'>
+					{i18n.t('mediaItem.details.placeholders.completedOn')}
+				</label>
+				<div className='media-item-details-completion-list'>
+					{completionDates.length === 0 && (
+						<p className='media-item-details-inline-hint'>No dates added yet</p>
+					)}
+					{completionDates.map((completedOn, index) => {
+						return (
+							<div className='media-item-details-completion-row' key={`completed-on-${index}`}>
+								<input
+									id={`media-item-completed-on-${index}`}
+									className='media-item-details-input'
+									type='date'
+									value={this.dateToInputValue(completedOn)}
+									onChange={(event) => {
+										this.updateCompletionDate(index, event.target.value);
+									}}
+								/>
+								<button
+									type='button'
+									className='media-item-details-button media-item-details-button-secondary media-item-details-small-button'
+									onClick={() => {
+										this.removeCompletionDate(index);
+									}}>
+									Remove
+								</button>
+							</div>
+						);
+					})}
+					<button
+						type='button'
+						className='media-item-details-button media-item-details-button-secondary media-item-details-inline-button'
+						onClick={() => {
+							this.addCompletionDate();
+						}}>
+						Add date
+					</button>
+				</div>
+			</>
+		);
+	}
+
+	/**
 	 * Renders fields specific to current media item type
 	 * @param mediaItem the current media item values
 	 * @returns the fields
 	 */
-	private renderTypeSpecificFields(mediaItem: MediaItemDetailsFormValues): ReactNode {
+	private renderTypeSpecificPrimaryFields(mediaItem: MediaItemDetailsFormValues): ReactNode {
 		switch(mediaItem.mediaType) {
 			case 'BOOK': {
 				const book = mediaItem as BookInternal;
@@ -267,17 +688,14 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 							}}
 						/>
 
-						<label className='media-item-details-label' htmlFor='media-item-book-authors'>
-							{i18n.t('mediaItem.details.placeholders.creators.BOOK')}
-						</label>
-						<textarea
-							id='media-item-book-authors'
-							className='media-item-details-textarea'
-							value={this.multiTextToInputValue(book.authors)}
-							onChange={(event) => {
-								this.setFormField('authors', this.inputValueToMultiText(event.target.value));
-							}}
-						/>
+						{this.renderArrayTextInputField(
+							'media-item-book-authors',
+							i18n.t('mediaItem.details.placeholders.creators.BOOK'),
+							book.authors,
+							(values) => {
+								this.setFormField('authors', values);
+							}
+						)}
 					</>
 				);
 			}
@@ -299,17 +717,14 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 							}}
 						/>
 
-						<label className='media-item-details-label' htmlFor='media-item-movie-directors'>
-							{i18n.t('mediaItem.details.placeholders.creators.MOVIE')}
-						</label>
-						<textarea
-							id='media-item-movie-directors'
-							className='media-item-details-textarea'
-							value={this.multiTextToInputValue(movie.directors)}
-							onChange={(event) => {
-								this.setFormField('directors', this.inputValueToMultiText(event.target.value));
-							}}
-						/>
+						{this.renderArrayTextInputField(
+							'media-item-movie-directors',
+							i18n.t('mediaItem.details.placeholders.creators.MOVIE'),
+							movie.directors,
+							(values) => {
+								this.setFormField('directors', values);
+							}
+						)}
 					</>
 				);
 			}
@@ -317,6 +732,7 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 			case 'TV_SHOW': {
 				const tvShow = mediaItem as TvShowInternal;
 				const seasonsSummary = this.getTvShowSeasonsSummary(tvShow.seasons);
+
 				return (
 					<>
 						<label className='media-item-details-label' htmlFor='media-item-episode-runtime'>
@@ -332,17 +748,14 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 							}}
 						/>
 
-						<label className='media-item-details-label' htmlFor='media-item-tv-show-creators'>
-							{i18n.t('mediaItem.details.placeholders.creators.TV_SHOW')}
-						</label>
-						<textarea
-							id='media-item-tv-show-creators'
-							className='media-item-details-textarea'
-							value={this.multiTextToInputValue(tvShow.creators)}
-							onChange={(event) => {
-								this.setFormField('creators', this.inputValueToMultiText(event.target.value));
-							}}
-						/>
+						{this.renderArrayTextInputField(
+							'media-item-tv-show-creators',
+							i18n.t('mediaItem.details.placeholders.creators.TV_SHOW'),
+							tvShow.creators,
+							(values) => {
+								this.setFormField('creators', values);
+							}
+						)}
 
 						<label className='media-item-details-label' htmlFor='media-item-tv-show-seasons-handler'>
 							{i18n.t('mediaItem.details.placeholders.seasons')}
@@ -418,41 +831,32 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 							}}
 						/>
 
-						<label className='media-item-details-label' htmlFor='media-item-videogame-developers'>
-							{i18n.t('mediaItem.details.placeholders.creators.VIDEOGAME')}
-						</label>
-						<textarea
-							id='media-item-videogame-developers'
-							className='media-item-details-textarea'
-							value={this.multiTextToInputValue(videogame.developers)}
-							onChange={(event) => {
-								this.setFormField('developers', this.inputValueToMultiText(event.target.value));
-							}}
-						/>
+						{this.renderArrayTextInputField(
+							'media-item-videogame-developers',
+							i18n.t('mediaItem.details.placeholders.creators.VIDEOGAME'),
+							videogame.developers,
+							(values) => {
+								this.setFormField('developers', values);
+							}
+						)}
 
-						<label className='media-item-details-label' htmlFor='media-item-videogame-publishers'>
-							{i18n.t('mediaItem.details.placeholders.publishers')}
-						</label>
-						<textarea
-							id='media-item-videogame-publishers'
-							className='media-item-details-textarea'
-							value={this.multiTextToInputValue(videogame.publishers)}
-							onChange={(event) => {
-								this.setFormField('publishers', this.inputValueToMultiText(event.target.value));
-							}}
-						/>
+						{this.renderArrayTextInputField(
+							'media-item-videogame-publishers',
+							i18n.t('mediaItem.details.placeholders.publishers'),
+							videogame.publishers,
+							(values) => {
+								this.setFormField('publishers', values);
+							}
+						)}
 
-						<label className='media-item-details-label' htmlFor='media-item-videogame-platforms'>
-							{i18n.t('mediaItem.details.placeholders.platforms')}
-						</label>
-						<textarea
-							id='media-item-videogame-platforms'
-							className='media-item-details-textarea'
-							value={this.multiTextToInputValue(videogame.platforms)}
-							onChange={(event) => {
-								this.setFormField('platforms', this.inputValueToMultiText(event.target.value));
-							}}
-						/>
+						{this.renderArrayTextInputField(
+							'media-item-videogame-platforms',
+							i18n.t('mediaItem.details.placeholders.platforms'),
+							videogame.platforms,
+							(values) => {
+								this.setFormField('platforms', values);
+							}
+						)}
 					</>
 				);
 			}
@@ -460,6 +864,235 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 			default:
 				return null;
 		}
+	}
+
+	/**
+	 * Renders a single-line text input for array values
+	 * @param id field ID
+	 * @param label field label
+	 * @param values field values
+	 * @param onChange change handler
+	 * @returns the component
+	 */
+	private renderArrayTextInputField(id: string, label: string, values: string[] | undefined, onChange: (newValues: string[] | undefined) => void): ReactNode {
+		return (
+			<>
+				<label className='media-item-details-label' htmlFor={id}>
+					{label}
+				</label>
+				<input
+					id={id}
+					className='media-item-details-input'
+					type='text'
+					value={this.inlineTextToInputValue(values)}
+					onChange={(event) => {
+						onChange(this.inputValueToInlineText(event.target.value));
+					}}
+				/>
+			</>
+		);
+	}
+
+	/**
+	 * Builds the action buttons for the media image row
+	 * @param mediaItem current media item
+	 * @returns action buttons
+	 */
+	private getActionButtons(mediaItem: MediaItemDetailsFormValues): MediaItemActionButton[] {
+		const buttons: MediaItemActionButton[] = [
+			{
+				key: 'google',
+				label: i18n.t('mediaItem.details.buttons.google'),
+				icon: googleIcon,
+				disabled: !mediaItem.name,
+				onClick: () => {
+					this.openExternalLink(config.external.googleSearch(encodeURIComponent(mediaItem.name)));
+				}
+			},
+			{
+				key: 'wikipedia',
+				label: i18n.t('mediaItem.details.buttons.wikipedia'),
+				icon: wikipediaIcon,
+				disabled: !mediaItem.name,
+				onClick: () => {
+					this.openExternalLink(config.external.wikipediaSearch(encodeURIComponent(mediaItem.name)));
+				}
+			}
+		];
+
+		if(mediaItem.mediaType === 'MOVIE' || mediaItem.mediaType === 'TV_SHOW') {
+			buttons.push({
+				key: 'just-watch',
+				label: i18n.t('mediaItem.details.buttons.justWatch'),
+				icon: justWatchIcon,
+				disabled: !mediaItem.name,
+				onClick: () => {
+					this.openExternalLink(config.external.justWatchSearch(encodeURIComponent(mediaItem.name)));
+				}
+			});
+		}
+
+		if(mediaItem.mediaType === 'VIDEOGAME') {
+			buttons.push({
+				key: 'how-long-to-beat',
+				label: i18n.t('mediaItem.details.buttons.howLongToBeat'),
+				icon: howLongToBeatIcon,
+				disabled: !mediaItem.name,
+				onClick: () => {
+					this.openExternalLink(config.external.howLongToBeatSearch(encodeURIComponent(mediaItem.name)));
+				}
+			});
+		}
+
+		buttons.push({
+			key: 'reload-catalog',
+			label: i18n.t('mediaItem.details.buttons.downloadCatalog'),
+			icon: downloadIcon,
+			disabled: !mediaItem.catalogId,
+			onClick: () => {
+				if(mediaItem.catalogId) {
+					this.setState({
+						confirmReloadCatalogVisible: true,
+						pendingReloadCatalogId: mediaItem.catalogId
+					});
+				}
+			}
+		});
+
+		return buttons;
+	}
+
+	/**
+	 * Opens an external link in a new tab
+	 * @param url target URL
+	 */
+	private openExternalLink(url: string): void {
+		window.open(url, '_blank', 'noopener,noreferrer');
+	}
+
+	/**
+	 * Submits the current name as a catalog search term
+	 */
+	private submitCatalogSearch(): void {
+		const term = this.state.formValues.name.trim();
+
+		if(!term) {
+			return;
+		}
+
+		this.props.searchMediaItemsCatalog(term);
+	}
+
+	/**
+	 * Handles keyboard interactions on the name field
+	 * @param event keyboard event
+	 */
+	private handleNameFieldKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
+		if(event.key !== 'Enter') {
+			return;
+		}
+
+		event.preventDefault();
+		this.submitCatalogSearch();
+	}
+
+	/**
+	 * Merges catalog details into the current form values
+	 * @param currentValues current form values
+	 * @param catalogDetails latest catalog details
+	 * @returns merged values
+	 */
+	private mergeCatalogDetails(currentValues: MediaItemDetailsFormValues, catalogDetails: CatalogMediaItemInternal): MediaItemDetailsFormValues {
+		const mergedValues: MediaItemDetailsFormValues = {
+			...currentValues,
+			...this.getDefaultCatalogDetails(currentValues.mediaType),
+			...catalogDetails
+		};
+
+		if(currentValues.mediaType === 'TV_SHOW') {
+			const currentTvShow = currentValues as TvShowInternal;
+			const mergedTvShow = mergedValues as TvShowInternal;
+			const currentSeasons = currentTvShow.seasons;
+			const newSeasons = mergedTvShow.seasons;
+
+			if(newSeasons && newSeasons.length > 0 && currentSeasons && currentSeasons.length > 0) {
+				for(const newSeason of newSeasons) {
+					const currentSeason = currentSeasons.find((season) => {
+						return season.number === newSeason.number;
+					});
+
+					if(currentSeason) {
+						newSeason.watchedEpisodesNumber = currentSeason.watchedEpisodesNumber;
+					}
+				}
+			}
+		}
+
+		return mergedValues;
+	}
+
+	/**
+	 * Returns the empty catalog-linked fields for the active media type
+	 * @param mediaType current media type
+	 * @returns default catalog details
+	 */
+	private getDefaultCatalogDetails(mediaType: MediaItemInternal['mediaType']): CatalogMediaItemInternal {
+		switch(mediaType) {
+			case 'BOOK':
+				return DEFAULT_CATALOG_BOOK;
+
+			case 'MOVIE':
+				return DEFAULT_CATALOG_MOVIE;
+
+			case 'TV_SHOW':
+				return DEFAULT_CATALOG_TV_SHOW;
+
+			case 'VIDEOGAME':
+				return DEFAULT_CATALOG_VIDEOGAME;
+
+			default:
+				return DEFAULT_CATALOG_BOOK;
+		}
+	}
+
+	/**
+	 * Adds a completion date entry
+	 */
+	private addCompletionDate(): void {
+		const completionDates = this.state.formValues.completedOn ? [ ...this.state.formValues.completedOn ] : [];
+
+		completionDates.push(new Date());
+		this.setFormField('completedOn', completionDates);
+	}
+
+	/**
+	 * Updates a completion date entry
+	 * @param index row index
+	 * @param value date input value
+	 */
+	private updateCompletionDate(index: number, value: string): void {
+		const completionDates = this.state.formValues.completedOn ? [ ...this.state.formValues.completedOn ] : [];
+		const parsedDate = this.inputValueToDate(value);
+
+		if(!parsedDate) {
+			completionDates.splice(index, 1);
+		}
+		else {
+			completionDates[index] = parsedDate;
+		}
+
+		this.setFormField('completedOn', completionDates.length > 0 ? completionDates : undefined);
+	}
+
+	/**
+	 * Removes a completion date entry
+	 * @param index row index
+	 */
+	private removeCompletionDate(index: number): void {
+		const completionDates = this.state.formValues.completedOn ? [ ...this.state.formValues.completedOn ] : [];
+
+		completionDates.splice(index, 1);
+		this.setFormField('completedOn', completionDates.length > 0 ? completionDates : undefined);
 	}
 
 	/**
@@ -532,10 +1165,10 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 	 */
 	private isFormValid(mediaItem: MediaItemDetailsFormValues): boolean {
 		const hasName = Boolean(mediaItem.name && mediaItem.name.trim());
-		const hasRequiredEnums = Boolean(mediaItem.mediaType) && Boolean(mediaItem.status) && Boolean(mediaItem.importance);
-		const hasOrderIfGroupSelected = mediaItem.group?.id ? this.isOptionalNumberValid(mediaItem.orderInGroup) : true;
+		const hasImportance = Boolean(mediaItem.importance);
+		const hasRequiredOrderIfGroupSelected = mediaItem.group?.id ? mediaItem.orderInGroup !== undefined && this.isOptionalNumberValid(mediaItem.orderInGroup) : true;
 
-		if(!hasName || !hasRequiredEnums || !hasOrderIfGroupSelected) {
+		if(!hasName || !hasImportance || !hasRequiredOrderIfGroupSelected) {
 			return false;
 		}
 
@@ -804,30 +1437,38 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 	}
 
 	/**
-	 * Converts optional string array to textarea text
+	 * Converts an optional string array to an inline input value
 	 * @param values array values
-	 * @returns multiline text
+	 * @returns comma-separated string
 	 */
-	private multiTextToInputValue(values?: string[]): string {
+	private inlineTextToInputValue(values?: string[]): string {
 		if(!values || values.length === 0) {
 			return '';
 		}
-		return values.join('\n');
+		return values.join(', ');
 	}
 
 	/**
-	 * Converts multiline input text to array
-	 * @param value multiline text
+	 * Converts an inline text value to an optional string array
+	 * @param value current input value
 	 * @returns array or undefined
 	 */
-	private inputValueToMultiText(value: string): string[] | undefined {
+	private inputValueToInlineText(value: string): string[] | undefined {
+		const trimmedValue = value.trim();
+		if(!trimmedValue) {
+			return undefined;
+		}
+		if(!value.includes(',')) {
+			return [ value ];
+		}
+
 		const tokens = value
-			.split('\n')
-			.flatMap((row) => {
-				return row.split(',');
+			.split(',')
+			.map((token) => {
+				return token.trim();
 			})
 			.filter((token) => {
-				return token.trim().length > 0;
+				return token.length > 0;
 			});
 
 		return tokens.length > 0 ? tokens : undefined;
@@ -839,16 +1480,65 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 	 * @returns normalized form values
 	 */
 	private normalizeFormValues(values: MediaItemDetailsFormValues): MediaItemDetailsFormValues {
-		return {
+		const normalizedValues: MediaItemDetailsFormValues = {
 			...values,
-			genres: this.normalizeTextArray(values.genres),
-			authors: this.normalizeTextArray(values.authors),
-			directors: this.normalizeTextArray(values.directors),
-			creators: this.normalizeTextArray(values.creators),
-			developers: this.normalizeTextArray(values.developers),
-			publishers: this.normalizeTextArray(values.publishers),
-			platforms: this.normalizeTextArray(values.platforms)
+			status: this.buildStatusLabel(values)
 		};
+
+		if(values.group?.id) {
+			normalizedValues.orderInGroup = values.orderInGroup;
+		}
+		else {
+			delete normalizedValues.orderInGroup;
+		}
+
+		this.applyNormalizedTextArray(normalizedValues, 'genres', values.genres);
+		this.applyNormalizedTextArray(normalizedValues, 'authors', values.authors);
+		this.applyNormalizedTextArray(normalizedValues, 'directors', values.directors);
+		this.applyNormalizedTextArray(normalizedValues, 'creators', values.creators);
+		this.applyNormalizedTextArray(normalizedValues, 'developers', values.developers);
+		this.applyNormalizedTextArray(normalizedValues, 'publishers', values.publishers);
+		this.applyNormalizedTextArray(normalizedValues, 'platforms', values.platforms);
+
+		return normalizedValues;
+	}
+
+	/**
+	 * Builds the internal status label from other media item fields
+	 * @param values form values
+	 * @returns status label
+	 */
+	private buildStatusLabel(values: MediaItemDetailsFormValues): MediaItemInternal['status'] {
+		if(values.completedOn && values.completedOn.length > 0 && !values.markedAsRedo) {
+			return 'COMPLETE';
+		}
+		if(values.active) {
+			return 'ACTIVE';
+		}
+		if(values.completedOn && values.completedOn.length > 0 && values.markedAsRedo) {
+			return 'REDO';
+		}
+		if(values.releaseDate && values.releaseDate > new Date()) {
+			return 'UPCOMING';
+		}
+		return values.status || 'NEW';
+	}
+
+	/**
+	 * Applies a normalized string array only when needed
+	 * @param target target object
+	 * @param key target key
+	 * @param values original values
+	 */
+	private applyNormalizedTextArray<K extends keyof MediaItemDetailsFormValues>(target: MediaItemDetailsFormValues, key: K, values: string[] | undefined): void {
+		const normalizedValues = this.normalizeTextArray(values);
+
+		if(normalizedValues) {
+			target[key] = normalizedValues as MediaItemDetailsFormValues[K];
+		}
+		else {
+			delete target[key];
+		}
 	}
 
 	/**
@@ -901,6 +1591,26 @@ export type MediaItemDetailsScreenComponentInput = {
 	 * Timestamp updated when seasons flow is completed
 	 */
 	tvShowSeasonsLoadTimestamp: Date | undefined;
+
+	/**
+	 * Current catalog search results
+	 */
+	catalogSearchResults?: SearchMediaItemCatalogResultInternal[];
+
+	/**
+	 * Current catalog details
+	 */
+	catalogDetails?: CatalogMediaItemInternal;
+
+	/**
+	 * Current selected group
+	 */
+	selectedGroup?: GroupInternal;
+
+	/**
+	 * Current selected own platform
+	 */
+	selectedOwnPlatform?: OwnPlatformInternal;
 }
 
 /**
@@ -923,6 +1633,31 @@ export type MediaItemDetailsScreenComponentOutput = {
 	handleTvShowSeasons: (currentSeasons?: TvShowSeasonInternal[]) => void;
 
 	/**
+	 * Callback to request group selection
+	 */
+	requestGroupSelection: () => void;
+
+	/**
+	 * Callback to request own platform selection
+	 */
+	requestOwnPlatformSelection: () => void;
+
+	/**
+	 * Callback to search media items catalog
+	 */
+	searchMediaItemsCatalog: (term: string) => void;
+
+	/**
+	 * Callback to load media item catalog details
+	 */
+	loadMediaItemCatalogDetails: (catalogId: string) => void;
+
+	/**
+	 * Callback to clear media items catalog search results
+	 */
+	resetMediaItemsCatalogSearch: () => void;
+
+	/**
 	 * Callback to navigate back
 	 */
 	goBack: () => void;
@@ -931,4 +1666,6 @@ export type MediaItemDetailsScreenComponentOutput = {
 type MediaItemDetailsScreenComponentState = {
 	formValues: MediaItemDetailsFormValues;
 	confirmSameNameVisible: boolean;
+	confirmReloadCatalogVisible: boolean;
+	pendingReloadCatalogId?: string;
 }
