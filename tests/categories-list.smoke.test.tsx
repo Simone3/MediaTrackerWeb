@@ -22,8 +22,12 @@ describe('CategoriesListComponent', () => {
 		render(
 			<CategoriesListComponent
 				categories={categories}
+				highlightedCategory={undefined}
 				selectCategory={selectCategory}
 				highlightCategory={highlightCategory}
+				editCategory={jest.fn()}
+				deleteCategory={jest.fn()}
+				closeCategoryMenu={jest.fn()}
 				refreshCategories={refreshCategories}
 			/>
 		);

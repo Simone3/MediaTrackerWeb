@@ -1,5 +1,6 @@
 import React, { Component, ReactElement, ReactNode } from 'react';
 import { CategoryInternal } from 'app/data/models/internal/category';
+import { CategoryContextMenuComponent } from 'app/components/presentational/category/list/context-menu';
 import { CategoryRowComponent } from 'app/components/presentational/category/list/row';
 import { i18n } from 'app/utilities/i18n';
 
@@ -29,8 +30,12 @@ export class CategoriesListComponent extends Component<CategoriesListComponentIn
 	private renderList(): ReactNode {
 		const {
 			categories,
+			highlightedCategory,
 			selectCategory,
 			highlightCategory,
+			editCategory,
+			deleteCategory,
+			closeCategoryMenu,
 			refreshCategories
 		} = this.props;
 
@@ -61,6 +66,12 @@ export class CategoriesListComponent extends Component<CategoriesListComponentIn
 						})}
 					</ul>
 				)}
+				<CategoryContextMenuComponent
+					category={highlightedCategory}
+					edit={editCategory}
+					delete={deleteCategory}
+					close={closeCategoryMenu}
+				/>
 			</div>
 		);
 	}
@@ -74,6 +85,11 @@ export type CategoriesListComponentInput = {
 	 * The categories list to be displayed
 	 */
 	categories: CategoryInternal[];
+
+	/**
+	 * The currently highlighted category, if any
+	 */
+	highlightedCategory: CategoryInternal | undefined;
 }
 
 /**
@@ -89,6 +105,21 @@ export type CategoriesListComponentOutput = {
 	 * Callback to set a category as highlighted, e.g. to open its dialog menu
 	 */
 	highlightCategory: (category: CategoryInternal) => void;
+
+	/**
+	 * Callback to edit a category from the context menu
+	 */
+	editCategory: (category: CategoryInternal) => void;
+
+	/**
+	 * Callback to delete a category from the context menu
+	 */
+	deleteCategory: (category: CategoryInternal) => void;
+
+	/**
+	 * Callback to close the category context menu
+	 */
+	closeCategoryMenu: () => void;
 
 	/**
 	 * Callback to reload the list of categories
