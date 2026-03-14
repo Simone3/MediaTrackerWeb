@@ -41,6 +41,9 @@ const mapDispatchToProps = (dispatch: Dispatch): MediaItemDetailsScreenComponent
 		persistFormDraft: (mediaItem) => {
 			dispatch(setMediaItemFormDraft(mediaItem));
 		},
+		discardFormDraft: () => {
+			dispatch(setMediaItemFormDraft(undefined));
+		},
 		handleTvShowSeasons: (currentSeasons) => {
 			dispatch(startTvShowSeasonsHandling(currentSeasons || []));
 		},

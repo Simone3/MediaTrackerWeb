@@ -146,10 +146,15 @@
   - preserves staged group/platform/catalog form state when returning from picker/detail sub-screens on web remount
   - preserves arbitrary unsaved main-form edits when opening and backing out of group/platform picker screens
   - preserves handled TV show season edits when returning from the seasons sub-flow
+  - warns before leaving category and media-item details forms when the current form has unsaved changes, matching the old RN flow again
+  - confirmed exit from the media-item form now discards the temporary Redux draft instead of carrying it past navigation
 - Relevant files:
+  - `app/components/containers/category/details/screen.ts`
   - `app/components/containers/media-item/details/screen.ts`
+  - `app/components/presentational/category/details/screen/index.tsx`
   - `app/components/presentational/media-item/details/screen/index.tsx`
   - `app/web/styles.css`
+  - `tests/category-details.smoke.test.tsx`
   - `tests/media-item-details.smoke.test.tsx`
 - Inline media-item completion had an immutability bug on web:
   - `MARK_MEDIA_ITEM_AS_COMPLETE` reused the existing `completedOn` array reference

@@ -77,4 +77,30 @@ describe('CategoryDetailsScreenComponent', () => {
 			expect(saveCategory).toHaveBeenCalledWith(category, true);
 		});
 	});
+
+	test('warns before exiting with unsaved category changes', async() => {
+		const goBack = jest.fn();
+
+		render(
+			<CategoryDetailsScreenComponent
+				isLoading={false}
+				category={DEFAULT_CATEGORY}
+				sameNameConfirmationRequested={false}
+				saveCategory={jest.fn()}
+				notifyFormStatus={jest.fn()}
+				goBack={goBack}
+			/>
+		);
+
+		const user = userEvent.setup();
+		await user.type(screen.getByRole('textbox'), 'Sci-Fi');
+		await user.click(screen.getByRole('button', { name: 'Back' }));
+
+		expect(screen.getByRole('dialog')).toHaveTextContent('You have unsaved changes, are you sure you want to exit?');
+		expect(goBack).not.toHaveBeenCalled();
+
+		await user.click(screen.getByRole('button', { name: 'OK' }));
+
+		expect(goBack).toHaveBeenCalledTimes(1);
+	});
 });

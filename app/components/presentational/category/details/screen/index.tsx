@@ -12,7 +12,8 @@ import { i18n } from 'app/utilities/i18n';
 export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScreenComponentInput & CategoryDetailsScreenComponentOutput, CategoryDetailsScreenComponentState> {
 	public state: CategoryDetailsScreenComponentState = {
 		formValues: DEFAULT_CATEGORY,
-		confirmSameNameVisible: false
+		confirmSameNameVisible: false,
+		confirmExitVisible: false
 	};
 
 	/**
@@ -52,7 +53,8 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 
 		const {
 			formValues,
-			confirmSameNameVisible
+			confirmSameNameVisible,
+			confirmExitVisible
 		} = this.state;
 
 		const isValid = this.isFormValid(formValues);
@@ -62,7 +64,9 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 				<div className='category-details-header'>
 					<h1 className='category-details-title'>{formValues.id ? formValues.name : i18n.t('category.details.title.new')}</h1>
 					<div className='category-details-actions'>
-						<button type='button' className='category-details-button category-details-button-secondary' onClick={this.props.goBack}>
+						<button type='button' className='category-details-button category-details-button-secondary' onClick={() => {
+							this.requestGoBack();
+						}}>
 							Back
 						</button>
 						<button
@@ -166,6 +170,25 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 						});
 					}}
 				/>
+				<ConfirmDialogComponent
+					visible={confirmExitVisible}
+					title={i18n.t('common.alert.form.exit.title')}
+					message={i18n.t('common.alert.form.exit.message')}
+					confirmLabel={i18n.t('common.alert.default.okButton')}
+					cancelLabel={i18n.t('common.alert.default.cancelButton')}
+					onConfirm={() => {
+						this.setState({
+							confirmExitVisible: false
+						}, () => {
+							this.props.goBack();
+						});
+					}}
+					onCancel={() => {
+						this.setState({
+							confirmExitVisible: false
+						});
+					}}
+				/>
 				<LoadingIndicatorComponent visible={isLoading} fullScreen={false} />
 			</section>
 		);
@@ -215,6 +238,20 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 		}
 
 		this.props.saveCategory(formValues, confirmSameName);
+	}
+
+	/**
+	 * Navigates back immediately if the form is pristine, otherwise asks confirmation first
+	 */
+	private requestGoBack(): void {
+		if(this.isFormDirty(this.state.formValues)) {
+			this.setState({
+				confirmExitVisible: true
+			});
+			return;
+		}
+
+		this.props.goBack();
 	}
 
 	/**
@@ -300,4 +337,5 @@ export type CategoryDetailsScreenComponentOutput = {
 type CategoryDetailsScreenComponentState = {
 	formValues: CategoryInternal;
 	confirmSameNameVisible: boolean;
+	confirmExitVisible: boolean;
 }

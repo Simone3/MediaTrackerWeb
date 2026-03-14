@@ -341,11 +341,11 @@ export const setMediaItemFormStatus = (valid: boolean, dirty: boolean): SetMedia
 };
 
 /**
- * Generator for the set media item form draft, which persists the current unsaved form values
+ * Generator for the set media item form draft, which persists the current unsaved form values or clears them when undefined
  * @param mediaItem the current form values
  * @returns the action
  */
-export const setMediaItemFormDraft = (mediaItem: MediaItemInternal): SetMediaItemFormDraftAction => {
+export const setMediaItemFormDraft = (mediaItem?: MediaItemInternal): SetMediaItemFormDraftAction => {
 	return {
 		type: SET_MEDIA_ITEM_FORM_DRAFT,
 		mediaItem: mediaItem

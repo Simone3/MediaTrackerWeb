@@ -61,7 +61,7 @@ export const mediaItemDetails = (state: MediaItemDetailsState = initialState, ac
 			};
 		}
 
-		// When the local form changes, the current unsaved draft is persisted
+		// When the local form changes, the current unsaved draft is persisted, or cleared when the user discards the form
 		case SET_MEDIA_ITEM_FORM_DRAFT: {
 
 			const setMediaItemFormDraftAction = action as SetMediaItemFormDraftAction;
