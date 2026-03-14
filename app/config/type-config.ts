@@ -1,3 +1,5 @@
+import type { FirebaseOptions } from 'firebase/app';
+
 /**
  * Type for configuration files
  */
@@ -7,6 +9,7 @@ export type Config = {
 		baseUrl: string;
 		assumeWellFormedResponse: boolean;
 	};
+	firebase: FirebaseOptions;
 	ui: {
 		colors: {
 			colorPrimary: string;

@@ -6,6 +6,15 @@ const config: Config = {
 		baseUrl: '<backend_server_url>',
 		assumeWellFormedResponse: true
 	},
+	firebase: {
+		apiKey: '<firebase_api_key>',
+		authDomain: '<firebase_auth_domain>',
+		databaseURL: '<firebase_database_url>',
+		projectId: '<firebase_project_id>',
+		storageBucket: '<firebase_storage_bucket>',
+		messagingSenderId: '<firebase_messaging_sender_id>',
+		appId: '<firebase_app_id>'
+	},
 	ui: {
 		colors: {
 			colorPrimary: '#3F51B5',
