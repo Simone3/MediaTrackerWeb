@@ -2,7 +2,6 @@
 Just a Codex experiment for now.
 
 TODO:
-- make it write DOCUMENTATION.md and add that to AGENTS
 - test and fix bugs / missing features (mocked)
   - error handling
   - confirm popups
