@@ -29,10 +29,20 @@ describe('MediaItemsListComponent', () => {
 			<MediaItemsListComponent
 				category={category}
 				mediaItems={[ mediaItem ]}
+				highlightedMediaItem={undefined}
+				currentViewGroup={undefined}
 				refreshMediaItems={refreshMediaItems}
 				openFilters={openFilters}
 				selectMediaItem={selectMediaItem}
 				highlightMediaItem={highlightMediaItem}
+				editMediaItem={jest.fn()}
+				deleteMediaItem={jest.fn()}
+				markMediaItemAsActive={jest.fn()}
+				markMediaItemAsComplete={jest.fn()}
+				markMediaItemAsRedo={jest.fn()}
+				viewMediaItemGroup={jest.fn()}
+				closeMediaItemMenu={jest.fn()}
+				exitViewGroupMode={jest.fn()}
 			/>
 		);
 

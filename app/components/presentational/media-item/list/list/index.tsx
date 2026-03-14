@@ -1,4 +1,6 @@
 import React, { Component, ReactNode } from 'react';
+import { MediaItemContextMenuComponent } from 'app/components/presentational/media-item/list/context-menu';
+import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { i18n } from 'app/utilities/i18n';
 import { CategoryInternal } from 'app/data/models/internal/category';
@@ -17,7 +19,17 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 			refreshMediaItems,
 			openFilters,
 			selectMediaItem,
-			highlightMediaItem
+			highlightMediaItem,
+			highlightedMediaItem,
+			currentViewGroup,
+			editMediaItem,
+			deleteMediaItem,
+			markMediaItemAsActive,
+			markMediaItemAsComplete,
+			markMediaItemAsRedo,
+			viewMediaItemGroup,
+			closeMediaItemMenu,
+			exitViewGroupMode
 		} = this.props;
 		const emptyMessage = i18n.t(`mediaItem.list.empty.${category.mediaType}`);
 
@@ -32,6 +44,17 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 						Filter
 					</button>
 				</div>
+				{currentViewGroup && (
+					<div className='media-items-list-view-group-banner'>
+						<div className='media-items-list-view-group-copy'>
+							<span className='media-items-list-view-group-label'>{i18n.t('mediaItem.list.viewGroup')}</span>
+							<strong className='media-items-list-view-group-name'>{currentViewGroup.name}</strong>
+						</div>
+						<button type='button' className='media-items-list-view-group-exit' onClick={exitViewGroupMode}>
+							Back
+						</button>
+					</div>
+				)}
 				{mediaItems.length === 0 && (
 					<p className='media-items-list-empty'>{emptyMessage}</p>
 				)}
@@ -63,6 +86,17 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 						})}
 					</ul>
 				)}
+				<MediaItemContextMenuComponent
+					mediaItem={highlightedMediaItem}
+					currentViewGroupId={currentViewGroup?.id}
+					edit={editMediaItem}
+					delete={deleteMediaItem}
+					markAsActive={markMediaItemAsActive}
+					markAsComplete={markMediaItemAsComplete}
+					markAsRedo={markMediaItemAsRedo}
+					viewGroup={viewMediaItemGroup}
+					close={closeMediaItemMenu}
+				/>
 			</section>
 		);
 	}
@@ -104,6 +138,16 @@ export type MediaItemsListComponentInput = {
 	 * The media items list to be displayed
 	 */
 	mediaItems: MediaItemInternal[];
+
+	/**
+	 * The currently highlighted media item, if any
+	 */
+	highlightedMediaItem: MediaItemInternal | undefined;
+
+	/**
+	 * The currently viewed group, if the list is filtered by group
+	 */
+	currentViewGroup?: GroupInternal;
 }
 
 /**
@@ -121,6 +165,41 @@ export type MediaItemsListComponentOutput = {
 	highlightMediaItem: (mediaItem: MediaItemInternal) => void;
 
 	/**
+	 * Callback to edit a media item from the context menu
+	 */
+	editMediaItem: (mediaItem: MediaItemInternal) => void;
+
+	/**
+	 * Callback to delete a media item from the context menu
+	 */
+	deleteMediaItem: (mediaItem: MediaItemInternal) => void;
+
+	/**
+	 * Callback to mark a media item as active from the context menu
+	 */
+	markMediaItemAsActive: (mediaItem: MediaItemInternal) => void;
+
+	/**
+	 * Callback to mark a media item as complete from the context menu
+	 */
+	markMediaItemAsComplete: (mediaItem: MediaItemInternal) => void;
+
+	/**
+	 * Callback to mark a media item as redo from the context menu
+	 */
+	markMediaItemAsRedo: (mediaItem: MediaItemInternal) => void;
+
+	/**
+	 * Callback to view all media items in a group from the context menu
+	 */
+	viewMediaItemGroup: (group: GroupInternal) => void;
+
+	/**
+	 * Callback to close the media item context menu
+	 */
+	closeMediaItemMenu: () => void;
+
+	/**
 	 * Callback to refresh the media items list
 	 */
 	refreshMediaItems: () => void;
@@ -129,4 +208,9 @@ export type MediaItemsListComponentOutput = {
 	 * Callback to open filter modal
 	 */
 	openFilters: () => void;
+
+	/**
+	 * Callback to exit the current view-group mode
+	 */
+	exitViewGroupMode: () => void;
 }

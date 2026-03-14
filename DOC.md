@@ -119,6 +119,22 @@
   - `app/web/styles.css`
   - `tests/category-context-menu.smoke.test.tsx`
   - `tests/categories-list-container.smoke.test.tsx`
+- Media item three-dots options had also regressed to direct edit navigation.
+- Correct behavior on web now:
+  - clicking three dots highlights the media item instead of routing immediately
+  - opens a popup with the old actions again:
+    - edit
+    - delete with confirmation
+    - status shortcuts like mark active / complete / redo when applicable
+    - view group when the item belongs to a group
+  - if group-view mode is opened from that popup, the list now shows a small exit banner so the user can return to the normal list
+- Relevant files:
+  - `app/components/containers/media-item/list/list.ts`
+  - `app/components/presentational/media-item/list/list/index.tsx`
+  - `app/components/presentational/media-item/list/context-menu/index.tsx`
+  - `app/web/styles.css`
+  - `tests/media-item-context-menu.smoke.test.tsx`
+  - `tests/media-items-list-container.smoke.test.tsx`
 
 ## Testing notes
 - Jest setup is lightweight and mostly smoke-test oriented.
