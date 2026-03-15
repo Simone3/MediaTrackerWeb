@@ -3,7 +3,7 @@ import { UserController } from 'app/controllers/core/entities/user';
 import { AppError } from 'app/data/models/internal/error';
 import { UserInternal, UserSecretInternal } from 'app/data/models/internal/user';
 import { FirebaseOptions, getApps, initializeApp } from 'firebase/app';
-import { Auth, User, createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { Auth, User, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 const FIREBASE_APP_NAME = 'media-tracker-web';
 
@@ -14,6 +14,8 @@ const firebaseConfig: FirebaseOptions = config.firebase;
  * @see UserController
  */
 export class UserFirebaseController implements UserController {
+	private authInitialization?: Promise<void>;
+
 	private getAuthClient(): Auth {
 		if(!firebaseConfig.apiKey || !firebaseConfig.authDomain || !firebaseConfig.projectId || !firebaseConfig.appId) {
 			throw AppError.BACKEND_USER_LOGIN.withDetails('Missing Firebase web auth configuration. Set config.firebase.apiKey, config.firebase.authDomain, config.firebase.projectId, and config.firebase.appId');
@@ -28,10 +30,34 @@ export class UserFirebaseController implements UserController {
 	}
 
 	/**
+	 * Firebase restores persisted auth state asynchronously in the browser.
+	 * Wait for the first auth-state notification before reading currentUser.
+	 * @param auth the Firebase auth client
+	 * @returns the same auth client once initialization completes
+	 */
+	private async getInitializedAuthClient(auth: Auth = this.getAuthClient()): Promise<Auth> {
+		if(!this.authInitialization) {
+			this.authInitialization = new Promise((resolve, reject) => {
+				const unsubscribe = onAuthStateChanged(auth, () => {
+					unsubscribe();
+					resolve();
+				}, (error) => {
+					unsubscribe();
+					reject(error);
+				});
+			});
+		}
+
+		await this.authInitialization;
+		return auth;
+	}
+
+	/**
 	 * @override
 	 */
 	public async getCurrentUser(): Promise<UserInternal | undefined> {
-		const firebaseUser = this.getAuthClient().currentUser;
+		const auth = await this.getInitializedAuthClient();
+		const firebaseUser = auth.currentUser;
 		if(firebaseUser) {
 			return this.mapFirebaseUser(firebaseUser);
 		}
@@ -42,7 +68,8 @@ export class UserFirebaseController implements UserController {
 	 * @override
 	 */
 	public async getCurrentUserAccessToken(): Promise<string> {
-		const firebaseUser = this.getAuthClient().currentUser;
+		const auth = await this.getInitializedAuthClient();
+		const firebaseUser = auth.currentUser;
 		if(!firebaseUser) {
 			throw AppError.GENERIC.withDetails('Cannot get the access token if no user is logged in');
 		}

@@ -141,8 +141,10 @@ export class RestJsonInvokerAxios implements RestJsonInvoker {
 	private logRequest(options: AxiosRequestConfig): void {
 		
 		if(config.logging.logInvocations) {
+			const headers = options.headers as {[key: string]: string} | undefined;
+			const hasAuthorizationHeader = Boolean(headers && (headers.Authorization || headers.authorization));
 
-			console.log(`Invoking ${options.method} ${options.url} with params = ${JSON.stringify(options.params)} and body = ${options.data}`);
+			console.log(`Invoking ${options.method} ${options.url} with auth header = ${hasAuthorizationHeader ? 'present' : 'missing'}, params = ${JSON.stringify(options.params)} and body = ${options.data}`);
 		}
 	}
 
