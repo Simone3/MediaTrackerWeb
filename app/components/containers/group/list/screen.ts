@@ -1,5 +1,5 @@
 import { GroupsListScreenComponent, GroupsListScreenComponentInput, GroupsListScreenComponentOutput } from 'app/components/presentational/group/list/screen';
-import { deleteGroup, fetchGroups, invalidateGroups, loadGroupDetails, loadNewGroupDetails, selectGroup } from 'app/redux/actions/group/generators';
+import { deleteGroup, fetchGroups, loadGroupDetails, loadNewGroupDetails, selectGroup } from 'app/redux/actions/group/generators';
 import { State } from 'app/redux/state/state';
 import { navigationService } from 'app/utilities/navigation-service';
 import { connect } from 'react-redux';
@@ -31,9 +31,6 @@ const mapDispatchToProps = (dispatch: Dispatch): GroupsListScreenComponentOutput
 		},
 		deleteGroup: (group) => {
 			dispatch(deleteGroup(group));
-		},
-		refreshGroups: () => {
-			dispatch(invalidateGroups());
 		},
 		goBack: () => {
 			navigationService.back();

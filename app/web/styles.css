@@ -254,15 +254,6 @@ input {
 	color: var(--color-primary-dark);
 }
 
-.categories-list-refresh {
-	border: 1px solid var(--color-primary);
-	background: #ffffff;
-	color: var(--color-primary);
-	border-radius: 999px;
-	padding: 8px 14px;
-	cursor: pointer;
-}
-
 .categories-list-items {
 	list-style: none;
 	margin: 0;
@@ -1080,9 +1071,7 @@ input {
 }
 
 .groups-list-secondary,
-.groups-list-refresh,
 .own-platforms-list-secondary,
-.own-platforms-list-refresh,
 .tv-show-seasons-button,
 .settings-row {
 	border: 1px solid var(--color-border);
@@ -1091,12 +1080,6 @@ input {
 	border-radius: 999px;
 	padding: 9px 14px;
 	cursor: pointer;
-}
-
-.groups-list-refresh,
-.own-platforms-list-refresh {
-	border-color: var(--color-primary);
-	color: var(--color-primary);
 }
 
 .tv-show-seasons-button-primary {
@@ -1256,9 +1239,7 @@ input {
 .tv-show-season-details-button[disabled],
 .settings-row[disabled],
 .groups-list-secondary[disabled],
-.groups-list-refresh[disabled],
-.own-platforms-list-secondary[disabled],
-.own-platforms-list-refresh[disabled] {
+.own-platforms-list-secondary[disabled] {
 	opacity: 0.6;
 	cursor: not-allowed;
 }

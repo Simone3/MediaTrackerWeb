@@ -3,7 +3,6 @@ import { AppError } from 'app/data/models/internal/error';
 import {
 	deleteMediaItem,
 	highlightMediaItem,
-	invalidateMediaItems,
 	loadMediaItemDetails,
 	markMediaItemAsActive,
 	markMediaItemAsComplete,
@@ -63,9 +62,6 @@ const mapDispatchToProps = (dispatch: Dispatch): MediaItemsListComponentOutput =
 		},
 		closeMediaItemMenu: () => {
 			dispatch(removeMediaItemHighlight());
-		},
-		refreshMediaItems: () => {
-			dispatch(invalidateMediaItems());
 		},
 		openSearch: () => {
 			dispatch(startMediaItemsSearchMode());

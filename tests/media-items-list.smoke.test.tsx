@@ -6,7 +6,7 @@ import { CategoryInternal } from 'app/data/models/internal/category';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 
 describe('MediaItemsListComponent', () => {
-	test('handles refresh, search open, item open and options action', async() => {
+	test('handles search open, item open and options action', async() => {
 		const category: CategoryInternal = {
 			id: 'category-id',
 			name: 'My Books',
@@ -20,7 +20,6 @@ describe('MediaItemsListComponent', () => {
 			status: 'ACTIVE',
 			importance: '300'
 		};
-		const refreshMediaItems = jest.fn();
 		const openFilters = jest.fn();
 		const openSearch = jest.fn();
 		const selectMediaItem = jest.fn();
@@ -34,7 +33,6 @@ describe('MediaItemsListComponent', () => {
 				currentViewGroup={undefined}
 				isSearchMode={false}
 				currentSearchTerm={undefined}
-				refreshMediaItems={refreshMediaItems}
 				openSearch={openSearch}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -53,13 +51,11 @@ describe('MediaItemsListComponent', () => {
 		);
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: 'Refresh' }));
 		await user.click(screen.getByRole('button', { name: 'Search' }));
 		await user.click(screen.getByRole('button', { name: 'Filter' }));
 		await user.click(screen.getByText('Dune'));
 		await user.click(screen.getByRole('button', { name: 'Options for Dune' }));
 
-		expect(refreshMediaItems).toHaveBeenCalledTimes(1);
 		expect(openSearch).toHaveBeenCalledTimes(1);
 		expect(openFilters).toHaveBeenCalledTimes(1);
 		expect(selectMediaItem).toHaveBeenCalledWith(mediaItem);
@@ -84,7 +80,6 @@ describe('MediaItemsListComponent', () => {
 				currentViewGroup={undefined}
 				isSearchMode={true}
 				currentSearchTerm={'old term'}
-				refreshMediaItems={jest.fn()}
 				openSearch={jest.fn()}
 				submitSearch={submitSearch}
 				closeSearch={closeSearch}

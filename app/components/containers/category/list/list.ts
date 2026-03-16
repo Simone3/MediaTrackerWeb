@@ -1,5 +1,5 @@
 import { CategoriesListComponent, CategoriesListComponentInput, CategoriesListComponentOutput } from 'app/components/presentational/category/list/list';
-import { deleteCategory, highlightCategory, invalidateCategories, loadCategoryDetails, removeCategoryHighlight, selectCategory } from 'app/redux/actions/category/generators';
+import { deleteCategory, highlightCategory, loadCategoryDetails, removeCategoryHighlight, selectCategory } from 'app/redux/actions/category/generators';
 import { State } from 'app/redux/state/state';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -27,9 +27,6 @@ const mapDispatchToProps = (dispatch: Dispatch): CategoriesListComponentOutput =
 		},
 		closeCategoryMenu: () => {
 			dispatch(removeCategoryHighlight());
-		},
-		refreshCategories: () => {
-			dispatch(invalidateCategories());
 		}
 	};
 };

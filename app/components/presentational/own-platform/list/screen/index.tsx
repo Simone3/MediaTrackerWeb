@@ -49,9 +49,6 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 							<button type='button' className='own-platforms-list-secondary' onClick={this.props.goBack}>
 								Back
 							</button>
-							<button type='button' className='own-platforms-list-refresh' onClick={this.props.refreshOwnPlatforms}>
-								Refresh
-							</button>
 						</div>
 					</div>
 					<ul className='own-platforms-list-items'>
@@ -190,11 +187,6 @@ export type OwnPlatformsListScreenComponentOutput = {
 	 * Callback to request the own platforms list (re)load
 	 */
 	fetchOwnPlatforms: () => void;
-
-	/**
-	 * Callback to refresh own platforms list
-	 */
-	refreshOwnPlatforms: () => void;
 
 	/**
 	 * Callback to select an own platform (or none)

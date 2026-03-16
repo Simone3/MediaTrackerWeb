@@ -27,7 +27,6 @@ describe('GroupsListScreenComponent', () => {
 				groups={groups}
 				selectedGroupId={undefined}
 				fetchGroups={jest.fn()}
-				refreshGroups={jest.fn()}
 				selectGroup={selectGroup}
 				editGroup={editGroup}
 				deleteGroup={deleteGroup}

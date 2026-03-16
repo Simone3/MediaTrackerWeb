@@ -44,7 +44,6 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 		const {
 			mediaItems,
 			category,
-			refreshMediaItems,
 			openFilters,
 			selectMediaItem,
 			highlightMediaItem,
@@ -68,9 +67,6 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 				<div className='media-items-list-header'>
 					<h2 className='media-items-list-title'>{i18n.t(`category.mediaTypes.${category.mediaType}`)}</h2>
 					<div className='media-items-list-actions'>
-						<button type='button' className='media-items-list-action' onClick={refreshMediaItems}>
-							Refresh
-						</button>
 						{!isSearchMode && (
 							<button
 								type='button'
@@ -302,11 +298,6 @@ export type MediaItemsListComponentOutput = {
 	 * Callback to close the media item context menu
 	 */
 	closeMediaItemMenu: () => void;
-
-	/**
-	 * Callback to refresh the media items list
-	 */
-	refreshMediaItems: () => void;
 
 	/**
 	 * Callback to open text-search mode

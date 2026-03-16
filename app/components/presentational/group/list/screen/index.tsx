@@ -49,9 +49,6 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 							<button type='button' className='groups-list-secondary' onClick={this.props.goBack}>
 								Back
 							</button>
-							<button type='button' className='groups-list-refresh' onClick={this.props.refreshGroups}>
-								Refresh
-							</button>
 						</div>
 					</div>
 					<ul className='groups-list-items'>
@@ -190,11 +187,6 @@ export type GroupsListScreenComponentOutput = {
 	 * Callback to request the groups list (re)load
 	 */
 	fetchGroups: () => void;
-
-	/**
-	 * Callback to refresh groups list
-	 */
-	refreshGroups: () => void;
 
 	/**
 	 * Callback to select a group (or none)

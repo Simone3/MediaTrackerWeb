@@ -1,5 +1,5 @@
 import { OwnPlatformsListScreenComponent, OwnPlatformsListScreenComponentInput, OwnPlatformsListScreenComponentOutput } from 'app/components/presentational/own-platform/list/screen';
-import { deleteOwnPlatform, fetchOwnPlatforms, invalidateOwnPlatforms, loadNewOwnPlatformDetails, loadOwnPlatformDetails, selectOwnPlatform } from 'app/redux/actions/own-platform/generators';
+import { deleteOwnPlatform, fetchOwnPlatforms, loadNewOwnPlatformDetails, loadOwnPlatformDetails, selectOwnPlatform } from 'app/redux/actions/own-platform/generators';
 import { State } from 'app/redux/state/state';
 import { navigationService } from 'app/utilities/navigation-service';
 import { connect } from 'react-redux';
@@ -31,9 +31,6 @@ const mapDispatchToProps = (dispatch: Dispatch): OwnPlatformsListScreenComponent
 		},
 		deleteOwnPlatform: (ownPlatform) => {
 			dispatch(deleteOwnPlatform(ownPlatform));
-		},
-		refreshOwnPlatforms: () => {
-			dispatch(invalidateOwnPlatforms());
 		},
 		goBack: () => {
 			navigationService.back();

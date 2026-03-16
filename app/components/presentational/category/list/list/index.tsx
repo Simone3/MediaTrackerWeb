@@ -35,15 +35,13 @@ export class CategoriesListComponent extends Component<CategoriesListComponentIn
 			highlightCategory,
 			editCategory,
 			deleteCategory,
-			closeCategoryMenu,
-			refreshCategories
+			closeCategoryMenu
 		} = this.props;
 
 		return (
 			<div className='categories-list'>
 				<div className='categories-list-header'>
 					<h1 className='categories-list-title'>{i18n.t('category.list.title')}</h1>
-					<button type='button' className='categories-list-refresh' onClick={refreshCategories}>Refresh</button>
 				</div>
 				{categories.length === 0 ?
 					this.renderNone() :
@@ -121,8 +119,4 @@ export type CategoriesListComponentOutput = {
 	 */
 	closeCategoryMenu: () => void;
 
-	/**
-	 * Callback to reload the list of categories
-	 */
-	refreshCategories: () => void;
 }

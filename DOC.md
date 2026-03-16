@@ -41,6 +41,7 @@
 
 ### State management
 - Redux store setup: `app/redux/initializer.ts`
+- Web session persistence: `app/redux/persistence.ts`
 - Root reducer: `app/redux/reducers/root.ts`
 - Root saga: `app/redux/sagas/root.ts`
 - Typical flow:
@@ -48,6 +49,8 @@
   - saga performs async work / navigation
   - reducer updates slice state
   - presentational component re-renders from Redux props
+- Hard browser reloads now restore the current post-category navigation/detail context from `sessionStorage`.
+- Persisted list slices are intentionally reloaded as `REQUIRES_FETCH` on restore, so browser refresh still behaves like an actual data refresh.
 
 ### Navigation model
 - Screen/path mapping: `app/utilities/navigation-routes.ts`
@@ -183,6 +186,28 @@
     - keeps only the base image assets that the web port uses
   - Relevant files:
     - `app/resources/images`
+- Manual `Refresh` buttons on category/media/group/platform lists were redundant once browser reload started restoring navigation state.
+  - Correct behavior on web now:
+    - the explicit `Refresh` buttons are gone from those list screens
+    - a hard browser refresh no longer breaks after selecting a category / media item / group / own platform
+    - the selected navigation/detail context is restored from `sessionStorage`
+    - list screens immediately mark themselves for refetch after restore so the browser refresh still reloads data
+  - Relevant files:
+    - `app/redux/initializer.ts`
+    - `app/redux/persistence.ts`
+    - `app/components/presentational/category/list/list/index.tsx`
+    - `app/components/presentational/media-item/list/list/index.tsx`
+    - `app/components/presentational/group/list/screen/index.tsx`
+    - `app/components/presentational/own-platform/list/screen/index.tsx`
+    - `app/components/containers/category/list/list.ts`
+    - `app/components/containers/media-item/list/list.ts`
+    - `app/components/containers/group/list/screen.ts`
+    - `app/components/containers/own-platform/list/screen.ts`
+    - `app/web/styles.css`
+    - `tests/redux-persistence.test.ts`
+    - `tests/categories-list.smoke.test.tsx`
+    - `tests/media-items-list.smoke.test.tsx`
+    - `tests/groups-list.smoke.test.tsx`
 
 ## Testing notes
 - Jest setup is lightweight and mostly smoke-test oriented.
