@@ -208,6 +208,27 @@
     - `tests/categories-list.smoke.test.tsx`
     - `tests/media-items-list.smoke.test.tsx`
     - `tests/groups-list.smoke.test.tsx`
+- Visible navigation `Back` buttons have been removed from the web screens in favor of the browser back button.
+  - Correct behavior on web now:
+    - category, media item, group, own platform, and TV show season screens no longer render explicit `Back` buttons
+    - the media-item list still keeps its in-list `Back` control for exiting "view group" mode, because that is not browser navigation
+    - dirty category/media-item forms now intercept the browser back button and show the same unsaved-changes confirmation before leaving
+    - confirming browser-back from the media-item details screen still discards the temporary Redux draft before leaving
+  - Relevant files:
+    - `app/components/presentational/generic/browser-back-navigation-guard/index.tsx`
+    - `app/components/containers/category/details/screen.ts`
+    - `app/components/containers/media-item/details/screen.ts`
+    - `app/components/presentational/category/details/screen/index.tsx`
+    - `app/components/presentational/media-item/details/screen/index.tsx`
+    - `app/components/presentational/group/list/screen/index.tsx`
+    - `app/components/presentational/group/details/screen/index.tsx`
+    - `app/components/presentational/own-platform/list/screen/index.tsx`
+    - `app/components/presentational/own-platform/details/screen/index.tsx`
+    - `app/components/presentational/tv-show-season/list/screen/index.tsx`
+    - `app/components/presentational/tv-show-season/details/screen/index.tsx`
+    - `tests/browser-back-navigation-guard.test.tsx`
+    - `tests/category-details.smoke.test.tsx`
+    - `tests/media-item-details.smoke.test.tsx`
 
 ## Testing notes
 - Jest setup is lightweight and mostly smoke-test oriented.

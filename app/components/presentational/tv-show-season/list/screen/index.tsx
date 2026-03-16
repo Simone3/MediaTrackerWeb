@@ -28,9 +28,6 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 				<div className='tv-show-seasons-header'>
 					<h1 className='tv-show-seasons-title'>{i18n.t('tvShowSeason.list.title')}</h1>
 					<div className='tv-show-seasons-actions'>
-						<button type='button' className='tv-show-seasons-button tv-show-seasons-button-secondary' onClick={this.props.goBack}>
-							Back
-						</button>
 						<button type='button' className='tv-show-seasons-button tv-show-seasons-button-primary' onClick={this.props.completeHandling}>
 							Done
 						</button>

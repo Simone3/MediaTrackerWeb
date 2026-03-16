@@ -37,7 +37,6 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 		formValues: DEFAULT_BOOK,
 		confirmSameNameVisible: false,
 		confirmReloadCatalogVisible: false,
-		confirmExitVisible: false,
 		pendingReloadCatalogId: undefined
 	};
 
@@ -89,8 +88,7 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 		const {
 			formValues,
 			confirmSameNameVisible,
-			confirmReloadCatalogVisible,
-			confirmExitVisible
+			confirmReloadCatalogVisible
 		} = this.state;
 		const isValid = this.isFormValid(formValues);
 		const title = formValues.id ? formValues.name : i18n.t(`mediaItem.details.title.new.${formValues.mediaType}`);
@@ -100,11 +98,6 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 				<div className='media-item-details-header'>
 					<h1 className='media-item-details-title'>{title}</h1>
 					<div className='media-item-details-actions'>
-						<button type='button' className='media-item-details-button media-item-details-button-secondary' onClick={() => {
-							this.requestGoBack();
-						}}>
-							Back
-						</button>
 						<button
 							type='button'
 							className='media-item-details-button media-item-details-button-primary'
@@ -178,26 +171,6 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 						this.setState({
 							confirmReloadCatalogVisible: false,
 							pendingReloadCatalogId: undefined
-						});
-					}}
-				/>
-				<ConfirmDialogComponent
-					visible={confirmExitVisible}
-					title={i18n.t('common.alert.form.exit.title')}
-					message={i18n.t('common.alert.form.exit.message')}
-					confirmLabel={i18n.t('common.alert.default.okButton')}
-					cancelLabel={i18n.t('common.alert.default.cancelButton')}
-					onConfirm={() => {
-						this.setState({
-							confirmExitVisible: false
-						}, () => {
-							this.props.discardFormDraft();
-							this.props.goBack();
-						});
-					}}
-					onCancel={() => {
-						this.setState({
-							confirmExitVisible: false
 						});
 					}}
 				/>
@@ -327,21 +300,6 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 				}
 			};
 		});
-	}
-
-	/**
-	 * Navigates back immediately if the form is pristine, otherwise asks confirmation first
-	 */
-	private requestGoBack(): void {
-		if(this.isFormDirty(this.state.formValues)) {
-			this.setState({
-				confirmExitVisible: true
-			});
-			return;
-		}
-
-		this.props.discardFormDraft();
-		this.props.goBack();
 	}
 
 	/**
@@ -1736,17 +1694,11 @@ export type MediaItemDetailsScreenComponentOutput = {
 	 * Callback to clear media items catalog search results
 	 */
 	resetMediaItemsCatalogSearch: () => void;
-
-	/**
-	 * Callback to navigate back
-	 */
-	goBack: () => void;
 }
 
 type MediaItemDetailsScreenComponentState = {
 	formValues: MediaItemDetailsFormValues;
 	confirmSameNameVisible: boolean;
 	confirmReloadCatalogVisible: boolean;
-	confirmExitVisible: boolean;
 	pendingReloadCatalogId?: string;
 }

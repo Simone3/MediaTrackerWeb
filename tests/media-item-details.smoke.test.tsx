@@ -32,7 +32,6 @@ const buildProps = (overrides: Partial<DetailsProps> = {}): DetailsProps => {
 		searchMediaItemsCatalog: jest.fn(),
 		loadMediaItemCatalogDetails: jest.fn(),
 		resetMediaItemsCatalogSearch: jest.fn(),
-		goBack: jest.fn(),
 		...overrides
 	};
 };
@@ -255,30 +254,6 @@ describe('MediaItemDetailsScreenComponent', () => {
 		expect(screen.getByLabelText('Number of pages')).toHaveValue(412);
 		expect(screen.getByLabelText('Your notes')).toHaveValue('Keep this draft');
 	});
-
-	test('warns before exiting with unsaved media item changes and discards the draft on confirm', async() => {
-		const goBack = jest.fn();
-		const discardFormDraft = jest.fn();
-
-		render(createScreen({
-			goBack,
-			discardFormDraft
-		}));
-
-		const user = userEvent.setup();
-		await user.type(screen.getByLabelText('Search or type name'), 'Dune');
-		await user.click(screen.getByRole('button', { name: 'Back' }));
-
-		expect(screen.getByRole('dialog')).toHaveTextContent('You have unsaved changes, are you sure you want to exit?');
-		expect(goBack).not.toHaveBeenCalled();
-		expect(discardFormDraft).not.toHaveBeenCalled();
-
-		await user.click(screen.getByRole('button', { name: 'OK' }));
-
-		expect(discardFormDraft).toHaveBeenCalledTimes(1);
-		expect(goBack).toHaveBeenCalledTimes(1);
-	});
-
 	test('restores handled tv show seasons after remounting from the seasons flow', () => {
 		const draftMediaItem: TvShowInternal = {
 			id: 'tv-show-id',

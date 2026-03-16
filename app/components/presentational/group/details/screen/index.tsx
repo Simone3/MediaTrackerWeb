@@ -62,9 +62,6 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 				<div className='group-details-header'>
 					<h1 className='group-details-title'>{formValues.id ? formValues.name : i18n.t('group.details.title.new')}</h1>
 					<div className='group-details-actions'>
-						<button type='button' className='group-details-button group-details-button-secondary' onClick={this.props.goBack}>
-							Back
-						</button>
 						<button
 							type='button'
 							className='group-details-button group-details-button-primary'

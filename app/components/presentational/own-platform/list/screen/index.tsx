@@ -45,11 +45,6 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 				<div className='own-platforms-list'>
 					<div className='own-platforms-list-header'>
 						<h1 className='own-platforms-list-title'>{i18n.t('ownPlatform.list.title')}</h1>
-						<div className='own-platforms-list-header-actions'>
-							<button type='button' className='own-platforms-list-secondary' onClick={this.props.goBack}>
-								Back
-							</button>
-						</div>
 					</div>
 					<ul className='own-platforms-list-items'>
 						<li className='own-platforms-list-item own-platforms-list-item-none'>

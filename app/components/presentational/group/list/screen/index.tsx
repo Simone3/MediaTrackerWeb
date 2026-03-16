@@ -45,11 +45,6 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 				<div className='groups-list'>
 					<div className='groups-list-header'>
 						<h1 className='groups-list-title'>{i18n.t('group.list.title')}</h1>
-						<div className='groups-list-header-actions'>
-							<button type='button' className='groups-list-secondary' onClick={this.props.goBack}>
-								Back
-							</button>
-						</div>
 					</div>
 					<ul className='groups-list-items'>
 						<li className='groups-list-item groups-list-item-none'>

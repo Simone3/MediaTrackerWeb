@@ -65,9 +65,6 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 				<div className='own-platform-details-header'>
 					<h1 className='own-platform-details-title'>{formValues.id ? formValues.name : i18n.t('ownPlatform.details.title.new')}</h1>
 					<div className='own-platform-details-actions'>
-						<button type='button' className='own-platform-details-button own-platform-details-button-secondary' onClick={this.props.goBack}>
-							Back
-						</button>
 						<button
 							type='button'
 							className='own-platform-details-button own-platform-details-button-primary'

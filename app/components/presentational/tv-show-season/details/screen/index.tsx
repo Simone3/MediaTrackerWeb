@@ -56,9 +56,6 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 				<div className='tv-show-season-details-header'>
 					<h1 className='tv-show-season-details-title'>{title}</h1>
 					<div className='tv-show-season-details-actions'>
-						<button type='button' className='tv-show-season-details-button tv-show-season-details-button-secondary' onClick={this.props.goBack}>
-							Back
-						</button>
 						<button
 							type='button'
 							className='tv-show-season-details-button tv-show-season-details-button-primary'
