@@ -2,9 +2,6 @@
 Just a Codex experiment for now.
 
 TODO:
-- test with Firebase
-- test with back-end APIs
-- fix images as csv? (are there original csvs in mobile repo?)
 - fix UI
   - modernize
   - sidebar like spot (mobile version on top too)
@@ -16,6 +13,7 @@ TODO:
 - split css file into single files
 - check if all strings are in lang-en
 - make all components functional and not class components (with "export default XXX;" at the end)
+- make all icons csvs
 - upgrade all dependencies versions
 - remove all empty lines after block start
 - remove useless console logs
