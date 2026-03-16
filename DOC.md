@@ -164,6 +164,19 @@
   - `app/redux/sagas/media-item/inline-update.ts`
   - `app/redux/sagas/media-item/inline-update-helper.ts`
   - `tests/media-item-inline-update.test.ts`
+- Media item list text search had been lost on the web port even though the Redux search flow still existed.
+  - Correct behavior on web now:
+    - the list header exposes a `Search` action again
+    - entering search mode shows a text field with the category-specific placeholder
+    - submitting the form dispatches the existing list search flow
+    - cancelling search exits search mode and returns to the normal list flow
+  - Relevant files:
+    - `app/components/containers/media-item/list/list.ts`
+    - `app/components/presentational/media-item/list/list/index.tsx`
+    - `app/resources/lang/lang-en.json`
+    - `app/web/styles.css`
+    - `tests/media-items-list.smoke.test.tsx`
+    - `tests/media-items-list-container.smoke.test.tsx`
 
 ## Testing notes
 - Jest setup is lightweight and mostly smoke-test oriented.

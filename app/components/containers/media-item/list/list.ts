@@ -9,8 +9,11 @@ import {
 	markMediaItemAsComplete,
 	markMediaItemAsRedo,
 	removeMediaItemHighlight,
+	searchMediaItems,
+	startMediaItemsSearchMode,
 	startMediaItemsSetFiltersMode,
 	startMediaItemsViewGroupMode,
+	stopMediaItemsSearchMode,
 	stopMediaItemsViewGroupMode
 } from 'app/redux/actions/media-item/generators';
 import { State } from 'app/redux/state/state';
@@ -26,7 +29,9 @@ const mapStateToProps = (state: State): MediaItemsListComponentInput => {
 		category: state.categoryGlobal.selectedCategory,
 		mediaItems: state.mediaItemsList.mediaItems,
 		highlightedMediaItem: state.mediaItemsList.highlightedMediaItem,
-		currentViewGroup: state.mediaItemsList.mode === 'VIEW_GROUP' ? state.mediaItemsList.viewGroup : undefined
+		currentViewGroup: state.mediaItemsList.mode === 'VIEW_GROUP' ? state.mediaItemsList.viewGroup : undefined,
+		isSearchMode: state.mediaItemsList.mode === 'SEARCH',
+		currentSearchTerm: state.mediaItemsList.mode === 'SEARCH' ? state.mediaItemsList.searchTerm : undefined
 	};
 };
 
@@ -61,6 +66,15 @@ const mapDispatchToProps = (dispatch: Dispatch): MediaItemsListComponentOutput =
 		},
 		refreshMediaItems: () => {
 			dispatch(invalidateMediaItems());
+		},
+		openSearch: () => {
+			dispatch(startMediaItemsSearchMode());
+		},
+		submitSearch: (term) => {
+			dispatch(searchMediaItems(term));
+		},
+		closeSearch: () => {
+			dispatch(stopMediaItemsSearchMode());
 		},
 		openFilters: () => {
 			dispatch(startMediaItemsSetFiltersMode());

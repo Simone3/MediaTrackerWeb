@@ -8,7 +8,35 @@ import { CategoryInternal } from 'app/data/models/internal/category';
 /**
  * Presentational component to display the list of user media items
  */
-export class MediaItemsListComponent extends Component<MediaItemsListComponentInput & MediaItemsListComponentOutput> {
+export class MediaItemsListComponent extends Component<MediaItemsListComponentInput & MediaItemsListComponentOutput, MediaItemsListComponentState> {
+	private readonly searchInputRef = React.createRef<HTMLInputElement>();
+
+	public state: MediaItemsListComponentState = {
+		searchTerm: this.props.currentSearchTerm || ''
+	};
+
+	/**
+	 * @override
+	 */
+	public componentDidUpdate(prevProps: Readonly<MediaItemsListComponentInput & MediaItemsListComponentOutput>): void {
+		if(
+			prevProps.category.id !== this.props.category.id ||
+			prevProps.isSearchMode !== this.props.isSearchMode ||
+			prevProps.currentSearchTerm !== this.props.currentSearchTerm
+		) {
+			const nextSearchTerm = this.props.currentSearchTerm || '';
+			if(nextSearchTerm !== this.state.searchTerm) {
+				this.setState({
+					searchTerm: nextSearchTerm
+				});
+			}
+		}
+
+		if(!prevProps.isSearchMode && this.props.isSearchMode) {
+			this.searchInputRef.current?.focus();
+		}
+	}
+
 	/**
 	 * @override
 	 */
@@ -22,6 +50,7 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 			highlightMediaItem,
 			highlightedMediaItem,
 			currentViewGroup,
+			isSearchMode,
 			editMediaItem,
 			deleteMediaItem,
 			markMediaItemAsActive,
@@ -32,18 +61,71 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 			exitViewGroupMode
 		} = this.props;
 		const emptyMessage = i18n.t(`mediaItem.list.empty.${category.mediaType}`);
+		const searchPlaceholder = i18n.t(`mediaItem.list.search.${category.mediaType}`);
 
 		return (
 			<section className='media-items-list'>
 				<div className='media-items-list-header'>
 					<h2 className='media-items-list-title'>{i18n.t(`category.mediaTypes.${category.mediaType}`)}</h2>
-					<button type='button' className='media-items-list-refresh' onClick={refreshMediaItems}>
-						Refresh
-					</button>
-					<button type='button' className='media-items-list-refresh' onClick={openFilters}>
-						Filter
-					</button>
+					<div className='media-items-list-actions'>
+						<button type='button' className='media-items-list-action' onClick={refreshMediaItems}>
+							Refresh
+						</button>
+						{!isSearchMode && (
+							<button
+								type='button'
+								className='media-items-list-action'
+								onClick={() => {
+									this.props.openSearch();
+								}}>
+								{i18n.t('mediaItem.list.buttons.search')}
+							</button>
+						)}
+						{!isSearchMode && (
+							<button type='button' className='media-items-list-action' onClick={openFilters}>
+								Filter
+							</button>
+						)}
+					</div>
 				</div>
+				{isSearchMode && (
+					<form
+						className='media-items-list-search'
+						role='search'
+						onSubmit={(event) => {
+							event.preventDefault();
+							this.submitSearch();
+						}}>
+						<input
+							ref={this.searchInputRef}
+							id='media-items-list-search'
+							className='media-items-list-search-input'
+							type='search'
+							value={this.state.searchTerm}
+							placeholder={searchPlaceholder}
+							aria-label={searchPlaceholder}
+							onChange={(event) => {
+								this.setState({
+									searchTerm: event.target.value
+								});
+							}}
+						/>
+						<button
+							type='submit'
+							className='media-items-list-action'
+							disabled={!this.state.searchTerm.trim()}>
+							{i18n.t('mediaItem.list.buttons.search')}
+						</button>
+						<button
+							type='button'
+							className='media-items-list-search-cancel'
+							onClick={() => {
+								this.props.closeSearch();
+							}}>
+							{i18n.t('common.alert.default.cancelButton')}
+						</button>
+					</form>
+				)}
 				{currentViewGroup && (
 					<div className='media-items-list-view-group-banner'>
 						<div className='media-items-list-view-group-copy'>
@@ -123,6 +205,18 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 
 		return metadata.join(' • ');
 	}
+
+	/**
+	 * Submits the current search term if valid
+	 */
+	private submitSearch(): void {
+		const searchTerm = this.state.searchTerm.trim();
+		if(!searchTerm) {
+			return;
+		}
+
+		this.props.submitSearch(searchTerm);
+	}
 }
 
 /**
@@ -148,6 +242,16 @@ export type MediaItemsListComponentInput = {
 	 * The currently viewed group, if the list is filtered by group
 	 */
 	currentViewGroup?: GroupInternal;
+
+	/**
+	 * Flag to tell whether the list is currently in text-search mode
+	 */
+	isSearchMode: boolean;
+
+	/**
+	 * The current submitted search term, if any
+	 */
+	currentSearchTerm?: string;
 }
 
 /**
@@ -205,6 +309,21 @@ export type MediaItemsListComponentOutput = {
 	refreshMediaItems: () => void;
 
 	/**
+	 * Callback to open text-search mode
+	 */
+	openSearch: () => void;
+
+	/**
+	 * Callback to submit a text search
+	 */
+	submitSearch: (term: string) => void;
+
+	/**
+	 * Callback to close text-search mode
+	 */
+	closeSearch: () => void;
+
+	/**
 	 * Callback to open filter modal
 	 */
 	openFilters: () => void;
@@ -213,4 +332,8 @@ export type MediaItemsListComponentOutput = {
 	 * Callback to exit the current view-group mode
 	 */
 	exitViewGroupMode: () => void;
+}
+
+type MediaItemsListComponentState = {
+	searchTerm: string;
 }

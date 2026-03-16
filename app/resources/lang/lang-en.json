@@ -149,6 +149,9 @@
 				"TV_SHOW": "Search shows...",
 				"VIDEOGAME": "Search games..."
 			},
+			"buttons": {
+				"search": "Search"
+			},
 			"group": "{{groupName}}, #{{order}}",
 			"completed": {
 				"single": "Completed on {{date}}",
