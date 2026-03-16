@@ -177,6 +177,12 @@
     - `app/web/styles.css`
     - `tests/media-items-list.smoke.test.tsx`
     - `tests/media-items-list-container.smoke.test.tsx`
+- Old React Native image density variants were still checked into the web app asset folder.
+  - Cleanup on web now:
+    - removes all `@2x` and `@3x` files from `app/resources/images`
+    - keeps only the base image assets that the web port uses
+  - Relevant files:
+    - `app/resources/images`
 
 ## Testing notes
 - Jest setup is lightweight and mostly smoke-test oriented.
