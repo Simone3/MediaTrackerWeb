@@ -1,7 +1,6 @@
 import { CreditsNavigator } from 'app/components/containers/navigation/credits-navigator';
 import { MediaNavigator } from 'app/components/containers/navigation/media-navigator';
 import { SettingsNavigator } from 'app/components/containers/navigation/settings-navigator';
-import appLogo from 'app/resources/images/ic_app_logo.png';
 import creditsIcon from 'app/resources/images/ic_credits.png';
 import homeIcon from 'app/resources/images/ic_home.png';
 import settingsIcon from 'app/resources/images/ic_settings.png';
@@ -41,10 +40,6 @@ export class AuthenticatedNavigator extends Component {
 			<div className='app-shell'>
 				<aside className='app-shell-menu'>
 					<div className='app-shell-rail'>
-						<div className='app-shell-brand' title={i18n.t('common.app.name')}>
-							<img src={appLogo} alt={i18n.t('common.app.name')} className='app-shell-brand-logo' />
-							<span className='app-shell-brand-label'>{i18n.t('common.app.name')}</span>
-						</div>
 						<nav className='app-shell-nav' aria-label={i18n.t('common.drawer.navigation')}>
 							{navigationItems.map((navigationItem) => {
 								const label = i18n.t(navigationItem.labelKey);

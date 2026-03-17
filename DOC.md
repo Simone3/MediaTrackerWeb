@@ -231,13 +231,13 @@
     - `tests/media-item-details.smoke.test.tsx`
 - Authenticated app navigation now uses a VS Code-style icon rail on desktop and a touch-friendly bottom bar on mobile.
   - Correct behavior on web now:
-    - the authenticated shell shows only the logo and section icons in a narrow left rail on desktop
+    - the authenticated shell shows only the section icons in a narrow left rail on desktop
     - hovering or keyboard-focusing a nav icon reveals its label next to the rail
+    - the hover label now stacks above the main content instead of getting hidden under it
     - smaller screens switch to a fixed bottom navigation with visible labels because hover is not available on touch
     - the `Media` nav item now stays active anywhere inside the `/media/*` section instead of only on the categories route
   - Relevant files:
     - `app/components/containers/navigation/authenticated-navigator.tsx`
-    - `app/resources/lang/lang-en.json`
     - `app/web/styles.css`
     - `tests/authenticated-navigation.smoke.test.tsx`
 

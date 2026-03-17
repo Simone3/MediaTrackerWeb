@@ -27,6 +27,7 @@ describe('AuthenticatedNavigator', () => {
 		);
 
 		expect(screen.getByRole('navigation', { name: i18n.t('common.drawer.navigation') })).toBeInTheDocument();
+		expect(screen.queryByRole('img', { name: i18n.t('common.app.name') })).not.toBeInTheDocument();
 		expect(screen.getByRole('link', { name: i18n.t('common.drawer.home') })).toHaveClass('app-shell-link-active');
 		expect(screen.getByRole('link', { name: i18n.t('common.drawer.settings') })).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: i18n.t('common.drawer.credits') })).toBeInTheDocument();
