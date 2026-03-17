@@ -394,6 +394,7 @@
 			}
 		},
 		"drawer": {
+			"navigation": "App navigation",
 			"home": "Media",
 			"settings": "Settings",
 			"credits": "Credits"

@@ -1,11 +1,33 @@
 import { CreditsNavigator } from 'app/components/containers/navigation/credits-navigator';
 import { MediaNavigator } from 'app/components/containers/navigation/media-navigator';
 import { SettingsNavigator } from 'app/components/containers/navigation/settings-navigator';
+import appLogo from 'app/resources/images/ic_app_logo.png';
+import creditsIcon from 'app/resources/images/ic_credits.png';
+import homeIcon from 'app/resources/images/ic_home.png';
+import settingsIcon from 'app/resources/images/ic_settings.png';
 import { i18n } from 'app/utilities/i18n';
 import { screenToPath } from 'app/utilities/navigation-routes';
 import { AppScreens, AppSections } from 'app/utilities/screens';
 import React, { Component, ReactNode } from 'react';
 import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
+
+const navigationItems = [
+	{
+		icon: homeIcon,
+		labelKey: 'common.drawer.home',
+		path: screenToPath(AppSections.Media)
+	},
+	{
+		icon: settingsIcon,
+		labelKey: 'common.drawer.settings',
+		path: screenToPath(AppSections.Settings)
+	},
+	{
+		icon: creditsIcon,
+		labelKey: 'common.drawer.credits',
+		path: screenToPath(AppSections.Credits)
+	}
+];
 
 /**
  * The navigator to switch between the main authenticated app sections via side menu
@@ -18,28 +40,31 @@ export class AuthenticatedNavigator extends Component {
 		return (
 			<div className='app-shell'>
 				<aside className='app-shell-menu'>
-					<div className='app-shell-brand'>{i18n.t('common.app.name')}</div>
-					<NavLink
-						to={screenToPath(AppScreens.CategoriesList)}
-						className={({ isActive }) => {
-							return isActive ? 'app-shell-link app-shell-link-active' : 'app-shell-link';
-						}}>
-						{i18n.t('common.drawer.home')}
-					</NavLink>
-					<NavLink
-						to={screenToPath(AppScreens.Settings)}
-						className={({ isActive }) => {
-							return isActive ? 'app-shell-link app-shell-link-active' : 'app-shell-link';
-						}}>
-						{i18n.t('common.drawer.settings')}
-					</NavLink>
-					<NavLink
-						to={screenToPath(AppScreens.Credits)}
-						className={({ isActive }) => {
-							return isActive ? 'app-shell-link app-shell-link-active' : 'app-shell-link';
-						}}>
-						{i18n.t('common.drawer.credits')}
-					</NavLink>
+					<div className='app-shell-rail'>
+						<div className='app-shell-brand' title={i18n.t('common.app.name')}>
+							<img src={appLogo} alt={i18n.t('common.app.name')} className='app-shell-brand-logo' />
+							<span className='app-shell-brand-label'>{i18n.t('common.app.name')}</span>
+						</div>
+						<nav className='app-shell-nav' aria-label={i18n.t('common.drawer.navigation')}>
+							{navigationItems.map((navigationItem) => {
+								const label = i18n.t(navigationItem.labelKey);
+
+								return (
+									<NavLink
+										key={navigationItem.path}
+										to={navigationItem.path}
+										title={label}
+										aria-label={label}
+										className={({ isActive }) => {
+											return isActive ? 'app-shell-link app-shell-link-active' : 'app-shell-link';
+										}}>
+										<img src={navigationItem.icon} alt='' aria-hidden='true' className='app-shell-link-icon' />
+										<span className='app-shell-link-label'>{label}</span>
+									</NavLink>
+								);
+							})}
+						</nav>
+					</div>
 				</aside>
 				<main className='app-shell-content'>
 					<Routes>
