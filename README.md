@@ -2,13 +2,12 @@
 Just a Codex experiment for now.
 
 TODO:
-- fix UI
+- fix UI page by page
   - modernize
-  - sidebar like spot (mobile version on top too)
   - icons are missing (forms, modals, etc.)
   - media item element does not show the old data
-  - favicon
-- how are params like IDs passed to the screens? does browser back work well?
+  - also: responsive mobile versions!
+- add favicon
 - check dev vs. prod configs - how to inject them in a webapp?
 - split css file into single files
 - check if all strings are in lang-en
