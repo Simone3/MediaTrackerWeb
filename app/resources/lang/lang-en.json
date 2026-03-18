@@ -44,7 +44,6 @@
 		},
 		"list": {
 			"title": "Media Tracker",
-			"subtitle": "Organize your collections by media type.",
 			"count": {
 				"single": "1 category",
 				"multiple": "{{count}} categories"

@@ -242,11 +242,13 @@
     - `tests/authenticated-navigation.smoke.test.tsx`
 - The categories page now has a dark elevated main panel with white accent cards, a desktop header CTA, and a responsive overflow menu.
   - Correct behavior on web now:
-    - the categories main content uses a dark charcoal panel that visually matches the dark navigation rail without changing the shared shell
-    - category rows render as mostly dark-neutral cards with a thin color rail, a media-type pill, and a quieter ghost-style options trigger
+    - the categories route now drives the authenticated content area into a full-screen dark treatment instead of sitting inside a smaller dark card with light margins around it
+    - category rows render as mostly dark-neutral cards with a thin color rail, the restored media-type icon, a media-type pill, and a quieter ghost-style options trigger
     - desktop shows an outlined `Add category` header button, while mobile keeps the floating `+` action above the bottom nav
     - the category overflow actions open as an anchored popover on desktop and a bottom sheet on mobile, while keeping the same edit/delete behavior and delete confirmation
+    - mobile floating actions and bottom sheets now sit above the fixed bottom navigation instead of getting partially hidden by it
   - Relevant files:
+    - `app/components/presentational/category/common/media-icon/index.tsx`
     - `app/components/presentational/category/list/constants.ts`
     - `app/components/containers/category/list/screen.ts`
     - `app/components/presentational/category/list/screen/index.tsx`

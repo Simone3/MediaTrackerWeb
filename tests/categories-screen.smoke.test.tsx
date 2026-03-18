@@ -59,6 +59,8 @@ describe('CategoriesListScreenComponent', () => {
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: '+ Add category' }));
 
+		expect(document.body).toHaveClass('categories-screen-active');
+		expect(screen.getByText('0 categories')).toBeInTheDocument();
 		expect(loadNewCategoryDetails).toHaveBeenCalledTimes(1);
 		expect(fetchCategories).not.toHaveBeenCalled();
 	});
@@ -93,6 +95,7 @@ describe('CategoriesListScreenComponent', () => {
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: '+' }));
 
+		expect(document.body).toHaveClass('categories-screen-active');
 		expect(loadNewCategoryDetails).toHaveBeenCalledTimes(1);
 		expect(screen.queryByRole('button', { name: '+ Add category' })).not.toBeInTheDocument();
 	});

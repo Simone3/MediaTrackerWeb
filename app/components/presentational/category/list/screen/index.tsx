@@ -17,6 +17,7 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 	 * @override
 	 */
 	public componentDidMount(): void {
+		document.body.classList.add('categories-screen-active');
 		window.addEventListener('resize', this.handleResize);
 		this.requestFetchIfRequired();
 	}
@@ -32,6 +33,7 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 	 * @override
 	 */
 	public componentWillUnmount(): void {
+		document.body.classList.remove('categories-screen-active');
 		window.removeEventListener('resize', this.handleResize);
 	}
 
@@ -49,21 +51,22 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 
 		return (
 			<section className='categories-screen'>
-				<header className='categories-screen-header'>
-					<div className='categories-screen-heading'>
-						<p className='categories-screen-count'>{countLabel}</p>
-						<h1 className='categories-screen-title'>{i18n.t('category.list.title')}</h1>
-						<p className='categories-screen-subtitle'>{i18n.t('category.list.subtitle')}</p>
-					</div>
-					{!this.state.isMobileLayout &&
-						<button
-							type='button'
-							className='categories-screen-add-button'
-							onClick={loadNewCategoryDetails}>
-							+ {i18n.t('category.list.add')}
-						</button>}
-				</header>
-				<CategoriesListContainer />
+				<div className='categories-screen-content'>
+					<header className='categories-screen-header'>
+						<div className='categories-screen-heading'>
+							<h1 className='categories-screen-title'>{i18n.t('category.list.title')}</h1>
+							<p className='categories-screen-count'>{countLabel}</p>
+						</div>
+						{!this.state.isMobileLayout &&
+							<button
+								type='button'
+								className='categories-screen-add-button'
+								onClick={loadNewCategoryDetails}>
+								+ {i18n.t('category.list.add')}
+							</button>}
+					</header>
+					<CategoriesListContainer />
+				</div>
 				{this.state.isMobileLayout &&
 					<FABComponent
 						text='+'

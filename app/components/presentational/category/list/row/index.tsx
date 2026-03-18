@@ -1,3 +1,4 @@
+import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
 import React, { Component, CSSProperties, ReactNode } from 'react';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { i18n } from 'app/utilities/i18n';
@@ -26,9 +27,14 @@ export class CategoryRowComponent extends Component<CategoryRowComponentInput & 
 				style={{ '--category-color': category.color } as CSSProperties}>
 				<span className='category-row-accent' aria-hidden={true} />
 				<button type='button' className='category-row-main' onClick={open}>
-					<span className='category-row-copy'>
-						<span className='category-row-media'>{mediaType}</span>
-						<span className='category-row-name'>{category.name}</span>
+					<span className='category-row-leading'>
+						<span className='category-row-icon-shell' aria-hidden={true}>
+							<MediaIconComponent mediaType={category.mediaType} className='category-row-icon' />
+						</span>
+						<span className='category-row-copy'>
+							<span className='category-row-media'>{mediaType}</span>
+							<span className='category-row-name'>{category.name}</span>
+						</span>
 					</span>
 				</button>
 				<button
