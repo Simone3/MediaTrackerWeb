@@ -264,6 +264,7 @@
   - Correct behavior on web now:
     - the category details route uses the same full-screen dark categories theme as the categories list, including dark confirmation/loading surfaces
     - the form is now a single centered dark card with visual media-type choices and compact predefined color swatches
+    - selected media-type tiles now keep their selected tint while hovered instead of visually falling back to the generic hover state
     - the free-form browser color picker has been removed, so category colors now come only from the configured preset palette
     - the media type remains locked while editing an existing category, matching the prior web behavior
     - smaller screens keep the same single-column form layout and expand the save button to full width
