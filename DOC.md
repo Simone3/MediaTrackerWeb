@@ -260,6 +260,19 @@
     - `tests/categories-list.smoke.test.tsx`
     - `tests/category-context-menu.smoke.test.tsx`
     - `tests/categories-screen.smoke.test.tsx`
+- The category add/edit screen now matches the dark categories theme and uses only the predefined color palette.
+  - Correct behavior on web now:
+    - the category details route uses the same full-screen dark categories theme as the categories list, including dark confirmation/loading surfaces
+    - the form shows a live preview card, visual media-type choices, and larger predefined color swatches
+    - the free-form browser color picker has been removed, so category colors now come only from the configured preset palette
+    - the media type remains locked while editing an existing category, matching the prior web behavior
+    - smaller screens stack the preview above the form and expand the save button to full width
+  - Relevant files:
+    - `app/components/presentational/category/details/screen/index.tsx`
+    - `app/components/presentational/category/common/media-icon/index.tsx`
+    - `app/components/containers/category/details/screen.ts`
+    - `app/web/styles.css`
+    - `tests/category-details.smoke.test.tsx`
 
 ## Testing notes
 - Jest setup is lightweight and mostly smoke-test oriented.
