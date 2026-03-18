@@ -65,17 +65,13 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 		} = this.state;
 
 		const isValid = this.isFormValid(formValues);
-		const mediaTypeLabel = i18n.t(`category.mediaTypes.${formValues.mediaType}`);
 		const detailsTitle = formValues.id ? formValues.name : i18n.t('category.details.title.new');
 
 		return (
 			<section className='category-details-screen'>
 				<div className='category-details-shell'>
 					<div className='category-details-header'>
-						<div className='category-details-heading'>
-							<h1 className='category-details-title'>{detailsTitle}</h1>
-							<p className='category-details-subtitle'>{mediaTypeLabel}</p>
-						</div>
+						<h1 className='category-details-title'>{detailsTitle}</h1>
 						<div className='category-details-actions'>
 							<button
 								type='button'
@@ -88,100 +84,83 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 							</button>
 						</div>
 					</div>
-					<div className='category-details-layout'>
-						<aside className='category-details-preview'>
-							<div
-								className='category-details-preview-card'
-								style={{ '--category-color': formValues.color } as React.CSSProperties}>
-								<span className='category-details-preview-accent' aria-hidden={true} />
-								<div className='category-details-preview-icon-shell' aria-hidden={true}>
-									<MediaIconComponent mediaType={formValues.mediaType} className='category-details-preview-icon' />
-								</div>
-								<div className='category-details-preview-copy'>
-									<p className='category-details-preview-media'>{mediaTypeLabel}</p>
-									<h2 className='category-details-preview-name'>{formValues.name.trim() || i18n.t('category.details.title.new')}</h2>
-								</div>
-							</div>
-						</aside>
-						<form
-							id='category-details-form'
-							className='category-details-form'
-							onSubmit={(event) => {
-								event.preventDefault();
-								this.submitForm(false);
-							}}>
-							<div className='category-details-section'>
-								<label className='category-details-label' htmlFor='category-name'>
-									{i18n.t('category.details.placeholders.name')}
-								</label>
-								<input
-									id='category-name'
-									className='category-details-input'
-									type='text'
-									value={formValues.name}
-									onChange={(event) => {
-										this.setFormField('name', event.target.value);
-									}}
-								/>
-							</div>
-							<fieldset className='category-details-section category-details-section-choices'>
-								<legend className='category-details-label'>{i18n.t('category.details.prompts.mediaType')}</legend>
-								<div className='category-details-media-grid'>
-									{MEDIA_TYPES_INTERNAL.map((mediaType) => {
-										const selected = formValues.mediaType === mediaType;
-										const disabled = Boolean(formValues.id);
-										const buttonClassName = selected ?
-											'category-details-media-option category-details-media-option-selected' :
-											'category-details-media-option';
-										const optionLabel = i18n.t(`category.mediaTypes.${mediaType}`);
+					<form
+						id='category-details-form'
+						className='category-details-form'
+						onSubmit={(event) => {
+							event.preventDefault();
+							this.submitForm(false);
+						}}>
+						<div className='category-details-section'>
+							<label className='category-details-label' htmlFor='category-name'>
+								{i18n.t('category.details.placeholders.name')}
+							</label>
+							<input
+								id='category-name'
+								className='category-details-input'
+								type='text'
+								value={formValues.name}
+								onChange={(event) => {
+									this.setFormField('name', event.target.value);
+								}}
+							/>
+						</div>
+						<div className='category-details-section'>
+							<p className='category-details-label'>{i18n.t('category.details.prompts.mediaType')}</p>
+							<div className='category-details-media-grid'>
+								{MEDIA_TYPES_INTERNAL.map((mediaType) => {
+									const selected = formValues.mediaType === mediaType;
+									const disabled = Boolean(formValues.id);
+									const buttonClassName = selected ?
+										'category-details-media-option category-details-media-option-selected' :
+										'category-details-media-option';
+									const optionLabel = i18n.t(`category.mediaTypes.${mediaType}`);
 
-										return (
-											<button
-												key={mediaType}
-												type='button'
-												className={buttonClassName}
-												disabled={disabled}
-												aria-pressed={selected}
-												onClick={() => {
-													this.setFormField('mediaType', mediaType);
-												}}>
-												<span className='category-details-media-option-icon-shell' aria-hidden={true}>
-													<MediaIconComponent mediaType={mediaType} className='category-details-media-option-icon' />
-												</span>
-												<span className='category-details-media-option-label'>{optionLabel}</span>
-											</button>
-										);
-									})}
-								</div>
-							</fieldset>
-							<fieldset className='category-details-section category-details-section-choices'>
-								<legend className='category-details-label'>Color</legend>
-								<div className='category-details-colors'>
-									{config.ui.colors.availableCategoryColors.map((color) => {
-										const selected = formValues.color === color;
-										const buttonClassName = selected ?
-											'category-details-color category-details-color-selected' :
-											'category-details-color';
+									return (
+										<button
+											key={mediaType}
+											type='button'
+											className={buttonClassName}
+											disabled={disabled}
+											aria-pressed={selected}
+											onClick={() => {
+												this.setFormField('mediaType', mediaType);
+											}}>
+											<span className='category-details-media-option-icon-shell' aria-hidden={true}>
+												<MediaIconComponent mediaType={mediaType} className='category-details-media-option-icon' />
+											</span>
+											<span className='category-details-media-option-label'>{optionLabel}</span>
+										</button>
+									);
+								})}
+							</div>
+						</div>
+						<div className='category-details-section'>
+							<p className='category-details-label'>Color</p>
+							<div className='category-details-colors'>
+								{config.ui.colors.availableCategoryColors.map((color) => {
+									const selected = formValues.color === color;
+									const buttonClassName = selected ?
+										'category-details-color category-details-color-selected' :
+										'category-details-color';
 
-										return (
-											<button
-												key={color}
-												type='button'
-												className={buttonClassName}
-												style={{ backgroundColor: color }}
-												onClick={() => {
-													this.setFormField('color', color);
-												}}
-												aria-label={`Select color ${color}`}
-												aria-pressed={selected}>
-												{selected && <span className='category-details-color-check' aria-hidden={true}>+</span>}
-											</button>
-										);
-									})}
-								</div>
-							</fieldset>
-						</form>
-					</div>
+									return (
+										<button
+											key={color}
+											type='button'
+											className={buttonClassName}
+											style={{ backgroundColor: color }}
+											onClick={() => {
+												this.setFormField('color', color);
+											}}
+											aria-label={`Select color ${color}`}
+											aria-pressed={selected}
+										/>
+									);
+								})}
+							</div>
+						</div>
+					</form>
 				</div>
 				<ConfirmDialogComponent
 					visible={confirmSameNameVisible}
