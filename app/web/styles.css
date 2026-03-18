@@ -188,13 +188,16 @@ input {
 	min-width: 0;
 }
 
-body.categories-screen-active {
+body.categories-screen-active,
+body.categories-screen-active #root,
+body.categories-screen-active .app-shell {
 	background: #0f151d;
 }
 
 body.categories-screen-active .app-shell-content {
 	padding: 0;
 	background: #0f151d;
+	min-height: 100vh;
 }
 
 .auth-screen {
@@ -326,7 +329,7 @@ body.categories-screen-active .app-shell-content {
 
 .categories-screen {
 	position: relative;
-	min-height: 100%;
+	min-height: 100vh;
 	padding: 42px 40px 148px;
 	background:
 		radial-gradient(circle at top right, rgba(90, 128, 190, 0.24) 0%, rgba(90, 128, 190, 0) 32%),
@@ -532,23 +535,8 @@ body.categories-screen-active .app-shell-content {
 
 .category-row-copy {
 	display: grid;
-	gap: 12px;
+	gap: 4px;
 	min-width: 0;
-}
-
-.category-row-media {
-	display: inline-flex;
-	align-items: center;
-	width: fit-content;
-	padding: 6px 10px;
-	border-radius: 999px;
-	border: 1px solid rgba(178, 195, 227, 0.16);
-	background: rgba(255, 255, 255, 0.04);
-	font-weight: 600;
-	font-size: 0.74rem;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	color: #b6c6e2;
 }
 
 .category-row-name {
@@ -655,22 +643,13 @@ body.categories-screen-active .app-shell-content {
 
 .category-context-menu-header {
 	display: grid;
-	gap: 4px;
+	gap: 0;
 }
 
 .category-context-menu-title {
 	margin: 0;
 	font-size: 1.15rem;
 	color: #f5f8ff;
-}
-
-.category-context-menu-media {
-	margin: 0;
-	color: #95a5c5;
-	font-size: 0.78rem;
-	font-weight: 700;
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
 }
 
 .category-context-menu-actions {
@@ -787,16 +766,28 @@ body.categories-screen-active .app-shell-content {
 	position: fixed;
 	right: 28px;
 	bottom: 28px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	width: 56px;
 	height: 56px;
 	border: 0;
+	padding: 0;
 	border-radius: 50%;
 	font-size: 2rem;
-	line-height: 1;
 	color: #ffffff;
 	background: var(--color-accent);
 	box-shadow: var(--shadow-soft);
 	cursor: pointer;
+	z-index: 28;
+}
+
+.floating-action-button-label {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	transform: translateY(-1px);
 }
 
 .category-details-screen {
@@ -1859,6 +1850,42 @@ body.categories-screen-active .app-shell-content {
 	color: #ffffff;
 }
 
+body.categories-screen-active .confirm-dialog-overlay {
+	background: rgba(8, 12, 19, 0.72);
+	backdrop-filter: blur(10px);
+}
+
+body.categories-screen-active .confirm-dialog {
+	background: linear-gradient(180deg, #18222d 0%, #131b24 100%);
+	border: 1px solid rgba(150, 175, 222, 0.22);
+	border-radius: 22px;
+	padding: 22px;
+	box-shadow: 0 28px 56px rgba(5, 11, 20, 0.38);
+}
+
+body.categories-screen-active .confirm-dialog-title {
+	color: #f5f8ff;
+}
+
+body.categories-screen-active .confirm-dialog-message {
+	color: #aebad3;
+	line-height: 1.6;
+}
+
+body.categories-screen-active .confirm-dialog-button {
+	padding: 11px 16px;
+}
+
+body.categories-screen-active .confirm-dialog-button-secondary {
+	background: rgba(255, 255, 255, 0.06);
+	color: #eef3ff;
+}
+
+body.categories-screen-active .confirm-dialog-button-primary {
+	background: linear-gradient(180deg, #ff7b7b 0%, #e15353 100%);
+	color: #ffffff;
+}
+
 .placeholder-screen {
 	background: var(--color-surface);
 	border: 1px dashed var(--color-border);
@@ -1967,7 +1994,8 @@ body.categories-screen-active .app-shell-content {
 	}
 
 	.categories-screen {
-		padding: 24px 18px calc(148px + env(safe-area-inset-bottom));
+		min-height: 100vh;
+		padding: 24px 18px calc(164px + env(safe-area-inset-bottom));
 	}
 
 	.categories-screen-header {
@@ -2005,7 +2033,7 @@ body.categories-screen-active .app-shell-content {
 
 	.category-context-menu-overlay,
 	.media-item-context-menu-overlay {
-		padding: 16px 16px calc(104px + env(safe-area-inset-bottom));
+		padding: 16px 16px calc(120px + env(safe-area-inset-bottom));
 	}
 
 	.category-context-menu {
@@ -2014,7 +2042,7 @@ body.categories-screen-active .app-shell-content {
 
 	.floating-action-button {
 		right: 18px;
-		bottom: calc(96px + env(safe-area-inset-bottom));
+		bottom: calc(116px + env(safe-area-inset-bottom));
 	}
 
 	.media-items-list-header {

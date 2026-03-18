@@ -144,7 +144,6 @@ export class CategoryContextMenuComponent extends Component<CategoryContextMenuC
 			<>
 				<header className='category-context-menu-header'>
 					<h2 id='category-context-menu-title' className='category-context-menu-title'>{category.name}</h2>
-					<p className='category-context-menu-media'>{i18n.t(`category.mediaTypes.${category.mediaType}`)}</p>
 				</header>
 				<div className='category-context-menu-actions'>
 					<button
@@ -177,7 +176,7 @@ export class CategoryContextMenuComponent extends Component<CategoryContextMenuC
 	 */
 	private getPopoverStyle(): React.CSSProperties {
 		const popoverWidth = 272;
-		const popoverHeight = 204;
+		const popoverHeight = 176;
 		const viewportPadding = 16;
 		const anchorRect = this.props.anchorRect;
 

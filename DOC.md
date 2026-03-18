@@ -243,9 +243,9 @@
 - The categories page now has a dark elevated main panel with white accent cards, a desktop header CTA, and a responsive overflow menu.
   - Correct behavior on web now:
     - the categories route now drives the authenticated content area into a full-screen dark treatment instead of sitting inside a smaller dark card with light margins around it
-    - category rows render as mostly dark-neutral cards with a thin color rail, the restored media-type icon, a media-type pill, and a quieter ghost-style options trigger
+    - category rows render as mostly dark-neutral cards with a thin color rail, the restored media-type icon, and a quieter ghost-style options trigger
     - desktop shows an outlined `Add category` header button, while mobile keeps the floating `+` action above the bottom nav
-    - the category overflow actions open as an anchored popover on desktop and a bottom sheet on mobile, while keeping the same edit/delete behavior and delete confirmation
+    - the category overflow actions open as an anchored popover on desktop and a bottom sheet on mobile, while keeping the same edit/delete behavior and a darker confirmation dialog for destructive actions on the categories route
     - mobile floating actions and bottom sheets now sit above the fixed bottom navigation instead of getting partially hidden by it
   - Relevant files:
     - `app/components/presentational/category/common/media-icon/index.tsx`

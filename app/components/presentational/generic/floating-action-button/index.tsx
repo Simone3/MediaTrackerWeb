@@ -14,7 +14,7 @@ export class FABComponent extends Component<FABComponentInput & FABComponentOutp
 				className='floating-action-button'
 				onClick={this.props.onPress}
 				aria-label={this.props.text}>
-				{this.props.text}
+				<span className='floating-action-button-label'>{this.props.text}</span>
 			</button>
 		);
 	}

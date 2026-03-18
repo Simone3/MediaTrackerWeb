@@ -36,5 +36,6 @@ describe('CategoriesListComponent', () => {
 
 		expect(selectCategory).toHaveBeenCalledWith(categories[0]);
 		expect(highlightCategory).toHaveBeenCalledWith(categories[0]);
+		expect(screen.queryByText('Books')).not.toBeInTheDocument();
 	});
 });

@@ -1,7 +1,6 @@
 import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
 import React, { Component, CSSProperties, ReactNode } from 'react';
 import { CategoryInternal } from 'app/data/models/internal/category';
-import { i18n } from 'app/utilities/i18n';
 
 /**
  * Presentational component to display a generic category row
@@ -17,8 +16,6 @@ export class CategoryRowComponent extends Component<CategoryRowComponentInput & 
 			open,
 			showOptionsMenu
 		} = this.props;
-
-		const mediaType = i18n.t(`category.mediaTypes.${category.mediaType}`);
 		const cardClassName = highlighted ? 'category-row category-row-highlighted' : 'category-row';
 
 		return (
@@ -32,7 +29,6 @@ export class CategoryRowComponent extends Component<CategoryRowComponentInput & 
 							<MediaIconComponent mediaType={category.mediaType} className='category-row-icon' />
 						</span>
 						<span className='category-row-copy'>
-							<span className='category-row-media'>{mediaType}</span>
 							<span className='category-row-name'>{category.name}</span>
 						</span>
 					</span>

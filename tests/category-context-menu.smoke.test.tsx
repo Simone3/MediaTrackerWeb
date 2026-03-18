@@ -41,6 +41,7 @@ describe('CategoryContextMenuComponent', () => {
 		expect(edit).toHaveBeenCalledWith(category);
 		expect(deleteCallback).not.toHaveBeenCalled();
 		expect(close).toHaveBeenCalledTimes(1);
+		expect(screen.queryByText('Books')).not.toBeInTheDocument();
 	});
 
 	test('asks confirmation before deleting a category', async() => {
