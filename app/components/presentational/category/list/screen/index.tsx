@@ -1,16 +1,23 @@
 import React, { Component, ReactNode } from 'react';
+import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 import { CategoriesListContainer } from 'app/components/containers/category/list/list';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
+import { i18n } from 'app/utilities/i18n';
 
 /**
  * Presentational component that contains the whole "categories list" screen, that lists all user categories
  */
-export class CategoriesListScreenComponent extends Component<CategoriesListScreenComponentInput & CategoriesListScreenComponentOutput> {
+export class CategoriesListScreenComponent extends Component<CategoriesListScreenComponentInput & CategoriesListScreenComponentOutput, CategoriesListScreenComponentState> {
+	public state: CategoriesListScreenComponentState = {
+		isMobileLayout: this.isMobileLayout()
+	};
+
 	/**
 	 * @override
 	 */
 	public componentDidMount(): void {
+		window.addEventListener('resize', this.handleResize);
 		this.requestFetchIfRequired();
 	}
 
@@ -24,16 +31,44 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 	/**
 	 * @override
 	 */
+	public componentWillUnmount(): void {
+		window.removeEventListener('resize', this.handleResize);
+	}
+
+	/**
+	 * @override
+	 */
 	public render(): ReactNode {
+		const {
+			categoriesCount,
+			loadNewCategoryDetails
+		} = this.props;
+		const countLabel = categoriesCount === 1 ?
+			i18n.t('category.list.count.single') :
+			i18n.t('category.list.count.multiple', { count: categoriesCount });
+
 		return (
 			<section className='categories-screen'>
+				<header className='categories-screen-header'>
+					<div className='categories-screen-heading'>
+						<p className='categories-screen-count'>{countLabel}</p>
+						<h1 className='categories-screen-title'>{i18n.t('category.list.title')}</h1>
+						<p className='categories-screen-subtitle'>{i18n.t('category.list.subtitle')}</p>
+					</div>
+					{!this.state.isMobileLayout &&
+						<button
+							type='button'
+							className='categories-screen-add-button'
+							onClick={loadNewCategoryDetails}>
+							+ {i18n.t('category.list.add')}
+						</button>}
+				</header>
 				<CategoriesListContainer />
-				<FABComponent
-					text='+'
-					onPress={() => {
-						this.props.loadNewCategoryDetails();
-					}}
-				/>
+				{this.state.isMobileLayout &&
+					<FABComponent
+						text='+'
+						onPress={loadNewCategoryDetails}
+					/>}
 				<LoadingIndicatorComponent
 					visible={this.props.isLoading}
 					fullScreen={false}
@@ -50,12 +85,38 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 			this.props.fetchCategories();
 		}
 	}
+
+	/**
+	 * Updates the responsive layout flag when the viewport changes
+	 */
+	private handleResize = (): void => {
+		const isMobileLayout = this.isMobileLayout();
+
+		if(isMobileLayout !== this.state.isMobileLayout) {
+			this.setState({
+				isMobileLayout
+			});
+		}
+	};
+
+	/**
+	 * Checks whether the current viewport matches the mobile layout
+	 * @returns true if mobile layout should be used
+	 */
+	private isMobileLayout(): boolean {
+		return window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
+	}
 }
 
 /**
  * CategoriesListScreenComponent's input props
  */
 export type CategoriesListScreenComponentInput = {
+	/**
+	 * Number of categories currently loaded
+	 */
+	categoriesCount: number;
+
 	/**
 	 * Flag to tell if the component is currently waiting on an async operation. If true, shows the loading screen.
 	 */
@@ -80,4 +141,8 @@ export type CategoriesListScreenComponentOutput = {
 	 * Callback to load the details of a new category
 	 */
 	loadNewCategoryDetails: () => void;
+}
+
+type CategoriesListScreenComponentState = {
+	isMobileLayout: boolean;
 }

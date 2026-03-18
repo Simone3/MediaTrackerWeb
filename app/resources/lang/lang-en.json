@@ -44,7 +44,14 @@
 		},
 		"list": {
 			"title": "Media Tracker",
+			"subtitle": "Organize your collections by media type.",
+			"count": {
+				"single": "1 category",
+				"multiple": "{{count}} categories"
+			},
+			"add": "Add category",
 			"empty": "No categories",
+			"emptyHint": "Add your first category to start tracking.",
 			"edit": "Edit category",
 			"delete": "Delete category"
 		},

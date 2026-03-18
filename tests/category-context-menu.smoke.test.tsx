@@ -11,6 +11,14 @@ describe('CategoryContextMenuComponent', () => {
 		mediaType: 'BOOK',
 		color: '#3f51b5'
 	};
+	const anchorRect = {
+		top: 24,
+		bottom: 56,
+		left: 120,
+		right: 152,
+		width: 32,
+		height: 32
+	};
 
 	test('edits a category from the popup', async() => {
 		const edit = jest.fn();
@@ -20,6 +28,7 @@ describe('CategoryContextMenuComponent', () => {
 		render(
 			<CategoryContextMenuComponent
 				category={category}
+				anchorRect={anchorRect}
 				edit={edit}
 				delete={deleteCallback}
 				close={close}
@@ -42,6 +51,7 @@ describe('CategoryContextMenuComponent', () => {
 		render(
 			<CategoryContextMenuComponent
 				category={category}
+				anchorRect={anchorRect}
 				edit={edit}
 				delete={deleteCallback}
 				close={close}

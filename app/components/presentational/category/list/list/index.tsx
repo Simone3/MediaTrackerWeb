@@ -1,13 +1,28 @@
 import React, { Component, ReactElement, ReactNode } from 'react';
 import { CategoryInternal } from 'app/data/models/internal/category';
-import { CategoryContextMenuComponent } from 'app/components/presentational/category/list/context-menu';
+import { CategoryContextMenuAnchorRect, CategoryContextMenuComponent } from 'app/components/presentational/category/list/context-menu';
 import { CategoryRowComponent } from 'app/components/presentational/category/list/row';
 import { i18n } from 'app/utilities/i18n';
 
 /**
  * Presentational component to display the list of user categories
  */
-export class CategoriesListComponent extends Component<CategoriesListComponentInput & CategoriesListComponentOutput> {
+export class CategoriesListComponent extends Component<CategoriesListComponentInput & CategoriesListComponentOutput, CategoriesListComponentState> {
+	public state: CategoriesListComponentState = {
+		menuAnchorRect: undefined
+	};
+
+	/**
+	 * @override
+	 */
+	public componentDidUpdate(prevProps: Readonly<CategoriesListComponentInput & CategoriesListComponentOutput>): void {
+		if(prevProps.highlightedCategory && !this.props.highlightedCategory && this.state.menuAnchorRect) {
+			this.setState({
+				menuAnchorRect: undefined
+			});
+		}
+	}
+
 	/**
 	 * @override
 	 */
@@ -20,7 +35,12 @@ export class CategoriesListComponent extends Component<CategoriesListComponentIn
 	 * @returns the node portion
 	 */
 	private renderNone(): ReactElement {
-		return <p className='categories-list-empty'>{i18n.t('category.list.empty')}</p>;
+		return (
+			<div className='categories-list-empty'>
+				<p className='categories-list-empty-title'>{i18n.t('category.list.empty')}</p>
+				<p className='categories-list-empty-copy'>{i18n.t('category.list.emptyHint')}</p>
+			</div>
+		);
 	}
 
 	/**
@@ -40,22 +60,33 @@ export class CategoriesListComponent extends Component<CategoriesListComponentIn
 
 		return (
 			<div className='categories-list'>
-				<div className='categories-list-header'>
-					<h1 className='categories-list-title'>{i18n.t('category.list.title')}</h1>
-				</div>
 				{categories.length === 0 ?
 					this.renderNone() :
 					(
 					<ul className='categories-list-items'>
 						{categories.map((category: CategoryInternal) => {
+							const highlighted = highlightedCategory?.id === category.id;
+							const itemClassName = highlighted ? 'categories-list-item categories-list-item-highlighted' : 'categories-list-item';
+
 							return (
-								<li key={category.id} className='categories-list-item'>
+								<li key={category.id} className={itemClassName}>
 									<CategoryRowComponent
 										category={category}
+										highlighted={highlighted}
 										open={() => {
 											selectCategory(category);
 										}}
-										showOptionsMenu={() => {
+										showOptionsMenu={(buttonRect) => {
+											this.setState({
+												menuAnchorRect: {
+													top: buttonRect.top,
+													bottom: buttonRect.bottom,
+													left: buttonRect.left,
+													right: buttonRect.right,
+													width: buttonRect.width,
+													height: buttonRect.height
+												}
+											});
 											highlightCategory(category);
 										}}
 									/>
@@ -66,9 +97,15 @@ export class CategoriesListComponent extends Component<CategoriesListComponentIn
 				)}
 				<CategoryContextMenuComponent
 					category={highlightedCategory}
+					anchorRect={this.state.menuAnchorRect}
 					edit={editCategory}
 					delete={deleteCategory}
-					close={closeCategoryMenu}
+					close={() => {
+						this.setState({
+							menuAnchorRect: undefined
+						});
+						closeCategoryMenu();
+					}}
 				/>
 			</div>
 		);
@@ -119,4 +156,8 @@ export type CategoriesListComponentOutput = {
 	 */
 	closeCategoryMenu: () => void;
 
+}
+
+type CategoriesListComponentState = {
+	menuAnchorRect: CategoryContextMenuAnchorRect | undefined;
 }

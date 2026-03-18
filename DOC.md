@@ -240,6 +240,24 @@
     - `app/components/containers/navigation/authenticated-navigator.tsx`
     - `app/web/styles.css`
     - `tests/authenticated-navigation.smoke.test.tsx`
+- The categories page now has a dark elevated main panel with white accent cards, a desktop header CTA, and a responsive overflow menu.
+  - Correct behavior on web now:
+    - the categories main content uses a dark charcoal panel that visually matches the dark navigation rail without changing the shared shell
+    - category rows render as mostly dark-neutral cards with a thin color rail, a media-type pill, and a quieter ghost-style options trigger
+    - desktop shows an outlined `Add category` header button, while mobile keeps the floating `+` action above the bottom nav
+    - the category overflow actions open as an anchored popover on desktop and a bottom sheet on mobile, while keeping the same edit/delete behavior and delete confirmation
+  - Relevant files:
+    - `app/components/presentational/category/list/constants.ts`
+    - `app/components/containers/category/list/screen.ts`
+    - `app/components/presentational/category/list/screen/index.tsx`
+    - `app/components/presentational/category/list/list/index.tsx`
+    - `app/components/presentational/category/list/row/index.tsx`
+    - `app/components/presentational/category/list/context-menu/index.tsx`
+    - `app/resources/lang/lang-en.json`
+    - `app/web/styles.css`
+    - `tests/categories-list.smoke.test.tsx`
+    - `tests/category-context-menu.smoke.test.tsx`
+    - `tests/categories-screen.smoke.test.tsx`
 
 ## Testing notes
 - Jest setup is lightweight and mostly smoke-test oriented.

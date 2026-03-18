@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component, CSSProperties, ReactNode } from 'react';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { i18n } from 'app/utilities/i18n';
 
@@ -12,24 +12,33 @@ export class CategoryRowComponent extends Component<CategoryRowComponentInput & 
 	public render(): ReactNode {
 		const {
 			category,
+			highlighted,
 			open,
 			showOptionsMenu
 		} = this.props;
 
 		const mediaType = i18n.t(`category.mediaTypes.${category.mediaType}`);
+		const cardClassName = highlighted ? 'category-row category-row-highlighted' : 'category-row';
 
 		return (
-			<article className='category-row' style={{ backgroundColor: category.color }}>
+			<article
+				className={cardClassName}
+				style={{ '--category-color': category.color } as CSSProperties}>
+				<span className='category-row-accent' aria-hidden={true} />
 				<button type='button' className='category-row-main' onClick={open}>
-					<span className='category-row-media'>{mediaType}</span>
-					<span className='category-row-name'>{category.name}</span>
+					<span className='category-row-copy'>
+						<span className='category-row-media'>{mediaType}</span>
+						<span className='category-row-name'>{category.name}</span>
+					</span>
 				</button>
 				<button
 					type='button'
 					className='category-row-options'
-					onClick={showOptionsMenu}
+					onClick={(event) => {
+						showOptionsMenu(event.currentTarget.getBoundingClientRect());
+					}}
 					aria-label={`Options for ${category.name}`}>
-					...
+					<span className='category-row-options-icon' aria-hidden={true}>...</span>
 				</button>
 			</article>
 		);
@@ -40,6 +49,11 @@ export class CategoryRowComponent extends Component<CategoryRowComponentInput & 
  * CategoryRowComponent's input props
  */
 export type CategoryRowComponentInput = {
+	/**
+	 * True when the row options menu is open for this category
+	 */
+	highlighted: boolean;
+
 	/**
 	 * The category to be displayed
 	 */
@@ -58,5 +72,5 @@ export type CategoryRowComponentOutput = {
 	/**
 	 * Callback to open the options context menu (with e.g. the edit button)
 	 */
-	showOptionsMenu: () => void;
+	showOptionsMenu: (buttonRect: DOMRect) => void;
 };

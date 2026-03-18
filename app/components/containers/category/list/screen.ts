@@ -5,17 +5,16 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: State): CategoriesListScreenComponentInput => {
-	
 	const listState = state.categoriesList;
 
 	return {
+		categoriesCount: listState.categories.length,
 		isLoading: listState.status === 'FETCHING' || listState.status === 'DELETING',
 		requiresFetch: listState.status === 'REQUIRES_FETCH'
 	};
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): CategoriesListScreenComponentOutput => {
-
 	return {
 		fetchCategories: () => {
 			dispatch(fetchCategories());
