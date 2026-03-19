@@ -7,7 +7,7 @@ describe('SettingsScreenComponent', () => {
 	test('supports logout confirmation flow', async() => {
 		const logout = jest.fn();
 
-		render(
+		const { unmount } = render(
 			<SettingsScreenComponent
 				user={{
 					id: 'user-id',
@@ -18,9 +18,13 @@ describe('SettingsScreenComponent', () => {
 			/>
 		);
 
+		expect(document.body).toHaveClass('app-dark-screen-active');
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: /Logout/i }));
 		await user.click(screen.getByRole('button', { name: 'OK' }));
 		expect(logout).toHaveBeenCalledTimes(1);
+
+		unmount();
+		expect(document.body).not.toHaveClass('app-dark-screen-active');
 	});
 });

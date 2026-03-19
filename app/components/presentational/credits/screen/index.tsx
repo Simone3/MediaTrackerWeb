@@ -8,29 +8,51 @@ export class CreditsScreenComponent extends Component<CreditsScreenComponentProp
 	/**
 	 * @override
 	 */
+	public componentDidMount(): void {
+		document.body.classList.add('app-dark-screen-active');
+	}
+
+	/**
+	 * @override
+	 */
+	public componentWillUnmount(): void {
+		document.body.classList.remove('app-dark-screen-active');
+	}
+
+	/**
+	 * @override
+	 */
 	public render(): ReactNode {
 		return (
 			<section className='credits-screen'>
-				<h1 className='credits-title'>{i18n.t('credits.screen.title')}</h1>
-				<p className='credits-paragraph'>
-					Movies and TV Shows data provided by{' '}
-					<a href='https://www.themoviedb.org' target='_blank' rel='noreferrer' className='credits-link'>
-						The Movie Database (TMDb)
-					</a>{' '}
-					(this product uses the TMDb API but is not endorsed or certified by TMDb).
-				</p>
-				<p className='credits-paragraph'>
-					Videogames data provided by{' '}
-					<a href='http://www.giantbomb.com' target='_blank' rel='noreferrer' className='credits-link'>
-						Giant Bomb
-					</a>.
-				</p>
-				<p className='credits-paragraph'>
-					Books data provided by{' '}
-					<a href='https://books.google.com' target='_blank' rel='noreferrer' className='credits-link'>
-						Google Books
-					</a>.
-				</p>
+				<div className='credits-shell'>
+					<div className='credits-header'>
+						<h1 className='credits-title'>{i18n.t('credits.screen.title')}</h1>
+					</div>
+					<div className='credits-grid'>
+						<article className='credits-card'>
+							<h2 className='credits-card-title'>The Movie Database (TMDb)</h2>
+							<p className='credits-card-copy'>Movies and TV Shows data provided by TMDb. This product uses the TMDb API but is not endorsed or certified by TMDb.</p>
+							<a href='https://www.themoviedb.org' target='_blank' rel='noreferrer' className='credits-link'>
+								Visit TMDb
+							</a>
+						</article>
+						<article className='credits-card'>
+							<h2 className='credits-card-title'>Giant Bomb</h2>
+							<p className='credits-card-copy'>Videogames data provided by Giant Bomb.</p>
+							<a href='http://www.giantbomb.com' target='_blank' rel='noreferrer' className='credits-link'>
+								Visit Giant Bomb
+							</a>
+						</article>
+						<article className='credits-card'>
+							<h2 className='credits-card-title'>Google Books</h2>
+							<p className='credits-card-copy'>Books data provided by Google Books.</p>
+							<a href='https://books.google.com' target='_blank' rel='noreferrer' className='credits-link'>
+								Visit Google Books
+							</a>
+						</article>
+					</div>
+				</div>
 			</section>
 		);
 	}

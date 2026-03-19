@@ -274,6 +274,18 @@
     - `app/components/containers/category/details/screen.ts`
     - `app/web/styles.css`
     - `tests/category-details.smoke.test.tsx`
+- The Settings and Credits sections now use the same full-screen dark shell styling as the categories experience.
+  - Correct behavior on web now:
+    - the Settings route uses a dark shell with a centered elevated panel for the user actions while keeping the existing logout confirmation flow
+    - the Credits route now presents the external data sources as dark cards with clearer outbound links
+    - both routes activate the same dark confirm-dialog/loading treatment used on the categories screens
+    - mobile keeps the same dark shell and collapses the credits cards into a single column
+  - Relevant files:
+    - `app/components/presentational/settings/screen/index.tsx`
+    - `app/components/presentational/credits/screen/index.tsx`
+    - `app/web/styles.css`
+    - `tests/settings-screen.smoke.test.tsx`
+    - `tests/credits-screen.smoke.test.tsx`
 
 ## Testing notes
 - Jest setup is lightweight and mostly smoke-test oriented.

@@ -15,6 +15,20 @@ export class SettingsScreenComponent extends Component<SettingsScreenComponentPr
 	/**
 	 * @override
 	 */
+	public componentDidMount(): void {
+		document.body.classList.add('app-dark-screen-active');
+	}
+
+	/**
+	 * @override
+	 */
+	public componentWillUnmount(): void {
+		document.body.classList.remove('app-dark-screen-active');
+	}
+
+	/**
+	 * @override
+	 */
 	public render(): ReactNode {
 		const {
 			user,
@@ -26,21 +40,27 @@ export class SettingsScreenComponent extends Component<SettingsScreenComponentPr
 
 		return (
 			<section className='settings-screen'>
-				<div className='settings-header'>
-					<h1 className='settings-title'>{i18n.t('settings.screen.title')}</h1>
-				</div>
-				<div className='settings-section'>
-					<h2 className='settings-section-title'>{i18n.t('settings.screen.sections.user')}</h2>
-					<button
-						type='button'
-						className='settings-row'
-						disabled={isLoading}
-						onClick={() => {
-							this.handleLogout();
-						}}>
-						<span className='settings-row-title'>{i18n.t('settings.screen.rows.logout.title')}</span>
-						<span className='settings-row-subtitle'>{i18n.t('settings.screen.rows.logout.subtitle', { username: user ? user.email : '' })}</span>
-					</button>
+				<div className='settings-shell'>
+					<div className='settings-header'>
+						<h1 className='settings-title'>{i18n.t('settings.screen.title')}</h1>
+					</div>
+					<div className='settings-panel'>
+						<div className='settings-section'>
+							<h2 className='settings-section-title'>{i18n.t('settings.screen.sections.user')}</h2>
+							<button
+								type='button'
+								className='settings-row'
+								disabled={isLoading}
+								onClick={() => {
+									this.handleLogout();
+								}}>
+								<span className='settings-row-copy'>
+									<span className='settings-row-title'>{i18n.t('settings.screen.rows.logout.title')}</span>
+									<span className='settings-row-subtitle'>{i18n.t('settings.screen.rows.logout.subtitle', { username: user ? user.email : '' })}</span>
+								</span>
+							</button>
+						</div>
+					</div>
 				</div>
 				<LoadingIndicatorComponent
 					visible={isLoading}

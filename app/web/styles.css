@@ -190,11 +190,15 @@ input {
 
 body.categories-screen-active,
 body.categories-screen-active #root,
-body.categories-screen-active .app-shell {
+body.categories-screen-active .app-shell,
+body.app-dark-screen-active,
+body.app-dark-screen-active #root,
+body.app-dark-screen-active .app-shell {
 	background: #0f151d;
 }
 
-body.categories-screen-active .app-shell-content {
+body.categories-screen-active .app-shell-content,
+body.app-dark-screen-active .app-shell-content {
 	padding: 0;
 	background: #0f151d;
 	min-height: 100vh;
@@ -1687,9 +1691,7 @@ body.categories-screen-active .app-shell-content {
 
 .group-details-screen,
 .own-platform-details-screen,
-.tv-show-season-details-screen,
-.settings-screen,
-.credits-screen {
+.tv-show-season-details-screen {
 	position: relative;
 	max-width: 860px;
 	background: var(--color-surface);
@@ -1877,53 +1879,155 @@ body.categories-screen-active .app-shell-content {
 	cursor: not-allowed;
 }
 
-.settings-header {
-	margin-bottom: 8px;
+.settings-screen,
+.credits-screen {
+	position: relative;
+	min-height: 100vh;
+	padding: 42px 40px 96px;
+	background:
+		radial-gradient(circle at top right, rgba(90, 128, 190, 0.2) 0%, rgba(90, 128, 190, 0) 34%),
+		linear-gradient(180deg, #131a23 0%, #10161e 100%);
+	color: #f3f6ff;
+}
+
+.settings-screen::before,
+.credits-screen::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 22%);
+	pointer-events: none;
+}
+
+.settings-shell,
+.credits-shell {
+	position: relative;
+	z-index: 1;
+	max-width: 960px;
+	margin: 0 auto;
+}
+
+.settings-header,
+.credits-header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 18px;
+	margin-bottom: 28px;
+}
+
+.settings-title,
+.credits-title {
+	margin: 0;
+	font-size: clamp(2rem, 4vw, 2.8rem);
+	line-height: 1.02;
+	color: #f6f8ff;
+}
+
+.settings-panel {
+	padding: 24px;
+	border-radius: 26px;
+	border: 1px solid rgba(126, 150, 188, 0.16);
+	background: linear-gradient(180deg, #1a222d 0%, #202936 100%);
+	box-shadow: 0 24px 48px rgba(6, 12, 20, 0.22);
 }
 
 .settings-section {
-	margin-top: 16px;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
+	display: grid;
+	gap: 14px;
 }
 
 .settings-section-title {
 	margin: 0;
-	font-size: 1rem;
+	font-size: 0.84rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
 	text-transform: uppercase;
-	letter-spacing: 0.04em;
-	color: var(--color-muted);
+	color: #97a8c9;
 }
 
 .settings-row {
-	border-radius: 12px;
-	padding: 12px 14px;
+	width: 100%;
+	border: 1px solid rgba(159, 183, 231, 0.14);
+	border-radius: 20px;
+	padding: 18px 20px;
 	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
+	align-items: center;
 	text-align: left;
-	gap: 2px;
+	background: rgba(255, 255, 255, 0.04);
+	color: #eef3ff;
+	cursor: pointer;
+	transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.settings-row:hover:not([disabled]) {
+	transform: translateY(-1px);
+	background: rgba(255, 255, 255, 0.07);
+	border-color: rgba(159, 183, 231, 0.26);
+}
+
+.settings-row:focus-visible {
+	outline: none;
+	border-color: #7ea8ff;
+	box-shadow: 0 0 0 3px rgba(64, 140, 255, 0.18);
+}
+
+.settings-row-copy {
+	display: grid;
+	gap: 4px;
 }
 
 .settings-row-title {
 	font-weight: 700;
+	font-size: 1.05rem;
+	color: #f8fbff;
 }
 
 .settings-row-subtitle {
-	color: var(--color-muted);
-	font-size: 0.9rem;
+	color: #9eadca;
+	font-size: 0.92rem;
+	line-height: 1.5;
 }
 
-.credits-paragraph {
-	margin: 14px 0 0;
-	color: var(--color-text);
-	line-height: 1.55;
+.credits-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 16px;
+}
+
+.credits-card {
+	padding: 22px 20px;
+	border-radius: 24px;
+	border: 1px solid rgba(126, 150, 188, 0.16);
+	background: linear-gradient(180deg, #1a222d 0%, #202936 100%);
+	box-shadow: 0 24px 48px rgba(6, 12, 20, 0.22);
+	display: grid;
+	gap: 12px;
+}
+
+.credits-card-title {
+	margin: 0;
+	font-size: 1.15rem;
+	color: #f5f8ff;
+}
+
+.credits-card-copy {
+	margin: 0;
+	color: #aebad3;
+	line-height: 1.6;
 }
 
 .credits-link {
-	color: var(--color-primary);
+	width: fit-content;
+	color: #8ec0ff;
 	font-weight: 700;
+	text-decoration: none;
+}
+
+.credits-link:hover,
+.credits-link:focus-visible {
+	color: #d4e7ff;
 }
 
 .confirm-dialog-overlay {
@@ -1983,12 +2087,14 @@ body.categories-screen-active .app-shell-content {
 	color: #ffffff;
 }
 
-body.categories-screen-active .confirm-dialog-overlay {
+body.categories-screen-active .confirm-dialog-overlay,
+body.app-dark-screen-active .confirm-dialog-overlay {
 	background: rgba(8, 12, 19, 0.72);
 	backdrop-filter: blur(10px);
 }
 
-body.categories-screen-active .confirm-dialog {
+body.categories-screen-active .confirm-dialog,
+body.app-dark-screen-active .confirm-dialog {
 	background: linear-gradient(180deg, #18222d 0%, #131b24 100%);
 	border: 1px solid rgba(150, 175, 222, 0.22);
 	border-radius: 22px;
@@ -1996,35 +2102,42 @@ body.categories-screen-active .confirm-dialog {
 	box-shadow: 0 28px 56px rgba(5, 11, 20, 0.38);
 }
 
-body.categories-screen-active .confirm-dialog-title {
+body.categories-screen-active .confirm-dialog-title,
+body.app-dark-screen-active .confirm-dialog-title {
 	color: #f5f8ff;
 }
 
-body.categories-screen-active .confirm-dialog-message {
+body.categories-screen-active .confirm-dialog-message,
+body.app-dark-screen-active .confirm-dialog-message {
 	color: #aebad3;
 	line-height: 1.6;
 }
 
-body.categories-screen-active .confirm-dialog-button {
+body.categories-screen-active .confirm-dialog-button,
+body.app-dark-screen-active .confirm-dialog-button {
 	padding: 11px 16px;
 }
 
-body.categories-screen-active .confirm-dialog-button-secondary {
+body.categories-screen-active .confirm-dialog-button-secondary,
+body.app-dark-screen-active .confirm-dialog-button-secondary {
 	background: rgba(255, 255, 255, 0.06);
 	color: #eef3ff;
 }
 
-body.categories-screen-active .confirm-dialog-button-primary {
+body.categories-screen-active .confirm-dialog-button-primary,
+body.app-dark-screen-active .confirm-dialog-button-primary {
 	background: linear-gradient(180deg, #ff7b7b 0%, #e15353 100%);
 	color: #ffffff;
 }
 
-body.categories-screen-active .loading-indicator-container-parent-size {
+body.categories-screen-active .loading-indicator-container-parent-size,
+body.app-dark-screen-active .loading-indicator-container-parent-size {
 	background: rgba(8, 12, 18, 0.48);
 	backdrop-filter: blur(3px);
 }
 
-body.categories-screen-active .loading-indicator-spinner {
+body.categories-screen-active .loading-indicator-spinner,
+body.app-dark-screen-active .loading-indicator-spinner {
 	border-color: rgba(255, 255, 255, 0.16);
 	border-top-color: #7db4ff;
 }
@@ -2247,10 +2360,25 @@ body.categories-screen-active .loading-indicator-spinner {
 
 	.group-details-screen,
 	.own-platform-details-screen,
-	.tv-show-season-details-screen,
+	.tv-show-season-details-screen {
+		padding: 18px;
+	}
+
 	.settings-screen,
 	.credits-screen {
-		padding: 18px;
+		padding: 24px 18px 48px;
+	}
+
+	.settings-panel {
+		padding: 20px;
+	}
+
+	.settings-row {
+		padding: 16px 18px;
+	}
+
+	.credits-grid {
+		grid-template-columns: 1fr;
 	}
 
 	.groups-list-item,
