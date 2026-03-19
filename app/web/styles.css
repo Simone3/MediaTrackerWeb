@@ -38,7 +38,7 @@ input {
 	position: fixed;
 	right: 24px;
 	bottom: 24px;
-	z-index: 20;
+	z-index: 32;
 	max-width: 420px;
 	padding: 14px 16px;
 	border-radius: 12px;
@@ -2048,6 +2048,13 @@ body.categories-screen-active .loading-indicator-spinner {
 }
 
 @media (max-width: 960px) {
+	.error-handler-toast {
+		left: 16px;
+		right: 16px;
+		bottom: calc(188px + env(safe-area-inset-bottom));
+		max-width: none;
+	}
+
 	.app-shell {
 		display: block;
 	}

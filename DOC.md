@@ -292,6 +292,7 @@
 - Global CSS file is large and mixed across features.
 - Some original RN patterns were ported literally, so behavior may be correct even if the structure feels awkward for web.
 - Missing or partial web parity is often easiest to confirm by comparing with the old RN commit.
+- Mobile error toasts are intentionally lifted above the fixed bottom nav and floating action button so they do not get obscured by either control.
 
 ## Good recovery workflow for future work
 1. Read `app/AGENTS.md`.
