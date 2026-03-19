@@ -274,6 +274,22 @@
     - `app/components/containers/category/details/screen.ts`
     - `app/web/styles.css`
     - `tests/category-details.smoke.test.tsx`
+- The login and signup pages now use a dark full-screen auth shell instead of the older light pill-input card.
+  - Correct behavior on web now:
+    - both auth routes now activate the same dark full-screen background treatment used by the app's newer dark pages, including a dark loading overlay while auth requests are in progress
+    - login and signup now render as responsive two-panel layouts on desktop and stack cleanly into a single column on mobile
+    - the auth forms now use clearer field labels, stronger dark inputs, a more prominent primary submit button, and preserve submit-via-click and submit-via-enter behavior
+    - the initial auth loading screen now also uses the dark full-screen loading treatment instead of rendering a parent-sized spinner with no proper shell
+  - Relevant files:
+    - `app/components/presentational/auth/common/app-title/index.tsx`
+    - `app/components/presentational/auth/common/auth-submit/index.tsx`
+    - `app/components/presentational/auth/loading/screen/index.tsx`
+    - `app/components/presentational/auth/login/screen/index.tsx`
+    - `app/components/presentational/auth/signup/screen/index.tsx`
+    - `app/resources/lang/lang-en.json`
+    - `app/web/styles.css`
+    - `tests/auth-login-screen.smoke.test.tsx`
+    - `tests/auth-signup-screen.smoke.test.tsx`
 - The Settings and Credits sections now use the same full-screen dark shell styling as the categories experience.
   - Correct behavior on web now:
     - the Settings route uses a dark shell with a centered elevated panel for the user actions while keeping the existing logout confirmation flow

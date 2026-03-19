@@ -5,24 +5,29 @@ import { LoadingIndicatorComponent } from 'app/components/presentational/generic
  * Presentational component that contains the app landing page that checks for user authentication and then redirects to the correct flow
  */
 export class AuthLoadingScreenComponent extends Component<AuthLoadingScreenComponentProps> {
-	
 	/**
 	 * @override
 	 */
 	public componentDidMount(): void {
-		
+		document.body.classList.add('app-dark-screen-active');
 		this.props.fetchLoginStatus();
 	}
 
 	/**
 	 * @override
 	 */
-	public render(): ReactNode {
+	public componentWillUnmount(): void {
+		document.body.classList.remove('app-dark-screen-active');
+	}
 
+	/**
+	 * @override
+	 */
+	public render(): ReactNode {
 		return (
 			<LoadingIndicatorComponent
 				visible={true}
-				fullScreen={false}
+				fullScreen={true}
 			/>
 		);
 	}
@@ -31,15 +36,12 @@ export class AuthLoadingScreenComponent extends Component<AuthLoadingScreenCompo
 /**
  * AuthLoadingScreenComponent's input props
  */
-export type AuthLoadingScreenComponentInput = {
-
-}
+export type AuthLoadingScreenComponentInput = Record<string, never>;
 
 /**
  * AuthLoadingScreenComponent's output props
  */
 export type AuthLoadingScreenComponentOutput = {
-
 	/**
 	 * Callback to request the user login status
 	 */

@@ -407,7 +407,12 @@
 		}
 	},
 	"auth": {
+		"common": {
+			"tagline": "Track books, movies, TV shows, and games in one place."
+		},
 		"signup": {
+			"eyebrow": "Create your account",
+			"description": "Create an account to start organizing your media.",
 			"placeholders": {
 				"email": "E-mail",
 				"password": "Password"
@@ -418,6 +423,8 @@
 			}
 		},
 		"login": {
+			"eyebrow": "Welcome back",
+			"description": "Use your email and password to continue.",
 			"placeholders": {
 				"email": "E-mail",
 				"password": "Password"

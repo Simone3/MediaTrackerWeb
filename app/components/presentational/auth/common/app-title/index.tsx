@@ -19,7 +19,9 @@ export class AppTitleComponent extends Component<AppTitleComponentProps> {
 
 		return (
 			<div className={resolvedClassName} style={style}>
-				<img src={appLogo} alt={i18n.t('common.app.name')} className='auth-title-logo' />
+				<span className='auth-title-logo-shell'>
+					<img src={appLogo} alt={i18n.t('common.app.name')} className='auth-title-logo' />
+				</span>
 				<h1 className='auth-title-text'>{i18n.t('common.app.name')}</h1>
 			</div>
 		);

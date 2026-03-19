@@ -12,6 +12,7 @@ export class AuthSubmitComponent extends Component<AuthSubmitComponentProps> {
 			text,
 			onPress,
 			className,
+			type = 'button',
 			...otherProps
 		} = this.props;
 
@@ -20,7 +21,7 @@ export class AuthSubmitComponent extends Component<AuthSubmitComponentProps> {
 		return (
 			<button
 				{...otherProps}
-				type='button'
+				type={type}
 				className={resolvedClassName}
 				onClick={(event: MouseEvent<HTMLButtonElement>) => {
 					if(otherProps.onClick) {
