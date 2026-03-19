@@ -302,6 +302,13 @@
     - `app/web/styles.css`
     - `tests/settings-screen.smoke.test.tsx`
     - `tests/credits-screen.smoke.test.tsx`
+- Chrome overscroll no longer reveals the old light page background above or below the app shell.
+  - Correct behavior on web now:
+    - the global `html` / `body` / `#root` background is now a stable dark shell color so browser bounce/elastic scrolling does not flash a white strip around the app
+    - the light gradient background for the classic non-dark authenticated pages now lives on `.app-shell-content` instead of on the whole document
+    - Chrome gets `overscroll-behavior-y: none` at the page level to reduce the visible elastic-scroll artifact that Firefox was not showing
+  - Relevant files:
+    - `app/web/styles.css`
 
 ## Testing notes
 - Jest setup is lightweight and mostly smoke-test oriented.
