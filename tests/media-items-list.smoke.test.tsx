@@ -270,4 +270,52 @@ describe('MediaItemsListComponent', () => {
 
 		expect(screen.getByText('Hades').closest('li')?.style.getPropertyValue('--media-item-row-accent')).toBe('transparent');
 	});
+
+	test('renders extremely long names without changing the row interaction model', async() => {
+		const category: CategoryInternal = {
+			id: 'category-id',
+			name: 'My Movies',
+			mediaType: 'MOVIE',
+			color: '#3f51b5'
+		};
+		const mediaItem: MediaItemInternal = {
+			id: 'media-id',
+			name: 'TheRidiculouslyLongMovieNameThatKeepsGoingAndGoingWithoutAnySpacesToForceTheRowToShrinkCorrectlyOnWebPorts',
+			mediaType: 'MOVIE',
+			status: 'ACTIVE',
+			importance: '300'
+		};
+		const selectMediaItem = jest.fn();
+
+		render(
+			<MediaItemsListComponent
+				category={category}
+				mediaItems={[ mediaItem ]}
+				highlightedMediaItem={undefined}
+				currentViewGroup={undefined}
+				isSearchMode={false}
+				currentSearchTerm={undefined}
+				openSearch={jest.fn()}
+				submitSearch={jest.fn()}
+				closeSearch={jest.fn()}
+				openFilters={jest.fn()}
+				selectMediaItem={selectMediaItem}
+				highlightMediaItem={jest.fn()}
+				editMediaItem={jest.fn()}
+				deleteMediaItem={jest.fn()}
+				markMediaItemAsActive={jest.fn()}
+				markMediaItemAsComplete={jest.fn()}
+				markMediaItemAsRedo={jest.fn()}
+				viewMediaItemGroup={jest.fn()}
+				closeMediaItemMenu={jest.fn()}
+				exitViewGroupMode={jest.fn()}
+			/>
+		);
+
+		const user = userEvent.setup();
+		await user.click(screen.getByText(mediaItem.name));
+
+		expect(selectMediaItem).toHaveBeenCalledWith(mediaItem);
+		expect(screen.getByText(mediaItem.name)).toHaveClass('media-item-row-name');
+	});
 });

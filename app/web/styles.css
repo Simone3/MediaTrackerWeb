@@ -1633,6 +1633,10 @@ body.app-dark-screen-active .app-shell-content {
 }
 
 .media-item-row-name {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
 	font-weight: 700;
 	font-size: 1.08rem;
 	line-height: 1.3;
@@ -1643,6 +1647,10 @@ body.app-dark-screen-active .app-shell-content {
 }
 
 .media-item-row-detail {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
 	font-size: 0.9rem;
 	color: #a9b7d3;
 	line-height: 1.35;
