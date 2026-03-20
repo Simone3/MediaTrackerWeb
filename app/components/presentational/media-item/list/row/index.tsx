@@ -378,11 +378,13 @@ export const MediaItemRowComponent = (props: MediaItemRowComponentInput & MediaI
 					className='media-item-row-platform'
 					role='img'
 					aria-label={ownPlatform ? `Owned at ${ownPlatform.name}` : 'Not owned on any platform'}>
-					<span
-						className='media-item-row-icon media-item-row-platform-icon'
-						style={getMaskedIconStyle(ownPlatformIcon, ownPlatformColor)}
-						aria-hidden={true}
-					/>
+					<span className='media-item-row-platform-shell' aria-hidden={true}>
+						<span
+							className='media-item-row-icon media-item-row-platform-icon'
+							style={getMaskedIconStyle(ownPlatformIcon, ownPlatformColor)}
+							aria-hidden={true}
+						/>
+					</span>
 				</span>
 				<span className='media-item-row-data'>
 					<span className='media-item-row-name'>{props.mediaItem.name}</span>
@@ -419,7 +421,7 @@ export const MediaItemRowComponent = (props: MediaItemRowComponentInput & MediaI
 					aria-label={`Options for ${props.mediaItem.name}`}>
 					<span
 						className='media-item-row-icon media-item-row-options-icon'
-						style={getMaskedIconStyle(actionMoreIcon, config.ui.colors.black)}
+						style={getMaskedIconStyle(actionMoreIcon, config.ui.colors.white)}
 						aria-hidden={true}
 					/>
 				</button>

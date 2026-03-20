@@ -106,12 +106,23 @@
 			}
 		},
 		"list": {
+			"count": {
+				"single": "1 item",
+				"multiple": "{{count}} items"
+			},
+			"add": {
+				"BOOK": "Add book",
+				"MOVIE": "Add movie",
+				"TV_SHOW": "Add show",
+				"VIDEOGAME": "Add game"
+			},
 			"empty": {
 				"BOOK": "No books",
 				"MOVIE": "No movies",
 				"TV_SHOW": "No shows",
 				"VIDEOGAME": "No games"
 			},
+			"emptyHint": "Add your first entry to start tracking this category.",
 			"duration": {
 				"BOOK": "{{duration}}pp.",
 				"MOVIE": "{{duration}}'",

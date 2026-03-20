@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component, ReactElement, ReactNode } from 'react';
 import { MediaItemContextMenuComponent } from 'app/components/presentational/media-item/list/context-menu';
 import { MediaItemRowComponent } from 'app/components/presentational/media-item/list/row';
 import { GroupInternal } from 'app/data/models/internal/group';
@@ -61,100 +61,110 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 			exitViewGroupMode
 		} = this.props;
 		const emptyMessage = i18n.t(`mediaItem.list.empty.${category.mediaType}`);
+		const countLabel = mediaItems.length === 1 ?
+			i18n.t('mediaItem.list.count.single') :
+			i18n.t('mediaItem.list.count.multiple', { count: mediaItems.length });
 		const searchPlaceholder = i18n.t(`mediaItem.list.search.${category.mediaType}`);
+		const toolbarLabel = currentViewGroup ?
+			i18n.t('mediaItem.list.viewGroup') :
+			i18n.t(`category.mediaTypes.${category.mediaType}`);
 
 		return (
 			<section className='media-items-list'>
-				<div className='media-items-list-header'>
-					<h2 className='media-items-list-title'>{i18n.t(`category.mediaTypes.${category.mediaType}`)}</h2>
-					<div className='media-items-list-actions'>
-						{!isSearchMode && (
+				<div className='media-items-list-panel'>
+					<div className='media-items-list-header'>
+						<div className='media-items-list-heading'>
+							<p className='media-items-list-label'>{toolbarLabel}</p>
+							<h2 className='media-items-list-title'>{countLabel}</h2>
+						</div>
+						<div className='media-items-list-actions'>
+							{!isSearchMode && (
+								<button
+									type='button'
+									className='media-items-list-action'
+									onClick={() => {
+										this.props.openSearch();
+									}}>
+									{i18n.t('mediaItem.list.buttons.search')}
+								</button>
+							)}
+							{!isSearchMode && (
+								<button type='button' className='media-items-list-action' onClick={openFilters}>
+									{i18n.t('mediaItem.list.filter.title')}
+								</button>
+							)}
+						</div>
+					</div>
+					{currentViewGroup && (
+						<div className='media-items-list-view-group-banner'>
+							<div className='media-items-list-view-group-copy'>
+								<span className='media-items-list-view-group-label'>{i18n.t('mediaItem.list.viewGroup')}</span>
+								<strong className='media-items-list-view-group-name'>{currentViewGroup.name}</strong>
+							</div>
+							<button type='button' className='media-items-list-view-group-exit' onClick={exitViewGroupMode}>
+								Back
+							</button>
+						</div>
+					)}
+					{isSearchMode && (
+						<form
+							className='media-items-list-search'
+							role='search'
+							onSubmit={(event) => {
+								event.preventDefault();
+								this.submitSearch();
+							}}>
+							<input
+								ref={this.searchInputRef}
+								id='media-items-list-search'
+								className='media-items-list-search-input'
+								type='search'
+								value={this.state.searchTerm}
+								placeholder={searchPlaceholder}
+								aria-label={searchPlaceholder}
+								onChange={(event) => {
+									this.setState({
+										searchTerm: event.target.value
+									});
+								}}
+							/>
 							<button
-								type='button'
+								type='submit'
 								className='media-items-list-action'
-								onClick={() => {
-									this.props.openSearch();
-								}}>
+								disabled={!this.state.searchTerm.trim()}>
 								{i18n.t('mediaItem.list.buttons.search')}
 							</button>
-						)}
-						{!isSearchMode && (
-							<button type='button' className='media-items-list-action' onClick={openFilters}>
-								Filter
+							<button
+								type='button'
+								className='media-items-list-search-cancel'
+								onClick={() => {
+									this.props.closeSearch();
+								}}>
+								{i18n.t('common.alert.default.cancelButton')}
 							</button>
-						)}
-					</div>
+						</form>
+					)}
+					{mediaItems.length === 0 ?
+						this.renderNone(emptyMessage) :
+						(
+						<ul className='media-items-list-items'>
+							{mediaItems.map((mediaItem) => {
+								return (
+									<MediaItemRowComponent
+										key={mediaItem.id}
+										mediaItem={mediaItem}
+										open={() => {
+											selectMediaItem(mediaItem);
+										}}
+										showOptionsMenu={() => {
+											highlightMediaItem(mediaItem);
+										}}
+									/>
+								);
+							})}
+						</ul>
+					)}
 				</div>
-				{isSearchMode && (
-					<form
-						className='media-items-list-search'
-						role='search'
-						onSubmit={(event) => {
-							event.preventDefault();
-							this.submitSearch();
-						}}>
-						<input
-							ref={this.searchInputRef}
-							id='media-items-list-search'
-							className='media-items-list-search-input'
-							type='search'
-							value={this.state.searchTerm}
-							placeholder={searchPlaceholder}
-							aria-label={searchPlaceholder}
-							onChange={(event) => {
-								this.setState({
-									searchTerm: event.target.value
-								});
-							}}
-						/>
-						<button
-							type='submit'
-							className='media-items-list-action'
-							disabled={!this.state.searchTerm.trim()}>
-							{i18n.t('mediaItem.list.buttons.search')}
-						</button>
-						<button
-							type='button'
-							className='media-items-list-search-cancel'
-							onClick={() => {
-								this.props.closeSearch();
-							}}>
-							{i18n.t('common.alert.default.cancelButton')}
-						</button>
-					</form>
-				)}
-				{currentViewGroup && (
-					<div className='media-items-list-view-group-banner'>
-						<div className='media-items-list-view-group-copy'>
-							<span className='media-items-list-view-group-label'>{i18n.t('mediaItem.list.viewGroup')}</span>
-							<strong className='media-items-list-view-group-name'>{currentViewGroup.name}</strong>
-						</div>
-						<button type='button' className='media-items-list-view-group-exit' onClick={exitViewGroupMode}>
-							Back
-						</button>
-					</div>
-				)}
-				{mediaItems.length === 0 && (
-					<p className='media-items-list-empty'>{emptyMessage}</p>
-				)}
-				{mediaItems.length > 0 && (
-					<ul className='media-items-list-items'>
-						{mediaItems.map((mediaItem) => {
-							return (
-								<MediaItemRowComponent
-									key={mediaItem.id}
-									mediaItem={mediaItem}
-									open={() => {
-										selectMediaItem(mediaItem);
-									}}
-									showOptionsMenu={() => {
-										highlightMediaItem(mediaItem);
-									}}
-								/>
-							);
-						})}
-					</ul>
-				)}
 				<MediaItemContextMenuComponent
 					mediaItem={highlightedMediaItem}
 					currentViewGroupId={currentViewGroup?.id}
@@ -167,6 +177,20 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 					close={closeMediaItemMenu}
 				/>
 			</section>
+		);
+	}
+
+	/**
+	 * Helper method to render the empty-state card
+	 * @param emptyMessage the media-type-specific empty title
+	 * @returns the node portion
+	 */
+	private renderNone(emptyMessage: string): ReactElement {
+		return (
+			<div className='media-items-list-empty'>
+				<p className='media-items-list-empty-title'>{emptyMessage}</p>
+				<p className='media-items-list-empty-copy'>{i18n.t('mediaItem.list.emptyHint')}</p>
+			</div>
 		);
 	}
 

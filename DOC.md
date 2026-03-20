@@ -110,6 +110,20 @@
   - good reference implementations when category behavior looks wrong
 
 ## Recent fix worth remembering
+- Media item list screen on web still looked like an older placeholder instead of matching the newer categories experience.
+  - Correct behavior/style on web now:
+    - the screen uses the same full-bleed dark shell language as the categories list
+    - desktop shows a top-right add button while mobile keeps the shared FAB pattern
+    - the list toolbar, view-group banner, empty state, row cards, and media-item context menu now belong to that same visual family
+    - search, filter, group-view, inline row metadata, and context-menu actions keep their existing logic
+  - Relevant files:
+    - `app/components/containers/media-item/list/screen.ts`
+    - `app/components/presentational/media-item/list/screen/index.tsx`
+    - `app/components/presentational/media-item/list/list/index.tsx`
+    - `app/components/presentational/media-item/list/row/index.tsx`
+    - `app/resources/lang/lang-en.json`
+    - `app/web/styles.css`
+    - `tests/media-items-screen.smoke.test.tsx`
 - Category three-dots options had regressed to direct edit navigation.
 - Correct behavior on web now:
   - clicking three dots highlights the category

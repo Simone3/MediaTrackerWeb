@@ -6,23 +6,21 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: State): MediaItemsListScreenComponentInput => {
-	
 	const listState = state.mediaItemsList;
 	const category = state.categoryGlobal.selectedCategory;
 	if(!category) {
-
 		throw AppError.GENERIC.withDetails('App navigated to the media items details screen without category data');
 	}
 
 	return {
 		isLoading: listState.status === 'FETCHING' || listState.status === 'DELETING' || listState.status === 'INLINE_UPDATING',
 		requiresFetch: listState.status === 'REQUIRES_FETCH',
-		category: category
+		category: category,
+		mediaItemsCount: listState.mediaItems.length
 	};
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): MediaItemsListScreenComponentOutput => {
-
 	return {
 		fetchMediaItems: () => {
 			dispatch(fetchMediaItems());
