@@ -81,102 +81,112 @@ export class MediaItemFilterModalComponent extends Component<MediaItemFilterModa
 						{i18n.t('mediaItem.list.filter.title')}
 					</h2>
 					<div className='media-item-filter-form'>
-						<label className='media-item-filter-label' htmlFor='media-item-filter-status'>
-							{i18n.t('mediaItem.list.filter.prompts.status')}
-						</label>
-						<select
-							id='media-item-filter-status'
-							className='media-item-filter-select'
-							value={formValues.status}
-							onChange={(event) => {
-								this.setFormField('status', event.target.value as MediaItemFilterFormValues['status']);
-							}}>
-							{MEDIA_ITEM_FILTER_FORM_STATUS_VALUES.map((status) => {
-								return (
-									<option key={status} value={status}>
-										{i18n.t(`mediaItem.list.filter.values.status.${status}`)}
-									</option>
-								);
-							})}
-						</select>
+						<div className='media-item-filter-field'>
+							<label className='media-item-filter-label' htmlFor='media-item-filter-status'>
+								{i18n.t('mediaItem.list.filter.prompts.status')}
+							</label>
+							<select
+								id='media-item-filter-status'
+								className='media-item-filter-select'
+								value={formValues.status}
+								onChange={(event) => {
+									this.setFormField('status', event.target.value as MediaItemFilterFormValues['status']);
+								}}>
+								{MEDIA_ITEM_FILTER_FORM_STATUS_VALUES.map((status) => {
+									return (
+										<option key={status} value={status}>
+											{i18n.t(`mediaItem.list.filter.values.status.${status}`)}
+										</option>
+									);
+								})}
+							</select>
+						</div>
 
-						<label className='media-item-filter-label' htmlFor='media-item-filter-importance'>
-							{i18n.t('mediaItem.list.filter.prompts.importance')}
-						</label>
-						<select
-							id='media-item-filter-importance'
-							className='media-item-filter-select'
-							value={formValues.importanceLevel}
-							onChange={(event) => {
-								this.setFormField('importanceLevel', event.target.value as MediaItemFilterFormValues['importanceLevel']);
-							}}>
-							{MEDIA_ITEM_FILTER_FORM_IMPORTANCE_VALUES.map((importance) => {
-								return (
-									<option key={importance} value={importance}>
-										{importance === 'NONE' ?
-											i18n.t('mediaItem.list.filter.values.importance.all') :
-											i18n.t(`mediaItem.common.importance.${importance}`)}
-									</option>
-								);
-							})}
-						</select>
+						<div className='media-item-filter-field'>
+							<label className='media-item-filter-label' htmlFor='media-item-filter-importance'>
+								{i18n.t('mediaItem.list.filter.prompts.importance')}
+							</label>
+							<select
+								id='media-item-filter-importance'
+								className='media-item-filter-select'
+								value={formValues.importanceLevel}
+								onChange={(event) => {
+									this.setFormField('importanceLevel', event.target.value as MediaItemFilterFormValues['importanceLevel']);
+								}}>
+								{MEDIA_ITEM_FILTER_FORM_IMPORTANCE_VALUES.map((importance) => {
+									return (
+										<option key={importance} value={importance}>
+											{importance === 'NONE' ?
+												i18n.t('mediaItem.list.filter.values.importance.all') :
+												i18n.t(`mediaItem.common.importance.${importance}`)}
+										</option>
+									);
+								})}
+							</select>
+						</div>
 
-						<label className='media-item-filter-label' htmlFor='media-item-filter-group'>
-							{i18n.t('mediaItem.list.filter.prompts.group')}
-						</label>
-						<select
-							id='media-item-filter-group'
-							className='media-item-filter-select'
-							value={formValues.group}
-							onChange={(event) => {
-								this.setFormField('group', event.target.value as MediaItemFilterFormValues['group']);
-							}}>
-							{MEDIA_ITEM_FILTER_FORM_GROUP_VALUES.map((group) => {
-								return (
-									<option key={group} value={group}>
-										{i18n.t(`mediaItem.list.filter.values.group.${group}`)}
-									</option>
-								);
-							})}
-						</select>
+						<div className='media-item-filter-field'>
+							<label className='media-item-filter-label' htmlFor='media-item-filter-group'>
+								{i18n.t('mediaItem.list.filter.prompts.group')}
+							</label>
+							<select
+								id='media-item-filter-group'
+								className='media-item-filter-select'
+								value={formValues.group}
+								onChange={(event) => {
+									this.setFormField('group', event.target.value as MediaItemFilterFormValues['group']);
+								}}>
+								{MEDIA_ITEM_FILTER_FORM_GROUP_VALUES.map((group) => {
+									return (
+										<option key={group} value={group}>
+											{i18n.t(`mediaItem.list.filter.values.group.${group}`)}
+										</option>
+									);
+								})}
+							</select>
+						</div>
 
-						<label className='media-item-filter-label' htmlFor='media-item-filter-own-platform'>
-							{i18n.t('mediaItem.list.filter.prompts.ownPlatform')}
-						</label>
-						<select
-							id='media-item-filter-own-platform'
-							className='media-item-filter-select'
-							value={formValues.ownPlatform}
-							onChange={(event) => {
-								this.setFormField('ownPlatform', event.target.value as MediaItemFilterFormValues['ownPlatform']);
-							}}>
-							{MEDIA_ITEM_FILTER_FORM_OWN_PLATFORM_VALUES.map((ownPlatform) => {
-								return (
-									<option key={ownPlatform} value={ownPlatform}>
-										{i18n.t(`mediaItem.list.filter.values.ownPlatform.${ownPlatform}`)}
-									</option>
-								);
-							})}
-						</select>
+						<div className='media-item-filter-field'>
+							<label className='media-item-filter-label' htmlFor='media-item-filter-own-platform'>
+								{i18n.t('mediaItem.list.filter.prompts.ownPlatform')}
+							</label>
+							<select
+								id='media-item-filter-own-platform'
+								className='media-item-filter-select'
+								value={formValues.ownPlatform}
+								onChange={(event) => {
+									this.setFormField('ownPlatform', event.target.value as MediaItemFilterFormValues['ownPlatform']);
+								}}>
+								{MEDIA_ITEM_FILTER_FORM_OWN_PLATFORM_VALUES.map((ownPlatform) => {
+									return (
+										<option key={ownPlatform} value={ownPlatform}>
+											{i18n.t(`mediaItem.list.filter.values.ownPlatform.${ownPlatform}`)}
+										</option>
+									);
+								})}
+							</select>
+						</div>
 
-						<label className='media-item-filter-label' htmlFor='media-item-filter-sort-by'>
-							{i18n.t('mediaItem.list.filter.prompts.sort')}
-						</label>
-						<select
-							id='media-item-filter-sort-by'
-							className='media-item-filter-select'
-							value={formValues.sortBy}
-							onChange={(event) => {
-								this.setFormField('sortBy', event.target.value as MediaItemFilterFormValues['sortBy']);
-							}}>
-							{MEDIA_ITEM_FILTER_FORM_SORT_VALUES.map((sortBy) => {
-								return (
-									<option key={sortBy} value={sortBy}>
-										{i18n.t(`mediaItem.list.filter.values.sort.${sortBy}`)}
-									</option>
-								);
-							})}
-						</select>
+						<div className='media-item-filter-field'>
+							<label className='media-item-filter-label' htmlFor='media-item-filter-sort-by'>
+								{i18n.t('mediaItem.list.filter.prompts.sort')}
+							</label>
+							<select
+								id='media-item-filter-sort-by'
+								className='media-item-filter-select'
+								value={formValues.sortBy}
+								onChange={(event) => {
+									this.setFormField('sortBy', event.target.value as MediaItemFilterFormValues['sortBy']);
+								}}>
+								{MEDIA_ITEM_FILTER_FORM_SORT_VALUES.map((sortBy) => {
+									return (
+										<option key={sortBy} value={sortBy}>
+											{i18n.t(`mediaItem.list.filter.values.sort.${sortBy}`)}
+										</option>
+									);
+								})}
+							</select>
+						</div>
 					</div>
 					<div className='media-item-filter-actions'>
 						<button type='button' className='media-item-filter-button media-item-filter-button-secondary' onClick={this.props.close}>

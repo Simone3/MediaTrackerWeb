@@ -27,6 +27,7 @@ describe('MediaItemsListComponent', () => {
 		};
 		const openFilters = jest.fn();
 		const openSearch = jest.fn();
+		const submitSearch = jest.fn();
 		const selectMediaItem = jest.fn();
 		const highlightMediaItem = jest.fn();
 
@@ -39,7 +40,7 @@ describe('MediaItemsListComponent', () => {
 				isSearchMode={false}
 				currentSearchTerm={undefined}
 				openSearch={openSearch}
-				submitSearch={jest.fn()}
+				submitSearch={submitSearch}
 				closeSearch={jest.fn()}
 				openFilters={openFilters}
 				selectMediaItem={selectMediaItem}
@@ -56,6 +57,9 @@ describe('MediaItemsListComponent', () => {
 		);
 
 		const user = userEvent.setup();
+		const searchInput = screen.getByRole('searchbox', { name: 'Search books...' });
+
+		await user.type(searchInput, 'Dune');
 		await user.click(screen.getByRole('button', { name: 'Search' }));
 		await user.click(screen.getByRole('button', { name: 'Filter' }));
 		await user.click(screen.getByText('Dune'));
@@ -63,12 +67,13 @@ describe('MediaItemsListComponent', () => {
 
 		expect(screen.queryByText('1 item')).not.toBeInTheDocument();
 		expect(openSearch).toHaveBeenCalledTimes(1);
+		expect(submitSearch).toHaveBeenCalledWith('Dune');
 		expect(openFilters).toHaveBeenCalledTimes(1);
 		expect(selectMediaItem).toHaveBeenCalledWith(mediaItem);
 		expect(highlightMediaItem).toHaveBeenCalledWith(mediaItem);
 	});
 
-	test('submits and closes text search', async() => {
+	test('keeps the search bar visible and closes search mode from the submit button when cleared', async() => {
 		const category: CategoryInternal = {
 			id: 'category-id',
 			name: 'My Books',
@@ -108,10 +113,12 @@ describe('MediaItemsListComponent', () => {
 		await user.clear(searchInput);
 		await user.type(searchInput, 'Dune Messiah');
 		await user.click(screen.getByRole('button', { name: 'Search' }));
-		await user.click(screen.getByRole('button', { name: 'Cancel' }));
+		await user.clear(searchInput);
+		await user.click(screen.getByRole('button', { name: 'Search' }));
 
 		expect(submitSearch).toHaveBeenCalledWith('Dune Messiah');
 		expect(closeSearch).toHaveBeenCalledTimes(1);
+		expect(screen.getByRole('searchbox', { name: 'Search books...' })).toBeInTheDocument();
 	});
 
 	test('renders restored row metadata, platform icon and status icon', () => {
@@ -228,7 +235,7 @@ describe('MediaItemsListComponent', () => {
 		expect(screen.getByLabelText("I'm following this")).toBeInTheDocument();
 	});
 
-	test('keeps the left accent transparent for new items', () => {
+	test('keeps the new-item chrome neutral while leaving the left accent transparent', () => {
 		const category: CategoryInternal = {
 			id: 'category-id',
 			name: 'My Games',
@@ -269,6 +276,54 @@ describe('MediaItemsListComponent', () => {
 		);
 
 		expect(screen.getByText('Hades').closest('li')?.style.getPropertyValue('--media-item-row-accent')).toBe('transparent');
+		expect(screen.getByText('Hades').closest('li')).not.toHaveClass('media-item-row-highlighted');
+		expect(screen.getByLabelText('Important')).toHaveStyle({
+			backgroundColor: 'rgba(255, 255, 255, 0.06)',
+			borderColor: 'rgba(255, 255, 255, 0.06)'
+		});
+	});
+
+	test('adds the highlighted row class when the media item menu is open', () => {
+		const category: CategoryInternal = {
+			id: 'category-id',
+			name: 'My Movies',
+			mediaType: 'MOVIE',
+			color: '#3f51b5'
+		};
+		const mediaItem: MediaItemInternal = {
+			id: 'media-id',
+			name: 'Arrival',
+			mediaType: 'MOVIE',
+			status: 'ACTIVE',
+			importance: '300'
+		};
+
+		render(
+			<MediaItemsListComponent
+				category={category}
+				mediaItems={[ mediaItem ]}
+				highlightedMediaItem={mediaItem}
+				currentViewGroup={undefined}
+				isSearchMode={false}
+				currentSearchTerm={undefined}
+				openSearch={jest.fn()}
+				submitSearch={jest.fn()}
+				closeSearch={jest.fn()}
+				openFilters={jest.fn()}
+				selectMediaItem={jest.fn()}
+				highlightMediaItem={jest.fn()}
+				editMediaItem={jest.fn()}
+				deleteMediaItem={jest.fn()}
+				markMediaItemAsActive={jest.fn()}
+				markMediaItemAsComplete={jest.fn()}
+				markMediaItemAsRedo={jest.fn()}
+				viewMediaItemGroup={jest.fn()}
+				closeMediaItemMenu={jest.fn()}
+				exitViewGroupMode={jest.fn()}
+			/>
+		);
+
+		expect(screen.getByRole('button', { name: 'Options for Arrival' }).closest('li')).toHaveClass('media-item-row-highlighted');
 	});
 
 	test('renders extremely long names without changing the row interaction model', async() => {

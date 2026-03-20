@@ -115,9 +115,12 @@
     - the screen uses the same full-bleed dark shell language as the categories list
     - desktop shows a top-right add button while mobile keeps the shared FAB pattern
     - the top header now uses the media-type icon next to the category name instead of a repeated media-type pill
-    - the list toolbar, view-group banner, empty state, row cards, and media-item context menu now belong to that same visual family without repeating the page title/count inside the list
+    - the list toolbar, view-group banner, empty state, row cards, media-item context menu, and filter modal now belong to that same visual family without repeating the page title/count inside the list
     - the rows sit directly on the screen background instead of inside an extra boxed panel, which keeps the layout closer to the categories list
     - media-item rows now fill the same shared content width as the categories list, and their left accent follows the status color while staying transparent for `NEW` items
+    - the search bar is now always visible with the `Filter` button beside it, while still using the existing Redux search mode under the hood
+    - the row highlight treatment now uses that same left accent color instead of a generic dark/black outline
+    - the status chip now matches the three-dots chip size, and `NEW` items reuse the same neutral chrome as the options button
     - row text now shrinks correctly even for extremely long unbroken media-item names, preventing right-edge overflow
     - the screen/list wrappers now also clip stray horizontal overflow defensively so pathological test data cannot push the page width
     - search, filter, group-view, inline row metadata, and context-menu actions keep their existing logic
@@ -144,7 +147,9 @@
 - Media item three-dots options had also regressed to direct edit navigation.
 - Correct behavior on web now:
   - clicking three dots highlights the media item instead of routing immediately
-  - opens a popup with the old actions again:
+  - opens the old actions again in an anchored desktop popover or a mobile bottom sheet, matching the categories list behavior
+  - the menu header only shows the media item name now; it no longer repeats the media-type subtitle
+  - available actions still include:
     - edit
     - delete with confirmation
     - status shortcuts like mark active / complete / redo when applicable
@@ -188,14 +193,12 @@
   - `tests/media-item-inline-update.test.ts`
 - Media item list text search had been lost on the web port even though the Redux search flow still existed.
   - Correct behavior on web now:
-    - the list header exposes a `Search` action again
-    - entering search mode shows a text field with the category-specific placeholder
-    - submitting the form dispatches the existing list search flow
-    - cancelling search exits search mode and returns to the normal list flow
+    - the list header always shows the category-specific search field plus a submit button
+    - typing a term and submitting still dispatches the existing list search flow and enters Redux search mode
+    - submitting an empty field while already in search mode exits search mode without hiding the search bar itself
   - Relevant files:
     - `app/components/containers/media-item/list/list.ts`
     - `app/components/presentational/media-item/list/list/index.tsx`
-    - `app/resources/lang/lang-en.json`
     - `app/web/styles.css`
     - `tests/media-items-list.smoke.test.tsx`
     - `tests/media-items-list-container.smoke.test.tsx`

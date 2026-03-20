@@ -160,8 +160,6 @@ describe('MediaItemsListContainer', () => {
 		);
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: 'Search' }));
-
 		const searchInput = screen.getByRole('searchbox', { name: 'Search books...' });
 		await user.type(searchInput, 'Neuromancer');
 		await user.click(screen.getByRole('button', { name: 'Search' }));
@@ -169,10 +167,11 @@ describe('MediaItemsListContainer', () => {
 		expect(store.getState().mediaItemsList.mode).toBe('SEARCH');
 		expect(store.getState().mediaItemsList.searchTerm).toBe('Neuromancer');
 
-		await user.click(screen.getByRole('button', { name: 'Cancel' }));
+		await user.clear(searchInput);
+		await user.click(screen.getByRole('button', { name: 'Search' }));
 
 		expect(store.getState().mediaItemsList.mode).toBe('NORMAL');
 		expect(store.getState().mediaItemsList.searchTerm).toBeUndefined();
-		expect(screen.queryByRole('searchbox', { name: 'Search books...' })).not.toBeInTheDocument();
+		expect(screen.getByRole('searchbox', { name: 'Search books...' })).toBeInTheDocument();
 	});
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 import { MediaItemContextMenuComponent } from 'app/components/presentational/media-item/list/context-menu';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
@@ -18,8 +19,16 @@ describe('MediaItemContextMenuComponent', () => {
 		importance: '300',
 		group: group
 	};
+	const anchorRect = {
+		top: 24,
+		bottom: 56,
+		left: 120,
+		right: 152,
+		width: 32,
+		height: 32
+	};
 
-	test('renders contextual actions and allows editing a media item', async() => {
+	test('renders a desktop popover without the media-type subtitle and allows editing a media item', async() => {
 		const edit = jest.fn();
 		const deleteCallback = jest.fn();
 		const markAsActive = jest.fn();
@@ -28,9 +37,10 @@ describe('MediaItemContextMenuComponent', () => {
 		const viewGroup = jest.fn();
 		const close = jest.fn();
 
-		render(
+		const { container } = render(
 			<MediaItemContextMenuComponent
 				mediaItem={mediaItem}
+				anchorRect={anchorRect}
 				currentViewGroupId={undefined}
 				edit={edit}
 				delete={deleteCallback}
@@ -42,11 +52,14 @@ describe('MediaItemContextMenuComponent', () => {
 			/>
 		);
 
+		expect(container.querySelector('.media-item-context-menu-popover')).not.toBeNull();
+		expect(container.querySelector('.media-item-context-menu-sheet')).toBeNull();
 		expect(screen.getByRole('button', { name: 'Edit book' })).toBeInTheDocument();
 		expect(screen.getByRole('button', { name: 'Delete book' })).toBeInTheDocument();
 		expect(screen.getByRole('button', { name: "I'm reading this" })).toBeInTheDocument();
 		expect(screen.getByRole('button', { name: "I've read this" })).toBeInTheDocument();
 		expect(screen.getByRole('button', { name: 'View Group' })).toBeInTheDocument();
+		expect(screen.queryByText('Books')).not.toBeInTheDocument();
 
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: 'Edit book' }));
@@ -60,33 +73,52 @@ describe('MediaItemContextMenuComponent', () => {
 		expect(close).toHaveBeenCalledTimes(1);
 	});
 
-	test('asks confirmation before deleting a media item', async() => {
-		const deleteCallback = jest.fn();
-		const close = jest.fn();
+	test('uses the mobile bottom sheet and asks confirmation before deleting a media item', async() => {
+		const previousInnerWidth = window.innerWidth;
+		try {
+			Object.defineProperty(window, 'innerWidth', {
+				configurable: true,
+				writable: true,
+				value: CATEGORIES_MOBILE_BREAKPOINT
+			});
 
-		render(
-			<MediaItemContextMenuComponent
-				mediaItem={mediaItem}
-				currentViewGroupId={undefined}
-				edit={jest.fn()}
-				delete={deleteCallback}
-				markAsActive={jest.fn()}
-				markAsComplete={jest.fn()}
-				markAsRedo={jest.fn()}
-				viewGroup={jest.fn()}
-				close={close}
-			/>
-		);
+			const deleteCallback = jest.fn();
+			const close = jest.fn();
 
-		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: 'Delete book' }));
+			const { container } = render(
+				<MediaItemContextMenuComponent
+					mediaItem={mediaItem}
+					anchorRect={anchorRect}
+					currentViewGroupId={undefined}
+					edit={jest.fn()}
+					delete={deleteCallback}
+					markAsActive={jest.fn()}
+					markAsComplete={jest.fn()}
+					markAsRedo={jest.fn()}
+					viewGroup={jest.fn()}
+					close={close}
+				/>
+			);
 
-		expect(screen.getByText('Delete Book')).toBeInTheDocument();
-		expect(deleteCallback).not.toHaveBeenCalled();
+			expect(container.querySelector('.media-item-context-menu-sheet')).not.toBeNull();
+			expect(container.querySelector('.media-item-context-menu-popover')).toBeNull();
 
-		await user.click(screen.getByRole('button', { name: 'OK' }));
+			const user = userEvent.setup();
+			await user.click(screen.getByRole('button', { name: 'Delete book' }));
 
-		expect(deleteCallback).toHaveBeenCalledWith(mediaItem);
-		expect(close).toHaveBeenCalledTimes(1);
+			expect(screen.getByText('Delete Book')).toBeInTheDocument();
+			expect(deleteCallback).not.toHaveBeenCalled();
+
+			await user.click(screen.getByRole('button', { name: 'OK' }));
+
+			expect(deleteCallback).toHaveBeenCalledWith(mediaItem);
+			expect(close).toHaveBeenCalledTimes(1);
+		} finally {
+			Object.defineProperty(window, 'innerWidth', {
+				configurable: true,
+				writable: true,
+				value: previousInnerWidth
+			});
+		}
 	});
 });

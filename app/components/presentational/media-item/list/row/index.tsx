@@ -318,9 +318,9 @@ const getStatusColors = (mediaItem: MediaItemInternal): IconColors => {
 
 		case 'NEW':
 			return {
-				icon: config.ui.colors.black,
-				background: config.ui.colors.white,
-				border: config.ui.colors.black
+				icon: config.ui.colors.white,
+				background: 'rgba(255, 255, 255, 0.06)',
+				border: 'rgba(255, 255, 255, 0.06)'
 			};
 
 		default:
@@ -377,10 +377,11 @@ export const MediaItemRowComponent = (props: MediaItemRowComponentInput & MediaI
 	const ownPlatformColor = ownPlatform ? ownPlatform.color : config.ui.colors.grey;
 	const statusColors = getStatusColors(props.mediaItem);
 	const statusIcon = getStatusIcon(props.mediaItem);
+	const cardClassName = props.highlighted ? 'media-item-row media-item-row-highlighted' : 'media-item-row';
 
 	return (
 		<li
-			className='media-item-row'
+			className={cardClassName}
 			style={{ '--media-item-row-accent': getRowAccentColor(props.mediaItem, statusColors) } as CSSProperties}>
 			<button
 				type='button'
@@ -429,7 +430,9 @@ export const MediaItemRowComponent = (props: MediaItemRowComponentInput & MediaI
 				<button
 					type='button'
 					className='media-item-row-options'
-					onClick={props.showOptionsMenu}
+					onClick={(event) => {
+						props.showOptionsMenu(event.currentTarget.getBoundingClientRect());
+					}}
 					aria-label={`Options for ${props.mediaItem.name}`}>
 					<span
 						className='media-item-row-icon media-item-row-options-icon'
@@ -459,10 +462,11 @@ type MediaItemRowDetail = {
 };
 
 type MediaItemRowComponentInput = {
+	highlighted: boolean;
 	mediaItem: MediaItemInternal;
 };
 
 type MediaItemRowComponentOutput = {
 	open: () => void;
-	showOptionsMenu: () => void;
+	showOptionsMenu: (buttonRect: DOMRect) => void;
 };

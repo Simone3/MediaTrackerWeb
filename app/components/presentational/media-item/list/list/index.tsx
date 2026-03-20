@@ -1,5 +1,5 @@
 import React, { Component, ReactElement, ReactNode } from 'react';
-import { MediaItemContextMenuComponent } from 'app/components/presentational/media-item/list/context-menu';
+import { MediaItemContextMenuAnchorRect, MediaItemContextMenuComponent } from 'app/components/presentational/media-item/list/context-menu';
 import { MediaItemRowComponent } from 'app/components/presentational/media-item/list/row';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
@@ -13,7 +13,8 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 	private readonly searchInputRef = React.createRef<HTMLInputElement>();
 
 	public state: MediaItemsListComponentState = {
-		searchTerm: this.props.currentSearchTerm || ''
+		searchTerm: this.props.currentSearchTerm || '',
+		menuAnchorRect: undefined
 	};
 
 	/**
@@ -22,7 +23,6 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 	public componentDidUpdate(prevProps: Readonly<MediaItemsListComponentInput & MediaItemsListComponentOutput>): void {
 		if(
 			prevProps.category.id !== this.props.category.id ||
-			prevProps.isSearchMode !== this.props.isSearchMode ||
 			prevProps.currentSearchTerm !== this.props.currentSearchTerm
 		) {
 			const nextSearchTerm = this.props.currentSearchTerm || '';
@@ -35,6 +35,12 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 
 		if(!prevProps.isSearchMode && this.props.isSearchMode) {
 			this.searchInputRef.current?.focus();
+		}
+
+		if(prevProps.highlightedMediaItem && !this.props.highlightedMediaItem && this.state.menuAnchorRect) {
+			this.setState({
+				menuAnchorRect: undefined
+			});
 		}
 	}
 
@@ -65,41 +71,13 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 
 		return (
 			<section className='media-items-list'>
-				{!isSearchMode && (
-					<div className='media-items-list-header'>
-						<div className='media-items-list-actions'>
-							<button
-								type='button'
-								className='media-items-list-action'
-								onClick={() => {
-									this.props.openSearch();
-								}}>
-								{i18n.t('mediaItem.list.buttons.search')}
-							</button>
-							<button type='button' className='media-items-list-action' onClick={openFilters}>
-								{i18n.t('mediaItem.list.filter.title')}
-							</button>
-						</div>
-					</div>
-				)}
-				{currentViewGroup && (
-					<div className='media-items-list-view-group-banner'>
-						<div className='media-items-list-view-group-copy'>
-							<span className='media-items-list-view-group-label'>{i18n.t('mediaItem.list.viewGroup')}</span>
-							<strong className='media-items-list-view-group-name'>{currentViewGroup.name}</strong>
-						</div>
-						<button type='button' className='media-items-list-view-group-exit' onClick={exitViewGroupMode}>
-							Back
-						</button>
-					</div>
-				)}
-				{isSearchMode && (
+				<div className='media-items-list-header'>
 					<form
-						className='media-items-list-search'
+						className='media-items-list-search media-items-list-search-inline'
 						role='search'
 						onSubmit={(event) => {
 							event.preventDefault();
-							this.submitSearch();
+							this.submitSearchOrClose();
 						}}>
 						<input
 							ref={this.searchInputRef}
@@ -118,32 +96,51 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 						<button
 							type='submit'
 							className='media-items-list-action'
-							disabled={!this.state.searchTerm.trim()}>
+							disabled={!isSearchMode && !this.state.searchTerm.trim()}>
 							{i18n.t('mediaItem.list.buttons.search')}
 						</button>
-						<button
-							type='button'
-							className='media-items-list-search-cancel'
-							onClick={() => {
-								this.props.closeSearch();
-							}}>
-							{i18n.t('common.alert.default.cancelButton')}
-						</button>
 					</form>
+					<button type='button' className='media-items-list-action' onClick={openFilters}>
+						{i18n.t('mediaItem.list.filter.title')}
+					</button>
+				</div>
+				{currentViewGroup && (
+					<div className='media-items-list-view-group-banner'>
+						<div className='media-items-list-view-group-copy'>
+							<span className='media-items-list-view-group-label'>{i18n.t('mediaItem.list.viewGroup')}</span>
+							<strong className='media-items-list-view-group-name'>{currentViewGroup.name}</strong>
+						</div>
+						<button type='button' className='media-items-list-view-group-exit' onClick={exitViewGroupMode}>
+							Back
+						</button>
+					</div>
 				)}
 				{mediaItems.length === 0 ?
 					this.renderNone(emptyMessage) :
 					(
 					<ul className='media-items-list-items'>
 						{mediaItems.map((mediaItem) => {
+							const highlighted = highlightedMediaItem?.id === mediaItem.id;
+
 							return (
 								<MediaItemRowComponent
 									key={mediaItem.id}
 									mediaItem={mediaItem}
+									highlighted={highlighted}
 									open={() => {
 										selectMediaItem(mediaItem);
 									}}
-									showOptionsMenu={() => {
+									showOptionsMenu={(buttonRect) => {
+										this.setState({
+											menuAnchorRect: {
+												top: buttonRect.top,
+												bottom: buttonRect.bottom,
+												left: buttonRect.left,
+												right: buttonRect.right,
+												width: buttonRect.width,
+												height: buttonRect.height
+											}
+										});
 										highlightMediaItem(mediaItem);
 									}}
 								/>
@@ -153,6 +150,7 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 				)}
 				<MediaItemContextMenuComponent
 					mediaItem={highlightedMediaItem}
+					anchorRect={this.state.menuAnchorRect}
 					currentViewGroupId={currentViewGroup?.id}
 					edit={editMediaItem}
 					delete={deleteMediaItem}
@@ -160,7 +158,12 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 					markAsComplete={markMediaItemAsComplete}
 					markAsRedo={markMediaItemAsRedo}
 					viewGroup={viewMediaItemGroup}
-					close={closeMediaItemMenu}
+					close={() => {
+						this.setState({
+							menuAnchorRect: undefined
+						});
+						closeMediaItemMenu();
+					}}
 				/>
 			</section>
 		);
@@ -183,10 +186,17 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 	/**
 	 * Submits the current search term if valid
 	 */
-	private submitSearch(): void {
+	private submitSearchOrClose(): void {
 		const searchTerm = this.state.searchTerm.trim();
 		if(!searchTerm) {
+			if(this.props.isSearchMode) {
+				this.props.closeSearch();
+			}
 			return;
+		}
+
+		if(!this.props.isSearchMode) {
+			this.props.openSearch();
 		}
 
 		this.props.submitSearch(searchTerm);
@@ -305,4 +315,5 @@ export type MediaItemsListComponentOutput = {
 
 type MediaItemsListComponentState = {
 	searchTerm: string;
+	menuAnchorRect: MediaItemContextMenuAnchorRect | undefined;
 }
