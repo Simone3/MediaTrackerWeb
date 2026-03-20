@@ -71,100 +71,98 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 
 		return (
 			<section className='media-items-list'>
-				<div className='media-items-list-panel'>
-					<div className='media-items-list-header'>
-						<div className='media-items-list-heading'>
-							<p className='media-items-list-label'>{toolbarLabel}</p>
-							<h2 className='media-items-list-title'>{countLabel}</h2>
-						</div>
-						<div className='media-items-list-actions'>
-							{!isSearchMode && (
-								<button
-									type='button'
-									className='media-items-list-action'
-									onClick={() => {
-										this.props.openSearch();
-									}}>
-									{i18n.t('mediaItem.list.buttons.search')}
-								</button>
-							)}
-							{!isSearchMode && (
-								<button type='button' className='media-items-list-action' onClick={openFilters}>
-									{i18n.t('mediaItem.list.filter.title')}
-								</button>
-							)}
-						</div>
+				<div className='media-items-list-header'>
+					<div className='media-items-list-heading'>
+						<p className='media-items-list-label'>{toolbarLabel}</p>
+						<h2 className='media-items-list-title'>{countLabel}</h2>
 					</div>
-					{currentViewGroup && (
-						<div className='media-items-list-view-group-banner'>
-							<div className='media-items-list-view-group-copy'>
-								<span className='media-items-list-view-group-label'>{i18n.t('mediaItem.list.viewGroup')}</span>
-								<strong className='media-items-list-view-group-name'>{currentViewGroup.name}</strong>
-							</div>
-							<button type='button' className='media-items-list-view-group-exit' onClick={exitViewGroupMode}>
-								Back
-							</button>
-						</div>
-					)}
-					{isSearchMode && (
-						<form
-							className='media-items-list-search'
-							role='search'
-							onSubmit={(event) => {
-								event.preventDefault();
-								this.submitSearch();
-							}}>
-							<input
-								ref={this.searchInputRef}
-								id='media-items-list-search'
-								className='media-items-list-search-input'
-								type='search'
-								value={this.state.searchTerm}
-								placeholder={searchPlaceholder}
-								aria-label={searchPlaceholder}
-								onChange={(event) => {
-									this.setState({
-										searchTerm: event.target.value
-									});
-								}}
-							/>
-							<button
-								type='submit'
-								className='media-items-list-action'
-								disabled={!this.state.searchTerm.trim()}>
-								{i18n.t('mediaItem.list.buttons.search')}
-							</button>
+					<div className='media-items-list-actions'>
+						{!isSearchMode && (
 							<button
 								type='button'
-								className='media-items-list-search-cancel'
+								className='media-items-list-action'
 								onClick={() => {
-									this.props.closeSearch();
+									this.props.openSearch();
 								}}>
-								{i18n.t('common.alert.default.cancelButton')}
+								{i18n.t('mediaItem.list.buttons.search')}
 							</button>
-						</form>
-					)}
-					{mediaItems.length === 0 ?
-						this.renderNone(emptyMessage) :
-						(
-						<ul className='media-items-list-items'>
-							{mediaItems.map((mediaItem) => {
-								return (
-									<MediaItemRowComponent
-										key={mediaItem.id}
-										mediaItem={mediaItem}
-										open={() => {
-											selectMediaItem(mediaItem);
-										}}
-										showOptionsMenu={() => {
-											highlightMediaItem(mediaItem);
-										}}
-									/>
-								);
-							})}
-						</ul>
-					)}
+						)}
+						{!isSearchMode && (
+							<button type='button' className='media-items-list-action' onClick={openFilters}>
+								{i18n.t('mediaItem.list.filter.title')}
+							</button>
+						)}
+					</div>
 				</div>
+				{currentViewGroup && (
+					<div className='media-items-list-view-group-banner'>
+						<div className='media-items-list-view-group-copy'>
+							<span className='media-items-list-view-group-label'>{i18n.t('mediaItem.list.viewGroup')}</span>
+							<strong className='media-items-list-view-group-name'>{currentViewGroup.name}</strong>
+						</div>
+						<button type='button' className='media-items-list-view-group-exit' onClick={exitViewGroupMode}>
+							Back
+						</button>
+					</div>
+				)}
+				{isSearchMode && (
+					<form
+						className='media-items-list-search'
+						role='search'
+						onSubmit={(event) => {
+							event.preventDefault();
+							this.submitSearch();
+						}}>
+						<input
+							ref={this.searchInputRef}
+							id='media-items-list-search'
+							className='media-items-list-search-input'
+							type='search'
+							value={this.state.searchTerm}
+							placeholder={searchPlaceholder}
+							aria-label={searchPlaceholder}
+							onChange={(event) => {
+								this.setState({
+									searchTerm: event.target.value
+								});
+							}}
+						/>
+						<button
+							type='submit'
+							className='media-items-list-action'
+							disabled={!this.state.searchTerm.trim()}>
+							{i18n.t('mediaItem.list.buttons.search')}
+						</button>
+						<button
+							type='button'
+							className='media-items-list-search-cancel'
+							onClick={() => {
+								this.props.closeSearch();
+							}}>
+							{i18n.t('common.alert.default.cancelButton')}
+						</button>
+					</form>
+				)}
+				{mediaItems.length === 0 ?
+					this.renderNone(emptyMessage) :
+					(
+					<ul className='media-items-list-items'>
+						{mediaItems.map((mediaItem) => {
+							return (
+								<MediaItemRowComponent
+									key={mediaItem.id}
+									mediaItem={mediaItem}
+									open={() => {
+										selectMediaItem(mediaItem);
+									}}
+									showOptionsMenu={() => {
+										highlightMediaItem(mediaItem);
+									}}
+								/>
+							);
+						})}
+					</ul>
+				)}
 				<MediaItemContextMenuComponent
 					mediaItem={highlightedMediaItem}
 					currentViewGroupId={currentViewGroup?.id}
