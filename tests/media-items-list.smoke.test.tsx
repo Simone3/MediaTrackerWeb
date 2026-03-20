@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { config } from 'app/config/config';
 import { MediaItemsListComponent } from 'app/components/presentational/media-item/list/list';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { GroupInternal } from 'app/data/models/internal/group';
@@ -60,6 +61,7 @@ describe('MediaItemsListComponent', () => {
 		await user.click(screen.getByText('Dune'));
 		await user.click(screen.getByRole('button', { name: 'Options for Dune' }));
 
+		expect(screen.queryByText('1 item')).not.toBeInTheDocument();
 		expect(openSearch).toHaveBeenCalledTimes(1);
 		expect(openFilters).toHaveBeenCalledTimes(1);
 		expect(selectMediaItem).toHaveBeenCalledWith(mediaItem);
@@ -175,6 +177,7 @@ describe('MediaItemsListComponent', () => {
 		expect(screen.getByText('Dune Chronicles, #1')).toBeInTheDocument();
 		expect(screen.getByLabelText('Owned at Kindle')).toBeInTheDocument();
 		expect(screen.getByLabelText("I'm reading this")).toBeInTheDocument();
+		expect(screen.getByText('Dune').closest('li')?.style.getPropertyValue('--media-item-row-accent')).toBe(config.ui.colors.green);
 	});
 
 	test('renders tv show specific row metadata', () => {
@@ -223,5 +226,48 @@ describe('MediaItemsListComponent', () => {
 
 		expect(screen.getByText('2017 • 60\' • P • Baran bo Odar, Jantje Friese')).toBeInTheDocument();
 		expect(screen.getByLabelText("I'm following this")).toBeInTheDocument();
+	});
+
+	test('keeps the left accent transparent for new items', () => {
+		const category: CategoryInternal = {
+			id: 'category-id',
+			name: 'My Games',
+			mediaType: 'VIDEOGAME',
+			color: '#3f51b5'
+		};
+		const mediaItem: MediaItemInternal = {
+			id: 'media-id',
+			name: 'Hades',
+			mediaType: 'VIDEOGAME',
+			status: 'NEW',
+			importance: '300'
+		};
+
+		render(
+			<MediaItemsListComponent
+				category={category}
+				mediaItems={[ mediaItem ]}
+				highlightedMediaItem={undefined}
+				currentViewGroup={undefined}
+				isSearchMode={false}
+				currentSearchTerm={undefined}
+				openSearch={jest.fn()}
+				submitSearch={jest.fn()}
+				closeSearch={jest.fn()}
+				openFilters={jest.fn()}
+				selectMediaItem={jest.fn()}
+				highlightMediaItem={jest.fn()}
+				editMediaItem={jest.fn()}
+				deleteMediaItem={jest.fn()}
+				markMediaItemAsActive={jest.fn()}
+				markMediaItemAsComplete={jest.fn()}
+				markMediaItemAsRedo={jest.fn()}
+				viewMediaItemGroup={jest.fn()}
+				closeMediaItemMenu={jest.fn()}
+				exitViewGroupMode={jest.fn()}
+			/>
+		);
+
+		expect(screen.getByText('Hades').closest('li')?.style.getPropertyValue('--media-item-row-accent')).toBe('transparent');
 	});
 });

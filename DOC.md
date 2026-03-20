@@ -114,8 +114,10 @@
   - Correct behavior/style on web now:
     - the screen uses the same full-bleed dark shell language as the categories list
     - desktop shows a top-right add button while mobile keeps the shared FAB pattern
-    - the list toolbar, view-group banner, empty state, row cards, and media-item context menu now belong to that same visual family
+    - the top header now uses the media-type icon next to the category name instead of a repeated media-type pill
+    - the list toolbar, view-group banner, empty state, row cards, and media-item context menu now belong to that same visual family without repeating the page title/count inside the list
     - the rows sit directly on the screen background instead of inside an extra boxed panel, which keeps the layout closer to the categories list
+    - row width is constrained again and the left accent now follows the status color, staying transparent for `NEW` items
     - search, filter, group-view, inline row metadata, and context-menu actions keep their existing logic
   - Relevant files:
     - `app/components/containers/media-item/list/screen.ts`

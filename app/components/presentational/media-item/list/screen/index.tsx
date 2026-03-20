@@ -1,6 +1,7 @@
 import React, { Component, CSSProperties, ReactNode } from 'react';
 import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 import { MediaItemsListContainer } from 'app/components/containers/media-item/list/list';
+import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
 import { MediaItemFilterModalContainer } from 'app/components/containers/media-item/list/filter-modal';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
@@ -60,8 +61,12 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 				<div className='media-items-screen-content'>
 					<header className='media-items-screen-header'>
 						<div className='media-items-screen-heading'>
-							<span className='media-items-screen-badge'>{i18n.t(`category.mediaTypes.${category.mediaType}`)}</span>
-							<h1 className='media-items-screen-title'>{category.name}</h1>
+							<div className='media-items-screen-title-row'>
+								<span className='media-items-screen-icon-shell' aria-hidden={true}>
+									<MediaIconComponent mediaType={category.mediaType} className='media-items-screen-icon' />
+								</span>
+								<h1 className='media-items-screen-title'>{category.name}</h1>
+							</div>
 							<p className='media-items-screen-count'>{countLabel}</p>
 						</div>
 						{!this.state.isMobileLayout &&

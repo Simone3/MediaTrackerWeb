@@ -61,23 +61,13 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 			exitViewGroupMode
 		} = this.props;
 		const emptyMessage = i18n.t(`mediaItem.list.empty.${category.mediaType}`);
-		const countLabel = mediaItems.length === 1 ?
-			i18n.t('mediaItem.list.count.single') :
-			i18n.t('mediaItem.list.count.multiple', { count: mediaItems.length });
 		const searchPlaceholder = i18n.t(`mediaItem.list.search.${category.mediaType}`);
-		const toolbarLabel = currentViewGroup ?
-			i18n.t('mediaItem.list.viewGroup') :
-			i18n.t(`category.mediaTypes.${category.mediaType}`);
 
 		return (
 			<section className='media-items-list'>
-				<div className='media-items-list-header'>
-					<div className='media-items-list-heading'>
-						<p className='media-items-list-label'>{toolbarLabel}</p>
-						<h2 className='media-items-list-title'>{countLabel}</h2>
-					</div>
-					<div className='media-items-list-actions'>
-						{!isSearchMode && (
+				{!isSearchMode && (
+					<div className='media-items-list-header'>
+						<div className='media-items-list-actions'>
 							<button
 								type='button'
 								className='media-items-list-action'
@@ -86,14 +76,12 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 								}}>
 								{i18n.t('mediaItem.list.buttons.search')}
 							</button>
-						)}
-						{!isSearchMode && (
 							<button type='button' className='media-items-list-action' onClick={openFilters}>
 								{i18n.t('mediaItem.list.filter.title')}
 							</button>
-						)}
+						</div>
 					</div>
-				</div>
+				)}
 				{currentViewGroup && (
 					<div className='media-items-list-view-group-banner'>
 						<div className='media-items-list-view-group-copy'>

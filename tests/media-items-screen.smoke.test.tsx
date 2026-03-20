@@ -18,8 +18,8 @@ jest.mock('app/components/containers/media-item/list/filter-modal', () => {
 
 const category: CategoryInternal = {
 	id: 'category-id',
-	name: 'My Books',
-	mediaType: 'BOOK',
+	name: 'Weekend Queue',
+	mediaType: 'MOVIE',
 	color: '#3f51b5'
 };
 
@@ -42,6 +42,7 @@ describe('MediaItemsListScreenComponent', () => {
 		setViewportWidth(1280);
 
 		const {
+			container,
 			unmount
 		} = render(
 			<MediaItemsListScreenComponent
@@ -56,12 +57,14 @@ describe('MediaItemsListScreenComponent', () => {
 
 		expect(fetchMediaItems).toHaveBeenCalledTimes(1);
 		expect(document.body).toHaveClass('app-dark-screen-active');
-		expect(screen.getByText('2 items')).toBeInTheDocument();
+		expect(screen.getAllByText('2 items')).toHaveLength(1);
+		expect(screen.queryByText('Movies')).not.toBeInTheDocument();
 		expect(screen.getByTestId('media-items-list-container')).toBeInTheDocument();
 		expect(screen.getByTestId('media-item-filter-modal-container')).toBeInTheDocument();
+		expect(container.querySelector('.media-items-screen-icon')).not.toBeNull();
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: '+ Add book' }));
+		await user.click(screen.getByRole('button', { name: '+ Add movie' }));
 
 		expect(loadNewMediaItemDetails).toHaveBeenCalledWith(category);
 
@@ -85,8 +88,9 @@ describe('MediaItemsListScreenComponent', () => {
 			/>
 		);
 
-		expect(screen.queryByRole('button', { name: '+ Add book' })).not.toBeInTheDocument();
+		expect(screen.queryByRole('button', { name: '+ Add movie' })).not.toBeInTheDocument();
 		expect(screen.getByText('1 item')).toBeInTheDocument();
+		expect(screen.queryByText('Movies')).not.toBeInTheDocument();
 
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: '+' }));

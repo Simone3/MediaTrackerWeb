@@ -39,7 +39,7 @@ import statusWatchingIcon from 'app/resources/images/ic_status_watching.png';
 import { i18n } from 'app/utilities/i18n';
 import { mediaItemUtils } from 'app/utilities/media-item-utils';
 import { format } from 'date-fns';
-import React, { ReactElement } from 'react';
+import React, { CSSProperties, ReactElement } from 'react';
 
 const ownPlatformIcons: Record<OwnPlatformIconInternal, string> = {
 	default: ownPlatformDefaultIcon,
@@ -356,6 +356,16 @@ const getStatusLabel = (mediaItem: MediaItemInternal): string => {
 };
 
 /**
+ * Helper to define the left-side accent color
+ * @param mediaItem the media item
+ * @param statusColors the already computed status colors
+ * @returns the accent color
+ */
+const getRowAccentColor = (mediaItem: MediaItemInternal, statusColors: IconColors): string => {
+	return mediaItem.status === 'NEW' ? 'transparent' : statusColors.background;
+};
+
+/**
  * Presentational component to display a media item row
  * @param props the input/output props
  * @returns the component
@@ -369,7 +379,9 @@ export const MediaItemRowComponent = (props: MediaItemRowComponentInput & MediaI
 	const statusIcon = getStatusIcon(props.mediaItem);
 
 	return (
-		<li className='media-item-row'>
+		<li
+			className='media-item-row'
+			style={{ '--media-item-row-accent': getRowAccentColor(props.mediaItem, statusColors) } as CSSProperties}>
 			<button
 				type='button'
 				className='media-item-row-main'
