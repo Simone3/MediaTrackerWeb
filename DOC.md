@@ -117,7 +117,7 @@
     - the top header now uses the media-type icon next to the category name instead of a repeated media-type pill
     - the list toolbar, view-group banner, empty state, row cards, and media-item context menu now belong to that same visual family without repeating the page title/count inside the list
     - the rows sit directly on the screen background instead of inside an extra boxed panel, which keeps the layout closer to the categories list
-    - row width is constrained again and the left accent now follows the status color, staying transparent for `NEW` items
+    - media-item rows now fill the same shared content width as the categories list, and their left accent follows the status color while staying transparent for `NEW` items
     - row text now shrinks correctly even for extremely long unbroken media-item names, preventing right-edge overflow
     - the screen/list wrappers now also clip stray horizontal overflow defensively so pathological test data cannot push the page width
     - search, filter, group-view, inline row metadata, and context-menu actions keep their existing logic
