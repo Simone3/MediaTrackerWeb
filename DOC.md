@@ -119,6 +119,7 @@
     - the rows sit directly on the screen background instead of inside an extra boxed panel, which keeps the layout closer to the categories list
     - row width is constrained again and the left accent now follows the status color, staying transparent for `NEW` items
     - row text now shrinks correctly even for extremely long unbroken media-item names, preventing right-edge overflow
+    - the screen/list wrappers now also clip stray horizontal overflow defensively so pathological test data cannot push the page width
     - search, filter, group-view, inline row metadata, and context-menu actions keep their existing logic
   - Relevant files:
     - `app/components/containers/media-item/list/screen.ts`
