@@ -180,6 +180,21 @@
     - `app/web/styles.css`
     - `tests/media-items-list.smoke.test.tsx`
     - `tests/media-items-list-container.smoke.test.tsx`
+- Media item rows on the web had lost most of the old RN summary content and iconography.
+  - Correct behavior on web now:
+    - each row again shows the own-platform icon on the left, falling back to the old "none" icon when there is no platform
+    - the row body mirrors the RN text layout again:
+      - title on the first line
+      - year / duration / TV production flag / creators on the second line when available
+      - either completion history or genres on the third line
+      - group order on the fourth line when applicable
+    - the right edge again shows the old status circle/icon plus the separate options trigger
+    - `NEW` items keep the original importance icon in that status circle, while active/complete/redo/upcoming items use the old status-specific icons and colors
+  - Relevant files:
+    - `app/components/presentational/media-item/list/list/index.tsx`
+    - `app/components/presentational/media-item/list/row/index.tsx`
+    - `app/web/styles.css`
+    - `tests/media-items-list.smoke.test.tsx`
 - Old React Native image density variants were still checked into the web app asset folder.
   - Cleanup on web now:
     - removes all `@2x` and `@3x` files from `app/resources/images`

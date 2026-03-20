@@ -1,5 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { MediaItemContextMenuComponent } from 'app/components/presentational/media-item/list/context-menu';
+import { MediaItemRowComponent } from 'app/components/presentational/media-item/list/row';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { i18n } from 'app/utilities/i18n';
@@ -140,26 +141,16 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 					<ul className='media-items-list-items'>
 						{mediaItems.map((mediaItem) => {
 							return (
-								<li key={mediaItem.id} className='media-item-row'>
-									<button
-										type='button'
-										className='media-item-row-main'
-										onClick={() => {
-											selectMediaItem(mediaItem);
-										}}>
-										<span className='media-item-row-name'>{mediaItem.name}</span>
-										<span className='media-item-row-meta'>{this.getMediaItemMetadata(mediaItem)}</span>
-									</button>
-									<button
-										type='button'
-										className='media-item-row-options'
-										onClick={() => {
-											highlightMediaItem(mediaItem);
-										}}
-										aria-label={`Options for ${mediaItem.name}`}>
-										⋮
-									</button>
-								</li>
+								<MediaItemRowComponent
+									key={mediaItem.id}
+									mediaItem={mediaItem}
+									open={() => {
+										selectMediaItem(mediaItem);
+									}}
+									showOptionsMenu={() => {
+										highlightMediaItem(mediaItem);
+									}}
+								/>
 							);
 						})}
 					</ul>
@@ -177,29 +168,6 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 				/>
 			</section>
 		);
-	}
-
-	/**
-	 * Helper method to build row metadata text for a media item
-	 * @param mediaItem the media item
-	 * @returns the metadata text
-	 */
-	private getMediaItemMetadata(mediaItem: MediaItemInternal): string {
-		const metadata: string[] = [];
-		if(mediaItem.importance) {
-			metadata.push(i18n.t(`mediaItem.common.importance.${mediaItem.importance}`));
-		}
-		if(mediaItem.status) {
-			metadata.push(mediaItem.status);
-		}
-		if(mediaItem.group && mediaItem.group.name) {
-			metadata.push(mediaItem.group.name);
-		}
-		if(mediaItem.ownPlatform && mediaItem.ownPlatform.name) {
-			metadata.push(mediaItem.ownPlatform.name);
-		}
-
-		return metadata.join(' • ');
 	}
 
 	/**
