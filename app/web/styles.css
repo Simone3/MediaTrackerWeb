@@ -2102,7 +2102,7 @@ body.app-dark-screen-active .app-shell-content {
 
 .media-item-details-image-actions {
 	display: grid;
-	grid-template-columns: repeat(2, var(--media-item-details-action-size));
+	grid-template-columns: 1fr;
 	grid-auto-rows: var(--media-item-details-action-size);
 	gap: var(--media-item-details-action-gap);
 	flex: 0 0 auto;
@@ -3329,10 +3329,6 @@ body.app-dark-screen-active .loading-indicator-spinner {
 	.media-item-details-search-button,
 	.media-item-details-inline-button {
 		width: 100%;
-	}
-
-	.media-item-details-image-actions {
-		grid-template-columns: 1fr;
 	}
 
 	.group-details-screen,
