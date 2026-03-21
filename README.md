@@ -5,18 +5,23 @@ TODO:
 - fix UI page by page
   - modernize
   - icons are missing (forms, modals, etc.)
-  - media item element does not show the old data
   - also: responsive mobile versions!
+- fix bugs
+  - categories add FAB displayed under the confirm modal
+  - three-dots modal does not have icons
+  - media item accent when clicking three dots is still black
 - add favicon
+- refactor to have common centralized components, if not already
 - check dev vs. prod configs - how to inject them in a webapp?
-- split css file into single files
 - check if all strings are in lang-en
-- make all components functional and not class components (with "export default XXX;" at the end)
-- make all icons csvs
+- make all icons csvs?
 - upgrade all dependencies versions
 - remove all empty lines after block start
+- how is the current user saved? custom cookie or all handled by firebase sdk?
 - remove useless console logs
 - final manual code check
+- "merge" web and be to deploy them as a single app?
+- limit signups in prod firebase?
 
 MISSING OLD SCRENSHOTS:
 - view group
