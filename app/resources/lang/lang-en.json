@@ -266,7 +266,34 @@
 				"downloadCatalog": "Reload Catalog"
 			},
 			"labels": {
-				"seasons": "{{seasonsNumber}} seasons, watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes"
+				"seasons": "{{seasonsNumber}} seasons, watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes",
+				"completion": {
+					"none": "No dates yet",
+					"single": "1 date added",
+					"multiple": "{{count}} dates added"
+				}
+			},
+			"sections": {
+				"sidebar": {
+					"title": "Quick actions",
+					"copy": "Artwork, shortcuts, and the current collection snapshot."
+				},
+				"basics": {
+					"title": "Basics",
+					"copy": "Start with the name, summary, and release information."
+				},
+				"profile": {
+					"title": "Media profile",
+					"copy": "Fill in the type-specific details that describe this entry."
+				},
+				"collection": {
+					"title": "Collection",
+					"copy": "Keep the item linked with its importance, platform, and group."
+				},
+				"progress": {
+					"title": "Progress",
+					"copy": "Track notes and completion history in one place."
+				}
 			}
 		}
 	},

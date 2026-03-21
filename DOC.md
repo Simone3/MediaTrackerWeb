@@ -177,6 +177,9 @@
   - preserves handled TV show season edits when returning from the seasons sub-flow
   - warns before leaving category and media-item details forms when the current form has unsaved changes, matching the old RN flow again
   - confirmed exit from the media-item form now discards the temporary Redux draft instead of carrying it past navigation
+  - the details page now uses the same full-bleed dark shell language as the media items list instead of the older light card
+  - the form is grouped into responsive section cards with a sticky desktop sidebar for artwork, shortcuts, and quick collection info
+  - mobile collapses that layout into a single column while keeping the save action prominent and the field controls full-width
 - Relevant files:
   - `app/components/containers/category/details/screen.ts`
   - `app/components/containers/media-item/details/screen.ts`

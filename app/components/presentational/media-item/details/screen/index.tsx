@@ -1,5 +1,6 @@
 import React, { Component, KeyboardEvent, ReactNode } from 'react';
 import { config } from 'app/config/config';
+import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { DEFAULT_CATALOG_BOOK, DEFAULT_BOOK, BookInternal } from 'app/data/models/internal/media-items/book';
@@ -28,6 +29,8 @@ type MediaItemActionButton = {
 	onClick: () => void;
 };
 
+type MediaItemDetailsSectionKey = 'sidebar' | 'basics' | 'profile' | 'collection' | 'progress';
+
 /**
  * Presentational component that contains the whole "media item details" screen, that works as the "add new media item", "update media item" and
  * "view media item data" sections
@@ -46,6 +49,7 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 	 * @override
 	 */
 	public componentDidMount(): void {
+		document.body.classList.add('app-dark-screen-active');
 		this.syncFormValuesWithProps();
 	}
 
@@ -81,6 +85,13 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 	/**
 	 * @override
 	 */
+	public componentWillUnmount(): void {
+		document.body.classList.remove('app-dark-screen-active');
+	}
+
+	/**
+	 * @override
+	 */
 	public render(): ReactNode {
 		const {
 			isLoading
@@ -92,42 +103,57 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 		} = this.state;
 		const isValid = this.isFormValid(formValues);
 		const title = formValues.id ? formValues.name : i18n.t(`mediaItem.details.title.new.${formValues.mediaType}`);
+		const mediaTypeLabel = i18n.t(`category.mediaTypes.${formValues.mediaType}`);
+		const heroPills = this.getHeroPills(formValues);
 
 		return (
 			<section className='media-item-details-screen'>
-				<div className='media-item-details-header'>
-					<h1 className='media-item-details-title'>{title}</h1>
-					<div className='media-item-details-actions'>
-						<button
-							type='button'
-							className='media-item-details-button media-item-details-button-primary'
-							disabled={!isValid || isLoading}
-							onClick={() => {
-								this.submitForm(false);
-							}}>
-							Save
-						</button>
-					</div>
+				<div className='media-item-details-screen-content'>
+					<header className='media-item-details-hero'>
+						<div className='media-item-details-heading'>
+							<p className='media-item-details-eyebrow'>{mediaTypeLabel}</p>
+							<div className='media-item-details-title-row'>
+								<span className='media-item-details-icon-shell' aria-hidden={true}>
+									<MediaIconComponent mediaType={formValues.mediaType} className='media-item-details-icon' />
+								</span>
+								<div className='media-item-details-title-copy'>
+									<h1 className='media-item-details-title'>{title}</h1>
+									<div className='media-item-details-pills'>
+										{heroPills.map((pill, index) => {
+											return (
+												<span key={`${pill}-${index}`} className='media-item-details-pill'>
+													{pill}
+												</span>
+											);
+										})}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div className='media-item-details-actions'>
+							<button
+								type='button'
+								className='media-item-details-button media-item-details-button-primary'
+								disabled={!isValid || isLoading}
+								onClick={() => {
+									this.submitForm(false);
+								}}>
+								Save
+							</button>
+						</div>
+					</header>
+					<form
+						className='media-item-details-form'
+						onSubmit={(event) => {
+							event.preventDefault();
+							this.submitForm(false);
+						}}>
+						<div className='media-item-details-layout'>
+							{this.renderSidebar(formValues)}
+							{this.renderFormSections(formValues)}
+						</div>
+					</form>
 				</div>
-				<form
-					className='media-item-details-form'
-					onSubmit={(event) => {
-						event.preventDefault();
-						this.submitForm(false);
-					}}>
-					{this.renderImageButtonsRow(formValues)}
-					{this.renderNameField(formValues)}
-					{this.renderDescriptionField(formValues)}
-					{this.renderReleaseDateField(formValues)}
-					{this.renderTypeSpecificPrimaryFields(formValues)}
-					{this.renderGenresField(formValues)}
-					{this.renderImportanceField(formValues)}
-					{this.renderOwnPlatformField(formValues)}
-					{this.renderGroupField(formValues)}
-					{this.renderOrderInGroupField(formValues)}
-					{this.renderUserCommentField(formValues)}
-					{this.renderCompletionDatesField(formValues)}
-				</form>
 				<ConfirmDialogComponent
 					visible={confirmSameNameVisible}
 					title={i18n.t('mediaItem.common.alert.addSameName.title')}
@@ -303,54 +329,174 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 	}
 
 	/**
-	 * Renders the image and its action buttons
+	 * Renders the sidebar summary card
 	 * @param mediaItem current media item
 	 * @returns the component
 	 */
-	private renderImageButtonsRow(mediaItem: MediaItemDetailsFormValues): ReactNode {
-		if(!mediaItem.id && !mediaItem.catalogId) {
-			return null;
-		}
-
+	private renderSidebar(mediaItem: MediaItemDetailsFormValues): ReactNode {
 		const buttons = this.getActionButtons(mediaItem);
+		const mediaTypeLabel = i18n.t(`category.mediaTypes.${mediaItem.mediaType}`);
 
 		return (
-			<div className='media-item-details-image-row'>
-				<div className='media-item-details-image-wrapper'>
-					<img
-						className='media-item-details-image'
-						src={mediaItem.imageUrl || defaultMediaItemImage}
-						alt={`${mediaItem.name || i18n.t(`category.mediaTypes.${mediaItem.mediaType}`)} cover`}
-					/>
-				</div>
-				<div className='media-item-details-image-actions'>
-					{buttons.map((button) => {
-						return (
-							<button
-								key={button.key}
-								type='button'
-								className='media-item-details-image-action'
-								disabled={button.disabled}
-								aria-label={button.label}
-								title={button.label}
-								onClick={button.onClick}>
-								<img className='media-item-details-image-action-icon' src={button.icon} alt='' />
-							</button>
-						);
-					})}
-				</div>
+			<aside className='media-item-details-sidebar'>
+				{this.renderSection('sidebar', (
+					<>
+						<div className='media-item-details-image-wrapper'>
+							<img
+								className='media-item-details-image'
+								src={mediaItem.imageUrl || defaultMediaItemImage}
+								alt={`${mediaItem.name || mediaTypeLabel} cover`}
+							/>
+						</div>
+						<div className='media-item-details-image-actions'>
+							{buttons.map((button) => {
+								return (
+									<button
+										key={button.key}
+										type='button'
+										className='media-item-details-image-action'
+										disabled={button.disabled}
+										aria-label={button.label}
+										title={button.label}
+										onClick={button.onClick}>
+										<img className='media-item-details-image-action-icon' src={button.icon} alt='' />
+									</button>
+								);
+							})}
+						</div>
+						<dl className='media-item-details-summary-list'>
+							<div className='media-item-details-summary-row'>
+								<dt className='media-item-details-summary-label'>{i18n.t('mediaItem.details.prompts.importance')}</dt>
+								<dd className='media-item-details-summary-value'>{i18n.t(`mediaItem.common.importance.${mediaItem.importance}`)}</dd>
+							</div>
+							<div className='media-item-details-summary-row'>
+								<dt className='media-item-details-summary-label'>{i18n.t('mediaItem.details.placeholders.ownPlatform')}</dt>
+								<dd className='media-item-details-summary-value'>{mediaItem.ownPlatform?.name || i18n.t('ownPlatform.list.none')}</dd>
+							</div>
+							<div className='media-item-details-summary-row'>
+								<dt className='media-item-details-summary-label'>{i18n.t('mediaItem.details.placeholders.group')}</dt>
+								<dd className='media-item-details-summary-value'>{mediaItem.group?.name || i18n.t('group.list.none')}</dd>
+							</div>
+							<div className='media-item-details-summary-row'>
+								<dt className='media-item-details-summary-label'>{i18n.t('mediaItem.details.placeholders.completedOn')}</dt>
+								<dd className='media-item-details-summary-value'>{this.getCompletionCountLabel(mediaItem.completedOn)}</dd>
+							</div>
+						</dl>
+					</>
+				))}
+			</aside>
+		);
+	}
+
+	/**
+	 * Renders the main form sections
+	 * @param mediaItem current media item
+	 * @returns the component
+	 */
+	private renderFormSections(mediaItem: MediaItemDetailsFormValues): ReactNode {
+		return (
+			<div className='media-item-details-main'>
+				{this.renderSection('basics', (
+					<div className='media-item-details-grid'>
+						{this.renderNameField(mediaItem, 'media-item-details-field media-item-details-field-span-2')}
+						{this.renderDescriptionField(mediaItem, 'media-item-details-field media-item-details-field-span-2')}
+						{this.renderReleaseDateField(mediaItem)}
+					</div>
+				))}
+				{this.renderSection('profile', (
+					<div className='media-item-details-grid'>
+						{this.renderTypeSpecificPrimaryFields(mediaItem)}
+						{this.renderGenresField(mediaItem, 'media-item-details-field media-item-details-field-span-2')}
+					</div>
+				))}
+				{this.renderSection('collection', (
+					<div className='media-item-details-grid'>
+						{this.renderImportanceField(mediaItem)}
+						{this.renderOwnPlatformField(mediaItem)}
+						{this.renderGroupField(mediaItem)}
+						{this.renderOrderInGroupField(mediaItem)}
+					</div>
+				))}
+				{this.renderSection('progress', (
+					<div className='media-item-details-grid'>
+						{this.renderUserCommentField(mediaItem, 'media-item-details-field media-item-details-field-span-2')}
+						{this.renderCompletionDatesField(mediaItem, 'media-item-details-field media-item-details-field-span-2')}
+					</div>
+				))}
 			</div>
 		);
 	}
 
 	/**
-	 * Renders the catalog-aware name field
-	 * @param mediaItem current media item
+	 * Renders a form section card
+	 * @param sectionKey section key
+	 * @param children section content
 	 * @returns the component
 	 */
-	private renderNameField(mediaItem: MediaItemDetailsFormValues): ReactNode {
+	private renderSection(sectionKey: MediaItemDetailsSectionKey, children: ReactNode): ReactNode {
 		return (
-			<>
+			<section className='media-item-details-panel'>
+				<div className='media-item-details-section-heading'>
+					<h2 className='media-item-details-section-title'>{i18n.t(`mediaItem.details.sections.${sectionKey}.title`)}</h2>
+					<p className='media-item-details-section-copy'>{i18n.t(`mediaItem.details.sections.${sectionKey}.copy`)}</p>
+				</div>
+				{children}
+			</section>
+		);
+	}
+
+	/**
+	 * Builds the summary pills shown in the hero
+	 * @param mediaItem current media item
+	 * @returns pill labels
+	 */
+	private getHeroPills(mediaItem: MediaItemDetailsFormValues): string[] {
+		const pills: string[] = [
+			`${i18n.t('mediaItem.details.prompts.importance')}: ${i18n.t(`mediaItem.common.importance.${mediaItem.importance}`)}`
+		];
+
+		if(mediaItem.releaseDate) {
+			pills.push(`${mediaItem.releaseDate.getFullYear()}`);
+		}
+
+		if(mediaItem.group?.name) {
+			pills.push(mediaItem.group.name);
+		}
+
+		if(mediaItem.ownPlatform?.name) {
+			pills.push(mediaItem.ownPlatform.name);
+		}
+
+		return pills;
+	}
+
+	/**
+	 * Builds the completion summary text for the sidebar
+	 * @param completedOn completion dates
+	 * @returns summary text
+	 */
+	private getCompletionCountLabel(completedOn?: Date[]): string {
+		if(!completedOn || completedOn.length === 0) {
+			return i18n.t('mediaItem.details.labels.completion.none');
+		}
+		if(completedOn.length === 1) {
+			return i18n.t('mediaItem.details.labels.completion.single');
+		}
+
+		return i18n.t('mediaItem.details.labels.completion.multiple', {
+			count: completedOn.length
+		});
+	}
+
+	/**
+	 * Renders the catalog-aware name field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderNameField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		return (
+			<div className={fieldClassName}>
 				<label className='media-item-details-label' htmlFor='media-item-name'>
 					{i18n.t('mediaItem.details.placeholders.name')}
 				</label>
@@ -382,7 +528,269 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 					</button>
 				</div>
 				{this.renderCatalogSearchResults()}
-			</>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the description field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderDescriptionField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor='media-item-description'>
+					{i18n.t('mediaItem.details.placeholders.description')}
+				</label>
+				<textarea
+					id='media-item-description'
+					className='media-item-details-textarea'
+					value={mediaItem.description || ''}
+					onChange={(event) => {
+						this.setFormField('description', event.target.value || undefined);
+					}}
+				/>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the release date field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderReleaseDateField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor='media-item-release-date'>
+					{i18n.t('mediaItem.details.placeholders.releaseDate')}
+				</label>
+				<input
+					id='media-item-release-date'
+					className='media-item-details-input'
+					type='date'
+					value={this.dateToInputValue(mediaItem.releaseDate)}
+					onChange={(event) => {
+						this.setFormField('releaseDate', this.inputValueToDate(event.target.value));
+					}}
+				/>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the common genres field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderGenresField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		return this.renderArrayTextInputField(
+			'media-item-genres',
+			i18n.t('mediaItem.details.placeholders.genres'),
+			mediaItem.genres,
+			(values) => {
+				this.setFormField('genres', values);
+			},
+			fieldClassName
+		);
+	}
+
+	/**
+	 * Renders the importance field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderImportanceField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor='media-item-importance'>
+					{i18n.t('mediaItem.details.prompts.importance')}
+				</label>
+				<select
+					id='media-item-importance'
+					className='media-item-details-select'
+					value={mediaItem.importance}
+					onChange={(event) => {
+						this.setFormField('importance', event.target.value as MediaItemInternal['importance']);
+					}}>
+					{MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES.map((importance) => {
+						return (
+							<option key={importance} value={importance}>
+								{i18n.t(`mediaItem.common.importance.${importance}`)}
+							</option>
+						);
+					})}
+				</select>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the own platform field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderOwnPlatformField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		const ownPlatform = mediaItem.ownPlatform;
+
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor='media-item-own-platform'>
+					{i18n.t('mediaItem.details.placeholders.ownPlatform')}
+				</label>
+				<button
+					id='media-item-own-platform'
+					type='button'
+					className='media-item-details-picker-button'
+					onClick={this.props.requestOwnPlatformSelection}>
+					<span className='media-item-details-picker-value'>
+						{ownPlatform && (
+							<span className='media-item-details-picker-swatch' style={{ backgroundColor: ownPlatform.color }} />
+						)}
+						<span>{ownPlatform?.name || i18n.t('ownPlatform.list.none')}</span>
+					</span>
+					<span className='media-item-details-picker-action'>Select</span>
+				</button>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the group field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderGroupField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor='media-item-group'>
+					{i18n.t('mediaItem.details.placeholders.group')}
+				</label>
+				<button
+					id='media-item-group'
+					type='button'
+					className='media-item-details-picker-button'
+					onClick={this.props.requestGroupSelection}>
+					<span className='media-item-details-picker-value'>
+						{mediaItem.group?.name || i18n.t('group.list.none')}
+					</span>
+					<span className='media-item-details-picker-action'>Select</span>
+				</button>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the order-in-group field only when a group is selected
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderOrderInGroupField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		if(!mediaItem.group) {
+			return null;
+		}
+
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor='media-item-order-in-group'>
+					{i18n.t('mediaItem.details.placeholders.orderInGroup')}
+				</label>
+				<input
+					id='media-item-order-in-group'
+					className='media-item-details-input'
+					type='number'
+					value={this.numberToInputValue(mediaItem.orderInGroup)}
+					onChange={(event) => {
+						this.setFormField('orderInGroup', this.inputValueToNumber(event.target.value));
+					}}
+				/>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the user comment field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderUserCommentField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor='media-item-user-comment'>
+					{i18n.t('mediaItem.details.placeholders.userComment')}
+				</label>
+				<textarea
+					id='media-item-user-comment'
+					className='media-item-details-textarea'
+					value={mediaItem.userComment || ''}
+					onChange={(event) => {
+						this.setFormField('userComment', event.target.value || undefined);
+					}}
+				/>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the completion dates field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderCompletionDatesField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		const completionDates = mediaItem.completedOn ? mediaItem.completedOn : [];
+
+		return (
+			<div className={fieldClassName}>
+				<p className='media-item-details-label'>
+					{i18n.t('mediaItem.details.placeholders.completedOn')}
+				</p>
+				<div className='media-item-details-completion-list'>
+					{completionDates.length === 0 && (
+						<p className='media-item-details-inline-hint'>No dates added yet</p>
+					)}
+					{completionDates.map((completedOn, index) => {
+						return (
+							<div className='media-item-details-completion-row' key={`completed-on-${index}`}>
+								<input
+									id={`media-item-completed-on-${index}`}
+									className='media-item-details-input'
+									type='date'
+									value={this.dateToInputValue(completedOn)}
+									onChange={(event) => {
+										this.updateCompletionDate(index, event.target.value);
+									}}
+								/>
+								<button
+									type='button'
+									className='media-item-details-button media-item-details-button-secondary media-item-details-small-button'
+									onClick={() => {
+										this.removeCompletionDate(index);
+									}}>
+									Remove
+								</button>
+							</div>
+						);
+					})}
+					<button
+						type='button'
+						className='media-item-details-button media-item-details-button-secondary media-item-details-inline-button'
+						onClick={() => {
+							this.addCompletionDate();
+						}}>
+						Add date
+					</button>
+				</div>
+			</div>
 		);
 	}
 
@@ -436,258 +844,6 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 	}
 
 	/**
-	 * Renders the description field
-	 * @param mediaItem current media item
-	 * @returns the component
-	 */
-	private renderDescriptionField(mediaItem: MediaItemDetailsFormValues): ReactNode {
-		return (
-			<>
-				<label className='media-item-details-label' htmlFor='media-item-description'>
-					{i18n.t('mediaItem.details.placeholders.description')}
-				</label>
-				<textarea
-					id='media-item-description'
-					className='media-item-details-textarea'
-					value={mediaItem.description || ''}
-					onChange={(event) => {
-						this.setFormField('description', event.target.value || undefined);
-					}}
-				/>
-			</>
-		);
-	}
-
-	/**
-	 * Renders the release date field
-	 * @param mediaItem current media item
-	 * @returns the component
-	 */
-	private renderReleaseDateField(mediaItem: MediaItemDetailsFormValues): ReactNode {
-		return (
-			<>
-				<label className='media-item-details-label' htmlFor='media-item-release-date'>
-					{i18n.t('mediaItem.details.placeholders.releaseDate')}
-				</label>
-				<input
-					id='media-item-release-date'
-					className='media-item-details-input'
-					type='date'
-					value={this.dateToInputValue(mediaItem.releaseDate)}
-					onChange={(event) => {
-						this.setFormField('releaseDate', this.inputValueToDate(event.target.value));
-					}}
-				/>
-			</>
-		);
-	}
-
-	/**
-	 * Renders the common genres field
-	 * @param mediaItem current media item
-	 * @returns the component
-	 */
-	private renderGenresField(mediaItem: MediaItemDetailsFormValues): ReactNode {
-		return this.renderArrayTextInputField(
-			'media-item-genres',
-			i18n.t('mediaItem.details.placeholders.genres'),
-			mediaItem.genres,
-			(values) => {
-				this.setFormField('genres', values);
-			}
-		);
-	}
-
-	/**
-	 * Renders the importance field
-	 * @param mediaItem current media item
-	 * @returns the component
-	 */
-	private renderImportanceField(mediaItem: MediaItemDetailsFormValues): ReactNode {
-		return (
-			<>
-				<label className='media-item-details-label' htmlFor='media-item-importance'>
-					{i18n.t('mediaItem.details.prompts.importance')}
-				</label>
-				<select
-					id='media-item-importance'
-					className='media-item-details-select'
-					value={mediaItem.importance}
-					onChange={(event) => {
-						this.setFormField('importance', event.target.value as MediaItemInternal['importance']);
-					}}>
-					{MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES.map((importance) => {
-						return (
-							<option key={importance} value={importance}>
-								{i18n.t(`mediaItem.common.importance.${importance}`)}
-							</option>
-						);
-					})}
-				</select>
-			</>
-		);
-	}
-
-	/**
-	 * Renders the own platform field
-	 * @param mediaItem current media item
-	 * @returns the component
-	 */
-	private renderOwnPlatformField(mediaItem: MediaItemDetailsFormValues): ReactNode {
-		const ownPlatform = mediaItem.ownPlatform;
-
-		return (
-			<>
-				<label className='media-item-details-label' htmlFor='media-item-own-platform'>
-					{i18n.t('mediaItem.details.placeholders.ownPlatform')}
-				</label>
-				<button
-					id='media-item-own-platform'
-					type='button'
-					className='media-item-details-picker-button'
-					onClick={this.props.requestOwnPlatformSelection}>
-					<span className='media-item-details-picker-value'>
-						{ownPlatform && (
-							<span className='media-item-details-picker-swatch' style={{ backgroundColor: ownPlatform.color }} />
-						)}
-						<span>{ownPlatform?.name || i18n.t('ownPlatform.list.none')}</span>
-					</span>
-					<span className='media-item-details-picker-action'>Select</span>
-				</button>
-			</>
-		);
-	}
-
-	/**
-	 * Renders the group field
-	 * @param mediaItem current media item
-	 * @returns the component
-	 */
-	private renderGroupField(mediaItem: MediaItemDetailsFormValues): ReactNode {
-		return (
-			<>
-				<label className='media-item-details-label' htmlFor='media-item-group'>
-					{i18n.t('mediaItem.details.placeholders.group')}
-				</label>
-				<button
-					id='media-item-group'
-					type='button'
-					className='media-item-details-picker-button'
-					onClick={this.props.requestGroupSelection}>
-					<span className='media-item-details-picker-value'>
-						{mediaItem.group?.name || i18n.t('group.list.none')}
-					</span>
-					<span className='media-item-details-picker-action'>Select</span>
-				</button>
-			</>
-		);
-	}
-
-	/**
-	 * Renders the order-in-group field only when a group is selected
-	 * @param mediaItem current media item
-	 * @returns the component
-	 */
-	private renderOrderInGroupField(mediaItem: MediaItemDetailsFormValues): ReactNode {
-		if(!mediaItem.group) {
-			return null;
-		}
-
-		return (
-			<>
-				<label className='media-item-details-label' htmlFor='media-item-order-in-group'>
-					{i18n.t('mediaItem.details.placeholders.orderInGroup')}
-				</label>
-				<input
-					id='media-item-order-in-group'
-					className='media-item-details-input'
-					type='number'
-					value={this.numberToInputValue(mediaItem.orderInGroup)}
-					onChange={(event) => {
-						this.setFormField('orderInGroup', this.inputValueToNumber(event.target.value));
-					}}
-				/>
-			</>
-		);
-	}
-
-	/**
-	 * Renders the user comment field
-	 * @param mediaItem current media item
-	 * @returns the component
-	 */
-	private renderUserCommentField(mediaItem: MediaItemDetailsFormValues): ReactNode {
-		return (
-			<>
-				<label className='media-item-details-label' htmlFor='media-item-user-comment'>
-					{i18n.t('mediaItem.details.placeholders.userComment')}
-				</label>
-				<textarea
-					id='media-item-user-comment'
-					className='media-item-details-textarea'
-					value={mediaItem.userComment || ''}
-					onChange={(event) => {
-						this.setFormField('userComment', event.target.value || undefined);
-					}}
-				/>
-			</>
-		);
-	}
-
-	/**
-	 * Renders the completion dates field
-	 * @param mediaItem current media item
-	 * @returns the component
-	 */
-	private renderCompletionDatesField(mediaItem: MediaItemDetailsFormValues): ReactNode {
-		const completionDates = mediaItem.completedOn ? mediaItem.completedOn : [];
-
-		return (
-			<>
-				<label className='media-item-details-label'>
-					{i18n.t('mediaItem.details.placeholders.completedOn')}
-				</label>
-				<div className='media-item-details-completion-list'>
-					{completionDates.length === 0 && (
-						<p className='media-item-details-inline-hint'>No dates added yet</p>
-					)}
-					{completionDates.map((completedOn, index) => {
-						return (
-							<div className='media-item-details-completion-row' key={`completed-on-${index}`}>
-								<input
-									id={`media-item-completed-on-${index}`}
-									className='media-item-details-input'
-									type='date'
-									value={this.dateToInputValue(completedOn)}
-									onChange={(event) => {
-										this.updateCompletionDate(index, event.target.value);
-									}}
-								/>
-								<button
-									type='button'
-									className='media-item-details-button media-item-details-button-secondary media-item-details-small-button'
-									onClick={() => {
-										this.removeCompletionDate(index);
-									}}>
-									Remove
-								</button>
-							</div>
-						);
-					})}
-					<button
-						type='button'
-						className='media-item-details-button media-item-details-button-secondary media-item-details-inline-button'
-						onClick={() => {
-							this.addCompletionDate();
-						}}>
-						Add date
-					</button>
-				</div>
-			</>
-		);
-	}
-
-	/**
 	 * Renders fields specific to current media item type
 	 * @param mediaItem the current media item values
 	 * @returns the fields
@@ -698,18 +854,20 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 				const book = mediaItem as BookInternal;
 				return (
 					<>
-						<label className='media-item-details-label' htmlFor='media-item-pages-number'>
-							{i18n.t('mediaItem.details.placeholders.duration.BOOK')}
-						</label>
-						<input
-							id='media-item-pages-number'
-							className='media-item-details-input'
-							type='number'
-							value={this.numberToInputValue(book.pagesNumber)}
-							onChange={(event) => {
-								this.setFormField('pagesNumber', this.inputValueToNumber(event.target.value));
-							}}
-						/>
+						<div className='media-item-details-field'>
+							<label className='media-item-details-label' htmlFor='media-item-pages-number'>
+								{i18n.t('mediaItem.details.placeholders.duration.BOOK')}
+							</label>
+							<input
+								id='media-item-pages-number'
+								className='media-item-details-input'
+								type='number'
+								value={this.numberToInputValue(book.pagesNumber)}
+								onChange={(event) => {
+									this.setFormField('pagesNumber', this.inputValueToNumber(event.target.value));
+								}}
+							/>
+						</div>
 
 						{this.renderArrayTextInputField(
 							'media-item-book-authors',
@@ -717,7 +875,8 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 							book.authors,
 							(values) => {
 								this.setFormField('authors', values);
-							}
+							},
+							'media-item-details-field'
 						)}
 					</>
 				);
@@ -727,18 +886,20 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 				const movie = mediaItem as MovieInternal;
 				return (
 					<>
-						<label className='media-item-details-label' htmlFor='media-item-duration-minutes'>
-							{i18n.t('mediaItem.details.placeholders.duration.MOVIE')}
-						</label>
-						<input
-							id='media-item-duration-minutes'
-							className='media-item-details-input'
-							type='number'
-							value={this.numberToInputValue(movie.durationMinutes)}
-							onChange={(event) => {
-								this.setFormField('durationMinutes', this.inputValueToNumber(event.target.value));
-							}}
-						/>
+						<div className='media-item-details-field'>
+							<label className='media-item-details-label' htmlFor='media-item-duration-minutes'>
+								{i18n.t('mediaItem.details.placeholders.duration.MOVIE')}
+							</label>
+							<input
+								id='media-item-duration-minutes'
+								className='media-item-details-input'
+								type='number'
+								value={this.numberToInputValue(movie.durationMinutes)}
+								onChange={(event) => {
+									this.setFormField('durationMinutes', this.inputValueToNumber(event.target.value));
+								}}
+							/>
+						</div>
 
 						{this.renderArrayTextInputField(
 							'media-item-movie-directors',
@@ -746,7 +907,8 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 							movie.directors,
 							(values) => {
 								this.setFormField('directors', values);
-							}
+							},
+							'media-item-details-field'
 						)}
 					</>
 				);
@@ -758,18 +920,20 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 
 				return (
 					<>
-						<label className='media-item-details-label' htmlFor='media-item-episode-runtime'>
-							{i18n.t('mediaItem.details.placeholders.duration.TV_SHOW')}
-						</label>
-						<input
-							id='media-item-episode-runtime'
-							className='media-item-details-input'
-							type='number'
-							value={this.numberToInputValue(tvShow.averageEpisodeRuntimeMinutes)}
-							onChange={(event) => {
-								this.setFormField('averageEpisodeRuntimeMinutes', this.inputValueToNumber(event.target.value));
-							}}
-						/>
+						<div className='media-item-details-field'>
+							<label className='media-item-details-label' htmlFor='media-item-episode-runtime'>
+								{i18n.t('mediaItem.details.placeholders.duration.TV_SHOW')}
+							</label>
+							<input
+								id='media-item-episode-runtime'
+								className='media-item-details-input'
+								type='number'
+								value={this.numberToInputValue(tvShow.averageEpisodeRuntimeMinutes)}
+								onChange={(event) => {
+									this.setFormField('averageEpisodeRuntimeMinutes', this.inputValueToNumber(event.target.value));
+								}}
+							/>
+						</div>
 
 						{this.renderArrayTextInputField(
 							'media-item-tv-show-creators',
@@ -777,48 +941,53 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 							tvShow.creators,
 							(values) => {
 								this.setFormField('creators', values);
-							}
+							},
+							'media-item-details-field'
 						)}
 
-						<label className='media-item-details-label' htmlFor='media-item-tv-show-seasons-handler'>
-							{i18n.t('mediaItem.details.placeholders.seasons')}
-						</label>
-						<button
-							id='media-item-tv-show-seasons-handler'
-							type='button'
-							className='media-item-details-button media-item-details-button-secondary media-item-details-inline-button'
-							onClick={() => {
-								this.props.handleTvShowSeasons(tvShow.seasons);
-							}}>
-							{i18n.t('tvShowSeason.list.title')}
-						</button>
-						<p className='media-item-details-inline-hint'>{seasonsSummary}</p>
+						<div className='media-item-details-field media-item-details-field-span-2'>
+							<label className='media-item-details-label' htmlFor='media-item-tv-show-seasons-handler'>
+								{i18n.t('mediaItem.details.placeholders.seasons')}
+							</label>
+							<button
+								id='media-item-tv-show-seasons-handler'
+								type='button'
+								className='media-item-details-button media-item-details-button-secondary media-item-details-inline-button'
+								onClick={() => {
+									this.props.handleTvShowSeasons(tvShow.seasons);
+								}}>
+								{i18n.t('tvShowSeason.list.title')}
+							</button>
+							<p className='media-item-details-inline-hint'>{seasonsSummary}</p>
+						</div>
 
-						<label className='media-item-details-checkbox-row' htmlFor='media-item-in-production'>
-							<input
-								id='media-item-in-production'
-								className='media-item-details-checkbox'
-								type='checkbox'
-								checked={Boolean(tvShow.inProduction)}
-								onChange={(event) => {
-									const inProduction = event.target.checked;
-									this.setState((prevState) => {
-										const prevTvShow = prevState.formValues as TvShowInternal;
-										return {
-											formValues: {
-												...prevTvShow,
-												inProduction: inProduction,
-												nextEpisodeAirDate: inProduction ? prevTvShow.nextEpisodeAirDate : undefined
-											}
-										};
-									});
-								}}
-							/>
-							<span className='media-item-details-checkbox-label'>{i18n.t('mediaItem.details.placeholders.inProduction')}</span>
-						</label>
+						<div className='media-item-details-field media-item-details-field-span-2'>
+							<label className='media-item-details-checkbox-row' htmlFor='media-item-in-production'>
+								<input
+									id='media-item-in-production'
+									className='media-item-details-checkbox'
+									type='checkbox'
+									checked={Boolean(tvShow.inProduction)}
+									onChange={(event) => {
+										const inProduction = event.target.checked;
+										this.setState((prevState) => {
+											const prevTvShow = prevState.formValues as TvShowInternal;
+											return {
+												formValues: {
+													...prevTvShow,
+													inProduction: inProduction,
+													nextEpisodeAirDate: inProduction ? prevTvShow.nextEpisodeAirDate : undefined
+												}
+											};
+										});
+									}}
+								/>
+								<span className='media-item-details-checkbox-label'>{i18n.t('mediaItem.details.placeholders.inProduction')}</span>
+							</label>
+						</div>
 
 						{tvShow.inProduction && (
-							<>
+							<div className='media-item-details-field'>
 								<label className='media-item-details-label' htmlFor='media-item-next-episode-air-date'>
 									{i18n.t('mediaItem.details.placeholders.nextEpisodeAirDate')}
 								</label>
@@ -831,7 +1000,7 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 										this.setFormField('nextEpisodeAirDate', this.inputValueToDate(event.target.value));
 									}}
 								/>
-							</>
+							</div>
 						)}
 					</>
 				);
@@ -841,18 +1010,20 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 				const videogame = mediaItem as VideogameInternal;
 				return (
 					<>
-						<label className='media-item-details-label' htmlFor='media-item-average-length'>
-							{i18n.t('mediaItem.details.placeholders.duration.VIDEOGAME')}
-						</label>
-						<input
-							id='media-item-average-length'
-							className='media-item-details-input'
-							type='number'
-							value={this.numberToInputValue(videogame.averageLengthHours)}
-							onChange={(event) => {
-								this.setFormField('averageLengthHours', this.inputValueToNumber(event.target.value));
-							}}
-						/>
+						<div className='media-item-details-field'>
+							<label className='media-item-details-label' htmlFor='media-item-average-length'>
+								{i18n.t('mediaItem.details.placeholders.duration.VIDEOGAME')}
+							</label>
+							<input
+								id='media-item-average-length'
+								className='media-item-details-input'
+								type='number'
+								value={this.numberToInputValue(videogame.averageLengthHours)}
+								onChange={(event) => {
+									this.setFormField('averageLengthHours', this.inputValueToNumber(event.target.value));
+								}}
+							/>
+						</div>
 
 						{this.renderArrayTextInputField(
 							'media-item-videogame-developers',
@@ -860,7 +1031,8 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 							videogame.developers,
 							(values) => {
 								this.setFormField('developers', values);
-							}
+							},
+							'media-item-details-field'
 						)}
 
 						{this.renderArrayTextInputField(
@@ -869,7 +1041,8 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 							videogame.publishers,
 							(values) => {
 								this.setFormField('publishers', values);
-							}
+							},
+							'media-item-details-field'
 						)}
 
 						{this.renderArrayTextInputField(
@@ -878,7 +1051,8 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 							videogame.platforms,
 							(values) => {
 								this.setFormField('platforms', values);
-							}
+							},
+							'media-item-details-field'
 						)}
 					</>
 				);
@@ -895,11 +1069,18 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 	 * @param label field label
 	 * @param values field values
 	 * @param onChange change handler
+	 * @param fieldClassName layout class name
 	 * @returns the component
 	 */
-	private renderArrayTextInputField(id: string, label: string, values: string[] | undefined, onChange: (newValues: string[] | undefined) => void): ReactNode {
+	private renderArrayTextInputField(
+		id: string,
+		label: string,
+		values: string[] | undefined,
+		onChange: (newValues: string[] | undefined) => void,
+		fieldClassName: string = 'media-item-details-field'
+	): ReactNode {
 		return (
-			<>
+			<div className={fieldClassName}>
 				<label className='media-item-details-label' htmlFor={id}>
 					{label}
 				</label>
@@ -912,12 +1093,12 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 						onChange(this.inputValueToInlineText(event.target.value));
 					}}
 				/>
-			</>
+			</div>
 		);
 	}
 
 	/**
-	 * Builds the action buttons for the media image row
+	 * Builds the action buttons for the sidebar shortcuts
 	 * @param mediaItem current media item
 	 * @returns action buttons
 	 */

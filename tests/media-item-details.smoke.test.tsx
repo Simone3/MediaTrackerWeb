@@ -184,7 +184,7 @@ describe('MediaItemDetailsScreenComponent', () => {
 		expect(screen.getByAltText('Dune cover')).toBeInTheDocument();
 		expect(screen.getByLabelText('Owned at')).toHaveTextContent('None');
 		expect(screen.getByLabelText('Group')).toHaveTextContent('None');
-		expect(screen.getByText('Completed on')).toBeInTheDocument();
+		expect(screen.getAllByText('Completed on')).toHaveLength(2);
 
 		rerender(createScreen({
 			mediaItem,
@@ -194,6 +194,26 @@ describe('MediaItemDetailsScreenComponent', () => {
 
 		expect(screen.getByLabelText('Owned at')).toHaveTextContent('Kindle');
 		expect(screen.getByLabelText('Group')).toHaveTextContent('Sci-Fi Saga');
+	});
+
+	test('renders the dark media-style shell sections and cleans up the body class', () => {
+		const { unmount } = render(createScreen({
+			mediaItem: {
+				...DEFAULT_BOOK,
+				name: 'Dune'
+			}
+		}));
+
+		expect(document.body).toHaveClass('app-dark-screen-active');
+		expect(screen.getByRole('heading', { name: 'Quick actions' })).toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: 'Basics' })).toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: 'Media profile' })).toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: 'Collection' })).toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: 'Progress' })).toBeInTheDocument();
+
+		unmount();
+
+		expect(document.body).not.toHaveClass('app-dark-screen-active');
 	});
 
 	test('hydrates selected own platform on mount and saves it', async() => {
