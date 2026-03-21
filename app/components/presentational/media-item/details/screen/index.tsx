@@ -888,32 +888,34 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 						</div>
 
 						<div className='media-item-details-field media-item-details-field-span-2'>
-							<label className='media-item-details-label' htmlFor='media-item-in-production'>
-								{i18n.t('mediaItem.details.placeholders.production')}
-							</label>
 							<div className='media-item-details-tv-show-inline-row media-item-details-tv-show-production-row'>
-								<label className='media-item-details-checkbox-row' htmlFor='media-item-in-production'>
-									<input
-										id='media-item-in-production'
-										className='media-item-details-checkbox'
-										type='checkbox'
-										checked={Boolean(tvShow.inProduction)}
-										onChange={(event) => {
-											const inProduction = event.target.checked;
-											this.setState((prevState) => {
-												const prevTvShow = prevState.formValues as TvShowInternal;
-												return {
-													formValues: {
-														...prevTvShow,
-														inProduction: inProduction,
-														nextEpisodeAirDate: inProduction ? prevTvShow.nextEpisodeAirDate : undefined
-													}
-												};
-											});
-										}}
-									/>
-									<span className='media-item-details-checkbox-label'>{i18n.t('mediaItem.details.placeholders.inProduction')}</span>
-								</label>
+								<div className='media-item-details-tv-show-production-field'>
+									<label className='media-item-details-label' htmlFor='media-item-in-production'>
+										{i18n.t('mediaItem.details.placeholders.production')}
+									</label>
+									<label className='media-item-details-checkbox-row' htmlFor='media-item-in-production'>
+										<input
+											id='media-item-in-production'
+											className='media-item-details-checkbox'
+											type='checkbox'
+											checked={Boolean(tvShow.inProduction)}
+											onChange={(event) => {
+												const inProduction = event.target.checked;
+												this.setState((prevState) => {
+													const prevTvShow = prevState.formValues as TvShowInternal;
+													return {
+														formValues: {
+															...prevTvShow,
+															inProduction: inProduction,
+															nextEpisodeAirDate: inProduction ? prevTvShow.nextEpisodeAirDate : undefined
+														}
+													};
+												});
+											}}
+										/>
+										<span className='media-item-details-checkbox-label'>{i18n.t('mediaItem.details.placeholders.inProduction')}</span>
+									</label>
+								</div>
 
 								{tvShow.inProduction && (
 									<div className='media-item-details-tv-show-next-episode-field'>

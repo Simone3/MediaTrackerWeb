@@ -2316,13 +2316,23 @@ body.app-dark-screen-active .app-shell-content {
 }
 
 .media-item-details-tv-show-production-row {
-	align-items: flex-end;
+	align-items: flex-start;
+}
+
+.media-item-details-tv-show-production-field,
+.media-item-details-tv-show-next-episode-field {
+	display: grid;
+	gap: 8px;
+}
+
+.media-item-details-tv-show-production-field {
+	flex: 1 1 280px;
+	min-width: 220px;
+	max-width: 340px;
 }
 
 .media-item-details-tv-show-next-episode-field {
 	flex: 1 1 280px;
-	display: grid;
-	gap: 8px;
 	min-width: 220px;
 	max-width: 340px;
 }
