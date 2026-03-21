@@ -119,6 +119,8 @@
     - the rows sit directly on the screen background instead of inside an extra boxed panel, which keeps the layout closer to the categories list
     - media-item rows now fill the same shared content width as the categories list, and their left accent follows the status color while staying transparent for `NEW` items
     - the search bar is now always visible with the `Filter` button beside it, while still using the existing Redux search mode under the hood
+    - the search toolbar no longer wraps that form in an extra container box, and the `Search` / `Filter` buttons now use the same compact pill sizing
+    - the temporary view-group banner now uses the shared card surface without an extra left accent strip
     - the row highlight treatment now uses that same left accent color instead of a generic dark/black outline
     - the status chip now matches the three-dots chip size, and `NEW` items reuse the same neutral chrome as the options button
     - row text now shrinks correctly even for extremely long unbroken media-item names, preventing right-edge overflow
