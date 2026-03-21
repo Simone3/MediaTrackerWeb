@@ -1933,17 +1933,7 @@ body.app-dark-screen-active .app-shell-content {
 
 .media-item-details-heading {
 	display: grid;
-	gap: 12px;
 	min-width: 0;
-}
-
-.media-item-details-eyebrow {
-	margin: 0;
-	font-size: 0.8rem;
-	font-weight: 700;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-	color: #8ec0ff;
 }
 
 .media-item-details-title-row {
@@ -2059,8 +2049,8 @@ body.app-dark-screen-active .app-shell-content {
 
 .media-item-details-media-panel {
 	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
+	align-items: flex-start;
+	justify-content: flex-start;
 	gap: 20px;
 }
 
@@ -2088,9 +2078,10 @@ body.app-dark-screen-active .app-shell-content {
 }
 
 .media-item-details-image-wrapper {
-	flex: 0 0 160px;
-	width: 160px;
-	max-width: 100%;
+	flex: 0 1 auto;
+	display: flex;
+	width: fit-content;
+	max-width: calc(100% - 76px);
 	border-radius: 22px;
 	overflow: hidden;
 	border: 1px solid rgba(126, 150, 188, 0.16);
@@ -2100,17 +2091,19 @@ body.app-dark-screen-active .app-shell-content {
 
 .media-item-details-image {
 	display: block;
-	width: 100%;
-	aspect-ratio: 2 / 3;
-	object-fit: cover;
+	width: auto;
+	max-width: 100%;
+	height: auto;
+	max-height: calc((var(--media-item-details-action-count, 4) * 56px) + ((var(--media-item-details-action-count, 4) - 1) * 10px));
+	object-fit: contain;
 }
 
 .media-item-details-image-actions {
 	display: flex;
-	flex: 1 1 260px;
-	flex-wrap: wrap;
+	flex: 0 0 auto;
+	flex-direction: column;
 	gap: 10px;
-	align-items: center;
+	align-items: stretch;
 }
 
 .media-item-details-image-action {
@@ -3312,10 +3305,6 @@ body.app-dark-screen-active .loading-indicator-spinner {
 		border-radius: 22px;
 	}
 
-	.media-item-details-media-panel {
-		align-items: flex-start;
-	}
-
 	.media-item-details-grid {
 		grid-template-columns: 1fr;
 		gap: 14px;
@@ -3336,8 +3325,12 @@ body.app-dark-screen-active .loading-indicator-spinner {
 		width: 100%;
 	}
 
+	.media-item-details-image-wrapper {
+		max-width: calc(100% - 76px);
+	}
+
 	.media-item-details-image-actions {
-		width: 100%;
+		width: 56px;
 	}
 
 	.group-details-screen,

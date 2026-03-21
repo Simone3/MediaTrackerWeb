@@ -206,6 +206,7 @@ describe('MediaItemDetailsScreenComponent', () => {
 
 		expect(document.body).toHaveClass('app-dark-screen-active');
 		expect(screen.queryByRole('heading', { name: 'Quick actions' })).not.toBeInTheDocument();
+		expect(screen.queryByText('Books')).not.toBeInTheDocument();
 		expect(screen.getByRole('heading', { name: 'Basics' })).toBeInTheDocument();
 		expect(screen.getByRole('heading', { name: 'Media profile' })).toBeInTheDocument();
 		expect(screen.getByRole('heading', { name: 'Collection' })).toBeInTheDocument();

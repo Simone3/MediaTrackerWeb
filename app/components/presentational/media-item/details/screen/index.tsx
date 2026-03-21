@@ -1,4 +1,4 @@
-import React, { Component, KeyboardEvent, ReactNode } from 'react';
+import React, { CSSProperties, Component, KeyboardEvent, ReactNode } from 'react';
 import { config } from 'app/config/config';
 import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
@@ -103,14 +103,12 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 		} = this.state;
 		const isValid = this.isFormValid(formValues);
 		const title = formValues.id ? formValues.name : i18n.t(`mediaItem.details.title.new.${formValues.mediaType}`);
-		const mediaTypeLabel = i18n.t(`category.mediaTypes.${formValues.mediaType}`);
 
 		return (
 			<section className='media-item-details-screen'>
 				<div className='media-item-details-screen-content'>
 					<header className='media-item-details-hero'>
 						<div className='media-item-details-heading'>
-							<p className='media-item-details-eyebrow'>{mediaTypeLabel}</p>
 							<div className='media-item-details-title-row'>
 								<span className='media-item-details-icon-shell' aria-hidden={true}>
 									<MediaIconComponent mediaType={formValues.mediaType} className='media-item-details-icon' />
@@ -326,7 +324,9 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 		const mediaTypeLabel = i18n.t(`category.mediaTypes.${mediaItem.mediaType}`);
 
 		return (
-			<section className='media-item-details-panel media-item-details-media-panel'>
+			<section
+				className='media-item-details-panel media-item-details-media-panel'
+				style={{ '--media-item-details-action-count': buttons.length } as CSSProperties}>
 				<div className='media-item-details-image-wrapper'>
 					<img
 						className='media-item-details-image'

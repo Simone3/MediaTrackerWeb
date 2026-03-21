@@ -179,7 +179,7 @@
   - confirmed exit from the media-item form now discards the temporary Redux draft instead of carrying it past navigation
   - the details page now uses the same full-bleed dark shell language as the media items list instead of the older light card
   - the form is grouped into responsive section cards, while the artwork and external shortcut buttons now sit together in a top strip again instead of a left sidebar
-  - mobile keeps that top strip responsive by letting the action icons wrap under the artwork while the form sections stay full-width
+  - the poster now keeps its original aspect ratio and sizes itself against a vertical action-icon column on its right, with the old extra media-type eyebrow removed from the page header
 - Relevant files:
   - `app/components/containers/category/details/screen.ts`
   - `app/components/containers/media-item/details/screen.ts`
