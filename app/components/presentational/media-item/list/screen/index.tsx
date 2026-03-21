@@ -80,15 +80,15 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 							</button>}
 					</header>
 					<MediaItemsListContainer/>
+					{this.state.isMobileLayout &&
+						<FABComponent
+							text='+'
+							onPress={() => {
+								loadNewMediaItemDetails(category);
+							}}
+						/>}
 				</div>
 				<MediaItemFilterModalContainer/>
-				{this.state.isMobileLayout &&
-					<FABComponent
-						text='+'
-						onPress={() => {
-							loadNewMediaItemDetails(category);
-						}}
-					/>}
 				<LoadingIndicatorComponent
 					visible={isLoading}
 					fullScreen={false}

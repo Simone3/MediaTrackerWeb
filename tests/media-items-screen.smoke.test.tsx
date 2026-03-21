@@ -88,6 +88,7 @@ describe('MediaItemsListScreenComponent', () => {
 			/>
 		);
 
+		expect(document.querySelector('.media-items-screen-content .floating-action-button')).not.toBeNull();
 		expect(screen.queryByRole('button', { name: '+ Add movie' })).not.toBeInTheDocument();
 		expect(screen.getByText('1 item')).toBeInTheDocument();
 		expect(screen.queryByText('Movies')).not.toBeInTheDocument();

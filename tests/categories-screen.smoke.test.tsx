@@ -92,6 +92,7 @@ describe('CategoriesListScreenComponent', () => {
 			</Provider>
 		);
 
+		expect(document.querySelector('.categories-screen-content .floating-action-button')).not.toBeNull();
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: '+' }));
 

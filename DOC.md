@@ -218,6 +218,14 @@
   - confirmed exit from the media-item form now discards the temporary Redux draft instead of carrying it past navigation
   - the details page now uses the same full-bleed dark shell language as the media items list instead of the older light card
   - the form is grouped into responsive section cards, while the artwork and external shortcut buttons now sit together in a top strip again instead of a left sidebar
+- Mobile category and media-item bottom sheets were appearing underneath the shared FAB because the sheets lived inside the `*-screen-content` stacking context while the FAB was rendered outside it.
+  - Correct behavior on web now:
+    - the mobile FAB for categories and media items now renders inside the matching `*-screen-content` wrapper, so mobile context-menu sheets and filter overlays stack above it correctly
+  - Relevant files:
+    - `app/components/presentational/category/list/screen/index.tsx`
+    - `app/components/presentational/media-item/list/screen/index.tsx`
+    - `tests/categories-screen.smoke.test.tsx`
+    - `tests/media-items-screen.smoke.test.tsx`
   - the media block now uses a vertical shortcut list beside the poster, with the poster/shortcut group centered in the strip and the panel gap preserved across breakpoints
   - the poster is rendered without the old box chrome, stays centered in the left portion of the strip, and keeps the same fixed-height treatment while cropping proportionally if width gets tight
   - the old extra media-type eyebrow has been removed from the page header

@@ -66,12 +66,12 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 							</button>}
 					</header>
 					<CategoriesListContainer />
+					{this.state.isMobileLayout &&
+						<FABComponent
+							text='+'
+							onPress={loadNewCategoryDetails}
+						/>}
 				</div>
-				{this.state.isMobileLayout &&
-					<FABComponent
-						text='+'
-						onPress={loadNewCategoryDetails}
-					/>}
 				<LoadingIndicatorComponent
 					visible={this.props.isLoading}
 					fullScreen={false}
