@@ -196,6 +196,7 @@
     - on mobile, the form keeps enough bottom padding for the completion `Add date` button to stay above the fixed bottom navigation
     - on larger screens, the TV show seasons summary sits beside the `Seasons` button instead of under it
     - the TV show `Production` and `Next episode air date` fields now render as aligned peer fields on larger screens, with both labels and controls starting at the same height
+    - the `In production` checkbox shell now uses the same control height rhythm as the surrounding text/date fields
     - on larger screens, `Next episode air date` sits beside the `In production` toggle and still only renders while that toggle is enabled
   - Relevant files:
     - `app/components/presentational/media-item/details/screen/index.tsx`
