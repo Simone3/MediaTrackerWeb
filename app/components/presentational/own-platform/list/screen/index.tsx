@@ -3,11 +3,46 @@ import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/cate
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
-import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
+import { OwnPlatformIconInternal, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import ownPlatformIcon from 'app/resources/images/ic_input_own_platform.png';
+import platformAndroidIcon from 'app/resources/images/ic_platform_android.png';
+import platformAppleIcon from 'app/resources/images/ic_platform_apple.png';
+import platformBookIcon from 'app/resources/images/ic_platform_book.png';
+import platformDiscIcon from 'app/resources/images/ic_platform_disc.png';
+import platformDisneyIcon from 'app/resources/images/ic_platform_disney.png';
+import platformDownloadIcon from 'app/resources/images/ic_platform_download.png';
+import platformEpicIcon from 'app/resources/images/ic_platform_epic.png';
+import platformGogIcon from 'app/resources/images/ic_platform_gog.png';
+import platformHuluIcon from 'app/resources/images/ic_platform_hulu.png';
+import platformKindleIcon from 'app/resources/images/ic_platform_kindle.png';
+import platformNetflixIcon from 'app/resources/images/ic_platform_netflix.png';
+import platformOriginIcon from 'app/resources/images/ic_platform_origin.png';
+import platformPlaystationIcon from 'app/resources/images/ic_platform_playstation.png';
+import platformSteamIcon from 'app/resources/images/ic_platform_steam.png';
+import platformSwitchIcon from 'app/resources/images/ic_platform_switch.png';
+import platformUplayIcon from 'app/resources/images/ic_platform_uplay.png';
 import { i18n } from 'app/utilities/i18n';
 
 const OWN_PLATFORMS_SCREEN_ACCENT = '#74d6af';
+const ownPlatformIcons: Record<OwnPlatformIconInternal, string> = {
+	default: ownPlatformIcon,
+	android: platformAndroidIcon,
+	apple: platformAppleIcon,
+	book: platformBookIcon,
+	disc: platformDiscIcon,
+	disney: platformDisneyIcon,
+	download: platformDownloadIcon,
+	epic: platformEpicIcon,
+	gog: platformGogIcon,
+	hulu: platformHuluIcon,
+	kindle: platformKindleIcon,
+	netflix: platformNetflixIcon,
+	origin: platformOriginIcon,
+	playstation: platformPlaystationIcon,
+	steam: platformSteamIcon,
+	switch: platformSwitchIcon,
+	uplay: platformUplayIcon
+};
 
 /**
  * Presentational component that contains the whole "own platforms list" screen, that lists all user own platforms
@@ -97,7 +132,7 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 									onClick={() => {
 										this.props.selectOwnPlatform(undefined);
 									}}>
-									<span className='entity-management-list-badge-shell entity-management-list-badge-shell-muted' aria-hidden={true}>
+									<span className='entity-management-list-badge-shell entity-management-list-badge-shell-muted entity-management-list-badge-shell-accent' aria-hidden={true}>
 										<span className='entity-management-list-badge'>-</span>
 									</span>
 									<span className='entity-management-list-main-copy'>
@@ -121,15 +156,14 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 											onClick={() => {
 												this.props.selectOwnPlatform(ownPlatform);
 											}}>
-											<span className='entity-management-list-badge-shell' aria-hidden={true}>
-												<span className='entity-management-list-badge'>{this.getBadgeLabel(ownPlatform.name, 'OP')}</span>
+											<span className='entity-management-list-badge-shell entity-management-list-badge-shell-accent' aria-hidden={true}>
+												<span
+													className='entity-management-list-badge-icon'
+													style={this.getOwnPlatformIconStyle(ownPlatform)}
+												/>
 											</span>
 											<span className='entity-management-list-main-copy'>
 												<span className='entity-management-list-name'>{ownPlatform.name}</span>
-												<span className='entity-management-list-meta'>
-													<span className='entity-management-list-swatch' style={{ backgroundColor: ownPlatform.color }} />
-													{i18n.t(`ownPlatform.icons.${ownPlatform.icon}`)}
-												</span>
 											</span>
 											{selected && <span className='entity-management-list-selection'>{i18n.t('common.state.selected')}</span>}
 										</button>
@@ -232,24 +266,15 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 	};
 
 	/**
-	 * Extracts a small badge label from the provided text
-	 * @param text the source text
-	 * @param fallback the fallback label
-	 * @returns the display label
+	 * Builds the masked icon styles for the provided own platform
+	 * @param ownPlatform the own platform
+	 * @returns the CSS properties
 	 */
-	private getBadgeLabel(text: string, fallback: string): string {
-		const compactLabel = text
-			.trim()
-			.split(/\s+/u)
-			.filter(Boolean)
-			.slice(0, 2)
-			.map((chunk) => {
-				return chunk[0];
-			})
-			.join('')
-			.toUpperCase();
-
-		return compactLabel || fallback;
+	private getOwnPlatformIconStyle(ownPlatform: OwnPlatformInternal): CSSProperties {
+		return {
+			'--entity-management-badge-icon-url': `url(${ownPlatformIcons[ownPlatform.icon]})`,
+			'--entity-management-badge-icon-color': ownPlatform.color
+		} as CSSProperties;
 	}
 
 	/**

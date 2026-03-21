@@ -115,6 +115,9 @@
     - all three screens now use the same full-bleed dark shell language as the media items list instead of the older boxed light layout
     - desktop now shows a header action button for creating a new group / platform / season, while mobile keeps the shared FAB pattern
     - the group and own-platform selectors still keep their `None` option, selected-row behavior, edit flow, delete confirmation, and fetch logic
+    - own-platform rows now show the actual platform icon tinted with the platform color in the leading badge, instead of repeating the icon name and color dot as a subtitle
+    - selected group and own-platform rows now keep their accent outline/shadow while hovered, instead of briefly falling back to the generic hover border
+    - the `None` own-platform row now reuses the same accent tint on its leading badge shell when selected
     - the seasons screen keeps the old edit / complete / delete / done flows, but now presents them as responsive card rows with progress pills and clearer action grouping
     - all three screens now share the same responsive card row styling, empty-state treatment, and loading overlay treatment as the newer media list pages
   - Relevant files:

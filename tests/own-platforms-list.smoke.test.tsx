@@ -39,6 +39,8 @@ describe('OwnPlatformsListScreenComponent', () => {
 			/>
 		);
 
+		expect(screen.queryByText('Nintendo Switch')).toBeNull();
+
 		const user = userEvent.setup();
 		await user.click(screen.getByText('Switch'));
 		await user.click(screen.getByRole('button', { name: 'Edit Switch' }));
