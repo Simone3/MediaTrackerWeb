@@ -2052,10 +2052,10 @@ body.app-dark-screen-active .app-shell-content {
 	--media-item-details-action-gap: 10px;
 	--media-item-details-action-grid-height: calc((2 * var(--media-item-details-action-size)) + var(--media-item-details-action-gap));
 	--media-item-details-image-height: calc(2 * var(--media-item-details-action-grid-height));
-	display: grid;
-	grid-template-columns: minmax(0, 1fr) auto;
+	display: flex;
 	align-items: center;
-	column-gap: 24px;
+	justify-content: center;
+	gap: 24px;
 }
 
 .media-item-details-panel::before {
@@ -2082,20 +2082,18 @@ body.app-dark-screen-active .app-shell-content {
 }
 
 .media-item-details-image-wrapper {
+	flex: 0 1 auto;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	min-width: 0;
-	width: min(100%, calc(var(--media-item-details-image-height) * 2 / 3));
 	height: var(--media-item-details-image-height);
-	justify-self: center;
-	align-self: center;
 	overflow: hidden;
 }
 
 .media-item-details-image {
 	display: block;
-	width: 100%;
+	width: auto;
 	height: 100%;
 	border-radius: 18px;
 	object-fit: cover;
@@ -2107,7 +2105,7 @@ body.app-dark-screen-active .app-shell-content {
 	grid-template-columns: repeat(2, var(--media-item-details-action-size));
 	grid-auto-rows: var(--media-item-details-action-size);
 	gap: var(--media-item-details-action-gap);
-	justify-self: end;
+	flex: 0 0 auto;
 }
 
 .media-item-details-image-action {
@@ -3310,7 +3308,7 @@ body.app-dark-screen-active .loading-indicator-spinner {
 	}
 
 	.media-item-details-media-panel {
-		column-gap: 20px;
+		gap: 20px;
 	}
 
 	.media-item-details-grid {
@@ -3331,6 +3329,10 @@ body.app-dark-screen-active .loading-indicator-spinner {
 	.media-item-details-search-button,
 	.media-item-details-inline-button {
 		width: 100%;
+	}
+
+	.media-item-details-image-actions {
+		grid-template-columns: 1fr;
 	}
 
 	.group-details-screen,

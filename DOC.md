@@ -181,6 +181,7 @@
   - the form is grouped into responsive section cards, while the artwork and external shortcut buttons now sit together in a top strip again instead of a left sidebar
   - the media block now uses a 2x2 shortcut grid on the right side of the strip, with panel padding and the gap between poster and shortcuts intentionally matched
   - the poster is rendered without the old box chrome, stays centered in the left portion of the strip, and keeps a fixed height equal to twice the shortcut-grid height while cropping proportionally if width gets tight
+  - on mobile that shortcut grid now collapses into a vertical icon list while the centered poster keeps the same fixed-height treatment
   - the old extra media-type eyebrow has been removed from the page header
 - Relevant files:
   - `app/components/containers/category/details/screen.ts`
