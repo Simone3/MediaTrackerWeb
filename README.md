@@ -2,26 +2,22 @@
 Just a Codex experiment for now.
 
 TODO:
-- fix UI page by page
-  - modernize
-  - icons are missing (forms, modals, etc.)
-  - also: responsive mobile versions!
-- fix bugs
-  - categories add FAB displayed under the confirm modal
-  - three-dots modal does not have icons
-  - media item accent when clicking three dots is still black
-  - back triggers the edited changes warning, but not clicking on the sidebar!
-  - remove circle in non-owned media items, just leave the empty box
 - add favicon
-- refactor to have common centralized components, if not already
-- check dev vs. prod configs - how to inject them in a webapp?
-- check if all strings are in lang-en
-- make all icons csvs?
-- upgrade all dependencies versions
-- remove all empty lines after block start
+- make all icons csvs
 - how is the current user saved? custom cookie or all handled by firebase sdk?
-- remove useless console logs
+- ai pass to check if all strings are in lang-en
+- ai pass to remove unused code
+- ai pass to remove unused css rules
+- ai pass to remove unused files/resources
+- ai pass to find possible components to generalize
+- ai pass to remove all empty lines after block start
+- ai pass to remove useless logs or comments
+- upgrade all dependencies versions
+- check for any console errors
+- check dev vs. prod configs - how to inject them in a webapp?
 - final manual code check
+- fully test on chrome/firefox
+- fully test on mobile
 - "merge" web and be to deploy them as a single app?
 - limit signups in prod firebase?
 
