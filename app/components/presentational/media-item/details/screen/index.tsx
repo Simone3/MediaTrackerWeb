@@ -888,6 +888,9 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 						</div>
 
 						<div className='media-item-details-field media-item-details-field-span-2'>
+							<label className='media-item-details-label' htmlFor='media-item-in-production'>
+								{i18n.t('mediaItem.details.placeholders.production')}
+							</label>
 							<div className='media-item-details-tv-show-inline-row media-item-details-tv-show-production-row'>
 								<label className='media-item-details-checkbox-row' htmlFor='media-item-in-production'>
 									<input

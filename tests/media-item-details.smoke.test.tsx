@@ -167,6 +167,7 @@ describe('MediaItemDetailsScreenComponent', () => {
 			mediaItem: tvShow
 		}));
 
+		expect(screen.getByText('Production')).toBeInTheDocument();
 		expect(screen.queryByLabelText('Next episode air date')).not.toBeInTheDocument();
 
 		const user = userEvent.setup();
