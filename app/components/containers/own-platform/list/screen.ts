@@ -7,11 +7,14 @@ import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: State): OwnPlatformsListScreenComponentInput => {
 	const listState = state.ownPlatformsList;
+
 	return {
 		isLoading: listState.status === 'FETCHING' || listState.status === 'DELETING',
 		requiresFetch: listState.status === 'REQUIRES_FETCH',
 		ownPlatforms: listState.ownPlatforms,
-		selectedOwnPlatformId: state.ownPlatformGlobal.selectedOwnPlatform?.id
+		selectedOwnPlatformId: state.ownPlatformGlobal.selectedOwnPlatform?.id,
+		showEmptyState: listState.status === 'FETCHED' && listState.ownPlatforms.length === 0,
+		showSkeletons: listState.ownPlatforms.length === 0 && (listState.status === 'REQUIRES_FETCH' || listState.status === 'FETCHING')
 	};
 };
 

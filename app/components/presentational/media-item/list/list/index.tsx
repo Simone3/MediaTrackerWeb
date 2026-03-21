@@ -51,6 +51,8 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 		const {
 			mediaItems,
 			category,
+			showEmptyState,
+			showSkeletons,
 			openFilters,
 			selectMediaItem,
 			highlightMediaItem,
@@ -68,9 +70,50 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 		} = this.props;
 		const emptyMessage = i18n.t(`mediaItem.list.empty.${category.mediaType}`);
 		const searchPlaceholder = i18n.t(`mediaItem.list.search.${category.mediaType}`);
+		let listContent: ReactNode;
+
+		if(showSkeletons) {
+			listContent = this.renderSkeletons();
+		}
+		else if(showEmptyState) {
+			listContent = this.renderNone(emptyMessage);
+		}
+		else {
+			listContent = (
+				<ul className='media-items-list-items'>
+					{mediaItems.map((mediaItem) => {
+						const highlighted = highlightedMediaItem?.id === mediaItem.id;
+
+						return (
+							<MediaItemRowComponent
+								key={mediaItem.id}
+								mediaItem={mediaItem}
+								highlighted={highlighted}
+								open={() => {
+									selectMediaItem(mediaItem);
+								}}
+								showOptionsMenu={(buttonRect) => {
+									this.setState({
+										menuAnchorRect: {
+											top: buttonRect.top,
+											bottom: buttonRect.bottom,
+											left: buttonRect.left,
+											right: buttonRect.right,
+											width: buttonRect.width,
+											height: buttonRect.height
+										}
+									});
+									highlightMediaItem(mediaItem);
+								}}
+							/>
+						);
+					})}
+				</ul>
+			);
+		}
 
 		return (
-			<section className='media-items-list'>
+			<section className='media-items-list' aria-busy={showSkeletons}>
 				<div className='media-items-list-header'>
 					<form
 						className='media-items-list-search media-items-list-search-inline'
@@ -115,39 +158,7 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 						</button>
 					</div>
 				)}
-				{mediaItems.length === 0 ?
-					this.renderNone(emptyMessage) :
-					(
-					<ul className='media-items-list-items'>
-						{mediaItems.map((mediaItem) => {
-							const highlighted = highlightedMediaItem?.id === mediaItem.id;
-
-							return (
-								<MediaItemRowComponent
-									key={mediaItem.id}
-									mediaItem={mediaItem}
-									highlighted={highlighted}
-									open={() => {
-										selectMediaItem(mediaItem);
-									}}
-									showOptionsMenu={(buttonRect) => {
-										this.setState({
-											menuAnchorRect: {
-												top: buttonRect.top,
-												bottom: buttonRect.bottom,
-												left: buttonRect.left,
-												right: buttonRect.right,
-												width: buttonRect.width,
-												height: buttonRect.height
-											}
-										});
-										highlightMediaItem(mediaItem);
-									}}
-								/>
-							);
-						})}
-					</ul>
-				)}
+				{listContent}
 				<MediaItemContextMenuComponent
 					mediaItem={highlightedMediaItem}
 					anchorRect={this.state.menuAnchorRect}
@@ -180,6 +191,41 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 				<p className='media-items-list-empty-title'>{emptyMessage}</p>
 				<p className='media-items-list-empty-copy'>{i18n.t('mediaItem.list.emptyHint')}</p>
 			</div>
+		);
+	}
+
+	/**
+	 * Helper method to render loading skeleton rows
+	 * @returns the node portion
+	 */
+	private renderSkeletons(): ReactElement {
+		const loadingRows = Array.from({ length: 4 }, (_, index) => {
+			return index;
+		});
+
+		return (
+			<ul className='media-items-list-items media-items-list-skeleton-items' aria-hidden={true}>
+				{loadingRows.map((loadingRow) => {
+					return (
+						<li key={loadingRow} className='media-item-row media-item-row-skeleton'>
+							<div className='media-item-row-main'>
+								<span className='media-item-row-platform'>
+									<span className='media-item-row-platform-shell list-skeleton-block media-items-list-skeleton-platform' />
+								</span>
+								<span className='media-item-row-data'>
+									<span className='list-skeleton-block media-items-list-skeleton-title' />
+									<span className='list-skeleton-block media-items-list-skeleton-detail' />
+									<span className='list-skeleton-block media-items-list-skeleton-detail media-items-list-skeleton-detail-short' />
+								</span>
+							</div>
+							<div className='media-item-row-secondary'>
+								<span className='media-item-row-status list-skeleton-block media-items-list-skeleton-status' />
+								<span className='media-item-row-options list-skeleton-block media-items-list-skeleton-options' />
+							</div>
+						</li>
+					);
+				})}
+			</ul>
 		);
 	}
 
@@ -236,6 +282,16 @@ export type MediaItemsListComponentInput = {
 	 * The current submitted search term, if any
 	 */
 	currentSearchTerm?: string;
+
+	/**
+	 * Whether the list should render the empty-state card
+	 */
+	showEmptyState: boolean;
+
+	/**
+	 * Whether the list should render loading skeletons
+	 */
+	showSkeletons: boolean;
 }
 
 /**

@@ -120,7 +120,7 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 								+ {i18n.t('ownPlatform.details.title.new')}
 							</button>}
 					</header>
-					<div className='entity-management-list'>
+					<div className='entity-management-list' aria-busy={this.props.showSkeletons}>
 						<ul className='entity-management-list-items'>
 							<li
 								className={`entity-management-list-row entity-management-list-row-standalone${selectedOwnPlatformId ? '' : ' entity-management-list-row-selected'}`}
@@ -141,57 +141,59 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 									{!selectedOwnPlatformId && <span className='entity-management-list-selection'>{i18n.t('common.state.selected')}</span>}
 								</button>
 							</li>
-							{ownPlatforms.map((ownPlatform: OwnPlatformInternal) => {
-								const selected = ownPlatform.id === selectedOwnPlatformId;
+							{this.props.showSkeletons ?
+								this.renderSkeletonRows() :
+								ownPlatforms.map((ownPlatform: OwnPlatformInternal) => {
+									const selected = ownPlatform.id === selectedOwnPlatformId;
 
-								return (
-									<li
-										key={ownPlatform.id}
-										className={`entity-management-list-row${selected ? ' entity-management-list-row-selected' : ''}`}
-										style={{ '--entity-management-row-accent': ownPlatform.color } as CSSProperties}>
-										<button
-											type='button'
-											className='entity-management-list-main'
-											aria-pressed={selected}
-											onClick={() => {
-												this.props.selectOwnPlatform(ownPlatform);
-											}}>
-											<span className='entity-management-list-badge-shell entity-management-list-badge-shell-accent' aria-hidden={true}>
-												<span
-													className='entity-management-list-badge-icon'
-													style={this.getOwnPlatformIconStyle(ownPlatform)}
-												/>
-											</span>
-											<span className='entity-management-list-main-copy'>
-												<span className='entity-management-list-name'>{ownPlatform.name}</span>
-											</span>
-											{selected && <span className='entity-management-list-selection'>{i18n.t('common.state.selected')}</span>}
-										</button>
-										<div className='entity-management-list-actions'>
+									return (
+										<li
+											key={ownPlatform.id}
+											className={`entity-management-list-row${selected ? ' entity-management-list-row-selected' : ''}`}
+											style={{ '--entity-management-row-accent': ownPlatform.color } as CSSProperties}>
 											<button
 												type='button'
-												className='entity-management-list-action'
+												className='entity-management-list-main'
+												aria-pressed={selected}
 												onClick={() => {
-													this.props.editOwnPlatform(ownPlatform);
-												}}
-												aria-label={`Edit ${ownPlatform.name}`}>
-												{i18n.t('ownPlatform.list.edit')}
+													this.props.selectOwnPlatform(ownPlatform);
+												}}>
+												<span className='entity-management-list-badge-shell entity-management-list-badge-shell-accent' aria-hidden={true}>
+													<span
+														className='entity-management-list-badge-icon'
+														style={this.getOwnPlatformIconStyle(ownPlatform)}
+													/>
+												</span>
+												<span className='entity-management-list-main-copy'>
+													<span className='entity-management-list-name'>{ownPlatform.name}</span>
+												</span>
+												{selected && <span className='entity-management-list-selection'>{i18n.t('common.state.selected')}</span>}
 											</button>
-											<button
-												type='button'
-												className='entity-management-list-action entity-management-list-action-danger'
-												onClick={() => {
-													this.requestDeleteOwnPlatform(ownPlatform);
-												}}
-												aria-label={`Delete ${ownPlatform.name}`}>
-												{i18n.t('ownPlatform.list.delete')}
-											</button>
-										</div>
-									</li>
-								);
-							})}
+											<div className='entity-management-list-actions'>
+												<button
+													type='button'
+													className='entity-management-list-action'
+													onClick={() => {
+														this.props.editOwnPlatform(ownPlatform);
+													}}
+													aria-label={`Edit ${ownPlatform.name}`}>
+													{i18n.t('ownPlatform.list.edit')}
+												</button>
+												<button
+													type='button'
+													className='entity-management-list-action entity-management-list-action-danger'
+													onClick={() => {
+														this.requestDeleteOwnPlatform(ownPlatform);
+													}}
+													aria-label={`Delete ${ownPlatform.name}`}>
+													{i18n.t('ownPlatform.list.delete')}
+												</button>
+											</div>
+										</li>
+									);
+								})}
 						</ul>
-						{ownPlatforms.length === 0 &&
+						{this.props.showEmptyState &&
 							<div className='entity-management-list-empty'>
 								<p className='entity-management-list-empty-title'>{i18n.t('ownPlatform.list.empty')}</p>
 								<p className='entity-management-list-empty-copy'>{i18n.t('ownPlatform.list.emptyHint')}</p>
@@ -253,6 +255,40 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 	}
 
 	/**
+	 * Renders placeholder rows while the own platforms list is loading for the first time
+	 * @returns the loading rows
+	 */
+	private renderSkeletonRows(): ReactNode {
+		const loadingRows = Array.from({ length: 3 }, (_, index) => {
+			return index;
+		});
+
+		return loadingRows.map((loadingRow) => {
+			return (
+				<li
+					key={`own-platform-loading-${loadingRow}`}
+					className='entity-management-list-row entity-management-list-skeleton-row'
+					style={{ '--entity-management-row-accent': OWN_PLATFORMS_SCREEN_ACCENT } as CSSProperties}
+					aria-hidden={true}>
+					<div className='entity-management-list-main'>
+						<span className='entity-management-list-badge-shell entity-management-list-badge-shell-accent list-skeleton-block entity-management-list-skeleton-badge-shell'>
+							<span className='list-skeleton-block entity-management-list-skeleton-badge' />
+						</span>
+						<span className='entity-management-list-main-copy'>
+							<span className='list-skeleton-block entity-management-list-skeleton-title' />
+						</span>
+						<span className='entity-management-list-selection list-skeleton-block entity-management-list-skeleton-pill' />
+					</div>
+					<div className='entity-management-list-actions'>
+						<span className='entity-management-list-action list-skeleton-block entity-management-list-skeleton-action' />
+						<span className='entity-management-list-action list-skeleton-block entity-management-list-skeleton-action' />
+					</div>
+				</li>
+			);
+		});
+	}
+
+	/**
 	 * Updates the responsive layout flag when the viewport changes
 	 */
 	private handleResize = (): void => {
@@ -309,6 +345,16 @@ export type OwnPlatformsListScreenComponentInput = {
 	 * The currently selected own platform ID if any
 	 */
 	selectedOwnPlatformId?: string;
+
+	/**
+	 * Whether the list should render the empty-state card
+	 */
+	showEmptyState: boolean;
+
+	/**
+	 * Whether the list should render loading skeleton rows
+	 */
+	showSkeletons: boolean;
 }
 
 /**

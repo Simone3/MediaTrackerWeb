@@ -31,6 +31,41 @@ export class CategoriesListComponent extends Component<CategoriesListComponentIn
 	}
 
 	/**
+	 * Helper method to render loading skeleton rows
+	 * @returns the node portion
+	 */
+	private renderSkeletons(): ReactElement {
+		const loadingRows = Array.from({ length: 4 }, (_, index) => {
+			return index;
+		});
+
+		return (
+			<ul className='categories-list-items categories-list-skeleton-items' aria-hidden={true}>
+				{loadingRows.map((loadingRow) => {
+					return (
+						<li key={loadingRow} className='categories-list-item categories-list-skeleton-row'>
+							<div className='category-row category-row-skeleton'>
+								<span className='category-row-accent list-skeleton-block categories-list-skeleton-accent' />
+								<div className='category-row-main'>
+									<div className='category-row-leading'>
+										<span className='category-row-icon-shell list-skeleton-block categories-list-skeleton-icon' />
+										<span className='category-row-copy categories-list-skeleton-copy'>
+											<span className='list-skeleton-block categories-list-skeleton-title' />
+										</span>
+									</div>
+								</div>
+								<div className='category-row-options'>
+									<span className='list-skeleton-block categories-list-skeleton-options-icon' />
+								</div>
+							</div>
+						</li>
+					);
+				})}
+			</ul>
+		);
+	}
+
+	/**
 	 * Helper method to render the no categories message
 	 * @returns the node portion
 	 */
@@ -51,50 +86,61 @@ export class CategoriesListComponent extends Component<CategoriesListComponentIn
 		const {
 			categories,
 			highlightedCategory,
+			showEmptyState,
+			showSkeletons,
 			selectCategory,
 			highlightCategory,
 			editCategory,
 			deleteCategory,
 			closeCategoryMenu
 		} = this.props;
+		let listContent: ReactNode;
+
+		if(showSkeletons) {
+			listContent = this.renderSkeletons();
+		}
+		else if(showEmptyState) {
+			listContent = this.renderNone();
+		}
+		else {
+			listContent = (
+				<ul className='categories-list-items'>
+					{categories.map((category: CategoryInternal) => {
+						const highlighted = highlightedCategory?.id === category.id;
+						const itemClassName = highlighted ? 'categories-list-item categories-list-item-highlighted' : 'categories-list-item';
+
+						return (
+							<li key={category.id} className={itemClassName}>
+								<CategoryRowComponent
+									category={category}
+									highlighted={highlighted}
+									open={() => {
+										selectCategory(category);
+									}}
+									showOptionsMenu={(buttonRect) => {
+										this.setState({
+											menuAnchorRect: {
+												top: buttonRect.top,
+												bottom: buttonRect.bottom,
+												left: buttonRect.left,
+												right: buttonRect.right,
+												width: buttonRect.width,
+												height: buttonRect.height
+											}
+										});
+										highlightCategory(category);
+									}}
+								/>
+							</li>
+						);
+					})}
+				</ul>
+			);
+		}
 
 		return (
-			<div className='categories-list'>
-				{categories.length === 0 ?
-					this.renderNone() :
-					(
-					<ul className='categories-list-items'>
-						{categories.map((category: CategoryInternal) => {
-							const highlighted = highlightedCategory?.id === category.id;
-							const itemClassName = highlighted ? 'categories-list-item categories-list-item-highlighted' : 'categories-list-item';
-
-							return (
-								<li key={category.id} className={itemClassName}>
-									<CategoryRowComponent
-										category={category}
-										highlighted={highlighted}
-										open={() => {
-											selectCategory(category);
-										}}
-										showOptionsMenu={(buttonRect) => {
-											this.setState({
-												menuAnchorRect: {
-													top: buttonRect.top,
-													bottom: buttonRect.bottom,
-													left: buttonRect.left,
-													right: buttonRect.right,
-													width: buttonRect.width,
-													height: buttonRect.height
-												}
-											});
-											highlightCategory(category);
-										}}
-									/>
-								</li>
-							);
-						})}
-					</ul>
-				)}
+			<div className='categories-list' aria-busy={showSkeletons}>
+				{listContent}
 				<CategoryContextMenuComponent
 					category={highlightedCategory}
 					anchorRect={this.state.menuAnchorRect}
@@ -125,6 +171,16 @@ export type CategoriesListComponentInput = {
 	 * The currently highlighted category, if any
 	 */
 	highlightedCategory: CategoryInternal | undefined;
+
+	/**
+	 * Whether the list should render the empty-state card
+	 */
+	showEmptyState: boolean;
+
+	/**
+	 * Whether the list should render loading skeletons
+	 */
+	showSkeletons: boolean;
 }
 
 /**

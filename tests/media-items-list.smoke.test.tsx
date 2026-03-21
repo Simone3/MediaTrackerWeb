@@ -39,6 +39,8 @@ describe('MediaItemsListComponent', () => {
 				currentViewGroup={undefined}
 				isSearchMode={false}
 				currentSearchTerm={undefined}
+				showEmptyState={false}
+				showSkeletons={false}
 				openSearch={openSearch}
 				submitSearch={submitSearch}
 				closeSearch={jest.fn()}
@@ -96,6 +98,8 @@ describe('MediaItemsListComponent', () => {
 				currentViewGroup={undefined}
 				isSearchMode={false}
 				currentSearchTerm={undefined}
+				showEmptyState={false}
+				showSkeletons={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -137,6 +141,8 @@ describe('MediaItemsListComponent', () => {
 				currentViewGroup={undefined}
 				isSearchMode={true}
 				currentSearchTerm={'old term'}
+				showEmptyState={false}
+				showSkeletons={false}
 				openSearch={jest.fn()}
 				submitSearch={submitSearch}
 				closeSearch={closeSearch}
@@ -165,6 +171,77 @@ describe('MediaItemsListComponent', () => {
 		expect(submitSearch).toHaveBeenCalledWith('Dune Messiah');
 		expect(closeSearch).toHaveBeenCalledTimes(1);
 		expect(screen.getByRole('searchbox', { name: 'Search books...' })).toBeInTheDocument();
+	});
+
+	test('renders loading skeletons until the empty result is confirmed', () => {
+		const category: CategoryInternal = {
+			id: 'category-id',
+			name: 'My Books',
+			mediaType: 'BOOK',
+			color: '#3f51b5'
+		};
+		const {
+			container,
+			rerender
+		} = render(
+			<MediaItemsListComponent
+				category={category}
+				mediaItems={[]}
+				highlightedMediaItem={undefined}
+				currentViewGroup={undefined}
+				isSearchMode={false}
+				currentSearchTerm={undefined}
+				showEmptyState={false}
+				showSkeletons={true}
+				openSearch={jest.fn()}
+				submitSearch={jest.fn()}
+				closeSearch={jest.fn()}
+				openFilters={jest.fn()}
+				selectMediaItem={jest.fn()}
+				highlightMediaItem={jest.fn()}
+				editMediaItem={jest.fn()}
+				deleteMediaItem={jest.fn()}
+				markMediaItemAsActive={jest.fn()}
+				markMediaItemAsComplete={jest.fn()}
+				markMediaItemAsRedo={jest.fn()}
+				viewMediaItemGroup={jest.fn()}
+				closeMediaItemMenu={jest.fn()}
+				exitViewGroupMode={jest.fn()}
+			/>
+		);
+
+		expect(screen.queryByText('No books')).not.toBeInTheDocument();
+		expect(container.querySelectorAll('.media-item-row-skeleton')).toHaveLength(4);
+
+		rerender(
+			<MediaItemsListComponent
+				category={category}
+				mediaItems={[]}
+				highlightedMediaItem={undefined}
+				currentViewGroup={undefined}
+				isSearchMode={false}
+				currentSearchTerm={undefined}
+				showEmptyState={true}
+				showSkeletons={false}
+				openSearch={jest.fn()}
+				submitSearch={jest.fn()}
+				closeSearch={jest.fn()}
+				openFilters={jest.fn()}
+				selectMediaItem={jest.fn()}
+				highlightMediaItem={jest.fn()}
+				editMediaItem={jest.fn()}
+				deleteMediaItem={jest.fn()}
+				markMediaItemAsActive={jest.fn()}
+				markMediaItemAsComplete={jest.fn()}
+				markMediaItemAsRedo={jest.fn()}
+				viewMediaItemGroup={jest.fn()}
+				closeMediaItemMenu={jest.fn()}
+				exitViewGroupMode={jest.fn()}
+			/>
+		);
+
+		expect(screen.getByText('No books')).toBeInTheDocument();
+		expect(container.querySelectorAll('.media-item-row-skeleton')).toHaveLength(0);
 	});
 
 	test('renders restored row metadata, platform icon and status icon', () => {
@@ -207,6 +284,8 @@ describe('MediaItemsListComponent', () => {
 				currentViewGroup={undefined}
 				isSearchMode={false}
 				currentSearchTerm={undefined}
+				showEmptyState={false}
+				showSkeletons={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -260,6 +339,8 @@ describe('MediaItemsListComponent', () => {
 				currentViewGroup={undefined}
 				isSearchMode={false}
 				currentSearchTerm={undefined}
+				showEmptyState={false}
+				showSkeletons={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -304,6 +385,8 @@ describe('MediaItemsListComponent', () => {
 				currentViewGroup={undefined}
 				isSearchMode={false}
 				currentSearchTerm={undefined}
+				showEmptyState={false}
+				showSkeletons={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -352,6 +435,8 @@ describe('MediaItemsListComponent', () => {
 				currentViewGroup={undefined}
 				isSearchMode={false}
 				currentSearchTerm={undefined}
+				showEmptyState={false}
+				showSkeletons={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -396,6 +481,8 @@ describe('MediaItemsListComponent', () => {
 				currentViewGroup={undefined}
 				isSearchMode={false}
 				currentSearchTerm={undefined}
+				showEmptyState={false}
+				showSkeletons={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}

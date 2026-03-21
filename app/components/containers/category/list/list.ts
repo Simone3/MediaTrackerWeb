@@ -5,9 +5,14 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: State): CategoriesListComponentInput => {
+	const categories = state.categoriesList.categories;
+	const status = state.categoriesList.status;
+
 	return {
-		categories: state.categoriesList.categories,
-		highlightedCategory: state.categoriesList.highlightedCategory
+		categories: categories,
+		highlightedCategory: state.categoriesList.highlightedCategory,
+		showEmptyState: status === 'FETCHED' && categories.length === 0,
+		showSkeletons: categories.length === 0 && (status === 'REQUIRES_FETCH' || status === 'FETCHING')
 	};
 };
 

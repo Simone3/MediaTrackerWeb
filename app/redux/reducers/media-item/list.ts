@@ -69,13 +69,12 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 			};
 		}
 
-		// When the app fails to fetch the media items, the status is reset and an empty list is loaded (an error is shown by the global handler)
+		// When the app fails to fetch the media items, the status is updated without clearing the last known list
 		case FAIL_FETCHING_MEDIA_ITEMS: {
 
 			return {
 				...state,
-				status: 'FETCHED',
-				mediaItems: []
+				status: 'FETCH_FAILED'
 			};
 		}
 

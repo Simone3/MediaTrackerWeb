@@ -311,6 +311,35 @@
     - `tests/categories-list.smoke.test.tsx`
     - `tests/media-items-list.smoke.test.tsx`
     - `tests/groups-list.smoke.test.tsx`
+- Fetchable category, media-item, group, and own-platform lists were treating "still loading" and "fetch failed" the same as a real empty result.
+  - Correct behavior on web now:
+    - those list UIs render skeleton rows only while an empty list is still waiting for its first/reload fetch
+    - the empty-state cards now appear only after a successful fetch confirms there are actually zero results
+    - failed fetches now keep the last known list data and store a dedicated `FETCH_FAILED` status so the UI no longer falls back to misleading empty cards
+    - the shared group/own-platform selector screens still keep their `None` row visible while the fetched rows are loading
+  - Relevant files:
+    - `app/components/containers/category/list/list.ts`
+    - `app/components/containers/media-item/list/list.ts`
+    - `app/components/containers/group/list/screen.ts`
+    - `app/components/containers/own-platform/list/screen.ts`
+    - `app/components/presentational/category/list/list/index.tsx`
+    - `app/components/presentational/media-item/list/list/index.tsx`
+    - `app/components/presentational/group/list/screen/index.tsx`
+    - `app/components/presentational/own-platform/list/screen/index.tsx`
+    - `app/redux/reducers/category/list.ts`
+    - `app/redux/reducers/media-item/list.ts`
+    - `app/redux/reducers/group/list.ts`
+    - `app/redux/reducers/own-platform/list.ts`
+    - `app/redux/state/category.ts`
+    - `app/redux/state/media-item.ts`
+    - `app/redux/state/group.ts`
+    - `app/redux/state/own-platform.ts`
+    - `app/web/styles.css`
+    - `tests/categories-list.smoke.test.tsx`
+    - `tests/media-items-list.smoke.test.tsx`
+    - `tests/groups-list.smoke.test.tsx`
+    - `tests/own-platforms-list.smoke.test.tsx`
+    - `tests/list-fetch-failure-state.test.ts`
 - Visible navigation `Back` buttons have been removed from the web screens in favor of the browser back button.
   - Correct behavior on web now:
     - category, media item, group, own platform, and TV show season screens no longer render explicit `Back` buttons

@@ -7,11 +7,14 @@ import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: State): GroupsListScreenComponentInput => {
 	const listState = state.groupsList;
+
 	return {
 		isLoading: listState.status === 'FETCHING' || listState.status === 'DELETING',
 		requiresFetch: listState.status === 'REQUIRES_FETCH',
 		groups: listState.groups,
-		selectedGroupId: state.groupGlobal.selectedGroup?.id
+		selectedGroupId: state.groupGlobal.selectedGroup?.id,
+		showEmptyState: listState.status === 'FETCHED' && listState.groups.length === 0,
+		showSkeletons: listState.groups.length === 0 && (listState.status === 'REQUIRES_FETCH' || listState.status === 'FETCHING')
 	};
 };
 

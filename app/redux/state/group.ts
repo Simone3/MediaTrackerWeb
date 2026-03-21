@@ -62,7 +62,7 @@ export type GroupDetailsState = {
 /**
  * The current status of the groups list
  */
-export type GroupsListStatus = 'REQUIRES_FETCH' | 'FETCHING' | 'FETCHED' | 'DELETING';
+export type GroupsListStatus = 'REQUIRES_FETCH' | 'FETCHING' | 'FETCHED' | 'FETCH_FAILED' | 'DELETING';
 
 /**
  * The current status of the group saving process

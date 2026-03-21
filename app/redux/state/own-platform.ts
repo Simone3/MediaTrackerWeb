@@ -62,7 +62,7 @@ export type OwnPlatformDetailsState = {
 /**
  * The current status of the own platforms list
  */
-export type OwnPlatformsListStatus = 'REQUIRES_FETCH' | 'FETCHING' | 'FETCHED' | 'DELETING';
+export type OwnPlatformsListStatus = 'REQUIRES_FETCH' | 'FETCHING' | 'FETCHED' | 'FETCH_FAILED' | 'DELETING';
 
 /**
  * The current status of the own platform saving process

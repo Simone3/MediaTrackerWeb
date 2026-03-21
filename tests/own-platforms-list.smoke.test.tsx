@@ -30,6 +30,8 @@ describe('OwnPlatformsListScreenComponent', () => {
 				requiresFetch={false}
 				ownPlatforms={ownPlatforms}
 				selectedOwnPlatformId={undefined}
+				showEmptyState={false}
+				showSkeletons={false}
 				fetchOwnPlatforms={jest.fn()}
 				selectOwnPlatform={selectOwnPlatform}
 				editOwnPlatform={editOwnPlatform}
@@ -51,5 +53,29 @@ describe('OwnPlatformsListScreenComponent', () => {
 		expect(selectOwnPlatform).toHaveBeenCalledWith(ownPlatforms[0]);
 		expect(editOwnPlatform).toHaveBeenCalledWith(ownPlatforms[0]);
 		expect(deleteOwnPlatform).toHaveBeenCalledWith(ownPlatforms[0]);
+	});
+
+	test('shows loading skeletons instead of the empty state while own platforms are still loading', () => {
+		const {
+			container
+		} = render(
+			<OwnPlatformsListScreenComponent
+				isLoading={false}
+				requiresFetch={true}
+				ownPlatforms={[]}
+				selectedOwnPlatformId={undefined}
+				showEmptyState={false}
+				showSkeletons={true}
+				fetchOwnPlatforms={jest.fn()}
+				selectOwnPlatform={jest.fn()}
+				editOwnPlatform={jest.fn()}
+				deleteOwnPlatform={jest.fn()}
+				loadNewOwnPlatformDetails={jest.fn()}
+				goBack={jest.fn()}
+			/>
+		);
+
+		expect(screen.queryByText('No platforms')).not.toBeInTheDocument();
+		expect(container.querySelectorAll('.entity-management-list-skeleton-row')).toHaveLength(3);
 	});
 });

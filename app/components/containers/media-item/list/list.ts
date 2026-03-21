@@ -24,13 +24,18 @@ const mapStateToProps = (state: State): MediaItemsListComponentInput => {
 		throw AppError.GENERIC.withDetails('Category cannot be null while rendering the media items list');
 	}
 
+	const mediaItems = state.mediaItemsList.mediaItems;
+	const status = state.mediaItemsList.status;
+
 	return {
 		category: state.categoryGlobal.selectedCategory,
-		mediaItems: state.mediaItemsList.mediaItems,
+		mediaItems: mediaItems,
 		highlightedMediaItem: state.mediaItemsList.highlightedMediaItem,
 		currentViewGroup: state.mediaItemsList.mode === 'VIEW_GROUP' ? state.mediaItemsList.viewGroup : undefined,
 		isSearchMode: state.mediaItemsList.mode === 'SEARCH',
-		currentSearchTerm: state.mediaItemsList.mode === 'SEARCH' ? state.mediaItemsList.searchTerm : undefined
+		currentSearchTerm: state.mediaItemsList.mode === 'SEARCH' ? state.mediaItemsList.searchTerm : undefined,
+		showEmptyState: status === 'FETCHED' && mediaItems.length === 0,
+		showSkeletons: mediaItems.length === 0 && (status === 'REQUIRES_FETCH' || status === 'FETCHING')
 	};
 };
 

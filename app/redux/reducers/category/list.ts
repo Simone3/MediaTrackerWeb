@@ -43,13 +43,12 @@ export const categoriesList = (state: CategoriesListState = initialState, action
 			};
 		}
 
-		// When the app fails to fetch the categories, the status is reset and an empty list is loaded (an error is shown by the global handler)
+		// When the app fails to fetch the categories, the status is updated without clearing the last known list
 		case FAIL_FETCHING_CATEGORIES: {
 
 			return {
 				...state,
-				status: 'FETCHED',
-				categories: []
+				status: 'FETCH_FAILED'
 			};
 		}
 

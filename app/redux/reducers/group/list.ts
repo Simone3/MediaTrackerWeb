@@ -44,13 +44,12 @@ export const groupsList = (state: GroupsListState = initialState, action: Action
 			};
 		}
 
-		// When the app fails to fetch the groups, the status is reset and an empty list is loaded (an error is shown by the global handler)
+		// When the app fails to fetch the groups, the status is updated without clearing the last known list
 		case FAIL_FETCHING_GROUPS: {
 
 			return {
 				...state,
-				status: 'FETCHED',
-				groups: []
+				status: 'FETCH_FAILED'
 			};
 		}
 

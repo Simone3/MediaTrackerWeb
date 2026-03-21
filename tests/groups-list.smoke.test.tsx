@@ -26,6 +26,8 @@ describe('GroupsListScreenComponent', () => {
 				requiresFetch={false}
 				groups={groups}
 				selectedGroupId={undefined}
+				showEmptyState={false}
+				showSkeletons={false}
 				fetchGroups={jest.fn()}
 				selectGroup={selectGroup}
 				editGroup={editGroup}
@@ -45,5 +47,29 @@ describe('GroupsListScreenComponent', () => {
 		expect(selectGroup).toHaveBeenCalledWith(groups[0]);
 		expect(editGroup).toHaveBeenCalledWith(groups[0]);
 		expect(deleteGroup).toHaveBeenCalledWith(groups[0]);
+	});
+
+	test('shows loading skeletons instead of the empty state while groups are still loading', () => {
+		const {
+			container
+		} = render(
+			<GroupsListScreenComponent
+				isLoading={false}
+				requiresFetch={true}
+				groups={[]}
+				selectedGroupId={undefined}
+				showEmptyState={false}
+				showSkeletons={true}
+				fetchGroups={jest.fn()}
+				selectGroup={jest.fn()}
+				editGroup={jest.fn()}
+				deleteGroup={jest.fn()}
+				loadNewGroupDetails={jest.fn()}
+				goBack={jest.fn()}
+			/>
+		);
+
+		expect(screen.queryByText('No groups')).not.toBeInTheDocument();
+		expect(container.querySelectorAll('.entity-management-list-skeleton-row')).toHaveLength(3);
 	});
 });

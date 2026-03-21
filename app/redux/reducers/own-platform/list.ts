@@ -44,13 +44,12 @@ export const ownPlatformsList = (state: OwnPlatformsListState = initialState, ac
 			};
 		}
 
-		// When the app fails to fetch the own platforms, the status is reset and an empty list is loaded (an error is shown by the global handler)
+		// When the app fails to fetch the own platforms, the status is updated without clearing the last known list
 		case FAIL_FETCHING_OWN_PLATFORMS: {
 
 			return {
 				...state,
-				status: 'FETCHED',
-				ownPlatforms: []
+				status: 'FETCH_FAILED'
 			};
 		}
 

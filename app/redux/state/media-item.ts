@@ -96,7 +96,7 @@ export type MediaItemDetailsState = {
 /**
  * The current status (e.g. allows to invalidate, show the loading indicator, etc.)
  */
-export type MediaItemsListStatus = 'REQUIRES_FETCH' | 'FETCHING' | 'FETCHED' | 'DELETING' | 'INLINE_UPDATING';
+export type MediaItemsListStatus = 'REQUIRES_FETCH' | 'FETCHING' | 'FETCHED' | 'FETCH_FAILED' | 'DELETING' | 'INLINE_UPDATING';
 
 /**
  * The current mode (e.g. allows to toggle between standard and search mode)

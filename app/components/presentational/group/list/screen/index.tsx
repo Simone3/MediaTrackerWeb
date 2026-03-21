@@ -85,7 +85,7 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 								+ {i18n.t('group.details.title.new')}
 							</button>}
 					</header>
-					<div className='entity-management-list'>
+					<div className='entity-management-list' aria-busy={this.props.showSkeletons}>
 						<ul className='entity-management-list-items'>
 							<li
 								className={`entity-management-list-row entity-management-list-row-standalone${selectedGroupId ? '' : ' entity-management-list-row-selected'}`}
@@ -106,54 +106,56 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 									{!selectedGroupId && <span className='entity-management-list-selection'>{i18n.t('common.state.selected')}</span>}
 								</button>
 							</li>
-							{groups.map((group: GroupInternal) => {
-								const selected = group.id === selectedGroupId;
+							{this.props.showSkeletons ?
+								this.renderSkeletonRows() :
+								groups.map((group: GroupInternal) => {
+									const selected = group.id === selectedGroupId;
 
-								return (
-									<li
-										key={group.id}
-										className={`entity-management-list-row${selected ? ' entity-management-list-row-selected' : ''}`}
-										style={{ '--entity-management-row-accent': GROUPS_SCREEN_ACCENT } as CSSProperties}>
-										<button
-											type='button'
-											className='entity-management-list-main'
-											aria-pressed={selected}
-											onClick={() => {
-												this.props.selectGroup(group);
-											}}>
-											<span className='entity-management-list-badge-shell' aria-hidden={true}>
-												<span className='entity-management-list-badge'>{this.getBadgeLabel(group.name, '#')}</span>
-											</span>
-											<span className='entity-management-list-main-copy'>
-												<span className='entity-management-list-name'>{group.name}</span>
-											</span>
-											{selected && <span className='entity-management-list-selection'>{i18n.t('common.state.selected')}</span>}
-										</button>
-										<div className='entity-management-list-actions'>
+									return (
+										<li
+											key={group.id}
+											className={`entity-management-list-row${selected ? ' entity-management-list-row-selected' : ''}`}
+											style={{ '--entity-management-row-accent': GROUPS_SCREEN_ACCENT } as CSSProperties}>
 											<button
 												type='button'
-												className='entity-management-list-action'
+												className='entity-management-list-main'
+												aria-pressed={selected}
 												onClick={() => {
-													this.props.editGroup(group);
-												}}
-												aria-label={`Edit ${group.name}`}>
-												{i18n.t('group.list.edit')}
+													this.props.selectGroup(group);
+												}}>
+												<span className='entity-management-list-badge-shell' aria-hidden={true}>
+													<span className='entity-management-list-badge'>{this.getBadgeLabel(group.name, '#')}</span>
+												</span>
+												<span className='entity-management-list-main-copy'>
+													<span className='entity-management-list-name'>{group.name}</span>
+												</span>
+												{selected && <span className='entity-management-list-selection'>{i18n.t('common.state.selected')}</span>}
 											</button>
-											<button
-												type='button'
-												className='entity-management-list-action entity-management-list-action-danger'
-												onClick={() => {
-													this.requestDeleteGroup(group);
-												}}
-												aria-label={`Delete ${group.name}`}>
-												{i18n.t('group.list.delete')}
-											</button>
-										</div>
-									</li>
-								);
-							})}
+											<div className='entity-management-list-actions'>
+												<button
+													type='button'
+													className='entity-management-list-action'
+													onClick={() => {
+														this.props.editGroup(group);
+													}}
+													aria-label={`Edit ${group.name}`}>
+													{i18n.t('group.list.edit')}
+												</button>
+												<button
+													type='button'
+													className='entity-management-list-action entity-management-list-action-danger'
+													onClick={() => {
+														this.requestDeleteGroup(group);
+													}}
+													aria-label={`Delete ${group.name}`}>
+													{i18n.t('group.list.delete')}
+												</button>
+											</div>
+										</li>
+									);
+								})}
 						</ul>
-						{groups.length === 0 &&
+						{this.props.showEmptyState &&
 							<div className='entity-management-list-empty'>
 								<p className='entity-management-list-empty-title'>{i18n.t('group.list.empty')}</p>
 								<p className='entity-management-list-empty-copy'>{i18n.t('group.list.emptyHint')}</p>
@@ -211,6 +213,40 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 	private requestDeleteGroup(group: GroupInternal): void {
 		this.setState({
 			pendingDeleteGroup: group
+		});
+	}
+
+	/**
+	 * Renders placeholder rows while the groups list is loading for the first time
+	 * @returns the loading rows
+	 */
+	private renderSkeletonRows(): ReactNode {
+		const loadingRows = Array.from({ length: 3 }, (_, index) => {
+			return index;
+		});
+
+		return loadingRows.map((loadingRow) => {
+			return (
+				<li
+					key={`group-loading-${loadingRow}`}
+					className='entity-management-list-row entity-management-list-skeleton-row'
+					style={{ '--entity-management-row-accent': GROUPS_SCREEN_ACCENT } as CSSProperties}
+					aria-hidden={true}>
+					<div className='entity-management-list-main'>
+						<span className='entity-management-list-badge-shell list-skeleton-block entity-management-list-skeleton-badge-shell'>
+							<span className='list-skeleton-block entity-management-list-skeleton-badge' />
+						</span>
+						<span className='entity-management-list-main-copy'>
+							<span className='list-skeleton-block entity-management-list-skeleton-title' />
+						</span>
+						<span className='entity-management-list-selection list-skeleton-block entity-management-list-skeleton-pill' />
+					</div>
+					<div className='entity-management-list-actions'>
+						<span className='entity-management-list-action list-skeleton-block entity-management-list-skeleton-action' />
+						<span className='entity-management-list-action list-skeleton-block entity-management-list-skeleton-action' />
+					</div>
+				</li>
+			);
 		});
 	}
 
@@ -280,6 +316,16 @@ export type GroupsListScreenComponentInput = {
 	 * The currently selected group ID if any
 	 */
 	selectedGroupId?: string;
+
+	/**
+	 * Whether the list should render the empty-state card
+	 */
+	showEmptyState: boolean;
+
+	/**
+	 * Whether the list should render loading skeleton rows
+	 */
+	showSkeletons: boolean;
 }
 
 /**

@@ -13,6 +13,7 @@ type CategoriesScreenTestState = {
 			mediaType: 'BOOK' | 'MOVIE' | 'TV_SHOW' | 'VIDEOGAME';
 			color: string;
 		}[];
+		status: string;
 		highlightedCategory: undefined;
 	};
 };
@@ -40,6 +41,7 @@ describe('CategoriesListScreenComponent', () => {
 		const store = createStore((state: CategoriesScreenTestState = {
 			categoriesList: {
 				categories: [],
+				status: 'FETCHED',
 				highlightedCategory: undefined
 			}
 		}) => state);
@@ -76,6 +78,7 @@ describe('CategoriesListScreenComponent', () => {
 		const store = createStore((state: CategoriesScreenTestState = {
 			categoriesList: {
 				categories: [],
+				status: 'FETCHED',
 				highlightedCategory: undefined
 			}
 		}) => state);

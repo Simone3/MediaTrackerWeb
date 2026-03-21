@@ -22,6 +22,8 @@ describe('CategoriesListComponent', () => {
 			<CategoriesListComponent
 				categories={categories}
 				highlightedCategory={undefined}
+				showEmptyState={false}
+				showSkeletons={false}
 				selectCategory={selectCategory}
 				highlightCategory={highlightCategory}
 				editCategory={jest.fn()}
@@ -37,5 +39,44 @@ describe('CategoriesListComponent', () => {
 		expect(selectCategory).toHaveBeenCalledWith(categories[0]);
 		expect(highlightCategory).toHaveBeenCalledWith(categories[0]);
 		expect(screen.queryByText('Books')).not.toBeInTheDocument();
+	});
+
+	test('renders loading skeletons until an empty result is actually fetched', () => {
+		const {
+			container,
+			rerender
+		} = render(
+			<CategoriesListComponent
+				categories={[]}
+				highlightedCategory={undefined}
+				showEmptyState={false}
+				showSkeletons={true}
+				selectCategory={jest.fn()}
+				highlightCategory={jest.fn()}
+				editCategory={jest.fn()}
+				deleteCategory={jest.fn()}
+				closeCategoryMenu={jest.fn()}
+			/>
+		);
+
+		expect(screen.queryByText('No categories')).not.toBeInTheDocument();
+		expect(container.querySelectorAll('.categories-list-skeleton-row')).toHaveLength(4);
+
+		rerender(
+			<CategoriesListComponent
+				categories={[]}
+				highlightedCategory={undefined}
+				showEmptyState={true}
+				showSkeletons={false}
+				selectCategory={jest.fn()}
+				highlightCategory={jest.fn()}
+				editCategory={jest.fn()}
+				deleteCategory={jest.fn()}
+				closeCategoryMenu={jest.fn()}
+			/>
+		);
+
+		expect(screen.getByText('No categories')).toBeInTheDocument();
+		expect(container.querySelectorAll('.categories-list-skeleton-row')).toHaveLength(0);
 	});
 });
