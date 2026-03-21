@@ -301,7 +301,7 @@
 				"multiple": "{{count}} seasons in this show"
 			},
 			"empty": "No seasons",
-			"emptyHint": "Add the first season to keep episode progress in one place.",
+			"emptyHint": "Add seasons to keep track of episode progress",
 			"row": {
 				"main": "Season {{seasonNumber}}",
 				"secondary": "Watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes"

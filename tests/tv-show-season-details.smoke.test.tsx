@@ -24,8 +24,9 @@ describe('TvShowSeasonDetailsScreenComponent', () => {
 
 		expect(document.body).toHaveClass('app-dark-screen-active');
 		expect(screen.getByRole('heading', { level: 1, name: 'New Season' })).toBeInTheDocument();
-		expect(screen.getByRole('heading', { level: 2, name: 'Basics' })).toBeInTheDocument();
-		expect(screen.getByRole('heading', { level: 2, name: 'Progress' })).toBeInTheDocument();
+		expect(screen.queryByRole('heading', { level: 2, name: 'Basics' })).not.toBeInTheDocument();
+		expect(screen.queryByRole('heading', { level: 2, name: 'Progress' })).not.toBeInTheDocument();
+		expect(screen.getByText('Add seasons to keep track of episode progress')).toBeInTheDocument();
 
 		const user = userEvent.setup();
 		const numberInput = screen.getByLabelText('Season number');
@@ -39,7 +40,7 @@ describe('TvShowSeasonDetailsScreenComponent', () => {
 		await user.type(episodesInput, '10');
 		await user.type(watchedInput, '7');
 
-		expect(screen.getAllByText('Watched 7 out of 10 episodes').length).toBeGreaterThan(0);
+		expect(screen.getByText('Watched 7 out of 10 episodes')).toBeInTheDocument();
 		expect(saveButton).toBeEnabled();
 
 		await user.click(saveButton);

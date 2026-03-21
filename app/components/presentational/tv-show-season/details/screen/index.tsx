@@ -64,7 +64,6 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 			i18n.t('tvShowSeason.details.title.new') :
 			i18n.t('tvShowSeason.details.title.existing', { seasonNumber: formValues.number });
 		const seasonSummary = this.getSeasonSummary(formValues);
-		const progressPercentage = this.getProgressPercentage(formValues);
 
 		return (
 			<section
@@ -101,14 +100,10 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 							event.preventDefault();
 							this.submitForm();
 						}}>
-						<div className='entity-details-main entity-details-main-split'>
+						<div className='entity-details-main'>
 							<section className='entity-details-panel'>
-								<div className='entity-details-section-heading'>
-									<h2 className='entity-details-section-title'>{i18n.t('common.sections.basics')}</h2>
-									<p className='entity-details-panel-copy'>{seasonSummary}</p>
-								</div>
 								<div className='entity-details-grid'>
-									<div className='entity-details-field'>
+									<div className='entity-details-field entity-details-field-span-2'>
 										<label className='entity-details-label' htmlFor='tv-show-season-number'>
 											{i18n.t('tvShowSeason.details.placeholders.number')}
 										</label>
@@ -141,7 +136,7 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 											}}
 										/>
 									</div>
-									<div className='entity-details-field entity-details-field-span-2'>
+									<div className='entity-details-field'>
 										<label className='entity-details-label' htmlFor='tv-show-season-watched'>
 											{i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber')}
 										</label>
@@ -156,43 +151,6 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 												this.setFormField('watchedEpisodesNumber', value);
 											}}
 										/>
-									</div>
-								</div>
-							</section>
-							<section className='entity-details-panel'>
-								<div className='entity-details-section-heading'>
-									<h2 className='entity-details-section-title'>{i18n.t('common.sections.progress')}</h2>
-									<p className='entity-details-panel-copy'>{seasonSummary}</p>
-								</div>
-								<div className='entity-details-preview'>
-									<span className='entity-details-preview-badge-shell' aria-hidden={true}>
-										<span className='entity-details-preview-badge'>{this.getPreviewBadgeLabel(formValues.number)}</span>
-									</span>
-									<div className='entity-details-preview-copy'>
-										<h3 className='entity-details-preview-title'>{title}</h3>
-										<p className='entity-details-preview-description'>{seasonSummary}</p>
-									</div>
-								</div>
-								<div className='entity-details-progress'>
-									<div className='entity-details-progress-track' aria-hidden={true}>
-										<span
-											className='entity-details-progress-fill'
-											style={{ width: `${progressPercentage}%` }}
-										/>
-									</div>
-									<div className='entity-details-stats'>
-										<div className='entity-details-stat'>
-											<span className='entity-details-stat-label'>{i18n.t('tvShowSeason.details.placeholders.number')}</span>
-											<span className='entity-details-stat-value'>{this.getStatValue(formValues.number)}</span>
-										</div>
-										<div className='entity-details-stat'>
-											<span className='entity-details-stat-label'>{i18n.t('tvShowSeason.details.placeholders.episodesNumber')}</span>
-											<span className='entity-details-stat-value'>{this.getStatValue(formValues.episodesNumber)}</span>
-										</div>
-										<div className='entity-details-stat'>
-											<span className='entity-details-stat-label'>{i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber')}</span>
-											<span className='entity-details-stat-value'>{this.getStatValue(formValues.watchedEpisodesNumber)}</span>
-										</div>
 									</div>
 								</div>
 							</section>
@@ -312,22 +270,6 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 	}
 
 	/**
-	 * Computes progress percentage for the current season
-	 * @param tvShowSeason current season values
-	 * @returns progress percentage
-	 */
-	private getProgressPercentage(tvShowSeason: TvShowSeasonInternal): number {
-		const episodesNumber = tvShowSeason.episodesNumber ? tvShowSeason.episodesNumber : 0;
-		const watchedEpisodesNumber = tvShowSeason.watchedEpisodesNumber ? tvShowSeason.watchedEpisodesNumber : 0;
-
-		if(!episodesNumber) {
-			return 0;
-		}
-
-		return Math.max(0, Math.min(100, (watchedEpisodesNumber / episodesNumber) * 100));
-	}
-
-	/**
 	 * Resolves the accent color for the current season
 	 * @param tvShowSeason current season values
 	 * @returns accent color
@@ -345,24 +287,6 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 		}
 
 		return TV_SHOW_SEASON_DETAILS_ACCENT;
-	}
-
-	/**
-	 * Formats a preview badge label for the season
-	 * @param seasonNumber current season number
-	 * @returns badge label
-	 */
-	private getPreviewBadgeLabel(seasonNumber?: number): string {
-		return seasonNumber === undefined ? '?' : String(seasonNumber);
-	}
-
-	/**
-	 * Formats stat values consistently
-	 * @param value current stat value
-	 * @returns display value
-	 */
-	private getStatValue(value?: number): string {
-		return value === undefined ? '-' : String(value);
 	}
 }
 
