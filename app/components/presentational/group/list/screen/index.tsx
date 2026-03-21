@@ -1,22 +1,29 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component, CSSProperties, ReactNode } from 'react';
+import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { GroupInternal } from 'app/data/models/internal/group';
+import groupIcon from 'app/resources/images/ic_input_group.png';
 import { i18n } from 'app/utilities/i18n';
+
+const GROUPS_SCREEN_ACCENT = '#7db4ff';
 
 /**
  * Presentational component that contains the whole "groups list" screen, that lists all user groups
  */
 export class GroupsListScreenComponent extends Component<GroupsListScreenComponentInput & GroupsListScreenComponentOutput, GroupsListScreenComponentState> {
 	public state: GroupsListScreenComponentState = {
-		pendingDeleteGroup: undefined
+		pendingDeleteGroup: undefined,
+		isMobileLayout: this.isMobileLayout()
 	};
 
 	/**
 	 * @override
 	 */
 	public componentDidMount(): void {
+		document.body.classList.add('app-dark-screen-active');
+		window.addEventListener('resize', this.handleResize);
 		this.requestFetchIfRequired();
 	}
 
@@ -30,77 +37,136 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 	/**
 	 * @override
 	 */
+	public componentWillUnmount(): void {
+		document.body.classList.remove('app-dark-screen-active');
+		window.removeEventListener('resize', this.handleResize);
+	}
+
+	/**
+	 * @override
+	 */
 	public render(): ReactNode {
 		const {
 			groups,
 			selectedGroupId,
-			isLoading
+			isLoading,
+			loadNewGroupDetails
 		} = this.props;
 		const {
-			pendingDeleteGroup
+			pendingDeleteGroup,
+			isMobileLayout
 		} = this.state;
+		const countLabel = groups.length === 1 ?
+			i18n.t('group.list.count.single') :
+			i18n.t('group.list.count.multiple', { count: groups.length });
 
 		return (
-			<section className='groups-screen'>
-				<div className='groups-list'>
-					<div className='groups-list-header'>
-						<h1 className='groups-list-title'>{i18n.t('group.list.title')}</h1>
-					</div>
-					<ul className='groups-list-items'>
-						<li className='groups-list-item groups-list-item-none'>
+			<section
+				className='entity-management-screen groups-screen'
+				style={{ '--entity-management-accent': GROUPS_SCREEN_ACCENT } as CSSProperties}>
+				<div className='entity-management-screen-content'>
+					<header className='entity-management-screen-header'>
+						<div className='entity-management-screen-heading'>
+							<div className='entity-management-screen-title-row'>
+								<span className='entity-management-screen-icon-shell' aria-hidden={true}>
+									<img src={groupIcon} alt='' className='entity-management-screen-icon' />
+								</span>
+								<div className='entity-management-screen-title-copy'>
+									<h1 className='entity-management-screen-title'>{i18n.t('group.list.title')}</h1>
+									<p className='entity-management-screen-count'>{countLabel}</p>
+								</div>
+							</div>
+						</div>
+						{!isMobileLayout &&
 							<button
 								type='button'
-								className={selectedGroupId ? 'groups-list-row' : 'groups-list-row groups-list-row-selected'}
-								onClick={() => {
-									this.props.selectGroup(undefined);
-								}}>
-								{i18n.t('group.list.none')}
-							</button>
-						</li>
-						{groups.map((group: GroupInternal) => {
-							const selected = group.id === selectedGroupId;
-							const rowClass = selected ? 'groups-list-row groups-list-row-selected' : 'groups-list-row';
+								className='entity-management-screen-button entity-management-screen-button-secondary'
+								onClick={loadNewGroupDetails}>
+								+ {i18n.t('group.details.title.new')}
+							</button>}
+					</header>
+					<div className='entity-management-list'>
+						<ul className='entity-management-list-items'>
+							<li
+								className={`entity-management-list-row entity-management-list-row-standalone${selectedGroupId ? '' : ' entity-management-list-row-selected'}`}
+								style={{ '--entity-management-row-accent': GROUPS_SCREEN_ACCENT } as CSSProperties}>
+								<button
+									type='button'
+									className='entity-management-list-main entity-management-list-main-standalone'
+									aria-pressed={!selectedGroupId}
+									onClick={() => {
+										this.props.selectGroup(undefined);
+									}}>
+									<span className='entity-management-list-badge-shell entity-management-list-badge-shell-muted' aria-hidden={true}>
+										<span className='entity-management-list-badge'>-</span>
+									</span>
+									<span className='entity-management-list-main-copy'>
+										<span className='entity-management-list-name'>{i18n.t('group.list.none')}</span>
+									</span>
+									{!selectedGroupId && <span className='entity-management-list-selection'>{i18n.t('common.state.selected')}</span>}
+								</button>
+							</li>
+							{groups.map((group: GroupInternal) => {
+								const selected = group.id === selectedGroupId;
 
-							return (
-								<li key={group.id} className='groups-list-item'>
-									<button
-										type='button'
-										className={rowClass}
-										onClick={() => {
-											this.props.selectGroup(group);
-										}}>
-										{group.name}
-									</button>
-									<button
-										type='button'
-										className='groups-list-options'
-										onClick={() => {
-											this.props.editGroup(group);
-										}}
-										aria-label={`Edit ${group.name}`}>
-										{i18n.t('group.list.edit')}
-									</button>
-									<button
-										type='button'
-										className='groups-list-options groups-list-options-danger'
-										onClick={() => {
-											this.requestDeleteGroup(group);
-										}}
-										aria-label={`Delete ${group.name}`}>
-										{i18n.t('group.list.delete')}
-									</button>
-								</li>
-							);
-						})}
-					</ul>
-					{groups.length === 0 && <p className='groups-list-empty'>{i18n.t('group.list.empty')}</p>}
+								return (
+									<li
+										key={group.id}
+										className={`entity-management-list-row${selected ? ' entity-management-list-row-selected' : ''}`}
+										style={{ '--entity-management-row-accent': GROUPS_SCREEN_ACCENT } as CSSProperties}>
+										<button
+											type='button'
+											className='entity-management-list-main'
+											aria-pressed={selected}
+											onClick={() => {
+												this.props.selectGroup(group);
+											}}>
+											<span className='entity-management-list-badge-shell' aria-hidden={true}>
+												<span className='entity-management-list-badge'>{this.getBadgeLabel(group.name, '#')}</span>
+											</span>
+											<span className='entity-management-list-main-copy'>
+												<span className='entity-management-list-name'>{group.name}</span>
+											</span>
+											{selected && <span className='entity-management-list-selection'>{i18n.t('common.state.selected')}</span>}
+										</button>
+										<div className='entity-management-list-actions'>
+											<button
+												type='button'
+												className='entity-management-list-action'
+												onClick={() => {
+													this.props.editGroup(group);
+												}}
+												aria-label={`Edit ${group.name}`}>
+												{i18n.t('group.list.edit')}
+											</button>
+											<button
+												type='button'
+												className='entity-management-list-action entity-management-list-action-danger'
+												onClick={() => {
+													this.requestDeleteGroup(group);
+												}}
+												aria-label={`Delete ${group.name}`}>
+												{i18n.t('group.list.delete')}
+											</button>
+										</div>
+									</li>
+								);
+							})}
+						</ul>
+						{groups.length === 0 &&
+							<div className='entity-management-list-empty'>
+								<p className='entity-management-list-empty-title'>{i18n.t('group.list.empty')}</p>
+								<p className='entity-management-list-empty-copy'>{i18n.t('group.list.emptyHint')}</p>
+							</div>}
+					</div>
 				</div>
-				<FABComponent
-					text='+'
-					onPress={() => {
-						this.props.loadNewGroupDetails();
-					}}
-				/>
+				{isMobileLayout &&
+					<FABComponent
+						text='+'
+						onPress={() => {
+							loadNewGroupDetails();
+						}}
+					/>}
 				<LoadingIndicatorComponent
 					visible={isLoading}
 					fullScreen={false}
@@ -146,6 +212,48 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 		this.setState({
 			pendingDeleteGroup: group
 		});
+	}
+
+	/**
+	 * Updates the responsive layout flag when the viewport changes
+	 */
+	private handleResize = (): void => {
+		const isMobileLayout = this.isMobileLayout();
+
+		if(isMobileLayout !== this.state.isMobileLayout) {
+			this.setState({
+				isMobileLayout
+			});
+		}
+	};
+
+	/**
+	 * Extracts a small badge label from the provided text
+	 * @param text the source text
+	 * @param fallback the fallback label
+	 * @returns the display label
+	 */
+	private getBadgeLabel(text: string, fallback: string): string {
+		const compactLabel = text
+			.trim()
+			.split(/\s+/u)
+			.filter(Boolean)
+			.slice(0, 2)
+			.map((chunk) => {
+				return chunk[0];
+			})
+			.join('')
+			.toUpperCase();
+
+		return compactLabel || fallback;
+	}
+
+	/**
+	 * Checks whether the current viewport matches the mobile layout
+	 * @returns true if mobile layout should be used
+	 */
+	private isMobileLayout(): boolean {
+		return window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
 	}
 }
 
@@ -211,4 +319,5 @@ export type GroupsListScreenComponentOutput = {
 
 type GroupsListScreenComponentState = {
 	pendingDeleteGroup?: GroupInternal;
+	isMobileLayout: boolean;
 }

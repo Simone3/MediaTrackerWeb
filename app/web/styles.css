@@ -2385,140 +2385,405 @@ body.app-dark-screen-active .app-shell-content {
 	border-top-color: #7db4ff;
 }
 
-.groups-screen,
-.own-platforms-screen,
-.tv-show-seasons-screen {
+.entity-management-screen {
 	position: relative;
-	min-height: calc(100vh - 56px);
+	min-height: 100vh;
+	padding: 42px 40px 148px;
+	overflow-x: clip;
+	background:
+		radial-gradient(circle at top right, rgba(90, 128, 190, 0.24) 0%, rgba(90, 128, 190, 0) 32%),
+		linear-gradient(180deg, #131a23 0%, #10161e 100%);
+	color: #f3f6ff;
 }
 
-.groups-list,
-.own-platforms-list,
-.tv-show-seasons-list {
-	max-width: 920px;
+.entity-management-screen::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 24%);
+	pointer-events: none;
 }
 
-.groups-list-header,
-.own-platforms-list-header,
-.tv-show-seasons-header {
+.entity-management-screen-content {
+	position: relative;
+	z-index: 1;
+	max-width: 1080px;
+	margin: 0 auto;
+	min-width: 0;
+	overflow-x: clip;
+}
+
+.entity-management-screen-header {
 	display: flex;
 	justify-content: space-between;
+	align-items: flex-start;
+	gap: 20px;
+	margin-bottom: 26px;
+}
+
+.entity-management-screen-heading {
+	display: grid;
+	gap: 10px;
+	min-width: 0;
+}
+
+.entity-management-screen-title-row {
+	display: flex;
 	align-items: center;
-	margin-bottom: 14px;
+	gap: 16px;
+	min-width: 0;
+}
+
+.entity-management-screen-icon-shell {
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 56px;
+	height: 56px;
+	border-radius: 18px;
+	border: 1px solid rgba(178, 195, 227, 0.14);
+	background: rgba(255, 255, 255, 0.05);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.entity-management-screen-icon {
+	width: 28px;
+	height: 28px;
+	object-fit: contain;
+	filter: brightness(0) invert(1);
+	opacity: 0.9;
+}
+
+.entity-management-screen-title-copy {
+	display: grid;
+	gap: 6px;
+	min-width: 0;
+}
+
+.entity-management-screen-title {
+	margin: 0;
+	font-size: clamp(2rem, 4vw, 2.8rem);
+	line-height: 1.02;
+	color: #f6f8ff;
+	word-break: break-word;
+}
+
+.entity-management-screen-count {
+	margin: 0;
+	color: #aebad3;
+	font-size: 1rem;
+	line-height: 1.5;
+}
+
+.entity-management-screen-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-end;
 	gap: 10px;
 }
 
-.groups-list-title,
-.own-platforms-list-title,
-.tv-show-seasons-title {
-	margin: 0;
-	font-size: 1.7rem;
-	color: var(--color-primary-dark);
-}
-
-.groups-list-header-actions,
-.own-platforms-list-header-actions,
-.tv-show-seasons-actions {
-	display: flex;
-	gap: 8px;
-}
-
-.groups-list-secondary,
-.own-platforms-list-secondary,
-.tv-show-seasons-button,
-.settings-row {
-	border: 1px solid var(--color-border);
-	background: #ffffff;
-	color: var(--color-primary-dark);
+.entity-management-screen-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 46px;
+	border: 1px solid rgba(159, 183, 231, 0.2);
 	border-radius: 999px;
-	padding: 9px 14px;
+	padding: 12px 18px;
+	font-weight: 700;
 	cursor: pointer;
+	transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.tv-show-seasons-button-primary {
-	background: var(--color-accent);
-	border-color: var(--color-accent);
+.entity-management-screen-button-secondary {
+	background: rgba(255, 255, 255, 0.05);
+	color: #eef3ff;
+}
+
+.entity-management-screen-button-primary {
+	background: linear-gradient(180deg, #4694ff 0%, #367eec 100%);
 	color: #ffffff;
+	border-color: rgba(88, 148, 255, 0.56);
 }
 
-.tv-show-seasons-button-secondary {
-	background: #eef2ff;
+.entity-management-screen-button:hover {
+	transform: translateY(-1px);
 }
 
-.groups-list-items,
-.own-platforms-list-items {
+.entity-management-screen-button:focus-visible {
+	outline: none;
+	border-color: #a7c1ff;
+	box-shadow: 0 0 0 3px rgba(121, 165, 255, 0.18);
+}
+
+.entity-management-screen .loading-indicator-container-parent-size {
+	background: rgba(8, 12, 18, 0.48);
+	backdrop-filter: blur(3px);
+}
+
+.entity-management-screen .loading-indicator-spinner {
+	border-color: rgba(255, 255, 255, 0.16);
+	border-top-color: var(--entity-management-accent, #7db4ff);
+}
+
+.entity-management-list {
+	position: relative;
+	display: grid;
+	gap: 18px;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	overflow-x: clip;
+}
+
+.entity-management-list-items {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+	gap: 16px;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
 }
 
-.groups-list-item,
-.own-platforms-list-item {
+.entity-management-list-row {
+	position: relative;
 	display: flex;
-	gap: 8px;
+	align-items: stretch;
+	align-self: stretch;
+	width: 100%;
+	min-width: 0;
+	max-width: 100%;
+	border-radius: 22px;
+	overflow: hidden;
+	border: 1px solid rgba(126, 150, 188, 0.16);
+	background: linear-gradient(180deg, #1a222d 0%, #202936 100%);
+	box-shadow: 0 18px 40px rgba(6, 12, 20, 0.18);
+	transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.groups-list-row,
-.own-platforms-list-row {
+.entity-management-list-row::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 6px;
+	background: var(--entity-management-row-accent, transparent);
+}
+
+.entity-management-list-row:hover {
+	transform: translateY(-1px);
+	border-color: rgba(160, 182, 224, 0.24);
+	box-shadow: 0 28px 52px rgba(6, 12, 20, 0.24);
+}
+
+.entity-management-list-row:focus-within,
+.entity-management-list-row-selected {
+	border-color: var(--entity-management-row-accent, rgba(167, 193, 255, 0.45));
+	box-shadow: 0 0 0 1px var(--entity-management-row-accent, rgba(167, 193, 255, 0.45)), 0 28px 52px rgba(6, 12, 20, 0.3);
+}
+
+.entity-management-list-main {
 	flex: 1;
-	border: 1px solid var(--color-border);
-	background: #ffffff;
-	color: var(--color-text);
-	border-radius: 12px;
-	padding: 12px 14px;
+	border: 0;
+	background: transparent;
 	cursor: pointer;
+	padding: 18px 20px 18px 24px;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	width: 0;
+	max-width: 100%;
+	text-align: left;
+	min-width: 0;
+	overflow: hidden;
+	color: #f5f8ff;
+}
+
+.entity-management-list-main-standalone {
+	width: 100%;
+}
+
+.entity-management-list-main:focus-visible,
+.entity-management-list-action:focus-visible {
+	outline: none;
+}
+
+.entity-management-list-badge-shell {
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 48px;
+	height: 48px;
+	border-radius: 16px;
+	border: 1px solid rgba(178, 195, 227, 0.14);
+	background: rgba(255, 255, 255, 0.05);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.entity-management-list-badge-shell-muted {
+	background: rgba(255, 255, 255, 0.03);
+}
+
+.entity-management-list-badge {
+	font-size: 1rem;
+	font-weight: 800;
+	line-height: 1;
+	color: #f6f8ff;
+	letter-spacing: 0.04em;
+}
+
+.entity-management-list-main-copy {
+	flex: 1;
+	width: 0;
+	max-width: 100%;
+	min-width: 0;
+	display: grid;
+	align-content: center;
+	gap: 4px;
+	overflow: hidden;
+}
+
+.entity-management-list-name {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	font-weight: 700;
+	font-size: 1.08rem;
+	line-height: 1.3;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	color: #f8fbff;
+}
+
+.entity-management-list-meta {
 	display: inline-flex;
 	align-items: center;
 	gap: 8px;
-	font-weight: 600;
-	text-align: left;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	font-size: 0.9rem;
+	color: #a9b7d3;
+	line-height: 1.35;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
-.groups-list-row-selected,
-.own-platforms-list-row-selected {
-	border-color: var(--color-primary);
-	box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.14);
-}
-
-.groups-list-item-none .groups-list-row,
-.own-platforms-list-item-none .own-platforms-list-row {
-	font-weight: 700;
-	color: var(--color-muted);
-}
-
-.own-platforms-list-row-color {
+.entity-management-list-swatch {
 	display: inline-block;
-	width: 14px;
-	height: 14px;
-	border-radius: 50%;
-	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+	width: 12px;
+	height: 12px;
+	border-radius: 999px;
+	flex-shrink: 0;
+	border: 1px solid rgba(255, 255, 255, 0.28);
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.14);
 }
 
-.groups-list-options,
-.own-platforms-list-options {
-	border: 0;
-	background: #edf2ff;
-	color: var(--color-primary-dark);
-	border-radius: 10px;
-	padding: 0 12px;
+.entity-management-list-selection,
+.entity-management-list-progress {
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 38px;
+	border: 1px solid rgba(159, 183, 231, 0.2);
+	border-radius: 999px;
+	padding: 8px 14px;
+	background: rgba(255, 255, 255, 0.05);
+	color: #dce8ff;
+	font-size: 0.88rem;
+	font-weight: 700;
+	line-height: 1;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.entity-management-list-progress {
+	min-width: 72px;
+}
+
+.entity-management-list-progress-strong {
+	color: #f5f8ff;
+}
+
+.entity-management-list-actions {
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 16px 14px 4px;
+	border-left: 1px solid rgba(126, 150, 188, 0.14);
+	background: rgba(255, 255, 255, 0.03);
+}
+
+.entity-management-list-action {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 40px;
+	border: 1px solid rgba(159, 183, 231, 0.22);
+	background: rgba(255, 255, 255, 0.04);
+	color: #eef3ff;
+	border-radius: 999px;
+	padding: 10px 16px;
 	cursor: pointer;
 	font-weight: 700;
+	white-space: nowrap;
+	transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
-.groups-list-options-danger,
-.own-platforms-list-options-danger {
-	background: #ffe8e8;
-	color: #af1f1f;
+.entity-management-list-action:hover,
+.entity-management-list-action:focus-visible {
+	background: rgba(255, 255, 255, 0.08);
+	border-color: rgba(178, 201, 245, 0.36);
+	transform: translateY(-1px);
 }
 
-.groups-list-empty,
-.own-platforms-list-empty,
-.tv-show-seasons-empty {
-	margin: 20px 0;
-	color: var(--color-muted);
+.entity-management-list-action[disabled] {
+	opacity: 0.55;
+	cursor: not-allowed;
+	transform: none;
+}
+
+.entity-management-list-action-danger {
+	background: rgba(255, 112, 112, 0.1);
+	border-color: rgba(255, 135, 135, 0.22);
+	color: #ffd0d0;
+}
+
+.entity-management-list-empty {
+	display: grid;
+	gap: 10px;
+	padding: 32px 26px;
+	border-radius: 24px;
+	border: 1px dashed rgba(159, 183, 231, 0.24);
+	background: rgba(255, 255, 255, 0.03);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.entity-management-list-empty-title,
+.entity-management-list-empty-copy {
+	margin: 0;
+}
+
+.entity-management-list-empty-title {
+	color: #f4f7ff;
+	font-size: 1.05rem;
+	font-weight: 700;
+}
+
+.entity-management-list-empty-copy {
+	color: #9eadca;
+	line-height: 1.5;
 }
 
 .group-details-screen,
@@ -2650,65 +2915,6 @@ body.app-dark-screen-active .app-shell-content {
 
 .own-platform-details-color-selected {
 	box-shadow: 0 0 0 2px var(--color-primary-dark);
-}
-
-.tv-show-seasons-list {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
-}
-
-.tv-show-seasons-row {
-	display: flex;
-	gap: 8px;
-	border: 1px solid var(--color-border);
-	border-radius: 12px;
-	background: #ffffff;
-	padding: 10px;
-}
-
-.tv-show-seasons-row-main {
-	flex: 1;
-	border: 0;
-	background: transparent;
-	cursor: pointer;
-	text-align: left;
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
-	padding: 4px 6px;
-}
-
-.tv-show-seasons-row-title {
-	font-weight: 700;
-}
-
-.tv-show-seasons-row-subtitle {
-	color: var(--color-muted);
-	font-size: 0.9rem;
-}
-
-.tv-show-seasons-row-actions {
-	display: flex;
-	gap: 8px;
-}
-
-.tv-show-seasons-row-action {
-	border: 1px solid var(--color-border);
-	border-radius: 10px;
-	background: #f6f8ff;
-	color: var(--color-primary-dark);
-	padding: 0 12px;
-	cursor: pointer;
-	font-weight: 700;
-}
-
-.tv-show-seasons-row-action[disabled] {
-	opacity: 0.5;
-	cursor: not-allowed;
 }
 
 .settings-screen,
@@ -3306,6 +3512,90 @@ body.app-dark-screen-active .loading-indicator-spinner {
 		padding: 12px 8px;
 	}
 
+	.entity-management-screen {
+		min-height: 100vh;
+		padding: 24px 18px calc(164px + env(safe-area-inset-bottom));
+	}
+
+	.entity-management-screen-header {
+		flex-direction: column;
+		margin-bottom: 22px;
+	}
+
+	.entity-management-screen-title-row {
+		gap: 14px;
+	}
+
+	.entity-management-screen-icon-shell {
+		width: 48px;
+		height: 48px;
+		border-radius: 16px;
+	}
+
+	.entity-management-screen-icon {
+		width: 24px;
+		height: 24px;
+	}
+
+	.entity-management-screen-actions,
+	.entity-management-screen-button {
+		width: 100%;
+	}
+
+	.entity-management-screen-actions {
+		justify-content: stretch;
+	}
+
+	.entity-management-list-row {
+		border-radius: 20px;
+		flex-direction: column;
+	}
+
+	.entity-management-list-row::before {
+		width: 5px;
+	}
+
+	.entity-management-list-main {
+		width: 100%;
+		padding: 16px 16px 16px 20px;
+		gap: 14px;
+		align-items: flex-start;
+	}
+
+	.entity-management-list-badge-shell {
+		width: 44px;
+		height: 44px;
+		border-radius: 14px;
+	}
+
+	.entity-management-list-name,
+	.entity-management-list-meta {
+		white-space: normal;
+		overflow: visible;
+		text-overflow: clip;
+	}
+
+	.entity-management-list-selection,
+	.entity-management-list-progress {
+		min-height: 34px;
+		padding: 8px 12px;
+	}
+
+	.entity-management-list-actions {
+		width: 100%;
+		padding: 0 16px 16px 20px;
+		border-left: 0;
+	}
+
+	.entity-management-list-action {
+		flex: 1 1 0;
+		padding: 10px 12px;
+	}
+
+	.entity-management-list-empty {
+		padding: 26px 20px;
+	}
+
 	.media-item-details-screen {
 		min-height: 100vh;
 		padding: 24px 18px calc(164px + env(safe-area-inset-bottom));
@@ -3402,28 +3692,5 @@ body.app-dark-screen-active .loading-indicator-spinner {
 
 	.credits-grid {
 		grid-template-columns: 1fr;
-	}
-
-	.groups-list-item,
-	.own-platforms-list-item,
-	.tv-show-seasons-row {
-		flex-direction: column;
-	}
-
-	.groups-list-options,
-	.own-platforms-list-options,
-	.tv-show-seasons-row-action {
-		padding: 8px 12px;
-	}
-
-	.groups-list-header,
-	.own-platforms-list-header,
-	.tv-show-seasons-header {
-		align-items: flex-start;
-		flex-direction: column;
-	}
-
-	.tv-show-seasons-row-actions {
-		width: 100%;
 	}
 }

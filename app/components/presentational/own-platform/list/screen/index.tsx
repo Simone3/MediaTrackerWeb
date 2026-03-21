@@ -1,22 +1,29 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component, CSSProperties, ReactNode } from 'react';
+import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
+import ownPlatformIcon from 'app/resources/images/ic_input_own_platform.png';
 import { i18n } from 'app/utilities/i18n';
+
+const OWN_PLATFORMS_SCREEN_ACCENT = '#74d6af';
 
 /**
  * Presentational component that contains the whole "own platforms list" screen, that lists all user own platforms
  */
 export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListScreenComponentInput & OwnPlatformsListScreenComponentOutput, OwnPlatformsListScreenComponentState> {
 	public state: OwnPlatformsListScreenComponentState = {
-		pendingDeleteOwnPlatform: undefined
+		pendingDeleteOwnPlatform: undefined,
+		isMobileLayout: this.isMobileLayout()
 	};
 
 	/**
 	 * @override
 	 */
 	public componentDidMount(): void {
+		document.body.classList.add('app-dark-screen-active');
+		window.addEventListener('resize', this.handleResize);
 		this.requestFetchIfRequired();
 	}
 
@@ -30,77 +37,140 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 	/**
 	 * @override
 	 */
+	public componentWillUnmount(): void {
+		document.body.classList.remove('app-dark-screen-active');
+		window.removeEventListener('resize', this.handleResize);
+	}
+
+	/**
+	 * @override
+	 */
 	public render(): ReactNode {
 		const {
 			ownPlatforms,
 			selectedOwnPlatformId,
-			isLoading
+			isLoading,
+			loadNewOwnPlatformDetails
 		} = this.props;
 		const {
-			pendingDeleteOwnPlatform
+			pendingDeleteOwnPlatform,
+			isMobileLayout
 		} = this.state;
+		const countLabel = ownPlatforms.length === 1 ?
+			i18n.t('ownPlatform.list.count.single') :
+			i18n.t('ownPlatform.list.count.multiple', { count: ownPlatforms.length });
 
 		return (
-			<section className='own-platforms-screen'>
-				<div className='own-platforms-list'>
-					<div className='own-platforms-list-header'>
-						<h1 className='own-platforms-list-title'>{i18n.t('ownPlatform.list.title')}</h1>
-					</div>
-					<ul className='own-platforms-list-items'>
-						<li className='own-platforms-list-item own-platforms-list-item-none'>
+			<section
+				className='entity-management-screen own-platforms-screen'
+				style={{ '--entity-management-accent': OWN_PLATFORMS_SCREEN_ACCENT } as CSSProperties}>
+				<div className='entity-management-screen-content'>
+					<header className='entity-management-screen-header'>
+						<div className='entity-management-screen-heading'>
+							<div className='entity-management-screen-title-row'>
+								<span className='entity-management-screen-icon-shell' aria-hidden={true}>
+									<img src={ownPlatformIcon} alt='' className='entity-management-screen-icon' />
+								</span>
+								<div className='entity-management-screen-title-copy'>
+									<h1 className='entity-management-screen-title'>{i18n.t('ownPlatform.list.title')}</h1>
+									<p className='entity-management-screen-count'>{countLabel}</p>
+								</div>
+							</div>
+						</div>
+						{!isMobileLayout &&
 							<button
 								type='button'
-								className={selectedOwnPlatformId ? 'own-platforms-list-row' : 'own-platforms-list-row own-platforms-list-row-selected'}
-								onClick={() => {
-									this.props.selectOwnPlatform(undefined);
-								}}>
-								{i18n.t('ownPlatform.list.none')}
-							</button>
-						</li>
-						{ownPlatforms.map((ownPlatform: OwnPlatformInternal) => {
-							const selected = ownPlatform.id === selectedOwnPlatformId;
-							const rowClass = selected ? 'own-platforms-list-row own-platforms-list-row-selected' : 'own-platforms-list-row';
-							return (
-								<li key={ownPlatform.id} className='own-platforms-list-item'>
-									<button
-										type='button'
-										className={rowClass}
-										onClick={() => {
-											this.props.selectOwnPlatform(ownPlatform);
-										}}>
-										<span className='own-platforms-list-row-color' style={{ backgroundColor: ownPlatform.color }} />
-										<span>{ownPlatform.name}</span>
-									</button>
-									<button
-										type='button'
-										className='own-platforms-list-options'
-										onClick={() => {
-											this.props.editOwnPlatform(ownPlatform);
-										}}
-										aria-label={`Edit ${ownPlatform.name}`}>
-										{i18n.t('ownPlatform.list.edit')}
-									</button>
-									<button
-										type='button'
-										className='own-platforms-list-options own-platforms-list-options-danger'
-										onClick={() => {
-											this.requestDeleteOwnPlatform(ownPlatform);
-										}}
-										aria-label={`Delete ${ownPlatform.name}`}>
-										{i18n.t('ownPlatform.list.delete')}
-									</button>
-								</li>
-							);
-						})}
-					</ul>
-					{ownPlatforms.length === 0 && <p className='own-platforms-list-empty'>{i18n.t('ownPlatform.list.empty')}</p>}
+								className='entity-management-screen-button entity-management-screen-button-secondary'
+								onClick={loadNewOwnPlatformDetails}>
+								+ {i18n.t('ownPlatform.details.title.new')}
+							</button>}
+					</header>
+					<div className='entity-management-list'>
+						<ul className='entity-management-list-items'>
+							<li
+								className={`entity-management-list-row entity-management-list-row-standalone${selectedOwnPlatformId ? '' : ' entity-management-list-row-selected'}`}
+								style={{ '--entity-management-row-accent': OWN_PLATFORMS_SCREEN_ACCENT } as CSSProperties}>
+								<button
+									type='button'
+									className='entity-management-list-main entity-management-list-main-standalone'
+									aria-pressed={!selectedOwnPlatformId}
+									onClick={() => {
+										this.props.selectOwnPlatform(undefined);
+									}}>
+									<span className='entity-management-list-badge-shell entity-management-list-badge-shell-muted' aria-hidden={true}>
+										<span className='entity-management-list-badge'>-</span>
+									</span>
+									<span className='entity-management-list-main-copy'>
+										<span className='entity-management-list-name'>{i18n.t('ownPlatform.list.none')}</span>
+									</span>
+									{!selectedOwnPlatformId && <span className='entity-management-list-selection'>{i18n.t('common.state.selected')}</span>}
+								</button>
+							</li>
+							{ownPlatforms.map((ownPlatform: OwnPlatformInternal) => {
+								const selected = ownPlatform.id === selectedOwnPlatformId;
+
+								return (
+									<li
+										key={ownPlatform.id}
+										className={`entity-management-list-row${selected ? ' entity-management-list-row-selected' : ''}`}
+										style={{ '--entity-management-row-accent': ownPlatform.color } as CSSProperties}>
+										<button
+											type='button'
+											className='entity-management-list-main'
+											aria-pressed={selected}
+											onClick={() => {
+												this.props.selectOwnPlatform(ownPlatform);
+											}}>
+											<span className='entity-management-list-badge-shell' aria-hidden={true}>
+												<span className='entity-management-list-badge'>{this.getBadgeLabel(ownPlatform.name, 'OP')}</span>
+											</span>
+											<span className='entity-management-list-main-copy'>
+												<span className='entity-management-list-name'>{ownPlatform.name}</span>
+												<span className='entity-management-list-meta'>
+													<span className='entity-management-list-swatch' style={{ backgroundColor: ownPlatform.color }} />
+													{i18n.t(`ownPlatform.icons.${ownPlatform.icon}`)}
+												</span>
+											</span>
+											{selected && <span className='entity-management-list-selection'>{i18n.t('common.state.selected')}</span>}
+										</button>
+										<div className='entity-management-list-actions'>
+											<button
+												type='button'
+												className='entity-management-list-action'
+												onClick={() => {
+													this.props.editOwnPlatform(ownPlatform);
+												}}
+												aria-label={`Edit ${ownPlatform.name}`}>
+												{i18n.t('ownPlatform.list.edit')}
+											</button>
+											<button
+												type='button'
+												className='entity-management-list-action entity-management-list-action-danger'
+												onClick={() => {
+													this.requestDeleteOwnPlatform(ownPlatform);
+												}}
+												aria-label={`Delete ${ownPlatform.name}`}>
+												{i18n.t('ownPlatform.list.delete')}
+											</button>
+										</div>
+									</li>
+								);
+							})}
+						</ul>
+						{ownPlatforms.length === 0 &&
+							<div className='entity-management-list-empty'>
+								<p className='entity-management-list-empty-title'>{i18n.t('ownPlatform.list.empty')}</p>
+								<p className='entity-management-list-empty-copy'>{i18n.t('ownPlatform.list.emptyHint')}</p>
+							</div>}
+					</div>
 				</div>
-				<FABComponent
-					text='+'
-					onPress={() => {
-						this.props.loadNewOwnPlatformDetails();
-					}}
-				/>
+				{isMobileLayout &&
+					<FABComponent
+						text='+'
+						onPress={() => {
+							loadNewOwnPlatformDetails();
+						}}
+					/>}
 				<LoadingIndicatorComponent
 					visible={isLoading}
 					fullScreen={false}
@@ -146,6 +216,48 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 		this.setState({
 			pendingDeleteOwnPlatform: ownPlatform
 		});
+	}
+
+	/**
+	 * Updates the responsive layout flag when the viewport changes
+	 */
+	private handleResize = (): void => {
+		const isMobileLayout = this.isMobileLayout();
+
+		if(isMobileLayout !== this.state.isMobileLayout) {
+			this.setState({
+				isMobileLayout
+			});
+		}
+	};
+
+	/**
+	 * Extracts a small badge label from the provided text
+	 * @param text the source text
+	 * @param fallback the fallback label
+	 * @returns the display label
+	 */
+	private getBadgeLabel(text: string, fallback: string): string {
+		const compactLabel = text
+			.trim()
+			.split(/\s+/u)
+			.filter(Boolean)
+			.slice(0, 2)
+			.map((chunk) => {
+				return chunk[0];
+			})
+			.join('')
+			.toUpperCase();
+
+		return compactLabel || fallback;
+	}
+
+	/**
+	 * Checks whether the current viewport matches the mobile layout
+	 * @returns true if mobile layout should be used
+	 */
+	private isMobileLayout(): boolean {
+		return window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
 	}
 }
 
@@ -211,4 +323,5 @@ export type OwnPlatformsListScreenComponentOutput = {
 
 type OwnPlatformsListScreenComponentState = {
 	pendingDeleteOwnPlatform?: OwnPlatformInternal;
+	isMobileLayout: boolean;
 }

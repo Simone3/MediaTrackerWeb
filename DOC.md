@@ -110,6 +110,22 @@
   - good reference implementations when category behavior looks wrong
 
 ## Recent fix worth remembering
+- Group, own-platform, and TV-show-season list pages had still been using the older lighter list treatment on web.
+  - Correct behavior/style on web now:
+    - all three screens now use the same full-bleed dark shell language as the media items list instead of the older boxed light layout
+    - desktop now shows a header action button for creating a new group / platform / season, while mobile keeps the shared FAB pattern
+    - the group and own-platform selectors still keep their `None` option, selected-row behavior, edit flow, delete confirmation, and fetch logic
+    - the seasons screen keeps the old edit / complete / delete / done flows, but now presents them as responsive card rows with progress pills and clearer action grouping
+    - all three screens now share the same responsive card row styling, empty-state treatment, and loading overlay treatment as the newer media list pages
+  - Relevant files:
+    - `app/components/presentational/group/list/screen/index.tsx`
+    - `app/components/presentational/own-platform/list/screen/index.tsx`
+    - `app/components/presentational/tv-show-season/list/screen/index.tsx`
+    - `app/resources/lang/lang-en.json`
+    - `app/web/styles.css`
+    - `tests/groups-list.smoke.test.tsx`
+    - `tests/own-platforms-list.smoke.test.tsx`
+    - `tests/tv-show-seasons-list.smoke.test.tsx`
 - Media item list screen on web still looked like an older placeholder instead of matching the newer categories experience.
   - Correct behavior/style on web now:
     - the screen uses the same full-bleed dark shell language as the categories list

@@ -296,7 +296,12 @@
 		},
 		"list": {
 			"title": "Seasons",
+			"count": {
+				"single": "1 season in this show",
+				"multiple": "{{count}} seasons in this show"
+			},
 			"empty": "No seasons",
+			"emptyHint": "Add the first season to keep episode progress in one place.",
 			"row": {
 				"main": "Season {{seasonNumber}}",
 				"secondary": "Watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes"
@@ -333,7 +338,12 @@
 		},
 		"list": {
 			"title": "Select Group",
+			"count": {
+				"single": "1 group available",
+				"multiple": "{{count}} groups available"
+			},
 			"empty": "No groups",
+			"emptyHint": "Create a group to keep sagas, franchises, and collections together.",
 			"none": "None",
 			"edit": "Edit group",
 			"delete": "Delete group"
@@ -362,7 +372,12 @@
 		},
 		"list": {
 			"title": "Select Own Platform",
+			"count": {
+				"single": "1 platform available",
+				"multiple": "{{count}} platforms available"
+			},
 			"empty": "No platforms",
+			"emptyHint": "Add a platform so each entry can show where you own it.",
 			"none": "None",
 			"edit": "Edit platform",
 			"delete": "Delete platform"
@@ -402,6 +417,9 @@
 		"app": {
 			"name": "Media Tracker"
 		},
+		"buttons": {
+			"done": "Done"
+		},
 		"alert": {
 			"default": {
 				"okButton": "OK",
@@ -424,6 +442,9 @@
 					"placeholder": "Insert date"
 				}
 			}
+		},
+		"state": {
+			"selected": "Selected"
 		},
 		"drawer": {
 			"navigation": "App navigation",

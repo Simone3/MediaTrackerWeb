@@ -1,16 +1,39 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component, CSSProperties, ReactNode } from 'react';
+import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
+import seasonIcon from 'app/resources/images/ic_input_season_number.png';
 import { i18n } from 'app/utilities/i18n';
+
+const TV_SHOW_SEASONS_SCREEN_ACCENT = '#ffb067';
+const TV_SHOW_SEASONS_SCREEN_ACTIVE_ACCENT = '#7db4ff';
+const TV_SHOW_SEASONS_SCREEN_COMPLETE_ACCENT = '#7ad18f';
 
 /**
  * Presentational component that contains the whole "TV show seasons list" screen, that lists all seasons of a TV show
  */
 export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsListScreenComponentInput & TvShowSeasonsListScreenComponentOutput, TvShowSeasonsListScreenComponentState> {
 	public state: TvShowSeasonsListScreenComponentState = {
-		pendingDeleteTvShowSeason: undefined
+		pendingDeleteTvShowSeason: undefined,
+		isMobileLayout: this.isMobileLayout()
 	};
+
+	/**
+	 * @override
+	 */
+	public componentDidMount(): void {
+		document.body.classList.add('app-dark-screen-active');
+		window.addEventListener('resize', this.handleResize);
+	}
+
+	/**
+	 * @override
+	 */
+	public componentWillUnmount(): void {
+		document.body.classList.remove('app-dark-screen-active');
+		window.removeEventListener('resize', this.handleResize);
+	}
 
 	/**
 	 * @override
@@ -20,75 +43,122 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 			tvShowSeasons
 		} = this.props;
 		const {
-			pendingDeleteTvShowSeason
+			pendingDeleteTvShowSeason,
+			isMobileLayout
 		} = this.state;
+		const countLabel = tvShowSeasons.length === 1 ?
+			i18n.t('tvShowSeason.list.count.single') :
+			i18n.t('tvShowSeason.list.count.multiple', { count: tvShowSeasons.length });
 
 		return (
-			<section className='tv-show-seasons-screen'>
-				<div className='tv-show-seasons-header'>
-					<h1 className='tv-show-seasons-title'>{i18n.t('tvShowSeason.list.title')}</h1>
-					<div className='tv-show-seasons-actions'>
-						<button type='button' className='tv-show-seasons-button tv-show-seasons-button-primary' onClick={this.props.completeHandling}>
-							Done
-						</button>
-					</div>
-				</div>
-				<ul className='tv-show-seasons-list'>
-					{tvShowSeasons.map((tvShowSeason: TvShowSeasonInternal) => {
-						const episodesNumber = tvShowSeason.episodesNumber ? tvShowSeason.episodesNumber : 0;
-						const watchedEpisodesNumber = tvShowSeason.watchedEpisodesNumber ? tvShowSeason.watchedEpisodesNumber : 0;
-						const completeDisabled = !episodesNumber || watchedEpisodesNumber === episodesNumber;
-
-						return (
-							<li key={String(tvShowSeason.number)} className='tv-show-seasons-row'>
+			<section
+				className='entity-management-screen tv-show-seasons-screen'
+				style={{ '--entity-management-accent': TV_SHOW_SEASONS_SCREEN_ACCENT } as CSSProperties}>
+				<div className='entity-management-screen-content'>
+					<header className='entity-management-screen-header'>
+						<div className='entity-management-screen-heading'>
+							<div className='entity-management-screen-title-row'>
+								<span className='entity-management-screen-icon-shell' aria-hidden={true}>
+									<img src={seasonIcon} alt='' className='entity-management-screen-icon' />
+								</span>
+								<div className='entity-management-screen-title-copy'>
+									<h1 className='entity-management-screen-title'>{i18n.t('tvShowSeason.list.title')}</h1>
+									<p className='entity-management-screen-count'>{countLabel}</p>
+								</div>
+							</div>
+						</div>
+						<div className='entity-management-screen-actions'>
+							{!isMobileLayout &&
 								<button
 									type='button'
-									className='tv-show-seasons-row-main'
-									onClick={() => {
-										this.props.editTvShowSeason(tvShowSeason);
-									}}>
-									<span className='tv-show-seasons-row-title'>
-										{i18n.t('tvShowSeason.list.row.main', {
-											seasonNumber: tvShowSeason.number
-										})}
-									</span>
-									<span className='tv-show-seasons-row-subtitle'>
-										{i18n.t('tvShowSeason.list.row.secondary', {
-											episodesNumber: episodesNumber,
-											watchedEpisodesNumber: watchedEpisodesNumber
-										})}
-									</span>
-								</button>
-								<div className='tv-show-seasons-row-actions'>
-									<button
-										type='button'
-										className='tv-show-seasons-row-action'
-										disabled={completeDisabled}
-										onClick={() => {
-											this.props.completeTvShowSeason(tvShowSeason);
-										}}>
-										{i18n.t('tvShowSeason.list.complete')}
-									</button>
-									<button
-										type='button'
-										className='tv-show-seasons-row-action'
-										onClick={() => {
-											this.requestDeleteTvShowSeason(tvShowSeason);
-										}}>
-										{i18n.t('tvShowSeason.list.delete')}
-									</button>
-								</div>
-							</li>
-						);
-					})}
-				</ul>
-				{tvShowSeasons.length === 0 && <p className='tv-show-seasons-empty'>{i18n.t('tvShowSeason.list.empty')}</p>}
-				<FABComponent
-					text='+'
-					onPress={() => {
-						this.props.loadNewTvShowSeasonDetails();
-					}}
-				/>
+									className='entity-management-screen-button entity-management-screen-button-secondary'
+									onClick={this.props.loadNewTvShowSeasonDetails}>
+									+ {i18n.t('tvShowSeason.details.title.new')}
+								</button>}
+							<button
+								type='button'
+								className='entity-management-screen-button entity-management-screen-button-primary'
+								onClick={this.props.completeHandling}>
+								{i18n.t('common.buttons.done')}
+							</button>
+						</div>
+					</header>
+					<div className='entity-management-list'>
+						{tvShowSeasons.length === 0 ?
+							<div className='entity-management-list-empty'>
+								<p className='entity-management-list-empty-title'>{i18n.t('tvShowSeason.list.empty')}</p>
+								<p className='entity-management-list-empty-copy'>{i18n.t('tvShowSeason.list.emptyHint')}</p>
+							</div> :
+							<ul className='entity-management-list-items'>
+								{tvShowSeasons.map((tvShowSeason: TvShowSeasonInternal) => {
+									const episodesNumber = tvShowSeason.episodesNumber ? tvShowSeason.episodesNumber : 0;
+									const watchedEpisodesNumber = tvShowSeason.watchedEpisodesNumber ? tvShowSeason.watchedEpisodesNumber : 0;
+									const completeDisabled = !episodesNumber || watchedEpisodesNumber === episodesNumber;
+
+									return (
+										<li
+											key={String(tvShowSeason.number)}
+											className='entity-management-list-row'
+											style={{ '--entity-management-row-accent': this.getSeasonAccent(tvShowSeason) } as CSSProperties}>
+											<button
+												type='button'
+												className='entity-management-list-main'
+												onClick={() => {
+													this.props.editTvShowSeason(tvShowSeason);
+												}}>
+												<span className='entity-management-list-badge-shell' aria-hidden={true}>
+													<span className='entity-management-list-badge'>{tvShowSeason.number}</span>
+												</span>
+												<span className='entity-management-list-main-copy'>
+													<span className='entity-management-list-name'>
+														{i18n.t('tvShowSeason.list.row.main', {
+															seasonNumber: tvShowSeason.number
+														})}
+													</span>
+													<span className='entity-management-list-meta'>
+														{i18n.t('tvShowSeason.list.row.secondary', {
+															episodesNumber: episodesNumber,
+															watchedEpisodesNumber: watchedEpisodesNumber
+														})}
+													</span>
+												</span>
+												<span className='entity-management-list-progress'>
+													<span className='entity-management-list-progress-strong'>{watchedEpisodesNumber}</span>
+													/{episodesNumber}
+												</span>
+											</button>
+											<div className='entity-management-list-actions'>
+												<button
+													type='button'
+													className='entity-management-list-action'
+													disabled={completeDisabled}
+													onClick={() => {
+														this.props.completeTvShowSeason(tvShowSeason);
+													}}>
+													{i18n.t('tvShowSeason.list.complete')}
+												</button>
+												<button
+													type='button'
+													className='entity-management-list-action entity-management-list-action-danger'
+													onClick={() => {
+														this.requestDeleteTvShowSeason(tvShowSeason);
+													}}>
+													{i18n.t('tvShowSeason.list.delete')}
+												</button>
+											</div>
+										</li>
+									);
+								})}
+							</ul>}
+					</div>
+				</div>
+				{isMobileLayout &&
+					<FABComponent
+						text='+'
+						onPress={() => {
+							this.props.loadNewTvShowSeasonDetails();
+						}}
+					/>}
 				<ConfirmDialogComponent
 					visible={Boolean(pendingDeleteTvShowSeason)}
 					title={i18n.t('tvShowSeason.common.alert.delete.title')}
@@ -121,6 +191,47 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 		this.setState({
 			pendingDeleteTvShowSeason: tvShowSeason
 		});
+	}
+
+	/**
+	 * Updates the responsive layout flag when the viewport changes
+	 */
+	private handleResize = (): void => {
+		const isMobileLayout = this.isMobileLayout();
+
+		if(isMobileLayout !== this.state.isMobileLayout) {
+			this.setState({
+				isMobileLayout
+			});
+		}
+	};
+
+	/**
+	 * Resolves the accent color for the provided season row
+	 * @param tvShowSeason the season
+	 * @returns the accent color
+	 */
+	private getSeasonAccent(tvShowSeason: TvShowSeasonInternal): string {
+		const episodesNumber = tvShowSeason.episodesNumber ? tvShowSeason.episodesNumber : 0;
+		const watchedEpisodesNumber = tvShowSeason.watchedEpisodesNumber ? tvShowSeason.watchedEpisodesNumber : 0;
+
+		if(episodesNumber > 0 && watchedEpisodesNumber === episodesNumber) {
+			return TV_SHOW_SEASONS_SCREEN_COMPLETE_ACCENT;
+		}
+
+		if(watchedEpisodesNumber > 0) {
+			return TV_SHOW_SEASONS_SCREEN_ACTIVE_ACCENT;
+		}
+
+		return TV_SHOW_SEASONS_SCREEN_ACCENT;
+	}
+
+	/**
+	 * Checks whether the current viewport matches the mobile layout
+	 * @returns true if mobile layout should be used
+	 */
+	private isMobileLayout(): boolean {
+		return window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
 	}
 }
 
@@ -171,4 +282,5 @@ export type TvShowSeasonsListScreenComponentOutput = {
 
 type TvShowSeasonsListScreenComponentState = {
 	pendingDeleteTvShowSeason?: TvShowSeasonInternal;
+	isMobileLayout: boolean;
 }
