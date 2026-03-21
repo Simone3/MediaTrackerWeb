@@ -1,8 +1,11 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component, CSSProperties, ReactNode } from 'react';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { GroupInternal } from 'app/data/models/internal/group';
+import groupIcon from 'app/resources/images/ic_input_group.png';
 import { i18n } from 'app/utilities/i18n';
+
+const GROUP_DETAILS_ACCENT = '#7db4ff';
 
 /**
  * Presentational component that contains the whole "group details" screen, that works as the "add new group", "update group" and
@@ -21,6 +24,7 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 	 * @override
 	 */
 	public componentDidMount(): void {
+		document.body.classList.add('app-dark-screen-active');
 		this.syncFormValuesWithProps();
 	}
 
@@ -47,6 +51,13 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 	/**
 	 * @override
 	 */
+	public componentWillUnmount(): void {
+		document.body.classList.remove('app-dark-screen-active');
+	}
+
+	/**
+	 * @override
+	 */
 	public render(): ReactNode {
 		const {
 			isLoading
@@ -56,42 +67,84 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 			confirmSameNameVisible
 		} = this.state;
 		const isValid = this.isFormValid(formValues);
+		const title = formValues.id ? formValues.name : i18n.t('group.details.title.new');
 
 		return (
-			<section className='group-details-screen'>
-				<div className='group-details-header'>
-					<h1 className='group-details-title'>{formValues.id ? formValues.name : i18n.t('group.details.title.new')}</h1>
-					<div className='group-details-actions'>
-						<button
-							type='button'
-							className='group-details-button group-details-button-primary'
-							disabled={!isValid || isLoading}
-							onClick={() => {
-								this.submitForm(false);
-							}}>
-							Save
-						</button>
-					</div>
+			<section
+				className='entity-details-screen group-details-screen'
+				style={{ '--entity-details-accent': GROUP_DETAILS_ACCENT } as CSSProperties}>
+				<div className='entity-details-screen-content'>
+					<header className='entity-details-hero'>
+						<div className='entity-details-heading'>
+							<div className='entity-details-title-row'>
+								<span className='entity-details-icon-shell' aria-hidden={true}>
+									<img src={groupIcon} alt='' className='entity-details-icon' />
+								</span>
+								<div className='entity-details-title-copy'>
+									<h1 className='entity-details-title'>{title}</h1>
+									<p className='entity-details-subtitle'>{i18n.t('group.list.emptyHint')}</p>
+								</div>
+							</div>
+						</div>
+						<div className='entity-details-actions'>
+							<button
+								type='button'
+								className='entity-details-button entity-details-button-primary'
+								disabled={!isValid || isLoading}
+								onClick={() => {
+									this.submitForm(false);
+								}}>
+								Save
+							</button>
+						</div>
+					</header>
+					<form
+						className='entity-details-form'
+						onSubmit={(event) => {
+							event.preventDefault();
+							this.submitForm(false);
+						}}>
+						<div className='entity-details-main entity-details-main-split'>
+							<section className='entity-details-panel'>
+								<div className='entity-details-section-heading'>
+									<h2 className='entity-details-section-title'>{i18n.t('common.sections.basics')}</h2>
+									<p className='entity-details-panel-copy'>{i18n.t('group.list.emptyHint')}</p>
+								</div>
+								<div className='entity-details-grid'>
+									<div className='entity-details-field entity-details-field-span-2'>
+										<label className='entity-details-label' htmlFor='group-name'>
+											{i18n.t('group.details.placeholders.name')}
+										</label>
+										<input
+											id='group-name'
+											className='entity-details-input'
+											type='text'
+											value={formValues.name}
+											placeholder={i18n.t('group.details.placeholders.name')}
+											onChange={(event) => {
+												this.setFormField('name', event.target.value);
+											}}
+										/>
+									</div>
+								</div>
+							</section>
+							<section className='entity-details-panel'>
+								<div className='entity-details-section-heading'>
+									<h2 className='entity-details-section-title'>{i18n.t('common.sections.preview')}</h2>
+								</div>
+								<div className='entity-details-preview'>
+									<span className='entity-details-preview-badge-shell' aria-hidden={true}>
+										<span className='entity-details-preview-badge'>{this.getBadgeLabel(formValues.name, '#')}</span>
+									</span>
+									<div className='entity-details-preview-copy'>
+										<h3 className='entity-details-preview-title'>{title}</h3>
+										<p className='entity-details-preview-description'>{i18n.t('group.list.emptyHint')}</p>
+									</div>
+								</div>
+							</section>
+						</div>
+					</form>
 				</div>
-				<form
-					className='group-details-form'
-					onSubmit={(event) => {
-						event.preventDefault();
-						this.submitForm(false);
-					}}>
-					<label className='group-details-label' htmlFor='group-name'>
-						{i18n.t('group.details.placeholders.name')}
-					</label>
-					<input
-						id='group-name'
-						className='group-details-input'
-						type='text'
-						value={formValues.name}
-						onChange={(event) => {
-							this.setFormField('name', event.target.value);
-						}}
-					/>
-				</form>
 				<ConfirmDialogComponent
 					visible={confirmSameNameVisible}
 					title={i18n.t('group.common.alert.addSameName.title')}
@@ -202,6 +255,27 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 	 */
 	private areGroupsDifferent(left: GroupInternal, right: GroupInternal): boolean {
 		return left.id !== right.id || left.name !== right.name;
+	}
+
+	/**
+	 * Extracts a small badge label from the provided text
+	 * @param text the source text
+	 * @param fallback the fallback label
+	 * @returns the display label
+	 */
+	private getBadgeLabel(text: string, fallback: string): string {
+		const compactLabel = text
+			.trim()
+			.split(/\s+/u)
+			.filter(Boolean)
+			.slice(0, 2)
+			.map((chunk) => {
+				return chunk[0];
+			})
+			.join('')
+			.toUpperCase();
+
+		return compactLabel || fallback;
 	}
 }
 

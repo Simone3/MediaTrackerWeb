@@ -1,6 +1,11 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component, CSSProperties, ReactNode } from 'react';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
+import seasonIcon from 'app/resources/images/ic_input_season_number.png';
 import { i18n } from 'app/utilities/i18n';
+
+const TV_SHOW_SEASON_DETAILS_ACCENT = '#ffb067';
+const TV_SHOW_SEASON_DETAILS_ACTIVE_ACCENT = '#7db4ff';
+const TV_SHOW_SEASON_DETAILS_COMPLETE_ACCENT = '#7ad18f';
 
 /**
  * Presentational component that contains the whole "TV show season details" screen, that works as the "add new TV show season", "update TV show season" and
@@ -19,6 +24,7 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 	 * @override
 	 */
 	public componentDidMount(): void {
+		document.body.classList.add('app-dark-screen-active');
 		this.syncFormValuesWithProps();
 	}
 
@@ -39,6 +45,13 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 	/**
 	 * @override
 	 */
+	public componentWillUnmount(): void {
+		document.body.classList.remove('app-dark-screen-active');
+	}
+
+	/**
+	 * @override
+	 */
 	public render(): ReactNode {
 		const {
 			formValues
@@ -50,72 +63,142 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 		const title = addingNewSeason ?
 			i18n.t('tvShowSeason.details.title.new') :
 			i18n.t('tvShowSeason.details.title.existing', { seasonNumber: formValues.number });
+		const seasonSummary = this.getSeasonSummary(formValues);
+		const progressPercentage = this.getProgressPercentage(formValues);
 
 		return (
-			<section className='tv-show-season-details-screen'>
-				<div className='tv-show-season-details-header'>
-					<h1 className='tv-show-season-details-title'>{title}</h1>
-					<div className='tv-show-season-details-actions'>
-						<button
-							type='button'
-							className='tv-show-season-details-button tv-show-season-details-button-primary'
-							disabled={!isValid}
-							onClick={() => {
-								this.submitForm();
-							}}>
-							Save
-						</button>
-					</div>
+			<section
+				className='entity-details-screen tv-show-season-details-screen'
+				style={{ '--entity-details-accent': this.getSeasonAccent(formValues) } as CSSProperties}>
+				<div className='entity-details-screen-content'>
+					<header className='entity-details-hero'>
+						<div className='entity-details-heading'>
+							<div className='entity-details-title-row'>
+								<span className='entity-details-icon-shell' aria-hidden={true}>
+									<img src={seasonIcon} alt='' className='entity-details-icon' />
+								</span>
+								<div className='entity-details-title-copy'>
+									<h1 className='entity-details-title'>{title}</h1>
+									<p className='entity-details-subtitle'>{seasonSummary}</p>
+								</div>
+							</div>
+						</div>
+						<div className='entity-details-actions'>
+							<button
+								type='button'
+								className='entity-details-button entity-details-button-primary'
+								disabled={!isValid}
+								onClick={() => {
+									this.submitForm();
+								}}>
+								Save
+							</button>
+						</div>
+					</header>
+					<form
+						className='entity-details-form'
+						onSubmit={(event) => {
+							event.preventDefault();
+							this.submitForm();
+						}}>
+						<div className='entity-details-main entity-details-main-split'>
+							<section className='entity-details-panel'>
+								<div className='entity-details-section-heading'>
+									<h2 className='entity-details-section-title'>{i18n.t('common.sections.basics')}</h2>
+									<p className='entity-details-panel-copy'>{seasonSummary}</p>
+								</div>
+								<div className='entity-details-grid'>
+									<div className='entity-details-field'>
+										<label className='entity-details-label' htmlFor='tv-show-season-number'>
+											{i18n.t('tvShowSeason.details.placeholders.number')}
+										</label>
+										<input
+											id='tv-show-season-number'
+											className='entity-details-input'
+											type='number'
+											value={formValues.number ?? ''}
+											placeholder={i18n.t('tvShowSeason.details.placeholders.number')}
+											disabled={!addingNewSeason}
+											onChange={(event) => {
+												const value = event.target.value ? Number(event.target.value) : undefined;
+												this.setFormField('number', value as TvShowSeasonInternal['number']);
+											}}
+										/>
+									</div>
+									<div className='entity-details-field'>
+										<label className='entity-details-label' htmlFor='tv-show-season-episodes'>
+											{i18n.t('tvShowSeason.details.placeholders.episodesNumber')}
+										</label>
+										<input
+											id='tv-show-season-episodes'
+											className='entity-details-input'
+											type='number'
+											value={formValues.episodesNumber ?? ''}
+											placeholder={i18n.t('tvShowSeason.details.placeholders.episodesNumber')}
+											onChange={(event) => {
+												const value = event.target.value ? Number(event.target.value) : undefined;
+												this.setFormField('episodesNumber', value);
+											}}
+										/>
+									</div>
+									<div className='entity-details-field entity-details-field-span-2'>
+										<label className='entity-details-label' htmlFor='tv-show-season-watched'>
+											{i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber')}
+										</label>
+										<input
+											id='tv-show-season-watched'
+											className='entity-details-input'
+											type='number'
+											value={formValues.watchedEpisodesNumber ?? ''}
+											placeholder={i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber')}
+											onChange={(event) => {
+												const value = event.target.value ? Number(event.target.value) : undefined;
+												this.setFormField('watchedEpisodesNumber', value);
+											}}
+										/>
+									</div>
+								</div>
+							</section>
+							<section className='entity-details-panel'>
+								<div className='entity-details-section-heading'>
+									<h2 className='entity-details-section-title'>{i18n.t('common.sections.progress')}</h2>
+									<p className='entity-details-panel-copy'>{seasonSummary}</p>
+								</div>
+								<div className='entity-details-preview'>
+									<span className='entity-details-preview-badge-shell' aria-hidden={true}>
+										<span className='entity-details-preview-badge'>{this.getPreviewBadgeLabel(formValues.number)}</span>
+									</span>
+									<div className='entity-details-preview-copy'>
+										<h3 className='entity-details-preview-title'>{title}</h3>
+										<p className='entity-details-preview-description'>{seasonSummary}</p>
+									</div>
+								</div>
+								<div className='entity-details-progress'>
+									<div className='entity-details-progress-track' aria-hidden={true}>
+										<span
+											className='entity-details-progress-fill'
+											style={{ width: `${progressPercentage}%` }}
+										/>
+									</div>
+									<div className='entity-details-stats'>
+										<div className='entity-details-stat'>
+											<span className='entity-details-stat-label'>{i18n.t('tvShowSeason.details.placeholders.number')}</span>
+											<span className='entity-details-stat-value'>{this.getStatValue(formValues.number)}</span>
+										</div>
+										<div className='entity-details-stat'>
+											<span className='entity-details-stat-label'>{i18n.t('tvShowSeason.details.placeholders.episodesNumber')}</span>
+											<span className='entity-details-stat-value'>{this.getStatValue(formValues.episodesNumber)}</span>
+										</div>
+										<div className='entity-details-stat'>
+											<span className='entity-details-stat-label'>{i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber')}</span>
+											<span className='entity-details-stat-value'>{this.getStatValue(formValues.watchedEpisodesNumber)}</span>
+										</div>
+									</div>
+								</div>
+							</section>
+						</div>
+					</form>
 				</div>
-				<form
-					className='tv-show-season-details-form'
-					onSubmit={(event) => {
-						event.preventDefault();
-						this.submitForm();
-					}}>
-					<label className='tv-show-season-details-label' htmlFor='tv-show-season-number'>
-						{i18n.t('tvShowSeason.details.placeholders.number')}
-					</label>
-					<input
-						id='tv-show-season-number'
-						className='tv-show-season-details-input'
-						type='number'
-						value={formValues.number ?? ''}
-						disabled={!addingNewSeason}
-						onChange={(event) => {
-							const value = event.target.value ? Number(event.target.value) : undefined;
-							this.setFormField('number', value as TvShowSeasonInternal['number']);
-						}}
-					/>
-
-					<label className='tv-show-season-details-label' htmlFor='tv-show-season-episodes'>
-						{i18n.t('tvShowSeason.details.placeholders.episodesNumber')}
-					</label>
-					<input
-						id='tv-show-season-episodes'
-						className='tv-show-season-details-input'
-						type='number'
-						value={formValues.episodesNumber ?? ''}
-						onChange={(event) => {
-							const value = event.target.value ? Number(event.target.value) : undefined;
-							this.setFormField('episodesNumber', value);
-						}}
-					/>
-
-					<label className='tv-show-season-details-label' htmlFor='tv-show-season-watched'>
-						{i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber')}
-					</label>
-					<input
-						id='tv-show-season-watched'
-						className='tv-show-season-details-input'
-						type='number'
-						value={formValues.watchedEpisodesNumber ?? ''}
-						onChange={(event) => {
-							const value = event.target.value ? Number(event.target.value) : undefined;
-							this.setFormField('watchedEpisodesNumber', value);
-						}}
-					/>
-				</form>
 			</section>
 		);
 	}
@@ -210,6 +293,76 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 		return left.number !== right.number ||
 			left.episodesNumber !== right.episodesNumber ||
 			left.watchedEpisodesNumber !== right.watchedEpisodesNumber;
+	}
+
+	/**
+	 * Formats the current season summary copy
+	 * @param tvShowSeason current season values
+	 * @returns summary label
+	 */
+	private getSeasonSummary(tvShowSeason: TvShowSeasonInternal): string {
+		if(tvShowSeason.number === undefined && tvShowSeason.episodesNumber === undefined && tvShowSeason.watchedEpisodesNumber === undefined) {
+			return i18n.t('tvShowSeason.list.emptyHint');
+		}
+
+		return i18n.t('tvShowSeason.list.row.secondary', {
+			episodesNumber: tvShowSeason.episodesNumber ? tvShowSeason.episodesNumber : 0,
+			watchedEpisodesNumber: tvShowSeason.watchedEpisodesNumber ? tvShowSeason.watchedEpisodesNumber : 0
+		});
+	}
+
+	/**
+	 * Computes progress percentage for the current season
+	 * @param tvShowSeason current season values
+	 * @returns progress percentage
+	 */
+	private getProgressPercentage(tvShowSeason: TvShowSeasonInternal): number {
+		const episodesNumber = tvShowSeason.episodesNumber ? tvShowSeason.episodesNumber : 0;
+		const watchedEpisodesNumber = tvShowSeason.watchedEpisodesNumber ? tvShowSeason.watchedEpisodesNumber : 0;
+
+		if(!episodesNumber) {
+			return 0;
+		}
+
+		return Math.max(0, Math.min(100, (watchedEpisodesNumber / episodesNumber) * 100));
+	}
+
+	/**
+	 * Resolves the accent color for the current season
+	 * @param tvShowSeason current season values
+	 * @returns accent color
+	 */
+	private getSeasonAccent(tvShowSeason: TvShowSeasonInternal): string {
+		const episodesNumber = tvShowSeason.episodesNumber ? tvShowSeason.episodesNumber : 0;
+		const watchedEpisodesNumber = tvShowSeason.watchedEpisodesNumber ? tvShowSeason.watchedEpisodesNumber : 0;
+
+		if(episodesNumber > 0 && watchedEpisodesNumber === episodesNumber) {
+			return TV_SHOW_SEASON_DETAILS_COMPLETE_ACCENT;
+		}
+
+		if(watchedEpisodesNumber > 0) {
+			return TV_SHOW_SEASON_DETAILS_ACTIVE_ACCENT;
+		}
+
+		return TV_SHOW_SEASON_DETAILS_ACCENT;
+	}
+
+	/**
+	 * Formats a preview badge label for the season
+	 * @param seasonNumber current season number
+	 * @returns badge label
+	 */
+	private getPreviewBadgeLabel(seasonNumber?: number): string {
+		return seasonNumber === undefined ? '?' : String(seasonNumber);
+	}
+
+	/**
+	 * Formats stat values consistently
+	 * @param value current stat value
+	 * @returns display value
+	 */
+	private getStatValue(value?: number): string {
+		return value === undefined ? '-' : String(value);
 	}
 }
 

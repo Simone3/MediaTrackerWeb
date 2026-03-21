@@ -110,6 +110,23 @@
   - good reference implementations when category behavior looks wrong
 
 ## Recent fix worth remembering
+- Group, own-platform, and TV-show-season detail forms had still been using the older light card layout on web.
+  - Correct behavior/style on web now:
+    - all three forms now use the same dark full-bleed shell language as the media-item details page instead of standalone light cards
+    - each screen now has a responsive hero header with the entity icon, save action, and stacked mobile layout
+    - group details now pair the name field with a live initials preview card
+    - own-platform details now split basics, appearance controls, and a live preview card while keeping the same name/icon/color save logic
+    - TV-show-season details now pair the edit fields with a progress summary card that reflects watched vs total episodes without changing validation behavior
+    - all three screens now add and remove the shared `app-dark-screen-active` body class so their background and loading treatment match the newer detail flows
+  - Relevant files:
+    - `app/components/presentational/group/details/screen/index.tsx`
+    - `app/components/presentational/own-platform/details/screen/index.tsx`
+    - `app/components/presentational/tv-show-season/details/screen/index.tsx`
+    - `app/resources/lang/lang-en.json`
+    - `app/web/styles.css`
+    - `tests/group-details.smoke.test.tsx`
+    - `tests/own-platform-details.smoke.test.tsx`
+    - `tests/tv-show-season-details.smoke.test.tsx`
 - Group, own-platform, and TV-show-season list pages had still been using the older lighter list treatment on web.
   - Correct behavior/style on web now:
     - all three screens now use the same full-bleed dark shell language as the media items list instead of the older boxed light layout

@@ -446,6 +446,15 @@
 		"state": {
 			"selected": "Selected"
 		},
+		"fields": {
+			"color": "Color"
+		},
+		"sections": {
+			"appearance": "Appearance",
+			"basics": "Basics",
+			"preview": "Preview",
+			"progress": "Progress"
+		},
 		"drawer": {
 			"navigation": "App navigation",
 			"home": "Media",
