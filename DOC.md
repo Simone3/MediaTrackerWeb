@@ -317,6 +317,7 @@
     - the empty-state cards now appear only after a successful fetch confirms there are actually zero results
     - failed fetches now keep the last known list data and store a dedicated `FETCH_FAILED` status so the UI no longer falls back to misleading empty cards
     - the shared group/own-platform selector screens still keep their `None` row visible while the fetched rows are loading
+    - the category skeleton now keeps its right-side overflow placeholder vertically centered inside the same slot used by the real three-dots action
   - Relevant files:
     - `app/components/containers/category/list/list.ts`
     - `app/components/containers/media-item/list/list.ts`

@@ -784,6 +784,9 @@ body.app-dark-screen-active .app-shell-content {
 }
 
 .category-row-options {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: 72px;
 	border: 0;
 	border-left: 1px solid rgba(126, 150, 188, 0.14);
