@@ -315,7 +315,7 @@
   - Correct behavior on web now:
     - category, media item, group, own platform, and TV show season screens no longer render explicit `Back` buttons
     - the media-item list still keeps its in-list `Back` control for exiting "view group" mode, because that is not browser navigation
-    - dirty category/media-item forms now intercept the browser back button and show the same unsaved-changes confirmation before leaving
+    - dirty category/media-item forms now intercept the browser back button and same-origin in-app link clicks, so the shared unsaved-changes confirmation also appears when leaving through the main sidebar icons
     - confirming browser-back from the media-item details screen still discards the temporary Redux draft before leaving
   - Relevant files:
     - `app/components/presentational/generic/browser-back-navigation-guard/index.tsx`

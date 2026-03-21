@@ -1,6 +1,6 @@
 import React, { ReactElement, ReactNode, useEffect, useRef, useState } from 'react';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
-import { useBeforeUnload, useLocation } from 'react-router-dom';
+import { useBeforeUnload, useLocation, useNavigate } from 'react-router-dom';
 
 const HISTORY_STATE_KEY = '__browserBackGuardPath';
 
@@ -28,6 +28,13 @@ const pushGuardHistoryState = (path: string): void => {
 	}, '', path);
 };
 
+type PendingNavigation = {
+	type: 'BROWSER_BACK';
+} | {
+	type: 'IN_APP_PATH';
+	path: string;
+};
+
 /**
  * Generic wrapper that replaces in-app back buttons while still guarding browser back for dirty forms.
  * It inserts a duplicate history entry when needed so the first browser-back attempt can be intercepted.
@@ -45,11 +52,13 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 		children
 	} = props;
 	const location = useLocation();
+	const navigate = useNavigate();
 	const currentPath = getCurrentPath(location.pathname, location.search, location.hash);
 	const [ dialogVisible, setDialogVisible ] = useState(false);
 	const currentPathRef = useRef(currentPath);
 	const whenRef = useRef(when);
 	const guardArmedRef = useRef(false);
+	const pendingNavigationRef = useRef<PendingNavigation | undefined>(undefined);
 
 	currentPathRef.current = currentPath;
 	whenRef.current = when;
@@ -73,6 +82,9 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 			guardArmedRef.current = false;
 
 			if(whenRef.current) {
+				pendingNavigationRef.current = {
+					type: 'BROWSER_BACK'
+				};
 				setDialogVisible(true);
 				return;
 			}
@@ -84,6 +96,60 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 
 		return () => {
 			window.removeEventListener('popstate', handlePopState);
+		};
+	}, []);
+
+	useEffect(() => {
+		const handleDocumentClick = (event: MouseEvent): void => {
+			if(
+				!whenRef.current ||
+				event.defaultPrevented ||
+				event.button !== 0 ||
+				event.metaKey ||
+				event.altKey ||
+				event.ctrlKey ||
+				event.shiftKey
+			) {
+				return;
+			}
+
+			const target = event.target;
+			if(!(target instanceof Element)) {
+				return;
+			}
+
+			// Intercept same-origin anchor navigation, including sidebar links rendered outside the guarded subtree.
+			const linkElement = target.closest('a[href]');
+			if(!(linkElement instanceof HTMLAnchorElement)) {
+				return;
+			}
+
+			if((linkElement.target && linkElement.target !== '_self') || linkElement.hasAttribute('download')) {
+				return;
+			}
+
+			const nextUrl = new URL(linkElement.href, window.location.href);
+			if(nextUrl.origin !== window.location.origin) {
+				return;
+			}
+
+			const nextPath = getCurrentPath(nextUrl.pathname, nextUrl.search, nextUrl.hash);
+			if(nextPath === currentPathRef.current) {
+				return;
+			}
+
+			event.preventDefault();
+			pendingNavigationRef.current = {
+				type: 'IN_APP_PATH',
+				path: nextPath
+			};
+			setDialogVisible(true);
+		};
+
+		document.addEventListener('click', handleDocumentClick, true);
+
+		return () => {
+			document.removeEventListener('click', handleDocumentClick, true);
 		};
 	}, []);
 
@@ -114,13 +180,26 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 				confirmLabel={confirmLabel}
 				cancelLabel={cancelLabel}
 				onConfirm={() => {
+					const pendingNavigation = pendingNavigationRef.current;
+					pendingNavigationRef.current = undefined;
 					setDialogVisible(false);
 					onConfirmLeave?.();
-					window.history.back();
+
+					if(!pendingNavigation || pendingNavigation.type === 'BROWSER_BACK') {
+						window.history.back();
+						return;
+					}
+
+					navigate(pendingNavigation.path);
 				}}
 				onCancel={() => {
+					const pendingNavigation = pendingNavigationRef.current;
+					pendingNavigationRef.current = undefined;
 					setDialogVisible(false);
-					rearmGuard();
+
+					if(pendingNavigation?.type === 'BROWSER_BACK') {
+						rearmGuard();
+					}
 				}}
 			/>
 		</>

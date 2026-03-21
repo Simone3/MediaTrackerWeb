@@ -5,6 +5,7 @@ import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/cate
 import { MediaItemContextMenuComponent } from 'app/components/presentational/media-item/list/context-menu';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
+import { i18n } from 'app/utilities/i18n';
 
 describe('MediaItemContextMenuComponent', () => {
 	const group: GroupInternal = {
@@ -58,7 +59,7 @@ describe('MediaItemContextMenuComponent', () => {
 		expect(screen.getByRole('button', { name: 'Delete book' })).toBeInTheDocument();
 		expect(screen.getByRole('button', { name: "I'm reading this" })).toBeInTheDocument();
 		expect(screen.getByRole('button', { name: "I've read this" })).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: 'View Group' })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.viewGroup') })).toBeInTheDocument();
 		expect(screen.queryByText('Books')).not.toBeInTheDocument();
 
 		const user = userEvent.setup();
