@@ -104,12 +104,8 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 							event.preventDefault();
 							this.submitForm(false);
 						}}>
-						<div className='entity-details-main entity-details-main-split'>
+						<div className='entity-details-main'>
 							<section className='entity-details-panel'>
-								<div className='entity-details-section-heading'>
-									<h2 className='entity-details-section-title'>{i18n.t('common.sections.basics')}</h2>
-									<p className='entity-details-panel-copy'>{i18n.t('group.list.emptyHint')}</p>
-								</div>
 								<div className='entity-details-grid'>
 									<div className='entity-details-field entity-details-field-span-2'>
 										<label className='entity-details-label' htmlFor='group-name'>
@@ -125,20 +121,6 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 												this.setFormField('name', event.target.value);
 											}}
 										/>
-									</div>
-								</div>
-							</section>
-							<section className='entity-details-panel'>
-								<div className='entity-details-section-heading'>
-									<h2 className='entity-details-section-title'>{i18n.t('common.sections.preview')}</h2>
-								</div>
-								<div className='entity-details-preview'>
-									<span className='entity-details-preview-badge-shell' aria-hidden={true}>
-										<span className='entity-details-preview-badge'>{this.getBadgeLabel(formValues.name, '#')}</span>
-									</span>
-									<div className='entity-details-preview-copy'>
-										<h3 className='entity-details-preview-title'>{title}</h3>
-										<p className='entity-details-preview-description'>{i18n.t('group.list.emptyHint')}</p>
 									</div>
 								</div>
 							</section>
@@ -255,27 +237,6 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 	 */
 	private areGroupsDifferent(left: GroupInternal, right: GroupInternal): boolean {
 		return left.id !== right.id || left.name !== right.name;
-	}
-
-	/**
-	 * Extracts a small badge label from the provided text
-	 * @param text the source text
-	 * @param fallback the fallback label
-	 * @returns the display label
-	 */
-	private getBadgeLabel(text: string, fallback: string): string {
-		const compactLabel = text
-			.trim()
-			.split(/\s+/u)
-			.filter(Boolean)
-			.slice(0, 2)
-			.map((chunk) => {
-				return chunk[0];
-			})
-			.join('')
-			.toUpperCase();
-
-		return compactLabel || fallback;
 	}
 }
 

@@ -24,8 +24,8 @@ describe('GroupDetailsScreenComponent', () => {
 
 		expect(document.body).toHaveClass('app-dark-screen-active');
 		expect(screen.getByRole('heading', { level: 1, name: 'New Group' })).toBeInTheDocument();
-		expect(screen.getByRole('heading', { level: 2, name: 'Basics' })).toBeInTheDocument();
-		expect(screen.getByRole('heading', { level: 2, name: 'Preview' })).toBeInTheDocument();
+		expect(screen.queryByRole('heading', { level: 2, name: 'Basics' })).not.toBeInTheDocument();
+		expect(screen.queryByRole('heading', { level: 2, name: 'Preview' })).not.toBeInTheDocument();
 
 		const user = userEvent.setup();
 		const nameInput = screen.getByLabelText('Name');
