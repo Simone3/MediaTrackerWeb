@@ -73,6 +73,52 @@ describe('MediaItemsListComponent', () => {
 		expect(highlightMediaItem).toHaveBeenCalledWith(mediaItem);
 	});
 
+	test('keeps the platform shell empty when a media item has no own platform', () => {
+		const category: CategoryInternal = {
+			id: 'category-id',
+			name: 'My Books',
+			mediaType: 'BOOK',
+			color: '#3f51b5'
+		};
+		const mediaItem: MediaItemInternal = {
+			id: 'media-id',
+			name: 'Dune',
+			mediaType: 'BOOK',
+			status: 'ACTIVE',
+			importance: '300'
+		};
+
+		render(
+			<MediaItemsListComponent
+				category={category}
+				mediaItems={[ mediaItem ]}
+				highlightedMediaItem={undefined}
+				currentViewGroup={undefined}
+				isSearchMode={false}
+				currentSearchTerm={undefined}
+				openSearch={jest.fn()}
+				submitSearch={jest.fn()}
+				closeSearch={jest.fn()}
+				openFilters={jest.fn()}
+				selectMediaItem={jest.fn()}
+				highlightMediaItem={jest.fn()}
+				editMediaItem={jest.fn()}
+				deleteMediaItem={jest.fn()}
+				markMediaItemAsActive={jest.fn()}
+				markMediaItemAsComplete={jest.fn()}
+				markMediaItemAsRedo={jest.fn()}
+				viewMediaItemGroup={jest.fn()}
+				closeMediaItemMenu={jest.fn()}
+				exitViewGroupMode={jest.fn()}
+			/>
+		);
+
+		const platformBadge = screen.getByLabelText('Not owned on any platform');
+
+		expect(platformBadge.querySelector('.media-item-row-platform-shell')).not.toBeNull();
+		expect(platformBadge.querySelector('.media-item-row-platform-icon')).toBeNull();
+	});
+
 	test('keeps the search bar visible and closes search mode from the submit button when cleared', async() => {
 		const category: CategoryInternal = {
 			id: 'category-id',

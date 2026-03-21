@@ -270,7 +270,7 @@
     - `tests/media-items-list-container.smoke.test.tsx`
 - Media item rows on the web had lost most of the old RN summary content and iconography.
   - Correct behavior on web now:
-    - each row again shows the own-platform icon on the left, falling back to the old "none" icon when there is no platform
+    - each row again shows the own-platform icon on the left, while items without a platform keep the same empty badge shell without rendering the old fallback circle icon
     - the row body mirrors the RN text layout again:
       - title on the first line
       - year / duration / TV production flag / creators on the second line when available

@@ -12,7 +12,6 @@ import importanceOneIcon from 'app/resources/images/ic_importance_1.png';
 import importanceTwoIcon from 'app/resources/images/ic_importance_2.png';
 import importanceThreeIcon from 'app/resources/images/ic_importance_3.png';
 import importanceFourIcon from 'app/resources/images/ic_importance_4.png';
-import noneIcon from 'app/resources/images/ic_none.png';
 import platformAndroidIcon from 'app/resources/images/ic_platform_android.png';
 import platformAppleIcon from 'app/resources/images/ic_platform_apple.png';
 import platformBookIcon from 'app/resources/images/ic_platform_book.png';
@@ -373,7 +372,6 @@ const getRowAccentColor = (mediaItem: MediaItemInternal, statusColors: IconColor
 export const MediaItemRowComponent = (props: MediaItemRowComponentInput & MediaItemRowComponentOutput): ReactElement => {
 	const detailRows = getDetailRows(props.mediaItem);
 	const ownPlatform = props.mediaItem.ownPlatform;
-	const ownPlatformIcon = ownPlatform ? ownPlatformIcons[ownPlatform.icon] : noneIcon;
 	const ownPlatformColor = ownPlatform ? ownPlatform.color : config.ui.colors.grey;
 	const statusColors = getStatusColors(props.mediaItem);
 	const statusIcon = getStatusIcon(props.mediaItem);
@@ -392,11 +390,13 @@ export const MediaItemRowComponent = (props: MediaItemRowComponentInput & MediaI
 					role='img'
 					aria-label={ownPlatform ? `Owned at ${ownPlatform.name}` : 'Not owned on any platform'}>
 					<span className='media-item-row-platform-shell' aria-hidden={true}>
-						<span
-							className='media-item-row-icon media-item-row-platform-icon'
-							style={getMaskedIconStyle(ownPlatformIcon, ownPlatformColor)}
-							aria-hidden={true}
-						/>
+						{ownPlatform && (
+							<span
+								className='media-item-row-icon media-item-row-platform-icon'
+								style={getMaskedIconStyle(ownPlatformIcons[ownPlatform.icon], ownPlatformColor)}
+								aria-hidden={true}
+							/>
+						)}
 					</span>
 				</span>
 				<span className='media-item-row-data'>
