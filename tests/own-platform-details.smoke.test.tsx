@@ -28,9 +28,11 @@ describe('OwnPlatformDetailsScreenComponent', () => {
 
 		expect(document.body).toHaveClass('app-dark-screen-active');
 		expect(screen.getByRole('heading', { level: 1, name: 'New Platform' })).toBeInTheDocument();
-		expect(screen.getByRole('heading', { level: 2, name: 'Basics' })).toBeInTheDocument();
-		expect(screen.getByRole('heading', { level: 2, name: 'Appearance' })).toBeInTheDocument();
-		expect(screen.getByRole('heading', { level: 2, name: 'Preview' })).toBeInTheDocument();
+		expect(screen.queryByRole('heading', { level: 2, name: 'Basics' })).not.toBeInTheDocument();
+		expect(screen.queryByRole('heading', { level: 2, name: 'Appearance' })).not.toBeInTheDocument();
+		expect(screen.queryByRole('heading', { level: 2, name: 'Preview' })).not.toBeInTheDocument();
+		expect(document.querySelector('input[type="color"]')).not.toBeInTheDocument();
+		expect(screen.getByRole('img', { name: 'Generic icon' })).toBeInTheDocument();
 
 		const user = userEvent.setup();
 		const nameInput = screen.getByLabelText('Name');
@@ -38,6 +40,7 @@ describe('OwnPlatformDetailsScreenComponent', () => {
 
 		await user.type(nameInput, 'Kindle Library');
 		await user.selectOptions(iconSelect, 'kindle');
+		expect(screen.getByRole('img', { name: 'Kindle icon' })).toBeInTheDocument();
 		await user.click(screen.getByRole('button', { name: `Select color ${selectedColor}` }));
 		await user.click(screen.getByRole('button', { name: 'Save' }));
 

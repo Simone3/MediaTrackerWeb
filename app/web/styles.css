@@ -3003,6 +3003,7 @@ body.app-dark-screen-active .app-shell-content {
 }
 
 .entity-details-label {
+	margin: 0;
 	font-size: 0.82rem;
 	font-weight: 700;
 	letter-spacing: 0.08em;
@@ -3022,6 +3023,36 @@ body.app-dark-screen-active .app-shell-content {
 	color: #f6f8ff;
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 	color-scheme: dark;
+}
+
+.entity-details-select-row {
+	display: flex;
+	align-items: stretch;
+	gap: 12px;
+}
+
+.entity-details-select-row .entity-details-select {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.entity-details-selected-icon-shell {
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 54px;
+	height: 54px;
+	border-radius: 16px;
+	border: 1px solid rgba(159, 183, 231, 0.16);
+	background: rgba(255, 255, 255, 0.04);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.entity-details-selected-icon {
+	width: 26px;
+	height: 26px;
+	object-fit: contain;
 }
 
 .entity-details-color-input {
@@ -3122,19 +3153,19 @@ body.app-dark-screen-active .app-shell-content {
 }
 
 .entity-details-color-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
+	display: flex;
+	flex-wrap: wrap;
 	gap: 10px;
 }
 
 .entity-details-color {
-	width: 100%;
-	aspect-ratio: 1 / 1;
-	border: 1px solid rgba(255, 255, 255, 0.22);
-	border-radius: 16px;
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+	flex: 0 0 auto;
+	width: 36px;
+	height: 36px;
+	border-radius: 14px;
+	border: 2px solid rgba(12, 18, 28, 0.42);
 	cursor: pointer;
-	transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+	transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .entity-details-color:hover:not([disabled]) {
@@ -3142,8 +3173,15 @@ body.app-dark-screen-active .app-shell-content {
 }
 
 .entity-details-color-selected {
-	border-color: #f7fbff;
-	box-shadow: 0 0 0 2px rgba(125, 180, 255, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+	border-color: #dfe8fb;
+	box-shadow: 0 0 0 3px rgba(126, 168, 255, 0.28);
+	transform: translateY(-1px);
+}
+
+.entity-details-color:focus-visible {
+	outline: none;
+	border-color: rgba(12, 18, 28, 0.42);
+	box-shadow: 0 0 0 3px rgba(126, 168, 255, 0.22);
 }
 
 .entity-details-progress {
@@ -4021,8 +4059,8 @@ body.app-dark-screen-active .loading-indicator-spinner {
 		border-radius: 20px;
 	}
 
-	.entity-details-color-grid {
-		grid-template-columns: repeat(auto-fit, minmax(52px, 1fr));
+	.entity-details-select-row {
+		gap: 10px;
 	}
 
 	.settings-screen,

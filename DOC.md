@@ -115,7 +115,8 @@
     - all three forms now use the same dark full-bleed shell language as the media-item details page instead of standalone light cards
     - each screen now has a responsive hero header with the entity icon, save action, and stacked mobile layout
     - group details now pair the name field with a live initials preview card
-    - own-platform details now split basics, appearance controls, and a live preview card while keeping the same name/icon/color save logic
+    - own-platform details now use a single main form card without extra section headings or preview chrome, while keeping the same name/icon/color save logic
+    - the platform icon selector now shows the currently selected icon beside the dropdown, and the color swatches now reuse the same compact size/treatment as the category form
     - TV-show-season details now use the same dark shell but keep only the main form card, with the season summary living in the page hero instead of a separate progress panel
     - on larger screens, the season number field now sits on its own row, while total and watched episodes share the row below
     - all three screens now add and remove the shared `app-dark-screen-active` body class so their background and loading treatment match the newer detail flows

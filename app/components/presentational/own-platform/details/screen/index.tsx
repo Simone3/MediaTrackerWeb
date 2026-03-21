@@ -2,11 +2,46 @@ import React, { Component, CSSProperties, ReactNode } from 'react';
 import { config } from 'app/config/config';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
-import { OWN_PLATFORM_ICON_INTERNAL_VALUES, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
+import { OWN_PLATFORM_ICON_INTERNAL_VALUES, OwnPlatformIconInternal, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import ownPlatformIcon from 'app/resources/images/ic_input_own_platform.png';
+import platformAndroidIcon from 'app/resources/images/ic_platform_android.png';
+import platformAppleIcon from 'app/resources/images/ic_platform_apple.png';
+import platformBookIcon from 'app/resources/images/ic_platform_book.png';
+import platformDiscIcon from 'app/resources/images/ic_platform_disc.png';
+import platformDisneyIcon from 'app/resources/images/ic_platform_disney.png';
+import platformDownloadIcon from 'app/resources/images/ic_platform_download.png';
+import platformEpicIcon from 'app/resources/images/ic_platform_epic.png';
+import platformGogIcon from 'app/resources/images/ic_platform_gog.png';
+import platformHuluIcon from 'app/resources/images/ic_platform_hulu.png';
+import platformKindleIcon from 'app/resources/images/ic_platform_kindle.png';
+import platformNetflixIcon from 'app/resources/images/ic_platform_netflix.png';
+import platformOriginIcon from 'app/resources/images/ic_platform_origin.png';
+import platformPlaystationIcon from 'app/resources/images/ic_platform_playstation.png';
+import platformSteamIcon from 'app/resources/images/ic_platform_steam.png';
+import platformSwitchIcon from 'app/resources/images/ic_platform_switch.png';
+import platformUplayIcon from 'app/resources/images/ic_platform_uplay.png';
 import { i18n } from 'app/utilities/i18n';
 
 const OWN_PLATFORM_DETAILS_ACCENT = '#7db4ff';
+const ownPlatformIcons: Record<OwnPlatformIconInternal, string> = {
+	default: ownPlatformIcon,
+	android: platformAndroidIcon,
+	apple: platformAppleIcon,
+	book: platformBookIcon,
+	disc: platformDiscIcon,
+	disney: platformDisneyIcon,
+	download: platformDownloadIcon,
+	epic: platformEpicIcon,
+	gog: platformGogIcon,
+	hulu: platformHuluIcon,
+	kindle: platformKindleIcon,
+	netflix: platformNetflixIcon,
+	origin: platformOriginIcon,
+	playstation: platformPlaystationIcon,
+	steam: platformSteamIcon,
+	switch: platformSwitchIcon,
+	uplay: platformUplayIcon
+};
 
 /**
  * Presentational component that contains the whole "own platform details" screen, that works as the "add new own platform", "update own platform" and
@@ -107,40 +142,39 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 							event.preventDefault();
 							this.submitForm(false);
 						}}>
-						<div className='entity-details-main entity-details-main-split'>
-							<div className='entity-details-stack'>
-								<section className='entity-details-panel'>
-									<div className='entity-details-section-heading'>
-										<h2 className='entity-details-section-title'>{i18n.t('common.sections.basics')}</h2>
-										<p className='entity-details-panel-copy'>{i18n.t('ownPlatform.list.emptyHint')}</p>
+						<div className='entity-details-main'>
+							<section className='entity-details-panel'>
+								<div className='entity-details-grid'>
+									<div className='entity-details-field entity-details-field-span-2'>
+										<label className='entity-details-label' htmlFor='own-platform-name'>
+											{i18n.t('ownPlatform.details.placeholders.name')}
+										</label>
+										<input
+											id='own-platform-name'
+											className='entity-details-input'
+											type='text'
+											value={formValues.name}
+											placeholder={i18n.t('ownPlatform.details.placeholders.name')}
+											onChange={(event) => {
+												this.setFormField('name', event.target.value);
+											}}
+										/>
 									</div>
-									<div className='entity-details-grid'>
-										<div className='entity-details-field entity-details-field-span-2'>
-											<label className='entity-details-label' htmlFor='own-platform-name'>
-												{i18n.t('ownPlatform.details.placeholders.name')}
-											</label>
-											<input
-												id='own-platform-name'
-												className='entity-details-input'
-												type='text'
-												value={formValues.name}
-												placeholder={i18n.t('ownPlatform.details.placeholders.name')}
-												onChange={(event) => {
-													this.setFormField('name', event.target.value);
-												}}
-											/>
-										</div>
-									</div>
-								</section>
-								<section className='entity-details-panel'>
-									<div className='entity-details-section-heading'>
-										<h2 className='entity-details-section-title'>{i18n.t('common.sections.appearance')}</h2>
-									</div>
-									<div className='entity-details-grid'>
-										<div className='entity-details-field'>
-											<label className='entity-details-label' htmlFor='own-platform-icon'>
-												{i18n.t('ownPlatform.details.prompts.icon')}
-											</label>
+									<div className='entity-details-field entity-details-field-span-2'>
+										<label className='entity-details-label' htmlFor='own-platform-icon'>
+											{i18n.t('ownPlatform.details.prompts.icon')}
+										</label>
+										<div className='entity-details-select-row'>
+											<span
+												className='entity-details-selected-icon-shell'
+												role='img'
+												aria-label={`${i18n.t(`ownPlatform.icons.${formValues.icon}`)} icon`}>
+												<img
+													src={ownPlatformIcons[formValues.icon]}
+													alt=''
+													className='entity-details-selected-icon'
+												/>
+											</span>
 											<select
 												id='own-platform-icon'
 												className='entity-details-select'
@@ -157,63 +191,37 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 												})}
 											</select>
 										</div>
-										<div className='entity-details-field entity-details-field-span-2'>
-											<label className='entity-details-label' htmlFor='own-platform-color'>
-												{i18n.t('common.fields.color')}
-											</label>
-											<div className='entity-details-color-grid'>
-												{config.ui.colors.availableOwnPlatformColors.map((color) => {
-													const selected = formValues.color === color;
-													const buttonClassName = selected ?
-														'entity-details-color entity-details-color-selected' :
-														'entity-details-color';
+									</div>
+									<div className='entity-details-field entity-details-field-span-2'>
+										<p className='entity-details-label'>
+											{i18n.t('common.fields.color')}
+										</p>
+										<div
+											id='own-platform-color'
+											className='entity-details-color-grid'
+											role='group'
+											aria-label={i18n.t('common.fields.color')}>
+											{config.ui.colors.availableOwnPlatformColors.map((color) => {
+												const selected = formValues.color === color;
+												const buttonClassName = selected ?
+													'entity-details-color entity-details-color-selected' :
+													'entity-details-color';
 
-													return (
-														<button
-															key={color}
-															type='button'
-															className={buttonClassName}
-															style={{ backgroundColor: color }}
-															onClick={() => {
-																this.setFormField('color', color);
-															}}
-															aria-label={`Select color ${color}`}
-															aria-pressed={selected}
-														/>
-													);
-												})}
-											</div>
-											<input
-												id='own-platform-color'
-												className='entity-details-color-input'
-												type='color'
-												value={formValues.color}
-												onChange={(event) => {
-													this.setFormField('color', event.target.value);
-												}}
-											/>
+												return (
+													<button
+														key={color}
+														type='button'
+														className={buttonClassName}
+														style={{ backgroundColor: color }}
+														onClick={() => {
+															this.setFormField('color', color);
+														}}
+														aria-label={`Select color ${color}`}
+														aria-pressed={selected}
+													/>
+												);
+											})}
 										</div>
-									</div>
-								</section>
-							</div>
-							<section className='entity-details-panel'>
-								<div className='entity-details-section-heading'>
-									<h2 className='entity-details-section-title'>{i18n.t('common.sections.preview')}</h2>
-								</div>
-								<div className='entity-details-preview'>
-									<span
-										className='entity-details-preview-badge-shell'
-										style={{ backgroundColor: formValues.color }}
-										aria-hidden={true}>
-										<img src={ownPlatformIcon} alt='' className='entity-details-preview-icon' />
-									</span>
-									<div className='entity-details-preview-copy'>
-										<h3 className='entity-details-preview-title'>{title}</h3>
-										<p className='entity-details-preview-description'>{i18n.t(`ownPlatform.icons.${formValues.icon}`)}</p>
-									</div>
-									<div className='entity-details-chip-row'>
-										<span className='entity-details-chip'>{i18n.t(`ownPlatform.icons.${formValues.icon}`)}</span>
-										<span className='entity-details-chip'>{formValues.color}</span>
 									</div>
 								</div>
 							</section>
