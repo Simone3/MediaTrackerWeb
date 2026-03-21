@@ -23,7 +23,7 @@ import platformSwitchIcon from 'app/resources/images/ic_platform_switch.png';
 import platformUplayIcon from 'app/resources/images/ic_platform_uplay.png';
 import { i18n } from 'app/utilities/i18n';
 
-const OWN_PLATFORMS_SCREEN_ACCENT = '#74d6af';
+const OWN_PLATFORMS_SCREEN_ACCENT = '#7db4ff';
 const ownPlatformIcons: Record<OwnPlatformIconInternal, string> = {
 	default: ownPlatformIcon,
 	android: platformAndroidIcon,

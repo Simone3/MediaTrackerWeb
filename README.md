@@ -10,6 +10,8 @@ TODO:
   - categories add FAB displayed under the confirm modal
   - three-dots modal does not have icons
   - media item accent when clicking three dots is still black
+  - back triggers the edited changes warning, but not clicking on the sidebar!
+  - remove circle in non-owned media items, just leave the empty box
 - add favicon
 - refactor to have common centralized components, if not already
 - check dev vs. prod configs - how to inject them in a webapp?
