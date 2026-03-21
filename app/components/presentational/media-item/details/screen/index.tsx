@@ -1,4 +1,4 @@
-import React, { CSSProperties, Component, KeyboardEvent, ReactNode } from 'react';
+import React, { Component, KeyboardEvent, ReactNode } from 'react';
 import { config } from 'app/config/config';
 import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
@@ -324,9 +324,7 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 		const mediaTypeLabel = i18n.t(`category.mediaTypes.${mediaItem.mediaType}`);
 
 		return (
-			<section
-				className='media-item-details-panel media-item-details-media-panel'
-				style={{ '--media-item-details-action-count': buttons.length } as CSSProperties}>
+			<section className='media-item-details-panel media-item-details-media-panel'>
 				<div className='media-item-details-image-wrapper'>
 					<img
 						className='media-item-details-image'

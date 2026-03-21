@@ -179,7 +179,8 @@
   - confirmed exit from the media-item form now discards the temporary Redux draft instead of carrying it past navigation
   - the details page now uses the same full-bleed dark shell language as the media items list instead of the older light card
   - the form is grouped into responsive section cards, while the artwork and external shortcut buttons now sit together in a top strip again instead of a left sidebar
-  - the poster now keeps its original aspect ratio and sizes itself against a vertical action-icon column on its right, with that icon rail anchored to the panel's right edge while the poster stays centered in the remaining space
+  - the media block now uses a 2x2 shortcut grid on the right side of the strip, with panel padding and the gap between poster and shortcuts intentionally matched
+  - the poster is rendered without the old box chrome, stays centered in the left portion of the strip, and keeps a fixed height equal to twice the shortcut-grid height while cropping proportionally if width gets tight
   - the old extra media-type eyebrow has been removed from the page header
 - Relevant files:
   - `app/components/containers/category/details/screen.ts`
