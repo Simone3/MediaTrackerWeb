@@ -29,7 +29,7 @@ type MediaItemActionButton = {
 	onClick: () => void;
 };
 
-type MediaItemDetailsSectionKey = 'sidebar' | 'basics' | 'profile' | 'collection' | 'progress';
+type MediaItemDetailsSectionKey = 'basics' | 'profile' | 'collection' | 'progress';
 
 /**
  * Presentational component that contains the whole "media item details" screen, that works as the "add new media item", "update media item" and
@@ -104,7 +104,6 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 		const isValid = this.isFormValid(formValues);
 		const title = formValues.id ? formValues.name : i18n.t(`mediaItem.details.title.new.${formValues.mediaType}`);
 		const mediaTypeLabel = i18n.t(`category.mediaTypes.${formValues.mediaType}`);
-		const heroPills = this.getHeroPills(formValues);
 
 		return (
 			<section className='media-item-details-screen'>
@@ -118,15 +117,6 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 								</span>
 								<div className='media-item-details-title-copy'>
 									<h1 className='media-item-details-title'>{title}</h1>
-									<div className='media-item-details-pills'>
-										{heroPills.map((pill, index) => {
-											return (
-												<span key={`${pill}-${index}`} className='media-item-details-pill'>
-													{pill}
-												</span>
-											);
-										})}
-									</div>
 								</div>
 							</div>
 						</div>
@@ -148,10 +138,8 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 							event.preventDefault();
 							this.submitForm(false);
 						}}>
-						<div className='media-item-details-layout'>
-							{this.renderSidebar(formValues)}
-							{this.renderFormSections(formValues)}
-						</div>
+						{this.renderImageActionsRow(formValues)}
+						{this.renderFormSections(formValues)}
 					</form>
 				</div>
 				<ConfirmDialogComponent
@@ -329,62 +317,40 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 	}
 
 	/**
-	 * Renders the sidebar summary card
+	 * Renders the top image and action row
 	 * @param mediaItem current media item
 	 * @returns the component
 	 */
-	private renderSidebar(mediaItem: MediaItemDetailsFormValues): ReactNode {
+	private renderImageActionsRow(mediaItem: MediaItemDetailsFormValues): ReactNode {
 		const buttons = this.getActionButtons(mediaItem);
 		const mediaTypeLabel = i18n.t(`category.mediaTypes.${mediaItem.mediaType}`);
 
 		return (
-			<aside className='media-item-details-sidebar'>
-				{this.renderSection('sidebar', (
-					<>
-						<div className='media-item-details-image-wrapper'>
-							<img
-								className='media-item-details-image'
-								src={mediaItem.imageUrl || defaultMediaItemImage}
-								alt={`${mediaItem.name || mediaTypeLabel} cover`}
-							/>
-						</div>
-						<div className='media-item-details-image-actions'>
-							{buttons.map((button) => {
-								return (
-									<button
-										key={button.key}
-										type='button'
-										className='media-item-details-image-action'
-										disabled={button.disabled}
-										aria-label={button.label}
-										title={button.label}
-										onClick={button.onClick}>
-										<img className='media-item-details-image-action-icon' src={button.icon} alt='' />
-									</button>
-								);
-							})}
-						</div>
-						<dl className='media-item-details-summary-list'>
-							<div className='media-item-details-summary-row'>
-								<dt className='media-item-details-summary-label'>{i18n.t('mediaItem.details.prompts.importance')}</dt>
-								<dd className='media-item-details-summary-value'>{i18n.t(`mediaItem.common.importance.${mediaItem.importance}`)}</dd>
-							</div>
-							<div className='media-item-details-summary-row'>
-								<dt className='media-item-details-summary-label'>{i18n.t('mediaItem.details.placeholders.ownPlatform')}</dt>
-								<dd className='media-item-details-summary-value'>{mediaItem.ownPlatform?.name || i18n.t('ownPlatform.list.none')}</dd>
-							</div>
-							<div className='media-item-details-summary-row'>
-								<dt className='media-item-details-summary-label'>{i18n.t('mediaItem.details.placeholders.group')}</dt>
-								<dd className='media-item-details-summary-value'>{mediaItem.group?.name || i18n.t('group.list.none')}</dd>
-							</div>
-							<div className='media-item-details-summary-row'>
-								<dt className='media-item-details-summary-label'>{i18n.t('mediaItem.details.placeholders.completedOn')}</dt>
-								<dd className='media-item-details-summary-value'>{this.getCompletionCountLabel(mediaItem.completedOn)}</dd>
-							</div>
-						</dl>
-					</>
-				))}
-			</aside>
+			<section className='media-item-details-panel media-item-details-media-panel'>
+				<div className='media-item-details-image-wrapper'>
+					<img
+						className='media-item-details-image'
+						src={mediaItem.imageUrl || defaultMediaItemImage}
+						alt={`${mediaItem.name || mediaTypeLabel} cover`}
+					/>
+				</div>
+				<div className='media-item-details-image-actions'>
+					{buttons.map((button) => {
+						return (
+							<button
+								key={button.key}
+								type='button'
+								className='media-item-details-image-action'
+								disabled={button.disabled}
+								aria-label={button.label}
+								title={button.label}
+								onClick={button.onClick}>
+								<img className='media-item-details-image-action-icon' src={button.icon} alt='' />
+							</button>
+						);
+					})}
+				</div>
+			</section>
 		);
 	}
 
@@ -438,54 +404,10 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 			<section className='media-item-details-panel'>
 				<div className='media-item-details-section-heading'>
 					<h2 className='media-item-details-section-title'>{i18n.t(`mediaItem.details.sections.${sectionKey}.title`)}</h2>
-					<p className='media-item-details-section-copy'>{i18n.t(`mediaItem.details.sections.${sectionKey}.copy`)}</p>
 				</div>
 				{children}
 			</section>
 		);
-	}
-
-	/**
-	 * Builds the summary pills shown in the hero
-	 * @param mediaItem current media item
-	 * @returns pill labels
-	 */
-	private getHeroPills(mediaItem: MediaItemDetailsFormValues): string[] {
-		const pills: string[] = [
-			`${i18n.t('mediaItem.details.prompts.importance')}: ${i18n.t(`mediaItem.common.importance.${mediaItem.importance}`)}`
-		];
-
-		if(mediaItem.releaseDate) {
-			pills.push(`${mediaItem.releaseDate.getFullYear()}`);
-		}
-
-		if(mediaItem.group?.name) {
-			pills.push(mediaItem.group.name);
-		}
-
-		if(mediaItem.ownPlatform?.name) {
-			pills.push(mediaItem.ownPlatform.name);
-		}
-
-		return pills;
-	}
-
-	/**
-	 * Builds the completion summary text for the sidebar
-	 * @param completedOn completion dates
-	 * @returns summary text
-	 */
-	private getCompletionCountLabel(completedOn?: Date[]): string {
-		if(!completedOn || completedOn.length === 0) {
-			return i18n.t('mediaItem.details.labels.completion.none');
-		}
-		if(completedOn.length === 1) {
-			return i18n.t('mediaItem.details.labels.completion.single');
-		}
-
-		return i18n.t('mediaItem.details.labels.completion.multiple', {
-			count: completedOn.length
-		});
 	}
 
 	/**

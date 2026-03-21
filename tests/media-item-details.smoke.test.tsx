@@ -184,7 +184,7 @@ describe('MediaItemDetailsScreenComponent', () => {
 		expect(screen.getByAltText('Dune cover')).toBeInTheDocument();
 		expect(screen.getByLabelText('Owned at')).toHaveTextContent('None');
 		expect(screen.getByLabelText('Group')).toHaveTextContent('None');
-		expect(screen.getAllByText('Completed on')).toHaveLength(2);
+		expect(screen.getByText('Completed on')).toBeInTheDocument();
 
 		rerender(createScreen({
 			mediaItem,
@@ -205,11 +205,12 @@ describe('MediaItemDetailsScreenComponent', () => {
 		}));
 
 		expect(document.body).toHaveClass('app-dark-screen-active');
-		expect(screen.getByRole('heading', { name: 'Quick actions' })).toBeInTheDocument();
+		expect(screen.queryByRole('heading', { name: 'Quick actions' })).not.toBeInTheDocument();
 		expect(screen.getByRole('heading', { name: 'Basics' })).toBeInTheDocument();
 		expect(screen.getByRole('heading', { name: 'Media profile' })).toBeInTheDocument();
 		expect(screen.getByRole('heading', { name: 'Collection' })).toBeInTheDocument();
 		expect(screen.getByRole('heading', { name: 'Progress' })).toBeInTheDocument();
+		expect(screen.queryByText('Importance: Very important')).not.toBeInTheDocument();
 
 		unmount();
 
