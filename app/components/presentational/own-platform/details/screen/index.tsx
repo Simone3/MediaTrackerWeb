@@ -169,10 +169,10 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 												className='entity-details-selected-icon-shell'
 												role='img'
 												aria-label={`${i18n.t(`ownPlatform.icons.${formValues.icon}`)} icon`}>
-												<img
-													src={ownPlatformIcons[formValues.icon]}
-													alt=''
+												<span
 													className='entity-details-selected-icon'
+													style={this.getSelectedIconStyle(formValues)}
+													aria-hidden={true}
 												/>
 											</span>
 											<select
@@ -338,6 +338,18 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 	 */
 	private areOwnPlatformsDifferent(left: OwnPlatformInternal, right: OwnPlatformInternal): boolean {
 		return left.id !== right.id || left.name !== right.name || left.color !== right.color || left.icon !== right.icon;
+	}
+
+	/**
+	 * Resolves the selected icon masked style
+	 * @param ownPlatform the current form values
+	 * @returns masked icon style
+	 */
+	private getSelectedIconStyle(ownPlatform: OwnPlatformInternal): CSSProperties {
+		return {
+			'--entity-details-selected-icon-url': `url(${ownPlatformIcons[ownPlatform.icon]})`,
+			'--entity-details-selected-icon-color': ownPlatform.color
+		} as CSSProperties;
 	}
 }
 

@@ -3052,7 +3052,10 @@ body.app-dark-screen-active .app-shell-content {
 .entity-details-selected-icon {
 	width: 26px;
 	height: 26px;
-	object-fit: contain;
+	display: block;
+	background-color: var(--entity-details-selected-icon-color, #f6f8ff);
+	-webkit-mask: var(--entity-details-selected-icon-url) center / contain no-repeat;
+	mask: var(--entity-details-selected-icon-url) center / contain no-repeat;
 }
 
 .entity-details-color-input {

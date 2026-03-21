@@ -42,6 +42,7 @@ describe('OwnPlatformDetailsScreenComponent', () => {
 		await user.selectOptions(iconSelect, 'kindle');
 		expect(screen.getByRole('img', { name: 'Kindle icon' })).toBeInTheDocument();
 		await user.click(screen.getByRole('button', { name: `Select color ${selectedColor}` }));
+		expect(screen.getByRole('img', { name: 'Kindle icon' }).firstElementChild).toHaveStyle(`--entity-details-selected-icon-color: ${selectedColor}`);
 		await user.click(screen.getByRole('button', { name: 'Save' }));
 
 		expect(saveOwnPlatform).toHaveBeenCalledWith({
