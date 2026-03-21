@@ -2302,6 +2302,31 @@ body.app-dark-screen-active .app-shell-content {
 	line-height: 1.5;
 }
 
+.media-item-details-tv-show-inline-row {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	flex-wrap: wrap;
+	min-width: 0;
+}
+
+.media-item-details-tv-show-seasons-row .media-item-details-inline-hint {
+	flex: 1 1 280px;
+	min-width: 0;
+}
+
+.media-item-details-tv-show-production-row {
+	align-items: flex-end;
+}
+
+.media-item-details-tv-show-next-episode-field {
+	flex: 1 1 280px;
+	display: grid;
+	gap: 8px;
+	min-width: 220px;
+	max-width: 340px;
+}
+
 .media-item-details-checkbox-row {
 	display: flex;
 	align-items: center;
@@ -3270,7 +3295,7 @@ body.app-dark-screen-active .loading-indicator-spinner {
 
 	.media-item-details-screen {
 		min-height: 100vh;
-		padding: 24px 18px 48px;
+		padding: 24px 18px calc(164px + env(safe-area-inset-bottom));
 	}
 
 	.media-item-details-hero {
@@ -3324,6 +3349,18 @@ body.app-dark-screen-active .loading-indicator-spinner {
 	.media-item-details-completion-row {
 		display: grid;
 		grid-template-columns: 1fr;
+	}
+
+	.media-item-details-tv-show-inline-row {
+		display: grid;
+		grid-template-columns: 1fr;
+		align-items: stretch;
+		gap: 12px;
+	}
+
+	.media-item-details-tv-show-next-episode-field {
+		min-width: 0;
+		max-width: none;
 	}
 
 	.media-item-details-search-button,

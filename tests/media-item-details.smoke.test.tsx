@@ -154,6 +154,31 @@ describe('MediaItemDetailsScreenComponent', () => {
 		expect(screen.getByText('1 seasons, watched 8 out of 10 episodes')).toBeInTheDocument();
 	});
 
+	test('shows and hides the next episode air date field with the in-production toggle', async() => {
+		const tvShow: TvShowInternal = {
+			id: 'tv-show-id',
+			name: 'Dark',
+			mediaType: 'TV_SHOW',
+			status: 'ACTIVE',
+			importance: '300'
+		};
+
+		render(createScreen({
+			mediaItem: tvShow
+		}));
+
+		expect(screen.queryByLabelText('Next episode air date')).not.toBeInTheDocument();
+
+		const user = userEvent.setup();
+		await user.click(screen.getByLabelText('In production'));
+
+		expect(screen.getByLabelText('Next episode air date')).toBeInTheDocument();
+
+		await user.click(screen.getByLabelText('In production'));
+
+		expect(screen.queryByLabelText('Next episode air date')).not.toBeInTheDocument();
+	});
+
 	test('renders the old shared book form controls and syncs selected entities', () => {
 		const mediaItem: MediaItemInternal = {
 			...DEFAULT_BOOK,
@@ -284,6 +309,7 @@ describe('MediaItemDetailsScreenComponent', () => {
 		expect(screen.getByLabelText('Number of pages')).toHaveValue(412);
 		expect(screen.getByLabelText('Your notes')).toHaveValue('Keep this draft');
 	});
+
 	test('restores handled tv show seasons after remounting from the seasons flow', () => {
 		const draftMediaItem: TvShowInternal = {
 			id: 'tv-show-id',

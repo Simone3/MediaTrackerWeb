@@ -191,6 +191,15 @@
   - `app/web/styles.css`
   - `tests/category-details.smoke.test.tsx`
   - `tests/media-item-details.smoke.test.tsx`
+- Media item details TV show layout now adapts better across breakpoints.
+  - Correct behavior on web now:
+    - on mobile, the form keeps enough bottom padding for the completion `Add date` button to stay above the fixed bottom navigation
+    - on larger screens, the TV show seasons summary sits beside the `Seasons` button instead of under it
+    - on larger screens, `Next episode air date` sits beside the `In production` toggle and still only renders while that toggle is enabled
+  - Relevant files:
+    - `app/components/presentational/media-item/details/screen/index.tsx`
+    - `app/web/styles.css`
+    - `tests/media-item-details.smoke.test.tsx`
 - Inline media-item completion had an immutability bug on web:
   - `MARK_MEDIA_ITEM_AS_COMPLETE` reused the existing `completedOn` array reference
   - pushing the new completion date mutated Redux state during dispatch
