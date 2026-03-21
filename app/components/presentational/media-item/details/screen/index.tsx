@@ -320,6 +320,10 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 	 * @returns the component
 	 */
 	private renderImageActionsRow(mediaItem: MediaItemDetailsFormValues): ReactNode {
+		if(!mediaItem.id && !mediaItem.catalogId) {
+			return null;
+		}
+
 		const buttons = this.getActionButtons(mediaItem);
 		const mediaTypeLabel = i18n.t(`category.mediaTypes.${mediaItem.mediaType}`);
 

@@ -196,6 +196,14 @@ describe('MediaItemDetailsScreenComponent', () => {
 		expect(screen.getByLabelText('Group')).toHaveTextContent('Sci-Fi Saga');
 	});
 
+	test('hides the media image/actions block for a brand new item without catalog data', () => {
+		render(createScreen());
+
+		expect(screen.queryByRole('button', { name: 'Google Search' })).not.toBeInTheDocument();
+		expect(screen.queryByRole('button', { name: 'Wikipedia Search' })).not.toBeInTheDocument();
+		expect(screen.queryByAltText('Books cover')).not.toBeInTheDocument();
+	});
+
 	test('renders the dark media-style shell sections and cleans up the body class', () => {
 		const { unmount } = render(createScreen({
 			mediaItem: {
