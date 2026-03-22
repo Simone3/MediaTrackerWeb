@@ -7,6 +7,7 @@
 - The removed exception is the old "Import from old app" feature.
 
 ## Fast start
+- Current dependency baseline requires Node `>=20.9.0`.
 - Install: `npm install`
 - Dev server: `npm start`
 - Production build: `npm run build`
@@ -103,6 +104,11 @@
 - A stylesheet audit also removed unused category/media/entity-details/placeholder selectors plus orphaned root CSS variables from `app/web/styles.css`; a TS/TSX reference scan now comes back clean for the remaining class selectors.
 - Smoke tests now prefer `i18n.t(...)` for app-owned button text, labels, placeholders, empty states, and accessibility copy, while still leaving test-owned fixture text and intentionally formatted render-output assertions hardcoded when they are not sourced from `lang-en.json`.
 - A later repo-wide TS/TSX style pass removed blank first lines inside executable blocks like functions, reducers, sagas, conditionals, and switch bodies, while intentionally preserving the blank-line spacing at the start of class bodies.
+- The dependency refresh upgraded the app to React `19`, React Router `7`, Jest `30`, TypeScript `5.9`, and the latest compatible webpack/Babel/Redux packages while keeping the existing app logic unchanged.
+- That refresh also removed unused direct packages such as `formik`, `yup`, `prettier`, `react-test-renderer`, redundant `@types/*` packages for libraries that now ship their own types, and the old `typescript-eslint` meta package in favor of the direct parser package actually used by `.eslintrc.js`.
+- `firebase` stays as a real runtime dependency because the prod user controller and config typings still import `firebase/app` and `firebase/auth`.
+- `tests/setup-tests.ts` now installs `TextEncoder`/`TextDecoder` from Node `util` so the Jest/jsdom environment works with React Router `7`.
+- Linting currently runs on ESLint `9` in legacy `.eslintrc.js` mode via `ESLINT_USE_FLAT_CONFIG=false`; the repo no longer keeps the old `.eslintignore` file because the npm lint script already scopes the checked files directly.
 
 ## High-signal files to open first
 - `app/AGENTS.md`
