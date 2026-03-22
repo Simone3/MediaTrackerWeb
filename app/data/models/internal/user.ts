@@ -15,19 +15,3 @@ export type UserSecretInternal = {
 	email: string;
 	password: string;
 }
-
-/**
- * The default initial user, internal type just for display purposes
- */
-export const DEFAULT_USER: UserInternal = {
-	id: '',
-	email: ''
-};
-
-/**
- * The default initial user with secret data, internal type just for display purposes
- */
-export const DEFAULT_USER_SECRET: UserSecretInternal = {
-	email: '',
-	password: ''
-};

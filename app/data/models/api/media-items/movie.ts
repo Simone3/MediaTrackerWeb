@@ -1,4 +1,4 @@
-import { AddMediaItemRequest, CatalogMediaItem, FilterMediaItemsRequest, FilterMediaItemsResponse, GetAllMediaItemsResponse, GetMediaItemFromCatalogResponse, MediaItem, MediaItemFilter, MediaItemSortBy, MediaItemSortField, SearchMediaItemCatalogResponse, SearchMediaItemCatalogResult, SearchMediaItemsRequest, SearchMediaItemsResponse, UpdateMediaItemRequest } from 'app/data/models/api/media-items/media-item';
+import { AddMediaItemRequest, CatalogMediaItem, FilterMediaItemsRequest, FilterMediaItemsResponse, GetMediaItemFromCatalogResponse, MediaItem, MediaItemFilter, MediaItemSortBy, MediaItemSortField, SearchMediaItemCatalogResponse, SearchMediaItemCatalogResult, SearchMediaItemsRequest, SearchMediaItemsResponse, UpdateMediaItemRequest } from 'app/data/models/api/media-items/media-item';
 import { Type } from 'class-transformer';
 import { IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
@@ -84,23 +84,6 @@ export class AddMovieRequest extends AddMediaItemRequest {
 	})
 	@ValidateNested()
 	public newMovie!: Movie;
-}
-
-/**
- * Response for the 'get all movies' API
- */
-export class GetAllMoviesResponse extends GetAllMediaItemsResponse {
-
-	/**
-	 * The retrieved movies
-	 */
-	@IsDefined()
-	@IsDefined({ each: true })
-	@Type(() => {
-		return IdentifiedMovie;
-	})
-	@ValidateNested()
-	public movies: IdentifiedMovie[] = [];
 }
 
 /**

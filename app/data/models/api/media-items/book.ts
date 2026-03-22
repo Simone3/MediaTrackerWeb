@@ -1,4 +1,4 @@
-import { AddMediaItemRequest, CatalogMediaItem, FilterMediaItemsRequest, FilterMediaItemsResponse, GetAllMediaItemsResponse, GetMediaItemFromCatalogResponse, MediaItem, MediaItemFilter, MediaItemSortBy, MediaItemSortField, SearchMediaItemCatalogResponse, SearchMediaItemCatalogResult, SearchMediaItemsRequest, SearchMediaItemsResponse, UpdateMediaItemRequest } from 'app/data/models/api/media-items/media-item';
+import { AddMediaItemRequest, CatalogMediaItem, FilterMediaItemsRequest, FilterMediaItemsResponse, GetMediaItemFromCatalogResponse, MediaItem, MediaItemFilter, MediaItemSortBy, MediaItemSortField, SearchMediaItemCatalogResponse, SearchMediaItemCatalogResult, SearchMediaItemsRequest, SearchMediaItemsResponse, UpdateMediaItemRequest } from 'app/data/models/api/media-items/media-item';
 import { Type } from 'class-transformer';
 import { IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
@@ -84,23 +84,6 @@ export class AddBookRequest extends AddMediaItemRequest {
 	})
 	@ValidateNested()
 	public newBook!: Book;
-}
-
-/**
- * Response for the 'get all books' API
- */
-export class GetAllBooksResponse extends GetAllMediaItemsResponse {
-
-	/**
-	 * The retrieved books
-	 */
-	@IsDefined()
-	@IsDefined({ each: true })
-	@Type(() => {
-		return IdentifiedBook;
-	})
-	@ValidateNested()
-	public books: IdentifiedBook[] = [];
 }
 
 /**

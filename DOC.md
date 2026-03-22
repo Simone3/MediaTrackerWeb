@@ -86,6 +86,7 @@
 - Runtime config loader: `app/config/config.ts`
 - Dev config: `app/config/properties/config-dev.ts`
 - Prod config: `app/config/properties/config-prod.ts`
+- The old unused `app/config/properties/config-sample.ts` helper has been removed; the repo now only keeps the actual dev/prod config files that are already versioned.
 - Current dev config uses mocks for:
   - user
   - categories
@@ -93,7 +94,10 @@
   - own platforms
   - media items
 - Backend base URL in dev config is `http://localhost:3000`
-- The comment in `app/config/config.ts` says some config files are not versioned, but in this repo the config files are present.
+
+## Maintenance notes
+- The codebase cleanup pass removed dead action creators/type aliases, unused API model wrappers, the unused sample config file, and leftover default `React` imports that were no longer needed with the web app's JSX transform.
+- After that cleanup, strict `tsc --noUnusedLocals --noUnusedParameters` runs clean; the remaining same-file-only exports are still in-file dependencies rather than dead code.
 
 ## High-signal files to open first
 - `app/AGENTS.md`

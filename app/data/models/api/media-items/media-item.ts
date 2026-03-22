@@ -339,13 +339,6 @@ export class DeleteMediaItemResponse extends CommonResponse {
 }
 
 /**
- * Abstract response for the 'get all media items' API
- */
-export abstract class GetAllMediaItemsResponse extends CommonResponse {
-
-}
-
-/**
  * Abstract request for the 'update media item' API
  */
 export abstract class UpdateMediaItemRequest extends CommonSaveRequest {
@@ -441,4 +434,3 @@ export abstract class SearchMediaItemCatalogResponse extends CommonResponse {
 export abstract class GetMediaItemFromCatalogResponse extends CommonResponse {
 
 }
-

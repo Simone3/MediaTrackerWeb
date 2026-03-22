@@ -3,7 +3,7 @@ import bookIcon from 'app/resources/images/ic_media_book.svg';
 import movieIcon from 'app/resources/images/ic_media_movie.svg';
 import tvShowIcon from 'app/resources/images/ic_media_tvshow.svg';
 import videogameIcon from 'app/resources/images/ic_media_videogame.svg';
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 
 const mediaTypeToIcon: Record<MediaTypeInternal, string> = {
 	BOOK: bookIcon,

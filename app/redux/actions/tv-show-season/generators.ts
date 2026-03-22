@@ -1,6 +1,6 @@
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
-import { COMPLETE_DELETING_TV_SHOW_SEASON, COMPLETE_INLINE_UPDATING_TV_SHOW_SEASON, COMPLETE_SAVING_TV_SHOW_SEASON, COMPLETE_TV_SHOW_SEASONS_HANDLING, DELETE_TV_SHOW_SEASON, FAIL_SAVING_TV_SHOW_SEASON, HIGHLIGHT_TV_SHOW_SEASON, INLINE_UPDATE_TV_SHOW_SEASON, LOAD_NEW_TV_SHOW_SEASON_DETAILS, LOAD_TV_SHOW_SEASON_DETAILS, REMOVE_TV_SHOW_SEASON_HIGHLIGHT, REQUEST_TV_SHOW_SEASON_SAVE, SAVE_TV_SHOW_SEASON, SET_TV_SHOW_SEASON_FORM_STATUS, START_TV_SHOW_SEASONS_HANDLING } from './const';
-import { CompleteDeletingTvShowSeasonAction, CompleteInlineUpdatingTvShowSeasonAction, CompleteSavingTvShowSeasonAction, CompleteTvShowSeasonsHandlingAction, DeleteTvShowSeasonAction, FailSavingTvShowSeasonAction, HighlightTvShowSeasonAction, InlineUpdateTvShowSeasonAction, LoadNewTvShowSeasonDetailsAction, LoadTvShowSeasonDetailsAction, RemoveTvShowSeasonHighlightAction, RequestTvShowSeasonSave, SaveTvShowSeasonAction, SetTvShowSeasonFormStatusAction, StartTvShowSeasonsHandlingAction } from './types';
+import { COMPLETE_DELETING_TV_SHOW_SEASON, COMPLETE_INLINE_UPDATING_TV_SHOW_SEASON, COMPLETE_SAVING_TV_SHOW_SEASON, COMPLETE_TV_SHOW_SEASONS_HANDLING, DELETE_TV_SHOW_SEASON, FAIL_SAVING_TV_SHOW_SEASON, INLINE_UPDATE_TV_SHOW_SEASON, LOAD_NEW_TV_SHOW_SEASON_DETAILS, LOAD_TV_SHOW_SEASON_DETAILS, SAVE_TV_SHOW_SEASON, SET_TV_SHOW_SEASON_FORM_STATUS, START_TV_SHOW_SEASONS_HANDLING } from './const';
+import { CompleteDeletingTvShowSeasonAction, CompleteInlineUpdatingTvShowSeasonAction, CompleteSavingTvShowSeasonAction, CompleteTvShowSeasonsHandlingAction, DeleteTvShowSeasonAction, FailSavingTvShowSeasonAction, InlineUpdateTvShowSeasonAction, LoadNewTvShowSeasonDetailsAction, LoadTvShowSeasonDetailsAction, SaveTvShowSeasonAction, SetTvShowSeasonFormStatusAction, StartTvShowSeasonsHandlingAction } from './types';
 
 /**
  * Generator for the start handling TV show seasons action, which saves in the state the initial list of seasons
@@ -47,17 +47,6 @@ export const loadTvShowSeasonDetails = (tvShowSeason: TvShowSeasonInternal): Loa
 	return {
 		type: LOAD_TV_SHOW_SEASON_DETAILS,
 		tvShowSeason: tvShowSeason
-	};
-};
-
-/**
- * Generator for the TV show season save request action, which notifies the form to submit its data
- * @returns the action
- */
-export const requestTvShowSeasonSave = (): RequestTvShowSeasonSave => {
-	
-	return {
-		type: REQUEST_TV_SHOW_SEASON_SAVE
 	};
 };
 
@@ -162,30 +151,6 @@ export const completeInlineUpdatingTvShowSeason = (tvShowSeasons: TvShowSeasonIn
 	return {
 		type: COMPLETE_INLINE_UPDATING_TV_SHOW_SEASON,
 		tvShowSeasons: tvShowSeasons
-	};
-};
-
-/**
- * Generator for the highlight TV show season action, which marks a season as highlighted
- * @param tvShowSeason the TV show season
- * @returns the action
- */
-export const highlightTvShowSeason = (tvShowSeason: TvShowSeasonInternal): HighlightTvShowSeasonAction => {
-	
-	return {
-		type: HIGHLIGHT_TV_SHOW_SEASON,
-		tvShowSeason: tvShowSeason
-	};
-};
-
-/**
- * Generator for the remove TV show season highlight action, which removes any highlighted season
- * @returns the action
- */
-export const removeTvShowSeasonHighlight = (): RemoveTvShowSeasonHighlightAction => {
-	
-	return {
-		type: REMOVE_TV_SHOW_SEASON_HIGHLIGHT
 	};
 };
 

@@ -1,5 +1,5 @@
 import { UserSettingsScreenContainer } from 'app/components/containers/settings/screen';
-import React, { Component, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 /**

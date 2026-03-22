@@ -1,4 +1,4 @@
-import React, { Component, CSSProperties, ReactNode } from 'react';
+import { Component, CSSProperties, ReactNode } from 'react';
 import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 import { MediaItemsListContainer } from 'app/components/containers/media-item/list/list';
 import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';

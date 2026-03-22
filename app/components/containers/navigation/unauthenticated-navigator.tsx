@@ -2,7 +2,7 @@ import { UserLoginScreenContainer } from 'app/components/containers/auth/login';
 import { UserSignupScreenContainer } from 'app/components/containers/auth/signup';
 import { screenToPath } from 'app/utilities/navigation-routes';
 import { AppScreens } from 'app/utilities/screens';
-import React, { Component, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 /**

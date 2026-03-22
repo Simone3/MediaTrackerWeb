@@ -1,6 +1,6 @@
 import { ConnectedAuthenticationNavigator } from 'app/components/containers/navigation/authentication-navigator';
 import { navigationService } from 'app/utilities/navigation-service';
-import React, { Component, ReactNode, useEffect } from 'react';
+import { Component, ReactNode, useEffect } from 'react';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
 
 const NavigationServiceBridge = (): null => {

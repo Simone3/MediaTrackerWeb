@@ -31,13 +31,6 @@ export type FailFetchingGroupsAction = Action & {
 };
 
 /**
- * The invalidate groups action
- */
-export type InvalidateGroupsAction = Action & {
-	
-};
-
-/**
  * The load new group action
  */
 export type LoadNewGroupDetailsAction = Action & {
@@ -59,13 +52,6 @@ export type SetGroupFormStatusAction = Action & {
 	
 	valid: boolean;
 	dirty: boolean;
-};
-
-/**
- * The request group save action
- */
-export type RequestGroupSaveAction = Action & {
-	
 };
 
 /**
@@ -143,13 +129,6 @@ export type FailDeletingGroupAction = Action & {
 export type HighlightGroupAction = Action & {
 	
 	group: GroupInternal;
-};
-
-/**
- * The remove group highlight action
- */
-export type RemoveGroupHighlightAction = Action & {
-	
 };
 
 /**

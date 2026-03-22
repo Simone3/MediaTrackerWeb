@@ -21,48 +21,6 @@ export class CommonResponse {
 }
 
 /**
- * Generic response for a failure outcome
- */
-export class ErrorResponse extends CommonResponse {
-
-	/**
-	 * A unique error code, should never be displayed to the user
-	 */
-	@IsOptional()
-	@IsString()
-	public errorCode: string;
-
-	/**
-	 * An error description, should never be displayed to the user
-	 */
-	@IsOptional()
-	@IsString()
-	public errorDescription: string;
-
-	/**
-	 * Optional details for the error, should never be displayed to the user
-	 */
-	@IsOptional()
-	@IsString()
-	public errorDetails?: string;
-	
-	/**
-	 * Constructor
-	 * @param errorCode source code
-	 * @param errorDescription source description
-	 * @param errorDetails source details
-	 */
-	public constructor(errorCode: string, errorDescription: string, errorDetails?: string) {
-
-		super();
-
-		this.errorCode = errorCode;
-		this.errorDescription = errorDescription;
-		this.errorDetails = errorDetails;
-	}
-}
-
-/**
  * Type that can be extended by insert or update API requests for common fields
  */
 export class CommonSaveRequest extends CommonRequest {

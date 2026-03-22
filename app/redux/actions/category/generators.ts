@@ -1,6 +1,6 @@
 import { CategoryInternal } from 'app/data/models/internal/category';
-import { ASK_CONFIRMATION_BEFORE_SAVING_CATEGORY, COMPLETE_DELETING_CATEGORY, COMPLETE_FETCHING_CATEGORIES, COMPLETE_SAVING_CATEGORY, DELETE_CATEGORY, FAIL_DELETING_CATEGORY, FAIL_FETCHING_CATEGORIES, FAIL_SAVING_CATEGORY, FETCH_CATEGORIES, HIGHLIGHT_CATEGORY, INVALIDATE_CATEGORIES, LOAD_CATEGORY_DETAILS, LOAD_NEW_CATEGORY_DETAILS, REMOVE_CATEGORY_HIGHLIGHT, REQUEST_CATEGORY_SAVE, SAVE_CATEGORY, SELECT_CATEGORY, SET_CATEGORY_FORM_STATUS, START_DELETING_CATEGORY, START_FETCHING_CATEGORIES, START_SAVING_CATEGORY } from './const';
-import { AskConfirmationBeforeSavingCategoryAction, CompleteDeletingCategoryAction, CompleteFetchingCategoriesAction, CompleteSavingCategoryAction, DeleteCategoryAction, FailDeletingCategoryAction, FailFetchingCategoriesAction, FailSavingCategoryAction, FetchCategoriesAction, HighlightCategoryAction, InvalidateCategoriesAction, LoadCategoryDetailsAction, LoadNewCategoryDetailsAction, RemoveCategoryHighlightAction, RequestCategorySaveAction, SaveCategoryAction, SelectCategoryAction, SetCategoryFormStatusAction, StartDeletingCategoryAction, StartFetchingCategoriesAction, StartSavingCategoryAction } from './types';
+import { ASK_CONFIRMATION_BEFORE_SAVING_CATEGORY, COMPLETE_DELETING_CATEGORY, COMPLETE_FETCHING_CATEGORIES, COMPLETE_SAVING_CATEGORY, DELETE_CATEGORY, FAIL_DELETING_CATEGORY, FAIL_FETCHING_CATEGORIES, FAIL_SAVING_CATEGORY, FETCH_CATEGORIES, HIGHLIGHT_CATEGORY, LOAD_CATEGORY_DETAILS, LOAD_NEW_CATEGORY_DETAILS, REMOVE_CATEGORY_HIGHLIGHT, SAVE_CATEGORY, SELECT_CATEGORY, SET_CATEGORY_FORM_STATUS, START_DELETING_CATEGORY, START_FETCHING_CATEGORIES, START_SAVING_CATEGORY } from './const';
+import { AskConfirmationBeforeSavingCategoryAction, CompleteDeletingCategoryAction, CompleteFetchingCategoriesAction, CompleteSavingCategoryAction, DeleteCategoryAction, FailDeletingCategoryAction, FailFetchingCategoriesAction, FailSavingCategoryAction, FetchCategoriesAction, HighlightCategoryAction, LoadCategoryDetailsAction, LoadNewCategoryDetailsAction, RemoveCategoryHighlightAction, SaveCategoryAction, SelectCategoryAction, SetCategoryFormStatusAction, StartDeletingCategoryAction, StartFetchingCategoriesAction, StartSavingCategoryAction } from './types';
 
 /**
  * Generator for the fetch categories list action, which causes the request categories action, the async categories fetch and then the receive categories action
@@ -49,17 +49,6 @@ export const failFetchingCategories = (): FailFetchingCategoriesAction => {
 };
 
 /**
- * Generator for the invalidate categories action, which marks the categories list as invalid, i.e. they require a reload
- * @returns the action
- */
-export const invalidateCategories = (): InvalidateCategoriesAction => {
-
-	return {
-		type: INVALIDATE_CATEGORIES
-	};
-};
-
-/**
  * Generator for the load new category action, which resets the category details state to the initial values
  * @returns the action
  */
@@ -95,17 +84,6 @@ export const setCategoryFormStatus = (valid: boolean, dirty: boolean): SetCatego
 		type: SET_CATEGORY_FORM_STATUS,
 		valid: valid,
 		dirty: dirty
-	};
-};
-
-/**
- * Generator for the request category save action, which requests the category form validation and, if OK, submission
- * @returns the action
- */
-export const requestCategorySave = (): RequestCategorySaveAction => {
-	
-	return {
-		type: REQUEST_CATEGORY_SAVE
 	};
 };
 

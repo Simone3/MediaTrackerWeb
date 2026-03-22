@@ -1,4 +1,4 @@
-import React, { Component, ReactElement, ReactNode } from 'react';
+import { Component, ReactElement, ReactNode } from 'react';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { CategoryContextMenuAnchorRect, CategoryContextMenuComponent } from 'app/components/presentational/category/list/context-menu';
 import { CategoryRowComponent } from 'app/components/presentational/category/list/row';

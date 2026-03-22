@@ -10,9 +10,6 @@ import { getEnvValue } from 'app/utilities/env';
  * - config-prod.ts for production environment
  *
  * In general, config-{ENV}.ts where {ENV} is defined by the MEDIA_TRACKER_APP_ENV variable (defined in the ".env" files)
- *
- * config-dev.ts and config-prod.ts are NOT versioned. They can be defined starting from
- * the helper config-sample.ts
  */
 
 const environment = getEnvValue('MEDIA_TRACKER_APP_ENV') || 'dev';

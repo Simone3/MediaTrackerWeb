@@ -3,7 +3,7 @@ import { AuthenticatedNavigator } from 'app/components/containers/navigation/aut
 import { UnauthenticatedNavigator } from 'app/components/containers/navigation/unauthenticated-navigator';
 import { State } from 'app/redux/state/state';
 import { UserStatus } from 'app/redux/state/user';
-import React, { Component, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import { connect } from 'react-redux';
 
 /**

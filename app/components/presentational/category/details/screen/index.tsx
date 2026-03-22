@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
 import { CategoryInternal, DEFAULT_CATEGORY, MEDIA_TYPES_INTERNAL } from 'app/data/models/internal/category';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';

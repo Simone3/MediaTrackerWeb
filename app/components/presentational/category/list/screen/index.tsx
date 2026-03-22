@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 import { CategoriesListContainer } from 'app/components/containers/category/list/list';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';

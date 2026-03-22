@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 
 /**
  * Presentational component to display a simple confirmation dialog

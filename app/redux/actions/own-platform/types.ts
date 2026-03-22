@@ -31,13 +31,6 @@ export type FailFetchingOwnPlatformsAction = Action & {
 };
 
 /**
- * The invalidate own platforms action
- */
-export type InvalidateOwnPlatformsAction = Action & {
-	
-};
-
-/**
  * The load new own platform action
  */
 export type LoadNewOwnPlatformDetailsAction = Action & {
@@ -59,13 +52,6 @@ export type SetOwnPlatformFormStatusAction = Action & {
 	
 	valid: boolean;
 	dirty: boolean;
-};
-
-/**
- * The request own platform save action
- */
-export type RequestOwnPlatformSaveAction = Action & {
-	
 };
 
 /**
@@ -143,13 +129,6 @@ export type FailDeletingOwnPlatformAction = Action & {
 export type HighlightOwnPlatformAction = Action & {
 	
 	ownPlatform: OwnPlatformInternal;
-};
-
-/**
- * The remove own platform highlight action
- */
-export type RemoveOwnPlatformHighlightAction = Action & {
-	
 };
 
 /**

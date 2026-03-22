@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';

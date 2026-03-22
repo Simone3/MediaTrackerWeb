@@ -32,13 +32,6 @@ export type LoadTvShowSeasonDetailsAction = Action & {
 };
 
 /**
- * The request TV show season save action
- */
-export type RequestTvShowSeasonSave = Action & {
-	
-};
-
-/**
  * The save TV show season action
  */
 export type SaveTvShowSeasonAction = Action & {
@@ -108,11 +101,4 @@ export type CompleteInlineUpdatingTvShowSeasonAction = Action & {
 export type HighlightTvShowSeasonAction = Action & {
 	
 	tvShowSeason: TvShowSeasonInternal;
-};
-
-/**
- * The remove TV show season highlight action
- */
-export type RemoveTvShowSeasonHighlightAction = Action & {
-	
 };

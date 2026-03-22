@@ -1,5 +1,5 @@
 import { CreditsScreenContainer } from 'app/components/containers/credits/screen';
-import React, { Component, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 /**

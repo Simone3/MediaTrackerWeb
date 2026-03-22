@@ -1,4 +1,4 @@
-import { AddMediaItemRequest, CatalogMediaItem, FilterMediaItemsRequest, FilterMediaItemsResponse, GetAllMediaItemsResponse, GetMediaItemFromCatalogResponse, MediaItem, MediaItemFilter, MediaItemSortBy, MediaItemSortField, SearchMediaItemCatalogResponse, SearchMediaItemCatalogResult, SearchMediaItemsRequest, SearchMediaItemsResponse, UpdateMediaItemRequest } from 'app/data/models/api/media-items/media-item';
+import { AddMediaItemRequest, CatalogMediaItem, FilterMediaItemsRequest, FilterMediaItemsResponse, GetMediaItemFromCatalogResponse, MediaItem, MediaItemFilter, MediaItemSortBy, MediaItemSortField, SearchMediaItemCatalogResponse, SearchMediaItemCatalogResult, SearchMediaItemsRequest, SearchMediaItemsResponse, UpdateMediaItemRequest } from 'app/data/models/api/media-items/media-item';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsDateString, IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
@@ -136,23 +136,6 @@ export class AddTvShowRequest extends AddMediaItemRequest {
 	})
 	@ValidateNested()
 	public newTvShow!: TvShow;
-}
-
-/**
- * Response for the 'get all TV shows' API
- */
-export class GetAllTvShowsResponse extends GetAllMediaItemsResponse {
-
-	/**
-	 * The retrieved TV shows
-	 */
-	@IsDefined()
-	@IsDefined({ each: true })
-	@Type(() => {
-		return IdentifiedTvShow;
-	})
-	@ValidateNested()
-	public tvShows: IdentifiedTvShow[] = [];
 }
 
 /**

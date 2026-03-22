@@ -33,13 +33,6 @@ export type FailFetchingMediaItemsAction = Action & {
 };
 
 /**
- * The invalidate media items action
- */
-export type InvalidateMediaItemsAction = Action & {
-	
-};
-
-/**
  * The mark media item as active action
  */
 export type MarkMediaItemAsActiveAction = Action & {
@@ -221,13 +214,6 @@ export type SetMediaItemFormDraftAction = Action & {
 };
 
 /**
- * The request media item save action
- */
-export type RequestMediaItemSaveAction = Action & {
-	
-};
-
-/**
  * The save media item action
  */
 export type SaveMediaItemAction = Action & {
@@ -329,12 +315,5 @@ export type CompleteGettingMediaItemCatalogDetailsAction = Action & {
  * The fail getting media item catalog details action
  */
 export type FailGettingMediaItemCatalogDetailsAction = Action & {
-	
-};
-
-/**
- * The reset media item catalog details action
- */
-export type ResetMediaItemCatalogDetailsAction = Action & {
 	
 };

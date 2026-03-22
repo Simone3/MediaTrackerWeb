@@ -31,13 +31,6 @@ export type FailFetchingCategoriesAction = Action & {
 };
 
 /**
- * The invalidate categories action
- */
-export type InvalidateCategoriesAction = Action & {
-	
-};
-
-/**
  * The load new category action
  */
 export type LoadNewCategoryDetailsAction = Action & {
@@ -59,13 +52,6 @@ export type SetCategoryFormStatusAction = Action & {
 	
 	valid: boolean;
 	dirty: boolean;
-};
-
-/**
- * The request category save action
- */
-export type RequestCategorySaveAction = Action & {
-	
 };
 
 /**

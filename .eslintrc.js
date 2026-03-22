@@ -167,6 +167,7 @@ module.exports = {
 		'@typescript-eslint/no-unused-vars': [ 1, { vars: 'all', args: 'after-used' }],
 		'no-use-before-define': 'off',
 		'@typescript-eslint/no-use-before-define': [ 'error', { typedefs: false }],
+		'react/react-in-jsx-scope': 'off',
 		'handle-callback-err': [ 1, 'err' ],
 		'no-buffer-constructor': 1,
 		'no-mixed-requires': [ 1, true ],

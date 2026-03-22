@@ -7,7 +7,7 @@ import settingsIcon from 'app/resources/images/ic_settings.svg';
 import { i18n } from 'app/utilities/i18n';
 import { screenToPath } from 'app/utilities/navigation-routes';
 import { AppScreens, AppSections } from 'app/utilities/screens';
-import React, { Component, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
 
 const navigationItems = [

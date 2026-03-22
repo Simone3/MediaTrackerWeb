@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import { AppError } from 'app/data/models/internal/error';
 import { i18n } from 'app/utilities/i18n';
 

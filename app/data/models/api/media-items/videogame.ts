@@ -1,4 +1,4 @@
-import { AddMediaItemRequest, CatalogMediaItem, FilterMediaItemsRequest, FilterMediaItemsResponse, GetAllMediaItemsResponse, GetMediaItemFromCatalogResponse, MediaItem, MediaItemFilter, MediaItemSortBy, MediaItemSortField, SearchMediaItemCatalogResponse, SearchMediaItemCatalogResult, SearchMediaItemsRequest, SearchMediaItemsResponse, UpdateMediaItemRequest } from 'app/data/models/api/media-items/media-item';
+import { AddMediaItemRequest, CatalogMediaItem, FilterMediaItemsRequest, FilterMediaItemsResponse, GetMediaItemFromCatalogResponse, MediaItem, MediaItemFilter, MediaItemSortBy, MediaItemSortField, SearchMediaItemCatalogResponse, SearchMediaItemCatalogResult, SearchMediaItemsRequest, SearchMediaItemsResponse, UpdateMediaItemRequest } from 'app/data/models/api/media-items/media-item';
 import { Type } from 'class-transformer';
 import { IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
@@ -100,23 +100,6 @@ export class AddVideogameRequest extends AddMediaItemRequest {
 	})
 	@ValidateNested()
 	public newVideogame!: Videogame;
-}
-
-/**
- * Response for the 'get all videogames' API
- */
-export class GetAllVideogamesResponse extends GetAllMediaItemsResponse {
-
-	/**
-	 * The retrieved videogames
-	 */
-	@IsDefined()
-	@IsDefined({ each: true })
-	@Type(() => {
-		return IdentifiedVideogame;
-	})
-	@ValidateNested()
-	public videogames: IdentifiedVideogame[] = [];
 }
 
 /**

@@ -1,6 +1,6 @@
 import { CommonAddResponse, CommonRequest, CommonResponse, CommonSaveRequest } from 'app/data/models/api/common';
 import { Type } from 'class-transformer';
-import { ArrayMinSize, IsDefined, IsHexColor, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsDefined, IsHexColor, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 /**
  * Model for a platform where some user owns some media items, publicly exposed via API
@@ -149,34 +149,6 @@ export class UpdateOwnPlatformRequest extends CommonSaveRequest {
  * Response for the 'update own platform' API
  */
 export class UpdateOwnPlatformResponse extends CommonResponse {
-
-}
-
-/**
- * Request for the 'merge own platforms' API
- */
-export class MergeOwnPlatformsRequest extends CommonRequest {
-
-	@IsDefined()
-	@ArrayMinSize(2)
-	@IsNotEmpty({ each: true })
-	public ownPlatformIds!: string[];
-	
-	/**
-	 * The final merged own platform data
-	 */
-	@IsDefined()
-	@Type(() => {
-		return OwnPlatform;
-	})
-	@ValidateNested()
-	public mergedOwnPlatform!: OwnPlatform;
-}
-
-/**
- * Response for the 'merge own platforms' API
- */
-export class MergeOwnPlatformsResponse extends CommonResponse {
 
 }
 

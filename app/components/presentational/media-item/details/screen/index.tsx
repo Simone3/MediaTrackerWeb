@@ -1,4 +1,4 @@
-import React, { Component, KeyboardEvent, ReactNode } from 'react';
+import { Component, KeyboardEvent, ReactNode } from 'react';
 import { config } from 'app/config/config';
 import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';

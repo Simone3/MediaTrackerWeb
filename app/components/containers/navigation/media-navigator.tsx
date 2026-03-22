@@ -10,7 +10,7 @@ import { TvShowSeasonsListScreenContainer } from 'app/components/containers/tv-s
 import { TvShowSeasonDetailsScreenContainer } from 'app/components/containers/tv-show-season/details/screen';
 import { screenToPath } from 'app/utilities/navigation-routes';
 import { AppScreens, AppSections } from 'app/utilities/screens';
-import React, { Component, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 const mediaSectionPath = screenToPath(AppSections.Media);

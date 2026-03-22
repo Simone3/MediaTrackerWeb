@@ -1,4 +1,4 @@
-import React, { Component, FormEvent, ReactNode } from 'react';
+import { Component, FormEvent, ReactNode } from 'react';
 import { AuthTextInputComponent } from 'app/components/presentational/auth/common/auth-input';
 import { UserSecretInternal } from 'app/data/models/internal/user';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
