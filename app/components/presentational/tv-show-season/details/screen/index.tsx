@@ -90,7 +90,7 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 								onClick={() => {
 									this.submitForm();
 								}}>
-								Save
+								{i18n.t('common.buttons.save')}
 							</button>
 						</div>
 					</header>

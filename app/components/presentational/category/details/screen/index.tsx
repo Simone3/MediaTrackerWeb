@@ -80,7 +80,7 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 								onClick={() => {
 									this.submitForm(false);
 								}}>
-								Save
+								{i18n.t('common.buttons.save')}
 							</button>
 						</div>
 					</div>
@@ -136,7 +136,7 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 							</div>
 						</div>
 						<div className='category-details-section'>
-							<p className='category-details-label'>Color</p>
+							<p className='category-details-label'>{i18n.t('common.fields.color')}</p>
 							<div className='category-details-colors'>
 								{config.ui.colors.availableCategoryColors.map((color) => {
 									const selected = formValues.color === color;
@@ -153,7 +153,7 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 											onClick={() => {
 												this.setFormField('color', color);
 											}}
-											aria-label={`Select color ${color}`}
+											aria-label={i18n.t('common.a11y.selectColor', { color: color })}
 											aria-pressed={selected}
 										/>
 									);

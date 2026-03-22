@@ -126,6 +126,28 @@
   - good reference implementations when category behavior looks wrong
 
 ## Recent fix worth remembering
+- A localization audit found a last batch of user-facing English strings still hardcoded in web components instead of coming from `app/resources/lang/lang-en.json`.
+  - Correct behavior on web now:
+    - credits provider titles/copy/link labels now all come from the language file
+    - category, group, own-platform, TV-season, and media-item details screens now pull their shared `Save` button label from the language file
+    - media-item details picker/completion controls now pull `Select`, `Add date`, `Remove`, and the empty completion hint from the language file
+    - category/media-item row option labels, group/platform list action labels, context-menu dismiss labels, platform badge labels, the own-platform selected-icon label, and color-swatch accessibility labels now all come from the language file too
+    - the media-item `UPCOMING` status accessibility label is now localized instead of hardcoded
+  - Relevant files:
+    - `app/resources/lang/lang-en.json`
+    - `app/components/presentational/credits/screen/index.tsx`
+    - `app/components/presentational/category/details/screen/index.tsx`
+    - `app/components/presentational/group/details/screen/index.tsx`
+    - `app/components/presentational/own-platform/details/screen/index.tsx`
+    - `app/components/presentational/tv-show-season/details/screen/index.tsx`
+    - `app/components/presentational/media-item/details/screen/index.tsx`
+    - `app/components/presentational/media-item/list/row/index.tsx`
+    - `app/components/presentational/category/list/row/index.tsx`
+    - `app/components/presentational/category/list/context-menu/index.tsx`
+    - `app/components/presentational/media-item/list/context-menu/index.tsx`
+    - `app/components/presentational/group/list/screen/index.tsx`
+    - `app/components/presentational/own-platform/list/screen/index.tsx`
+    - `tests/media-item-details.smoke.test.tsx`
 - Group, own-platform, and TV-show-season detail forms had still been using the older light card layout on web.
   - Correct behavior/style on web now:
     - all three forms now use the same dark full-bleed shell language as the media-item details page instead of standalone light cards

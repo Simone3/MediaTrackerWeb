@@ -137,7 +137,7 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 					type='button'
 					className='media-item-context-menu-dismiss'
 					onClick={close}
-					aria-label='Close media item actions'
+					aria-label={i18n.t('common.a11y.closeMediaItemActions')}
 				/>
 				<div
 					className='media-item-context-menu media-item-context-menu-popover'

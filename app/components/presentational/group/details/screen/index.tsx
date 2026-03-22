@@ -94,7 +94,7 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 								onClick={() => {
 									this.submitForm(false);
 								}}>
-								Save
+								{i18n.t('common.buttons.save')}
 							</button>
 						</div>
 					</header>

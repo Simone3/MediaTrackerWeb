@@ -126,7 +126,7 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 								onClick={() => {
 									this.submitForm(false);
 								}}>
-								Save
+								{i18n.t('common.buttons.save')}
 							</button>
 						</div>
 					</header>
@@ -579,7 +579,7 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 						)}
 						<span>{ownPlatform?.name || i18n.t('ownPlatform.list.none')}</span>
 					</span>
-					<span className='media-item-details-picker-action'>Select</span>
+					<span className='media-item-details-picker-action'>{i18n.t('common.buttons.select')}</span>
 				</button>
 			</div>
 		);
@@ -605,7 +605,7 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 					<span className='media-item-details-picker-value'>
 						{mediaItem.group?.name || i18n.t('group.list.none')}
 					</span>
-					<span className='media-item-details-picker-action'>Select</span>
+					<span className='media-item-details-picker-action'>{i18n.t('common.buttons.select')}</span>
 				</button>
 			</div>
 		);
@@ -680,7 +680,7 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 				</p>
 				<div className='media-item-details-completion-list'>
 					{completionDates.length === 0 && (
-						<p className='media-item-details-inline-hint'>No dates added yet</p>
+						<p className='media-item-details-inline-hint'>{i18n.t('mediaItem.details.completion.empty')}</p>
 					)}
 					{completionDates.map((completedOn, index) => {
 						return (
@@ -700,7 +700,7 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 									onClick={() => {
 										this.removeCompletionDate(index);
 									}}>
-									Remove
+									{i18n.t('common.buttons.remove')}
 								</button>
 							</div>
 						);
@@ -711,7 +711,7 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 						onClick={() => {
 							this.addCompletionDate();
 						}}>
-						Add date
+						{i18n.t('mediaItem.details.buttons.addDate')}
 					</button>
 				</div>
 			</div>

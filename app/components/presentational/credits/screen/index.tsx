@@ -31,24 +31,24 @@ export class CreditsScreenComponent extends Component<CreditsScreenComponentProp
 					</div>
 					<div className='credits-grid'>
 						<article className='credits-card'>
-							<h2 className='credits-card-title'>The Movie Database (TMDb)</h2>
-							<p className='credits-card-copy'>Movies and TV Shows data provided by TMDb. This product uses the TMDb API but is not endorsed or certified by TMDb.</p>
+							<h2 className='credits-card-title'>{i18n.t('credits.screen.cards.tmdb.title')}</h2>
+							<p className='credits-card-copy'>{i18n.t('credits.screen.cards.tmdb.copy')}</p>
 							<a href='https://www.themoviedb.org' target='_blank' rel='noreferrer' className='credits-link'>
-								Visit TMDb
+								{i18n.t('credits.screen.cards.tmdb.link')}
 							</a>
 						</article>
 						<article className='credits-card'>
-							<h2 className='credits-card-title'>Giant Bomb</h2>
-							<p className='credits-card-copy'>Videogames data provided by Giant Bomb.</p>
+							<h2 className='credits-card-title'>{i18n.t('credits.screen.cards.giantBomb.title')}</h2>
+							<p className='credits-card-copy'>{i18n.t('credits.screen.cards.giantBomb.copy')}</p>
 							<a href='http://www.giantbomb.com' target='_blank' rel='noreferrer' className='credits-link'>
-								Visit Giant Bomb
+								{i18n.t('credits.screen.cards.giantBomb.link')}
 							</a>
 						</article>
 						<article className='credits-card'>
-							<h2 className='credits-card-title'>Google Books</h2>
-							<p className='credits-card-copy'>Books data provided by Google Books.</p>
+							<h2 className='credits-card-title'>{i18n.t('credits.screen.cards.googleBooks.title')}</h2>
+							<p className='credits-card-copy'>{i18n.t('credits.screen.cards.googleBooks.copy')}</p>
 							<a href='https://books.google.com' target='_blank' rel='noreferrer' className='credits-link'>
-								Visit Google Books
+								{i18n.t('credits.screen.cards.googleBooks.link')}
 							</a>
 						</article>
 					</div>

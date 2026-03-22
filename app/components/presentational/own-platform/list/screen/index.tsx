@@ -176,7 +176,7 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 													onClick={() => {
 														this.props.editOwnPlatform(ownPlatform);
 													}}
-													aria-label={`Edit ${ownPlatform.name}`}>
+													aria-label={i18n.t('common.a11y.edit', { name: ownPlatform.name })}>
 													{i18n.t('ownPlatform.list.edit')}
 												</button>
 												<button
@@ -185,7 +185,7 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 													onClick={() => {
 														this.requestDeleteOwnPlatform(ownPlatform);
 													}}
-													aria-label={`Delete ${ownPlatform.name}`}>
+													aria-label={i18n.t('common.a11y.delete', { name: ownPlatform.name })}>
 													{i18n.t('ownPlatform.list.delete')}
 												</button>
 											</div>

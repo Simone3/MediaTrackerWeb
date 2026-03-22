@@ -1,6 +1,7 @@
 import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
 import { Component, CSSProperties, ReactNode } from 'react';
 import { CategoryInternal } from 'app/data/models/internal/category';
+import { i18n } from 'app/utilities/i18n';
 
 /**
  * Presentational component to display a generic category row
@@ -39,7 +40,7 @@ export class CategoryRowComponent extends Component<CategoryRowComponentInput & 
 					onClick={(event) => {
 						showOptionsMenu(event.currentTarget.getBoundingClientRect());
 					}}
-					aria-label={`Options for ${category.name}`}>
+					aria-label={i18n.t('common.a11y.optionsFor', { name: category.name })}>
 					<span className='category-row-options-icon' aria-hidden={true}>...</span>
 				</button>
 			</article>

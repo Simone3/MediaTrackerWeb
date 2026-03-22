@@ -119,7 +119,7 @@ export class CategoryContextMenuComponent extends Component<CategoryContextMenuC
 					type='button'
 					className='category-context-menu-dismiss'
 					onClick={close}
-					aria-label='Close category actions'
+					aria-label={i18n.t('common.a11y.closeCategoryActions')}
 				/>
 				<div
 					className='category-context-menu category-context-menu-popover'

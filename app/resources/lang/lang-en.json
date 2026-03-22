@@ -175,6 +175,15 @@
 				"multiple": "Completed {{times}} times, last on {{date}}"
 			},
 			"production": "P",
+			"status": {
+				"upcoming": "Upcoming"
+			},
+			"accessibility": {
+				"ownPlatform": {
+					"owned": "Owned at {{name}}",
+					"notOwned": "Not owned on any platform"
+				}
+			},
 			"filter": {
 				"title": "Filter",
 				"prompts": {
@@ -264,10 +273,14 @@
 				"wikipedia": "Wikipedia Search",
 				"justWatch": "Just Watch Search",
 				"howLongToBeat": "How Long To Beat Search",
-				"downloadCatalog": "Reload Catalog"
+				"downloadCatalog": "Reload Catalog",
+				"addDate": "Add date"
 			},
 			"labels": {
 				"seasons": "{{seasonsNumber}} seasons, watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes"
+			},
+			"completion": {
+				"empty": "No dates added yet"
 			},
 			"sections": {
 				"basics": {
@@ -418,7 +431,10 @@
 			"name": "Media Tracker"
 		},
 		"buttons": {
-			"done": "Done"
+			"done": "Done",
+			"save": "Save",
+			"select": "Select",
+			"remove": "Remove"
 		},
 		"alert": {
 			"default": {
@@ -445,6 +461,15 @@
 		},
 		"state": {
 			"selected": "Selected"
+		},
+		"a11y": {
+			"optionsFor": "Options for {{name}}",
+			"edit": "Edit {{name}}",
+			"delete": "Delete {{name}}",
+			"selectColor": "Select color {{color}}",
+			"icon": "{{name}} icon",
+			"closeCategoryActions": "Close category actions",
+			"closeMediaItemActions": "Close media item actions"
 		},
 		"fields": {
 			"color": "Color"
@@ -513,7 +538,24 @@
 	},
 	"credits": {
 		"screen": {
-			"title": "Credits"
+			"title": "Credits",
+			"cards": {
+				"tmdb": {
+					"title": "The Movie Database (TMDb)",
+					"copy": "Movies and TV Shows data provided by TMDb. This product uses the TMDb API but is not endorsed or certified by TMDb.",
+					"link": "Visit TMDb"
+				},
+				"giantBomb": {
+					"title": "Giant Bomb",
+					"copy": "Videogames data provided by Giant Bomb.",
+					"link": "Visit Giant Bomb"
+				},
+				"googleBooks": {
+					"title": "Google Books",
+					"copy": "Books data provided by Google Books.",
+					"link": "Visit Google Books"
+				}
+			}
 		}
 	}
 }

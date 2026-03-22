@@ -132,7 +132,7 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 								onClick={() => {
 									this.submitForm(false);
 								}}>
-								Save
+								{i18n.t('common.buttons.save')}
 							</button>
 						</div>
 					</header>
@@ -168,7 +168,7 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 											<span
 												className='entity-details-selected-icon-shell'
 												role='img'
-												aria-label={`${i18n.t(`ownPlatform.icons.${formValues.icon}`)} icon`}>
+												aria-label={i18n.t('common.a11y.icon', { name: i18n.t(`ownPlatform.icons.${formValues.icon}`) })}>
 												<span
 													className='entity-details-selected-icon'
 													style={this.getSelectedIconStyle(formValues)}
@@ -216,7 +216,7 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 														onClick={() => {
 															this.setFormField('color', color);
 														}}
-														aria-label={`Select color ${color}`}
+														aria-label={i18n.t('common.a11y.selectColor', { color: color })}
 														aria-pressed={selected}
 													/>
 												);

@@ -138,7 +138,7 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 													onClick={() => {
 														this.props.editGroup(group);
 													}}
-													aria-label={`Edit ${group.name}`}>
+													aria-label={i18n.t('common.a11y.edit', { name: group.name })}>
 													{i18n.t('group.list.edit')}
 												</button>
 												<button
@@ -147,7 +147,7 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 													onClick={() => {
 														this.requestDeleteGroup(group);
 													}}
-													aria-label={`Delete ${group.name}`}>
+													aria-label={i18n.t('common.a11y.delete', { name: group.name })}>
 													{i18n.t('group.list.delete')}
 												</button>
 											</div>

@@ -222,6 +222,25 @@ describe('MediaItemDetailsScreenComponent', () => {
 		expect(screen.getByLabelText('Group')).toHaveTextContent('Sci-Fi Saga');
 	});
 
+	test('renders completion date controls and picker actions', async() => {
+		render(createScreen({
+			mediaItem: {
+				...DEFAULT_BOOK,
+				name: 'Dune',
+				importance: '300'
+			}
+		}));
+
+		expect(screen.getAllByText('Select')).toHaveLength(2);
+		expect(screen.getByText('No dates added yet')).toBeInTheDocument();
+
+		const user = userEvent.setup();
+		await user.click(screen.getByRole('button', { name: 'Add date' }));
+
+		expect(screen.queryByText('No dates added yet')).not.toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'Remove' })).toBeInTheDocument();
+	});
+
 	test('hides the media image/actions block for a brand new item without catalog data', () => {
 		render(createScreen());
 

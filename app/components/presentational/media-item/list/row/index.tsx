@@ -344,7 +344,7 @@ const getStatusLabel = (mediaItem: MediaItemInternal): string => {
 			return i18n.t(`mediaItem.list.markRedo.${mediaItem.mediaType}`);
 
 		case 'UPCOMING':
-			return 'Upcoming';
+			return i18n.t('mediaItem.list.status.upcoming');
 
 		case 'NEW':
 			return i18n.t(`mediaItem.common.importance.${mediaItem.importance}`);
@@ -388,7 +388,9 @@ export const MediaItemRowComponent = (props: MediaItemRowComponentInput & MediaI
 				<span
 					className='media-item-row-platform'
 					role='img'
-					aria-label={ownPlatform ? `Owned at ${ownPlatform.name}` : 'Not owned on any platform'}>
+					aria-label={ownPlatform ?
+						i18n.t('mediaItem.list.accessibility.ownPlatform.owned', { name: ownPlatform.name }) :
+						i18n.t('mediaItem.list.accessibility.ownPlatform.notOwned')}>
 					<span className='media-item-row-platform-shell' aria-hidden={true}>
 						{ownPlatform && (
 							<span
@@ -433,7 +435,7 @@ export const MediaItemRowComponent = (props: MediaItemRowComponentInput & MediaI
 					onClick={(event) => {
 						props.showOptionsMenu(event.currentTarget.getBoundingClientRect());
 					}}
-					aria-label={`Options for ${props.mediaItem.name}`}>
+					aria-label={i18n.t('common.a11y.optionsFor', { name: props.mediaItem.name })}>
 					<span
 						className='media-item-row-icon media-item-row-options-icon'
 						style={getMaskedIconStyle(actionMoreIcon, config.ui.colors.white)}
