@@ -1,7 +1,7 @@
 import { Component, ReactNode } from 'react';
 import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
+import { SameNameConfirmationDialogComponent, shouldOpenSameNameConfirmation } from 'app/components/presentational/generic/same-name-confirmation';
 import { CategoryInternal, DEFAULT_CATEGORY, MEDIA_TYPES_INTERNAL } from 'app/data/models/internal/category';
-import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { config } from 'app/config/config';
 import { i18n } from 'app/utilities/i18n';
@@ -33,7 +33,7 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 			return;
 		}
 
-		if(!prevProps.sameNameConfirmationRequested && this.props.sameNameConfirmationRequested) {
+		if(shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
 			this.setState({
 				confirmSameNameVisible: true
 			});
@@ -162,12 +162,10 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 						</div>
 					</form>
 				</div>
-				<ConfirmDialogComponent
+				<SameNameConfirmationDialogComponent
 					visible={confirmSameNameVisible}
 					title={i18n.t('category.common.alert.addSameName.title')}
 					message={i18n.t('category.common.alert.addSameName.message')}
-					confirmLabel={i18n.t('common.alert.default.okButton')}
-					cancelLabel={i18n.t('common.alert.default.cancelButton')}
 					onConfirm={() => {
 						this.setState({
 							confirmSameNameVisible: false

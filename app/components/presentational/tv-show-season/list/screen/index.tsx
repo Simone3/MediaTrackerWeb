@@ -1,7 +1,6 @@
-import { Component, CSSProperties, ReactNode } from 'react';
-import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
+import { CSSProperties, Component, ReactNode } from 'react';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
-import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
+import { EntityManagementScreenComponent } from 'app/components/presentational/generic/entity-management-screen';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import seasonIcon from 'app/resources/images/ic_input_season_number.svg';
 import { i18n } from 'app/utilities/i18n';
@@ -15,25 +14,8 @@ const TV_SHOW_SEASONS_SCREEN_COMPLETE_ACCENT = '#7ad18f';
  */
 export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsListScreenComponentInput & TvShowSeasonsListScreenComponentOutput, TvShowSeasonsListScreenComponentState> {
 	public state: TvShowSeasonsListScreenComponentState = {
-		pendingDeleteTvShowSeason: undefined,
-		isMobileLayout: this.isMobileLayout()
+		pendingDeleteTvShowSeason: undefined
 	};
-
-	/**
-	 * @override
-	 */
-	public componentDidMount(): void {
-		document.body.classList.add('app-dark-screen-active');
-		window.addEventListener('resize', this.handleResize);
-	}
-
-	/**
-	 * @override
-	 */
-	public componentWillUnmount(): void {
-		document.body.classList.remove('app-dark-screen-active');
-		window.removeEventListener('resize', this.handleResize);
-	}
 
 	/**
 	 * @override
@@ -43,46 +25,36 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 			tvShowSeasons
 		} = this.props;
 		const {
-			pendingDeleteTvShowSeason,
-			isMobileLayout
+			pendingDeleteTvShowSeason
 		} = this.state;
 		const countLabel = tvShowSeasons.length === 1 ?
 			i18n.t('tvShowSeason.list.count.single') :
 			i18n.t('tvShowSeason.list.count.multiple', { count: tvShowSeasons.length });
 
 		return (
-			<section
-				className='entity-management-screen tv-show-seasons-screen'
-				style={{ '--entity-management-accent': TV_SHOW_SEASONS_SCREEN_ACCENT } as CSSProperties}>
-				<div className='entity-management-screen-content'>
-					<header className='entity-management-screen-header'>
-						<div className='entity-management-screen-heading'>
-							<div className='entity-management-screen-title-row'>
-								<span className='entity-management-screen-icon-shell' aria-hidden={true}>
-									<img src={seasonIcon} alt='' className='entity-management-screen-icon' />
-								</span>
-								<div className='entity-management-screen-title-copy'>
-									<h1 className='entity-management-screen-title'>{i18n.t('tvShowSeason.list.title')}</h1>
-									<p className='entity-management-screen-count'>{countLabel}</p>
-								</div>
-							</div>
-						</div>
-						<div className='entity-management-screen-actions'>
-							{!isMobileLayout &&
+			<>
+				<EntityManagementScreenComponent
+					screenClassName='tv-show-seasons-screen'
+					bodyClassName='app-dark-screen-active'
+					accentColor={TV_SHOW_SEASONS_SCREEN_ACCENT}
+					icon={<img src={seasonIcon} alt='' className='entity-management-screen-icon' />}
+					title={i18n.t('tvShowSeason.list.title')}
+					countLabel={countLabel}
+					addButtonLabel={i18n.t('tvShowSeason.details.title.new')}
+					onAdd={this.props.loadNewTvShowSeasonDetails}
+					renderHeaderActions={({ defaultAddAction }) => {
+						return (
+							<div className='entity-management-screen-actions'>
+								{defaultAddAction}
 								<button
 									type='button'
-									className='entity-management-screen-button entity-management-screen-button-secondary'
-									onClick={this.props.loadNewTvShowSeasonDetails}>
-									+ {i18n.t('tvShowSeason.details.title.new')}
-								</button>}
-							<button
-								type='button'
-								className='entity-management-screen-button entity-management-screen-button-primary'
-								onClick={this.props.completeHandling}>
-								{i18n.t('common.buttons.done')}
-							</button>
-						</div>
-					</header>
+									className='entity-management-screen-button entity-management-screen-button-primary'
+									onClick={this.props.completeHandling}>
+									{i18n.t('common.buttons.done')}
+								</button>
+							</div>
+						);
+					}}>
 					<div className='entity-management-list'>
 						{tvShowSeasons.length === 0 ?
 							<div className='entity-management-list-empty'>
@@ -151,14 +123,7 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 								})}
 							</ul>}
 					</div>
-				</div>
-				{isMobileLayout &&
-					<FABComponent
-						text='+'
-						onPress={() => {
-							this.props.loadNewTvShowSeasonDetails();
-						}}
-					/>}
+				</EntityManagementScreenComponent>
 				<ConfirmDialogComponent
 					visible={Boolean(pendingDeleteTvShowSeason)}
 					title={i18n.t('tvShowSeason.common.alert.delete.title')}
@@ -179,7 +144,7 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 						});
 					}}
 				/>
-			</section>
+			</>
 		);
 	}
 
@@ -192,19 +157,6 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 			pendingDeleteTvShowSeason: tvShowSeason
 		});
 	}
-
-	/**
-	 * Updates the responsive layout flag when the viewport changes
-	 */
-	private handleResize = (): void => {
-		const isMobileLayout = this.isMobileLayout();
-
-		if(isMobileLayout !== this.state.isMobileLayout) {
-			this.setState({
-				isMobileLayout
-			});
-		}
-	};
 
 	/**
 	 * Resolves the accent color for the provided season row
@@ -224,14 +176,6 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 		}
 
 		return TV_SHOW_SEASONS_SCREEN_ACCENT;
-	}
-
-	/**
-	 * Checks whether the current viewport matches the mobile layout
-	 * @returns true if mobile layout should be used
-	 */
-	private isMobileLayout(): boolean {
-		return window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
 	}
 }
 
@@ -282,5 +226,4 @@ export type TvShowSeasonsListScreenComponentOutput = {
 
 type TvShowSeasonsListScreenComponentState = {
 	pendingDeleteTvShowSeason?: TvShowSeasonInternal;
-	isMobileLayout: boolean;
 }

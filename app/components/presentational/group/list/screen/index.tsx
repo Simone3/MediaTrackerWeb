@@ -1,8 +1,7 @@
-import { Component, CSSProperties, ReactNode } from 'react';
-import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
+import { Component, ReactNode } from 'react';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
-import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
-import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
+import { EntityManagementListComponent } from 'app/components/presentational/generic/entity-management-list';
+import { EntityManagementScreenComponent } from 'app/components/presentational/generic/entity-management-screen';
 import { GroupInternal } from 'app/data/models/internal/group';
 import groupIcon from 'app/resources/images/ic_input_group.svg';
 import { i18n } from 'app/utilities/i18n';
@@ -14,16 +13,13 @@ const GROUPS_SCREEN_ACCENT = '#7db4ff';
  */
 export class GroupsListScreenComponent extends Component<GroupsListScreenComponentInput & GroupsListScreenComponentOutput, GroupsListScreenComponentState> {
 	public state: GroupsListScreenComponentState = {
-		pendingDeleteGroup: undefined,
-		isMobileLayout: this.isMobileLayout()
+		pendingDeleteGroup: undefined
 	};
 
 	/**
 	 * @override
 	 */
 	public componentDidMount(): void {
-		document.body.classList.add('app-dark-screen-active');
-		window.addEventListener('resize', this.handleResize);
 		this.requestFetchIfRequired();
 	}
 
@@ -37,142 +33,79 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 	/**
 	 * @override
 	 */
-	public componentWillUnmount(): void {
-		document.body.classList.remove('app-dark-screen-active');
-		window.removeEventListener('resize', this.handleResize);
-	}
-
-	/**
-	 * @override
-	 */
 	public render(): ReactNode {
 		const {
 			groups,
 			selectedGroupId,
 			isLoading,
-			loadNewGroupDetails
+			loadNewGroupDetails,
+			showEmptyState,
+			showSkeletons
 		} = this.props;
 		const {
-			pendingDeleteGroup,
-			isMobileLayout
+			pendingDeleteGroup
 		} = this.state;
 		const countLabel = groups.length === 1 ?
 			i18n.t('group.list.count.single') :
 			i18n.t('group.list.count.multiple', { count: groups.length });
 
 		return (
-			<section
-				className='entity-management-screen groups-screen'
-				style={{ '--entity-management-accent': GROUPS_SCREEN_ACCENT } as CSSProperties}>
-				<div className='entity-management-screen-content'>
-					<header className='entity-management-screen-header'>
-						<div className='entity-management-screen-heading'>
-							<div className='entity-management-screen-title-row'>
-								<span className='entity-management-screen-icon-shell' aria-hidden={true}>
-									<img src={groupIcon} alt='' className='entity-management-screen-icon' />
-								</span>
-								<div className='entity-management-screen-title-copy'>
-									<h1 className='entity-management-screen-title'>{i18n.t('group.list.title')}</h1>
-									<p className='entity-management-screen-count'>{countLabel}</p>
-								</div>
-							</div>
-						</div>
-						{!isMobileLayout &&
-							<button
-								type='button'
-								className='entity-management-screen-button entity-management-screen-button-secondary'
-								onClick={loadNewGroupDetails}>
-								+ {i18n.t('group.details.title.new')}
-							</button>}
-					</header>
-					<div className='entity-management-list' aria-busy={this.props.showSkeletons}>
-						<ul className='entity-management-list-items'>
-							<li
-								className={`entity-management-list-row entity-management-list-row-standalone${selectedGroupId ? '' : ' entity-management-list-row-selected'}`}
-								style={{ '--entity-management-row-accent': GROUPS_SCREEN_ACCENT } as CSSProperties}>
-								<button
-									type='button'
-									className='entity-management-list-main entity-management-list-main-standalone'
-									aria-pressed={!selectedGroupId}
-									onClick={() => {
-										this.props.selectGroup(undefined);
-									}}>
-									<span className='entity-management-list-badge-shell entity-management-list-badge-shell-muted' aria-hidden={true}>
-										<span className='entity-management-list-badge'>-</span>
-									</span>
-									<span className='entity-management-list-main-copy'>
-										<span className='entity-management-list-name'>{i18n.t('group.list.none')}</span>
-									</span>
-									{!selectedGroupId && <span className='entity-management-list-selection'>{i18n.t('common.state.selected')}</span>}
-								</button>
-							</li>
-							{this.props.showSkeletons ?
-								this.renderSkeletonRows() :
-								groups.map((group: GroupInternal) => {
-									const selected = group.id === selectedGroupId;
-
-									return (
-										<li
-											key={group.id}
-											className={`entity-management-list-row${selected ? ' entity-management-list-row-selected' : ''}`}
-											style={{ '--entity-management-row-accent': GROUPS_SCREEN_ACCENT } as CSSProperties}>
-											<button
-												type='button'
-												className='entity-management-list-main'
-												aria-pressed={selected}
-												onClick={() => {
-													this.props.selectGroup(group);
-												}}>
-												<span className='entity-management-list-badge-shell' aria-hidden={true}>
-													<span className='entity-management-list-badge'>{this.getBadgeLabel(group.name, '#')}</span>
-												</span>
-												<span className='entity-management-list-main-copy'>
-													<span className='entity-management-list-name'>{group.name}</span>
-												</span>
-												{selected && <span className='entity-management-list-selection'>{i18n.t('common.state.selected')}</span>}
-											</button>
-											<div className='entity-management-list-actions'>
-												<button
-													type='button'
-													className='entity-management-list-action'
-													onClick={() => {
-														this.props.editGroup(group);
-													}}
-													aria-label={i18n.t('common.a11y.edit', { name: group.name })}>
-													{i18n.t('group.list.edit')}
-												</button>
-												<button
-													type='button'
-													className='entity-management-list-action entity-management-list-action-danger'
-													onClick={() => {
-														this.requestDeleteGroup(group);
-													}}
-													aria-label={i18n.t('common.a11y.delete', { name: group.name })}>
-													{i18n.t('group.list.delete')}
-												</button>
-											</div>
-										</li>
-									);
-								})}
-						</ul>
-						{this.props.showEmptyState &&
-							<div className='entity-management-list-empty'>
-								<p className='entity-management-list-empty-title'>{i18n.t('group.list.empty')}</p>
-								<p className='entity-management-list-empty-copy'>{i18n.t('group.list.emptyHint')}</p>
-							</div>}
-					</div>
-				</div>
-				{isMobileLayout &&
-					<FABComponent
-						text='+'
-						onPress={() => {
-							loadNewGroupDetails();
+			<>
+				<EntityManagementScreenComponent
+					screenClassName='groups-screen'
+					bodyClassName='app-dark-screen-active'
+					accentColor={GROUPS_SCREEN_ACCENT}
+					icon={<img src={groupIcon} alt='' className='entity-management-screen-icon' />}
+					title={i18n.t('group.list.title')}
+					countLabel={countLabel}
+					addButtonLabel={i18n.t('group.details.title.new')}
+					loadingVisible={isLoading}
+					onAdd={loadNewGroupDetails}>
+					<EntityManagementListComponent
+						items={groups}
+						selectedItemId={selectedGroupId}
+						selectedLabel={i18n.t('common.state.selected')}
+						editLabel={i18n.t('group.list.edit')}
+						deleteLabel={i18n.t('group.list.delete')}
+						emptyTitle={i18n.t('group.list.empty')}
+						emptyCopy={i18n.t('group.list.emptyHint')}
+						showEmptyState={showEmptyState}
+						showSkeletons={showSkeletons}
+						getItemKey={(group) => {
+							return group.id;
 						}}
-					/>}
-				<LoadingIndicatorComponent
-					visible={isLoading}
-					fullScreen={false}
-				/>
+						getItemName={(group) => {
+							return group.name;
+						}}
+						getItemAccentColor={() => {
+							return GROUPS_SCREEN_ACCENT;
+						}}
+						renderItemBadge={(group) => {
+							return <span className='entity-management-list-badge'>{this.getBadgeLabel(group.name, '#')}</span>;
+						}}
+						onSelect={(group) => {
+							this.props.selectGroup(group);
+						}}
+						onEdit={(group) => {
+							this.props.editGroup(group);
+						}}
+						onDelete={(group) => {
+							this.requestDeleteGroup(group);
+						}}
+						noneOption={{
+							label: i18n.t('group.list.none'),
+							badge: <span className='entity-management-list-badge'>-</span>,
+							accentColor: GROUPS_SCREEN_ACCENT,
+							selected: !selectedGroupId,
+							onSelect: () => {
+								this.props.selectGroup(undefined);
+							},
+							badgeShellClassName: ' entity-management-list-badge-shell-muted'
+						}}
+						skeletonAccentColor={GROUPS_SCREEN_ACCENT}
+						skeletonKeyPrefix='group-loading'
+					/>
+				</EntityManagementScreenComponent>
 				<ConfirmDialogComponent
 					visible={Boolean(pendingDeleteGroup)}
 					title={i18n.t('group.common.alert.delete.title')}
@@ -193,7 +126,7 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 						});
 					}}
 				/>
-			</section>
+			</>
 		);
 	}
 
@@ -217,53 +150,6 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 	}
 
 	/**
-	 * Renders placeholder rows while the groups list is loading for the first time
-	 * @returns the loading rows
-	 */
-	private renderSkeletonRows(): ReactNode {
-		const loadingRows = Array.from({ length: 3 }, (_, index) => {
-			return index;
-		});
-
-		return loadingRows.map((loadingRow) => {
-			return (
-				<li
-					key={`group-loading-${loadingRow}`}
-					className='entity-management-list-row entity-management-list-skeleton-row'
-					style={{ '--entity-management-row-accent': GROUPS_SCREEN_ACCENT } as CSSProperties}
-					aria-hidden={true}>
-					<div className='entity-management-list-main'>
-						<span className='entity-management-list-badge-shell list-skeleton-block entity-management-list-skeleton-badge-shell'>
-							<span className='list-skeleton-block entity-management-list-skeleton-badge' />
-						</span>
-						<span className='entity-management-list-main-copy'>
-							<span className='list-skeleton-block entity-management-list-skeleton-title' />
-						</span>
-						<span className='entity-management-list-selection list-skeleton-block entity-management-list-skeleton-pill' />
-					</div>
-					<div className='entity-management-list-actions'>
-						<span className='entity-management-list-action list-skeleton-block entity-management-list-skeleton-action' />
-						<span className='entity-management-list-action list-skeleton-block entity-management-list-skeleton-action' />
-					</div>
-				</li>
-			);
-		});
-	}
-
-	/**
-	 * Updates the responsive layout flag when the viewport changes
-	 */
-	private handleResize = (): void => {
-		const isMobileLayout = this.isMobileLayout();
-
-		if(isMobileLayout !== this.state.isMobileLayout) {
-			this.setState({
-				isMobileLayout
-			});
-		}
-	};
-
-	/**
 	 * Extracts a small badge label from the provided text
 	 * @param text the source text
 	 * @param fallback the fallback label
@@ -282,14 +168,6 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 			.toUpperCase();
 
 		return compactLabel || fallback;
-	}
-
-	/**
-	 * Checks whether the current viewport matches the mobile layout
-	 * @returns true if mobile layout should be used
-	 */
-	private isMobileLayout(): boolean {
-		return window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
 	}
 }
 
@@ -365,5 +243,4 @@ export type GroupsListScreenComponentOutput = {
 
 type GroupsListScreenComponentState = {
 	pendingDeleteGroup?: GroupInternal;
-	isMobileLayout: boolean;
 }

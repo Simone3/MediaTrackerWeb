@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
-import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
+import { ResponsiveActionMenuAnchorRect, ResponsiveActionMenuComponent } from 'app/components/presentational/generic/responsive-action-menu';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { i18n } from 'app/utilities/i18n';
 
@@ -9,17 +9,8 @@ import { i18n } from 'app/utilities/i18n';
  */
 export class CategoryContextMenuComponent extends Component<CategoryContextMenuComponentInput & CategoryContextMenuComponentOutput, CategoryContextMenuComponentState> {
 	public state: CategoryContextMenuComponentState = {
-		deleteConfirmationVisible: false,
-		isMobileLayout: this.isMobileLayout()
+		deleteConfirmationVisible: false
 	};
-
-	/**
-	 * @override
-	 */
-	public componentDidMount(): void {
-		window.addEventListener('keydown', this.handleKeyDown);
-		window.addEventListener('resize', this.handleResize);
-	}
 
 	/**
 	 * @override
@@ -30,14 +21,6 @@ export class CategoryContextMenuComponent extends Component<CategoryContextMenuC
 				deleteConfirmationVisible: false
 			});
 		}
-	}
-
-	/**
-	 * @override
-	 */
-	public componentWillUnmount(): void {
-		window.removeEventListener('keydown', this.handleKeyDown);
-		window.removeEventListener('resize', this.handleResize);
 	}
 
 	/**
@@ -55,9 +38,23 @@ export class CategoryContextMenuComponent extends Component<CategoryContextMenuC
 
 		return (
 			<>
-				{this.state.isMobileLayout ?
-					this.renderSheet(category, close) :
-					this.renderPopover(category, close)}
+				<ResponsiveActionMenuComponent
+					visible={true}
+					anchorRect={this.props.anchorRect}
+					labelledBy='category-context-menu-title'
+					closeAriaLabel={i18n.t('common.a11y.closeCategoryActions')}
+					onClose={close}
+					popoverWidth={272}
+					popoverHeight={176}
+					escapeDisabled={this.state.deleteConfirmationVisible}
+					layerClassName='responsive-action-menu-layer category-context-menu-layer'
+					dismissClassName='responsive-action-menu-dismiss category-context-menu-dismiss'
+					overlayClassName='responsive-action-menu-overlay category-context-menu-overlay'
+					popoverClassName='responsive-action-menu responsive-action-menu-popover category-context-menu category-context-menu-popover'
+					sheetClassName='responsive-action-menu responsive-action-menu-sheet category-context-menu category-context-menu-sheet'
+					handleClassName='responsive-action-menu-handle category-context-menu-handle'>
+					{this.renderMenuContent(category, close)}
+				</ResponsiveActionMenuComponent>
 				<ConfirmDialogComponent
 					visible={this.state.deleteConfirmationVisible}
 					title={i18n.t('category.common.alert.delete.title')}
@@ -83,57 +80,6 @@ export class CategoryContextMenuComponent extends Component<CategoryContextMenuC
 	}
 
 	/**
-	 * Renders the mobile bottom sheet menu
-	 * @param category active category
-	 * @param close callback to close the menu
-	 * @returns the mobile menu node
-	 */
-	private renderSheet(category: CategoryInternal, close: () => void): ReactNode {
-		return (
-			<div className='category-context-menu-overlay' role='presentation' onClick={close}>
-				<div
-					className='category-context-menu category-context-menu-sheet'
-					role='dialog'
-					aria-modal={true}
-					aria-labelledby='category-context-menu-title'
-					onClick={(event) => {
-						event.stopPropagation();
-					}}>
-					<div className='category-context-menu-handle' />
-					{this.renderMenuContent(category, close)}
-				</div>
-			</div>
-		);
-	}
-
-	/**
-	 * Renders the desktop popover menu
-	 * @param category active category
-	 * @param close callback to close the menu
-	 * @returns the desktop popover node
-	 */
-	private renderPopover(category: CategoryInternal, close: () => void): ReactNode {
-		return (
-			<div className='category-context-menu-layer' role='presentation'>
-				<button
-					type='button'
-					className='category-context-menu-dismiss'
-					onClick={close}
-					aria-label={i18n.t('common.a11y.closeCategoryActions')}
-				/>
-				<div
-					className='category-context-menu category-context-menu-popover'
-					role='dialog'
-					aria-modal={false}
-					aria-labelledby='category-context-menu-title'
-					style={this.getPopoverStyle()}>
-					{this.renderMenuContent(category, close)}
-				</div>
-			</div>
-		);
-	}
-
-	/**
 	 * Renders the shared menu header and actions
 	 * @param category active category
 	 * @param close callback to close the menu
@@ -142,13 +88,13 @@ export class CategoryContextMenuComponent extends Component<CategoryContextMenuC
 	private renderMenuContent(category: CategoryInternal, close: () => void): ReactNode {
 		return (
 			<>
-				<header className='category-context-menu-header'>
-					<h2 id='category-context-menu-title' className='category-context-menu-title'>{category.name}</h2>
+				<header className='responsive-action-menu-header category-context-menu-header'>
+					<h2 id='category-context-menu-title' className='responsive-action-menu-title category-context-menu-title'>{category.name}</h2>
 				</header>
-				<div className='category-context-menu-actions'>
+				<div className='responsive-action-menu-actions category-context-menu-actions'>
 					<button
 						type='button'
-						className='category-context-menu-button'
+						className='responsive-action-menu-button category-context-menu-button'
 						onClick={() => {
 							this.props.edit(category);
 							close();
@@ -157,7 +103,7 @@ export class CategoryContextMenuComponent extends Component<CategoryContextMenuC
 					</button>
 					<button
 						type='button'
-						className='category-context-menu-button category-context-menu-button-danger'
+						className='responsive-action-menu-button responsive-action-menu-button-danger category-context-menu-button category-context-menu-button-danger'
 						onClick={() => {
 							this.setState({
 								deleteConfirmationVisible: true
@@ -168,69 +114,6 @@ export class CategoryContextMenuComponent extends Component<CategoryContextMenuC
 				</div>
 			</>
 		);
-	}
-
-	/**
-	 * Computes the desktop popover position from the clicked options button
-	 * @returns style object for the popover
-	 */
-	private getPopoverStyle(): React.CSSProperties {
-		const popoverWidth = 272;
-		const popoverHeight = 176;
-		const viewportPadding = 16;
-		const anchorRect = this.props.anchorRect;
-
-		if(!anchorRect) {
-			return {
-				top: viewportPadding,
-				right: viewportPadding
-			};
-		}
-
-		const left = Math.min(
-			Math.max(viewportPadding, anchorRect.right - popoverWidth),
-			window.innerWidth - popoverWidth - viewportPadding
-		);
-		const openAbove = anchorRect.bottom + 12 + popoverHeight > window.innerHeight - viewportPadding;
-		const top = openAbove ?
-			Math.max(viewportPadding, anchorRect.top - popoverHeight - 12) :
-			Math.min(anchorRect.bottom + 12, window.innerHeight - popoverHeight - viewportPadding);
-
-		return {
-			top,
-			left
-		};
-	}
-
-	/**
-	 * Closes the menu when Escape is pressed
-	 * @param event keyboard event
-	 */
-	private handleKeyDown = (event: KeyboardEvent): void => {
-		if(event.key === 'Escape' && this.props.category && !this.state.deleteConfirmationVisible) {
-			this.props.close();
-		}
-	};
-
-	/**
-	 * Updates the responsive layout state
-	 */
-	private handleResize = (): void => {
-		const isMobileLayout = this.isMobileLayout();
-
-		if(isMobileLayout !== this.state.isMobileLayout) {
-			this.setState({
-				isMobileLayout
-			});
-		}
-	};
-
-	/**
-	 * Checks whether the viewport should use the mobile sheet
-	 * @returns true if the mobile sheet should be shown
-	 */
-	private isMobileLayout(): boolean {
-		return window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
 	}
 }
 
@@ -269,16 +152,8 @@ export type CategoryContextMenuComponentOutput = {
 	close: () => void;
 };
 
-export type CategoryContextMenuAnchorRect = {
-	top: number;
-	bottom: number;
-	left: number;
-	right: number;
-	width: number;
-	height: number;
-};
+export type CategoryContextMenuAnchorRect = ResponsiveActionMenuAnchorRect;
 
 type CategoryContextMenuComponentState = {
 	deleteConfirmationVisible: boolean;
-	isMobileLayout: boolean;
 };

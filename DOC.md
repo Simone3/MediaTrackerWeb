@@ -47,6 +47,14 @@
   - Redux-connected wrappers
 - `app/components/presentational`
   - most actual screen / row / dialog rendering
+- Shared presentational building blocks now also live under:
+  - `app/components/presentational/generic/responsive-action-menu`
+  - `app/components/presentational/generic/entity-management-screen`
+  - `app/components/presentational/generic/entity-management-list`
+  - `app/components/presentational/generic/entity-details-frame`
+  - `app/components/presentational/generic/same-name-confirmation`
+  - `app/components/presentational/auth/common/credentials-screen`
+  - `app/components/presentational/own-platform/common/icon-registry.ts`
 - Most components are still class components.
 - Global styling is still centralized in `app/web/styles.css`.
 
@@ -109,6 +117,13 @@
 - `firebase` stays as a real runtime dependency because the prod user controller and config typings still import `firebase/app` and `firebase/auth`.
 - `tests/setup-tests.ts` now installs `TextEncoder`/`TextDecoder` from Node `util` so the Jest/jsdom environment works with React Router `7`.
 - Linting currently runs on ESLint `9` in legacy `.eslintrc.js` mode via `ESLINT_USE_FLAT_CONFIG=false`; the repo no longer keeps the old `.eslintignore` file because the npm lint script already scopes the checked files directly.
+- A shared-UI refactor also moved several repeated web-only patterns into reusable presentational primitives instead of keeping parallel copies in each screen.
+  - `responsive-action-menu` now drives both the category and media-item desktop popover/mobile bottom-sheet action menus.
+  - `entity-management-screen` and `entity-management-list` now cover the shared dark management-shell/list behavior used by group and own-platform screens, while TV-show seasons reuse the shared shell.
+  - `entity-details-frame` now owns the dark details-page shell for group, own-platform, and TV-show-season forms.
+  - `same-name-confirmation` now centralizes the duplicate-name confirmation dialog behavior used across category/group/platform/media-item details.
+  - `credentials-screen` now holds the shared login/signup email-password screen structure.
+  - `own-platform/common/icon-registry.ts` is now the single source of truth for own-platform icon assets and masked icon styles used across list/details/media-item views.
 
 ## High-signal files to open first
 - `app/AGENTS.md`

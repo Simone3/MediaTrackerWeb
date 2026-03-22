@@ -1,6 +1,6 @@
-import { Component, CSSProperties, ReactNode } from 'react';
-import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
-import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
+import { Component, ReactNode } from 'react';
+import { EntityDetailsFrameComponent } from 'app/components/presentational/generic/entity-details-frame';
+import { SameNameConfirmationDialogComponent, shouldOpenSameNameConfirmation } from 'app/components/presentational/generic/same-name-confirmation';
 import { GroupInternal } from 'app/data/models/internal/group';
 import groupIcon from 'app/resources/images/ic_input_group.svg';
 import { i18n } from 'app/utilities/i18n';
@@ -24,7 +24,6 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 	 * @override
 	 */
 	public componentDidMount(): void {
-		document.body.classList.add('app-dark-screen-active');
 		this.syncFormValuesWithProps();
 	}
 
@@ -37,7 +36,7 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 			return;
 		}
 
-		if(!prevProps.sameNameConfirmationRequested && this.props.sameNameConfirmationRequested) {
+		if(shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
 			this.setState({
 				confirmSameNameVisible: true
 			});
@@ -46,13 +45,6 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 		if(prevState.formValues !== this.state.formValues) {
 			this.notifyFormStatus();
 		}
-	}
-
-	/**
-	 * @override
-	 */
-	public componentWillUnmount(): void {
-		document.body.classList.remove('app-dark-screen-active');
 	}
 
 	/**
@@ -70,87 +62,62 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 		const title = formValues.id ? formValues.name : i18n.t('group.details.title.new');
 
 		return (
-			<section
-				className='entity-details-screen group-details-screen'
-				style={{ '--entity-details-accent': GROUP_DETAILS_ACCENT } as CSSProperties}>
-				<div className='entity-details-screen-content'>
-					<header className='entity-details-hero'>
-						<div className='entity-details-heading'>
-							<div className='entity-details-title-row'>
-								<span className='entity-details-icon-shell' aria-hidden={true}>
-									<img src={groupIcon} alt='' className='entity-details-icon' />
-								</span>
-								<div className='entity-details-title-copy'>
-									<h1 className='entity-details-title'>{title}</h1>
-									<p className='entity-details-subtitle'>{i18n.t('group.list.emptyHint')}</p>
-								</div>
-							</div>
+			<EntityDetailsFrameComponent
+				screenClassName='group-details-screen'
+				bodyClassName='app-dark-screen-active'
+				accentColor={GROUP_DETAILS_ACCENT}
+				icon={<img src={groupIcon} alt='' className='entity-details-icon' />}
+				title={title}
+				subtitle={i18n.t('group.list.emptyHint')}
+				saveLabel={i18n.t('common.buttons.save')}
+				saveDisabled={!isValid || isLoading}
+				loadingVisible={isLoading}
+				onSave={() => {
+					this.submitForm(false);
+				}}
+				onSubmit={(event) => {
+					event.preventDefault();
+					this.submitForm(false);
+				}}
+				dialogs={
+					<SameNameConfirmationDialogComponent
+						visible={confirmSameNameVisible}
+						title={i18n.t('group.common.alert.addSameName.title')}
+						message={i18n.t('group.common.alert.addSameName.message')}
+						onConfirm={() => {
+							this.setState({
+								confirmSameNameVisible: false
+							}, () => {
+								this.submitForm(true);
+							});
+						}}
+						onCancel={() => {
+							this.setState({
+								confirmSameNameVisible: false
+							});
+						}}
+					/>
+				}>
+				<section className='entity-details-panel'>
+					<div className='entity-details-grid'>
+						<div className='entity-details-field entity-details-field-span-2'>
+							<label className='entity-details-label' htmlFor='group-name'>
+								{i18n.t('group.details.placeholders.name')}
+							</label>
+							<input
+								id='group-name'
+								className='entity-details-input'
+								type='text'
+								value={formValues.name}
+								placeholder={i18n.t('group.details.placeholders.name')}
+								onChange={(event) => {
+									this.setFormField('name', event.target.value);
+								}}
+							/>
 						</div>
-						<div className='entity-details-actions'>
-							<button
-								type='button'
-								className='entity-details-button entity-details-button-primary'
-								disabled={!isValid || isLoading}
-								onClick={() => {
-									this.submitForm(false);
-								}}>
-								{i18n.t('common.buttons.save')}
-							</button>
-						</div>
-					</header>
-					<form
-						className='entity-details-form'
-						onSubmit={(event) => {
-							event.preventDefault();
-							this.submitForm(false);
-						}}>
-						<div className='entity-details-main'>
-							<section className='entity-details-panel'>
-								<div className='entity-details-grid'>
-									<div className='entity-details-field entity-details-field-span-2'>
-										<label className='entity-details-label' htmlFor='group-name'>
-											{i18n.t('group.details.placeholders.name')}
-										</label>
-										<input
-											id='group-name'
-											className='entity-details-input'
-											type='text'
-											value={formValues.name}
-											placeholder={i18n.t('group.details.placeholders.name')}
-											onChange={(event) => {
-												this.setFormField('name', event.target.value);
-											}}
-										/>
-									</div>
-								</div>
-							</section>
-						</div>
-					</form>
-				</div>
-				<ConfirmDialogComponent
-					visible={confirmSameNameVisible}
-					title={i18n.t('group.common.alert.addSameName.title')}
-					message={i18n.t('group.common.alert.addSameName.message')}
-					confirmLabel={i18n.t('common.alert.default.okButton')}
-					cancelLabel={i18n.t('common.alert.default.cancelButton')}
-					onConfirm={() => {
-						this.setState({
-							confirmSameNameVisible: false
-						}, () => {
-							this.submitForm(true);
-						});
-					}}
-					onCancel={() => {
-						this.setState({
-							confirmSameNameVisible: false
-						});
-					}}
-				/>
-				<LoadingIndicatorComponent
-					visible={isLoading}
-					fullScreen={false}
-				/>
-			</section>
+					</div>
+				</section>
+			</EntityDetailsFrameComponent>
 		);
 	}
 

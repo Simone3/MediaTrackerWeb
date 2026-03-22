@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
-import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
+import { ResponsiveActionMenuAnchorRect, ResponsiveActionMenuComponent } from 'app/components/presentational/generic/responsive-action-menu';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { i18n } from 'app/utilities/i18n';
@@ -10,17 +10,8 @@ import { i18n } from 'app/utilities/i18n';
  */
 export class MediaItemContextMenuComponent extends Component<MediaItemContextMenuComponentInput & MediaItemContextMenuComponentOutput, MediaItemContextMenuComponentState> {
 	public state: MediaItemContextMenuComponentState = {
-		deleteConfirmationVisible: false,
-		isMobileLayout: this.isMobileLayout()
+		deleteConfirmationVisible: false
 	};
-
-	/**
-	 * @override
-	 */
-	public componentDidMount(): void {
-		window.addEventListener('keydown', this.handleKeyDown);
-		window.addEventListener('resize', this.handleResize);
-	}
 
 	/**
 	 * @override
@@ -36,14 +27,6 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 	/**
 	 * @override
 	 */
-	public componentWillUnmount(): void {
-		window.removeEventListener('keydown', this.handleKeyDown);
-		window.removeEventListener('resize', this.handleResize);
-	}
-
-	/**
-	 * @override
-	 */
 	public render(): ReactNode {
 		const {
 			mediaItem,
@@ -54,26 +37,27 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 			return null;
 		}
 
-		const canMarkAsRedo = mediaItem.status === 'COMPLETE';
-		const canMarkAsActive = mediaItem.status === 'REDO' || mediaItem.status === 'NEW';
-		const canMarkAsComplete = mediaItem.status === 'REDO' || mediaItem.status === 'NEW' || mediaItem.status === 'ACTIVE';
-		const canViewGroup = Boolean(mediaItem.group?.id) && mediaItem.group?.id !== this.props.currentViewGroupId;
+		const visibility = this.getVisibility(mediaItem);
 
 		return (
 			<>
-				{this.state.isMobileLayout ?
-					this.renderSheet(mediaItem, close, {
-						canMarkAsRedo,
-						canMarkAsActive,
-						canMarkAsComplete,
-						canViewGroup
-					}) :
-					this.renderPopover(mediaItem, close, {
-						canMarkAsRedo,
-						canMarkAsActive,
-						canMarkAsComplete,
-						canViewGroup
-					})}
+				<ResponsiveActionMenuComponent
+					visible={true}
+					anchorRect={this.props.anchorRect}
+					labelledBy='media-item-context-menu-title'
+					closeAriaLabel={i18n.t('common.a11y.closeMediaItemActions')}
+					onClose={close}
+					popoverWidth={304}
+					popoverHeight={52 + (this.getActionsCount(visibility) * 58)}
+					escapeDisabled={this.state.deleteConfirmationVisible}
+					layerClassName='responsive-action-menu-layer media-item-context-menu-layer'
+					dismissClassName='responsive-action-menu-dismiss media-item-context-menu-dismiss'
+					overlayClassName='responsive-action-menu-overlay media-item-context-menu-overlay'
+					popoverClassName='responsive-action-menu responsive-action-menu-popover media-item-context-menu media-item-context-menu-popover'
+					sheetClassName='responsive-action-menu responsive-action-menu-sheet media-item-context-menu media-item-context-menu-sheet'
+					handleClassName='responsive-action-menu-handle media-item-context-menu-handle'>
+					{this.renderMenuContent(mediaItem, close, visibility)}
+				</ResponsiveActionMenuComponent>
 				<ConfirmDialogComponent
 					visible={this.state.deleteConfirmationVisible}
 					title={i18n.t(`mediaItem.common.alert.delete.title.${mediaItem.mediaType}`)}
@@ -99,59 +83,6 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 	}
 
 	/**
-	 * Renders the mobile bottom sheet menu
-	 * @param mediaItem active media item
-	 * @param close callback to close the menu
-	 * @param visibility action visibility flags
-	 * @returns the mobile menu node
-	 */
-	private renderSheet(mediaItem: MediaItemInternal, close: () => void, visibility: MediaItemContextMenuVisibility): ReactNode {
-		return (
-			<div className='media-item-context-menu-overlay' role='presentation' onClick={close}>
-				<div
-					className='media-item-context-menu media-item-context-menu-sheet'
-					role='dialog'
-					aria-modal={true}
-					aria-labelledby='media-item-context-menu-title'
-					onClick={(event) => {
-						event.stopPropagation();
-					}}>
-					<div className='media-item-context-menu-handle' />
-					{this.renderMenuContent(mediaItem, close, visibility)}
-				</div>
-			</div>
-		);
-	}
-
-	/**
-	 * Renders the desktop popover menu
-	 * @param mediaItem active media item
-	 * @param close callback to close the menu
-	 * @param visibility action visibility flags
-	 * @returns the desktop popover node
-	 */
-	private renderPopover(mediaItem: MediaItemInternal, close: () => void, visibility: MediaItemContextMenuVisibility): ReactNode {
-		return (
-			<div className='media-item-context-menu-layer' role='presentation'>
-				<button
-					type='button'
-					className='media-item-context-menu-dismiss'
-					onClick={close}
-					aria-label={i18n.t('common.a11y.closeMediaItemActions')}
-				/>
-				<div
-					className='media-item-context-menu media-item-context-menu-popover'
-					role='dialog'
-					aria-modal={false}
-					aria-labelledby='media-item-context-menu-title'
-					style={this.getPopoverStyle(visibility)}>
-					{this.renderMenuContent(mediaItem, close, visibility)}
-				</div>
-			</div>
-		);
-	}
-
-	/**
 	 * Renders the shared menu header and actions
 	 * @param mediaItem active media item
 	 * @param close callback to close the menu
@@ -161,13 +92,13 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 	private renderMenuContent(mediaItem: MediaItemInternal, close: () => void, visibility: MediaItemContextMenuVisibility): ReactNode {
 		return (
 			<>
-				<header className='media-item-context-menu-header'>
-					<h2 id='media-item-context-menu-title' className='media-item-context-menu-title'>{mediaItem.name}</h2>
+				<header className='responsive-action-menu-header media-item-context-menu-header'>
+					<h2 id='media-item-context-menu-title' className='responsive-action-menu-title media-item-context-menu-title'>{mediaItem.name}</h2>
 				</header>
-				<div className='media-item-context-menu-actions'>
+				<div className='responsive-action-menu-actions media-item-context-menu-actions'>
 					<button
 						type='button'
-						className='media-item-context-menu-button'
+						className='responsive-action-menu-button media-item-context-menu-button'
 						onClick={() => {
 							this.props.edit(mediaItem);
 							close();
@@ -176,7 +107,7 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 					</button>
 					<button
 						type='button'
-						className='media-item-context-menu-button media-item-context-menu-button-danger'
+						className='responsive-action-menu-button responsive-action-menu-button-danger media-item-context-menu-button media-item-context-menu-button-danger'
 						onClick={() => {
 							this.setState({
 								deleteConfirmationVisible: true
@@ -187,7 +118,7 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 					{visibility.canMarkAsRedo && (
 						<button
 							type='button'
-							className='media-item-context-menu-button'
+							className='responsive-action-menu-button media-item-context-menu-button'
 							onClick={() => {
 								this.props.markAsRedo(mediaItem);
 								close();
@@ -198,7 +129,7 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 					{visibility.canMarkAsActive && (
 						<button
 							type='button'
-							className='media-item-context-menu-button'
+							className='responsive-action-menu-button media-item-context-menu-button'
 							onClick={() => {
 								this.props.markAsActive(mediaItem);
 								close();
@@ -209,7 +140,7 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 					{visibility.canMarkAsComplete && (
 						<button
 							type='button'
-							className='media-item-context-menu-button'
+							className='responsive-action-menu-button media-item-context-menu-button'
 							onClick={() => {
 								this.props.markAsComplete(mediaItem);
 								close();
@@ -220,7 +151,7 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 					{visibility.canViewGroup && mediaItem.group && (
 						<button
 							type='button'
-							className='media-item-context-menu-button'
+							className='responsive-action-menu-button media-item-context-menu-button'
 							onClick={() => {
 								this.props.viewGroup(mediaItem.group as GroupInternal);
 								close();
@@ -234,72 +165,30 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 	}
 
 	/**
-	 * Computes the desktop popover position from the clicked options button
-	 * @param visibility action visibility flags
-	 * @returns style object for the popover
+	 * Resolves which media-item actions should be shown for the current row state
+	 * @param mediaItem current media item
+	 * @returns action visibility flags
 	 */
-	private getPopoverStyle(visibility: MediaItemContextMenuVisibility): React.CSSProperties {
-		const popoverWidth = 304;
-		const actionsCount = 2 +
-			Number(visibility.canMarkAsRedo) +
-			Number(visibility.canMarkAsActive) +
-			Number(visibility.canMarkAsComplete) +
-			Number(visibility.canViewGroup);
-		const popoverHeight = 52 + (actionsCount * 58);
-		const viewportPadding = 16;
-		const anchorRect = this.props.anchorRect;
-
-		if(!anchorRect) {
-			return {
-				top: viewportPadding,
-				right: viewportPadding
-			};
-		}
-
-		const left = Math.min(
-			Math.max(viewportPadding, anchorRect.right - popoverWidth),
-			window.innerWidth - popoverWidth - viewportPadding
-		);
-		const openAbove = anchorRect.bottom + 12 + popoverHeight > window.innerHeight - viewportPadding;
-		const top = openAbove ?
-			Math.max(viewportPadding, anchorRect.top - popoverHeight - 12) :
-			Math.min(anchorRect.bottom + 12, window.innerHeight - popoverHeight - viewportPadding);
-
+	private getVisibility(mediaItem: MediaItemInternal): MediaItemContextMenuVisibility {
 		return {
-			top,
-			left
+			canMarkAsRedo: mediaItem.status === 'COMPLETE',
+			canMarkAsActive: mediaItem.status === 'REDO' || mediaItem.status === 'NEW',
+			canMarkAsComplete: mediaItem.status === 'REDO' || mediaItem.status === 'NEW' || mediaItem.status === 'ACTIVE',
+			canViewGroup: Boolean(mediaItem.group?.id) && mediaItem.group?.id !== this.props.currentViewGroupId
 		};
 	}
 
 	/**
-	 * Closes the menu when Escape is pressed
-	 * @param event keyboard event
+	 * Counts the number of visible menu actions
+	 * @param visibility action visibility flags
+	 * @returns action count
 	 */
-	private handleKeyDown = (event: KeyboardEvent): void => {
-		if(event.key === 'Escape' && this.props.mediaItem && !this.state.deleteConfirmationVisible) {
-			this.props.close();
-		}
-	};
-
-	/**
-	 * Updates the responsive layout state
-	 */
-	private handleResize = (): void => {
-		const isMobileLayout = this.isMobileLayout();
-
-		if(isMobileLayout !== this.state.isMobileLayout) {
-			this.setState({
-				isMobileLayout
-			});
-		}
-	};
-
-	/**
-	 * Checks whether the viewport should use the mobile sheet
-	 * @returns true if the mobile sheet should be shown
-	 */
-	private isMobileLayout(): boolean {
-		return window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
+	private getActionsCount(visibility: MediaItemContextMenuVisibility): number {
+		return 2 +
+			Number(visibility.canMarkAsRedo) +
+			Number(visibility.canMarkAsActive) +
+			Number(visibility.canMarkAsComplete) +
+			Number(visibility.canViewGroup);
 	}
 }
 
@@ -365,7 +254,6 @@ export type MediaItemContextMenuComponentOutput = {
 
 type MediaItemContextMenuComponentState = {
 	deleteConfirmationVisible: boolean;
-	isMobileLayout: boolean;
 };
 
 type MediaItemContextMenuVisibility = {
@@ -375,11 +263,4 @@ type MediaItemContextMenuVisibility = {
 	canViewGroup: boolean;
 };
 
-export type MediaItemContextMenuAnchorRect = {
-	top: number;
-	bottom: number;
-	left: number;
-	right: number;
-	width: number;
-	height: number;
-};
+export type MediaItemContextMenuAnchorRect = ResponsiveActionMenuAnchorRect;

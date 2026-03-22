@@ -3,6 +3,7 @@ import { config } from 'app/config/config';
 import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
+import { SameNameConfirmationDialogComponent, shouldOpenSameNameConfirmation } from 'app/components/presentational/generic/same-name-confirmation';
 import { DEFAULT_CATALOG_BOOK, DEFAULT_BOOK, BookInternal } from 'app/data/models/internal/media-items/book';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { CatalogMediaItemInternal, MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
@@ -70,7 +71,7 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 		this.checkLoadSelectedGroup(prevProps.selectedGroup);
 		this.checkLoadSelectedOwnPlatform(prevProps.selectedOwnPlatform);
 
-		if(!prevProps.sameNameConfirmationRequested && this.props.sameNameConfirmationRequested) {
+		if(shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
 			this.setState({
 				confirmSameNameVisible: true
 			});
@@ -140,15 +141,13 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 						{this.renderFormSections(formValues)}
 					</form>
 				</div>
-				<ConfirmDialogComponent
-					visible={confirmSameNameVisible}
-					title={i18n.t('mediaItem.common.alert.addSameName.title')}
-					message={i18n.t(`mediaItem.common.alert.addSameName.message.${formValues.mediaType}`)}
-					confirmLabel={i18n.t('common.alert.default.okButton')}
-					cancelLabel={i18n.t('common.alert.default.cancelButton')}
-					onConfirm={() => {
-						this.setState({
-							confirmSameNameVisible: false
+					<SameNameConfirmationDialogComponent
+						visible={confirmSameNameVisible}
+						title={i18n.t('mediaItem.common.alert.addSameName.title')}
+						message={i18n.t(`mediaItem.common.alert.addSameName.message.${formValues.mediaType}`)}
+						onConfirm={() => {
+							this.setState({
+								confirmSameNameVisible: false
 						}, () => {
 							this.submitForm(true);
 						});

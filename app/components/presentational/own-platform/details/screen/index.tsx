@@ -1,47 +1,13 @@
-import { Component, CSSProperties, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import { config } from 'app/config/config';
-import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
-import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
-import { OWN_PLATFORM_ICON_INTERNAL_VALUES, OwnPlatformIconInternal, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
+import { EntityDetailsFrameComponent } from 'app/components/presentational/generic/entity-details-frame';
+import { SameNameConfirmationDialogComponent, shouldOpenSameNameConfirmation } from 'app/components/presentational/generic/same-name-confirmation';
+import { buildOwnPlatformMaskStyle } from 'app/components/presentational/own-platform/common/icon-registry';
+import { OWN_PLATFORM_ICON_INTERNAL_VALUES, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import ownPlatformIcon from 'app/resources/images/ic_input_own_platform.svg';
-import platformAndroidIcon from 'app/resources/images/ic_platform_android.svg';
-import platformAppleIcon from 'app/resources/images/ic_platform_apple.svg';
-import platformBookIcon from 'app/resources/images/ic_platform_book.svg';
-import platformDiscIcon from 'app/resources/images/ic_platform_disc.svg';
-import platformDisneyIcon from 'app/resources/images/ic_platform_disney.svg';
-import platformDownloadIcon from 'app/resources/images/ic_platform_download.svg';
-import platformEpicIcon from 'app/resources/images/ic_platform_epic.svg';
-import platformGogIcon from 'app/resources/images/ic_platform_gog.svg';
-import platformHuluIcon from 'app/resources/images/ic_platform_hulu.svg';
-import platformKindleIcon from 'app/resources/images/ic_platform_kindle.svg';
-import platformNetflixIcon from 'app/resources/images/ic_platform_netflix.svg';
-import platformOriginIcon from 'app/resources/images/ic_platform_origin.svg';
-import platformPlaystationIcon from 'app/resources/images/ic_platform_playstation.svg';
-import platformSteamIcon from 'app/resources/images/ic_platform_steam.svg';
-import platformSwitchIcon from 'app/resources/images/ic_platform_switch.svg';
-import platformUplayIcon from 'app/resources/images/ic_platform_uplay.svg';
 import { i18n } from 'app/utilities/i18n';
 
 const OWN_PLATFORM_DETAILS_ACCENT = '#7db4ff';
-const ownPlatformIcons: Record<OwnPlatformIconInternal, string> = {
-	default: ownPlatformIcon,
-	android: platformAndroidIcon,
-	apple: platformAppleIcon,
-	book: platformBookIcon,
-	disc: platformDiscIcon,
-	disney: platformDisneyIcon,
-	download: platformDownloadIcon,
-	epic: platformEpicIcon,
-	gog: platformGogIcon,
-	hulu: platformHuluIcon,
-	kindle: platformKindleIcon,
-	netflix: platformNetflixIcon,
-	origin: platformOriginIcon,
-	playstation: platformPlaystationIcon,
-	steam: platformSteamIcon,
-	switch: platformSwitchIcon,
-	uplay: platformUplayIcon
-};
 
 /**
  * Presentational component that contains the whole "own platform details" screen, that works as the "add new own platform", "update own platform" and
@@ -62,7 +28,6 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 	 * @override
 	 */
 	public componentDidMount(): void {
-		document.body.classList.add('app-dark-screen-active');
 		this.syncFormValuesWithProps();
 	}
 
@@ -75,7 +40,7 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 			return;
 		}
 
-		if(!prevProps.sameNameConfirmationRequested && this.props.sameNameConfirmationRequested) {
+		if(shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
 			this.setState({
 				confirmSameNameVisible: true
 			});
@@ -84,13 +49,6 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 		if(prevState.formValues !== this.state.formValues) {
 			this.notifyFormStatus();
 		}
-	}
-
-	/**
-	 * @override
-	 */
-	public componentWillUnmount(): void {
-		document.body.classList.remove('app-dark-screen-active');
 	}
 
 	/**
@@ -108,150 +66,130 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 		const title = formValues.id ? formValues.name : i18n.t('ownPlatform.details.title.new');
 
 		return (
-			<section
-				className='entity-details-screen own-platform-details-screen'
-				style={{ '--entity-details-accent': formValues.color || OWN_PLATFORM_DETAILS_ACCENT } as CSSProperties}>
-				<div className='entity-details-screen-content'>
-					<header className='entity-details-hero'>
-						<div className='entity-details-heading'>
-							<div className='entity-details-title-row'>
-								<span className='entity-details-icon-shell' aria-hidden={true}>
-									<img src={ownPlatformIcon} alt='' className='entity-details-icon' />
+			<EntityDetailsFrameComponent
+				screenClassName='own-platform-details-screen'
+				bodyClassName='app-dark-screen-active'
+				accentColor={formValues.color || OWN_PLATFORM_DETAILS_ACCENT}
+				icon={<img src={ownPlatformIcon} alt='' className='entity-details-icon' />}
+				title={title}
+				subtitle={i18n.t('ownPlatform.list.emptyHint')}
+				saveLabel={i18n.t('common.buttons.save')}
+				saveDisabled={!isValid || isLoading}
+				loadingVisible={isLoading}
+				onSave={() => {
+					this.submitForm(false);
+				}}
+				onSubmit={(event) => {
+					event.preventDefault();
+					this.submitForm(false);
+				}}
+				dialogs={
+					<SameNameConfirmationDialogComponent
+						visible={confirmSameNameVisible}
+						title={i18n.t('ownPlatform.common.alert.addSameName.title')}
+						message={i18n.t('ownPlatform.common.alert.addSameName.message')}
+						onConfirm={() => {
+							this.setState({
+								confirmSameNameVisible: false
+							}, () => {
+								this.submitForm(true);
+							});
+						}}
+						onCancel={() => {
+							this.setState({
+								confirmSameNameVisible: false
+							});
+						}}
+					/>
+				}>
+				<section className='entity-details-panel'>
+					<div className='entity-details-grid'>
+						<div className='entity-details-field entity-details-field-span-2'>
+							<label className='entity-details-label' htmlFor='own-platform-name'>
+								{i18n.t('ownPlatform.details.placeholders.name')}
+							</label>
+							<input
+								id='own-platform-name'
+								className='entity-details-input'
+								type='text'
+								value={formValues.name}
+								placeholder={i18n.t('ownPlatform.details.placeholders.name')}
+								onChange={(event) => {
+									this.setFormField('name', event.target.value);
+								}}
+							/>
+						</div>
+						<div className='entity-details-field entity-details-field-span-2'>
+							<label className='entity-details-label' htmlFor='own-platform-icon'>
+								{i18n.t('ownPlatform.details.prompts.icon')}
+							</label>
+							<div className='entity-details-select-row'>
+								<span
+									className='entity-details-selected-icon-shell'
+									role='img'
+									aria-label={i18n.t('common.a11y.icon', { name: i18n.t(`ownPlatform.icons.${formValues.icon}`) })}>
+									<span
+										className='entity-details-selected-icon'
+										style={buildOwnPlatformMaskStyle(
+											formValues.icon,
+											formValues.color,
+											'--entity-details-selected-icon-url',
+											'--entity-details-selected-icon-color'
+										)}
+										aria-hidden={true}
+									/>
 								</span>
-								<div className='entity-details-title-copy'>
-									<h1 className='entity-details-title'>{title}</h1>
-									<p className='entity-details-subtitle'>{i18n.t('ownPlatform.list.emptyHint')}</p>
-								</div>
+								<select
+									id='own-platform-icon'
+									className='entity-details-select'
+									value={formValues.icon}
+									onChange={(event) => {
+										this.setFormField('icon', event.target.value as OwnPlatformInternal['icon']);
+									}}>
+									{OWN_PLATFORM_ICON_INTERNAL_VALUES.map((icon) => {
+										return (
+											<option key={icon} value={icon}>
+												{i18n.t(`ownPlatform.icons.${icon}`)}
+											</option>
+										);
+									})}
+								</select>
 							</div>
 						</div>
-						<div className='entity-details-actions'>
-							<button
-								type='button'
-								className='entity-details-button entity-details-button-primary'
-								disabled={!isValid || isLoading}
-								onClick={() => {
-									this.submitForm(false);
-								}}>
-								{i18n.t('common.buttons.save')}
-							</button>
-						</div>
-					</header>
-					<form
-						className='entity-details-form'
-						onSubmit={(event) => {
-							event.preventDefault();
-							this.submitForm(false);
-						}}>
-						<div className='entity-details-main'>
-							<section className='entity-details-panel'>
-								<div className='entity-details-grid'>
-									<div className='entity-details-field entity-details-field-span-2'>
-										<label className='entity-details-label' htmlFor='own-platform-name'>
-											{i18n.t('ownPlatform.details.placeholders.name')}
-										</label>
-										<input
-											id='own-platform-name'
-											className='entity-details-input'
-											type='text'
-											value={formValues.name}
-											placeholder={i18n.t('ownPlatform.details.placeholders.name')}
-											onChange={(event) => {
-												this.setFormField('name', event.target.value);
-											}}
-										/>
-									</div>
-									<div className='entity-details-field entity-details-field-span-2'>
-										<label className='entity-details-label' htmlFor='own-platform-icon'>
-											{i18n.t('ownPlatform.details.prompts.icon')}
-										</label>
-										<div className='entity-details-select-row'>
-											<span
-												className='entity-details-selected-icon-shell'
-												role='img'
-												aria-label={i18n.t('common.a11y.icon', { name: i18n.t(`ownPlatform.icons.${formValues.icon}`) })}>
-												<span
-													className='entity-details-selected-icon'
-													style={this.getSelectedIconStyle(formValues)}
-													aria-hidden={true}
-												/>
-											</span>
-											<select
-												id='own-platform-icon'
-												className='entity-details-select'
-												value={formValues.icon}
-												onChange={(event) => {
-													this.setFormField('icon', event.target.value as OwnPlatformInternal['icon']);
-												}}>
-												{OWN_PLATFORM_ICON_INTERNAL_VALUES.map((icon) => {
-													return (
-														<option key={icon} value={icon}>
-															{i18n.t(`ownPlatform.icons.${icon}`)}
-														</option>
-													);
-												})}
-											</select>
-										</div>
-									</div>
-									<div className='entity-details-field entity-details-field-span-2'>
-										<p className='entity-details-label'>
-											{i18n.t('common.fields.color')}
-										</p>
-										<div
-											id='own-platform-color'
-											className='entity-details-color-grid'
-											role='group'
-											aria-label={i18n.t('common.fields.color')}>
-											{config.ui.colors.availableOwnPlatformColors.map((color) => {
-												const selected = formValues.color === color;
-												const buttonClassName = selected ?
-													'entity-details-color entity-details-color-selected' :
-													'entity-details-color';
+						<div className='entity-details-field entity-details-field-span-2'>
+							<p className='entity-details-label'>
+								{i18n.t('common.fields.color')}
+							</p>
+							<div
+								id='own-platform-color'
+								className='entity-details-color-grid'
+								role='group'
+								aria-label={i18n.t('common.fields.color')}>
+								{config.ui.colors.availableOwnPlatformColors.map((color) => {
+									const selected = formValues.color === color;
+									const buttonClassName = selected ?
+										'entity-details-color entity-details-color-selected' :
+										'entity-details-color';
 
-												return (
-													<button
-														key={color}
-														type='button'
-														className={buttonClassName}
-														style={{ backgroundColor: color }}
-														onClick={() => {
-															this.setFormField('color', color);
-														}}
-														aria-label={i18n.t('common.a11y.selectColor', { color: color })}
-														aria-pressed={selected}
-													/>
-												);
-											})}
-										</div>
-									</div>
-								</div>
-							</section>
+									return (
+										<button
+											key={color}
+											type='button'
+											className={buttonClassName}
+											style={{ backgroundColor: color }}
+											onClick={() => {
+												this.setFormField('color', color);
+											}}
+											aria-label={i18n.t('common.a11y.selectColor', { color: color })}
+											aria-pressed={selected}
+										/>
+									);
+								})}
+							</div>
 						</div>
-					</form>
-				</div>
-				<ConfirmDialogComponent
-					visible={confirmSameNameVisible}
-					title={i18n.t('ownPlatform.common.alert.addSameName.title')}
-					message={i18n.t('ownPlatform.common.alert.addSameName.message')}
-					confirmLabel={i18n.t('common.alert.default.okButton')}
-					cancelLabel={i18n.t('common.alert.default.cancelButton')}
-					onConfirm={() => {
-						this.setState({
-							confirmSameNameVisible: false
-						}, () => {
-							this.submitForm(true);
-						});
-					}}
-					onCancel={() => {
-						this.setState({
-							confirmSameNameVisible: false
-						});
-					}}
-				/>
-				<LoadingIndicatorComponent
-					visible={isLoading}
-					fullScreen={false}
-				/>
-			</section>
+					</div>
+				</section>
+			</EntityDetailsFrameComponent>
 		);
 	}
 
@@ -338,18 +276,6 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 	 */
 	private areOwnPlatformsDifferent(left: OwnPlatformInternal, right: OwnPlatformInternal): boolean {
 		return left.id !== right.id || left.name !== right.name || left.color !== right.color || left.icon !== right.icon;
-	}
-
-	/**
-	 * Resolves the selected icon masked style
-	 * @param ownPlatform the current form values
-	 * @returns masked icon style
-	 */
-	private getSelectedIconStyle(ownPlatform: OwnPlatformInternal): CSSProperties {
-		return {
-			'--entity-details-selected-icon-url': `url(${ownPlatformIcons[ownPlatform.icon]})`,
-			'--entity-details-selected-icon-color': ownPlatform.color
-		} as CSSProperties;
 	}
 }
 

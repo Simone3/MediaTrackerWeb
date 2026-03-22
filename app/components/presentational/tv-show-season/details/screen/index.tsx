@@ -1,4 +1,5 @@
-import { Component, CSSProperties, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
+import { EntityDetailsFrameComponent } from 'app/components/presentational/generic/entity-details-frame';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import seasonIcon from 'app/resources/images/ic_input_season_number.svg';
 import { i18n } from 'app/utilities/i18n';
@@ -24,7 +25,6 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 	 * @override
 	 */
 	public componentDidMount(): void {
-		document.body.classList.add('app-dark-screen-active');
 		this.syncFormValuesWithProps();
 	}
 
@@ -45,13 +45,6 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 	/**
 	 * @override
 	 */
-	public componentWillUnmount(): void {
-		document.body.classList.remove('app-dark-screen-active');
-	}
-
-	/**
-	 * @override
-	 */
 	public render(): ReactNode {
 		const {
 			formValues
@@ -66,98 +59,76 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 		const seasonSummary = this.getSeasonSummary(formValues);
 
 		return (
-			<section
-				className='entity-details-screen tv-show-season-details-screen'
-				style={{ '--entity-details-accent': this.getSeasonAccent(formValues) } as CSSProperties}>
-				<div className='entity-details-screen-content'>
-					<header className='entity-details-hero'>
-						<div className='entity-details-heading'>
-							<div className='entity-details-title-row'>
-								<span className='entity-details-icon-shell' aria-hidden={true}>
-									<img src={seasonIcon} alt='' className='entity-details-icon' />
-								</span>
-								<div className='entity-details-title-copy'>
-									<h1 className='entity-details-title'>{title}</h1>
-									<p className='entity-details-subtitle'>{seasonSummary}</p>
-								</div>
-							</div>
+			<EntityDetailsFrameComponent
+				screenClassName='tv-show-season-details-screen'
+				bodyClassName='app-dark-screen-active'
+				accentColor={this.getSeasonAccent(formValues)}
+				icon={<img src={seasonIcon} alt='' className='entity-details-icon' />}
+				title={title}
+				subtitle={seasonSummary}
+				saveLabel={i18n.t('common.buttons.save')}
+				saveDisabled={!isValid}
+				onSave={() => {
+					this.submitForm();
+				}}
+				onSubmit={(event) => {
+					event.preventDefault();
+					this.submitForm();
+				}}>
+				<section className='entity-details-panel'>
+					<div className='entity-details-grid'>
+						<div className='entity-details-field entity-details-field-span-2'>
+							<label className='entity-details-label' htmlFor='tv-show-season-number'>
+								{i18n.t('tvShowSeason.details.placeholders.number')}
+							</label>
+							<input
+								id='tv-show-season-number'
+								className='entity-details-input'
+								type='number'
+								value={formValues.number ?? ''}
+								placeholder={i18n.t('tvShowSeason.details.placeholders.number')}
+								disabled={!addingNewSeason}
+								onChange={(event) => {
+									const value = event.target.value ? Number(event.target.value) : undefined;
+									this.setFormField('number', value as TvShowSeasonInternal['number']);
+								}}
+							/>
 						</div>
-						<div className='entity-details-actions'>
-							<button
-								type='button'
-								className='entity-details-button entity-details-button-primary'
-								disabled={!isValid}
-								onClick={() => {
-									this.submitForm();
-								}}>
-								{i18n.t('common.buttons.save')}
-							</button>
+						<div className='entity-details-field'>
+							<label className='entity-details-label' htmlFor='tv-show-season-episodes'>
+								{i18n.t('tvShowSeason.details.placeholders.episodesNumber')}
+							</label>
+							<input
+								id='tv-show-season-episodes'
+								className='entity-details-input'
+								type='number'
+								value={formValues.episodesNumber ?? ''}
+								placeholder={i18n.t('tvShowSeason.details.placeholders.episodesNumber')}
+								onChange={(event) => {
+									const value = event.target.value ? Number(event.target.value) : undefined;
+									this.setFormField('episodesNumber', value);
+								}}
+							/>
 						</div>
-					</header>
-					<form
-						className='entity-details-form'
-						onSubmit={(event) => {
-							event.preventDefault();
-							this.submitForm();
-						}}>
-						<div className='entity-details-main'>
-							<section className='entity-details-panel'>
-								<div className='entity-details-grid'>
-									<div className='entity-details-field entity-details-field-span-2'>
-										<label className='entity-details-label' htmlFor='tv-show-season-number'>
-											{i18n.t('tvShowSeason.details.placeholders.number')}
-										</label>
-										<input
-											id='tv-show-season-number'
-											className='entity-details-input'
-											type='number'
-											value={formValues.number ?? ''}
-											placeholder={i18n.t('tvShowSeason.details.placeholders.number')}
-											disabled={!addingNewSeason}
-											onChange={(event) => {
-												const value = event.target.value ? Number(event.target.value) : undefined;
-												this.setFormField('number', value as TvShowSeasonInternal['number']);
-											}}
-										/>
-									</div>
-									<div className='entity-details-field'>
-										<label className='entity-details-label' htmlFor='tv-show-season-episodes'>
-											{i18n.t('tvShowSeason.details.placeholders.episodesNumber')}
-										</label>
-										<input
-											id='tv-show-season-episodes'
-											className='entity-details-input'
-											type='number'
-											value={formValues.episodesNumber ?? ''}
-											placeholder={i18n.t('tvShowSeason.details.placeholders.episodesNumber')}
-											onChange={(event) => {
-												const value = event.target.value ? Number(event.target.value) : undefined;
-												this.setFormField('episodesNumber', value);
-											}}
-										/>
-									</div>
-									<div className='entity-details-field'>
-										<label className='entity-details-label' htmlFor='tv-show-season-watched'>
-											{i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber')}
-										</label>
-										<input
-											id='tv-show-season-watched'
-											className='entity-details-input'
-											type='number'
-											value={formValues.watchedEpisodesNumber ?? ''}
-											placeholder={i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber')}
-											onChange={(event) => {
-												const value = event.target.value ? Number(event.target.value) : undefined;
-												this.setFormField('watchedEpisodesNumber', value);
-											}}
-										/>
-									</div>
-								</div>
-							</section>
+						<div className='entity-details-field'>
+							<label className='entity-details-label' htmlFor='tv-show-season-watched'>
+								{i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber')}
+							</label>
+							<input
+								id='tv-show-season-watched'
+								className='entity-details-input'
+								type='number'
+								value={formValues.watchedEpisodesNumber ?? ''}
+								placeholder={i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber')}
+								onChange={(event) => {
+									const value = event.target.value ? Number(event.target.value) : undefined;
+									this.setFormField('watchedEpisodesNumber', value);
+								}}
+							/>
 						</div>
-					</form>
-				</div>
-			</section>
+					</div>
+				</section>
+			</EntityDetailsFrameComponent>
 		);
 	}
 

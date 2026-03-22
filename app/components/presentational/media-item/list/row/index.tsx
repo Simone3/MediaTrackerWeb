@@ -1,4 +1,5 @@
 import { config } from 'app/config/config';
+import { buildOwnPlatformMaskStyle } from 'app/components/presentational/own-platform/common/icon-registry';
 import { MediaTypeInternal } from 'app/data/models/internal/category';
 import { AppError } from 'app/data/models/internal/error';
 import { BookInternal } from 'app/data/models/internal/media-items/book';
@@ -6,29 +7,11 @@ import { MediaItemImportanceInternal, MediaItemInternal } from 'app/data/models/
 import { MovieInternal } from 'app/data/models/internal/media-items/movie';
 import { TvShowInternal } from 'app/data/models/internal/media-items/tv-show';
 import { VideogameInternal } from 'app/data/models/internal/media-items/videogame';
-import { OwnPlatformIconInternal } from 'app/data/models/internal/own-platform';
 import actionMoreIcon from 'app/resources/images/ic_action_more.svg';
 import importanceOneIcon from 'app/resources/images/ic_importance_1.svg';
 import importanceTwoIcon from 'app/resources/images/ic_importance_2.svg';
 import importanceThreeIcon from 'app/resources/images/ic_importance_3.svg';
 import importanceFourIcon from 'app/resources/images/ic_importance_4.svg';
-import platformAndroidIcon from 'app/resources/images/ic_platform_android.svg';
-import platformAppleIcon from 'app/resources/images/ic_platform_apple.svg';
-import platformBookIcon from 'app/resources/images/ic_platform_book.svg';
-import platformDiscIcon from 'app/resources/images/ic_platform_disc.svg';
-import platformDisneyIcon from 'app/resources/images/ic_platform_disney.svg';
-import platformDownloadIcon from 'app/resources/images/ic_platform_download.svg';
-import platformEpicIcon from 'app/resources/images/ic_platform_epic.svg';
-import platformGogIcon from 'app/resources/images/ic_platform_gog.svg';
-import platformHuluIcon from 'app/resources/images/ic_platform_hulu.svg';
-import platformKindleIcon from 'app/resources/images/ic_platform_kindle.svg';
-import platformNetflixIcon from 'app/resources/images/ic_platform_netflix.svg';
-import platformOriginIcon from 'app/resources/images/ic_platform_origin.svg';
-import platformPlaystationIcon from 'app/resources/images/ic_platform_playstation.svg';
-import platformSteamIcon from 'app/resources/images/ic_platform_steam.svg';
-import platformSwitchIcon from 'app/resources/images/ic_platform_switch.svg';
-import platformUplayIcon from 'app/resources/images/ic_platform_uplay.svg';
-import ownPlatformDefaultIcon from 'app/resources/images/ic_input_own_platform.svg';
 import statusCompleteIcon from 'app/resources/images/ic_status_complete.svg';
 import statusPlayingIcon from 'app/resources/images/ic_status_playing.svg';
 import statusReadingIcon from 'app/resources/images/ic_status_reading.svg';
@@ -39,26 +22,6 @@ import { i18n } from 'app/utilities/i18n';
 import { mediaItemUtils } from 'app/utilities/media-item-utils';
 import { format } from 'date-fns';
 import React, { CSSProperties, ReactElement } from 'react';
-
-const ownPlatformIcons: Record<OwnPlatformIconInternal, string> = {
-	default: ownPlatformDefaultIcon,
-	android: platformAndroidIcon,
-	apple: platformAppleIcon,
-	book: platformBookIcon,
-	disc: platformDiscIcon,
-	disney: platformDisneyIcon,
-	download: platformDownloadIcon,
-	epic: platformEpicIcon,
-	gog: platformGogIcon,
-	hulu: platformHuluIcon,
-	kindle: platformKindleIcon,
-	netflix: platformNetflixIcon,
-	origin: platformOriginIcon,
-	playstation: platformPlaystationIcon,
-	steam: platformSteamIcon,
-	switch: platformSwitchIcon,
-	uplay: platformUplayIcon
-};
 
 const activeStatusIcons: Record<MediaTypeInternal, string> = {
 	BOOK: statusReadingIcon,
@@ -392,13 +355,18 @@ export const MediaItemRowComponent = (props: MediaItemRowComponentInput & MediaI
 						i18n.t('mediaItem.list.accessibility.ownPlatform.owned', { name: ownPlatform.name }) :
 						i18n.t('mediaItem.list.accessibility.ownPlatform.notOwned')}>
 					<span className='media-item-row-platform-shell' aria-hidden={true}>
-						{ownPlatform && (
-							<span
-								className='media-item-row-icon media-item-row-platform-icon'
-								style={getMaskedIconStyle(ownPlatformIcons[ownPlatform.icon], ownPlatformColor)}
-								aria-hidden={true}
-							/>
-						)}
+							{ownPlatform && (
+								<span
+									className='media-item-row-icon media-item-row-platform-icon'
+									style={buildOwnPlatformMaskStyle(
+										ownPlatform.icon,
+										ownPlatformColor,
+										'--media-item-row-icon-url',
+										'--media-item-row-icon-color'
+									)}
+									aria-hidden={true}
+								/>
+							)}
 					</span>
 				</span>
 				<span className='media-item-row-data'>
