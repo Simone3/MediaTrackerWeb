@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CategoriesListScreenComponent } from 'app/components/presentational/category/list/screen';
+import { i18n } from 'app/utilities/i18n';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
@@ -58,10 +59,10 @@ describe('CategoriesListScreenComponent', () => {
 		);
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: '+ Add category' }));
+		await user.click(screen.getByRole('button', { name: `+ ${i18n.t('category.list.add')}` }));
 
 		expect(document.body).toHaveClass('categories-screen-active');
-		expect(screen.getByText('0 categories')).toBeInTheDocument();
+		expect(screen.getByText(i18n.t('category.list.count.multiple', { count: 0 }))).toBeInTheDocument();
 		expect(loadNewCategoryDetails).toHaveBeenCalledTimes(1);
 		expect(fetchCategories).not.toHaveBeenCalled();
 	});
@@ -100,6 +101,6 @@ describe('CategoriesListScreenComponent', () => {
 
 		expect(document.body).toHaveClass('categories-screen-active');
 		expect(loadNewCategoryDetails).toHaveBeenCalledTimes(1);
-		expect(screen.queryByRole('button', { name: '+ Add category' })).not.toBeInTheDocument();
+		expect(screen.queryByRole('button', { name: `+ ${i18n.t('category.list.add')}` })).not.toBeInTheDocument();
 	});
 });

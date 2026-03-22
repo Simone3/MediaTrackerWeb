@@ -54,15 +54,15 @@ describe('MediaItemContextMenuComponent', () => {
 
 		expect(container.querySelector('.media-item-context-menu-popover')).not.toBeNull();
 		expect(container.querySelector('.media-item-context-menu-sheet')).toBeNull();
-		expect(screen.getByRole('button', { name: 'Edit book' })).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: 'Delete book' })).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: "I'm reading this" })).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: "I've read this" })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.edit.BOOK') })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.delete.BOOK') })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.markActive.BOOK') })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.markComplete.BOOK') })).toBeInTheDocument();
 		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.viewGroup') })).toBeInTheDocument();
-		expect(screen.queryByText('Books')).not.toBeInTheDocument();
+		expect(screen.queryByText(i18n.t('category.mediaTypes.BOOK'))).not.toBeInTheDocument();
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: 'Edit book' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.edit.BOOK') }));
 
 		expect(edit).toHaveBeenCalledWith(mediaItem);
 		expect(deleteCallback).not.toHaveBeenCalled();
@@ -104,12 +104,12 @@ describe('MediaItemContextMenuComponent', () => {
 			expect(container.querySelector('.media-item-context-menu-popover')).toBeNull();
 
 			const user = userEvent.setup();
-			await user.click(screen.getByRole('button', { name: 'Delete book' }));
+			await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.delete.BOOK') }));
 
-			expect(screen.getByText('Delete Book')).toBeInTheDocument();
+			expect(screen.getByText(i18n.t('mediaItem.common.alert.delete.title.BOOK'))).toBeInTheDocument();
 			expect(deleteCallback).not.toHaveBeenCalled();
 
-			await user.click(screen.getByRole('button', { name: 'OK' }));
+			await user.click(screen.getByRole('button', { name: i18n.t('common.alert.default.okButton') }));
 
 			expect(deleteCallback).toHaveBeenCalledWith(mediaItem);
 			expect(close).toHaveBeenCalledTimes(1);

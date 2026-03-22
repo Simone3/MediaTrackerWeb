@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MediaItemFilterModalComponent } from 'app/components/presentational/media-item/list/filter-modal';
 import { CategoryInternal } from 'app/data/models/internal/category';
+import { i18n } from 'app/utilities/i18n';
 
 describe('MediaItemFilterModalComponent', () => {
 	test('submits selected filter and sort values', async() => {
@@ -25,12 +26,12 @@ describe('MediaItemFilterModalComponent', () => {
 		);
 
 		const user = userEvent.setup();
-		await user.selectOptions(screen.getByLabelText('Status'), 'CURRENT');
-		await user.selectOptions(screen.getByLabelText('Importance'), '300');
-		await user.selectOptions(screen.getByLabelText('Group'), 'ANY');
-		await user.selectOptions(screen.getByLabelText('Owned'), 'NONE');
-		await user.selectOptions(screen.getByLabelText('Order'), 'NAME');
-		await user.click(screen.getByRole('button', { name: 'Apply' }));
+		await user.selectOptions(screen.getByLabelText(i18n.t('mediaItem.list.filter.prompts.status')), 'CURRENT');
+		await user.selectOptions(screen.getByLabelText(i18n.t('mediaItem.list.filter.prompts.importance')), '300');
+		await user.selectOptions(screen.getByLabelText(i18n.t('mediaItem.list.filter.prompts.group')), 'ANY');
+		await user.selectOptions(screen.getByLabelText(i18n.t('mediaItem.list.filter.prompts.ownPlatform')), 'NONE');
+		await user.selectOptions(screen.getByLabelText(i18n.t('mediaItem.list.filter.prompts.sort')), 'NAME');
+		await user.click(screen.getByRole('button', { name: i18n.t('common.alert.default.applyButton') }));
 
 		expect(submitFilter).toHaveBeenCalledWith({
 			status: 'CURRENT',

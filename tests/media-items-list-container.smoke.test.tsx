@@ -4,6 +4,7 @@ import { MediaItemsListContainer } from 'app/components/containers/media-item/li
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { HIGHLIGHT_MEDIA_ITEM, REMOVE_MEDIA_ITEM_HIGHLIGHT, SEARCH_MEDIA_ITEMS, START_MEDIA_ITEMS_SEARCH_MODE, STOP_MEDIA_ITEMS_SEARCH_MODE } from 'app/redux/actions/media-item/const';
+import { i18n } from 'app/utilities/i18n';
 import { Provider } from 'react-redux';
 import { Action, createStore } from 'redux';
 
@@ -84,12 +85,12 @@ describe('MediaItemsListContainer', () => {
 		);
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: 'Options for Dune' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.a11y.optionsFor', { name: mediaItem.name }) }));
 
-		expect(screen.getByRole('button', { name: 'Edit book' })).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: 'Delete book' })).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: "I'm reading this" })).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: "I've read this" })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.edit.BOOK') })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.delete.BOOK') })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.markActive.BOOK') })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.markComplete.BOOK') })).toBeInTheDocument();
 		expect(screen.getAllByText('Dune')).toHaveLength(2);
 	});
 
@@ -159,18 +160,18 @@ describe('MediaItemsListContainer', () => {
 		);
 
 		const user = userEvent.setup();
-		const searchInput = screen.getByRole('searchbox', { name: 'Search books...' });
+		const searchInput = screen.getByRole('searchbox', { name: i18n.t('mediaItem.list.search.BOOK') });
 		await user.type(searchInput, 'Neuromancer');
-		await user.click(screen.getByRole('button', { name: 'Search' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.buttons.search') }));
 
 		expect(store.getState().mediaItemsList.mode).toBe('SEARCH');
 		expect(store.getState().mediaItemsList.searchTerm).toBe('Neuromancer');
 
 		await user.clear(searchInput);
-		await user.click(screen.getByRole('button', { name: 'Search' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.buttons.search') }));
 
 		expect(store.getState().mediaItemsList.mode).toBe('NORMAL');
 		expect(store.getState().mediaItemsList.searchTerm).toBeUndefined();
-		expect(screen.getByRole('searchbox', { name: 'Search books...' })).toBeInTheDocument();
+		expect(screen.getByRole('searchbox', { name: i18n.t('mediaItem.list.search.BOOK') })).toBeInTheDocument();
 	});
 });

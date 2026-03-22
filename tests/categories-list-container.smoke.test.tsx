@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { CategoriesListContainer } from 'app/components/containers/category/list/list';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { HIGHLIGHT_CATEGORY, REMOVE_CATEGORY_HIGHLIGHT } from 'app/redux/actions/category/const';
+import { i18n } from 'app/utilities/i18n';
 import { Provider } from 'react-redux';
 import { Action, createStore } from 'redux';
 
@@ -64,10 +65,10 @@ describe('CategoriesListContainer', () => {
 		);
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: 'Options for My Books' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.a11y.optionsFor', { name: category.name }) }));
 
-		expect(screen.getByRole('button', { name: 'Edit category' })).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: 'Delete category' })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('category.list.edit') })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('category.list.delete') })).toBeInTheDocument();
 		expect(screen.getAllByText('My Books')).toHaveLength(2);
 	});
 });

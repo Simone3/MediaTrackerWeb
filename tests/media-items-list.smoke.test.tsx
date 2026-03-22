@@ -8,6 +8,7 @@ import { BookInternal } from 'app/data/models/internal/media-items/book';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { TvShowInternal } from 'app/data/models/internal/media-items/tv-show';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
+import { i18n } from 'app/utilities/i18n';
 
 describe('MediaItemsListComponent', () => {
 	test('handles search open, item open and options action', async() => {
@@ -58,15 +59,15 @@ describe('MediaItemsListComponent', () => {
 		);
 
 		const user = userEvent.setup();
-		const searchInput = screen.getByRole('searchbox', { name: 'Search books...' });
+		const searchInput = screen.getByRole('searchbox', { name: i18n.t('mediaItem.list.search.BOOK') });
 
 		await user.type(searchInput, 'Dune');
-		await user.click(screen.getByRole('button', { name: 'Search' }));
-		await user.click(screen.getByRole('button', { name: 'Filter' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.buttons.search') }));
+		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.filter.title') }));
 		await user.click(screen.getByText('Dune'));
-		await user.click(screen.getByRole('button', { name: 'Options for Dune' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.a11y.optionsFor', { name: mediaItem.name }) }));
 
-		expect(screen.queryByText('1 item')).not.toBeInTheDocument();
+		expect(screen.queryByText(i18n.t('mediaItem.list.count.single'))).not.toBeInTheDocument();
 		expect(openSearch).toHaveBeenCalledTimes(1);
 		expect(submitSearch).toHaveBeenCalledWith('Dune');
 		expect(openFilters).toHaveBeenCalledTimes(1);
@@ -116,7 +117,7 @@ describe('MediaItemsListComponent', () => {
 			/>
 		);
 
-		const platformBadge = screen.getByLabelText('Not owned on any platform');
+		const platformBadge = screen.getByLabelText(i18n.t('mediaItem.list.accessibility.ownPlatform.notOwned'));
 
 		expect(platformBadge.querySelector('.media-item-row-platform-shell')).not.toBeNull();
 		expect(platformBadge.querySelector('.media-item-row-platform-icon')).toBeNull();
@@ -160,16 +161,16 @@ describe('MediaItemsListComponent', () => {
 		);
 
 		const user = userEvent.setup();
-		const searchInput = screen.getByRole('searchbox', { name: 'Search books...' });
+		const searchInput = screen.getByRole('searchbox', { name: i18n.t('mediaItem.list.search.BOOK') });
 		await user.clear(searchInput);
 		await user.type(searchInput, 'Dune Messiah');
-		await user.click(screen.getByRole('button', { name: 'Search' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.buttons.search') }));
 		await user.clear(searchInput);
-		await user.click(screen.getByRole('button', { name: 'Search' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.buttons.search') }));
 
 		expect(submitSearch).toHaveBeenCalledWith('Dune Messiah');
 		expect(closeSearch).toHaveBeenCalledTimes(1);
-		expect(screen.getByRole('searchbox', { name: 'Search books...' })).toBeInTheDocument();
+		expect(screen.getByRole('searchbox', { name: i18n.t('mediaItem.list.search.BOOK') })).toBeInTheDocument();
 	});
 
 	test('renders loading skeletons until the empty result is confirmed', () => {
@@ -209,7 +210,7 @@ describe('MediaItemsListComponent', () => {
 			/>
 		);
 
-		expect(screen.queryByText('No books')).not.toBeInTheDocument();
+		expect(screen.queryByText(i18n.t('mediaItem.list.empty.BOOK'))).not.toBeInTheDocument();
 		expect(container.querySelectorAll('.media-item-row-skeleton')).toHaveLength(4);
 
 		rerender(
@@ -239,7 +240,7 @@ describe('MediaItemsListComponent', () => {
 			/>
 		);
 
-		expect(screen.getByText('No books')).toBeInTheDocument();
+		expect(screen.getByText(i18n.t('mediaItem.list.empty.BOOK'))).toBeInTheDocument();
 		expect(container.querySelectorAll('.media-item-row-skeleton')).toHaveLength(0);
 	});
 
@@ -305,9 +306,9 @@ describe('MediaItemsListComponent', () => {
 		expect(screen.getByText('Dune')).toBeInTheDocument();
 		expect(screen.getByText('1965 • 412pp. • Frank Herbert')).toBeInTheDocument();
 		expect(screen.getByText('Science fiction, Adventure')).toBeInTheDocument();
-		expect(screen.getByText('Dune Chronicles, #1')).toBeInTheDocument();
-		expect(screen.getByLabelText('Owned at Kindle')).toBeInTheDocument();
-		expect(screen.getByLabelText("I'm reading this")).toBeInTheDocument();
+		expect(screen.getByText(i18n.t('mediaItem.list.group', { groupName: group.name, order: 1 }))).toBeInTheDocument();
+		expect(screen.getByLabelText(i18n.t('mediaItem.list.accessibility.ownPlatform.owned', { name: ownPlatform.name }))).toBeInTheDocument();
+		expect(screen.getByLabelText(i18n.t('mediaItem.list.markActive.BOOK'))).toBeInTheDocument();
 		expect(screen.getByText('Dune').closest('li')?.style.getPropertyValue('--media-item-row-accent')).toBe(config.ui.colors.green);
 	});
 
@@ -358,7 +359,7 @@ describe('MediaItemsListComponent', () => {
 		);
 
 		expect(screen.getByText('2017 • 60\' • P • Baran bo Odar, Jantje Friese')).toBeInTheDocument();
-		expect(screen.getByLabelText("I'm following this")).toBeInTheDocument();
+		expect(screen.getByLabelText(i18n.t('mediaItem.list.markActive.TV_SHOW'))).toBeInTheDocument();
 	});
 
 	test('keeps the new-item chrome neutral while leaving the left accent transparent', () => {
@@ -405,7 +406,7 @@ describe('MediaItemsListComponent', () => {
 
 		expect(screen.getByText('Hades').closest('li')?.style.getPropertyValue('--media-item-row-accent')).toBe('transparent');
 		expect(screen.getByText('Hades').closest('li')).not.toHaveClass('media-item-row-highlighted');
-		expect(screen.getByLabelText('Important')).toHaveStyle({
+		expect(screen.getByLabelText(i18n.t('mediaItem.common.importance.300'))).toHaveStyle({
 			backgroundColor: 'rgba(255, 255, 255, 0.06)',
 			borderColor: 'rgba(255, 255, 255, 0.06)'
 		});
@@ -453,7 +454,7 @@ describe('MediaItemsListComponent', () => {
 			/>
 		);
 
-		expect(screen.getByRole('button', { name: 'Options for Arrival' }).closest('li')).toHaveClass('media-item-row-highlighted');
+		expect(screen.getByRole('button', { name: i18n.t('common.a11y.optionsFor', { name: mediaItem.name }) }).closest('li')).toHaveClass('media-item-row-highlighted');
 	});
 
 	test('renders extremely long names without changing the row interaction model', async() => {

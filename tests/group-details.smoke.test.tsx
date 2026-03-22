@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { GroupDetailsScreenComponent } from 'app/components/presentational/group/details/screen';
 import { GroupInternal } from 'app/data/models/internal/group';
+import { i18n } from 'app/utilities/i18n';
 
 describe('GroupDetailsScreenComponent', () => {
 	test('renders the shared dark-shell layout and submits a valid group', async() => {
@@ -22,13 +23,13 @@ describe('GroupDetailsScreenComponent', () => {
 		);
 
 		expect(document.body).toHaveClass('app-dark-screen-active');
-		expect(screen.getByRole('heading', { level: 1, name: 'New Group' })).toBeInTheDocument();
-		expect(screen.queryByRole('heading', { level: 2, name: 'Basics' })).not.toBeInTheDocument();
-		expect(screen.queryByRole('heading', { level: 2, name: 'Preview' })).not.toBeInTheDocument();
+		expect(screen.getByRole('heading', { level: 1, name: i18n.t('group.details.title.new') })).toBeInTheDocument();
+		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.basics') })).not.toBeInTheDocument();
+		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.preview') })).not.toBeInTheDocument();
 
 		const user = userEvent.setup();
-		const nameInput = screen.getByLabelText('Name');
-		const saveButton = screen.getByRole('button', { name: 'Save' });
+		const nameInput = screen.getByLabelText(i18n.t('group.details.placeholders.name'));
+		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
 
 		expect(saveButton).toBeDisabled();
 

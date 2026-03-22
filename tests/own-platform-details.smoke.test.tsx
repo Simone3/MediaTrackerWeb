@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { config } from 'app/config/config';
 import { OwnPlatformDetailsScreenComponent } from 'app/components/presentational/own-platform/details/screen';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
+import { i18n } from 'app/utilities/i18n';
 
 describe('OwnPlatformDetailsScreenComponent', () => {
 	test('renders the shared dark-shell layout and submits a configured platform', async() => {
@@ -26,23 +27,23 @@ describe('OwnPlatformDetailsScreenComponent', () => {
 		);
 
 		expect(document.body).toHaveClass('app-dark-screen-active');
-		expect(screen.getByRole('heading', { level: 1, name: 'New Platform' })).toBeInTheDocument();
-		expect(screen.queryByRole('heading', { level: 2, name: 'Basics' })).not.toBeInTheDocument();
-		expect(screen.queryByRole('heading', { level: 2, name: 'Appearance' })).not.toBeInTheDocument();
-		expect(screen.queryByRole('heading', { level: 2, name: 'Preview' })).not.toBeInTheDocument();
+		expect(screen.getByRole('heading', { level: 1, name: i18n.t('ownPlatform.details.title.new') })).toBeInTheDocument();
+		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.basics') })).not.toBeInTheDocument();
+		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.appearance') })).not.toBeInTheDocument();
+		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.preview') })).not.toBeInTheDocument();
 		expect(document.querySelector('input[type="color"]')).not.toBeInTheDocument();
-		expect(screen.getByRole('img', { name: 'Generic icon' })).toBeInTheDocument();
+		expect(screen.getByRole('img', { name: i18n.t('common.a11y.icon', { name: i18n.t('ownPlatform.icons.default') }) })).toBeInTheDocument();
 
 		const user = userEvent.setup();
-		const nameInput = screen.getByLabelText('Name');
-		const iconSelect = screen.getByLabelText('Icon');
+		const nameInput = screen.getByLabelText(i18n.t('ownPlatform.details.placeholders.name'));
+		const iconSelect = screen.getByLabelText(i18n.t('ownPlatform.details.prompts.icon'));
 
 		await user.type(nameInput, 'Kindle Library');
 		await user.selectOptions(iconSelect, 'kindle');
-		expect(screen.getByRole('img', { name: 'Kindle icon' })).toBeInTheDocument();
-		await user.click(screen.getByRole('button', { name: `Select color ${selectedColor}` }));
-		expect(screen.getByRole('img', { name: 'Kindle icon' }).firstElementChild).toHaveStyle(`--entity-details-selected-icon-color: ${selectedColor}`);
-		await user.click(screen.getByRole('button', { name: 'Save' }));
+		expect(screen.getByRole('img', { name: i18n.t('common.a11y.icon', { name: i18n.t('ownPlatform.icons.kindle') }) })).toBeInTheDocument();
+		await user.click(screen.getByRole('button', { name: i18n.t('common.a11y.selectColor', { color: selectedColor }) }));
+		expect(screen.getByRole('img', { name: i18n.t('common.a11y.icon', { name: i18n.t('ownPlatform.icons.kindle') }) }).firstElementChild).toHaveStyle(`--entity-details-selected-icon-color: ${selectedColor}`);
+		await user.click(screen.getByRole('button', { name: i18n.t('common.buttons.save') }));
 
 		expect(saveOwnPlatform).toHaveBeenCalledWith({
 			id: '',

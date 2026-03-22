@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TvShowSeasonsListScreenComponent } from 'app/components/presentational/tv-show-season/list/screen';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
+import { i18n } from 'app/utilities/i18n';
 
 describe('TvShowSeasonsListScreenComponent', () => {
 	test('supports editing, completion, deletion, and finishing the flow', async() => {
@@ -35,12 +36,12 @@ describe('TvShowSeasonsListScreenComponent', () => {
 		);
 
 		const user = userEvent.setup();
-		await user.click(screen.getByText('Season 2'));
-		await user.click(screen.getAllByRole('button', { name: 'Complete season' })[1]);
-		await user.click(screen.getAllByRole('button', { name: 'Delete season' })[1]);
+		await user.click(screen.getByText(i18n.t('tvShowSeason.list.row.main', { seasonNumber: 2 })));
+		await user.click(screen.getAllByRole('button', { name: i18n.t('tvShowSeason.list.complete') })[1]);
+		await user.click(screen.getAllByRole('button', { name: i18n.t('tvShowSeason.list.delete') })[1]);
 		expect(deleteTvShowSeason).toHaveBeenCalledTimes(0);
-		await user.click(screen.getByRole('button', { name: 'OK' }));
-		await user.click(screen.getByRole('button', { name: 'Done' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.alert.default.okButton') }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.buttons.done') }));
 
 		expect(editTvShowSeason).toHaveBeenCalledWith(tvShowSeasons[1]);
 		expect(completeTvShowSeason).toHaveBeenCalledWith(tvShowSeasons[1]);

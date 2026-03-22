@@ -101,6 +101,7 @@
 - After that cleanup, strict `tsc --noUnusedLocals --noUnusedParameters` runs clean; the remaining same-file-only exports are still in-file dependencies rather than dead code.
 - A later tracked-file audit also removed the stray nested `app/package.json` and the unimported legacy image assets that were no longer referenced by webpack, Jest, or the app source.
 - A stylesheet audit also removed unused category/media/entity-details/placeholder selectors plus orphaned root CSS variables from `app/web/styles.css`; a TS/TSX reference scan now comes back clean for the remaining class selectors.
+- Smoke tests now prefer `i18n.t(...)` for app-owned button text, labels, placeholders, empty states, and accessibility copy, while still leaving test-owned fixture text and intentionally formatted render-output assertions hardcoded when they are not sourced from `lang-en.json`.
 
 ## High-signal files to open first
 - `app/AGENTS.md`

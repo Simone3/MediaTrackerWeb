@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UserSignupScreenComponent } from 'app/components/presentational/auth/signup/screen';
+import { i18n } from 'app/utilities/i18n';
 
 describe('UserSignupScreenComponent', () => {
 	test('submits credentials after user input', async() => {
@@ -14,9 +15,9 @@ describe('UserSignupScreenComponent', () => {
 
 		expect(document.body).toHaveClass('app-dark-screen-active');
 		const user = userEvent.setup();
-		const emailInput = screen.getByPlaceholderText('E-mail');
-		const passwordInput = screen.getByPlaceholderText('Password');
-		const submitButton = screen.getByRole('button', { name: 'Signup' });
+		const emailInput = screen.getByPlaceholderText(i18n.t('auth.signup.placeholders.email'));
+		const passwordInput = screen.getByPlaceholderText(i18n.t('auth.signup.placeholders.password'));
+		const submitButton = screen.getByRole('button', { name: i18n.t('auth.signup.buttons.submit') });
 
 		expect(submitButton).toBeDisabled();
 

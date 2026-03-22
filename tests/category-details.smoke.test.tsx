@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { CategoryDetailsScreenComponent } from 'app/components/presentational/category/details/screen';
 import { config } from 'app/config/config';
 import { CategoryInternal, DEFAULT_CATEGORY } from 'app/data/models/internal/category';
+import { i18n } from 'app/utilities/i18n';
 
 describe('CategoryDetailsScreenComponent', () => {
 	test('submits a valid category from form input', async() => {
@@ -22,14 +23,14 @@ describe('CategoryDetailsScreenComponent', () => {
 		expect(document.body).toHaveClass('categories-screen-active');
 		expect(document.querySelector('input[type="color"]')).not.toBeInTheDocument();
 		const user = userEvent.setup();
-		const nameInput = screen.getByRole('textbox');
-		const saveButton = screen.getByRole('button', { name: 'Save' });
+		const nameInput = screen.getByLabelText(i18n.t('category.details.placeholders.name'));
+		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
 
 		expect(saveButton).toBeDisabled();
 
 		await user.type(nameInput, 'Sci-Fi');
-		await user.click(screen.getByRole('button', { name: 'Movies' }));
-		await user.click(screen.getByRole('button', { name: `Select color ${selectedColor}` }));
+		await user.click(screen.getByRole('button', { name: i18n.t('category.mediaTypes.MOVIE') }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.a11y.selectColor', { color: selectedColor }) }));
 		expect(saveButton).toBeEnabled();
 
 		await user.click(saveButton);
@@ -77,7 +78,7 @@ describe('CategoryDetailsScreenComponent', () => {
 		);
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: 'OK' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.alert.default.okButton') }));
 
 		await waitFor(() => {
 			expect(saveCategory).toHaveBeenCalledWith(category, true);

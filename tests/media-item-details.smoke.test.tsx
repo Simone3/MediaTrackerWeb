@@ -7,6 +7,7 @@ import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { TvShowInternal } from 'app/data/models/internal/media-items/tv-show';
+import { i18n } from 'app/utilities/i18n';
 
 type DetailsProps = React.ComponentProps<typeof MediaItemDetailsScreenComponent>;
 
@@ -65,10 +66,10 @@ describe('MediaItemDetailsScreenComponent', () => {
 		}));
 
 		const user = userEvent.setup();
-		const nameInput = screen.getByLabelText('Search or type name');
-		const pagesInput = screen.getByLabelText('Number of pages');
-		const authorsInput = screen.getByLabelText('Authors');
-		const saveButton = screen.getByRole('button', { name: 'Save' });
+		const nameInput = screen.getByLabelText(i18n.t('mediaItem.details.placeholders.name'));
+		const pagesInput = screen.getByLabelText(i18n.t('mediaItem.details.placeholders.duration.BOOK'));
+		const authorsInput = screen.getByLabelText(i18n.t('mediaItem.details.placeholders.creators.BOOK'));
+		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
 
 		expect(saveButton).toBeDisabled();
 
@@ -118,7 +119,7 @@ describe('MediaItemDetailsScreenComponent', () => {
 		}));
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: 'OK' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.alert.default.okButton') }));
 
 		await waitFor(() => {
 			expect(saveMediaItem).toHaveBeenCalledWith(mediaItem, true);
@@ -148,10 +149,14 @@ describe('MediaItemDetailsScreenComponent', () => {
 		}));
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: 'Seasons' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.details.placeholders.seasons') }));
 
 		expect(handleTvShowSeasons).toHaveBeenCalledWith(tvShow.seasons);
-		expect(screen.getByText('1 seasons, watched 8 out of 10 episodes')).toBeInTheDocument();
+		expect(screen.getByText(i18n.t('mediaItem.details.labels.seasons', {
+			seasonsNumber: 1,
+			watchedEpisodesNumber: 8,
+			episodesNumber: 10
+		}))).toBeInTheDocument();
 	});
 
 	test('shows and hides the next episode air date field with the in-production toggle', async() => {
@@ -167,17 +172,17 @@ describe('MediaItemDetailsScreenComponent', () => {
 			mediaItem: tvShow
 		}));
 
-		expect(screen.getByText('Production')).toBeInTheDocument();
-		expect(screen.queryByLabelText('Next episode air date')).not.toBeInTheDocument();
+		expect(screen.getByText(i18n.t('mediaItem.details.placeholders.production'))).toBeInTheDocument();
+		expect(screen.queryByLabelText(i18n.t('mediaItem.details.placeholders.nextEpisodeAirDate'))).not.toBeInTheDocument();
 
 		const user = userEvent.setup();
-		await user.click(screen.getByLabelText('In production'));
+		await user.click(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.inProduction')));
 
-		expect(screen.getByLabelText('Next episode air date')).toBeInTheDocument();
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.nextEpisodeAirDate'))).toBeInTheDocument();
 
-		await user.click(screen.getByLabelText('In production'));
+		await user.click(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.inProduction')));
 
-		expect(screen.queryByLabelText('Next episode air date')).not.toBeInTheDocument();
+		expect(screen.queryByLabelText(i18n.t('mediaItem.details.placeholders.nextEpisodeAirDate'))).not.toBeInTheDocument();
 	});
 
 	test('renders the old shared book form controls and syncs selected entities', () => {
@@ -205,12 +210,12 @@ describe('MediaItemDetailsScreenComponent', () => {
 		}));
 
 		expect(screen.queryByText('Status')).not.toBeInTheDocument();
-		expect(screen.getByRole('button', { name: 'Google Search' })).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: 'Wikipedia Search' })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('mediaItem.details.buttons.google') })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('mediaItem.details.buttons.wikipedia') })).toBeInTheDocument();
 		expect(screen.getByAltText('Dune cover')).toBeInTheDocument();
-		expect(screen.getByLabelText('Owned at')).toHaveTextContent('None');
-		expect(screen.getByLabelText('Group')).toHaveTextContent('None');
-		expect(screen.getByText('Completed on')).toBeInTheDocument();
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.ownPlatform'))).toHaveTextContent(i18n.t('ownPlatform.list.none'));
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.group'))).toHaveTextContent(i18n.t('group.list.none'));
+		expect(screen.getByText(i18n.t('mediaItem.details.placeholders.completedOn'))).toBeInTheDocument();
 
 		rerender(createScreen({
 			mediaItem,
@@ -218,8 +223,8 @@ describe('MediaItemDetailsScreenComponent', () => {
 			selectedOwnPlatform
 		}));
 
-		expect(screen.getByLabelText('Owned at')).toHaveTextContent('Kindle');
-		expect(screen.getByLabelText('Group')).toHaveTextContent('Sci-Fi Saga');
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.ownPlatform'))).toHaveTextContent('Kindle');
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.group'))).toHaveTextContent('Sci-Fi Saga');
 	});
 
 	test('renders completion date controls and picker actions', async() => {
@@ -231,21 +236,21 @@ describe('MediaItemDetailsScreenComponent', () => {
 			}
 		}));
 
-		expect(screen.getAllByText('Select')).toHaveLength(2);
-		expect(screen.getByText('No dates added yet')).toBeInTheDocument();
+		expect(screen.getAllByText(i18n.t('common.buttons.select'))).toHaveLength(2);
+		expect(screen.getByText(i18n.t('mediaItem.details.completion.empty'))).toBeInTheDocument();
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: 'Add date' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.details.buttons.addDate') }));
 
-		expect(screen.queryByText('No dates added yet')).not.toBeInTheDocument();
-		expect(screen.getByRole('button', { name: 'Remove' })).toBeInTheDocument();
+		expect(screen.queryByText(i18n.t('mediaItem.details.completion.empty'))).not.toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('common.buttons.remove') })).toBeInTheDocument();
 	});
 
 	test('hides the media image/actions block for a brand new item without catalog data', () => {
 		render(createScreen());
 
-		expect(screen.queryByRole('button', { name: 'Google Search' })).not.toBeInTheDocument();
-		expect(screen.queryByRole('button', { name: 'Wikipedia Search' })).not.toBeInTheDocument();
+		expect(screen.queryByRole('button', { name: i18n.t('mediaItem.details.buttons.google') })).not.toBeInTheDocument();
+		expect(screen.queryByRole('button', { name: i18n.t('mediaItem.details.buttons.wikipedia') })).not.toBeInTheDocument();
 		expect(screen.queryByAltText('Books cover')).not.toBeInTheDocument();
 	});
 
@@ -259,11 +264,11 @@ describe('MediaItemDetailsScreenComponent', () => {
 
 		expect(document.body).toHaveClass('app-dark-screen-active');
 		expect(screen.queryByRole('heading', { name: 'Quick actions' })).not.toBeInTheDocument();
-		expect(screen.queryByText('Books')).not.toBeInTheDocument();
-		expect(screen.getByRole('heading', { name: 'Basics' })).toBeInTheDocument();
-		expect(screen.getByRole('heading', { name: 'Media profile' })).toBeInTheDocument();
-		expect(screen.getByRole('heading', { name: 'Collection' })).toBeInTheDocument();
-		expect(screen.getByRole('heading', { name: 'Progress' })).toBeInTheDocument();
+		expect(screen.queryByText(i18n.t('category.mediaTypes.BOOK'))).not.toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: i18n.t('mediaItem.details.sections.basics.title') })).toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: i18n.t('mediaItem.details.sections.profile.title') })).toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: i18n.t('mediaItem.details.sections.collection.title') })).toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: i18n.t('mediaItem.details.sections.progress.title') })).toBeInTheDocument();
 		expect(screen.queryByText('Importance: Very important')).not.toBeInTheDocument();
 
 		unmount();
@@ -285,11 +290,11 @@ describe('MediaItemDetailsScreenComponent', () => {
 			saveMediaItem
 		}));
 
-		expect(screen.getByLabelText('Owned at')).toHaveTextContent('Kindle');
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.ownPlatform'))).toHaveTextContent('Kindle');
 
 		const user = userEvent.setup();
-		await user.type(screen.getByLabelText('Search or type name'), 'Dune');
-		await user.click(screen.getByRole('button', { name: 'Save' }));
+		await user.type(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.name')), 'Dune');
+		await user.click(screen.getByRole('button', { name: i18n.t('common.buttons.save') }));
 
 		expect(saveMediaItem).toHaveBeenCalledWith({
 			...DEFAULT_BOOK,
@@ -309,9 +314,9 @@ describe('MediaItemDetailsScreenComponent', () => {
 		}));
 
 		const user = userEvent.setup();
-		await user.type(screen.getByLabelText('Search or type name'), 'Dune');
-		await user.type(screen.getByLabelText('Number of pages'), '412');
-		await user.type(screen.getByLabelText('Your notes'), 'Keep this draft');
+		await user.type(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.name')), 'Dune');
+		await user.type(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.duration.BOOK')), '412');
+		await user.type(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.userComment')), 'Keep this draft');
 
 		expect(savedDraft).toMatchObject({
 			name: 'Dune',
@@ -325,9 +330,9 @@ describe('MediaItemDetailsScreenComponent', () => {
 			draftMediaItem: savedDraft
 		}));
 
-		expect(screen.getByLabelText('Search or type name')).toHaveValue('Dune');
-		expect(screen.getByLabelText('Number of pages')).toHaveValue(412);
-		expect(screen.getByLabelText('Your notes')).toHaveValue('Keep this draft');
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.name'))).toHaveValue('Dune');
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.duration.BOOK'))).toHaveValue(412);
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.userComment'))).toHaveValue('Keep this draft');
 	});
 
 	test('restores handled tv show seasons after remounting from the seasons flow', () => {
@@ -365,6 +370,10 @@ describe('MediaItemDetailsScreenComponent', () => {
 			tvShowSeasonsLoadTimestamp: new Date('2026-03-14T12:00:00.000Z')
 		}));
 
-		expect(screen.getByText('2 seasons, watched 14 out of 18 episodes')).toBeInTheDocument();
+		expect(screen.getByText(i18n.t('mediaItem.details.labels.seasons', {
+			seasonsNumber: 2,
+			watchedEpisodesNumber: 14,
+			episodesNumber: 18
+		}))).toBeInTheDocument();
 	});
 });

@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CategoryContextMenuComponent } from 'app/components/presentational/category/list/context-menu';
 import { CategoryInternal } from 'app/data/models/internal/category';
+import { i18n } from 'app/utilities/i18n';
 
 describe('CategoryContextMenuComponent', () => {
 	const category: CategoryInternal = {
@@ -35,12 +36,12 @@ describe('CategoryContextMenuComponent', () => {
 		);
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: 'Edit category' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('category.list.edit') }));
 
 		expect(edit).toHaveBeenCalledWith(category);
 		expect(deleteCallback).not.toHaveBeenCalled();
 		expect(close).toHaveBeenCalledTimes(1);
-		expect(screen.queryByText('Books')).not.toBeInTheDocument();
+		expect(screen.queryByText(i18n.t('category.mediaTypes.BOOK'))).not.toBeInTheDocument();
 	});
 
 	test('asks confirmation before deleting a category', async() => {
@@ -59,12 +60,12 @@ describe('CategoryContextMenuComponent', () => {
 		);
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: 'Delete category' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('category.list.delete') }));
 
-		expect(screen.getByText('Delete Category')).toBeInTheDocument();
+		expect(screen.getByText(i18n.t('category.common.alert.delete.title'))).toBeInTheDocument();
 		expect(deleteCallback).not.toHaveBeenCalled();
 
-		await user.click(screen.getByRole('button', { name: 'OK' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.alert.default.okButton') }));
 
 		expect(deleteCallback).toHaveBeenCalledWith(category);
 		expect(edit).not.toHaveBeenCalled();

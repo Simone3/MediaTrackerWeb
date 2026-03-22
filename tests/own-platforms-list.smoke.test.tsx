@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { OwnPlatformsListScreenComponent } from 'app/components/presentational/own-platform/list/screen';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
+import { i18n } from 'app/utilities/i18n';
 
 describe('OwnPlatformsListScreenComponent', () => {
 	test('supports selection, editing and deletion', async() => {
@@ -44,10 +45,10 @@ describe('OwnPlatformsListScreenComponent', () => {
 
 		const user = userEvent.setup();
 		await user.click(screen.getByText('Switch'));
-		await user.click(screen.getByRole('button', { name: 'Edit Switch' }));
-		await user.click(screen.getByRole('button', { name: 'Delete Switch' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.a11y.edit', { name: ownPlatforms[0].name }) }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.a11y.delete', { name: ownPlatforms[0].name }) }));
 		expect(deleteOwnPlatform).toHaveBeenCalledTimes(0);
-		await user.click(screen.getByRole('button', { name: 'OK' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.alert.default.okButton') }));
 
 		expect(selectOwnPlatform).toHaveBeenCalledWith(ownPlatforms[0]);
 		expect(editOwnPlatform).toHaveBeenCalledWith(ownPlatforms[0]);
@@ -74,7 +75,7 @@ describe('OwnPlatformsListScreenComponent', () => {
 			/>
 		);
 
-		expect(screen.queryByText('No platforms')).not.toBeInTheDocument();
+		expect(screen.queryByText(i18n.t('ownPlatform.list.empty'))).not.toBeInTheDocument();
 		expect(container.querySelectorAll('.entity-management-list-skeleton-row')).toHaveLength(3);
 	});
 });

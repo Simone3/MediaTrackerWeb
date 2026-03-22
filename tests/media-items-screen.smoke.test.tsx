@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MediaItemsListScreenComponent } from 'app/components/presentational/media-item/list/screen';
 import { CategoryInternal } from 'app/data/models/internal/category';
+import { i18n } from 'app/utilities/i18n';
 
 jest.mock('app/components/containers/media-item/list/list', () => {
 	return {
@@ -56,14 +57,14 @@ describe('MediaItemsListScreenComponent', () => {
 
 		expect(fetchMediaItems).toHaveBeenCalledTimes(1);
 		expect(document.body).toHaveClass('app-dark-screen-active');
-		expect(screen.getAllByText('2 items')).toHaveLength(1);
-		expect(screen.queryByText('Movies')).not.toBeInTheDocument();
+		expect(screen.getAllByText(i18n.t('mediaItem.list.count.multiple', { count: 2 }))).toHaveLength(1);
+		expect(screen.queryByText(i18n.t('category.mediaTypes.MOVIE'))).not.toBeInTheDocument();
 		expect(screen.getByTestId('media-items-list-container')).toBeInTheDocument();
 		expect(screen.getByTestId('media-item-filter-modal-container')).toBeInTheDocument();
 		expect(container.querySelector('.media-items-screen-icon')).not.toBeNull();
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: '+ Add movie' }));
+		await user.click(screen.getByRole('button', { name: `+ ${i18n.t('mediaItem.list.add.MOVIE')}` }));
 
 		expect(loadNewMediaItemDetails).toHaveBeenCalledWith(category);
 
@@ -88,9 +89,9 @@ describe('MediaItemsListScreenComponent', () => {
 		);
 
 		expect(document.querySelector('.media-items-screen-content .floating-action-button')).not.toBeNull();
-		expect(screen.queryByRole('button', { name: '+ Add movie' })).not.toBeInTheDocument();
-		expect(screen.getByText('1 item')).toBeInTheDocument();
-		expect(screen.queryByText('Movies')).not.toBeInTheDocument();
+		expect(screen.queryByRole('button', { name: `+ ${i18n.t('mediaItem.list.add.MOVIE')}` })).not.toBeInTheDocument();
+		expect(screen.getByText(i18n.t('mediaItem.list.count.single'))).toBeInTheDocument();
+		expect(screen.queryByText(i18n.t('category.mediaTypes.MOVIE'))).not.toBeInTheDocument();
 
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: '+' }));
