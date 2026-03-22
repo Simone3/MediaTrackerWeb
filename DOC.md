@@ -134,6 +134,14 @@
   - good reference implementations when category behavior looks wrong
 
 ## Recent fix worth remembering
+- The inline media-item status shortcuts on web could leave `active` behind when moving an item from `ACTIVE`/`COMPLETE` into `COMPLETE` or `REDO`.
+  - Correct behavior on web now:
+    - marking an item as complete clears `active`, keeps the appended completion history, and clears `markedAsRedo`
+    - marking an item as redo also clears any stale `active` flag so the mapper can derive `REDO` again and the list row stays cyan instead of reverting to green `ACTIVE`
+    - this keeps the old RN status-ordering logic intact while restoring the expected list-row result after inline updates
+  - Relevant files:
+    - `app/redux/sagas/media-item/inline-update-helper.ts`
+    - `tests/media-item-inline-update.test.ts`
 - A localization audit found a last batch of user-facing English strings still hardcoded in web components instead of coming from `app/resources/lang/lang-en.json`.
   - Correct behavior on web now:
     - credits provider titles/copy/link labels now all come from the language file

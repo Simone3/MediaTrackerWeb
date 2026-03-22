@@ -1,5 +1,5 @@
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
-import { MARK_MEDIA_ITEM_AS_COMPLETE } from 'app/redux/actions/media-item/const';
+import { MARK_MEDIA_ITEM_AS_COMPLETE, MARK_MEDIA_ITEM_AS_REDO } from 'app/redux/actions/media-item/const';
 import { applyInlineMediaItemUpdate } from 'app/redux/sagas/media-item/inline-update-helper';
 
 describe('applyInlineMediaItemUpdate', () => {
@@ -24,9 +24,35 @@ describe('applyInlineMediaItemUpdate', () => {
 		expect(updatedMediaItem.completedOn).toEqual([ originalCompletionDate, completionDate ]);
 		expect(updatedMediaItem.completedOn).not.toBe(completionDates);
 		expect(updatedMediaItem.status).toBe('COMPLETE');
+		expect(updatedMediaItem.active).toBe(false);
 		expect(updatedMediaItem.markedAsRedo).toBe(false);
 		expect(mediaItem.completedOn).toEqual([ originalCompletionDate ]);
+		expect(mediaItem.active).toBe(true);
 		expect(mediaItem.status).toBe('ACTIVE');
 		expect(mediaItem.markedAsRedo).toBe(true);
+	});
+
+	test('marks a completed media item as redo and clears stale active state', () => {
+		const originalCompletionDate = new Date('2010-01-01T00:00:00.000Z');
+		const mediaItem: MediaItemInternal = {
+			id: '6',
+			mediaType: 'MOVIE',
+			status: 'COMPLETE',
+			name: 'My Sixth Movie',
+			importance: '300',
+			completedOn: [ originalCompletionDate ],
+			active: true
+		};
+
+		const updatedMediaItem = applyInlineMediaItemUpdate(mediaItem, MARK_MEDIA_ITEM_AS_REDO);
+
+		expect(updatedMediaItem).not.toBe(mediaItem);
+		expect(updatedMediaItem.completedOn).toEqual([ originalCompletionDate ]);
+		expect(updatedMediaItem.active).toBe(false);
+		expect(updatedMediaItem.markedAsRedo).toBe(true);
+		expect(updatedMediaItem.status).toBe('REDO');
+		expect(mediaItem.active).toBe(true);
+		expect(mediaItem.markedAsRedo).toBeUndefined();
+		expect(mediaItem.status).toBe('COMPLETE');
 	});
 });

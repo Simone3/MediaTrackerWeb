@@ -25,12 +25,14 @@ export const applyInlineMediaItemUpdate = (sourceMediaItem: MediaItemInternal, a
 			const completionDates = mediaItem.completedOn ? [ ...mediaItem.completedOn ] : [];
 			completionDates.push(now);
 			mediaItem.completedOn = completionDates;
+			mediaItem.active = false;
 			mediaItem.markedAsRedo = false;
 			mediaItem.status = 'COMPLETE';
 			return mediaItem;
 		}
 
 		case MARK_MEDIA_ITEM_AS_REDO: {
+			mediaItem.active = false;
 			mediaItem.markedAsRedo = true;
 			mediaItem.status = 'REDO';
 			return mediaItem;
