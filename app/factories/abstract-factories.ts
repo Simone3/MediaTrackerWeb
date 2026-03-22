@@ -16,13 +16,10 @@ export abstract class MediaFactory<R, P = undefined> {
 	public get(category: CategoryInternal, extraParams?: P): R;
 	public get(mediaType: MediaTypeInternal, extraParams?: P): R;
 	public get(categoryOrMediaType: CategoryInternal | MediaTypeInternal, extraParams?: P): R {
-
 		if(typeof categoryOrMediaType === 'string') {
-
 			return this.getInternal(categoryOrMediaType, extraParams);
 		}
 		else {
-
 			return this.getInternal(categoryOrMediaType.mediaType, extraParams);
 		}
 	}

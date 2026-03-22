@@ -5,14 +5,12 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: State): UserSignupScreenComponentInput => {
-	
 	return {
 		isLoading: state.userOperations.signupStatus === 'IN_PROGRESS'
 	};
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): UserSignupScreenComponentOutput => {
-
 	return {
 		signup: (user) => {
 			dispatch(signUserUp(user));

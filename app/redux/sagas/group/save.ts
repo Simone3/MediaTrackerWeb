@@ -14,7 +14,6 @@ import { SagaIterator } from 'redux-saga';
  * @param action the intercepted action
  */
 const saveGroupSaga = function * (action: SaveGroupAction): SagaIterator {
-
 	const group = action.group;
 
 	yield put(startSavingGroup(group));
@@ -24,15 +23,12 @@ const saveGroupSaga = function * (action: SaveGroupAction): SagaIterator {
 	const category = state.categoryGlobal.selectedCategory;
 	const user = state.userGlobal.user;
 	if(!category || !user) {
-
 		throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while saving group');
 	}
 
 	try {
-
 		// If we are adding a new group and the user has not confirmed a same-name creation...
 		if(!group.id && !action.confirmSameName) {
-
 			// Check if there are other groups with the same name
 			const filter: GroupFilterInternal = {
 				name: group.name
@@ -41,7 +37,6 @@ const saveGroupSaga = function * (action: SaveGroupAction): SagaIterator {
 			
 			// If so, dispatch confirmation request action and exit
 			if(mediaItemsWithSameName.length > 0) {
-
 				yield put(askConfirmationBeforeSavingGroup());
 				return;
 			}
@@ -52,7 +47,6 @@ const saveGroupSaga = function * (action: SaveGroupAction): SagaIterator {
 		yield put(completeSavingGroup(group));
 	}
 	catch(error) {
-
 		// Send the failure action
 		yield put(failSavingGroup());
 		yield put(setError(AppError.BACKEND_GROUP_SAVE.withDetails(error)));
@@ -63,6 +57,5 @@ const saveGroupSaga = function * (action: SaveGroupAction): SagaIterator {
  * Watcher saga that reacts to the save group actions
  */
 export const watchSaveGroupSaga = function * (): SagaIterator {
-
 	yield takeLatest(SAVE_GROUP, saveGroupSaga);
 };

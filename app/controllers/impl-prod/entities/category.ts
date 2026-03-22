@@ -16,7 +16,6 @@ export class CategoryBackEndController implements CategoryController {
 	 * @override
 	 */
 	public async getAllCategories(userId: string): Promise<CategoryInternal[]> {
-		
 		const response = await backEndInvoker.invoke({
 			method: 'GET',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories' ], {
@@ -32,7 +31,6 @@ export class CategoryBackEndController implements CategoryController {
 	 * @override
 	 */
 	public async filter(userId: string, filter?: CategoryFilterInternal): Promise<CategoryInternal[]> {
-		
 		const request: FilterCategoriesRequest = {
 			filter: filter ? categoryFilterMapper.toExternal(filter) : undefined
 		};
@@ -53,9 +51,7 @@ export class CategoryBackEndController implements CategoryController {
 	 * @override
 	 */
 	public async saveCategory(userId: string, category: CategoryInternal): Promise<void> {
-
 		if(category.id) {
-
 			const request: UpdateCategoryRequest = {
 				category: categoryMapper.toExternal(category)
 			};
@@ -71,7 +67,6 @@ export class CategoryBackEndController implements CategoryController {
 			});
 		}
 		else {
-
 			const request: AddCategoryRequest = {
 				newCategory: categoryMapper.toExternal(category)
 			};
@@ -91,7 +86,6 @@ export class CategoryBackEndController implements CategoryController {
 	 * @override
 	 */
 	public async deleteCategory(userId: string, categoryId: string): Promise<void> {
-
 		await backEndInvoker.invoke({
 			method: 'DELETE',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:id' ], {

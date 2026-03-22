@@ -102,6 +102,7 @@
 - A later tracked-file audit also removed the stray nested `app/package.json` and the unimported legacy image assets that were no longer referenced by webpack, Jest, or the app source.
 - A stylesheet audit also removed unused category/media/entity-details/placeholder selectors plus orphaned root CSS variables from `app/web/styles.css`; a TS/TSX reference scan now comes back clean for the remaining class selectors.
 - Smoke tests now prefer `i18n.t(...)` for app-owned button text, labels, placeholders, empty states, and accessibility copy, while still leaving test-owned fixture text and intentionally formatted render-output assertions hardcoded when they are not sourced from `lang-en.json`.
+- A later repo-wide TS/TSX style pass removed blank first lines inside executable blocks like functions, reducers, sagas, conditionals, and switch bodies, while intentionally preserving the blank-line spacing at the start of class bodies.
 
 ## High-signal files to open first
 - `app/AGENTS.md`

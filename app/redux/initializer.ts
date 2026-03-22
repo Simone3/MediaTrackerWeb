@@ -11,7 +11,6 @@ import createSagaMiddleware from 'redux-saga';
  * @returns the Redux store
  */
 export const initializeRedux = (): Store => {
-
 	const sagaMiddleware = createSagaMiddleware();
 	const preloadedState = loadPersistedReduxState();
 

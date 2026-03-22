@@ -16,7 +16,6 @@ export class GroupBackEndController implements GroupController {
 	 * @override
 	 */
 	public async getAllGroups(userId: string, categoryId: string): Promise<GroupInternal[]> {
-		
 		const response = await backEndInvoker.invoke({
 			method: 'GET',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/groups' ], {
@@ -33,7 +32,6 @@ export class GroupBackEndController implements GroupController {
 	 * @override
 	 */
 	public async filter(userId: string, categoryId: string, filter?: GroupFilterInternal): Promise<GroupInternal[]> {
-		
 		const request: FilterGroupsRequest = {
 			filter: filter ? groupFilterMapper.toExternal(filter) : undefined
 		};
@@ -55,9 +53,7 @@ export class GroupBackEndController implements GroupController {
 	 * @override
 	 */
 	public async saveGroup(userId: string, categoryId: string, group: GroupInternal): Promise<void> {
-
 		if(group.id) {
-
 			const request: UpdateGroupRequest = {
 				group: groupMapper.toExternal(group)
 			};
@@ -74,7 +70,6 @@ export class GroupBackEndController implements GroupController {
 			});
 		}
 		else {
-
 			const request: AddGroupRequest = {
 				newGroup: groupMapper.toExternal(group)
 			};
@@ -95,7 +90,6 @@ export class GroupBackEndController implements GroupController {
 	 * @override
 	 */
 	public async deleteGroup(userId: string, categoryId: string, groupId: string): Promise<void> {
-
 		await backEndInvoker.invoke({
 			method: 'DELETE',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/groups/:id' ], {

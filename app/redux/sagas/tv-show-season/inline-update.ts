@@ -13,14 +13,12 @@ import { SagaIterator } from 'redux-saga';
  * @param action the intercepted action
  */
 const inlineUpdateTvShowSeasonSaga = function * (action: InlineUpdateTvShowSeasonAction): SagaIterator {
-
 	const season = action.tvShowSeason;
 
 	// Get values from state
 	const state: State = yield select();
 	let seasons = state.tvShowSeasonsList.tvShowSeasons;
 	if(!seasons) {
-
 		throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while updating TV show season');
 	}
 	seasons = [ ...seasons ];
@@ -32,7 +30,6 @@ const inlineUpdateTvShowSeasonSaga = function * (action: InlineUpdateTvShowSeaso
 
 	// Season must exist
 	if(index < 0) {
-
 		yield put(setError(AppError.GENERIC.withDetails('Season not found')));
 		return;
 	}
@@ -48,6 +45,5 @@ const inlineUpdateTvShowSeasonSaga = function * (action: InlineUpdateTvShowSeaso
  * Watcher saga that reacts to the TV show season inline update actions
  */
 export const watchInlineUpdateTvShowSeasonSaga = function * (): SagaIterator {
-
 	yield takeLatest(INLINE_UPDATE_TV_SHOW_SEASON, inlineUpdateTvShowSeasonSaga);
 };

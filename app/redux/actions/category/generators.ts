@@ -7,7 +7,6 @@ import { AskConfirmationBeforeSavingCategoryAction, CompleteDeletingCategoryActi
  * @returns the action
  */
 export const fetchCategories = (): FetchCategoriesAction => {
-	
 	return {
 		type: FETCH_CATEGORIES
 	};
@@ -18,7 +17,6 @@ export const fetchCategories = (): FetchCategoriesAction => {
  * @returns the action
  */
 export const startFetchingCategories = (): StartFetchingCategoriesAction => {
-	
 	return {
 		type: START_FETCHING_CATEGORIES
 	};
@@ -30,7 +28,6 @@ export const startFetchingCategories = (): StartFetchingCategoriesAction => {
  * @returns the action
  */
 export const completeFetchingCategories = (categories: CategoryInternal[]): CompleteFetchingCategoriesAction => {
-	
 	return {
 		type: COMPLETE_FETCHING_CATEGORIES,
 		categories: categories
@@ -42,7 +39,6 @@ export const completeFetchingCategories = (categories: CategoryInternal[]): Comp
  * @returns the action
  */
 export const failFetchingCategories = (): FailFetchingCategoriesAction => {
-	
 	return {
 		type: FAIL_FETCHING_CATEGORIES
 	};
@@ -53,7 +49,6 @@ export const failFetchingCategories = (): FailFetchingCategoriesAction => {
  * @returns the action
  */
 export const loadNewCategoryDetails = (): LoadNewCategoryDetailsAction => {
-	
 	return {
 		type: LOAD_NEW_CATEGORY_DETAILS
 	};
@@ -65,7 +60,6 @@ export const loadNewCategoryDetails = (): LoadNewCategoryDetailsAction => {
  * @returns the action
  */
 export const loadCategoryDetails = (category: CategoryInternal): LoadCategoryDetailsAction => {
-	
 	return {
 		type: LOAD_CATEGORY_DETAILS,
 		category: category
@@ -79,7 +73,6 @@ export const loadCategoryDetails = (category: CategoryInternal): LoadCategoryDet
  * @returns the action
  */
 export const setCategoryFormStatus = (valid: boolean, dirty: boolean): SetCategoryFormStatusAction => {
-	
 	return {
 		type: SET_CATEGORY_FORM_STATUS,
 		valid: valid,
@@ -94,7 +87,6 @@ export const setCategoryFormStatus = (valid: boolean, dirty: boolean): SetCatego
  * @returns the action
  */
 export const saveCategory = (category: CategoryInternal, confirmSameName: boolean): SaveCategoryAction => {
-	
 	return {
 		type: SAVE_CATEGORY,
 		category: category,
@@ -108,7 +100,6 @@ export const saveCategory = (category: CategoryInternal, confirmSameName: boolea
  * @returns the action
  */
 export const startSavingCategory = (category: CategoryInternal): StartSavingCategoryAction => {
-	
 	return {
 		type: START_SAVING_CATEGORY,
 		category: category
@@ -120,7 +111,6 @@ export const startSavingCategory = (category: CategoryInternal): StartSavingCate
  * @returns the action
  */
 export const askConfirmationBeforeSavingCategory = (): AskConfirmationBeforeSavingCategoryAction => {
-	
 	return {
 		type: ASK_CONFIRMATION_BEFORE_SAVING_CATEGORY
 	};
@@ -131,7 +121,6 @@ export const askConfirmationBeforeSavingCategory = (): AskConfirmationBeforeSavi
  * @returns the action
  */
 export const completeSavingCategory = (): CompleteSavingCategoryAction => {
-	
 	return {
 		type: COMPLETE_SAVING_CATEGORY
 	};
@@ -142,7 +131,6 @@ export const completeSavingCategory = (): CompleteSavingCategoryAction => {
  * @returns the action
  */
 export const failSavingCategory = (): FailSavingCategoryAction => {
-	
 	return {
 		type: FAIL_SAVING_CATEGORY
 	};
@@ -154,7 +142,6 @@ export const failSavingCategory = (): FailSavingCategoryAction => {
  * @returns the action
  */
 export const deleteCategory = (category: CategoryInternal): DeleteCategoryAction => {
-	
 	return {
 		type: DELETE_CATEGORY,
 		category: category
@@ -166,7 +153,6 @@ export const deleteCategory = (category: CategoryInternal): DeleteCategoryAction
  * @returns the action
  */
 export const startDeletingCategory = (): StartDeletingCategoryAction => {
-	
 	return {
 		type: START_DELETING_CATEGORY
 	};
@@ -177,7 +163,6 @@ export const startDeletingCategory = (): StartDeletingCategoryAction => {
  * @returns the action
  */
 export const completeDeletingCategory = (): CompleteDeletingCategoryAction => {
-	
 	return {
 		type: COMPLETE_DELETING_CATEGORY
 	};
@@ -188,7 +173,6 @@ export const completeDeletingCategory = (): CompleteDeletingCategoryAction => {
  * @returns the action
  */
 export const failDeletingCategory = (): FailDeletingCategoryAction => {
-	
 	return {
 		type: FAIL_DELETING_CATEGORY
 	};
@@ -200,7 +184,6 @@ export const failDeletingCategory = (): FailDeletingCategoryAction => {
  * @returns the action
  */
 export const highlightCategory = (category: CategoryInternal): HighlightCategoryAction => {
-	
 	return {
 		type: HIGHLIGHT_CATEGORY,
 		category: category
@@ -212,7 +195,6 @@ export const highlightCategory = (category: CategoryInternal): HighlightCategory
  * @returns the action
  */
 export const removeCategoryHighlight = (): RemoveCategoryHighlightAction => {
-	
 	return {
 		type: REMOVE_CATEGORY_HIGHLIGHT
 	};
@@ -224,7 +206,6 @@ export const removeCategoryHighlight = (): RemoveCategoryHighlightAction => {
  * @returns the action
  */
 export const selectCategory = (category: CategoryInternal): SelectCategoryAction => {
-	
 	return {
 		type: SELECT_CATEGORY,
 		category: category

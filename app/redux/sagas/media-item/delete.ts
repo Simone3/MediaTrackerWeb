@@ -13,17 +13,14 @@ import { SagaIterator } from 'redux-saga';
  * @param action the intercepted action
  */
 const deleteMediaItemSaga = function * (action: DeleteMediaItemAction): SagaIterator {
-
 	yield put(startDeletingMediaItem());
 
 	try {
-
 		// Get values from state
 		const state: State = yield select();
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
 		if(!category || !user) {
-
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while deleting media item');
 		}
 		
@@ -35,7 +32,6 @@ const deleteMediaItemSaga = function * (action: DeleteMediaItemAction): SagaIter
 		yield put(completeDeletingMediaItem());
 	}
 	catch(error) {
-
 		yield put(failDeletingMediaItem());
 		
 		yield put(setError(AppError.BACKEND_MEDIA_ITEM_DELETE.withDetails(error)));
@@ -46,6 +42,5 @@ const deleteMediaItemSaga = function * (action: DeleteMediaItemAction): SagaIter
  * Watcher saga that reacts to the delete media item actions
  */
 export const watchDeleteMediaItemSaga = function * (): SagaIterator {
-
 	yield takeLatest(DELETE_MEDIA_ITEM, deleteMediaItemSaga);
 };

@@ -27,9 +27,7 @@ export class GroupMockedController extends MockControllerHelper implements Group
 	 * @override
 	 */
 	public async getAllGroups(userId: string, categoryId: string): Promise<GroupInternal[]> {
-		
 		return this.resolveResult(() => {
-
 			return this.getCategoryGroups(userId, categoryId).slice();
 		});
 	}
@@ -38,20 +36,15 @@ export class GroupMockedController extends MockControllerHelper implements Group
 	 * @override
 	 */
 	public async filter(userId: string, categoryId: string, filter?: GroupFilterInternal): Promise<GroupInternal[]> {
-
 		return this.resolveResult(() => {
-
 			const categoryGroups = this.getCategoryGroups(userId, categoryId);
 
 			if(filter && filter.name) {
-
 				return categoryGroups.filter((group) => {
-	
 					return filter.name && filter.name.toUpperCase() === group.name.toUpperCase();
 				});
 			}
 			else {
-
 				return categoryGroups.slice();
 			}
 		});
@@ -61,13 +54,10 @@ export class GroupMockedController extends MockControllerHelper implements Group
 	 * @override
 	 */
 	public async saveGroup(userId: string, categoryId: string, group: GroupInternal): Promise<void> {
-
 		return this.resolveResult(() => {
-			
 			const categoryGroups = this.getCategoryGroups(userId, categoryId);
 			
 			if(group.id) {
-
 				const i = categoryGroups.findIndex((item) => {
 					return item.id === group.id;
 				});
@@ -75,7 +65,6 @@ export class GroupMockedController extends MockControllerHelper implements Group
 				categoryGroups[i] = group;
 			}
 			else {
-
 				categoryGroups.push({
 					...group,
 					id: this.randomId()
@@ -90,9 +79,7 @@ export class GroupMockedController extends MockControllerHelper implements Group
 	 * @override
 	 */
 	public async deleteGroup(userId: string, categoryId: string, groupId: string): Promise<void> {
-
 		return this.resolveResult(() => {
-			
 			const categoryGroups = this.getCategoryGroups(userId, categoryId);
 			
 			const i = categoryGroups.findIndex((item) => {
@@ -112,14 +99,11 @@ export class GroupMockedController extends MockControllerHelper implements Group
 	 * @returns the groups
 	 */
 	private getCategoryGroups(userId: string, categoryId: string): GroupInternal[] {
-
 		let categoryGroups: GroupInternal[];
 		if(userId in this.groups && categoryId in this.groups[userId]) {
-
 			categoryGroups = this.groups[userId][categoryId];
 		}
 		else {
-			
 			categoryGroups = [];
 		}
 		return categoryGroups;

@@ -14,16 +14,13 @@ import { SagaIterator } from 'redux-saga';
  * @param action the intercepted action
  */
 const searchMediaItemsCatalogSaga = function * (action: SearchMediaItemsCatalogAction): SagaIterator {
-
 	yield put(startSearchingMediaItemsCatalog());
 
 	try {
-		
 		// Get values from state
 		const state: State = yield select();
 		const category = state.categoryGlobal.selectedCategory;
 		if(!category) {
-
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find category while searching media items catalog');
 		}
 		
@@ -38,7 +35,6 @@ const searchMediaItemsCatalogSaga = function * (action: SearchMediaItemsCatalogA
 		yield put(completeSearchingMediaItemsCatalog(catalogResults));
 	}
 	catch(error) {
-
 		yield put(failSearchingMediaItemsCatalog());
 		
 		yield put(setError(AppError.BACKEND_MEDIA_ITEM_CATALOG_SEARCH.withDetails(error)));
@@ -49,6 +45,5 @@ const searchMediaItemsCatalogSaga = function * (action: SearchMediaItemsCatalogA
  * Watcher saga that reacts to the search media items catalog actions
  */
 export const watchSearchMediaItemsCatalogSaga = function * (): SagaIterator {
-
 	yield takeLatest(SEARCH_MEDIA_ITEMS_CATALOG, searchMediaItemsCatalogSaga);
 };

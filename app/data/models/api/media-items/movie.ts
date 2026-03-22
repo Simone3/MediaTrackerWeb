@@ -51,7 +51,6 @@ export class MovieSortField extends MediaItemSortField {
 	public static readonly DIRECTOR: string = 'DIRECTOR';
 	
 	public static values(): string[] {
-
 		return [ ...MediaItemSortField.commonValues(), this.DIRECTOR ];
 	}
 }

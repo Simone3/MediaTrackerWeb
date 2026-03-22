@@ -17,12 +17,9 @@ const initialState: CategoryGlobalState = {
  * @returns the new state
  */
 export const categoryGlobal = (state: CategoryGlobalState = initialState, action: Action): CategoryGlobalState => {
-	
 	switch(action.type) {
-
 		// When a category is selected, it is marked as such
 		case SELECT_CATEGORY: {
-
 			const selectCategoryAction = action as SelectCategoryAction;
 
 			const category = selectCategoryAction.category;

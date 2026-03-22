@@ -19,9 +19,7 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 	 * @override
 	 */
 	public async filter(userId: string, categoryId: string, filter?: TMediaItemFilterInternal, sortBy?: TMediaItemSortByInternal[]): Promise<TMediaItemInternal[]> {
-
 		return this.resolveResult(() => {
-
 			let categoryMediaItems = this.getCategoryMediaItems(userId, categoryId);
 			
 			categoryMediaItems = this.mockFilter(categoryMediaItems, filter);
@@ -35,9 +33,7 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 	 * @override
 	 */
 	public async search(userId: string, categoryId: string, searchTerm: string): Promise<TMediaItemInternal[]> {
-			
 		return this.resolveResult(() => {
-
 			return this.getCategoryMediaItems(userId, categoryId)
 				.filter((item) => {
 					return item.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -50,13 +46,10 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 	 * @override
 	 */
 	public async save(userId: string, categoryId: string, mediaItem: TMediaItemInternal): Promise<void> {
-		
 		return this.resolveResult(() => {
-			
 			const categoryMediaItems = this.getCategoryMediaItems(userId, categoryId);
 			
 			if(mediaItem.id) {
-
 				const i = categoryMediaItems.findIndex((item) => {
 					return item.id === mediaItem.id;
 				});
@@ -64,7 +57,6 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 				categoryMediaItems[i] = mediaItem;
 			}
 			else {
-
 				categoryMediaItems.push({
 					...mediaItem,
 					id: this.randomId()
@@ -79,9 +71,7 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 	 * @override
 	 */
 	public async delete(userId: string, categoryId: string, mediaItemId: string): Promise<void> {
-		
 		return this.resolveResult(() => {
-			
 			const categoryMediaItems = this.getCategoryMediaItems(userId, categoryId);
 			
 			const i = categoryMediaItems.findIndex((item) => {
@@ -101,9 +91,7 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 	 * @returns the sorted media items
 	 */
 	protected mockSort(mediaItems: TMediaItemInternal[], sortBy?: TMediaItemSortByInternal[]): TMediaItemInternal[] {
-
 		if(!sortBy) {
-
 			return mediaItems;
 		}
 
@@ -111,7 +99,6 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 		
 		const mockSortBy = sortBy as unknown as MovieSortByInternal[];
 		if(mockSortBy[0].field === 'NAME') {
-
 			return mediaItems.sort((first, second) => {
 				if(first.name < second.name) {
 					return -1;
@@ -123,7 +110,6 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 			});
 		}
 		else {
-
 			return mediaItems;
 		}
 	}
@@ -135,9 +121,7 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 	 * @returns the filtered media items
 	 */
 	protected mockFilter(mediaItems: TMediaItemInternal[], filter?: TMediaItemFilterInternal): TMediaItemInternal[] {
-
 		if(!filter) {
-
 			return mediaItems;
 		}
 
@@ -148,25 +132,19 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 		const importanceFilter = filter.importanceLevels;
 
 		if(nameFilter) {
-
 			mediaItems = mediaItems.filter((item) => {
-
 				return nameFilter.toUpperCase() === item.name.toUpperCase();
 			});
 		}
 		
 		if(groupsIdsFilter && groupsIdsFilter.length > 0) {
-
 			mediaItems = mediaItems.filter((item) => {
-
 				return item.group && groupsIdsFilter.includes(item.group.id);
 			});
 		}
 
 		if(importanceFilter) {
-
 			mediaItems = mediaItems.filter((item) => {
-
 				return importanceFilter.includes(item.importance);
 			});
 		}
@@ -181,14 +159,11 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 	 * @returns the media items
 	 */
 	private getCategoryMediaItems(userId: string, categoryId: string): TMediaItemInternal[] {
-
 		let categoryMediaItems: TMediaItemInternal[];
 		if(userId in this.mediaItems && categoryId in this.mediaItems[userId]) {
-
 			categoryMediaItems = this.mediaItems[userId][categoryId];
 		}
 		else {
-			
 			categoryMediaItems = [];
 		}
 		return categoryMediaItems;
@@ -211,9 +186,7 @@ export class MediaItemMockedCatalogController<TSearchMediaItemCatalogResultInter
 	 * @override
 	 */
 	public async search(searchTerm: string): Promise<TSearchMediaItemCatalogResultInternal[]> {
-		
 		return this.resolveResult(() => {
-			
 			return this.catalogList
 				.filter((item) => {
 					return item.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -226,11 +199,8 @@ export class MediaItemMockedCatalogController<TSearchMediaItemCatalogResultInter
 	 * @override
 	 */
 	public async getDetails(catalogId: string): Promise<TCatalogMediaItemInternal> {
-		
 		return this.resolveResult(() => {
-			
 			if(catalogId in this.catalogDetails) {
-
 				const catalog = this.catalogDetails[catalogId];
 				return {
 					...catalog,
@@ -238,7 +208,6 @@ export class MediaItemMockedCatalogController<TSearchMediaItemCatalogResultInter
 				};
 			}
 			else {
-				
 				throw AppError.GENERIC.withDetails('Mocked catalog details not found');
 			}
 		});

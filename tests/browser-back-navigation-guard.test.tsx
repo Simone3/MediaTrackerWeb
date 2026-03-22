@@ -68,7 +68,6 @@ describe('BrowserBackNavigationGuardComponent', () => {
 	test('shows confirmation on browser back and runs the confirm callback before leaving', async() => {
 		const onConfirmLeave = jest.fn();
 		const backSpy = jest.spyOn(window.history, 'back').mockImplementation(() => {});
-
 		renderGuard({
 			onConfirmLeave
 		});

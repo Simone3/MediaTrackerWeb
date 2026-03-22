@@ -7,7 +7,6 @@ import { ClearErrorAction, SetErrorAction } from 'app/redux/actions/error/types'
  * @returns the action
  */
 export const setError = (error: unknown): SetErrorAction => {
-	
 	return {
 		type: SET_ERROR,
 		error: error
@@ -19,7 +18,6 @@ export const setError = (error: unknown): SetErrorAction => {
  * @returns the action
  */
 export const clearError = (): ClearErrorAction => {
-	
 	return {
 		type: CLEAR_ERROR
 	};

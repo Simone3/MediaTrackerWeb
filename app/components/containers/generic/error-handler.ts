@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: State, ownProps: ErrorHandlerContainerProps): ErrorHandlerComponentInput => {
-	
 	return {
 		error: state.error.error,
 		children: ownProps.children
@@ -13,7 +12,6 @@ const mapStateToProps = (state: State, ownProps: ErrorHandlerContainerProps): Er
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): ErrorHandlerComponentOutput => {
-
 	return {
 		clearError: () => {
 			dispatch(clearError());

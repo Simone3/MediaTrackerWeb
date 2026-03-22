@@ -44,72 +44,59 @@ const navigationActions = [
  * @param action the intercepted action
  */
 const navigationSaga = function * (action: Action): SagaIterator {
-	
 	try {
-
 		switch(action.type) {
-			
 			case SELECT_CATEGORY: {
-
 				yield call(navigationService.navigate.bind(navigationService), AppScreens.MediaItemsList);
 				break;
 			}
 
 			case LOAD_NEW_CATEGORY_DETAILS:
 			case LOAD_CATEGORY_DETAILS: {
-
 				yield call(navigationService.navigate.bind(navigationService), AppScreens.CategoryDetails);
 				break;
 			}
 
 			case LOAD_NEW_MEDIA_ITEM_DETAILS:
 			case LOAD_MEDIA_ITEM_DETAILS: {
-
 				yield call(navigationService.navigate.bind(navigationService), AppScreens.MediaItemDetails);
 				break;
 			}
 
 			case REQUEST_GROUP_SELECTION: {
-
 				yield call(navigationService.navigate.bind(navigationService), AppScreens.GroupsList);
 				break;
 			}
 
 			case REQUEST_OWN_PLATFORM_SELECTION: {
-
 				yield call(navigationService.navigate.bind(navigationService), AppScreens.OwnPlatformsList);
 				break;
 			}
 
 			case SELECT_GROUP: {
-
 				yield call(navigationService.back.bind(navigationService));
 				break;
 			}
 
 			case SELECT_OWN_PLATFORM: {
-
 				yield call(navigationService.back.bind(navigationService));
 				break;
 			}
 
 			case LOAD_NEW_TV_SHOW_SEASON_DETAILS:
 			case LOAD_TV_SHOW_SEASON_DETAILS: {
-				
 				yield call(navigationService.navigate.bind(navigationService), AppScreens.TvShowSeasonDetails);
 				break;
 			}
 
 			case LOAD_NEW_GROUP_DETAILS:
 			case LOAD_GROUP_DETAILS: {
-				
 				yield call(navigationService.navigate.bind(navigationService), AppScreens.GroupDetails);
 				break;
 			}
 
 			case LOAD_NEW_OWN_PLATFORM_DETAILS:
 			case LOAD_OWN_PLATFORM_DETAILS: {
-				
 				yield call(navigationService.navigate.bind(navigationService), AppScreens.OwnPlatformDetails);
 				break;
 			}
@@ -119,31 +106,26 @@ const navigationSaga = function * (action: Action): SagaIterator {
 			case COMPLETE_SAVING_GROUP:
 			case COMPLETE_SAVING_OWN_PLATFORM:
 			case COMPLETE_SAVING_TV_SHOW_SEASON: {
-
 				yield call(navigationService.back.bind(navigationService));
 				break;
 			}
 
 			case START_TV_SHOW_SEASONS_HANDLING: {
-
 				yield call(navigationService.navigate.bind(navigationService), AppScreens.TvShowSeasonsList);
 				break;
 			}
 
 			case COMPLETE_TV_SHOW_SEASONS_HANDLING: {
-
 				yield call(navigationService.back.bind(navigationService));
 				break;
 			}
 
 			default: {
-
 				throw AppError.GENERIC.withDetails(`Action ${action.type} does not have a defined navigation behavior`);
 			}
 		}
 	}
 	catch(error) {
-
 		yield put(setError(AppError.GENERIC.withDetails(error)));
 	}
 };
@@ -152,6 +134,5 @@ const navigationSaga = function * (action: Action): SagaIterator {
  * Watcher saga that reacts to the navigation actions
  */
 export const watchNavigationSaga = function * (): SagaIterator {
-
 	yield takeLatest(navigationActions, navigationSaga);
 };

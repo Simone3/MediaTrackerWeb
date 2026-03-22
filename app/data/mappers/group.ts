@@ -11,7 +11,6 @@ class GroupMapper extends ModelMapper<GroupInternal, IdentifiedGroup, {}> {
 	 * @override
 	 */
 	protected convertToExternal(source: GroupInternal): IdentifiedGroup {
-		
 		return {
 			uid: source.id,
 			name: source.name
@@ -22,7 +21,6 @@ class GroupMapper extends ModelMapper<GroupInternal, IdentifiedGroup, {}> {
 	 * @override
 	 */
 	protected convertToInternal(source: IdentifiedGroup): GroupInternal {
-		
 		return {
 			id: source.uid,
 			name: source.name
@@ -39,7 +37,6 @@ class GroupFilterMapper extends ModelMapper<GroupFilterInternal, GroupFilter, {}
 	 * @override
 	 */
 	protected convertToExternal(source: GroupFilterInternal): GroupFilter {
-		
 		return {
 			name: source.name
 		};
@@ -49,7 +46,6 @@ class GroupFilterMapper extends ModelMapper<GroupFilterInternal, GroupFilter, {}
 	 * @override
 	 */
 	protected convertToInternal(source: GroupFilter): GroupFilterInternal {
-		
 		return {
 			name: source.name
 		};

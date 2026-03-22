@@ -19,12 +19,9 @@ const initialState: CategoriesListState = {
  * @returns the new state
  */
 export const categoriesList = (state: CategoriesListState = initialState, action: Action): CategoriesListState => {
-	
 	switch(action.type) {
-
 		// When the app starts fetching the list of categories, the status changes to show the loading indicator
 		case START_FETCHING_CATEGORIES: {
-
 			return {
 				...state,
 				status: 'FETCHING'
@@ -33,7 +30,6 @@ export const categoriesList = (state: CategoriesListState = initialState, action
 	
 		// When the app completes the fetching process, the status is reset and the retrieved list is saved
 		case COMPLETE_FETCHING_CATEGORIES: {
-
 			const receiveCategoriesAction = action as CompleteFetchingCategoriesAction;
 			
 			return {
@@ -45,7 +41,6 @@ export const categoriesList = (state: CategoriesListState = initialState, action
 
 		// When the app fails to fetch the categories, the status is updated without clearing the last known list
 		case FAIL_FETCHING_CATEGORIES: {
-
 			return {
 				...state,
 				status: 'FETCH_FAILED'
@@ -55,7 +50,6 @@ export const categoriesList = (state: CategoriesListState = initialState, action
 		// When the list is explicitly invalidated or when a new category has been successfully saved, the list is marked for reload
 		case INVALIDATE_CATEGORIES:
 		case COMPLETE_SAVING_CATEGORY: {
-		
 			return {
 				...state,
 				status: 'REQUIRES_FETCH'
@@ -64,7 +58,6 @@ export const categoriesList = (state: CategoriesListState = initialState, action
 
 		// When the app starts deleting a category, the status changes to show the loading indicator
 		case START_DELETING_CATEGORY: {
-
 			return {
 				...state,
 				status: 'DELETING'
@@ -73,7 +66,6 @@ export const categoriesList = (state: CategoriesListState = initialState, action
 
 		// When the app completes the delete process, the list is marked for reload
 		case COMPLETE_DELETING_CATEGORY: {
-		
 			return {
 				...state,
 				status: 'REQUIRES_FETCH'
@@ -82,7 +74,6 @@ export const categoriesList = (state: CategoriesListState = initialState, action
 
 		// When the app fails to delete a category, the status is reset (an error is shown by the global handler)
 		case FAIL_DELETING_CATEGORY: {
-		
 			return {
 				...state,
 				status: 'FETCHED'
@@ -91,7 +82,6 @@ export const categoriesList = (state: CategoriesListState = initialState, action
 
 		// When a category is highlighted (e.g. to open the context menu), the corresponding state field is set
 		case HIGHLIGHT_CATEGORY: {
-
 			const highlightCategoryAction = action as HighlightCategoryAction;
 
 			return {
@@ -102,7 +92,6 @@ export const categoriesList = (state: CategoriesListState = initialState, action
 
 		// When a category is no longer highlighted (e.g. to close the context menu), the corresponding state field is reset
 		case REMOVE_CATEGORY_HIGHLIGHT: {
-
 			return {
 				...state,
 				highlightedCategory: undefined

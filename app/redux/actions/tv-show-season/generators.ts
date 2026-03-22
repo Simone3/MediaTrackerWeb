@@ -8,7 +8,6 @@ import { CompleteDeletingTvShowSeasonAction, CompleteInlineUpdatingTvShowSeasonA
  * @returns the action
  */
 export const startTvShowSeasonsHandling = (tvShowSeasons: TvShowSeasonInternal[]): StartTvShowSeasonsHandlingAction => {
-	
 	return {
 		type: START_TV_SHOW_SEASONS_HANDLING,
 		tvShowSeasons: tvShowSeasons
@@ -20,7 +19,6 @@ export const startTvShowSeasonsHandling = (tvShowSeasons: TvShowSeasonInternal[]
  * @returns the action
  */
 export const completeTvShowSeasonsHandling = (): CompleteTvShowSeasonsHandlingAction => {
-	
 	return {
 		type: COMPLETE_TV_SHOW_SEASONS_HANDLING
 	};
@@ -31,7 +29,6 @@ export const completeTvShowSeasonsHandling = (): CompleteTvShowSeasonsHandlingAc
  * @returns the action
  */
 export const loadNewTvShowSeasonDetails = (): LoadNewTvShowSeasonDetailsAction => {
-	
 	return {
 		type: LOAD_NEW_TV_SHOW_SEASON_DETAILS
 	};
@@ -43,7 +40,6 @@ export const loadNewTvShowSeasonDetails = (): LoadNewTvShowSeasonDetailsAction =
  * @returns the action
  */
 export const loadTvShowSeasonDetails = (tvShowSeason: TvShowSeasonInternal): LoadTvShowSeasonDetailsAction => {
-	
 	return {
 		type: LOAD_TV_SHOW_SEASON_DETAILS,
 		tvShowSeason: tvShowSeason
@@ -56,7 +52,6 @@ export const loadTvShowSeasonDetails = (tvShowSeason: TvShowSeasonInternal): Loa
  * @returns the action
  */
 export const saveTvShowSeason = (tvShowSeason: TvShowSeasonInternal): SaveTvShowSeasonAction => {
-	
 	return {
 		type: SAVE_TV_SHOW_SEASON,
 		tvShowSeason: tvShowSeason
@@ -70,7 +65,6 @@ export const saveTvShowSeason = (tvShowSeason: TvShowSeasonInternal): SaveTvShow
  * @returns the action
  */
 export const setTvShowSeasonFormStatus = (valid: boolean, dirty: boolean): SetTvShowSeasonFormStatusAction => {
-	
 	return {
 		type: SET_TV_SHOW_SEASON_FORM_STATUS,
 		valid: valid,
@@ -84,7 +78,6 @@ export const setTvShowSeasonFormStatus = (valid: boolean, dirty: boolean): SetTv
  * @returns the action
  */
 export const completeSavingTvShowSeason = (tvShowSeasons: TvShowSeasonInternal[]): CompleteSavingTvShowSeasonAction => {
-	
 	return {
 		type: COMPLETE_SAVING_TV_SHOW_SEASON,
 		tvShowSeasons: tvShowSeasons
@@ -96,7 +89,6 @@ export const completeSavingTvShowSeason = (tvShowSeasons: TvShowSeasonInternal[]
  * @returns the action
  */
 export const failSavingTvShowSeason = (): FailSavingTvShowSeasonAction => {
-	
 	return {
 		type: FAIL_SAVING_TV_SHOW_SEASON
 	};
@@ -108,7 +100,6 @@ export const failSavingTvShowSeason = (): FailSavingTvShowSeasonAction => {
  * @returns the action
  */
 export const deleteTvShowSeason = (tvShowSeason: TvShowSeasonInternal): DeleteTvShowSeasonAction => {
-	
 	return {
 		type: DELETE_TV_SHOW_SEASON,
 		tvShowSeason: tvShowSeason
@@ -121,7 +112,6 @@ export const deleteTvShowSeason = (tvShowSeason: TvShowSeasonInternal): DeleteTv
  * @returns the action
  */
 export const completeDeletingTvShowSeason = (tvShowSeasons: TvShowSeasonInternal[]): CompleteDeletingTvShowSeasonAction => {
-	
 	return {
 		type: COMPLETE_DELETING_TV_SHOW_SEASON,
 		tvShowSeasons: tvShowSeasons
@@ -134,7 +124,6 @@ export const completeDeletingTvShowSeason = (tvShowSeasons: TvShowSeasonInternal
  * @returns the action
  */
 export const inlineUpdateTvShowSeason = (tvShowSeason: TvShowSeasonInternal): InlineUpdateTvShowSeasonAction => {
-	
 	return {
 		type: INLINE_UPDATE_TV_SHOW_SEASON,
 		tvShowSeason: tvShowSeason
@@ -147,7 +136,6 @@ export const inlineUpdateTvShowSeason = (tvShowSeason: TvShowSeasonInternal): In
  * @returns the action
  */
 export const completeInlineUpdatingTvShowSeason = (tvShowSeasons: TvShowSeasonInternal[]): CompleteInlineUpdatingTvShowSeasonAction => {
-	
 	return {
 		type: COMPLETE_INLINE_UPDATING_TV_SHOW_SEASON,
 		tvShowSeasons: tvShowSeasons

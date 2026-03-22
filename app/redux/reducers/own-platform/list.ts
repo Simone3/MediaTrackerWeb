@@ -20,12 +20,9 @@ const initialState: OwnPlatformsListState = {
  * @returns the new state
  */
 export const ownPlatformsList = (state: OwnPlatformsListState = initialState, action: Action): OwnPlatformsListState => {
-	
 	switch(action.type) {
-
 		// When the app starts fetching the list of own platforms, the status changes to show the loading indicator
 		case START_FETCHING_OWN_PLATFORMS: {
-
 			return {
 				...state,
 				status: 'FETCHING'
@@ -34,7 +31,6 @@ export const ownPlatformsList = (state: OwnPlatformsListState = initialState, ac
 	
 		// When the app completes the fetching process, the status is reset and the retrieved list is saved
 		case COMPLETE_FETCHING_OWN_PLATFORMS: {
-
 			const receiveOwnPlatformsAction = action as CompleteFetchingOwnPlatformsAction;
 			
 			return {
@@ -46,7 +42,6 @@ export const ownPlatformsList = (state: OwnPlatformsListState = initialState, ac
 
 		// When the app fails to fetch the own platforms, the status is updated without clearing the last known list
 		case FAIL_FETCHING_OWN_PLATFORMS: {
-
 			return {
 				...state,
 				status: 'FETCH_FAILED'
@@ -56,7 +51,6 @@ export const ownPlatformsList = (state: OwnPlatformsListState = initialState, ac
 		// When the list is explicitly invalidated or when a new own platform has been successfully saved, the list is marked for reload
 		case INVALIDATE_OWN_PLATFORMS:
 		case COMPLETE_SAVING_OWN_PLATFORM: {
-		
 			return {
 				...state,
 				status: 'REQUIRES_FETCH'
@@ -65,7 +59,6 @@ export const ownPlatformsList = (state: OwnPlatformsListState = initialState, ac
 
 		// When the app starts deleting a own platform, the status changes to show the loading indicator
 		case START_DELETING_OWN_PLATFORM: {
-
 			return {
 				...state,
 				status: 'DELETING'
@@ -74,7 +67,6 @@ export const ownPlatformsList = (state: OwnPlatformsListState = initialState, ac
 
 		// When the app completes the delete process, the list is marked for reload
 		case COMPLETE_DELETING_OWN_PLATFORM: {
-		
 			return {
 				...state,
 				status: 'REQUIRES_FETCH'
@@ -83,7 +75,6 @@ export const ownPlatformsList = (state: OwnPlatformsListState = initialState, ac
 
 		// When the app fails to delete a own platform, the status is reset (an error is shown by the global handler)
 		case FAIL_DELETING_OWN_PLATFORM: {
-		
 			return {
 				...state,
 				status: 'FETCHED'
@@ -92,7 +83,6 @@ export const ownPlatformsList = (state: OwnPlatformsListState = initialState, ac
 
 		// When a own platform is highlighted (e.g. to open the context menu), the corresponding state field is set
 		case HIGHLIGHT_OWN_PLATFORM: {
-
 			const highlightOwnPlatformAction = action as HighlightOwnPlatformAction;
 
 			return {
@@ -103,7 +93,6 @@ export const ownPlatformsList = (state: OwnPlatformsListState = initialState, ac
 
 		// When a own platform is no longer highlighted (e.g. to close the context menu), the corresponding state field is reset
 		case REMOVE_OWN_PLATFORM_HIGHLIGHT: {
-
 			return {
 				...state,
 				highlightedOwnPlatform: undefined
@@ -112,7 +101,6 @@ export const ownPlatformsList = (state: OwnPlatformsListState = initialState, ac
 
 		// When a category is selected, the own platform data is reset
 		case SELECT_CATEGORY: {
-
 			return {
 				...initialState
 			};

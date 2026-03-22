@@ -12,17 +12,14 @@ import { SagaIterator } from 'redux-saga';
  * Worker saga that fetches the own platforms
  */
 const fetchOwnPlatformsSaga = function * (): SagaIterator {
-
 	yield put(startFetchingOwnPlatforms());
 
 	try {
-
 		// Get values from state
 		const state: State = yield select();
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
 		if(!category || !user) {
-
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while fetching own platforms');
 		}
 
@@ -31,7 +28,6 @@ const fetchOwnPlatformsSaga = function * (): SagaIterator {
 		yield put(completeFetchingOwnPlatforms(ownPlatforms));
 	}
 	catch(error) {
-
 		yield put(failFetchingOwnPlatforms());
 		
 		yield put(setError(AppError.BACKEND_OWN_PLATFORM_FETCH.withDetails(error)));
@@ -42,6 +38,5 @@ const fetchOwnPlatformsSaga = function * (): SagaIterator {
  * Watcher saga that reacts to the fetch own platforms actions
  */
 export const watchFetchOwnPlatformsSaga = function * (): SagaIterator {
-
 	yield takeLatest(FETCH_OWN_PLATFORMS, fetchOwnPlatformsSaga);
 };

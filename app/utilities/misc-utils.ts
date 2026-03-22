@@ -12,7 +12,6 @@ class MiscUtils {
 	 * @returns the final URL
 	 */
 	public buildUrl(urlParts: string[], pathParams?: PathParams): string {
-
 		// Empty case
 		if(!urlParts || urlParts.length === 0) {
 			return '';
@@ -21,21 +20,16 @@ class MiscUtils {
 		// Build full URL
 		let fullUrl = urlParts[0] ? urlParts[0] : '';
 		for(let i = 1; i < urlParts.length; i++) {
-
 			if(urlParts[i] && urlParts[i].length > 0) {
-
 				const fullEnds = fullUrl.endsWith('/');
 				const partStarts = urlParts[i].startsWith('/');
 				if(fullEnds && partStarts) {
-					
 					fullUrl += urlParts[i].substring(1);
 				}
 				else if(!fullEnds && !partStarts) {
-
 					fullUrl += `/${urlParts[i]}`;
 				}
 				else {
-
 					fullUrl += urlParts[i];
 				}
 			}
@@ -43,9 +37,7 @@ class MiscUtils {
 
 		// Replace path params
 		if(pathParams) {
-
 			for(const key in pathParams) {
-
 				fullUrl = fullUrl.replace(`:${key}`, pathParams[key]);
 			}
 		}
@@ -59,11 +51,9 @@ class MiscUtils {
 	 * @returns the array of all fields of type T
 	 */
 	public buildArrayOfFields<T extends object>(source: Required<T>): (keyof T)[] {
-
 		const result: (keyof T)[] = [];
 
 		for(const key in source) {
-
 			result.push(key as keyof T);
 		}
 

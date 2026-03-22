@@ -9,7 +9,6 @@ class DateUtils {
 	 * @returns undefined if date is undefined, the ISO string otherwise
 	 */
 	public toString(date: Date | undefined | null): string | undefined {
-
 		return date ? date.toISOString() : undefined;
 	}
 
@@ -19,16 +18,12 @@ class DateUtils {
 	 * @returns undefined if dates is undefined, the array of ISO strings otherwise
 	 */
 	public toStringList(dates: Date[] | undefined | null): string[] | undefined {
-
 		if(dates) {
-			
 			return dates.map((date) => {
-
 				return this.toString(date) as string;
 			});
 		}
 		else {
-			
 			return undefined;
 		}
 	}
@@ -39,13 +34,10 @@ class DateUtils {
 	 * @returns undefined if dateString is undefined, the parsed date otherwise
 	 */
 	public toDate(dateString: string | undefined | null): Date | undefined {
-
 		if(dateString) {
-
 			return new Date(dateString);
 		}
 		else {
-
 			return undefined;
 		}
 	}
@@ -56,16 +48,12 @@ class DateUtils {
 	 * @returns undefined if dateStrings is undefined, the array of parsed dates otherwise
 	 */
 	public toDateList(dateStrings: string[] | undefined | null): Date[] | undefined {
-
 		if(dateStrings) {
-			
 			return dateStrings.map((dateString) => {
-
 				return this.toDate(dateString) as Date;
 			});
 		}
 		else {
-			
 			return undefined;
 		}
 	}

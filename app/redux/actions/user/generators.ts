@@ -7,7 +7,6 @@ import { CheckUserLoginStatusAction, CompleteCheckingUserLoginStatusAction, Comp
  * @returns the action
  */
 export const checkUserLoginStatus = (): CheckUserLoginStatusAction => {
-	
 	return {
 		type: CHECK_USER_LOGIN_STATUS
 	};
@@ -18,7 +17,6 @@ export const checkUserLoginStatus = (): CheckUserLoginStatusAction => {
  * @returns the action
  */
 export const startCheckingUserLoginStatus = (): StartCheckingUserLoginStatusAction => {
-	
 	return {
 		type: START_CHECKING_USER_LOGIN_STATUS
 	};
@@ -30,7 +28,6 @@ export const startCheckingUserLoginStatus = (): StartCheckingUserLoginStatusActi
  * @returns the action
  */
 export const completeCheckingUserLoginStatus = (user: UserInternal | undefined): CompleteCheckingUserLoginStatusAction => {
-	
 	return {
 		type: COMPLETE_CHECKING_USER_LOGIN_STATUS,
 		user: user
@@ -42,7 +39,6 @@ export const completeCheckingUserLoginStatus = (user: UserInternal | undefined):
  * @returns the action
  */
 export const failCheckingUserLoginStatus = (): FailCheckingUserLoginStatusAction => {
-	
 	return {
 		type: FAIL_CHECKING_USER_LOGIN_STATUS
 	};
@@ -54,7 +50,6 @@ export const failCheckingUserLoginStatus = (): FailCheckingUserLoginStatusAction
  * @returns the action
  */
 export const signUserUp = (user: UserSecretInternal): SignUserUpAction => {
-	
 	return {
 		type: SIGN_USER_UP,
 		user: user
@@ -66,7 +61,6 @@ export const signUserUp = (user: UserSecretInternal): SignUserUpAction => {
  * @returns the action
  */
 export const startSigningUserUp = (): StartSigningUserUpAction => {
-	
 	return {
 		type: START_SIGNING_USER_UP
 	};
@@ -78,7 +72,6 @@ export const startSigningUserUp = (): StartSigningUserUpAction => {
  * @returns the action
  */
 export const completeSigningUserUp = (user: UserInternal): CompleteSigningUserUpAction => {
-	
 	return {
 		type: COMPLETE_SIGNING_USER_UP,
 		user: user
@@ -90,7 +83,6 @@ export const completeSigningUserUp = (user: UserInternal): CompleteSigningUserUp
  * @returns the action
  */
 export const failSigningUserUp = (): FailSigningUserUpAction => {
-	
 	return {
 		type: FAIL_SIGNING_USER_UP
 	};
@@ -102,7 +94,6 @@ export const failSigningUserUp = (): FailSigningUserUpAction => {
  * @returns the action
  */
 export const logUserIn = (user: UserSecretInternal): LogUserInAction => {
-	
 	return {
 		type: LOG_USER_IN,
 		user: user
@@ -114,7 +105,6 @@ export const logUserIn = (user: UserSecretInternal): LogUserInAction => {
  * @returns the action
  */
 export const startLoggingUserIn = (): StartLoggingUserInAction => {
-	
 	return {
 		type: START_LOGGING_USER_IN
 	};
@@ -126,7 +116,6 @@ export const startLoggingUserIn = (): StartLoggingUserInAction => {
  * @returns the action
  */
 export const completeLoggingUserIn = (user: UserInternal): CompleteLoggingUserInAction => {
-	
 	return {
 		type: COMPLETE_LOGGING_USER_IN,
 		user: user
@@ -138,7 +127,6 @@ export const completeLoggingUserIn = (user: UserInternal): CompleteLoggingUserIn
  * @returns the action
  */
 export const failLoggingUserIn = (): FailLoggingUserInAction => {
-	
 	return {
 		type: FAIL_LOGGING_USER_IN
 	};
@@ -149,7 +137,6 @@ export const failLoggingUserIn = (): FailLoggingUserInAction => {
  * @returns the action
  */
 export const logUserOut = (): LogUserOutAction => {
-	
 	return {
 		type: LOG_USER_OUT
 	};
@@ -160,7 +147,6 @@ export const logUserOut = (): LogUserOutAction => {
  * @returns the action
  */
 export const startLoggingUserOut = (): StartLoggingUserOutAction => {
-	
 	return {
 		type: START_LOGGING_USER_OUT
 	};
@@ -171,7 +157,6 @@ export const startLoggingUserOut = (): StartLoggingUserOutAction => {
  * @returns the action
  */
 export const completeLoggingUserOut = (): CompleteLoggingUserOutAction => {
-	
 	return {
 		type: COMPLETE_LOGGING_USER_OUT
 	};
@@ -182,7 +167,6 @@ export const completeLoggingUserOut = (): CompleteLoggingUserOutAction => {
  * @returns the action
  */
 export const failLoggingUserOut = (): FailLoggingUserOutAction => {
-	
 	return {
 		type: FAIL_LOGGING_USER_OUT
 	};

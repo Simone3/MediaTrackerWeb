@@ -21,12 +21,9 @@ const initialState: GroupDetailsState = {
  * @returns the new state
  */
 export const groupDetails = (state: GroupDetailsState = initialState, action: Action): GroupDetailsState => {
-	
 	switch(action.type) {
-
 		// When the details page is started with a new group, the status is reset and the default group is loaded
 		case LOAD_NEW_GROUP_DETAILS: {
-
 			return {
 				...state,
 				saveStatus: 'IDLE',
@@ -36,7 +33,6 @@ export const groupDetails = (state: GroupDetailsState = initialState, action: Ac
 	
 		// When the details page is started with an existing group, the status is reset and the given group is loaded
 		case LOAD_GROUP_DETAILS: {
-
 			const loadGroupAction = action as LoadGroupDetailsAction;
 			
 			return {
@@ -48,7 +44,6 @@ export const groupDetails = (state: GroupDetailsState = initialState, action: Ac
 	
 		// When the form status changes, the corresponding state fields are set
 		case SET_GROUP_FORM_STATUS: {
-
 			const setGroupFormStatusAction = action as SetGroupFormStatusAction;
 			
 			return {
@@ -60,7 +55,6 @@ export const groupDetails = (state: GroupDetailsState = initialState, action: Ac
 
 		// When the group save is requested, the status changes (e.g. allows header save button to notify the form about the request)
 		case REQUEST_GROUP_SAVE: {
-
 			return {
 				...state,
 				saveStatus: 'REQUESTED'
@@ -69,7 +63,6 @@ export const groupDetails = (state: GroupDetailsState = initialState, action: Ac
 	
 		// When the app starts saving a group, the status changes to show the loading indicator
 		case START_SAVING_GROUP: {
-
 			const startSavingGroupAction = action as StartSavingGroupAction;
 
 			return {
@@ -81,7 +74,6 @@ export const groupDetails = (state: GroupDetailsState = initialState, action: Ac
 	
 		// When the app requires a confirmation before saving a group, the status changes to show the alert
 		case ASK_CONFIRMATION_BEFORE_SAVING_GROUP: {
-
 			return {
 				...state,
 				saveStatus: 'REQUIRES_CONFIRMATION'
@@ -90,7 +82,6 @@ export const groupDetails = (state: GroupDetailsState = initialState, action: Ac
 	
 		// When the app completes the save process, the status changes (at this point a navigation back to the list is expected)
 		case COMPLETE_SAVING_GROUP: {
-
 			return {
 				...state,
 				saveStatus: 'SAVED'
@@ -99,7 +90,6 @@ export const groupDetails = (state: GroupDetailsState = initialState, action: Ac
 	
 		// When the app fails to save a group, the status is reset (an error is shown by the global handler)
 		case FAIL_SAVING_GROUP: {
-
 			return {
 				...state,
 				saveStatus: 'IDLE'

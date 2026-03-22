@@ -21,12 +21,9 @@ const initialState: OwnPlatformDetailsState = {
  * @returns the new state
  */
 export const ownPlatformDetails = (state: OwnPlatformDetailsState = initialState, action: Action): OwnPlatformDetailsState => {
-	
 	switch(action.type) {
-
 		// When the details page is started with a new own platform, the status is reset and the default own platform is loaded
 		case LOAD_NEW_OWN_PLATFORM_DETAILS: {
-
 			return {
 				...state,
 				saveStatus: 'IDLE',
@@ -36,7 +33,6 @@ export const ownPlatformDetails = (state: OwnPlatformDetailsState = initialState
 	
 		// When the details page is started with an existing own platform, the status is reset and the given own platform is loaded
 		case LOAD_OWN_PLATFORM_DETAILS: {
-
 			const loadOwnPlatformAction = action as LoadOwnPlatformDetailsAction;
 			
 			return {
@@ -48,7 +44,6 @@ export const ownPlatformDetails = (state: OwnPlatformDetailsState = initialState
 	
 		// When the form status changes, the corresponding state fields are set
 		case SET_OWN_PLATFORM_FORM_STATUS: {
-
 			const setOwnPlatformFormStatusAction = action as SetOwnPlatformFormStatusAction;
 			
 			return {
@@ -60,7 +55,6 @@ export const ownPlatformDetails = (state: OwnPlatformDetailsState = initialState
 
 		// When the own platform save is requested, the status changes (e.g. allows header save button to notify the form about the request)
 		case REQUEST_OWN_PLATFORM_SAVE: {
-
 			return {
 				...state,
 				saveStatus: 'REQUESTED'
@@ -69,7 +63,6 @@ export const ownPlatformDetails = (state: OwnPlatformDetailsState = initialState
 	
 		// When the app starts saving a own platform, the status changes to show the loading indicator
 		case START_SAVING_OWN_PLATFORM: {
-
 			const startSavingOwnPlatformAction = action as StartSavingOwnPlatformAction;
 
 			return {
@@ -81,7 +74,6 @@ export const ownPlatformDetails = (state: OwnPlatformDetailsState = initialState
 	
 		// When the app requires a confirmation before saving an own platform, the status changes to show the alert
 		case ASK_CONFIRMATION_BEFORE_SAVING_OWN_PLATFORM: {
-
 			return {
 				...state,
 				saveStatus: 'REQUIRES_CONFIRMATION'
@@ -90,7 +82,6 @@ export const ownPlatformDetails = (state: OwnPlatformDetailsState = initialState
 	
 		// When the app completes the save process, the status changes (at this point a navigation back to the list is expected)
 		case COMPLETE_SAVING_OWN_PLATFORM: {
-
 			return {
 				...state,
 				saveStatus: 'SAVED'
@@ -99,7 +90,6 @@ export const ownPlatformDetails = (state: OwnPlatformDetailsState = initialState
 	
 		// When the app fails to save a own platform, the status is reset (an error is shown by the global handler)
 		case FAIL_SAVING_OWN_PLATFORM: {
-
 			return {
 				...state,
 				saveStatus: 'IDLE'

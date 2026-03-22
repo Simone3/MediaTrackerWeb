@@ -17,7 +17,6 @@ export class MovieBackEndController implements MovieController {
 	 * @override
 	 */
 	public async filter(userId: string, categoryId: string, filter?: MovieFilterInternal, sortBy?: MovieSortByInternal[]): Promise<MovieInternal[]> {
-		
 		const request: FilterMoviesRequest = {
 			filter: filter ? movieFilterMapper.toExternal(filter) : undefined,
 			sortBy: sortBy ? movieSortMapper.toExternalList(sortBy) : undefined
@@ -40,7 +39,6 @@ export class MovieBackEndController implements MovieController {
 	 * @override
 	 */
 	public async search(userId: string, categoryId: string, searchTerm: string): Promise<MovieInternal[]> {
-
 		const request: SearchMoviesRequest = {
 			searchTerm: searchTerm,
 			filter: undefined
@@ -63,9 +61,7 @@ export class MovieBackEndController implements MovieController {
 	 * @override
 	 */
 	public async save(userId: string, categoryId: string, movie: MovieInternal): Promise<void> {
-
 		if(movie.id) {
-
 			const request: UpdateMovieRequest = {
 				movie: movieMapper.toExternal(movie)
 			};
@@ -82,7 +78,6 @@ export class MovieBackEndController implements MovieController {
 			});
 		}
 		else {
-
 			const request: AddMovieRequest = {
 				newMovie: movieMapper.toExternal(movie)
 			};
@@ -103,7 +98,6 @@ export class MovieBackEndController implements MovieController {
 	 * @override
 	 */
 	public async delete(userId: string, categoryId: string, movieId: string): Promise<void> {
-
 		await backEndInvoker.invoke({
 			method: 'DELETE',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/movies/:id' ], {
@@ -126,7 +120,6 @@ export class MovieCatalogBackEndController implements MovieCatalogController {
 	 * @override
 	 */
 	public async search(searchTerm: string): Promise<SearchMovieCatalogResultInternal[]> {
-
 		const response = await backEndInvoker.invoke({
 			method: 'GET',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/catalog/movies/search/:searchTerm' ], {
@@ -142,7 +135,6 @@ export class MovieCatalogBackEndController implements MovieCatalogController {
 	 * @override
 	 */
 	public async getDetails(catalogId: string): Promise<CatalogMovieInternal> {
-
 		const response = await backEndInvoker.invoke({
 			method: 'GET',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/catalog/movies/:catalogId' ], {
@@ -165,7 +157,6 @@ export class MovieDefinitionsControllerImpl implements MovieDefinitionsControlle
 	 * @override
 	 */
 	public getDefaultFilter(): MovieFilterInternal {
-		
 		return {
 			status: 'CURRENT'
 		};
@@ -175,7 +166,6 @@ export class MovieDefinitionsControllerImpl implements MovieDefinitionsControlle
 	 * @override
 	 */
 	public getDefaultSortBy(): MovieSortByInternal[] {
-		
 		return [{
 			field: 'ACTIVE',
 			ascending: false
@@ -192,7 +182,6 @@ export class MovieDefinitionsControllerImpl implements MovieDefinitionsControlle
 	 * @override
 	 */
 	public getViewGroupSortBy(): MovieSortByInternal[] {
-
 		return [{
 			field: 'GROUP',
 			ascending: true
@@ -203,7 +192,6 @@ export class MovieDefinitionsControllerImpl implements MovieDefinitionsControlle
 	 * @override
 	 */
 	public getCreatorNames(mediaItem: MovieInternal): string[] | undefined {
-
 		return mediaItem.directors;
 	}
 
@@ -211,7 +199,6 @@ export class MovieDefinitionsControllerImpl implements MovieDefinitionsControlle
 	 * @override
 	 */
 	public getDurationValue(mediaItem: MovieInternal): number | undefined {
-
 		return mediaItem.durationMinutes;
 	}
 
@@ -219,7 +206,6 @@ export class MovieDefinitionsControllerImpl implements MovieDefinitionsControlle
 	 * @override
 	 */
 	public getDefaultMediaItem(): MovieInternal {
-		
 		return DEFAULT_MOVIE;
 	}
 }

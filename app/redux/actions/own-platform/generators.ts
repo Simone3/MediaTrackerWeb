@@ -7,7 +7,6 @@ import { AskConfirmationBeforeSavingOwnPlatformAction, CompleteDeletingOwnPlatfo
  * @returns the action
  */
 export const fetchOwnPlatforms = (): FetchOwnPlatformsAction => {
-	
 	return {
 		type: FETCH_OWN_PLATFORMS
 	};
@@ -18,7 +17,6 @@ export const fetchOwnPlatforms = (): FetchOwnPlatformsAction => {
  * @returns the action
  */
 export const startFetchingOwnPlatforms = (): StartFetchingOwnPlatformsAction => {
-	
 	return {
 		type: START_FETCHING_OWN_PLATFORMS
 	};
@@ -30,7 +28,6 @@ export const startFetchingOwnPlatforms = (): StartFetchingOwnPlatformsAction => 
  * @returns the action
  */
 export const completeFetchingOwnPlatforms = (ownPlatforms: OwnPlatformInternal[]): CompleteFetchingOwnPlatformsAction => {
-	
 	return {
 		type: COMPLETE_FETCHING_OWN_PLATFORMS,
 		ownPlatforms: ownPlatforms
@@ -42,7 +39,6 @@ export const completeFetchingOwnPlatforms = (ownPlatforms: OwnPlatformInternal[]
  * @returns the action
  */
 export const failFetchingOwnPlatforms = (): FailFetchingOwnPlatformsAction => {
-	
 	return {
 		type: FAIL_FETCHING_OWN_PLATFORMS
 	};
@@ -53,7 +49,6 @@ export const failFetchingOwnPlatforms = (): FailFetchingOwnPlatformsAction => {
  * @returns the action
  */
 export const loadNewOwnPlatformDetails = (): LoadNewOwnPlatformDetailsAction => {
-	
 	return {
 		type: LOAD_NEW_OWN_PLATFORM_DETAILS
 	};
@@ -65,7 +60,6 @@ export const loadNewOwnPlatformDetails = (): LoadNewOwnPlatformDetailsAction => 
  * @returns the action
  */
 export const loadOwnPlatformDetails = (ownPlatform: OwnPlatformInternal): LoadOwnPlatformDetailsAction => {
-	
 	return {
 		type: LOAD_OWN_PLATFORM_DETAILS,
 		ownPlatform: ownPlatform
@@ -79,7 +73,6 @@ export const loadOwnPlatformDetails = (ownPlatform: OwnPlatformInternal): LoadOw
  * @returns the action
  */
 export const setOwnPlatformFormStatus = (valid: boolean, dirty: boolean): SetOwnPlatformFormStatusAction => {
-	
 	return {
 		type: SET_OWN_PLATFORM_FORM_STATUS,
 		valid: valid,
@@ -94,7 +87,6 @@ export const setOwnPlatformFormStatus = (valid: boolean, dirty: boolean): SetOwn
  * @returns the action
  */
 export const saveOwnPlatform = (ownPlatform: OwnPlatformInternal, confirmSameName: boolean): SaveOwnPlatformAction => {
-	
 	return {
 		type: SAVE_OWN_PLATFORM,
 		ownPlatform: ownPlatform,
@@ -108,7 +100,6 @@ export const saveOwnPlatform = (ownPlatform: OwnPlatformInternal, confirmSameNam
  * @returns the action
  */
 export const startSavingOwnPlatform = (ownPlatform: OwnPlatformInternal): StartSavingOwnPlatformAction => {
-	
 	return {
 		type: START_SAVING_OWN_PLATFORM,
 		ownPlatform: ownPlatform
@@ -120,7 +111,6 @@ export const startSavingOwnPlatform = (ownPlatform: OwnPlatformInternal): StartS
  * @returns the action
  */
 export const askConfirmationBeforeSavingOwnPlatform = (): AskConfirmationBeforeSavingOwnPlatformAction => {
-	
 	return {
 		type: ASK_CONFIRMATION_BEFORE_SAVING_OWN_PLATFORM
 	};
@@ -132,7 +122,6 @@ export const askConfirmationBeforeSavingOwnPlatform = (): AskConfirmationBeforeS
  * @returns the action
  */
 export const completeSavingOwnPlatform = (ownPlatform: OwnPlatformInternal): CompleteSavingOwnPlatformAction => {
-	
 	return {
 		type: COMPLETE_SAVING_OWN_PLATFORM,
 		ownPlatform: ownPlatform
@@ -144,7 +133,6 @@ export const completeSavingOwnPlatform = (ownPlatform: OwnPlatformInternal): Com
  * @returns the action
  */
 export const failSavingOwnPlatform = (): FailSavingOwnPlatformAction => {
-	
 	return {
 		type: FAIL_SAVING_OWN_PLATFORM
 	};
@@ -156,7 +144,6 @@ export const failSavingOwnPlatform = (): FailSavingOwnPlatformAction => {
  * @returns the action
  */
 export const deleteOwnPlatform = (ownPlatform: OwnPlatformInternal): DeleteOwnPlatformAction => {
-	
 	return {
 		type: DELETE_OWN_PLATFORM,
 		ownPlatform: ownPlatform
@@ -168,7 +155,6 @@ export const deleteOwnPlatform = (ownPlatform: OwnPlatformInternal): DeleteOwnPl
  * @returns the action
  */
 export const startDeletingOwnPlatform = (): StartDeletingOwnPlatformAction => {
-	
 	return {
 		type: START_DELETING_OWN_PLATFORM
 	};
@@ -180,7 +166,6 @@ export const startDeletingOwnPlatform = (): StartDeletingOwnPlatformAction => {
  * @returns the action
  */
 export const completeDeletingOwnPlatform = (ownPlatformId: string): CompleteDeletingOwnPlatformAction => {
-	
 	return {
 		type: COMPLETE_DELETING_OWN_PLATFORM,
 		ownPlatformId: ownPlatformId
@@ -192,7 +177,6 @@ export const completeDeletingOwnPlatform = (ownPlatformId: string): CompleteDele
  * @returns the action
  */
 export const failDeletingOwnPlatform = (): FailDeletingOwnPlatformAction => {
-	
 	return {
 		type: FAIL_DELETING_OWN_PLATFORM
 	};
@@ -203,7 +187,6 @@ export const failDeletingOwnPlatform = (): FailDeletingOwnPlatformAction => {
  * @returns the action
  */
 export const requestOwnPlatformSelection = (): RequestOwnPlatformSelectionAction => {
-	
 	return {
 		type: REQUEST_OWN_PLATFORM_SELECTION
 	};
@@ -215,7 +198,6 @@ export const requestOwnPlatformSelection = (): RequestOwnPlatformSelectionAction
  * @returns the action
  */
 export const selectOwnPlatform = (ownPlatform: OwnPlatformInternal | undefined): SelectOwnPlatformAction => {
-	
 	return {
 		type: SELECT_OWN_PLATFORM,
 		ownPlatform: ownPlatform

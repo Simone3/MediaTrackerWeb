@@ -13,16 +13,13 @@ import { SagaIterator } from 'redux-saga';
  * @param action the intercepted action
  */
 const deleteCategorySaga = function * (action: DeleteCategoryAction): SagaIterator {
-
 	yield put(startDeletingCategory());
 
 	try {
-
 		// Get values from state
 		const state: State = yield select();
 		const user = state.userGlobal.user;
 		if(!user) {
-
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while deleting category');
 		}
 
@@ -31,7 +28,6 @@ const deleteCategorySaga = function * (action: DeleteCategoryAction): SagaIterat
 		yield put(completeDeletingCategory());
 	}
 	catch(error) {
-
 		yield put(failDeletingCategory());
 		
 		yield put(setError(AppError.BACKEND_CATEGORY_DELETE.withDetails(error)));
@@ -42,6 +38,5 @@ const deleteCategorySaga = function * (action: DeleteCategoryAction): SagaIterat
  * Watcher saga that reacts to the delete category actions
  */
 export const watchDeleteCategorySaga = function * (): SagaIterator {
-
 	yield takeLatest(DELETE_CATEGORY, deleteCategorySaga);
 };

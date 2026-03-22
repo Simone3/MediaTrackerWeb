@@ -16,9 +16,7 @@ export abstract class ModelMapper<TInternal, TExternal, TParams> {
 	 * @returns the mapping targets
 	 */
 	public toExternalList(sources: TInternal[], extraParams?: TParams): TExternal[] {
-
 		return sources.map((source) => {
-
 			return this.toExternal(source, extraParams);
 		});
 	}
@@ -30,9 +28,7 @@ export abstract class ModelMapper<TInternal, TExternal, TParams> {
 	 * @returns the mapping targets
 	 */
 	public toInternalList(sources: TExternal[], extraParams?: TParams): TInternal[] {
-
 		return sources.map((source) => {
-
 			return this.toInternal(source, extraParams);
 		});
 	}
@@ -44,7 +40,6 @@ export abstract class ModelMapper<TInternal, TExternal, TParams> {
 	 * @returns the mapping target
 	 */
 	public toExternal(source: TInternal, extraParams?: TParams): TExternal {
-
 		const target = this.convertToExternal(source, extraParams);
 		this.logMapping(source, target);
 		return target;
@@ -57,7 +52,6 @@ export abstract class ModelMapper<TInternal, TExternal, TParams> {
 	 * @returns the mapping target
 	 */
 	public toInternal(source: TExternal, extraParams?: TParams): TInternal {
-
 		const target = this.convertToInternal(source, extraParams);
 		this.logMapping(source, target);
 		return target;
@@ -85,9 +79,7 @@ export abstract class ModelMapper<TInternal, TExternal, TParams> {
 	 * @param target the mapping target
 	 */
 	private logMapping(source: unknown, target: unknown): void {
-
 		if(config.logging.logMapping) {
-			
 			console.log(`Mapping: ${JSON.stringify(source)} --------> ${JSON.stringify(target)}`);
 		}
 	}

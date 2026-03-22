@@ -18,25 +18,19 @@ const initialState: ErrorState = {
  * @returns the new state
  */
 export const error = (state: ErrorState = initialState, action: Action): ErrorState => {
-	
 	switch(action.type) {
-
 		case SET_ERROR: {
-
 			const setErrorAction = action as SetErrorAction;
 
 			let parsedError: AppError | string;
 			if(setErrorAction.error instanceof AppError || typeof setErrorAction.error === 'string') {
-
 				parsedError = setErrorAction.error;
 			}
 			else {
-
 				parsedError = AppError.GENERIC.withDetails(setErrorAction.error);
 			}
 
 			if(!parsedError) {
-
 				throw AppError.GENERIC.withDetails('Cannot display an empty error');
 			}
 
@@ -47,7 +41,6 @@ export const error = (state: ErrorState = initialState, action: Action): ErrorSt
 		}
 
 		case CLEAR_ERROR: {
-			
 			return {
 				...state,
 				error: undefined

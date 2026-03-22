@@ -9,7 +9,6 @@ import { AskConfirmationBeforeSavingMediaItemAction, CompleteDeletingMediaItemAc
  * @returns the action
  */
 export const fetchMediaItems = (): FetchMediaItemsAction => {
-	
 	return {
 		type: FETCH_MEDIA_ITEMS
 	};
@@ -20,7 +19,6 @@ export const fetchMediaItems = (): FetchMediaItemsAction => {
  * @returns the action
  */
 export const startFetchingMediaItems = (): StartFetchingMediaItemsAction => {
-	
 	return {
 		type: START_FETCHING_MEDIA_ITEMS
 	};
@@ -32,7 +30,6 @@ export const startFetchingMediaItems = (): StartFetchingMediaItemsAction => {
  * @returns the action
  */
 export const completeFetchingMediaItems = (mediaItems: MediaItemInternal[]): CompleteFetchingMediaItemsAction => {
-	
 	return {
 		type: COMPLETE_FETCHING_MEDIA_ITEMS,
 		mediaItems: mediaItems
@@ -44,7 +41,6 @@ export const completeFetchingMediaItems = (mediaItems: MediaItemInternal[]): Com
  * @returns the action
  */
 export const failFetchingMediaItems = (): FailFetchingMediaItemsAction => {
-	
 	return {
 		type: FAIL_FETCHING_MEDIA_ITEMS
 	};
@@ -56,7 +52,6 @@ export const failFetchingMediaItems = (): FailFetchingMediaItemsAction => {
  * @returns the action
  */
 export const deleteMediaItem = (mediaItem: MediaItemInternal): DeleteMediaItemAction => {
-	
 	return {
 		type: DELETE_MEDIA_ITEM,
 		mediaItem: mediaItem
@@ -68,7 +63,6 @@ export const deleteMediaItem = (mediaItem: MediaItemInternal): DeleteMediaItemAc
  * @returns the action
  */
 export const startDeletingMediaItem = (): StartDeletingMediaItemAction => {
-	
 	return {
 		type: START_DELETING_MEDIA_ITEM
 	};
@@ -79,7 +73,6 @@ export const startDeletingMediaItem = (): StartDeletingMediaItemAction => {
  * @returns the action
  */
 export const completeDeletingMediaItem = (): CompleteDeletingMediaItemAction => {
-	
 	return {
 		type: COMPLETE_DELETING_MEDIA_ITEM
 	};
@@ -90,7 +83,6 @@ export const completeDeletingMediaItem = (): CompleteDeletingMediaItemAction => 
  * @returns the action
  */
 export const failDeletingMediaItem = (): FailDeletingMediaItemAction => {
-	
 	return {
 		type: FAIL_DELETING_MEDIA_ITEM
 	};
@@ -102,7 +94,6 @@ export const failDeletingMediaItem = (): FailDeletingMediaItemAction => {
  * @returns the action
  */
 export const markMediaItemAsActive = (mediaItem: MediaItemInternal): MarkMediaItemAsActiveAction => {
-	
 	return {
 		type: MARK_MEDIA_ITEM_AS_ACTIVE,
 		mediaItem: mediaItem
@@ -115,7 +106,6 @@ export const markMediaItemAsActive = (mediaItem: MediaItemInternal): MarkMediaIt
  * @returns the action
  */
 export const markMediaItemAsComplete = (mediaItem: MediaItemInternal): MarkMediaItemAsCompleteAction => {
-	
 	return {
 		type: MARK_MEDIA_ITEM_AS_COMPLETE,
 		mediaItem: mediaItem
@@ -128,7 +118,6 @@ export const markMediaItemAsComplete = (mediaItem: MediaItemInternal): MarkMedia
  * @returns the action
  */
 export const markMediaItemAsRedo = (mediaItem: MediaItemInternal): MarkMediaItemAsRedoAction => {
-	
 	return {
 		type: MARK_MEDIA_ITEM_AS_REDO,
 		mediaItem: mediaItem
@@ -140,7 +129,6 @@ export const markMediaItemAsRedo = (mediaItem: MediaItemInternal): MarkMediaItem
  * @returns the action
  */
 export const startInlineUpdatingMediaItem = (): StartInlineUpdatingMediaItemAction => {
-	
 	return {
 		type: START_INLINE_UPDATING_MEDIA_ITEM
 	};
@@ -151,7 +139,6 @@ export const startInlineUpdatingMediaItem = (): StartInlineUpdatingMediaItemActi
  * @returns the action
  */
 export const completeInlineUpdatingMediaItem = (): CompleteInlineUpdatingMediaItemAction => {
-	
 	return {
 		type: COMPLETE_INLINE_UPDATING_MEDIA_ITEM
 	};
@@ -162,7 +149,6 @@ export const completeInlineUpdatingMediaItem = (): CompleteInlineUpdatingMediaIt
  * @returns the action
  */
 export const failInlineUpdatingMediaItem = (): FailInlineUpdatingMediaItemAction => {
-	
 	return {
 		type: FAIL_INLINE_UPDATING_MEDIA_ITEM
 	};
@@ -174,7 +160,6 @@ export const failInlineUpdatingMediaItem = (): FailInlineUpdatingMediaItemAction
  * @returns the action
  */
 export const highlightMediaItem = (mediaItem: MediaItemInternal): HighlightMediaItemAction => {
-	
 	return {
 		type: HIGHLIGHT_MEDIA_ITEM,
 		mediaItem: mediaItem
@@ -186,7 +171,6 @@ export const highlightMediaItem = (mediaItem: MediaItemInternal): HighlightMedia
  * @returns the action
  */
 export const removeMediaItemHighlight = (): RemoveMediaItemHighlightAction => {
-	
 	return {
 		type: REMOVE_MEDIA_ITEM_HIGHLIGHT
 	};
@@ -198,7 +182,6 @@ export const removeMediaItemHighlight = (): RemoveMediaItemHighlightAction => {
  * @returns the action
  */
 export const searchMediaItems = (term: string): SearchMediaItemsAction => {
-	
 	return {
 		type: SEARCH_MEDIA_ITEMS,
 		term: term
@@ -210,7 +193,6 @@ export const searchMediaItems = (term: string): SearchMediaItemsAction => {
  * @returns the action
  */
 export const startMediaItemsSearchMode = (): StartMediaItemsSearchModeAction => {
-	
 	return {
 		type: START_MEDIA_ITEMS_SEARCH_MODE
 	};
@@ -221,7 +203,6 @@ export const startMediaItemsSearchMode = (): StartMediaItemsSearchModeAction => 
  * @returns the action
  */
 export const stopMediaItemsSearchMode = (): StopMediaItemsSearchModeAction => {
-	
 	return {
 		type: STOP_MEDIA_ITEMS_SEARCH_MODE
 	};
@@ -233,7 +214,6 @@ export const stopMediaItemsSearchMode = (): StopMediaItemsSearchModeAction => {
  * @returns the action
  */
 export const startMediaItemsViewGroupMode = (group: GroupInternal): StartMediaItemsViewGroupModeAction => {
-	
 	return {
 		type: START_MEDIA_ITEMS_VIEW_GROUP_MODE,
 		group: group
@@ -245,7 +225,6 @@ export const startMediaItemsViewGroupMode = (group: GroupInternal): StartMediaIt
  * @returns the action
  */
 export const stopMediaItemsViewGroupMode = (): StopMediaItemsViewGroupModeAction => {
-	
 	return {
 		type: STOP_MEDIA_ITEMS_VIEW_GROUP_MODE
 	};
@@ -256,7 +235,6 @@ export const stopMediaItemsViewGroupMode = (): StopMediaItemsViewGroupModeAction
  * @returns the action
  */
 export const startMediaItemsSetFiltersMode = (): StartMediaItemsSetFiltersModeAction => {
-	
 	return {
 		type: START_MEDIA_ITEMS_SET_FILTERS_MODE
 	};
@@ -267,7 +245,6 @@ export const startMediaItemsSetFiltersMode = (): StartMediaItemsSetFiltersModeAc
  * @returns the action
  */
 export const stopMediaItemsSetFiltersMode = (): StopMediaItemsSetFiltersModeAction => {
-	
 	return {
 		type: STOP_MEDIA_ITEMS_SET_FILTERS_MODE
 	};
@@ -280,7 +257,6 @@ export const stopMediaItemsSetFiltersMode = (): StopMediaItemsSetFiltersModeActi
  * @returns the action
  */
 export const submitMediaItemsFilters = (filter: MediaItemFilterInternal, sortBy: MediaItemSortByInternal[]): SubmitMediaItemsFiltersAction => {
-	
 	return {
 		type: SUBMIT_MEDIA_ITEMS_FILTERS,
 		filter: filter,
@@ -294,7 +270,6 @@ export const submitMediaItemsFilters = (filter: MediaItemFilterInternal, sortBy:
  * @returns the action
  */
 export const loadNewMediaItemDetails = (category: CategoryInternal): LoadNewMediaItemDetailsAction => {
-	
 	return {
 		type: LOAD_NEW_MEDIA_ITEM_DETAILS,
 		category: category
@@ -307,7 +282,6 @@ export const loadNewMediaItemDetails = (category: CategoryInternal): LoadNewMedi
  * @returns the action
  */
 export const loadMediaItemDetails = (mediaItem: MediaItemInternal): LoadMediaItemDetailsAction => {
-	
 	return {
 		type: LOAD_MEDIA_ITEM_DETAILS,
 		mediaItem: mediaItem
@@ -321,7 +295,6 @@ export const loadMediaItemDetails = (mediaItem: MediaItemInternal): LoadMediaIte
  * @returns the action
  */
 export const setMediaItemFormStatus = (valid: boolean, dirty: boolean): SetMediaItemFormStatusAction => {
-	
 	return {
 		type: SET_MEDIA_ITEM_FORM_STATUS,
 		valid: valid,
@@ -348,7 +321,6 @@ export const setMediaItemFormDraft = (mediaItem?: MediaItemInternal): SetMediaIt
  * @returns the action
  */
 export const saveMediaItem = (mediaItem: MediaItemInternal, confirmSameName: boolean): SaveMediaItemAction => {
-	
 	return {
 		type: SAVE_MEDIA_ITEM,
 		mediaItem: mediaItem,
@@ -362,7 +334,6 @@ export const saveMediaItem = (mediaItem: MediaItemInternal, confirmSameName: boo
  * @returns the action
  */
 export const startSavingMediaItem = (mediaItem: MediaItemInternal): StartSavingMediaItemAction => {
-	
 	return {
 		type: START_SAVING_MEDIA_ITEM,
 		mediaItem: mediaItem
@@ -374,7 +345,6 @@ export const startSavingMediaItem = (mediaItem: MediaItemInternal): StartSavingM
  * @returns the action
  */
 export const askConfirmationBeforeSavingMediaItem = (): AskConfirmationBeforeSavingMediaItemAction => {
-	
 	return {
 		type: ASK_CONFIRMATION_BEFORE_SAVING_MEDIA_ITEM
 	};
@@ -385,7 +355,6 @@ export const askConfirmationBeforeSavingMediaItem = (): AskConfirmationBeforeSav
  * @returns the action
  */
 export const completeSavingMediaItem = (): CompleteSavingMediaItemAction => {
-	
 	return {
 		type: COMPLETE_SAVING_MEDIA_ITEM
 	};
@@ -396,7 +365,6 @@ export const completeSavingMediaItem = (): CompleteSavingMediaItemAction => {
  * @returns the action
  */
 export const failSavingMediaItem = (): FailSavingMediaItemAction => {
-	
 	return {
 		type: FAIL_SAVING_MEDIA_ITEM
 	};
@@ -408,7 +376,6 @@ export const failSavingMediaItem = (): FailSavingMediaItemAction => {
  * @returns the action
  */
 export const searchMediaItemsCatalog = (term: string): SearchMediaItemsCatalogAction => {
-	
 	return {
 		type: SEARCH_MEDIA_ITEMS_CATALOG,
 		term: term
@@ -420,7 +387,6 @@ export const searchMediaItemsCatalog = (term: string): SearchMediaItemsCatalogAc
  * @returns the action
  */
 export const startSearchingMediaItemsCatalog = (): StartSearchingMediaItemsCatalogAction => {
-	
 	return {
 		type: START_SEARCHING_MEDIA_ITEMS_CATALOG
 	};
@@ -432,7 +398,6 @@ export const startSearchingMediaItemsCatalog = (): StartSearchingMediaItemsCatal
  * @returns the action
  */
 export const completeSearchingMediaItemsCatalog = (results: SearchMediaItemCatalogResultInternal[]): CompleteSearchingMediaItemsCatalogAction => {
-	
 	return {
 		type: COMPLETE_SEARCHING_MEDIA_ITEMS_CATALOG,
 		results: results
@@ -444,7 +409,6 @@ export const completeSearchingMediaItemsCatalog = (results: SearchMediaItemCatal
  * @returns the action
  */
 export const failSearchingMediaItemsCatalog = (): FailSearchingMediaItemsCatalogAction => {
-	
 	return {
 		type: FAIL_SEARCHING_MEDIA_ITEMS_CATALOG
 	};
@@ -455,7 +419,6 @@ export const failSearchingMediaItemsCatalog = (): FailSearchingMediaItemsCatalog
  * @returns the action
  */
 export const resetMediaItemsCatalogSearch = (): ResetMediaItemsCatalogSearchAction => {
-	
 	return {
 		type: RESET_MEDIA_ITEMS_CATALOG_SEARCH
 	};
@@ -467,7 +430,6 @@ export const resetMediaItemsCatalogSearch = (): ResetMediaItemsCatalogSearchActi
  * @returns the action
  */
 export const getMediaItemCatalogDetails = (catalogId: string): GetMediaItemCatalogDetailsAction => {
-	
 	return {
 		type: GET_MEDIA_ITEM_CATALOG_DETAILS,
 		catalogId: catalogId
@@ -479,7 +441,6 @@ export const getMediaItemCatalogDetails = (catalogId: string): GetMediaItemCatal
  * @returns the action
  */
 export const startGettingMediaItemCatalogDetails = (): StartGettingMediaItemCatalogDetailsAction => {
-	
 	return {
 		type: START_GETTING_MEDIA_ITEM_CATALOG_DETAILS
 	};
@@ -491,7 +452,6 @@ export const startGettingMediaItemCatalogDetails = (): StartGettingMediaItemCata
  * @returns the action
  */
 export const completeGettingMediaItemCatalogDetails = (details: CatalogMediaItemInternal): CompleteGettingMediaItemCatalogDetailsAction => {
-	
 	return {
 		type: COMPLETE_GETTING_MEDIA_ITEM_CATALOG_DETAILS,
 		details: details
@@ -503,7 +463,6 @@ export const completeGettingMediaItemCatalogDetails = (details: CatalogMediaItem
  * @returns the action
  */
 export const failGettingMediaItemCatalogDetails = (): FailGettingMediaItemCatalogDetailsAction => {
-	
 	return {
 		type: FAIL_GETTING_MEDIA_ITEM_CATALOG_DETAILS
 	};

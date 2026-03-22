@@ -103,7 +103,6 @@ export class TvShowSortField extends MediaItemSortField {
 	public static readonly CREATOR: string = 'CREATOR';
 	
 	public static values(): string[] {
-
 		return [ ...MediaItemSortField.commonValues(), this.CREATOR ];
 	}
 }

@@ -17,7 +17,6 @@ export class TvShowBackEndController implements TvShowController {
 	 * @override
 	 */
 	public async filter(userId: string, categoryId: string, filter?: TvShowFilterInternal, sortBy?: TvShowSortByInternal[]): Promise<TvShowInternal[]> {
-		
 		const request: FilterTvShowsRequest = {
 			filter: filter ? tvShowFilterMapper.toExternal(filter) : undefined,
 			sortBy: sortBy ? tvShowSortMapper.toExternalList(sortBy) : undefined
@@ -40,7 +39,6 @@ export class TvShowBackEndController implements TvShowController {
 	 * @override
 	 */
 	public async search(userId: string, categoryId: string, searchTerm: string): Promise<TvShowInternal[]> {
-
 		const request: SearchTvShowsRequest = {
 			searchTerm: searchTerm,
 			filter: undefined
@@ -63,9 +61,7 @@ export class TvShowBackEndController implements TvShowController {
 	 * @override
 	 */
 	public async save(userId: string, categoryId: string, tvShow: TvShowInternal): Promise<void> {
-
 		if(tvShow.id) {
-
 			const request: UpdateTvShowRequest = {
 				tvShow: tvShowMapper.toExternal(tvShow)
 			};
@@ -82,7 +78,6 @@ export class TvShowBackEndController implements TvShowController {
 			});
 		}
 		else {
-
 			const request: AddTvShowRequest = {
 				newTvShow: tvShowMapper.toExternal(tvShow)
 			};
@@ -103,7 +98,6 @@ export class TvShowBackEndController implements TvShowController {
 	 * @override
 	 */
 	public async delete(userId: string, categoryId: string, tvShowId: string): Promise<void> {
-
 		await backEndInvoker.invoke({
 			method: 'DELETE',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/tv-shows/:id' ], {
@@ -126,7 +120,6 @@ export class TvShowCatalogBackEndController implements TvShowCatalogController {
 	 * @override
 	 */
 	public async search(searchTerm: string): Promise<SearchTvShowCatalogResultInternal[]> {
-
 		const response = await backEndInvoker.invoke({
 			method: 'GET',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/catalog/tv-shows/search/:searchTerm' ], {
@@ -142,7 +135,6 @@ export class TvShowCatalogBackEndController implements TvShowCatalogController {
 	 * @override
 	 */
 	public async getDetails(catalogId: string): Promise<CatalogTvShowInternal> {
-
 		const response = await backEndInvoker.invoke({
 			method: 'GET',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/catalog/tv-shows/:catalogId' ], {
@@ -165,7 +157,6 @@ export class TvShowDefinitionsControllerImpl implements TvShowDefinitionsControl
 	 * @override
 	 */
 	public getDefaultFilter(): TvShowFilterInternal {
-		
 		return {
 			status: 'CURRENT'
 		};
@@ -175,7 +166,6 @@ export class TvShowDefinitionsControllerImpl implements TvShowDefinitionsControl
 	 * @override
 	 */
 	public getDefaultSortBy(): TvShowSortByInternal[] {
-		
 		return [{
 			field: 'ACTIVE',
 			ascending: false
@@ -192,7 +182,6 @@ export class TvShowDefinitionsControllerImpl implements TvShowDefinitionsControl
 	 * @override
 	 */
 	public getViewGroupSortBy(): TvShowSortByInternal[] {
-
 		return [{
 			field: 'GROUP',
 			ascending: true
@@ -203,7 +192,6 @@ export class TvShowDefinitionsControllerImpl implements TvShowDefinitionsControl
 	 * @override
 	 */
 	public getCreatorNames(mediaItem: TvShowInternal): string[] | undefined {
-
 		return mediaItem.creators;
 	}
 
@@ -211,7 +199,6 @@ export class TvShowDefinitionsControllerImpl implements TvShowDefinitionsControl
 	 * @override
 	 */
 	public getDurationValue(mediaItem: TvShowInternal): number | undefined {
-
 		return mediaItem.averageEpisodeRuntimeMinutes;
 	}
 
@@ -219,7 +206,6 @@ export class TvShowDefinitionsControllerImpl implements TvShowDefinitionsControl
 	 * @override
 	 */
 	public getDefaultMediaItem(): TvShowInternal {
-		
 		return DEFAULT_TV_SHOW;
 	}
 }

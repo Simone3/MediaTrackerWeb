@@ -17,7 +17,6 @@ export class VideogameBackEndController implements VideogameController {
 	 * @override
 	 */
 	public async filter(userId: string, categoryId: string, filter?: VideogameFilterInternal, sortBy?: VideogameSortByInternal[]): Promise<VideogameInternal[]> {
-		
 		const request: FilterVideogamesRequest = {
 			filter: filter ? videogameFilterMapper.toExternal(filter) : undefined,
 			sortBy: sortBy ? videogameSortMapper.toExternalList(sortBy) : undefined
@@ -40,7 +39,6 @@ export class VideogameBackEndController implements VideogameController {
 	 * @override
 	 */
 	public async search(userId: string, categoryId: string, searchTerm: string): Promise<VideogameInternal[]> {
-
 		const request: SearchVideogamesRequest = {
 			searchTerm: searchTerm,
 			filter: undefined
@@ -63,9 +61,7 @@ export class VideogameBackEndController implements VideogameController {
 	 * @override
 	 */
 	public async save(userId: string, categoryId: string, videogame: VideogameInternal): Promise<void> {
-
 		if(videogame.id) {
-
 			const request: UpdateVideogameRequest = {
 				videogame: videogameMapper.toExternal(videogame)
 			};
@@ -82,7 +78,6 @@ export class VideogameBackEndController implements VideogameController {
 			});
 		}
 		else {
-
 			const request: AddVideogameRequest = {
 				newVideogame: videogameMapper.toExternal(videogame)
 			};
@@ -103,7 +98,6 @@ export class VideogameBackEndController implements VideogameController {
 	 * @override
 	 */
 	public async delete(userId: string, categoryId: string, videogameId: string): Promise<void> {
-
 		await backEndInvoker.invoke({
 			method: 'DELETE',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/videogames/:id' ], {
@@ -126,7 +120,6 @@ export class VideogameCatalogBackEndController implements VideogameCatalogContro
 	 * @override
 	 */
 	public async search(searchTerm: string): Promise<SearchVideogameCatalogResultInternal[]> {
-
 		const response = await backEndInvoker.invoke({
 			method: 'GET',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/catalog/videogames/search/:searchTerm' ], {
@@ -142,7 +135,6 @@ export class VideogameCatalogBackEndController implements VideogameCatalogContro
 	 * @override
 	 */
 	public async getDetails(catalogId: string): Promise<CatalogVideogameInternal> {
-
 		const response = await backEndInvoker.invoke({
 			method: 'GET',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/catalog/videogames/:catalogId' ], {
@@ -165,7 +157,6 @@ export class VideogameDefinitionsControllerImpl implements VideogameDefinitionsC
 	 * @override
 	 */
 	public getDefaultFilter(): VideogameFilterInternal {
-		
 		return {
 			status: 'CURRENT'
 		};
@@ -175,7 +166,6 @@ export class VideogameDefinitionsControllerImpl implements VideogameDefinitionsC
 	 * @override
 	 */
 	public getDefaultSortBy(): VideogameSortByInternal[] {
-		
 		return [{
 			field: 'ACTIVE',
 			ascending: false
@@ -192,7 +182,6 @@ export class VideogameDefinitionsControllerImpl implements VideogameDefinitionsC
 	 * @override
 	 */
 	public getViewGroupSortBy(): VideogameSortByInternal[] {
-
 		return [{
 			field: 'GROUP',
 			ascending: true
@@ -203,7 +192,6 @@ export class VideogameDefinitionsControllerImpl implements VideogameDefinitionsC
 	 * @override
 	 */
 	public getCreatorNames(mediaItem: VideogameInternal): string[] | undefined {
-
 		return mediaItem.developers;
 	}
 
@@ -211,7 +199,6 @@ export class VideogameDefinitionsControllerImpl implements VideogameDefinitionsC
 	 * @override
 	 */
 	public getDurationValue(mediaItem: VideogameInternal): number | undefined {
-
 		return mediaItem.averageLengthHours;
 	}
 
@@ -219,7 +206,6 @@ export class VideogameDefinitionsControllerImpl implements VideogameDefinitionsC
 	 * @override
 	 */
 	public getDefaultMediaItem(): VideogameInternal {
-		
 		return DEFAULT_VIDEOGAME;
 	}
 }

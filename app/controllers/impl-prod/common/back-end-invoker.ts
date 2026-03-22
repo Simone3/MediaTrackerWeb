@@ -14,7 +14,6 @@ export class BackEndInvokerRestJson implements BackEndInvoker {
 	 * @override
 	 */
 	public async invoke<TRequest extends object, TResponse extends object>(parameters: InvocationParams<TRequest, TResponse>): Promise<TResponse> {
-
 		await this.addAuthorizationHeader(parameters);
 		parameters.assumeWellFormedResponse = config.backEnd.assumeWellFormedResponse;
 		return restJsonInvoker.invoke(parameters);
@@ -25,7 +24,6 @@ export class BackEndInvokerRestJson implements BackEndInvoker {
 	 * @param parameters the invocation parameters
 	 */
 	private async addAuthorizationHeader(parameters: InvocationParams<unknown, unknown>): Promise<void> {
-
 		// Get the user access token
 		const accessToken = await userController.getCurrentUserAccessToken();
 			

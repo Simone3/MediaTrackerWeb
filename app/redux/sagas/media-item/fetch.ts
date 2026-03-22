@@ -12,18 +12,15 @@ import { SagaIterator } from 'redux-saga';
  * Worker saga that fetches the media items
  */
 const fetchMediaItemsSaga = function * (): SagaIterator {
-
 	yield put(startFetchingMediaItems());
 
 	try {
-		
 		// Get values from state
 		const state: State = yield select();
 		const mode = state.mediaItemsList.mode;
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
 		if(!category || !user) {
-
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find category while fetching media items');
 		}
 
@@ -34,14 +31,11 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 		// Retrieve media items from controller
 		let mediaItems: MediaItemInternal[];
 		switch(mode) {
-
 			// Normal fetching mode is the standard one, based on the current filter and sort options
 			case 'NORMAL': {
-
 				const filter = state.mediaItemsList.filter;
 				const sortBy = state.mediaItemsList.sortBy;
 				if(!filter || !sortBy) {
-		
 					throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find filter and sort options');
 				}
 
@@ -52,10 +46,8 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 
 			// Search fetching mode allows to search media items by term
 			case 'SEARCH': {
-
 				const term = state.mediaItemsList.searchTerm;
 				if(!term) {
-		
 					throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find search term');
 				}
 
@@ -66,10 +58,8 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 
 			// View group fetching mode allows to list all media items in a group
 			case 'VIEW_GROUP': {
-
 				const viewGroup = state.mediaItemsList.viewGroup;
 				if(!viewGroup) {
-		
 					throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find view group value');
 				}
 
@@ -87,7 +77,6 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 			}
 
 			default: {
-				
 				throw AppError.GENERIC.withDetails(`Mode ${mode} is not mapped in fetch saga`);
 			}
 		}
@@ -96,7 +85,6 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 		yield put(completeFetchingMediaItems(mediaItems));
 	}
 	catch(error) {
-
 		yield put(failFetchingMediaItems());
 		
 		yield put(setError(AppError.BACKEND_MEDIA_ITEM_FETCH.withDetails(error)));
@@ -107,6 +95,5 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
  * Watcher saga that reacts to the fetch media items actions
  */
 export const watchFetchMediaItemsSaga = function * (): SagaIterator {
-
 	yield takeLatest([ FETCH_MEDIA_ITEMS, SEARCH_MEDIA_ITEMS, START_MEDIA_ITEMS_VIEW_GROUP_MODE ], fetchMediaItemsSaga);
 };

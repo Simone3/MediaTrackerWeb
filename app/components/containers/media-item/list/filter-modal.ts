@@ -6,12 +6,10 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: State): MediaItemFilterModalComponentInput => {
-	
 	const category = state.categoryGlobal.selectedCategory;
 	const currentFilter = state.mediaItemsList.filter;
 	const currentSortBy = state.mediaItemsList.sortBy;
 	if(!category || !currentFilter || !currentSortBy) {
-
 		throw AppError.GENERIC.withDetails('List state has no linked category/filter/sort, cannot display filter modal');
 	}
 
@@ -24,7 +22,6 @@ const mapStateToProps = (state: State): MediaItemFilterModalComponentInput => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): MediaItemFilterModalComponentOutput => {
-
 	return {
 		submitFilter: (filter, sortBy) => {
 			dispatch(stopMediaItemsSetFiltersMode());

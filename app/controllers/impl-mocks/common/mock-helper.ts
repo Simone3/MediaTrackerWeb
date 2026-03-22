@@ -21,23 +21,18 @@ export abstract class MockControllerHelper {
 	 * @returns the promise of the mocked result
 	 */
 	protected resolveResult<T>(successResultCallback: () => T): Promise<T> {
-
 		const prob = this.errorProbability;
 		if(prob < 0 || prob > 1) {
-
 			throw AppError.GENERIC.withDetails('Mocked controller error probability must be [0, 1]');
 		}
 		const isError = Math.random() < prob;
 		
 		return new Promise((resolve, reject) => {
 			setTimeout(() => {
-				
 				if(isError) {
-
 					reject('Mocked error');
 				}
 				else {
-
 					resolve(successResultCallback());
 				}
 				
@@ -50,7 +45,6 @@ export abstract class MockControllerHelper {
 	 * @returns the ID
 	 */
 	protected randomId(): string {
-
 		return String(100 + Math.floor(Math.random() * 10000000001));
 	}
 }

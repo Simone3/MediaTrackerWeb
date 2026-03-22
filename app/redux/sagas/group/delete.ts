@@ -13,17 +13,14 @@ import { SagaIterator } from 'redux-saga';
  * @param action the intercepted action
  */
 const deleteGroupSaga = function * (action: DeleteGroupAction): SagaIterator {
-
 	yield put(startDeletingGroup());
 
 	try {
-
 		// Get values from state
 		const state: State = yield select();
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
 		if(!category || !user) {
-
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while deleting group');
 		}
 
@@ -32,7 +29,6 @@ const deleteGroupSaga = function * (action: DeleteGroupAction): SagaIterator {
 		yield put(completeDeletingGroup(action.group.id));
 	}
 	catch(error) {
-
 		yield put(failDeletingGroup());
 		
 		yield put(setError(AppError.BACKEND_GROUP_DELETE.withDetails(error)));
@@ -43,6 +39,5 @@ const deleteGroupSaga = function * (action: DeleteGroupAction): SagaIterator {
  * Watcher saga that reacts to the delete group actions
  */
 export const watchDeleteGroupSaga = function * (): SagaIterator {
-
 	yield takeLatest(DELETE_GROUP, deleteGroupSaga);
 };

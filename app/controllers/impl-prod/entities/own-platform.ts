@@ -16,7 +16,6 @@ export class OwnPlatformBackEndController implements OwnPlatformController {
 	 * @override
 	 */
 	public async getAllOwnPlatforms(userId: string, categoryId: string): Promise<OwnPlatformInternal[]> {
-		
 		const response = await backEndInvoker.invoke({
 			method: 'GET',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/own-platforms' ], {
@@ -33,7 +32,6 @@ export class OwnPlatformBackEndController implements OwnPlatformController {
 	 * @override
 	 */
 	public async filter(userId: string, categoryId: string, filter?: OwnPlatformFilterInternal): Promise<OwnPlatformInternal[]> {
-		
 		const request: FilterOwnPlatformsRequest = {
 			filter: filter ? ownPlatformFilterMapper.toExternal(filter) : undefined
 		};
@@ -55,9 +53,7 @@ export class OwnPlatformBackEndController implements OwnPlatformController {
 	 * @override
 	 */
 	public async saveOwnPlatform(userId: string, categoryId: string, ownPlatform: OwnPlatformInternal): Promise<void> {
-
 		if(ownPlatform.id) {
-
 			const request: UpdateOwnPlatformRequest = {
 				ownPlatform: ownPlatformMapper.toExternal(ownPlatform)
 			};
@@ -74,7 +70,6 @@ export class OwnPlatformBackEndController implements OwnPlatformController {
 			});
 		}
 		else {
-
 			const request: AddOwnPlatformRequest = {
 				newOwnPlatform: ownPlatformMapper.toExternal(ownPlatform)
 			};
@@ -95,7 +90,6 @@ export class OwnPlatformBackEndController implements OwnPlatformController {
 	 * @override
 	 */
 	public async deleteOwnPlatform(userId: string, categoryId: string, ownPlatformId: string): Promise<void> {
-
 		await backEndInvoker.invoke({
 			method: 'DELETE',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/own-platforms/:id' ], {

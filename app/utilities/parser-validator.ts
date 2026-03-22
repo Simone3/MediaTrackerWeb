@@ -13,7 +13,6 @@ class ParserValidator {
 	 * @template T the class to parse
 	 */
 	public parseAndValidate<T extends object>(classType: ClassType<T>, source: object): Promise<T> {
-
 		return transformAndValidate(classType, source, this.getDefaultTransformValidationOptions());
 	}
 
@@ -22,7 +21,6 @@ class ParserValidator {
 	 * @returns the transform-validation options
 	 */
 	private getDefaultTransformValidationOptions(): TransformValidationOptions {
-
 		return {
 			transformer: {
 				strategy: 'exposeAll'

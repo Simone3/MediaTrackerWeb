@@ -39,9 +39,7 @@ export class CategoryMockedController extends MockControllerHelper implements Ca
 	 * @override
 	 */
 	public async getAllCategories(userId: string): Promise<CategoryInternal[]> {
-		
 		return this.resolveResult(() => {
-
 			const userCategories = this.getUserCategories(userId);
 			return userCategories.slice();
 		});
@@ -51,18 +49,13 @@ export class CategoryMockedController extends MockControllerHelper implements Ca
 	 * @override
 	 */
 	public async filter(userId: string, filter?: CategoryFilterInternal): Promise<CategoryInternal[]> {
-
 		return this.resolveResult(() => {
-
 			if(filter && filter.name) {
-
 				return this.getUserCategories(userId).filter((category) => {
-	
 					return filter.name && filter.name.toUpperCase() === category.name.toUpperCase();
 				});
 			}
 			else {
-
 				return this.getUserCategories(userId).slice();
 			}
 		});
@@ -72,20 +65,16 @@ export class CategoryMockedController extends MockControllerHelper implements Ca
 	 * @override
 	 */
 	public async saveCategory(userId: string, category: CategoryInternal): Promise<void> {
-
 		return this.resolveResult(() => {
-				
 			const categories = this.getUserCategories(userId).slice();
 
 			if(category.id) {
-
 				const i = categories.findIndex((cat) => {
 					return category.id === cat.id;
 				});
 				categories[i] = category;
 			}
 			else {
-	
 				categories.push({
 					...category,
 					id: this.randomId()
@@ -100,9 +89,7 @@ export class CategoryMockedController extends MockControllerHelper implements Ca
 	 * @override
 	 */
 	public async deleteCategory(userId: string, categoryId: string): Promise<void> {
-
 		return this.resolveResult(() => {
-		
 			const categories = this.getUserCategories(userId).slice();
 
 			const i = categories.findIndex((cat) => {
@@ -121,14 +108,11 @@ export class CategoryMockedController extends MockControllerHelper implements Ca
 	 * @returns the media items
 	 */
 	private getUserCategories(userId: string): CategoryInternal[] {
-
 		let userCategories: CategoryInternal[];
 		if(userId in this.categories) {
-
 			userCategories = this.categories[userId];
 		}
 		else {
-			
 			userCategories = [];
 		}
 		return userCategories;

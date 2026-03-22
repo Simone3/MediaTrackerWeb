@@ -7,7 +7,6 @@ import { AskConfirmationBeforeSavingGroupAction, CompleteDeletingGroupAction, Co
  * @returns the action
  */
 export const fetchGroups = (): FetchGroupsAction => {
-	
 	return {
 		type: FETCH_GROUPS
 	};
@@ -18,7 +17,6 @@ export const fetchGroups = (): FetchGroupsAction => {
  * @returns the action
  */
 export const startFetchingGroups = (): StartFetchingGroupsAction => {
-	
 	return {
 		type: START_FETCHING_GROUPS
 	};
@@ -30,7 +28,6 @@ export const startFetchingGroups = (): StartFetchingGroupsAction => {
  * @returns the action
  */
 export const completeFetchingGroups = (groups: GroupInternal[]): CompleteFetchingGroupsAction => {
-	
 	return {
 		type: COMPLETE_FETCHING_GROUPS,
 		groups: groups
@@ -42,7 +39,6 @@ export const completeFetchingGroups = (groups: GroupInternal[]): CompleteFetchin
  * @returns the action
  */
 export const failFetchingGroups = (): FailFetchingGroupsAction => {
-	
 	return {
 		type: FAIL_FETCHING_GROUPS
 	};
@@ -53,7 +49,6 @@ export const failFetchingGroups = (): FailFetchingGroupsAction => {
  * @returns the action
  */
 export const loadNewGroupDetails = (): LoadNewGroupDetailsAction => {
-	
 	return {
 		type: LOAD_NEW_GROUP_DETAILS
 	};
@@ -65,7 +60,6 @@ export const loadNewGroupDetails = (): LoadNewGroupDetailsAction => {
  * @returns the action
  */
 export const loadGroupDetails = (group: GroupInternal): LoadGroupDetailsAction => {
-	
 	return {
 		type: LOAD_GROUP_DETAILS,
 		group: group
@@ -79,7 +73,6 @@ export const loadGroupDetails = (group: GroupInternal): LoadGroupDetailsAction =
  * @returns the action
  */
 export const setGroupFormStatus = (valid: boolean, dirty: boolean): SetGroupFormStatusAction => {
-	
 	return {
 		type: SET_GROUP_FORM_STATUS,
 		valid: valid,
@@ -94,7 +87,6 @@ export const setGroupFormStatus = (valid: boolean, dirty: boolean): SetGroupForm
  * @returns the action
  */
 export const saveGroup = (group: GroupInternal, confirmSameName: boolean): SaveGroupAction => {
-	
 	return {
 		type: SAVE_GROUP,
 		group: group,
@@ -108,7 +100,6 @@ export const saveGroup = (group: GroupInternal, confirmSameName: boolean): SaveG
  * @returns the action
  */
 export const startSavingGroup = (group: GroupInternal): StartSavingGroupAction => {
-	
 	return {
 		type: START_SAVING_GROUP,
 		group: group
@@ -120,7 +111,6 @@ export const startSavingGroup = (group: GroupInternal): StartSavingGroupAction =
  * @returns the action
  */
 export const askConfirmationBeforeSavingGroup = (): AskConfirmationBeforeSavingGroupAction => {
-	
 	return {
 		type: ASK_CONFIRMATION_BEFORE_SAVING_GROUP
 	};
@@ -132,7 +122,6 @@ export const askConfirmationBeforeSavingGroup = (): AskConfirmationBeforeSavingG
  * @returns the action
  */
 export const completeSavingGroup = (group: GroupInternal): CompleteSavingGroupAction => {
-	
 	return {
 		type: COMPLETE_SAVING_GROUP,
 		group: group
@@ -144,7 +133,6 @@ export const completeSavingGroup = (group: GroupInternal): CompleteSavingGroupAc
  * @returns the action
  */
 export const failSavingGroup = (): FailSavingGroupAction => {
-	
 	return {
 		type: FAIL_SAVING_GROUP
 	};
@@ -156,7 +144,6 @@ export const failSavingGroup = (): FailSavingGroupAction => {
  * @returns the action
  */
 export const deleteGroup = (group: GroupInternal): DeleteGroupAction => {
-	
 	return {
 		type: DELETE_GROUP,
 		group: group
@@ -168,7 +155,6 @@ export const deleteGroup = (group: GroupInternal): DeleteGroupAction => {
  * @returns the action
  */
 export const startDeletingGroup = (): StartDeletingGroupAction => {
-	
 	return {
 		type: START_DELETING_GROUP
 	};
@@ -180,7 +166,6 @@ export const startDeletingGroup = (): StartDeletingGroupAction => {
  * @returns the action
  */
 export const completeDeletingGroup = (groupId: string): CompleteDeletingGroupAction => {
-	
 	return {
 		type: COMPLETE_DELETING_GROUP,
 		groupId: groupId
@@ -192,7 +177,6 @@ export const completeDeletingGroup = (groupId: string): CompleteDeletingGroupAct
  * @returns the action
  */
 export const failDeletingGroup = (): FailDeletingGroupAction => {
-	
 	return {
 		type: FAIL_DELETING_GROUP
 	};
@@ -203,7 +187,6 @@ export const failDeletingGroup = (): FailDeletingGroupAction => {
  * @returns the action
  */
 export const requestGroupSelection = (): RequestGroupSelectionAction => {
-	
 	return {
 		type: REQUEST_GROUP_SELECTION
 	};
@@ -215,7 +198,6 @@ export const requestGroupSelection = (): RequestGroupSelectionAction => {
  * @returns the action
  */
 export const selectGroup = (group: GroupInternal | undefined): SelectGroupAction => {
-	
 	return {
 		type: SELECT_GROUP,
 		group: group

@@ -11,7 +11,6 @@ class OwnPlatformMapper extends ModelMapper<OwnPlatformInternal, IdentifiedOwnPl
 	 * @override
 	 */
 	protected convertToExternal(source: OwnPlatformInternal): IdentifiedOwnPlatform {
-		
 		return {
 			uid: source.id,
 			name: source.name,
@@ -24,7 +23,6 @@ class OwnPlatformMapper extends ModelMapper<OwnPlatformInternal, IdentifiedOwnPl
 	 * @override
 	 */
 	protected convertToInternal(source: IdentifiedOwnPlatform): OwnPlatformInternal {
-		
 		const ownPlatformIcon = OWN_PLATFORM_ICON_INTERNAL_VALUES.find((icon) => {
 			return icon === source.icon;
 		});
@@ -47,7 +45,6 @@ class OwnPlatformFilterMapper extends ModelMapper<OwnPlatformFilterInternal, Own
 	 * @override
 	 */
 	protected convertToExternal(source: OwnPlatformFilterInternal): OwnPlatformFilter {
-		
 		return {
 			name: source.name
 		};
@@ -57,7 +54,6 @@ class OwnPlatformFilterMapper extends ModelMapper<OwnPlatformFilterInternal, Own
 	 * @override
 	 */
 	protected convertToInternal(source: OwnPlatformFilter): OwnPlatformFilterInternal {
-		
 		return {
 			name: source.name
 		};

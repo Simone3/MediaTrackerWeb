@@ -12,17 +12,14 @@ import { SagaIterator } from 'redux-saga';
  * Worker saga that fetches the groups
  */
 const fetchGroupsSaga = function * (): SagaIterator {
-
 	yield put(startFetchingGroups());
 
 	try {
-
 		// Get values from state
 		const state: State = yield select();
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
 		if(!category || !user) {
-
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while fetching groups');
 		}
 
@@ -31,7 +28,6 @@ const fetchGroupsSaga = function * (): SagaIterator {
 		yield put(completeFetchingGroups(groups));
 	}
 	catch(error) {
-
 		yield put(failFetchingGroups());
 		
 		yield put(setError(AppError.BACKEND_GROUP_FETCH.withDetails(error)));
@@ -42,6 +38,5 @@ const fetchGroupsSaga = function * (): SagaIterator {
  * Watcher saga that reacts to the fetch groups actions
  */
 export const watchFetchGroupsSaga = function * (): SagaIterator {
-
 	yield takeLatest(FETCH_GROUPS, fetchGroupsSaga);
 };

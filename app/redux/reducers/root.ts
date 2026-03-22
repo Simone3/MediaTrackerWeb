@@ -47,10 +47,8 @@ export const allReduces = combineReducers({
  * @returns the new state
  */
 export const rootReducer = (state: State | undefined, action: Action): State => {
-
 	// When the user logs out, the whole state is reset (child reducers all set their initial state)
 	if(action.type === COMPLETE_LOGGING_USER_OUT) {
-
 		state = undefined;
 	}
 

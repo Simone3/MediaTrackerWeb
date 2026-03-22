@@ -19,12 +19,9 @@ const initialState: GroupGlobalState = {
  * @returns the new state
  */
 export const groupGlobal = (state: GroupGlobalState = initialState, action: Action): GroupGlobalState => {
-	
 	switch(action.type) {
-
 		// When a group is selected, it is marked as such
 		case SELECT_GROUP: {
-
 			const selectGroupAction = action as SelectGroupAction;
 
 			const group = selectGroupAction.group;
@@ -37,7 +34,6 @@ export const groupGlobal = (state: GroupGlobalState = initialState, action: Acti
 
 		// When the media item details page is initialized with a new media item, the currently selected group is reset
 		case LOAD_NEW_MEDIA_ITEM_DETAILS: {
-
 			return {
 				...state,
 				selectedGroup: undefined
@@ -46,7 +42,6 @@ export const groupGlobal = (state: GroupGlobalState = initialState, action: Acti
 	
 		// When the media item details page is initialized with an existing media item, the currently selected group is reset
 		case LOAD_MEDIA_ITEM_DETAILS: {
-
 			const loadMediaItemAction = action as LoadMediaItemDetailsAction;
 			
 			return {

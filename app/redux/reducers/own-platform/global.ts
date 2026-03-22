@@ -19,12 +19,9 @@ const initialState: OwnPlatformGlobalState = {
  * @returns the new state
  */
 export const ownPlatformGlobal = (state: OwnPlatformGlobalState = initialState, action: Action): OwnPlatformGlobalState => {
-	
 	switch(action.type) {
-
 		// When a own platform is selected, it is marked as such
 		case SELECT_OWN_PLATFORM: {
-
 			const selectOwnPlatformAction = action as SelectOwnPlatformAction;
 
 			const ownPlatform = selectOwnPlatformAction.ownPlatform;
@@ -37,7 +34,6 @@ export const ownPlatformGlobal = (state: OwnPlatformGlobalState = initialState, 
 
 		// When the media item details page is initialized with a new media item, the currently selected own platform is reset
 		case LOAD_NEW_MEDIA_ITEM_DETAILS: {
-
 			return {
 				...state,
 				selectedOwnPlatform: undefined
@@ -46,7 +42,6 @@ export const ownPlatformGlobal = (state: OwnPlatformGlobalState = initialState, 
 	
 		// When the media item details page is initialized with an existing media item, the currently selected own platform is reset
 		case LOAD_MEDIA_ITEM_DETAILS: {
-
 			const loadMediaItemAction = action as LoadMediaItemDetailsAction;
 			
 			return {

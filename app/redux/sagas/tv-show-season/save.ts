@@ -13,7 +13,6 @@ import { SagaIterator } from 'redux-saga';
  * @param action the intercepted action
  */
 const saveTvShowSeasonSaga = function * (action: SaveTvShowSeasonAction): SagaIterator {
-
 	const season = action.tvShowSeason;
 
 	// Get values from state
@@ -21,7 +20,6 @@ const saveTvShowSeasonSaga = function * (action: SaveTvShowSeasonAction): SagaIt
 	const saveMode = state.tvShowSeasonDetails.formMode;
 	let seasons = state.tvShowSeasonsList.tvShowSeasons;
 	if(!saveMode || !seasons) {
-
 		throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while saving TV show season');
 	}
 	seasons = [ ...seasons ];
@@ -32,10 +30,8 @@ const saveTvShowSeasonSaga = function * (action: SaveTvShowSeasonAction): SagaIt
 	});
 
 	if(saveMode === 'NEW') {
-
 		// If we are adding a new season, make sure there are no other seasons with the same number
 		if(index >= 0) {
-
 			yield put(setError(AppError.TV_SHOW_SEASON_SAME_NUMBER));
 			yield put(failSavingTvShowSeason());
 			return;
@@ -45,10 +41,8 @@ const saveTvShowSeasonSaga = function * (action: SaveTvShowSeasonAction): SagaIt
 		seasons.push(season);
 	}
 	else if(saveMode === 'EXISTING') {
-
 		// If we are updating an existing season, the season must exist
 		if(index < 0) {
-
 			yield put(setError(AppError.GENERIC.withDetails('Season not found')));
 			yield put(failSavingTvShowSeason());
 			return;
@@ -66,6 +60,5 @@ const saveTvShowSeasonSaga = function * (action: SaveTvShowSeasonAction): SagaIt
  * Watcher saga that reacts to the TV show season save actions
  */
 export const watchSaveTvShowSeasonSaga = function * (): SagaIterator {
-
 	yield takeLatest(SAVE_TV_SHOW_SEASON, saveTvShowSeasonSaga);
 };

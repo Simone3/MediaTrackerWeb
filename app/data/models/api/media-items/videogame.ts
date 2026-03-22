@@ -67,7 +67,6 @@ export class VideogameSortField extends MediaItemSortField {
 	public static readonly DEVELOPER: string = 'DEVELOPER';
 	
 	public static values(): string[] {
-
 		return [ ...MediaItemSortField.commonValues(), this.DEVELOPER ];
 	}
 }

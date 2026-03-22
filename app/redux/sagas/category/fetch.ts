@@ -12,16 +12,13 @@ import { SagaIterator } from 'redux-saga';
  * Worker saga that fetches the categories
  */
 const fetchCategoriesSaga = function * (): SagaIterator {
-
 	yield put(startFetchingCategories());
 
 	try {
-
 		// Get values from state
 		const state: State = yield select();
 		const user = state.userGlobal.user;
 		if(!user) {
-
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while fetching categories');
 		}
 
@@ -30,7 +27,6 @@ const fetchCategoriesSaga = function * (): SagaIterator {
 		yield put(completeFetchingCategories(categories));
 	}
 	catch(error) {
-
 		yield put(failFetchingCategories());
 		
 		yield put(setError(AppError.BACKEND_CATEGORY_FETCH.withDetails(error)));
@@ -41,6 +37,5 @@ const fetchCategoriesSaga = function * (): SagaIterator {
  * Watcher saga that reacts to the fetch categories actions
  */
 export const watchFetchCategoriesSaga = function * (): SagaIterator {
-
 	yield takeLatest(FETCH_CATEGORIES, fetchCategoriesSaga);
 };

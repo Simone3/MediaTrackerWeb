@@ -11,7 +11,6 @@ class CategoryMapper extends ModelMapper<CategoryInternal, IdentifiedCategory, {
 	 * @override
 	 */
 	protected convertToExternal(source: CategoryInternal): IdentifiedCategory {
-		
 		return {
 			uid: source.id,
 			name: source.name,
@@ -24,7 +23,6 @@ class CategoryMapper extends ModelMapper<CategoryInternal, IdentifiedCategory, {
 	 * @override
 	 */
 	protected convertToInternal(source: IdentifiedCategory): CategoryInternal {
-		
 		return {
 			id: source.uid,
 			name: source.name,
@@ -43,7 +41,6 @@ class CategoryFilterMapper extends ModelMapper<CategoryFilterInternal, CategoryF
 	 * @override
 	 */
 	protected convertToExternal(source: CategoryFilterInternal): CategoryFilter {
-		
 		return {
 			name: source.name
 		};
@@ -53,7 +50,6 @@ class CategoryFilterMapper extends ModelMapper<CategoryFilterInternal, CategoryF
 	 * @override
 	 */
 	protected convertToInternal(source: CategoryFilter): CategoryFilterInternal {
-		
 		return {
 			name: source.name
 		};

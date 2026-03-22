@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 const mapDispatchToProps = (dispatch: Dispatch): AuthLoadingScreenComponentOutput => {
-
 	return {
 		fetchLoginStatus: () => {
 			dispatch(checkUserLoginStatus());

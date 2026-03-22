@@ -10,17 +10,14 @@ import { SagaIterator } from 'redux-saga';
  * Worker saga that logs a user out
  */
 const userLogoutSaga = function * (): SagaIterator {
-
 	yield put(startLoggingUserOut());
 
 	try {
-
 		// Get user saved on device
 		yield call(userController.logout.bind(userController));
 		yield put(completeLoggingUserOut());
 	}
 	catch(error) {
-
 		yield put(failLoggingUserOut());
 		
 		yield put(setError(AppError.BACKEND_USER_LOGOUT.withDetails(error)));
@@ -31,6 +28,5 @@ const userLogoutSaga = function * (): SagaIterator {
  * Watcher saga that reacts to the user logout actions
  */
 export const watchUserLogoutSaga = function * (): SagaIterator {
-
 	yield takeLatest(LOG_USER_OUT, userLogoutSaga);
 };

@@ -38,7 +38,6 @@ export class AppError extends Error {
 	private _errorDetails?: string | AppError;
 
 	private constructor(errorCode: string, errorDescription: string, errorDetails?: string | AppError) {
-		
 		super(`${errorCode} - ${errorDescription} - ${errorDetails}`);
 
 		this._errorCode = errorCode;
@@ -51,7 +50,6 @@ export class AppError extends Error {
 	 * @returns the error code
 	 */
 	public get errorCode(): string {
-
 		return this._errorCode;
 	}
 
@@ -60,7 +58,6 @@ export class AppError extends Error {
 	 * @returns the error description
 	 */
 	public get errorDescription(): string {
-
 		return this._errorDescription;
 	}
 
@@ -69,7 +66,6 @@ export class AppError extends Error {
 	 * @returns the optional error details
 	 */
 	public get errorDetails(): string | AppError | undefined {
-
 		return this._errorDetails;
 	}
 
@@ -79,21 +75,16 @@ export class AppError extends Error {
 	 * @returns a new AppError with the given details
 	 */
 	public withDetails(errorDetails: unknown): AppError {
-
 		let convertedErrorDetails: string | AppError;
 		if(errorDetails) {
-
 			if(errorDetails instanceof AppError) {
-
 				convertedErrorDetails = errorDetails;
 			}
 			else {
-
 				convertedErrorDetails = String(errorDetails);
 			}
 		}
 		else {
-
 			convertedErrorDetails = '';
 		}
 

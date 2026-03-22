@@ -299,7 +299,6 @@ export abstract class MediaItemSortField {
 	public static readonly RELEASE_DATE: string = 'RELEASE_DATE';
 	
 	public static commonValues(): string[] {
-
 		return [ this.IMPORTANCE, this.NAME, this.GROUP, this.OWN_PLATFORM, this.COMPLETION_DATE, this.ACTIVE, this.RELEASE_DATE ];
 	}
 }

@@ -13,17 +13,14 @@ import { SagaIterator } from 'redux-saga';
  * @param action the action
  */
 const userSignupSaga = function * (action: SignUserUpAction): SagaIterator {
-
 	yield put(startSigningUserUp());
 
 	try {
-
 		// Sign user up
 		const user: UserInternal = yield call(userController.signup.bind(userController), action.user);
 		yield put(completeSigningUserUp(user));
 	}
 	catch(error) {
-
 		yield put(failSigningUserUp());
 		
 		yield put(setError(AppError.BACKEND_USER_SIGNUP.withDetails(error)));
@@ -34,6 +31,5 @@ const userSignupSaga = function * (action: SignUserUpAction): SagaIterator {
  * Watcher saga that reacts to the user signup actions
  */
 export const watchUserSignupSaga = function * (): SagaIterator {
-
 	yield takeLatest(SIGN_USER_UP, userSignupSaga);
 };

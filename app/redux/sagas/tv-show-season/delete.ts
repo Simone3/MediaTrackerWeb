@@ -13,14 +13,12 @@ import { SagaIterator } from 'redux-saga';
  * @param action the intercepted action
  */
 const deleteTvShowSeasonSaga = function * (action: DeleteTvShowSeasonAction): SagaIterator {
-
 	const season = action.tvShowSeason;
 
 	// Get values from state
 	const state: State = yield select();
 	let seasons = state.tvShowSeasonsList.tvShowSeasons;
 	if(!seasons) {
-
 		throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while deleting TV show season');
 	}
 	seasons = [ ...seasons ];
@@ -32,7 +30,6 @@ const deleteTvShowSeasonSaga = function * (action: DeleteTvShowSeasonAction): Sa
 
 	// Season must exist
 	if(index < 0) {
-
 		yield put(setError(AppError.GENERIC.withDetails('Season not found')));
 		return;
 	}
@@ -48,6 +45,5 @@ const deleteTvShowSeasonSaga = function * (action: DeleteTvShowSeasonAction): Sa
  * Watcher saga that reacts to the TV show season delete actions
  */
 export const watchDeleteTvShowSeasonSaga = function * (): SagaIterator {
-
 	yield takeLatest(DELETE_TV_SHOW_SEASON, deleteTvShowSeasonSaga);
 };

@@ -22,12 +22,9 @@ const initialState: TvShowSeasonDetailsState = {
  * @returns the new state
  */
 export const tvShowSeasonDetails = (state: TvShowSeasonDetailsState = initialState, action: Action): TvShowSeasonDetailsState => {
-	
 	switch(action.type) {
-
 		// When the details page is started with a new tvShowSeason, the status is reset and the default tvShowSeason is loaded
 		case LOAD_NEW_TV_SHOW_SEASON_DETAILS: {
-
 			return {
 				...state,
 				formMode: 'NEW',
@@ -38,7 +35,6 @@ export const tvShowSeasonDetails = (state: TvShowSeasonDetailsState = initialSta
 	
 		// When the details page is started with an existing tvShowSeason, the status is reset and the given tvShowSeason is loaded
 		case LOAD_TV_SHOW_SEASON_DETAILS: {
-
 			const loadTvShowSeasonAction = action as LoadTvShowSeasonDetailsAction;
 			
 			return {
@@ -51,7 +47,6 @@ export const tvShowSeasonDetails = (state: TvShowSeasonDetailsState = initialSta
 	
 		// When the TV show season save is requested, the status changes (e.g. allows header save button to notify the form about the request)
 		case REQUEST_TV_SHOW_SEASON_SAVE: {
-
 			return {
 				...state,
 				saveStatus: 'REQUESTED'
@@ -60,7 +55,6 @@ export const tvShowSeasonDetails = (state: TvShowSeasonDetailsState = initialSta
 	
 		// When the TV show season is saved, the status changes
 		case COMPLETE_SAVING_TV_SHOW_SEASON: {
-
 			return {
 				...state,
 				saveStatus: 'SAVED'
@@ -69,7 +63,6 @@ export const tvShowSeasonDetails = (state: TvShowSeasonDetailsState = initialSta
 
 		// When the app fails to save a TV show season, the status is reset (an error is shown by the global handler)
 		case FAIL_SAVING_TV_SHOW_SEASON: {
-
 			return {
 				...state,
 				saveStatus: 'IDLE'
@@ -78,7 +71,6 @@ export const tvShowSeasonDetails = (state: TvShowSeasonDetailsState = initialSta
 
 		// When the form status changes, the corresponding state fields are set
 		case SET_TV_SHOW_SEASON_FORM_STATUS: {
-
 			const setTvShowSeasonFormStatusAction = action as SetTvShowSeasonFormStatusAction;
 			
 			return {

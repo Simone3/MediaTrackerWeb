@@ -14,24 +14,20 @@ import { SagaIterator } from 'redux-saga';
  * @param action the intercepted action
  */
 const saveCategorySaga = function * (action: SaveCategoryAction): SagaIterator {
-
 	const category = action.category;
 
 	yield put(startSavingCategory(category));
 
 	try {
-
 		// Get values from state
 		const state: State = yield select();
 		const user = state.userGlobal.user;
 		if(!user) {
-
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while saving category');
 		}
 
 		// If we are adding a new category and the user has not confirmed a same-name creation...
 		if(!category.id && !action.confirmSameName) {
-
 			// Check if there are other categories with the same name
 			const filter: CategoryFilterInternal = {
 				name: category.name
@@ -40,7 +36,6 @@ const saveCategorySaga = function * (action: SaveCategoryAction): SagaIterator {
 			
 			// If so, dispatch confirmation request action and exit
 			if(mediaItemsWithSameName.length > 0) {
-
 				yield put(askConfirmationBeforeSavingCategory());
 				return;
 			}
@@ -51,7 +46,6 @@ const saveCategorySaga = function * (action: SaveCategoryAction): SagaIterator {
 		yield put(completeSavingCategory());
 	}
 	catch(error) {
-
 		// Send the failure action
 		yield put(failSavingCategory());
 		yield put(setError(AppError.BACKEND_CATEGORY_SAVE.withDetails(error)));
@@ -62,6 +56,5 @@ const saveCategorySaga = function * (action: SaveCategoryAction): SagaIterator {
  * Watcher saga that reacts to the save category actions
  */
 export const watchSaveCategorySaga = function * (): SagaIterator {
-
 	yield takeLatest(SAVE_CATEGORY, saveCategorySaga);
 };

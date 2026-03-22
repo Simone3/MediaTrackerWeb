@@ -17,7 +17,6 @@ export class BookBackEndController implements BookController {
 	 * @override
 	 */
 	public async filter(userId: string, categoryId: string, filter?: BookFilterInternal, sortBy?: BookSortByInternal[]): Promise<BookInternal[]> {
-		
 		const request: FilterBooksRequest = {
 			filter: filter ? bookFilterMapper.toExternal(filter) : undefined,
 			sortBy: sortBy ? bookSortMapper.toExternalList(sortBy) : undefined
@@ -40,7 +39,6 @@ export class BookBackEndController implements BookController {
 	 * @override
 	 */
 	public async search(userId: string, categoryId: string, searchTerm: string): Promise<BookInternal[]> {
-
 		const request: SearchBooksRequest = {
 			searchTerm: searchTerm,
 			filter: undefined
@@ -63,9 +61,7 @@ export class BookBackEndController implements BookController {
 	 * @override
 	 */
 	public async save(userId: string, categoryId: string, book: BookInternal): Promise<void> {
-
 		if(book.id) {
-
 			const request: UpdateBookRequest = {
 				book: bookMapper.toExternal(book)
 			};
@@ -82,7 +78,6 @@ export class BookBackEndController implements BookController {
 			});
 		}
 		else {
-
 			const request: AddBookRequest = {
 				newBook: bookMapper.toExternal(book)
 			};
@@ -103,7 +98,6 @@ export class BookBackEndController implements BookController {
 	 * @override
 	 */
 	public async delete(userId: string, categoryId: string, bookId: string): Promise<void> {
-
 		await backEndInvoker.invoke({
 			method: 'DELETE',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/books/:id' ], {
@@ -126,7 +120,6 @@ export class BookCatalogBackEndController implements BookCatalogController {
 	 * @override
 	 */
 	public async search(searchTerm: string): Promise<SearchBookCatalogResultInternal[]> {
-
 		const response = await backEndInvoker.invoke({
 			method: 'GET',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/catalog/books/search/:searchTerm' ], {
@@ -142,7 +135,6 @@ export class BookCatalogBackEndController implements BookCatalogController {
 	 * @override
 	 */
 	public async getDetails(catalogId: string): Promise<CatalogBookInternal> {
-
 		const response = await backEndInvoker.invoke({
 			method: 'GET',
 			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/catalog/books/:catalogId' ], {
@@ -165,7 +157,6 @@ export class BookDefinitionsControllerImpl implements BookDefinitionsController 
 	 * @override
 	 */
 	public getDefaultFilter(): BookFilterInternal {
-		
 		return {
 			status: 'CURRENT'
 		};
@@ -175,7 +166,6 @@ export class BookDefinitionsControllerImpl implements BookDefinitionsController 
 	 * @override
 	 */
 	public getDefaultSortBy(): BookSortByInternal[] {
-
 		return [{
 			field: 'ACTIVE',
 			ascending: false
@@ -192,7 +182,6 @@ export class BookDefinitionsControllerImpl implements BookDefinitionsController 
 	 * @override
 	 */
 	public getViewGroupSortBy(): BookSortByInternal[] {
-
 		return [{
 			field: 'GROUP',
 			ascending: true
@@ -203,7 +192,6 @@ export class BookDefinitionsControllerImpl implements BookDefinitionsController 
 	 * @override
 	 */
 	public getCreatorNames(mediaItem: BookInternal): string[] | undefined {
-
 		return mediaItem.authors;
 	}
 
@@ -211,7 +199,6 @@ export class BookDefinitionsControllerImpl implements BookDefinitionsController 
 	 * @override
 	 */
 	public getDurationValue(mediaItem: BookInternal): number | undefined {
-
 		return mediaItem.pagesNumber;
 	}
 
@@ -219,7 +206,6 @@ export class BookDefinitionsControllerImpl implements BookDefinitionsController 
 	 * @override
 	 */
 	public getDefaultMediaItem(): BookInternal {
-		
 		return DEFAULT_BOOK;
 	}
 }

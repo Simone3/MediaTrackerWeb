@@ -11,7 +11,6 @@ class VideogameMapper extends MediaItemMapper<VideogameInternal, IdentifiedVideo
 	 * @override
 	 */
 	protected convertToExternal(source: VideogameInternal): IdentifiedVideogame {
-
 		return {
 			...this.commonToExternal(source),
 			uid: source.id,
@@ -26,7 +25,6 @@ class VideogameMapper extends MediaItemMapper<VideogameInternal, IdentifiedVideo
 	 * @override
 	 */
 	protected convertToInternal(source: IdentifiedVideogame): VideogameInternal {
-		
 		return {
 			...this.commonToInternal(source),
 			id: source.uid,
@@ -48,7 +46,6 @@ class VideogameFilterMapper extends MediaItemFilterMapper<VideogameFilterInterna
 	 * @override
 	 */
 	protected convertToExternal(source: VideogameFilterInternal): VideogameFilter {
-		
 		return this.commonToExternal(source);
 	}
 		
@@ -56,7 +53,6 @@ class VideogameFilterMapper extends MediaItemFilterMapper<VideogameFilterInterna
 	 * @override
 	 */
 	protected convertToInternal(source: VideogameFilter): VideogameFilterInternal {
-		
 		return this.commonToInternal(source);
 	}
 }
@@ -70,7 +66,6 @@ class VideogameSortMapper extends MediaItemSortMapper<VideogameSortByInternal, V
 	 * @override
 	 */
 	protected convertToExternal(source: VideogameSortByInternal): VideogameSortBy {
-		
 		return {
 			...this.commonToExternal(source),
 			field: this.toExternalField(source.field)
@@ -81,7 +76,6 @@ class VideogameSortMapper extends MediaItemSortMapper<VideogameSortByInternal, V
 	 * @override
 	 */
 	protected convertToInternal(source: VideogameSortBy): VideogameSortByInternal {
-		
 		return {
 			...this.commonToInternal(source),
 			field: this.toInternalField(source.field)
@@ -94,9 +88,7 @@ class VideogameSortMapper extends MediaItemSortMapper<VideogameSortByInternal, V
 	 * @returns the mapping target
 	 */
 	protected toExternalField(source: VideogameSortFieldInternal): string {
-
 		switch(source) {
-			
 			case 'DEVELOPER': return VideogameSortField.DEVELOPER;
 			default: return this.commonToExternalField(source);
 		}
@@ -108,9 +100,7 @@ class VideogameSortMapper extends MediaItemSortMapper<VideogameSortByInternal, V
 	 * @returns the mapping target
 	 */
 	protected toInternalField(source: string): VideogameSortFieldInternal {
-
 		switch(source) {
-			
 			case VideogameSortField.DEVELOPER: return 'DEVELOPER';
 			default: return this.commonToInternalField(source);
 		}
@@ -126,7 +116,6 @@ class VideogameCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchVi
 	 * @override
 	 */
 	protected convertToExternal(source: SearchVideogameCatalogResultInternal): SearchVideogameCatalogResult {
-
 		return this.commonToExternal(source);
 	}
 	
@@ -134,7 +123,6 @@ class VideogameCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchVi
 	 * @override
 	 */
 	protected convertToInternal(source: SearchVideogameCatalogResult): SearchVideogameCatalogResultInternal {
-
 		return this.commonToInternal(source);
 	}
 }
@@ -148,7 +136,6 @@ class VideogameCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<Catalo
 	 * @override
 	 */
 	protected convertToExternal(source: CatalogVideogameInternal): CatalogVideogame {
-
 		return {
 			...this.commonToExternal(source),
 			developers: source.developers,
@@ -161,7 +148,6 @@ class VideogameCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<Catalo
 	 * @override
 	 */
 	protected convertToInternal(source: CatalogVideogame): CatalogVideogameInternal {
-
 		return {
 			...this.commonToInternal(source),
 			developers: source.developers,

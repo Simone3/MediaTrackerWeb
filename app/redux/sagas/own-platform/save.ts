@@ -14,7 +14,6 @@ import { SagaIterator } from 'redux-saga';
  * @param action the intercepted action
  */
 const saveOwnPlatformSaga = function * (action: SaveOwnPlatformAction): SagaIterator {
-
 	const ownPlatform = action.ownPlatform;
 
 	yield put(startSavingOwnPlatform(ownPlatform));
@@ -24,15 +23,12 @@ const saveOwnPlatformSaga = function * (action: SaveOwnPlatformAction): SagaIter
 	const category = state.categoryGlobal.selectedCategory;
 	const user = state.userGlobal.user;
 	if(!category || !user) {
-
 		throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while saving own platform');
 	}
 
 	try {
-
 		// If we are adding a new own platform and the user has not confirmed a same-name creation...
 		if(!ownPlatform.id && !action.confirmSameName) {
-
 			// Check if there are other own platforms with the same name
 			const filter: OwnPlatformFilterInternal = {
 				name: ownPlatform.name
@@ -41,7 +37,6 @@ const saveOwnPlatformSaga = function * (action: SaveOwnPlatformAction): SagaIter
 			
 			// If so, dispatch confirmation request action and exit
 			if(mediaItemsWithSameName.length > 0) {
-
 				yield put(askConfirmationBeforeSavingOwnPlatform());
 				return;
 			}
@@ -52,7 +47,6 @@ const saveOwnPlatformSaga = function * (action: SaveOwnPlatformAction): SagaIter
 		yield put(completeSavingOwnPlatform(ownPlatform));
 	}
 	catch(error) {
-
 		// Send the failure action
 		yield put(failSavingOwnPlatform());
 		yield put(setError(AppError.BACKEND_OWN_PLATFORM_SAVE.withDetails(error)));
@@ -63,6 +57,5 @@ const saveOwnPlatformSaga = function * (action: SaveOwnPlatformAction): SagaIter
  * Watcher saga that reacts to the save own platform actions
  */
 export const watchSaveOwnPlatformSaga = function * (): SagaIterator {
-
 	yield takeLatest(SAVE_OWN_PLATFORM, saveOwnPlatformSaga);
 };

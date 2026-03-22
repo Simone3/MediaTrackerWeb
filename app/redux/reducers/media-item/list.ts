@@ -27,12 +27,9 @@ const initialState: MediaItemsListState = {
  * @returns the new state
  */
 export const mediaItemsList = (state: MediaItemsListState = initialState, action: Action): MediaItemsListState => {
-	
 	switch(action.type) {
-	
 		// When a category is selected (i.e. the media items page is opened), its default settings are loaded
 		case SELECT_CATEGORY: {
-
 			const openMediaItemsListAction = action as SelectCategoryAction;
 
 			const category = openMediaItemsListAction.category;
@@ -50,7 +47,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 
 		// When the app starts fetching the list of media items, the status changes to show the loading indicator
 		case START_FETCHING_MEDIA_ITEMS: {
-
 			return {
 				...state,
 				status: 'FETCHING'
@@ -59,7 +55,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 	
 		// When the app completes the fetching process, the status is reset and the retrieved list is saved
 		case COMPLETE_FETCHING_MEDIA_ITEMS: {
-
 			const receiveMediaItemsAction = action as CompleteFetchingMediaItemsAction;
 			
 			return {
@@ -71,7 +66,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 
 		// When the app fails to fetch the media items, the status is updated without clearing the last known list
 		case FAIL_FETCHING_MEDIA_ITEMS: {
-
 			return {
 				...state,
 				status: 'FETCH_FAILED'
@@ -80,7 +74,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 
 		// When the list is explicitly invalidated, the list is marked for reload
 		case INVALIDATE_MEDIA_ITEMS: {
-		
 			return {
 				...state,
 				status: 'REQUIRES_FETCH'
@@ -89,7 +82,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 
 		// When a new media item has been successfully saved, the list is marked for reload
 		case COMPLETE_SAVING_MEDIA_ITEM: {
-		
 			return {
 				...state,
 				status: 'REQUIRES_FETCH'
@@ -98,7 +90,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 
 		// When the app starts deleting a media item, the status changes to show the loading indicator
 		case START_DELETING_MEDIA_ITEM: {
-
 			return {
 				...state,
 				status: 'DELETING'
@@ -107,7 +98,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 
 		// When the app completes the delete process, the list is marked for reload
 		case COMPLETE_DELETING_MEDIA_ITEM: {
-		
 			return {
 				...state,
 				status: 'REQUIRES_FETCH'
@@ -116,7 +106,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 
 		// When the app fails to delete a media item, the status is reset (an error is shown by the global handler)
 		case FAIL_DELETING_MEDIA_ITEM: {
-		
 			return {
 				...state,
 				status: 'FETCHED'
@@ -125,7 +114,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 		
 		// When the app starts an inline media item update, the status changes to show the loading indicator
 		case START_INLINE_UPDATING_MEDIA_ITEM: {
-
 			return {
 				...state,
 				status: 'INLINE_UPDATING'
@@ -134,7 +122,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 
 		// When the app completes the inline update process, the list is marked for reload
 		case COMPLETE_INLINE_UPDATING_MEDIA_ITEM: {
-		
 			return {
 				...state,
 				status: 'REQUIRES_FETCH'
@@ -143,7 +130,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 
 		// When the app fails to inline update a media item, the status is reset (an error is shown by the global handler)
 		case FAIL_INLINE_UPDATING_MEDIA_ITEM: {
-		
 			return {
 				...state,
 				status: 'FETCHED'
@@ -152,7 +138,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 		
 		// When a media item is highlighted (e.g. to open the context menu), the corresponding state field is set
 		case HIGHLIGHT_MEDIA_ITEM: {
-
 			const highlightMediaItemAction = action as HighlightMediaItemAction;
 
 			return {
@@ -163,7 +148,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 
 		// When a media item is no longer highlighted (e.g. to close the context menu), the corresponding state field is reset
 		case REMOVE_MEDIA_ITEM_HIGHLIGHT: {
-
 			return {
 				...state,
 				highlightedMediaItem: undefined
@@ -172,7 +156,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 		
 		// When the search mode is started, the mode field is set
 		case START_MEDIA_ITEMS_SEARCH_MODE: {
-
 			return {
 				...state,
 				mode: 'SEARCH'
@@ -181,7 +164,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 
 		// When a search is submitted, the state field is set (the rest of the logic is handled by a saga, which is executed right after this reducer)
 		case SEARCH_MEDIA_ITEMS: {
-
 			const searchMediaItemsAction = action as SearchMediaItemsAction;
 
 			return {
@@ -192,7 +174,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 		
 		// When the search mode is closed, the mode and term fields are reset and the list is marked for reload (i.e. the standard version of the list is fetched)
 		case STOP_MEDIA_ITEMS_SEARCH_MODE: {
-
 			return {
 				...state,
 				mode: 'NORMAL',
@@ -203,7 +184,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 		
 		// When the view group mode is started, the mode field is set and the selected group is set
 		case START_MEDIA_ITEMS_VIEW_GROUP_MODE: {
-
 			const startMediaItemsViewGroupModeAction = action as StartMediaItemsViewGroupModeAction;
 
 			return {
@@ -215,7 +195,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 		
 		// When the view group mode is closed, the mode and group fields are reset and the list is marked for reload (i.e. the standard version of the list is fetched)
 		case STOP_MEDIA_ITEMS_VIEW_GROUP_MODE: {
-
 			return {
 				...state,
 				mode: 'NORMAL',
@@ -226,7 +205,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 
 		// When the "set filters" mode is started, the mode field is set
 		case START_MEDIA_ITEMS_SET_FILTERS_MODE: {
-
 			return {
 				...state,
 				mode: 'SET_FILTERS'
@@ -235,7 +213,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 
 		// When the filters are submitted, they are saved in the state and the list is marked for reload
 		case SUBMIT_MEDIA_ITEMS_FILTERS: {
-
 			const submitMediaItemsFiltersAction = action as SubmitMediaItemsFiltersAction;
 
 			return {
@@ -248,7 +225,6 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 
 		// When the "set filters" mode is closed, the mode field is reset
 		case STOP_MEDIA_ITEMS_SET_FILTERS_MODE: {
-
 			return {
 				...state,
 				mode: 'NORMAL'

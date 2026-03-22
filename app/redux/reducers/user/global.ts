@@ -18,12 +18,9 @@ const initialState: UserGlobalState = {
  * @returns the new state
  */
 export const userGlobal = (state: UserGlobalState = initialState, action: Action): UserGlobalState => {
-	
 	switch(action.type) {
-
 		// When the user is retrived from local storage, the current user (may or may not be defined) is updated and the status changes
 		case COMPLETE_CHECKING_USER_LOGIN_STATUS: {
-
 			const completeCheckingUserLoginStatusAction = action as CompleteCheckingUserLoginStatusAction;
 			const user = completeCheckingUserLoginStatusAction.user;
 
@@ -36,7 +33,6 @@ export const userGlobal = (state: UserGlobalState = initialState, action: Action
 		// When the user authenticates, the current user is updated and the status changes
 		case COMPLETE_SIGNING_USER_UP:
 		case COMPLETE_LOGGING_USER_IN: {
-
 			const authAction = action as CompleteSigningUserUpAction | CompleteLoggingUserInAction;
 
 			return {

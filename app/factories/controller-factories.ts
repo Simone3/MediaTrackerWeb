@@ -17,9 +17,7 @@ export const mediaItemControllerFactory = new class MediaItemControllerFactory e
 	 * @override
 	 */
 	protected getInternal(mediaType: MediaTypeInternal): MediaItemController<MediaItemInternal, MediaItemSortByInternal, MediaItemFilterInternal> {
-
 		switch(mediaType) {
-
 			case 'BOOK': {
 				return bookController;
 			}
@@ -52,9 +50,7 @@ export const mediaItemDefinitionsControllerFactory = new class MediaItemDefiniti
 	 * @override
 	 */
 	protected getInternal(mediaType: MediaTypeInternal): MediaItemDefinitionsController<MediaItemInternal, MediaItemSortByInternal, MediaItemFilterInternal> {
-
 		switch(mediaType) {
-
 			case 'BOOK': {
 				return bookDefinitionsController;
 			}
@@ -87,9 +83,7 @@ export const mediaItemCatalogControllerFactory = new class MediaItemCatalogContr
 	 * @override
 	 */
 	protected getInternal(mediaType: MediaTypeInternal): MediaItemCatalogController<SearchMediaItemCatalogResultInternal, CatalogMediaItemInternal> {
-
 		switch(mediaType) {
-
 			case 'BOOK': {
 				return bookCatalogController;
 			}

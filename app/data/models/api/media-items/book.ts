@@ -51,7 +51,6 @@ export class BookSortField extends MediaItemSortField {
 	public static readonly AUTHOR: string = 'AUTHOR';
 	
 	public static values(): string[] {
-
 		return [ ...MediaItemSortField.commonValues(), this.AUTHOR ];
 	}
 }

@@ -13,17 +13,14 @@ import { SagaIterator } from 'redux-saga';
  * @param action the intercepted action
  */
 const deleteOwnPlatformSaga = function * (action: DeleteOwnPlatformAction): SagaIterator {
-
 	yield put(startDeletingOwnPlatform());
 
 	try {
-
 		// Get values from state
 		const state: State = yield select();
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
 		if(!category || !user) {
-
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while deleting own platform');
 		}
 
@@ -32,7 +29,6 @@ const deleteOwnPlatformSaga = function * (action: DeleteOwnPlatformAction): Saga
 		yield put(completeDeletingOwnPlatform(action.ownPlatform.id));
 	}
 	catch(error) {
-
 		yield put(failDeletingOwnPlatform());
 		
 		yield put(setError(AppError.BACKEND_OWN_PLATFORM_DELETE.withDetails(error)));
@@ -43,6 +39,5 @@ const deleteOwnPlatformSaga = function * (action: DeleteOwnPlatformAction): Saga
  * Watcher saga that reacts to the delete own platform actions
  */
 export const watchDeleteOwnPlatformSaga = function * (): SagaIterator {
-
 	yield takeLatest(DELETE_OWN_PLATFORM, deleteOwnPlatformSaga);
 };
