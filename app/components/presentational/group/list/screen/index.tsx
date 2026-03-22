@@ -4,7 +4,7 @@ import { ConfirmDialogComponent } from 'app/components/presentational/generic/co
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { GroupInternal } from 'app/data/models/internal/group';
-import groupIcon from 'app/resources/images/ic_input_group.png';
+import groupIcon from 'app/resources/images/ic_input_group.svg';
 import { i18n } from 'app/utilities/i18n';
 
 const GROUPS_SCREEN_ACCENT = '#7db4ff';

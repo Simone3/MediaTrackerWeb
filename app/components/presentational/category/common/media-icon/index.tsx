@@ -1,8 +1,8 @@
 import { MediaTypeInternal } from 'app/data/models/internal/category';
-import bookIcon from 'app/resources/images/ic_media_book.png';
-import movieIcon from 'app/resources/images/ic_media_movie.png';
-import tvShowIcon from 'app/resources/images/ic_media_tvshow.png';
-import videogameIcon from 'app/resources/images/ic_media_videogame.png';
+import bookIcon from 'app/resources/images/ic_media_book.svg';
+import movieIcon from 'app/resources/images/ic_media_movie.svg';
+import tvShowIcon from 'app/resources/images/ic_media_tvshow.svg';
+import videogameIcon from 'app/resources/images/ic_media_videogame.svg';
 import React, { ReactElement } from 'react';
 
 const mediaTypeToIcon: Record<MediaTypeInternal, string> = {

@@ -35,6 +35,8 @@
 - `webpack.config.js`
   - injects the app favicon into generated HTML using `app/resources/images/ic_app_logo.png`
   - this keeps the favicon working in both webpack dev server and production builds without duplicating the asset into `public/`
+- `app/resources/images`
+  - matching UI icons now live as SVGs, while PNG-only assets still remain for the favicon, catalog/provider badges, the `NEW` status icon, and the default media image
 
 ## Main architecture
 

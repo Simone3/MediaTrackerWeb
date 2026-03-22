@@ -1,6 +1,6 @@
 import React, { Component, CSSProperties, ReactNode } from 'react';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
-import seasonIcon from 'app/resources/images/ic_input_season_number.png';
+import seasonIcon from 'app/resources/images/ic_input_season_number.svg';
 import { i18n } from 'app/utilities/i18n';
 
 const TV_SHOW_SEASON_DETAILS_ACCENT = '#ffb067';

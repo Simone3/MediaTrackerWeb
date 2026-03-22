@@ -371,7 +371,7 @@ module.exports = {
 		'import/exports-last': 'off',
 		'import/no-duplicates': 1,
 		'import/no-namespace': 1,
-		'import/extensions': [ 1, 'never', { png: 'off' }],
+		'import/extensions': [ 1, 'never', { png: 'off', svg: 'off' }],
 		'import/order': 1,
 		'import/newline-after-import': 1,
 		'import/prefer-default-export': 'off',

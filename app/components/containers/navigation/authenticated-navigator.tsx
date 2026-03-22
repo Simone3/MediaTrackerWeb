@@ -1,9 +1,9 @@
 import { CreditsNavigator } from 'app/components/containers/navigation/credits-navigator';
 import { MediaNavigator } from 'app/components/containers/navigation/media-navigator';
 import { SettingsNavigator } from 'app/components/containers/navigation/settings-navigator';
-import creditsIcon from 'app/resources/images/ic_credits.png';
-import homeIcon from 'app/resources/images/ic_home.png';
-import settingsIcon from 'app/resources/images/ic_settings.png';
+import creditsIcon from 'app/resources/images/ic_credits.svg';
+import homeIcon from 'app/resources/images/ic_home.svg';
+import settingsIcon from 'app/resources/images/ic_settings.svg';
 import { i18n } from 'app/utilities/i18n';
 import { screenToPath } from 'app/utilities/navigation-routes';
 import { AppScreens, AppSections } from 'app/utilities/screens';

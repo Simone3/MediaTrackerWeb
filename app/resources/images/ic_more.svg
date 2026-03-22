@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4f, 2020-05-01)"
+   sodipodi:docname="ic_more.svg"
+   id="svg1104"
+   version="1.1"
+   viewBox="0 0 1000 1000"
+   height="1000pt"
+   width="1000pt">
+  <metadata
+     id="metadata1110">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs1108" />
+  <sodipodi:namedview
+     inkscape:document-rotation="0"
+     inkscape:current-layer="svg1104"
+     inkscape:window-maximized="0"
+     inkscape:window-y="23"
+     inkscape:window-x="0"
+     inkscape:cy="666.66667"
+     inkscape:cx="-149.71751"
+     inkscape:zoom="0.177"
+     showgrid="false"
+     id="namedview1106"
+     inkscape:window-height="943"
+     inkscape:window-width="1433"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <g
+     transform="matrix(1.2276923,0,0,1.2276923,-113.84617,-113.84617)"
+     id="surface1">
+    <path
+       inkscape:connector-curvature="0"
+       id="path1101"
+       d="M 500,93.75 C 275.58594,93.75 93.75,275.58594 93.75,500 93.75,724.41406 275.58594,906.25 500,906.25 724.41406,906.25 906.25,724.41406 906.25,500 906.25,275.58594 724.41406,93.75 500,93.75 Z m 0,778.71094 C 294.72656,872.46094 127.53906,705.46875 127.53906,500 127.53906,294.72656 294.53125,127.53906 500,127.53906 c 205.27344,0 372.46094,166.99219 372.46094,372.46094 0,205.27344 -167.1875,372.46094 -372.46094,372.46094 z m 0,0"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+  </g>
+  <g
+     transform="translate(2.1186371,8.4746246)"
+     id="g185">
+    <ellipse
+       cx="322.98334"
+       cy="489.01917"
+       id="circle67"
+       rx="54.278706"
+       ry="52.629585"
+       style="stroke-width:1.69675" />
+    <ellipse
+       cx="498.74298"
+       cy="494.03156"
+       id="circle69"
+       rx="54.278706"
+       ry="52.629585"
+       style="stroke-width:1.69675" />
+    <ellipse
+       cx="672.77936"
+       cy="492.36072"
+       id="circle71"
+       rx="54.278706"
+       ry="52.629585"
+       style="stroke-width:1.69675" />
+  </g>
+</svg>

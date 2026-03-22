@@ -2,7 +2,7 @@ import React, { Component, CSSProperties, ReactNode } from 'react';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { GroupInternal } from 'app/data/models/internal/group';
-import groupIcon from 'app/resources/images/ic_input_group.png';
+import groupIcon from 'app/resources/images/ic_input_group.svg';
 import { i18n } from 'app/utilities/i18n';
 
 const GROUP_DETAILS_ACCENT = '#7db4ff';

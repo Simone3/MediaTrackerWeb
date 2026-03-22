@@ -3,7 +3,7 @@ import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/cate
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
-import seasonIcon from 'app/resources/images/ic_input_season_number.png';
+import seasonIcon from 'app/resources/images/ic_input_season_number.svg';
 import { i18n } from 'app/utilities/i18n';
 
 const TV_SHOW_SEASONS_SCREEN_ACCENT = '#ffb067';

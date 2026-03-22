@@ -10,7 +10,7 @@ import { DEFAULT_CATALOG_MOVIE, MovieInternal } from 'app/data/models/internal/m
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { DEFAULT_CATALOG_TV_SHOW, TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { DEFAULT_CATALOG_VIDEOGAME, VideogameInternal } from 'app/data/models/internal/media-items/videogame';
-import downloadIcon from 'app/resources/images/ic_download.png';
+import downloadIcon from 'app/resources/images/ic_download.svg';
 import googleIcon from 'app/resources/images/ic_google.png';
 import howLongToBeatIcon from 'app/resources/images/ic_howlongtobeat.png';
 import justWatchIcon from 'app/resources/images/ic_justwatch.png';
