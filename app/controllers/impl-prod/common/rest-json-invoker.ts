@@ -31,8 +31,7 @@ export class RestJsonInvokerAxios implements RestJsonInvoker {
 				headers: {
 					...parameters.headers,
 					'Content-Type': 'application/json',
-					Accept: 'application/json',
-					'Accept-Charset': 'utf-8'
+					Accept: 'application/json'
 				}
 			};
 			this.logRequest(options);

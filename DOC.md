@@ -134,6 +134,14 @@
   - good reference implementations when category behavior looks wrong
 
 ## Recent fix worth remembering
+- The production REST JSON invoker still carried the old React Native `Accept-Charset` request header into the browser build.
+  - Correct behavior on web now:
+    - Axios still sends the intended JSON request headers (`Content-Type` and `Accept`)
+    - the browser-forbidden `Accept-Charset` header is no longer added, so the console no longer logs `Refused to set unsafe header "Accept-Charset"`
+    - a focused invoker test now guards that browser-compatible header set
+  - Relevant files:
+    - `app/controllers/impl-prod/common/rest-json-invoker.ts`
+    - `tests/rest-json-invoker.test.ts`
 - The inline media-item status shortcuts on web could leave `active` behind when moving an item from `ACTIVE`/`COMPLETE` into `COMPLETE` or `REDO`.
   - Correct behavior on web now:
     - marking an item as complete clears `active`, keeps the appended completion history, and clears `markedAsRedo`
