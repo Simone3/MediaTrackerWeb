@@ -37,6 +37,7 @@
   - this keeps the favicon working in both webpack dev server and production builds without duplicating the asset into `public/`
 - `app/resources/images`
   - matching UI icons now live as SVGs, while PNG-only assets still remain for the favicon, catalog/provider badges, the `NEW` status icon, and the default media image
+  - the old unreferenced React Native-era action/field/menu SVGs have been removed, so the folder now only keeps assets still imported by the web app
 
 ## Main architecture
 
@@ -98,6 +99,7 @@
 ## Maintenance notes
 - The codebase cleanup pass removed dead action creators/type aliases, unused API model wrappers, the unused sample config file, and leftover default `React` imports that were no longer needed with the web app's JSX transform.
 - After that cleanup, strict `tsc --noUnusedLocals --noUnusedParameters` runs clean; the remaining same-file-only exports are still in-file dependencies rather than dead code.
+- A later tracked-file audit also removed the stray nested `app/package.json` and the unimported legacy image assets that were no longer referenced by webpack, Jest, or the app source.
 
 ## High-signal files to open first
 - `app/AGENTS.md`
