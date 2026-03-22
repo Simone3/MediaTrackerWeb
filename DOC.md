@@ -29,6 +29,13 @@
    - uses `BrowserRouter`
    - bridges `react-router-dom` navigation into `navigationService`
 
+## Static shell
+- `public/index.html`
+  - base HTML template used by `HtmlWebpackPlugin`
+- `webpack.config.js`
+  - injects the app favicon into generated HTML using `app/resources/images/ic_app_logo.png`
+  - this keeps the favicon working in both webpack dev server and production builds without duplicating the asset into `public/`
+
 ## Main architecture
 
 ### UI split
