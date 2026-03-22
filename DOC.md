@@ -100,6 +100,7 @@
 - The codebase cleanup pass removed dead action creators/type aliases, unused API model wrappers, the unused sample config file, and leftover default `React` imports that were no longer needed with the web app's JSX transform.
 - After that cleanup, strict `tsc --noUnusedLocals --noUnusedParameters` runs clean; the remaining same-file-only exports are still in-file dependencies rather than dead code.
 - A later tracked-file audit also removed the stray nested `app/package.json` and the unimported legacy image assets that were no longer referenced by webpack, Jest, or the app source.
+- A stylesheet audit also removed unused category/media/entity-details/placeholder selectors plus orphaned root CSS variables from `app/web/styles.css`; a TS/TSX reference scan now comes back clean for the remaining class selectors.
 
 ## High-signal files to open first
 - `app/AGENTS.md`
