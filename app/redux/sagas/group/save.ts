@@ -19,7 +19,7 @@ const saveGroupSaga = function * (action: SaveGroupAction): SagaIterator {
 	yield put(startSavingGroup(group));
 
 	// Get values from state
-	const state: State = yield select();
+	const state = (yield select()) as State;
 	const category = state.categoryGlobal.selectedCategory;
 	const user = state.userGlobal.user;
 	if(!category || !user) {
@@ -33,7 +33,7 @@ const saveGroupSaga = function * (action: SaveGroupAction): SagaIterator {
 			const filter: GroupFilterInternal = {
 				name: group.name
 			};
-			const mediaItemsWithSameName: GroupInternal[] = yield call(groupController.filter.bind(groupController), user.id, category.id, filter);
+			const mediaItemsWithSameName = (yield call(groupController.filter.bind(groupController), user.id, category.id, filter)) as GroupInternal[];
 			
 			// If so, dispatch confirmation request action and exit
 			if(mediaItemsWithSameName.length > 0) {

@@ -81,7 +81,7 @@ export class AppError extends Error {
 				convertedErrorDetails = errorDetails;
 			}
 			else {
-				convertedErrorDetails = String(errorDetails);
+				convertedErrorDetails = JSON.stringify(errorDetails);
 			}
 		}
 		else {

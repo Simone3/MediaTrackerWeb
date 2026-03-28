@@ -5,6 +5,7 @@ import { LoadingIndicatorComponent } from 'app/components/presentational/generic
  * Presentational component that contains the app landing page that checks for user authentication and then redirects to the correct flow
  */
 export class AuthLoadingScreenComponent extends Component<AuthLoadingScreenComponentProps> {
+	
 	/**
 	 * @override
 	 */

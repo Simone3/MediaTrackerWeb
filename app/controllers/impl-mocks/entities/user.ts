@@ -30,7 +30,7 @@ export class UserMockedController extends MockControllerHelper implements UserCo
 		}
 
 		try {
-			return JSON.parse(value);
+			return JSON.parse(value) as UserInternal;
 		}
 		catch(error) {
 			await localStorage.removeValue(UserMockedController.LOCAL_STORAGE_KEY);
@@ -97,6 +97,6 @@ export class UserMockedController extends MockControllerHelper implements UserCo
 	 * @override
 	 */
 	public async logout(): Promise<void> {
-		localStorage.removeValue(UserMockedController.LOCAL_STORAGE_KEY);
+		await localStorage.removeValue(UserMockedController.LOCAL_STORAGE_KEY);
 	}
 }

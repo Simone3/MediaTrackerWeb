@@ -45,13 +45,13 @@ export class RestJsonInvokerAxios implements RestJsonInvoker {
 			// Execute request via promises
 			axios.request(options)
 				.then((axiosResponse) => {
-					const rawResponseBody = axiosResponse.data;
+					const rawResponseBody = axiosResponse.data as object;
 					this.logSuccessfulResponse(options, rawResponseBody);
 
 					// Check if we "trust" the API response to be valid...
 					if(parameters.assumeWellFormedResponse) {
 						// Skip validation and return the raw response
-						resolve(rawResponseBody);
+						resolve(rawResponseBody as TResponse);
 					}
 					else {
 						// Parse and validate the raw response

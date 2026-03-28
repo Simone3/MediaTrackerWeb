@@ -256,7 +256,7 @@ export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends Med
 					break;
 
 				default:
-					throw AppError.GENERIC.withDetails(`Cannot map status filter ${source}`);
+					throw AppError.GENERIC.withDetails(`Cannot map status filter!`);
 			}
 		}
 		
@@ -324,7 +324,7 @@ export abstract class MediaItemSortMapper<TMediaItemSortByInternal extends Media
 			case 'ACTIVE': return MediaItemSortField.ACTIVE;
 			case 'COMPLETION_DATE': return MediaItemSortField.COMPLETION_DATE;
 			case 'RELEASE_DATE': return MediaItemSortField.RELEASE_DATE;
-			default: throw AppError.GENERIC.withDetails(`Cannot map ${source}`);
+			default: throw AppError.GENERIC.withDetails(`Cannot map common to external field!`);
 		}
 	}
 	
@@ -339,7 +339,7 @@ export abstract class MediaItemSortMapper<TMediaItemSortByInternal extends Media
 			case MediaItemSortField.NAME: return 'NAME';
 			case MediaItemSortField.GROUP: return 'GROUP';
 			case MediaItemSortField.OWN_PLATFORM: return 'OWN_PLATFORM';
-			default: throw AppError.GENERIC.withDetails(`Cannot map ${source}`);
+			default: throw AppError.GENERIC.withDetails(`Cannot map common to internal field!`);
 		}
 	}
 }

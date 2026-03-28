@@ -39,7 +39,7 @@ export const applyInlineMediaItemUpdate = (sourceMediaItem: MediaItemInternal, a
 		}
 
 		default: {
-			throw AppError.GENERIC.withDetails(`Action ${actionType} was intercepted by saga but no case was matched`);
+			throw AppError.GENERIC.withDetails(`Action was intercepted by saga but no case was matched`);
 		}
 	}
 };

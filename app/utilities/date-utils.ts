@@ -20,7 +20,7 @@ class DateUtils {
 	public toStringList(dates: Date[] | undefined | null): string[] | undefined {
 		if(dates) {
 			return dates.map((date) => {
-				return this.toString(date) as string;
+				return this.toString(date);
 			});
 		}
 		else {
@@ -50,7 +50,7 @@ class DateUtils {
 	public toDateList(dateStrings: string[] | undefined | null): Date[] | undefined {
 		if(dateStrings) {
 			return dateStrings.map((dateString) => {
-				return this.toDate(dateString) as Date;
+				return this.toDate(dateString);
 			});
 		}
 		else {

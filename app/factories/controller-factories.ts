@@ -35,7 +35,7 @@ export const mediaItemControllerFactory = new class MediaItemControllerFactory e
 			}
 
 			default: {
-				throw AppError.GENERIC.withDetails(`Media type ${mediaType} not recognized in media items controller factory`);
+				throw AppError.GENERIC.withDetails(`Media type not recognized in media items controller factory`);
 			}
 		}
 	}
@@ -68,7 +68,7 @@ export const mediaItemDefinitionsControllerFactory = new class MediaItemDefiniti
 			}
 
 			default: {
-				throw AppError.GENERIC.withDetails(`Media type ${mediaType} not recognized in media items definitions controller factory`);
+				throw AppError.GENERIC.withDetails(`Media type not recognized in media items definitions controller factory`);
 			}
 		}
 	}
@@ -101,7 +101,7 @@ export const mediaItemCatalogControllerFactory = new class MediaItemCatalogContr
 			}
 
 			default: {
-				throw AppError.GENERIC.withDetails(`Media type ${mediaType} not recognized in media items catalog controller factory`);
+				throw AppError.GENERIC.withDetails(`Media type not recognized in media items catalog controller factory`);
 			}
 		}
 	}

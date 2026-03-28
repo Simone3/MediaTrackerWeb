@@ -28,6 +28,7 @@ const mediaRelativePath = (screen: string): string => {
  * The navigator for the main section of the authenticated app, with the categories and media items lists
  */
 export class MediaNavigator extends Component {
+
 	/**
 	 * @override
 	 */
@@ -35,33 +36,15 @@ export class MediaNavigator extends Component {
 		return (
 			<Routes>
 				<Route path={mediaRelativePath(AppScreens.CategoriesList)} element={<CategoriesListScreenContainer />} />
-				<Route
-					path={mediaRelativePath(AppScreens.CategoryDetails)}
-					element={<CategoryDetailsScreenContainer />} />
-				<Route
-					path={mediaRelativePath(AppScreens.MediaItemsList)}
-					element={<MediaItemsListScreenContainer />} />
-				<Route
-					path={mediaRelativePath(AppScreens.MediaItemDetails)}
-					element={<MediaItemDetailsScreenContainer />} />
-				<Route
-					path={mediaRelativePath(AppScreens.GroupsList)}
-					element={<GroupsListScreenContainer />} />
-				<Route
-					path={mediaRelativePath(AppScreens.GroupDetails)}
-					element={<GroupDetailsScreenContainer />} />
-				<Route
-					path={mediaRelativePath(AppScreens.OwnPlatformsList)}
-					element={<OwnPlatformsListScreenContainer />} />
-				<Route
-					path={mediaRelativePath(AppScreens.OwnPlatformDetails)}
-					element={<OwnPlatformDetailsScreenContainer />} />
-				<Route
-					path={mediaRelativePath(AppScreens.TvShowSeasonsList)}
-					element={<TvShowSeasonsListScreenContainer />} />
-				<Route
-					path={mediaRelativePath(AppScreens.TvShowSeasonDetails)}
-					element={<TvShowSeasonDetailsScreenContainer />} />
+				<Route path={mediaRelativePath(AppScreens.CategoryDetails)} element={<CategoryDetailsScreenContainer />} />
+				<Route path={mediaRelativePath(AppScreens.MediaItemsList)} element={<MediaItemsListScreenContainer />} />
+				<Route path={mediaRelativePath(AppScreens.MediaItemDetails)} element={<MediaItemDetailsScreenContainer />} />
+				<Route path={mediaRelativePath(AppScreens.GroupsList)} element={<GroupsListScreenContainer />} />
+				<Route path={mediaRelativePath(AppScreens.GroupDetails)} element={<GroupDetailsScreenContainer />} />
+				<Route path={mediaRelativePath(AppScreens.OwnPlatformsList)} element={<OwnPlatformsListScreenContainer />} />
+				<Route path={mediaRelativePath(AppScreens.OwnPlatformDetails)} element={<OwnPlatformDetailsScreenContainer />} />
+				<Route path={mediaRelativePath(AppScreens.TvShowSeasonsList)} element={<TvShowSeasonsListScreenContainer />} />
+				<Route path={mediaRelativePath(AppScreens.TvShowSeasonDetails)} element={<TvShowSeasonDetailsScreenContainer />} />
 				<Route path='*' element={<Navigate to={mediaRelativePath(AppScreens.CategoriesList)} replace={true} />} />
 			</Routes>
 		);

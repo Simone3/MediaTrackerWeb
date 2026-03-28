@@ -19,7 +19,7 @@ const saveOwnPlatformSaga = function * (action: SaveOwnPlatformAction): SagaIter
 	yield put(startSavingOwnPlatform(ownPlatform));
 
 	// Get values from state
-	const state: State = yield select();
+	const state = (yield select()) as State;
 	const category = state.categoryGlobal.selectedCategory;
 	const user = state.userGlobal.user;
 	if(!category || !user) {
@@ -33,7 +33,7 @@ const saveOwnPlatformSaga = function * (action: SaveOwnPlatformAction): SagaIter
 			const filter: OwnPlatformFilterInternal = {
 				name: ownPlatform.name
 			};
-			const mediaItemsWithSameName: OwnPlatformInternal[] = yield call(ownPlatformController.filter.bind(ownPlatformController), user.id, category.id, filter);
+			const mediaItemsWithSameName = (yield call(ownPlatformController.filter.bind(ownPlatformController), user.id, category.id, filter)) as OwnPlatformInternal[];
 			
 			// If so, dispatch confirmation request action and exit
 			if(mediaItemsWithSameName.length > 0) {

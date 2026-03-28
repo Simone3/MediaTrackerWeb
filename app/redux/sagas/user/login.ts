@@ -17,7 +17,7 @@ const userLoginSaga = function * (action: LogUserInAction): SagaIterator {
 
 	try {
 		// Log user in
-		const user: UserInternal = yield call(userController.login.bind(userController), action.user);
+		const user = (yield call(userController.login.bind(userController), action.user)) as UserInternal;
 		yield put(completeLoggingUserIn(user));
 	}
 	catch(error) {

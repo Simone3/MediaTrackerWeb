@@ -1,4 +1,4 @@
-import { FormEvent, ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { AuthTextInputComponent } from 'app/components/presentational/auth/common/auth-input';
 import { AppTitleComponent } from 'app/components/presentational/auth/common/app-title';
 import { AuthLinkComponent } from 'app/components/presentational/auth/common/auth-link';
@@ -59,7 +59,7 @@ export const AuthCredentialsScreenComponent = (props: AuthCredentialsScreenCompo
 					</div>
 					<form
 						className='auth-form'
-						onSubmit={(event: FormEvent<HTMLFormElement>) => {
+						onSubmit={(event) => {
 							event.preventDefault();
 							submitCredentials(credentials, props);
 						}}>

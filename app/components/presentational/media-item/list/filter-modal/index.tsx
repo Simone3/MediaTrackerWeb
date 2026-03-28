@@ -297,7 +297,7 @@ export class MediaItemFilterModalComponent extends Component<MediaItemFilterModa
 				}];
 
 			default:
-				throw AppError.GENERIC.withDetails(`Cannot map sort form value ${formValues.sortBy}`);
+				throw AppError.GENERIC.withDetails(`Cannot map sort form value!`);
 		}
 	}
 
@@ -391,7 +391,7 @@ export class MediaItemFilterModalComponent extends Component<MediaItemFilterModa
 			case 'CURRENT':
 				return 'CURRENT';
 			default:
-				throw AppError.GENERIC.withDetails(`Cannot map status filter ${source}`);
+				throw AppError.GENERIC.withDetails(`Cannot map status filter!`);
 		}
 	}
 
@@ -422,7 +422,7 @@ export class MediaItemFilterModalComponent extends Component<MediaItemFilterModa
 					noGroup: true
 				};
 			default:
-				throw AppError.GENERIC.withDetails(`Cannot map group filter ${source}`);
+				throw AppError.GENERIC.withDetails(`Cannot map group filter!`);
 		}
 	}
 
@@ -444,7 +444,7 @@ export class MediaItemFilterModalComponent extends Component<MediaItemFilterModa
 					noOwnPlatform: true
 				};
 			default:
-				throw AppError.GENERIC.withDetails(`Cannot map own platform filter ${source}`);
+				throw AppError.GENERIC.withDetails(`Cannot map own platform filter!`);
 		}
 	}
 }

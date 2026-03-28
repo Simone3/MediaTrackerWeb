@@ -16,7 +16,7 @@ const fetchGroupsSaga = function * (): SagaIterator {
 
 	try {
 		// Get values from state
-		const state: State = yield select();
+		const state = (yield select()) as State;
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
 		if(!category || !user) {
@@ -24,7 +24,7 @@ const fetchGroupsSaga = function * (): SagaIterator {
 		}
 
 		// Retrieve the groups
-		const groups: GroupInternal[] = yield call(groupController.getAllGroups.bind(groupController), user.id, category.id);
+		const groups = (yield call(groupController.getAllGroups.bind(groupController), user.id, category.id)) as GroupInternal[];
 		yield put(completeFetchingGroups(groups));
 	}
 	catch(error) {

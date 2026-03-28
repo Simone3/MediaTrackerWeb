@@ -16,7 +16,7 @@ const saveTvShowSeasonSaga = function * (action: SaveTvShowSeasonAction): SagaIt
 	const season = action.tvShowSeason;
 
 	// Get values from state
-	const state: State = yield select();
+	const state = (yield select()) as State;
 	const saveMode = state.tvShowSeasonDetails.formMode;
 	let seasons = state.tvShowSeasonsList.tvShowSeasons;
 	if(!saveMode || !seasons) {

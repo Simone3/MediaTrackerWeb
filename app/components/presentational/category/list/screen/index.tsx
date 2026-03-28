@@ -45,6 +45,7 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 			categoriesCount,
 			loadNewCategoryDetails
 		} = this.props;
+		
 		const countLabel = categoriesCount === 1 ?
 			i18n.t('category.list.count.single') :
 			i18n.t('category.list.count.multiple', { count: categoriesCount });

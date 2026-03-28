@@ -17,7 +17,7 @@ const deleteOwnPlatformSaga = function * (action: DeleteOwnPlatformAction): Saga
 
 	try {
 		// Get values from state
-		const state: State = yield select();
+		const state = (yield select()) as State;
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
 		if(!category || !user) {

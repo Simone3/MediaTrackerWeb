@@ -16,7 +16,7 @@ const fetchOwnPlatformsSaga = function * (): SagaIterator {
 
 	try {
 		// Get values from state
-		const state: State = yield select();
+		const state = (yield select()) as State;
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
 		if(!category || !user) {
@@ -24,7 +24,7 @@ const fetchOwnPlatformsSaga = function * (): SagaIterator {
 		}
 
 		// Retrieve the own platforms
-		const ownPlatforms: OwnPlatformInternal[] = yield call(ownPlatformController.getAllOwnPlatforms.bind(ownPlatformController), user.id, category.id);
+		const ownPlatforms = (yield call(ownPlatformController.getAllOwnPlatforms.bind(ownPlatformController), user.id, category.id)) as OwnPlatformInternal[];
 		yield put(completeFetchingOwnPlatforms(ownPlatforms));
 	}
 	catch(error) {

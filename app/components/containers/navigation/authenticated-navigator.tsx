@@ -32,6 +32,7 @@ const navigationItems = [
  * The navigator to switch between the main authenticated app sections via side menu
  */
 export class AuthenticatedNavigator extends Component {
+	
 	/**
 	 * @override
 	 */
@@ -43,7 +44,6 @@ export class AuthenticatedNavigator extends Component {
 						<nav className='app-shell-nav' aria-label={i18n.t('common.drawer.navigation')}>
 							{navigationItems.map((navigationItem) => {
 								const label = i18n.t(navigationItem.labelKey);
-
 								return (
 									<NavLink
 										key={navigationItem.path}

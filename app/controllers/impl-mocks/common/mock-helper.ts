@@ -30,7 +30,7 @@ export abstract class MockControllerHelper {
 		return new Promise((resolve, reject) => {
 			setTimeout(() => {
 				if(isError) {
-					reject('Mocked error');
+					reject(new Error('Mocked error'));
 				}
 				else {
 					resolve(successResultCallback());

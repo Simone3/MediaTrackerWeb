@@ -110,3 +110,16 @@ export const groupsList = (state: GroupsListState = initialState, action: Action
 			return state;
 	}
 };
+
+/**
+ * Not a reducer per se but an utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapGroupsListForPersistence = (state: GroupsListState): GroupsListState => {
+	return {
+		...state,
+		status: 'REQUIRES_FETCH',
+		highlightedGroup: undefined
+	};
+};

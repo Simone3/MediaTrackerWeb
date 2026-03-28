@@ -72,3 +72,15 @@ export const tvShowSeasonsList = (state: TvShowSeasonsListState = initialState, 
 			return state;
 	}
 };
+
+/**
+ * Not a reducer per se but an utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapTvShowSeasonsListForPersistence = (state: TvShowSeasonsListState): TvShowSeasonsListState => {
+	return {
+		...state,
+		highlightedTvShowSeason: undefined
+	};
+};

@@ -159,7 +159,6 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 		}
 
 		event.preventDefault();
-		event.returnValue = '';
 	});
 
 	const rearmGuard = (): void => {
@@ -190,7 +189,7 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 						return;
 					}
 
-					navigate(pendingNavigation.path);
+					void navigate(pendingNavigation.path);
 				}}
 				onCancel={() => {
 					const pendingNavigation = pendingNavigationRef.current;

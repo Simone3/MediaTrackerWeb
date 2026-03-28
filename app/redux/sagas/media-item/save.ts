@@ -22,7 +22,7 @@ const saveMediaItemSaga = function * (action: SaveMediaItemAction): SagaIterator
 	const mediaItemController = mediaItemControllerFactory.get(mediaItem.mediaType);
 	
 	// Get values from state
-	const state: State = yield select();
+	const state = (yield select()) as State;
 	const category = state.categoryGlobal.selectedCategory;
 	const user = state.userGlobal.user;
 	if(!category || !user) {
@@ -36,7 +36,7 @@ const saveMediaItemSaga = function * (action: SaveMediaItemAction): SagaIterator
 			const filter: MediaItemFilterInternal = {
 				name: mediaItem.name
 			};
-			const mediaItemsWithSameName: MediaItemInternal[] = yield call(mediaItemController.filter.bind(mediaItemController), user.id, category.id, filter);
+			const mediaItemsWithSameName = (yield call(mediaItemController.filter.bind(mediaItemController), user.id, category.id, filter)) as MediaItemInternal[];
 			
 			// If so, dispatch confirmation request action and exit
 			if(mediaItemsWithSameName.length > 0) {

@@ -235,3 +235,17 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 			return state;
 	}
 };
+
+/**
+ * Not a reducer per se but an utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapMediaItemsListForPersistence = (state: MediaItemsListState): MediaItemsListState => {
+	return {
+		...state,
+		status: 'REQUIRES_FETCH',
+		mode: state.mode === 'SET_FILTERS' ? 'NORMAL' : state.mode,
+		highlightedMediaItem: undefined
+	};
+};

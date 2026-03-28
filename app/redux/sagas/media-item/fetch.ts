@@ -16,7 +16,7 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 
 	try {
 		// Get values from state
-		const state: State = yield select();
+		const state = (yield select()) as State;
 		const mode = state.mediaItemsList.mode;
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
@@ -39,7 +39,7 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 					throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find filter and sort options');
 				}
 
-				mediaItems = yield call(mediaItemController.filter.bind(mediaItemController), user.id, category.id, filter, sortBy);
+				mediaItems = (yield call(mediaItemController.filter.bind(mediaItemController), user.id, category.id, filter, sortBy)) as MediaItemInternal[];
 
 				break;
 			}
@@ -51,7 +51,7 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 					throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find search term');
 				}
 
-				mediaItems = yield call(mediaItemController.search.bind(mediaItemController), user.id, category.id, term);
+				mediaItems = (yield call(mediaItemController.search.bind(mediaItemController), user.id, category.id, term)) as MediaItemInternal[];
 
 				break;
 			}
@@ -71,7 +71,7 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 
 				const sortBy = mediaItemDefinitionsController.getViewGroupSortBy();
 				
-				mediaItems = yield call(mediaItemController.filter.bind(mediaItemController), user.id, category.id, filter, sortBy);
+				mediaItems = (yield call(mediaItemController.filter.bind(mediaItemController), user.id, category.id, filter, sortBy)) as MediaItemInternal[];
 
 				break;
 			}

@@ -1,38 +1,10 @@
 import { State } from 'app/redux/state/state';
+import { mapStateForPersistence } from 'app/redux/reducers/root';
 
 const STORAGE_KEY = 'media-tracker-redux-state';
-const DATE_FIELD_KEYS = new Set([ 'releaseDate', 'nextEpisodeAirDate', 'completeHandlingTimestamp' ]);
-const DATE_ARRAY_FIELD_KEYS = new Set([ 'completedOn' ]);
-
-type PersistedReduxState = Partial<State>;
 
 const canUseSessionStorage = (): boolean => {
 	return typeof window !== 'undefined' && Boolean(window.sessionStorage);
-};
-
-const reviveDateArrayEntry = (entry: unknown): unknown => {
-	const revivedDate = typeof entry === 'string' ? new Date(entry) : undefined;
-	return !revivedDate || Number.isNaN(revivedDate.getTime()) ? entry : revivedDate;
-};
-
-const ignoreStorageError = (error: unknown): void => {
-	if(error instanceof Error) {
-		error.toString();
-	}
-};
-
-const readPersistedValue = (): string | undefined => {
-	if(!canUseSessionStorage()) {
-		return undefined;
-	}
-
-	try {
-		return window.sessionStorage.getItem(STORAGE_KEY) || undefined;
-	}
-	catch(error) {
-		ignoreStorageError(error);
-		return undefined;
-	}
 };
 
 const clearPersistedValue = (): void => {
@@ -44,123 +16,59 @@ const clearPersistedValue = (): void => {
 		window.sessionStorage.removeItem(STORAGE_KEY);
 	}
 	catch(error) {
-		// Ignore storage cleanup failures so navigation can continue.
-		ignoreStorageError(error);
+		console.log(error);
 	}
 };
 
-const revivePersistedValue = (value: unknown, key?: string): unknown => {
-	if(Array.isArray(value)) {
-		if(key && DATE_ARRAY_FIELD_KEYS.has(key)) {
-			return value.map(reviveDateArrayEntry);
-		}
-
-		return value.map((entry: unknown): unknown => {
-			return revivePersistedValue(entry);
-		});
+export const loadPersistedReduxState = (): State | undefined => {
+	if(!canUseSessionStorage()) {
+		return undefined;
 	}
 
-	if(typeof value === 'string' && key && DATE_FIELD_KEYS.has(key)) {
-		const revivedDate = new Date(value);
-		return Number.isNaN(revivedDate.getTime()) ? value : revivedDate;
+	let serializedState: string | undefined;
+	try {
+		serializedState = window.sessionStorage.getItem(STORAGE_KEY);
 	}
-
-	if(!value || typeof value !== 'object') {
-		return value;
+	catch(error) {
+		console.log(error);
+		return undefined;
 	}
-
-	const result: Record<string, unknown> = {};
-	for(const [ childKey, childValue ] of Object.entries(value)) {
-		result[childKey] = revivePersistedValue(childValue, childKey);
-	}
-	return result;
-};
-
-const buildPersistedState = (state: State): PersistedReduxState => {
-	return {
-		categoryGlobal: state.categoryGlobal,
-		categoriesList: {
-			...state.categoriesList,
-			status: 'REQUIRES_FETCH',
-			highlightedCategory: undefined
-		},
-		categoryDetails: {
-			...state.categoryDetails,
-			saveStatus: 'IDLE'
-		},
-		mediaItemsList: {
-			...state.mediaItemsList,
-			status: 'REQUIRES_FETCH',
-			mode: state.mediaItemsList.mode === 'SET_FILTERS' ? 'NORMAL' : state.mediaItemsList.mode,
-			highlightedMediaItem: undefined
-		},
-		mediaItemDetails: {
-			...state.mediaItemDetails,
-			saveStatus: 'IDLE',
-			catalogStatus: 'IDLE'
-		},
-		tvShowSeasonsList: {
-			...state.tvShowSeasonsList,
-			highlightedTvShowSeason: undefined
-		},
-		tvShowSeasonDetails: {
-			...state.tvShowSeasonDetails,
-			saveStatus: 'IDLE'
-		},
-		groupGlobal: state.groupGlobal,
-		groupsList: {
-			...state.groupsList,
-			status: 'REQUIRES_FETCH',
-			highlightedGroup: undefined
-		},
-		groupDetails: {
-			...state.groupDetails,
-			saveStatus: 'IDLE'
-		},
-		ownPlatformGlobal: state.ownPlatformGlobal,
-		ownPlatformsList: {
-			...state.ownPlatformsList,
-			status: 'REQUIRES_FETCH',
-			highlightedOwnPlatform: undefined
-		},
-		ownPlatformDetails: {
-			...state.ownPlatformDetails,
-			saveStatus: 'IDLE'
-		}
-	};
-};
-
-export const loadPersistedReduxState = (): PersistedReduxState | undefined => {
-	const serializedState = readPersistedValue();
 	if(!serializedState) {
 		return undefined;
 	}
 
+	let revivedState: State;
 	try {
-		return revivePersistedValue(JSON.parse(serializedState)) as PersistedReduxState;
+		revivedState = JSON.parse(serializedState) as State;
 	}
 	catch(error) {
+		console.log(error);
 		clearPersistedValue();
-		ignoreStorageError(error);
 		return undefined;
 	}
+
+	if(revivedState.userGlobal.status !== 'REQUIRES_CHECK') {
+		clearPersistedValue();
+		return undefined;
+	}
+
+	return revivedState;
 };
 
 export const persistReduxState = (state: State): void => {
+	if(!canUseSessionStorage()) {
+		return;
+	}
+
 	if(state.userGlobal.status !== 'AUTHENTICATED') {
 		clearPersistedValue();
 		return;
 	}
 
-	if(!canUseSessionStorage()) {
-		return;
-	}
-
 	try {
-		window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(buildPersistedState(state)));
+		window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(mapStateForPersistence(state)));
 	}
 	catch(error) {
-		// Ignore storage write failures so the current interaction is never blocked.
-		ignoreStorageError(error);
+		console.log(error);
 	}
 };

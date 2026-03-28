@@ -4,6 +4,7 @@ import React, { Component, MouseEvent, ReactNode } from 'react';
  * Presentational component to display a redirect link for the auth screens
  */
 export class AuthLinkComponent extends Component<AuthLinkComponentProps> {
+
 	/**
 	 * @override
 	 */
@@ -40,11 +41,7 @@ export class AuthLinkComponent extends Component<AuthLinkComponentProps> {
  * AuthLinkComponent's props
  */
 export type AuthLinkComponentProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> & {
-	/**
-	 * The button text
-	 */
 	text: string;
-
 	onClick?: React.MouseEventHandler<HTMLButtonElement>;
 	onPress?: React.MouseEventHandler<HTMLButtonElement>;
 };

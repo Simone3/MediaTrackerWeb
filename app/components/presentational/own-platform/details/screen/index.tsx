@@ -127,7 +127,7 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 								<span
 									className='entity-details-selected-icon-shell'
 									role='img'
-									aria-label={i18n.t('common.a11y.icon', { name: i18n.t(`ownPlatform.icons.${formValues.icon}`) })}>
+									aria-label={i18n.t('common.a11y.icon', { name: String(i18n.t(`ownPlatform.icons.${formValues.icon}`)) })}>
 									<span
 										className='entity-details-selected-icon'
 										style={buildOwnPlatformMaskStyle(

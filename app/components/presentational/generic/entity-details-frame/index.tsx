@@ -1,8 +1,8 @@
-import { CSSProperties, FormEvent, ReactElement, ReactNode, useEffect } from 'react';
+import { CSSProperties, SubmitEventHandler, ReactElement, ReactNode, useEffect } from 'react';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 
 /**
- * Shared shell for the dark entity-details forms.
+ * Shared shell for the entity-details forms.
  * @param props the input props
  * @returns the component
  */
@@ -70,7 +70,7 @@ export type EntityDetailsFrameComponentProps = {
 	saveDisabled: boolean;
 	children: ReactNode;
 	onSave: () => void;
-	onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+	onSubmit: SubmitEventHandler<HTMLFormElement>;
 	dialogs?: ReactNode;
 	loadingVisible?: boolean;
 	subtitle?: string;

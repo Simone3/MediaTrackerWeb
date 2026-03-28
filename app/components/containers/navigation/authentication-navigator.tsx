@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
  * The navigator to switch between unauthenticated and authenticated flows
  */
 class AuthenticationNavigator extends Component<AuthenticationNavigatorProps> {
+	
 	/**
 	 * @override
 	 */

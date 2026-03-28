@@ -9,6 +9,7 @@ import { AppScreens } from 'app/utilities/screens';
  * Presentational component that contains the add new user form
  */
 export class UserLoginScreenComponent extends Component<UserLoginScreenComponentProps> {
+	
 	/**
 	 * @override
 	 */

@@ -100,3 +100,15 @@ export const ownPlatformDetails = (state: OwnPlatformDetailsState = initialState
 			return state;
 	}
 };
+
+/**
+ * Not a reducer per se but an utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapOwnPlatformDetailsForPersistence = (state: OwnPlatformDetailsState): OwnPlatformDetailsState => {
+	return {
+		...state,
+		saveStatus: 'IDLE'
+	};
+};

@@ -1356,7 +1356,6 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 		const commonDifferent = left.id !== right.id ||
 			left.name !== right.name ||
 			left.mediaType !== right.mediaType ||
-			left.status !== right.status ||
 			left.importance !== right.importance ||
 			left.description !== right.description ||
 			left.userComment !== right.userComment ||
@@ -1617,8 +1616,7 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 	 */
 	private normalizeFormValues(values: MediaItemDetailsFormValues): MediaItemDetailsFormValues {
 		const normalizedValues: MediaItemDetailsFormValues = {
-			...values,
-			status: this.buildStatusLabel(values)
+			...values
 		};
 
 		if(values.group?.id) {
@@ -1637,27 +1635,6 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 		this.applyNormalizedTextArray(normalizedValues, 'platforms', values.platforms);
 
 		return normalizedValues;
-	}
-
-	/**
-	 * Builds the internal status label from other media item fields
-	 * @param values form values
-	 * @returns status label
-	 */
-	private buildStatusLabel(values: MediaItemDetailsFormValues): MediaItemInternal['status'] {
-		if(values.completedOn && values.completedOn.length > 0 && !values.markedAsRedo) {
-			return 'COMPLETE';
-		}
-		if(values.active) {
-			return 'ACTIVE';
-		}
-		if(values.completedOn && values.completedOn.length > 0 && values.markedAsRedo) {
-			return 'REDO';
-		}
-		if(values.releaseDate && values.releaseDate > new Date()) {
-			return 'UPCOMING';
-		}
-		return values.status || 'NEW';
 	}
 
 	/**

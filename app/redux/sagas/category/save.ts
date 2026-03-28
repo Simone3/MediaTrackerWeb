@@ -20,7 +20,7 @@ const saveCategorySaga = function * (action: SaveCategoryAction): SagaIterator {
 
 	try {
 		// Get values from state
-		const state: State = yield select();
+		const state = (yield select()) as State;
 		const user = state.userGlobal.user;
 		if(!user) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while saving category');
@@ -32,7 +32,7 @@ const saveCategorySaga = function * (action: SaveCategoryAction): SagaIterator {
 			const filter: CategoryFilterInternal = {
 				name: category.name
 			};
-			const mediaItemsWithSameName: CategoryInternal[] = yield call(categoryController.filter.bind(categoryController), user.id, filter);
+			const mediaItemsWithSameName = (yield call(categoryController.filter.bind(categoryController), user.id, filter)) as CategoryInternal[];
 			
 			// If so, dispatch confirmation request action and exit
 			if(mediaItemsWithSameName.length > 0) {

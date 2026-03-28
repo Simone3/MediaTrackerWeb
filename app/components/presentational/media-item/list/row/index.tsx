@@ -70,7 +70,7 @@ const getCreatorNames = (mediaItem: MediaItemInternal): string[] | undefined => 
 			return (mediaItem as VideogameInternal).developers;
 
 		default:
-			throw AppError.GENERIC.withDetails(`Media type ${mediaItem.mediaType} not recognized for media item creators`);
+			throw AppError.GENERIC.withDetails(`Media type not recognized for media item creators`);
 	}
 };
 
@@ -94,7 +94,7 @@ const getDurationValue = (mediaItem: MediaItemInternal): number | undefined => {
 			return (mediaItem as VideogameInternal).averageLengthHours;
 
 		default:
-			throw AppError.GENERIC.withDetails(`Media type ${mediaItem.mediaType} not recognized for media item duration`);
+			throw AppError.GENERIC.withDetails(`Media type not recognized for media item duration`);
 	}
 };
 
@@ -228,7 +228,7 @@ const getStatusIcon = (mediaItem: MediaItemInternal): string => {
 			return importanceIcons[mediaItem.importance];
 
 		default:
-			throw AppError.GENERIC.withDetails(`Status ${mediaItem.status} not recognized for media item status icon`);
+			throw AppError.GENERIC.withDetails(`Status not recognized for media item status icon`);
 	}
 };
 
@@ -286,7 +286,7 @@ const getStatusColors = (mediaItem: MediaItemInternal): IconColors => {
 			};
 
 		default:
-			throw AppError.GENERIC.withDetails(`Status ${mediaItem.status} not recognized for media item status icon colors`);
+			throw AppError.GENERIC.withDetails(`Status not recognized for media item status icon colors`);
 	}
 };
 
@@ -313,7 +313,7 @@ const getStatusLabel = (mediaItem: MediaItemInternal): string => {
 			return i18n.t(`mediaItem.common.importance.${mediaItem.importance}`);
 
 		default:
-			throw AppError.GENERIC.withDetails(`Status ${mediaItem.status} not recognized for media item status label`);
+			throw AppError.GENERIC.withDetails(`Status not recognized for media item status label`);
 	}
 };
 

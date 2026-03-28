@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { loadPersistedReduxState, persistReduxState } from 'app/redux/persistence';
 import { rootReducer } from 'app/redux/reducers/root';
-import { State } from 'app/redux/state/state';
 import { rootSaga } from 'app/redux/sagas/root';
 import { Store } from 'redux';
 import createSagaMiddleware from 'redux-saga';
@@ -30,7 +29,7 @@ export const initializeRedux = (): Store => {
 	
 	sagaMiddleware.run(rootSaga);
 	store.subscribe(() => {
-		persistReduxState(store.getState() as State);
+		persistReduxState(store.getState());
 	});
 
 	return store;

@@ -16,7 +16,7 @@ const inlineUpdateTvShowSeasonSaga = function * (action: InlineUpdateTvShowSeaso
 	const season = action.tvShowSeason;
 
 	// Get values from state
-	const state: State = yield select();
+	const state = (yield select()) as State;
 	let seasons = state.tvShowSeasonsList.tvShowSeasons;
 	if(!seasons) {
 		throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while updating TV show season');

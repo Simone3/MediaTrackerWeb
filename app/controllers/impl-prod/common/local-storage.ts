@@ -16,21 +16,27 @@ export class LocalStorageAsync implements LocalStorage {
 	/**
 	 * @override
 	 */
-	public async getValue(key: string): Promise<string | null> {
-		return this.getBrowserStorage().getItem(key);
+	public getValue(key: string): Promise<string | null> {
+		return new Promise((resolve) => {
+			resolve(this.getBrowserStorage().getItem(key));
+		});
 	}
 
 	/**
 	 * @override
 	 */
-	public async setValue(key: string, value: string): Promise<void> {
-		this.getBrowserStorage().setItem(key, value);
+	public setValue(key: string, value: string): Promise<void> {
+		return new Promise((resolve) => {
+			resolve(this.getBrowserStorage().setItem(key, value));
+		});
 	}
 
 	/**
 	 * @override
 	 */
 	public async removeValue(key: string): Promise<void> {
-		this.getBrowserStorage().removeItem(key);
+		return new Promise((resolve) => {
+			resolve(this.getBrowserStorage().removeItem(key));
+		});
 	}
 }

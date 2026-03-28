@@ -153,7 +153,7 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 							type='button'
 							className='responsive-action-menu-button media-item-context-menu-button'
 							onClick={() => {
-								this.props.viewGroup(mediaItem.group as GroupInternal);
+								this.props.viewGroup(mediaItem.group);
 								close();
 							}}>
 							{i18n.t('mediaItem.list.viewGroup')}

@@ -90,7 +90,7 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 								disabled={!addingNewSeason}
 								onChange={(event) => {
 									const value = event.target.value ? Number(event.target.value) : undefined;
-									this.setFormField('number', value as TvShowSeasonInternal['number']);
+									this.setFormField('number', value);
 								}}
 							/>
 						</div>

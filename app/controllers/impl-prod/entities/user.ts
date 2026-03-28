@@ -36,7 +36,7 @@ export class UserFirebaseController implements UserController {
 	 * @returns the same auth client once initialization completes
 	 */
 	private async getInitializedAuthClient(auth: Auth = this.getAuthClient()): Promise<Auth> {
-		if(!this.authInitialization) {
+		if(this.authInitialization === undefined) {
 			this.authInitialization = new Promise((resolve, reject) => {
 				const unsubscribe = onAuthStateChanged(auth, () => {
 					unsubscribe();

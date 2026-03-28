@@ -18,7 +18,7 @@ const searchMediaItemsCatalogSaga = function * (action: SearchMediaItemsCatalogA
 
 	try {
 		// Get values from state
-		const state: State = yield select();
+		const state = (yield select()) as State;
 		const category = state.categoryGlobal.selectedCategory;
 		if(!category) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find category while searching media items catalog');
@@ -29,7 +29,7 @@ const searchMediaItemsCatalogSaga = function * (action: SearchMediaItemsCatalogA
 
 		// Retrieve catalog results from controller
 		const term = action.term;
-		const catalogResults: SearchMediaItemCatalogResultInternal[] = yield call(catalogController.search.bind(catalogController), term);
+		const catalogResults = (yield call(catalogController.search.bind(catalogController), term)) as SearchMediaItemCatalogResultInternal[];
 
 		// Send the results
 		yield put(completeSearchingMediaItemsCatalog(catalogResults));

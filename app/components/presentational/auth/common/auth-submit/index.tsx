@@ -4,6 +4,7 @@ import React, { Component, MouseEvent, ReactNode } from 'react';
  * Presentational component to display a submit button for the auth screens
  */
 export class AuthSubmitComponent extends Component<AuthSubmitComponentProps> {
+
 	/**
 	 * @override
 	 */
@@ -41,11 +42,7 @@ export class AuthSubmitComponent extends Component<AuthSubmitComponentProps> {
  * AuthSubmitComponent's props
  */
 export type AuthSubmitComponentProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> & {
-	/**
-	 * The button text
-	 */
 	text: string;
-
 	onClick?: React.MouseEventHandler<HTMLButtonElement>;
 	onPress?: React.MouseEventHandler<HTMLButtonElement>;
 };

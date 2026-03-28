@@ -45,3 +45,13 @@ export const userGlobal = (state: UserGlobalState = initialState, action: Action
 			return state;
 	}
 };
+
+/**
+ * Not a reducer per se but an utility to map the state for persistence
+ * @returns the mapped state
+ */
+export const mapUserGlobalForPersistence = (): UserGlobalState => {
+	return {
+		...initialState
+	};
+};

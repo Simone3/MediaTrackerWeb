@@ -17,7 +17,7 @@ const deleteCategorySaga = function * (action: DeleteCategoryAction): SagaIterat
 
 	try {
 		// Get values from state
-		const state: State = yield select();
+		const state = (yield select()) as State;
 		const user = state.userGlobal.user;
 		if(!user) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while deleting category');

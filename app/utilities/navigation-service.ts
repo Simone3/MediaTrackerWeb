@@ -1,6 +1,10 @@
-import { Navigation } from 'app/components/containers/navigation/global';
 import { AppError } from 'app/data/models/internal/error';
 import { screenToPath } from 'app/utilities/navigation-routes';
+
+/**
+ * Helper type for navigation properties used by navigationService
+ */
+export type Navigation = { navigate: (path: string) => void, back: () => void };
 
 /**
  * Global class that can be used anywhere to navigate to a different app screen

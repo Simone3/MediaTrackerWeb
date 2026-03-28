@@ -110,3 +110,16 @@ export const ownPlatformsList = (state: OwnPlatformsListState = initialState, ac
 			return state;
 	}
 };
+
+/**
+ * Not a reducer per se but an utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapOwnPlatformsListForPersistence = (state: OwnPlatformsListState): OwnPlatformsListState => {
+	return {
+		...state,
+		status: 'REQUIRES_FETCH',
+		highlightedOwnPlatform: undefined
+	};
+};

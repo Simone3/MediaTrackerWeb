@@ -18,7 +18,7 @@ const getMediaItemCatalogDetailsSaga = function * (action: GetMediaItemCatalogDe
 
 	try {
 		// Get values from state
-		const state: State = yield select();
+		const state = (yield select()) as State;
 		const category = state.categoryGlobal.selectedCategory;
 		if(!category) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find category while getting media item catalog details');
@@ -29,7 +29,7 @@ const getMediaItemCatalogDetailsSaga = function * (action: GetMediaItemCatalogDe
 
 		// Retrieve catalog details from controller
 		const catalogId = action.catalogId;
-		const catalogDetails: CatalogMediaItemInternal = yield call(catalogController.getDetails.bind(catalogController), catalogId);
+		const catalogDetails = (yield call(catalogController.getDetails.bind(catalogController), catalogId)) as CatalogMediaItemInternal;
 		yield put(completeGettingMediaItemCatalogDetails(catalogDetails));
 	}
 	catch(error) {

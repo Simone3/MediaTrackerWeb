@@ -5,7 +5,6 @@ import { ValuesOf } from 'app/utilities/helper-types';
  * The generic media item filter form model
  */
 export type MediaItemFilterFormValues = {
-
 	status: MediaItemFilterFormStatus;
 	importanceLevel: MediaItemFilterFormImportance;
 	group: MediaItemFilterFormGroup;

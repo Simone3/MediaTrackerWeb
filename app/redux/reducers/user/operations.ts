@@ -132,3 +132,13 @@ export const userOperations = (state: UserOperationsState = initialState, action
 			return state;
 	}
 };
+
+/**
+ * Not a reducer per se but an utility to map the state for persistence
+ * @returns the mapped state
+ */
+export const mapUserOperationsForPersistence = (): UserOperationsState => {
+	return {
+		...initialState
+	};
+};

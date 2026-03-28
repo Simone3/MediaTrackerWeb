@@ -2,29 +2,28 @@
 Just a Codex experiment for now.
 
 TODO:
-- add favicon
-- make all icons csvs
-- how is the current user saved? custom cookie or all handled by firebase sdk?
-- ai pass to check if all strings are in lang-en
-- ai pass to remove unused code
-- ai pass to remove unused css rules
-- ai pass to remove unused files/resources
-- ai pass to find possible components to generalize
-- ai pass to remove all empty lines after block start
-- ai pass to remove useless logs or comments
-- upgrade all dependencies versions
-- check for any console errors
-- check dev vs. prod configs - how to inject them in a webapp?
-- final manual code check
-- fully test on chrome/firefox
-- fully test on mobile
+- final manual code check -> from /presentational
+  - restore formik and component switcher etc.
+  - refactor into generic text input, date picker, etc.
+  - authinput, authlink, authsubmit generalizable?
+  - find unused properties
+  - migrate to an eslint.config.js file
+  - app-dark-screen-active added and removed?
+  - remove blank lines after classes...
+  - CATEGORIES_MOBILE_BREAKPOINT rename and move
+  - test reload with date / date array fields, does it work?
+- fully test on chrome/firefox (production build)
+- fully test on mobile (need to deploy first?)
+- check dev vs. prod configs
+  - how to inject them in a webapp?
+  - do we need .env file?
+  - edit package.json commands to set environment
+  - restore config-sample.ts
+  - Firebase API key is public?
+  - is it useless to gitignore the configs?
 - "merge" web and be to deploy them as a single app?
-- limit signups in prod firebase?
+- limit signups in prod firebase? are there login attempts limits?
 
-MISSING OLD SCRENSHOTS:
-- view group
-- search catalog
-- tv seasons
 
 
 

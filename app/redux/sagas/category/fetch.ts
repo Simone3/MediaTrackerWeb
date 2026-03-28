@@ -16,14 +16,14 @@ const fetchCategoriesSaga = function * (): SagaIterator {
 
 	try {
 		// Get values from state
-		const state: State = yield select();
+		const state = (yield select()) as State;
 		const user = state.userGlobal.user;
 		if(!user) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while fetching categories');
 		}
 
 		// Fetch categories
-		const categories: CategoryInternal[] = yield call(categoryController.getAllCategories.bind(categoryController), user.id);
+		const categories = (yield call(categoryController.getAllCategories.bind(categoryController), user.id)) as CategoryInternal[];
 		yield put(completeFetchingCategories(categories));
 	}
 	catch(error) {

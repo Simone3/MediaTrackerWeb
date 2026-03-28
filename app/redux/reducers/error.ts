@@ -51,3 +51,13 @@ export const error = (state: ErrorState = initialState, action: Action): ErrorSt
 			return state;
 	}
 };
+
+/**
+ * Not a reducer per se but an utility to map the state for persistence
+ * @returns the mapped state
+ */
+export const mapErrorForPersistence = (): ErrorState => {
+	return {
+		...initialState
+	};
+};

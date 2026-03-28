@@ -17,7 +17,7 @@ const userSignupSaga = function * (action: SignUserUpAction): SagaIterator {
 
 	try {
 		// Sign user up
-		const user: UserInternal = yield call(userController.signup.bind(userController), action.user);
+		const user = (yield call(userController.signup.bind(userController), action.user)) as UserInternal;
 		yield put(completeSigningUserUp(user));
 	}
 	catch(error) {

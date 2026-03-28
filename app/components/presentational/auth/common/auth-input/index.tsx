@@ -4,6 +4,7 @@ import React, { ChangeEvent, Component, ReactNode } from 'react';
  * Presentational component to display a text input for the auth screens
  */
 export class AuthTextInputComponent extends Component<AuthTextInputComponentProps> {
+	
 	/**
 	 * @override
 	 */

@@ -9,10 +9,10 @@ const NavigationServiceBridge = (): null => {
 	useEffect(() => {
 		navigationService.initialize({
 			navigate: (path: string) => {
-				navigate(path);
+				void navigate(path);
 			},
 			back: () => {
-				navigate(-1);
+				void navigate(-1);
 			}
 		});
 	}, [ navigate ]);
@@ -24,6 +24,7 @@ const NavigationServiceBridge = (): null => {
  * The root container that wraps the navigation logic
  */
 export class AppNavigationContainer extends Component {
+	
 	/**
 	 * @override
 	 */
