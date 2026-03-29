@@ -252,6 +252,20 @@
     - `app/resources/lang/lang-en.json`
     - `app/web/styles.css`
     - `tests/media-items-screen.smoke.test.tsx`
+- `formik` had been removed during the web dependency refresh even though the old RN app relied on it for entity forms.
+  - Correct behavior on web now:
+    - `formik` is restored as a runtime dependency using the current stable `2.4.9` release, which is compatible with the repo's React `19` setup via Formik's `react >=16.8.0` peer range
+    - the categories details flow is once again Formik-backed instead of hand-rolled local component state
+    - the category form fields now match the old RN field definition directly: `CategoryInternal` values with `name`, `mediaType`, and `color` managed by Formik plus the existing `id`
+    - Formik now owns the category form `dirty` / `isValid` status that gets reported back into Redux, while the current web shell, save button, loading state, and same-name confirmation dialog remain unchanged
+    - editing an existing category still keeps the media-type selector locked, matching the old RN form behavior
+  - Relevant files:
+    - `package.json`
+    - `package-lock.json`
+    - `app/components/presentational/category/details/form/data/index.ts`
+    - `app/components/presentational/category/details/form/view/index.tsx`
+    - `app/components/presentational/category/details/screen/index.tsx`
+    - `tests/category-details.smoke.test.tsx`
 - Category three-dots options had regressed to direct edit navigation.
 - Correct behavior on web now:
   - clicking three dots highlights the category

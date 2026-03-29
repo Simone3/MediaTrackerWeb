@@ -84,4 +84,34 @@ describe('CategoryDetailsScreenComponent', () => {
 			expect(saveCategory).toHaveBeenCalledWith(category, true);
 		});
 	});
+
+	test('keeps media type locked when editing an existing category', async() => {
+		const saveCategory = jest.fn();
+		const category: CategoryInternal = {
+			id: 'category-id',
+			name: 'Books',
+			color: config.ui.colors.availableCategoryColors[0],
+			mediaType: 'BOOK'
+		};
+
+		render(
+			<CategoryDetailsScreenComponent
+				isLoading={false}
+				category={category}
+				sameNameConfirmationRequested={false}
+				saveCategory={saveCategory}
+				notifyFormStatus={jest.fn()}
+			/>
+		);
+
+		const user = userEvent.setup();
+		const movieButton = screen.getByRole('button', { name: i18n.t('category.mediaTypes.MOVIE') });
+		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
+
+		expect(movieButton).toBeDisabled();
+
+		await user.click(saveButton);
+
+		expect(saveCategory).toHaveBeenCalledWith(category, false);
+	});
 });
