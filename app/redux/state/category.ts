@@ -13,6 +13,24 @@ export type CategoryGlobalState = {
 }
 
 /**
+ * The initial value for the global category state
+ */
+export const categoryGlobalStateInitialValue: CategoryGlobalState = {
+	selectedCategory: undefined
+};
+
+/**
+ * Utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapCategoryGlobalForPersistence = (state: CategoryGlobalState): CategoryGlobalState => {
+	return {
+		...state
+	};
+};
+
+/**
  * Portion of the internal state with the categories list information
  */
 export type CategoriesListState = {
@@ -32,6 +50,28 @@ export type CategoriesListState = {
 	 */
 	readonly highlightedCategory: CategoryInternal | undefined;
 }
+
+/**
+ * The initial value for the categories list state
+ */
+export const categoriesListStateInitialValue: CategoriesListState = {
+	categories: [],
+	status: 'REQUIRES_FETCH',
+	highlightedCategory: undefined
+};
+
+/**
+ * Utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapCategoriesListForPersistence = (state: CategoriesListState): CategoriesListState => {
+	return {
+		...state,
+		status: 'REQUIRES_FETCH',
+		highlightedCategory: undefined
+	};
+};
 
 /**
  * Portion of the internal state with the category details information
@@ -58,6 +98,28 @@ export type CategoryDetailsState = {
 	 */
 	readonly saveStatus: CategorySaveStatus;
 }
+
+/**
+ * The initial value for the category details state
+ */
+export const categoryDetailsStateInitialValue: CategoryDetailsState = {
+	category: undefined,
+	valid: false,
+	dirty: false,
+	saveStatus: 'IDLE'
+};
+
+/**
+ * Utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapCategoryDetailsForPersistence = (state: CategoryDetailsState): CategoryDetailsState => {
+	return {
+		...state,
+		saveStatus: 'IDLE'
+	};
+};
 
 /**
  * The current status of the categories list

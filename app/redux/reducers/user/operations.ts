@@ -1,16 +1,6 @@
 import { COMPLETE_CHECKING_USER_LOGIN_STATUS, COMPLETE_LOGGING_USER_IN, COMPLETE_LOGGING_USER_OUT, COMPLETE_SIGNING_USER_UP, FAIL_CHECKING_USER_LOGIN_STATUS, FAIL_LOGGING_USER_IN, FAIL_LOGGING_USER_OUT, FAIL_SIGNING_USER_UP, START_CHECKING_USER_LOGIN_STATUS, START_LOGGING_USER_IN, START_LOGGING_USER_OUT, START_SIGNING_USER_UP } from 'app/redux/actions/user/const';
-import { UserOperationsState } from 'app/redux/state/user';
+import { UserOperationsState, userOperationsStateInitialValue } from 'app/redux/state/user';
 import { Action } from 'redux';
-
-/**
- * The initial state for the user operations
- */
-const initialState: UserOperationsState = {
-	checkLoginStatus: 'IDLE',
-	signupStatus: 'IDLE',
-	loginStatus: 'IDLE',
-	logoutStatus: 'IDLE'
-};
 
 /**
  * Reducer for the user operations portion of the global state
@@ -18,7 +8,7 @@ const initialState: UserOperationsState = {
  * @param action an action
  * @returns the new state
  */
-export const userOperations = (state: UserOperationsState = initialState, action: Action): UserOperationsState => {
+export const userOperations = (state: UserOperationsState = userOperationsStateInitialValue, action: Action): UserOperationsState => {
 	switch(action.type) {
 		// When the app starts the check process, the operation status changes
 		case START_CHECKING_USER_LOGIN_STATUS: {
@@ -131,14 +121,4 @@ export const userOperations = (state: UserOperationsState = initialState, action
 		default:
 			return state;
 	}
-};
-
-/**
- * Not a reducer per se but an utility to map the state for persistence
- * @returns the mapped state
- */
-export const mapUserOperationsForPersistence = (): UserOperationsState => {
-	return {
-		...initialState
-	};
 };

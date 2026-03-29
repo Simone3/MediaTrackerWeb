@@ -48,6 +48,34 @@ export type MediaItemsListState = {
 }
 
 /**
+ * The initial value for the media items list state
+ */
+export const mediaItemsListStateInitialValue: MediaItemsListState = {
+	status: 'REQUIRES_FETCH',
+	mode: 'NORMAL',
+	filter: undefined,
+	sortBy: undefined,
+	searchTerm: undefined,
+	viewGroup: undefined,
+	mediaItems: [],
+	highlightedMediaItem: undefined
+};
+
+/**
+ * Utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapMediaItemsListForPersistence = (state: MediaItemsListState): MediaItemsListState => {
+	return {
+		...state,
+		status: 'REQUIRES_FETCH',
+		mode: state.mode === 'SET_FILTERS' ? 'NORMAL' : state.mode,
+		highlightedMediaItem: undefined
+	};
+};
+
+/**
  * Portion of the internal state with the media item details information
  */
 export type MediaItemDetailsState = {
@@ -92,6 +120,33 @@ export type MediaItemDetailsState = {
 	 */
 	readonly saveStatus: MediaItemSaveStatus;
 }
+
+/**
+ * The initial value for the media item details state
+ */
+export const mediaItemDetailsStateInitialValue: MediaItemDetailsState = {
+	mediaItem: undefined,
+	formDraft: undefined,
+	valid: false,
+	dirty: false,
+	saveStatus: 'IDLE',
+	catalogSearchResults: undefined,
+	catalogDetails: undefined,
+	catalogStatus: 'IDLE'
+};
+
+/**
+ * Utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapMediaItemDetailsForPersistence = (state: MediaItemDetailsState): MediaItemDetailsState => {
+	return {
+		...state,
+		saveStatus: 'IDLE',
+		catalogStatus: 'IDLE'
+	};
+};
 
 /**
  * The current status (e.g. allows to invalidate, show the loading indicator, etc.)

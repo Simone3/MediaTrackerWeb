@@ -1,18 +1,8 @@
 import { DEFAULT_CATEGORY } from 'app/data/models/internal/category';
 import { ASK_CONFIRMATION_BEFORE_SAVING_CATEGORY, COMPLETE_SAVING_CATEGORY, FAIL_SAVING_CATEGORY, LOAD_CATEGORY_DETAILS, LOAD_NEW_CATEGORY_DETAILS, REQUEST_CATEGORY_SAVE, SET_CATEGORY_FORM_STATUS, START_SAVING_CATEGORY } from 'app/redux/actions/category/const';
 import { LoadCategoryDetailsAction, SetCategoryFormStatusAction, StartSavingCategoryAction } from 'app/redux/actions/category/types';
-import { CategoryDetailsState } from 'app/redux/state/category';
+import { CategoryDetailsState, categoryDetailsStateInitialValue } from 'app/redux/state/category';
 import { Action } from 'redux';
-
-/**
- * The initial state for the category details
- */
-const initialState: CategoryDetailsState = {
-	category: undefined,
-	valid: false,
-	dirty: false,
-	saveStatus: 'IDLE'
-};
 
 /**
  * Reducer for the category details portion of the global state
@@ -20,7 +10,7 @@ const initialState: CategoryDetailsState = {
  * @param action an action
  * @returns the new state
  */
-export const categoryDetails = (state: CategoryDetailsState = initialState, action: Action): CategoryDetailsState => {
+export const categoryDetails = (state: CategoryDetailsState = categoryDetailsStateInitialValue, action: Action): CategoryDetailsState => {
 	switch(action.type) {
 		// When the details page is started with a new category, the status is reset and the default category is loaded
 		case LOAD_NEW_CATEGORY_DETAILS: {
@@ -99,16 +89,4 @@ export const categoryDetails = (state: CategoryDetailsState = initialState, acti
 		default:
 			return state;
 	}
-};
-
-/**
- * Not a reducer per se but an utility to map the state for persistence
- * @param state the current state
- * @returns the mapped state
- */
-export const mapCategoryDetailsForPersistence = (state: CategoryDetailsState): CategoryDetailsState => {
-	return {
-		...state,
-		saveStatus: 'IDLE'
-	};
 };

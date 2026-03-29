@@ -1,18 +1,8 @@
 import { DEFAULT_GROUP } from 'app/data/models/internal/group';
 import { ASK_CONFIRMATION_BEFORE_SAVING_GROUP, COMPLETE_SAVING_GROUP, FAIL_SAVING_GROUP, LOAD_GROUP_DETAILS, LOAD_NEW_GROUP_DETAILS, REQUEST_GROUP_SAVE, SET_GROUP_FORM_STATUS, START_SAVING_GROUP } from 'app/redux/actions/group/const';
 import { LoadGroupDetailsAction, SetGroupFormStatusAction, StartSavingGroupAction } from 'app/redux/actions/group/types';
-import { GroupDetailsState } from 'app/redux/state/group';
+import { GroupDetailsState, groupDetailsStateInitialValue } from 'app/redux/state/group';
 import { Action } from 'redux';
-
-/**
- * The initial state for the group details
- */
-const initialState: GroupDetailsState = {
-	group: undefined,
-	valid: false,
-	dirty: false,
-	saveStatus: 'IDLE'
-};
 
 /**
  * Reducer for the group details portion of the global state
@@ -20,7 +10,7 @@ const initialState: GroupDetailsState = {
  * @param action an action
  * @returns the new state
  */
-export const groupDetails = (state: GroupDetailsState = initialState, action: Action): GroupDetailsState => {
+export const groupDetails = (state: GroupDetailsState = groupDetailsStateInitialValue, action: Action): GroupDetailsState => {
 	switch(action.type) {
 		// When the details page is started with a new group, the status is reset and the default group is loaded
 		case LOAD_NEW_GROUP_DETAILS: {
@@ -99,16 +89,4 @@ export const groupDetails = (state: GroupDetailsState = initialState, action: Ac
 		default:
 			return state;
 	}
-};
-
-/**
- * Not a reducer per se but an utility to map the state for persistence
- * @param state the current state
- * @returns the mapped state
- */
-export const mapGroupDetailsForPersistence = (state: GroupDetailsState): GroupDetailsState => {
-	return {
-		...state,
-		saveStatus: 'IDLE'
-	};
 };

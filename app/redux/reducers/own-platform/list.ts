@@ -1,17 +1,8 @@
 import { SELECT_CATEGORY } from 'app/redux/actions/category/const';
 import { COMPLETE_DELETING_OWN_PLATFORM, COMPLETE_FETCHING_OWN_PLATFORMS, COMPLETE_SAVING_OWN_PLATFORM, FAIL_DELETING_OWN_PLATFORM, FAIL_FETCHING_OWN_PLATFORMS, HIGHLIGHT_OWN_PLATFORM, INVALIDATE_OWN_PLATFORMS, REMOVE_OWN_PLATFORM_HIGHLIGHT, START_DELETING_OWN_PLATFORM, START_FETCHING_OWN_PLATFORMS } from 'app/redux/actions/own-platform/const';
 import { CompleteFetchingOwnPlatformsAction, HighlightOwnPlatformAction } from 'app/redux/actions/own-platform/types';
-import { OwnPlatformsListState } from 'app/redux/state/own-platform';
+import { OwnPlatformsListState, ownPlatformsListStateInitialValue } from 'app/redux/state/own-platform';
 import { Action } from 'redux';
-
-/**
- * The initial state for the own platforms list
- */
-const initialState: OwnPlatformsListState = {
-	ownPlatforms: [],
-	status: 'REQUIRES_FETCH',
-	highlightedOwnPlatform: undefined
-};
 
 /**
  * Reducer for the own platforms list portion of the global state
@@ -19,7 +10,7 @@ const initialState: OwnPlatformsListState = {
  * @param action an action
  * @returns the new state
  */
-export const ownPlatformsList = (state: OwnPlatformsListState = initialState, action: Action): OwnPlatformsListState => {
+export const ownPlatformsList = (state: OwnPlatformsListState = ownPlatformsListStateInitialValue, action: Action): OwnPlatformsListState => {
 	switch(action.type) {
 		// When the app starts fetching the list of own platforms, the status changes to show the loading indicator
 		case START_FETCHING_OWN_PLATFORMS: {
@@ -102,24 +93,11 @@ export const ownPlatformsList = (state: OwnPlatformsListState = initialState, ac
 		// When a category is selected, the own platform data is reset
 		case SELECT_CATEGORY: {
 			return {
-				...initialState
+				...ownPlatformsListStateInitialValue
 			};
 		}
 
 		default:
 			return state;
 	}
-};
-
-/**
- * Not a reducer per se but an utility to map the state for persistence
- * @param state the current state
- * @returns the mapped state
- */
-export const mapOwnPlatformsListForPersistence = (state: OwnPlatformsListState): OwnPlatformsListState => {
-	return {
-		...state,
-		status: 'REQUIRES_FETCH',
-		highlightedOwnPlatform: undefined
-	};
 };

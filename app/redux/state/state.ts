@@ -1,10 +1,10 @@
-import { CategoriesListState, CategoryDetailsState, CategoryGlobalState } from 'app/redux/state/category';
-import { ErrorState } from 'app/redux/state/error';
-import { GroupDetailsState, GroupGlobalState, GroupsListState } from 'app/redux/state/group';
-import { MediaItemDetailsState, MediaItemsListState } from 'app/redux/state/media-item';
-import { OwnPlatformDetailsState, OwnPlatformGlobalState, OwnPlatformsListState } from 'app/redux/state/own-platform';
-import { UserGlobalState, UserOperationsState } from 'app/redux/state/user';
-import { TvShowSeasonDetailsState, TvShowSeasonsListState } from './tv-show-season';
+import { CategoriesListState, CategoryDetailsState, CategoryGlobalState, mapCategoriesListForPersistence, mapCategoryDetailsForPersistence, mapCategoryGlobalForPersistence } from 'app/redux/state/category';
+import { ErrorState, mapErrorForPersistence } from 'app/redux/state/error';
+import { GroupDetailsState, GroupGlobalState, GroupsListState, mapGroupDetailsForPersistence, mapGroupGlobalForPersistence, mapGroupsListForPersistence } from 'app/redux/state/group';
+import { MediaItemDetailsState, MediaItemsListState, mapMediaItemDetailsForPersistence, mapMediaItemsListForPersistence } from 'app/redux/state/media-item';
+import { OwnPlatformDetailsState, OwnPlatformGlobalState, OwnPlatformsListState, mapOwnPlatformDetailsForPersistence, mapOwnPlatformGlobalForPersistence, mapOwnPlatformsListForPersistence } from 'app/redux/state/own-platform';
+import { TvShowSeasonDetailsState, TvShowSeasonsListState, mapTvShowSeasonDetailsForPersistence, mapTvShowSeasonsListForPersistence } from 'app/redux/state/tv-show-season';
+import { UserGlobalState, UserOperationsState, mapUserGlobalForPersistence, mapUserOperationsForPersistence } from 'app/redux/state/user';
 
 /**
  * The global application state (handled by Redux)
@@ -92,3 +92,29 @@ export class State {
 	public readonly ownPlatformDetails!: OwnPlatformDetailsState;
 
 }
+
+/**
+ * Utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapStateForPersistence = (state: State): State => {
+	return {
+		error: mapErrorForPersistence(),
+		userGlobal: mapUserGlobalForPersistence(),
+		userOperations: mapUserOperationsForPersistence(),
+		categoryGlobal: mapCategoryGlobalForPersistence(state.categoryGlobal),
+		categoriesList: mapCategoriesListForPersistence(state.categoriesList),
+		categoryDetails: mapCategoryDetailsForPersistence(state.categoryDetails),
+		mediaItemsList: mapMediaItemsListForPersistence(state.mediaItemsList),
+		mediaItemDetails: mapMediaItemDetailsForPersistence(state.mediaItemDetails),
+		tvShowSeasonsList: mapTvShowSeasonsListForPersistence(state.tvShowSeasonsList),
+		tvShowSeasonDetails: mapTvShowSeasonDetailsForPersistence(state.tvShowSeasonDetails),
+		groupGlobal: mapGroupGlobalForPersistence(state.groupGlobal),
+		groupsList: mapGroupsListForPersistence(state.groupsList),
+		groupDetails: mapGroupDetailsForPersistence(state.groupDetails),
+		ownPlatformGlobal: mapOwnPlatformGlobalForPersistence(state.ownPlatformGlobal),
+		ownPlatformsList: mapOwnPlatformsListForPersistence(state.ownPlatformsList),
+		ownPlatformDetails: mapOwnPlatformDetailsForPersistence(state.ownPlatformDetails)
+	};
+};

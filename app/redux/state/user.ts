@@ -17,6 +17,24 @@ export type UserGlobalState = {
 }
 
 /**
+ * The initial value for the global user state
+ */
+export const userGlobalStateInitialValue: UserGlobalState = {
+	status: 'REQUIRES_CHECK',
+	user: undefined
+};
+
+/**
+ * Utility to map the state for persistence
+ * @returns the mapped state
+ */
+export const mapUserGlobalForPersistence = (): UserGlobalState => {
+	return {
+		...userGlobalStateInitialValue
+	};
+};
+
+/**
  * Portion of the internal state with the user operations progress state
  */
 export type UserOperationsState = {
@@ -41,6 +59,26 @@ export type UserOperationsState = {
 	 */
 	readonly logoutStatus: UserOperationStatus;
 }
+
+/**
+ * The initial value for the user operations state
+ */
+export const userOperationsStateInitialValue: UserOperationsState = {
+	checkLoginStatus: 'IDLE',
+	signupStatus: 'IDLE',
+	loginStatus: 'IDLE',
+	logoutStatus: 'IDLE'
+};
+
+/**
+ * Utility to map the state for persistence
+ * @returns the mapped state
+ */
+export const mapUserOperationsForPersistence = (): UserOperationsState => {
+	return {
+		...userOperationsStateInitialValue
+	};
+};
 
 /**
  * The current status of the user

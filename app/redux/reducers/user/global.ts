@@ -1,15 +1,7 @@
 import { COMPLETE_CHECKING_USER_LOGIN_STATUS, COMPLETE_LOGGING_USER_IN, COMPLETE_SIGNING_USER_UP } from 'app/redux/actions/user/const';
 import { CompleteCheckingUserLoginStatusAction, CompleteLoggingUserInAction, CompleteSigningUserUpAction } from 'app/redux/actions/user/types';
-import { UserGlobalState } from 'app/redux/state/user';
+import { UserGlobalState, userGlobalStateInitialValue } from 'app/redux/state/user';
 import { Action } from 'redux';
-
-/**
- * The initial state for the global user data
- */
-const initialState: UserGlobalState = {
-	status: 'REQUIRES_CHECK',
-	user: undefined
-};
 
 /**
  * Reducer for the global user portion of the global state
@@ -17,7 +9,7 @@ const initialState: UserGlobalState = {
  * @param action an action
  * @returns the new state
  */
-export const userGlobal = (state: UserGlobalState = initialState, action: Action): UserGlobalState => {
+export const userGlobal = (state: UserGlobalState = userGlobalStateInitialValue, action: Action): UserGlobalState => {
 	switch(action.type) {
 		// When the user is retrived from local storage, the current user (may or may not be defined) is updated and the status changes
 		case COMPLETE_CHECKING_USER_LOGIN_STATUS: {
@@ -44,14 +36,4 @@ export const userGlobal = (state: UserGlobalState = initialState, action: Action
 		default:
 			return state;
 	}
-};
-
-/**
- * Not a reducer per se but an utility to map the state for persistence
- * @returns the mapped state
- */
-export const mapUserGlobalForPersistence = (): UserGlobalState => {
-	return {
-		...initialState
-	};
 };

@@ -22,6 +22,27 @@ export type TvShowSeasonsListState = {
 }
 
 /**
+ * The initial value for the TV show seasons list state
+ */
+export const tvShowSeasonsListStateInitialValue: TvShowSeasonsListState = {
+	tvShowSeasons: [],
+	completeHandlingTimestamp: undefined,
+	highlightedTvShowSeason: undefined
+};
+
+/**
+ * Utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapTvShowSeasonsListForPersistence = (state: TvShowSeasonsListState): TvShowSeasonsListState => {
+	return {
+		...state,
+		highlightedTvShowSeason: undefined
+	};
+};
+
+/**
  * Portion of the internal state with the TV show season details information
  */
 export type TvShowSeasonDetailsState = {
@@ -51,6 +72,29 @@ export type TvShowSeasonDetailsState = {
 	 */
 	readonly saveStatus: TvShowSeasonSaveStatus;
 }
+
+/**
+ * The initial value for the TV show season details state
+ */
+export const tvShowSeasonDetailsStateInitialValue: TvShowSeasonDetailsState = {
+	formMode: 'NEW',
+	saveStatus: 'IDLE',
+	tvShowSeason: undefined,
+	valid: false,
+	dirty: false
+};
+
+/**
+ * Utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapTvShowSeasonDetailsForPersistence = (state: TvShowSeasonDetailsState): TvShowSeasonDetailsState => {
+	return {
+		...state,
+		saveStatus: 'IDLE'
+	};
+};
 
 /**
  * The TV show season form mode

@@ -1,22 +1,8 @@
 import { mediaItemDefinitionsControllerFactory } from 'app/factories/controller-factories';
 import { ASK_CONFIRMATION_BEFORE_SAVING_MEDIA_ITEM, COMPLETE_GETTING_MEDIA_ITEM_CATALOG_DETAILS, COMPLETE_SAVING_MEDIA_ITEM, COMPLETE_SEARCHING_MEDIA_ITEMS_CATALOG, FAIL_GETTING_MEDIA_ITEM_CATALOG_DETAILS, FAIL_SAVING_MEDIA_ITEM, FAIL_SEARCHING_MEDIA_ITEMS_CATALOG, LOAD_MEDIA_ITEM_DETAILS, LOAD_NEW_MEDIA_ITEM_DETAILS, REQUEST_MEDIA_ITEM_SAVE, RESET_MEDIA_ITEMS_CATALOG_SEARCH, RESET_MEDIA_ITEM_CATALOG_DETAILS, SET_MEDIA_ITEM_FORM_DRAFT, SET_MEDIA_ITEM_FORM_STATUS, START_GETTING_MEDIA_ITEM_CATALOG_DETAILS, START_SAVING_MEDIA_ITEM, START_SEARCHING_MEDIA_ITEMS_CATALOG } from 'app/redux/actions/media-item/const';
 import { CompleteGettingMediaItemCatalogDetailsAction, CompleteSearchingMediaItemsCatalogAction, LoadMediaItemDetailsAction, LoadNewMediaItemDetailsAction, SetMediaItemFormDraftAction, SetMediaItemFormStatusAction, StartSavingMediaItemAction } from 'app/redux/actions/media-item/types';
-import { MediaItemDetailsState } from 'app/redux/state/media-item';
+import { MediaItemDetailsState, mediaItemDetailsStateInitialValue } from 'app/redux/state/media-item';
 import { Action } from 'redux';
-
-/**
- * The initial state for the media item details
- */
-const initialState: MediaItemDetailsState = {
-	mediaItem: undefined,
-	formDraft: undefined,
-	valid: false,
-	dirty: false,
-	saveStatus: 'IDLE',
-	catalogSearchResults: undefined,
-	catalogDetails: undefined,
-	catalogStatus: 'IDLE'
-};
 
 /**
  * Reducer for the media item details portion of the global state
@@ -24,7 +10,7 @@ const initialState: MediaItemDetailsState = {
  * @param action an action
  * @returns the new state
  */
-export const mediaItemDetails = (state: MediaItemDetailsState = initialState, action: Action): MediaItemDetailsState => {
+export const mediaItemDetails = (state: MediaItemDetailsState = mediaItemDetailsStateInitialValue, action: Action): MediaItemDetailsState => {
 	switch(action.type) {
 		// When the details page is started with a new media item, the status and other support fields are reset and the default media item is loaded
 		case LOAD_NEW_MEDIA_ITEM_DETAILS: {
@@ -197,17 +183,4 @@ export const mediaItemDetails = (state: MediaItemDetailsState = initialState, ac
 		default:
 			return state;
 	}
-};
-
-/**
- * Not a reducer per se but an utility to map the state for persistence
- * @param state the current state
- * @returns the mapped state
- */
-export const mapMediaItemDetailsForPersistence = (state: MediaItemDetailsState): MediaItemDetailsState => {
-	return {
-		...state,
-		saveStatus: 'IDLE',
-		catalogStatus: 'IDLE'
-	};
 };

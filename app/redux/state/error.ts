@@ -11,3 +11,20 @@ export type ErrorState = {
 	 */
 	error?: AppError | string;
 };
+
+/**
+ * The initial value for the error state
+ */
+export const errorStateInitialValue: ErrorState = {
+	error: undefined
+};
+
+/**
+ * Utility to map the state for persistence
+ * @returns the mapped state
+ */
+export const mapErrorForPersistence = (): ErrorState => {
+	return {
+		...errorStateInitialValue
+	};
+};

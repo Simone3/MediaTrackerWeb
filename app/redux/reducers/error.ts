@@ -1,15 +1,8 @@
 import { AppError } from 'app/data/models/internal/error';
 import { CLEAR_ERROR, SET_ERROR } from 'app/redux/actions/error/const';
 import { SetErrorAction } from 'app/redux/actions/error/types';
-import { ErrorState } from 'app/redux/state/error';
+import { ErrorState, errorStateInitialValue } from 'app/redux/state/error';
 import { Action } from 'redux';
-
-/**
- * The initial state for the error
- */
-const initialState: ErrorState = {
-	error: undefined
-};
 
 /**
  * Reducer for the error portion of the global state
@@ -17,7 +10,7 @@ const initialState: ErrorState = {
  * @param action an action
  * @returns the new state
  */
-export const error = (state: ErrorState = initialState, action: Action): ErrorState => {
+export const error = (state: ErrorState = errorStateInitialValue, action: Action): ErrorState => {
 	switch(action.type) {
 		case SET_ERROR: {
 			const setErrorAction = action as SetErrorAction;
@@ -50,14 +43,4 @@ export const error = (state: ErrorState = initialState, action: Action): ErrorSt
 		default:
 			return state;
 	}
-};
-
-/**
- * Not a reducer per se but an utility to map the state for persistence
- * @returns the mapped state
- */
-export const mapErrorForPersistence = (): ErrorState => {
-	return {
-		...initialState
-	};
 };

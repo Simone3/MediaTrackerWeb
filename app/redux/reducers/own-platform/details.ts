@@ -1,18 +1,8 @@
 import { DEFAULT_OWN_PLATFORM } from 'app/data/models/internal/own-platform';
 import { ASK_CONFIRMATION_BEFORE_SAVING_OWN_PLATFORM, COMPLETE_SAVING_OWN_PLATFORM, FAIL_SAVING_OWN_PLATFORM, LOAD_NEW_OWN_PLATFORM_DETAILS, LOAD_OWN_PLATFORM_DETAILS, REQUEST_OWN_PLATFORM_SAVE, SET_OWN_PLATFORM_FORM_STATUS, START_SAVING_OWN_PLATFORM } from 'app/redux/actions/own-platform/const';
 import { LoadOwnPlatformDetailsAction, SetOwnPlatformFormStatusAction, StartSavingOwnPlatformAction } from 'app/redux/actions/own-platform/types';
-import { OwnPlatformDetailsState } from 'app/redux/state/own-platform';
+import { OwnPlatformDetailsState, ownPlatformDetailsStateInitialValue } from 'app/redux/state/own-platform';
 import { Action } from 'redux';
-
-/**
- * The initial state for the own platform details
- */
-const initialState: OwnPlatformDetailsState = {
-	ownPlatform: undefined,
-	valid: false,
-	dirty: false,
-	saveStatus: 'IDLE'
-};
 
 /**
  * Reducer for the own platform details portion of the global state
@@ -20,7 +10,7 @@ const initialState: OwnPlatformDetailsState = {
  * @param action an action
  * @returns the new state
  */
-export const ownPlatformDetails = (state: OwnPlatformDetailsState = initialState, action: Action): OwnPlatformDetailsState => {
+export const ownPlatformDetails = (state: OwnPlatformDetailsState = ownPlatformDetailsStateInitialValue, action: Action): OwnPlatformDetailsState => {
 	switch(action.type) {
 		// When the details page is started with a new own platform, the status is reset and the default own platform is loaded
 		case LOAD_NEW_OWN_PLATFORM_DETAILS: {
@@ -99,16 +89,4 @@ export const ownPlatformDetails = (state: OwnPlatformDetailsState = initialState
 		default:
 			return state;
 	}
-};
-
-/**
- * Not a reducer per se but an utility to map the state for persistence
- * @param state the current state
- * @returns the mapped state
- */
-export const mapOwnPlatformDetailsForPersistence = (state: OwnPlatformDetailsState): OwnPlatformDetailsState => {
-	return {
-		...state,
-		saveStatus: 'IDLE'
-	};
 };

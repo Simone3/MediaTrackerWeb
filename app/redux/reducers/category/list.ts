@@ -1,16 +1,7 @@
 import { COMPLETE_DELETING_CATEGORY, COMPLETE_FETCHING_CATEGORIES, COMPLETE_SAVING_CATEGORY, FAIL_DELETING_CATEGORY, FAIL_FETCHING_CATEGORIES, HIGHLIGHT_CATEGORY, INVALIDATE_CATEGORIES, REMOVE_CATEGORY_HIGHLIGHT, START_DELETING_CATEGORY, START_FETCHING_CATEGORIES } from 'app/redux/actions/category/const';
 import { CompleteFetchingCategoriesAction, HighlightCategoryAction } from 'app/redux/actions/category/types';
-import { CategoriesListState } from 'app/redux/state/category';
+import { CategoriesListState, categoriesListStateInitialValue } from 'app/redux/state/category';
 import { Action } from 'redux';
-
-/**
- * The initial state for the categories list
- */
-const initialState: CategoriesListState = {
-	categories: [],
-	status: 'REQUIRES_FETCH',
-	highlightedCategory: undefined
-};
 
 /**
  * Reducer for the categories list portion of the global state
@@ -18,7 +9,7 @@ const initialState: CategoriesListState = {
  * @param action an action
  * @returns the new state
  */
-export const categoriesList = (state: CategoriesListState = initialState, action: Action): CategoriesListState => {
+export const categoriesList = (state: CategoriesListState = categoriesListStateInitialValue, action: Action): CategoriesListState => {
 	switch(action.type) {
 		// When the app starts fetching the list of categories, the status changes to show the loading indicator
 		case START_FETCHING_CATEGORIES: {
@@ -101,17 +92,4 @@ export const categoriesList = (state: CategoriesListState = initialState, action
 		default:
 			return state;
 	}
-};
-
-/**
- * Not a reducer per se but an utility to map the state for persistence
- * @param state the current state
- * @returns the mapped state
- */
-export const mapCategoriesListForPersistence = (state: CategoriesListState): CategoriesListState => {
-	return {
-		...state,
-		status: 'REQUIRES_FETCH',
-		highlightedCategory: undefined
-	};
 };

@@ -13,6 +13,24 @@ export type GroupGlobalState = {
 }
 
 /**
+ * The initial value for the global group state
+ */
+export const groupGlobalStateInitialValue: GroupGlobalState = {
+	selectedGroup: undefined
+};
+
+/**
+ * Utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapGroupGlobalForPersistence = (state: GroupGlobalState): GroupGlobalState => {
+	return {
+		...state
+	};
+};
+
+/**
  * Portion of the internal state with the groups list information
  */
 export type GroupsListState = {
@@ -32,6 +50,28 @@ export type GroupsListState = {
 	 */
 	readonly highlightedGroup: GroupInternal | undefined;
 }
+
+/**
+ * The initial value for the groups list state
+ */
+export const groupsListStateInitialValue: GroupsListState = {
+	groups: [],
+	status: 'REQUIRES_FETCH',
+	highlightedGroup: undefined
+};
+
+/**
+ * Utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapGroupsListForPersistence = (state: GroupsListState): GroupsListState => {
+	return {
+		...state,
+		status: 'REQUIRES_FETCH',
+		highlightedGroup: undefined
+	};
+};
 
 /**
  * Portion of the internal state with the group details information
@@ -58,6 +98,28 @@ export type GroupDetailsState = {
 	 */
 	readonly saveStatus: GroupSaveStatus;
 }
+
+/**
+ * The initial value for the group details state
+ */
+export const groupDetailsStateInitialValue: GroupDetailsState = {
+	group: undefined,
+	valid: false,
+	dirty: false,
+	saveStatus: 'IDLE'
+};
+
+/**
+ * Utility to map the state for persistence
+ * @param state the current state
+ * @returns the mapped state
+ */
+export const mapGroupDetailsForPersistence = (state: GroupDetailsState): GroupDetailsState => {
+	return {
+		...state,
+		saveStatus: 'IDLE'
+	};
+};
 
 /**
  * The current status of the groups list

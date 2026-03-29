@@ -1,17 +1,8 @@
 import { SELECT_CATEGORY } from 'app/redux/actions/category/const';
 import { COMPLETE_DELETING_GROUP, COMPLETE_FETCHING_GROUPS, COMPLETE_SAVING_GROUP, FAIL_DELETING_GROUP, FAIL_FETCHING_GROUPS, HIGHLIGHT_GROUP, INVALIDATE_GROUPS, REMOVE_GROUP_HIGHLIGHT, START_DELETING_GROUP, START_FETCHING_GROUPS } from 'app/redux/actions/group/const';
 import { CompleteFetchingGroupsAction, HighlightGroupAction } from 'app/redux/actions/group/types';
-import { GroupsListState } from 'app/redux/state/group';
+import { GroupsListState, groupsListStateInitialValue } from 'app/redux/state/group';
 import { Action } from 'redux';
-
-/**
- * The initial state for the groups list
- */
-const initialState: GroupsListState = {
-	groups: [],
-	status: 'REQUIRES_FETCH',
-	highlightedGroup: undefined
-};
 
 /**
  * Reducer for the groups list portion of the global state
@@ -19,7 +10,7 @@ const initialState: GroupsListState = {
  * @param action an action
  * @returns the new state
  */
-export const groupsList = (state: GroupsListState = initialState, action: Action): GroupsListState => {
+export const groupsList = (state: GroupsListState = groupsListStateInitialValue, action: Action): GroupsListState => {
 	switch(action.type) {
 		// When the app starts fetching the list of groups, the status changes to show the loading indicator
 		case START_FETCHING_GROUPS: {
@@ -102,24 +93,11 @@ export const groupsList = (state: GroupsListState = initialState, action: Action
 		// When a category is selected, the group data is reset
 		case SELECT_CATEGORY: {
 			return {
-				...initialState
+				...groupsListStateInitialValue
 			};
 		}
 
 		default:
 			return state;
 	}
-};
-
-/**
- * Not a reducer per se but an utility to map the state for persistence
- * @param state the current state
- * @returns the mapped state
- */
-export const mapGroupsListForPersistence = (state: GroupsListState): GroupsListState => {
-	return {
-		...state,
-		status: 'REQUIRES_FETCH',
-		highlightedGroup: undefined
-	};
 };

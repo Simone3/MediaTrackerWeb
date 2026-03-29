@@ -1,19 +1,8 @@
 import { DEFAULT_TV_SHOW_SEASON } from 'app/data/models/internal/media-items/tv-show';
 import { COMPLETE_SAVING_TV_SHOW_SEASON, FAIL_SAVING_TV_SHOW_SEASON, LOAD_NEW_TV_SHOW_SEASON_DETAILS, LOAD_TV_SHOW_SEASON_DETAILS, REQUEST_TV_SHOW_SEASON_SAVE, SET_TV_SHOW_SEASON_FORM_STATUS } from 'app/redux/actions/tv-show-season/const';
 import { LoadTvShowSeasonDetailsAction, SetTvShowSeasonFormStatusAction } from 'app/redux/actions/tv-show-season/types';
-import { TvShowSeasonDetailsState } from 'app/redux/state/tv-show-season';
+import { TvShowSeasonDetailsState, tvShowSeasonDetailsStateInitialValue } from 'app/redux/state/tv-show-season';
 import { Action } from 'redux';
-
-/**
- * The initial state for the tvShowSeason details
- */
-const initialState: TvShowSeasonDetailsState = {
-	formMode: 'NEW',
-	saveStatus: 'IDLE',
-	tvShowSeason: undefined,
-	valid: false,
-	dirty: false
-};
 
 /**
  * Reducer for the tvShowSeason details portion of the global state
@@ -21,7 +10,7 @@ const initialState: TvShowSeasonDetailsState = {
  * @param action an action
  * @returns the new state
  */
-export const tvShowSeasonDetails = (state: TvShowSeasonDetailsState = initialState, action: Action): TvShowSeasonDetailsState => {
+export const tvShowSeasonDetails = (state: TvShowSeasonDetailsState = tvShowSeasonDetailsStateInitialValue, action: Action): TvShowSeasonDetailsState => {
 	switch(action.type) {
 		// When the details page is started with a new tvShowSeason, the status is reset and the default tvShowSeason is loaded
 		case LOAD_NEW_TV_SHOW_SEASON_DETAILS: {
@@ -83,16 +72,4 @@ export const tvShowSeasonDetails = (state: TvShowSeasonDetailsState = initialSta
 		default:
 			return state;
 	}
-};
-
-/**
- * Not a reducer per se but an utility to map the state for persistence
- * @param state the current state
- * @returns the mapped state
- */
-export const mapTvShowSeasonDetailsForPersistence = (state: TvShowSeasonDetailsState): TvShowSeasonDetailsState => {
-	return {
-		...state,
-		saveStatus: 'IDLE'
-	};
 };

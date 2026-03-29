@@ -1,17 +1,8 @@
 import { LOAD_MEDIA_ITEM_DETAILS, LOAD_NEW_MEDIA_ITEM_DETAILS } from 'app/redux/actions/media-item/const';
 import { COMPLETE_DELETING_TV_SHOW_SEASON, COMPLETE_INLINE_UPDATING_TV_SHOW_SEASON, COMPLETE_SAVING_TV_SHOW_SEASON, COMPLETE_TV_SHOW_SEASONS_HANDLING, HIGHLIGHT_TV_SHOW_SEASON, REMOVE_TV_SHOW_SEASON_HIGHLIGHT, START_TV_SHOW_SEASONS_HANDLING } from 'app/redux/actions/tv-show-season/const';
 import { CompleteDeletingTvShowSeasonAction, CompleteInlineUpdatingTvShowSeasonAction, CompleteSavingTvShowSeasonAction, HighlightTvShowSeasonAction, StartTvShowSeasonsHandlingAction } from 'app/redux/actions/tv-show-season/types';
-import { TvShowSeasonsListState } from 'app/redux/state/tv-show-season';
+import { TvShowSeasonsListState, tvShowSeasonsListStateInitialValue } from 'app/redux/state/tv-show-season';
 import { Action } from 'redux';
-
-/**
- * The initial state for the TV show seasons list
- */
-const initialState: TvShowSeasonsListState = {
-	tvShowSeasons: [],
-	completeHandlingTimestamp: undefined,
-	highlightedTvShowSeason: undefined
-};
 
 /**
  * Reducer for the TV show seasons list portion of the global state
@@ -19,13 +10,13 @@ const initialState: TvShowSeasonsListState = {
  * @param action an action
  * @returns the new state
  */
-export const tvShowSeasonsList = (state: TvShowSeasonsListState = initialState, action: Action): TvShowSeasonsListState => {
+export const tvShowSeasonsList = (state: TvShowSeasonsListState = tvShowSeasonsListStateInitialValue, action: Action): TvShowSeasonsListState => {
 	switch(action.type) {
 		// When the media item details page is initialized, the current seasons list is reset
 		case LOAD_NEW_MEDIA_ITEM_DETAILS:
 		case LOAD_MEDIA_ITEM_DETAILS: {
 			return {
-				...initialState
+				...tvShowSeasonsListStateInitialValue
 			};
 		}
 	
@@ -71,16 +62,4 @@ export const tvShowSeasonsList = (state: TvShowSeasonsListState = initialState, 
 		default:
 			return state;
 	}
-};
-
-/**
- * Not a reducer per se but an utility to map the state for persistence
- * @param state the current state
- * @returns the mapped state
- */
-export const mapTvShowSeasonsListForPersistence = (state: TvShowSeasonsListState): TvShowSeasonsListState => {
-	return {
-		...state,
-		highlightedTvShowSeason: undefined
-	};
 };

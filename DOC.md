@@ -63,6 +63,8 @@
 - Web session persistence: `app/redux/persistence.ts`
 - Root reducer: `app/redux/reducers/root.ts`
 - Root saga: `app/redux/sagas/root.ts`
+- Slice state modules under `app/redux/state/*.ts` are now the single source of truth for each slice type, its initial value, and its `map...ForPersistence` helper.
+- Reducer files under `app/redux/reducers/**` now focus on reducer logic only and import their slice initial values from the matching state modules.
 - Typical flow:
   - container dispatches action
   - saga performs async work / navigation

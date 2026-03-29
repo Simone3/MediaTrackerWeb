@@ -3,22 +3,8 @@ import { SELECT_CATEGORY } from 'app/redux/actions/category/const';
 import { SelectCategoryAction } from 'app/redux/actions/category/types';
 import { COMPLETE_DELETING_MEDIA_ITEM, COMPLETE_FETCHING_MEDIA_ITEMS, COMPLETE_INLINE_UPDATING_MEDIA_ITEM, COMPLETE_SAVING_MEDIA_ITEM, FAIL_DELETING_MEDIA_ITEM, FAIL_FETCHING_MEDIA_ITEMS, FAIL_INLINE_UPDATING_MEDIA_ITEM, HIGHLIGHT_MEDIA_ITEM, INVALIDATE_MEDIA_ITEMS, REMOVE_MEDIA_ITEM_HIGHLIGHT, SEARCH_MEDIA_ITEMS, START_DELETING_MEDIA_ITEM, START_FETCHING_MEDIA_ITEMS, START_INLINE_UPDATING_MEDIA_ITEM, START_MEDIA_ITEMS_SEARCH_MODE, START_MEDIA_ITEMS_SET_FILTERS_MODE, START_MEDIA_ITEMS_VIEW_GROUP_MODE, STOP_MEDIA_ITEMS_SEARCH_MODE, STOP_MEDIA_ITEMS_SET_FILTERS_MODE, STOP_MEDIA_ITEMS_VIEW_GROUP_MODE, SUBMIT_MEDIA_ITEMS_FILTERS } from 'app/redux/actions/media-item/const';
 import { CompleteFetchingMediaItemsAction, HighlightMediaItemAction, SearchMediaItemsAction, StartMediaItemsViewGroupModeAction, SubmitMediaItemsFiltersAction } from 'app/redux/actions/media-item/types';
-import { MediaItemsListState } from 'app/redux/state/media-item';
+import { MediaItemsListState, mediaItemsListStateInitialValue } from 'app/redux/state/media-item';
 import { Action } from 'redux';
-
-/**
- * The initial state for the media items list
- */
-const initialState: MediaItemsListState = {
-	status: 'REQUIRES_FETCH',
-	mode: 'NORMAL',
-	filter: undefined,
-	sortBy: undefined,
-	searchTerm: undefined,
-	viewGroup: undefined,
-	mediaItems: [],
-	highlightedMediaItem: undefined
-};
 
 /**
  * Reducer for the media items list portion of the global state
@@ -26,7 +12,7 @@ const initialState: MediaItemsListState = {
  * @param action an action
  * @returns the new state
  */
-export const mediaItemsList = (state: MediaItemsListState = initialState, action: Action): MediaItemsListState => {
+export const mediaItemsList = (state: MediaItemsListState = mediaItemsListStateInitialValue, action: Action): MediaItemsListState => {
 	switch(action.type) {
 		// When a category is selected (i.e. the media items page is opened), its default settings are loaded
 		case SELECT_CATEGORY: {
@@ -39,7 +25,7 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 			const defaultSortBy = mediaItemDefinitionsController.getDefaultSortBy();
 
 			return {
-				...initialState,
+				...mediaItemsListStateInitialValue,
 				filter: defaultFilter,
 				sortBy: defaultSortBy
 			};
@@ -234,18 +220,4 @@ export const mediaItemsList = (state: MediaItemsListState = initialState, action
 		default:
 			return state;
 	}
-};
-
-/**
- * Not a reducer per se but an utility to map the state for persistence
- * @param state the current state
- * @returns the mapped state
- */
-export const mapMediaItemsListForPersistence = (state: MediaItemsListState): MediaItemsListState => {
-	return {
-		...state,
-		status: 'REQUIRES_FETCH',
-		mode: state.mode === 'SET_FILTERS' ? 'NORMAL' : state.mode,
-		highlightedMediaItem: undefined
-	};
 };

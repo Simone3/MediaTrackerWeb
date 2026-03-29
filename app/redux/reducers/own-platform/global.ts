@@ -2,15 +2,8 @@ import { LOAD_MEDIA_ITEM_DETAILS, LOAD_NEW_MEDIA_ITEM_DETAILS } from 'app/redux/
 import { LoadMediaItemDetailsAction } from 'app/redux/actions/media-item/types';
 import { SELECT_OWN_PLATFORM } from 'app/redux/actions/own-platform/const';
 import { SelectOwnPlatformAction } from 'app/redux/actions/own-platform/types';
-import { OwnPlatformGlobalState } from 'app/redux/state/own-platform';
+import { OwnPlatformGlobalState, ownPlatformGlobalStateInitialValue } from 'app/redux/state/own-platform';
 import { Action } from 'redux';
-
-/**
- * The initial state for the global own platform data
- */
-const initialState: OwnPlatformGlobalState = {
-	selectedOwnPlatform: undefined
-};
 
 /**
  * Reducer for the global own platform portion of the global state
@@ -18,7 +11,7 @@ const initialState: OwnPlatformGlobalState = {
  * @param action an action
  * @returns the new state
  */
-export const ownPlatformGlobal = (state: OwnPlatformGlobalState = initialState, action: Action): OwnPlatformGlobalState => {
+export const ownPlatformGlobal = (state: OwnPlatformGlobalState = ownPlatformGlobalStateInitialValue, action: Action): OwnPlatformGlobalState => {
 	switch(action.type) {
 		// When a own platform is selected, it is marked as such
 		case SELECT_OWN_PLATFORM: {
@@ -27,7 +20,7 @@ export const ownPlatformGlobal = (state: OwnPlatformGlobalState = initialState, 
 			const ownPlatform = selectOwnPlatformAction.ownPlatform;
 
 			return {
-				...initialState,
+				...ownPlatformGlobalStateInitialValue,
 				selectedOwnPlatform: ownPlatform
 			};
 		}
@@ -53,15 +46,4 @@ export const ownPlatformGlobal = (state: OwnPlatformGlobalState = initialState, 
 		default:
 			return state;
 	}
-};
-
-/**
- * Not a reducer per se but an utility to map the state for persistence
- * @param state the current state
- * @returns the mapped state
- */
-export const mapOwnPlatformGlobalForPersistence = (state: OwnPlatformGlobalState): OwnPlatformGlobalState => {
-	return {
-		...state
-	};
 };

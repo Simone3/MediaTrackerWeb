@@ -2,15 +2,8 @@ import { SELECT_GROUP } from 'app/redux/actions/group/const';
 import { SelectGroupAction } from 'app/redux/actions/group/types';
 import { LOAD_MEDIA_ITEM_DETAILS, LOAD_NEW_MEDIA_ITEM_DETAILS } from 'app/redux/actions/media-item/const';
 import { LoadMediaItemDetailsAction } from 'app/redux/actions/media-item/types';
-import { GroupGlobalState } from 'app/redux/state/group';
+import { GroupGlobalState, groupGlobalStateInitialValue } from 'app/redux/state/group';
 import { Action } from 'redux';
-
-/**
- * The initial state for the global group data
- */
-const initialState: GroupGlobalState = {
-	selectedGroup: undefined
-};
 
 /**
  * Reducer for the global group portion of the global state
@@ -18,7 +11,7 @@ const initialState: GroupGlobalState = {
  * @param action an action
  * @returns the new state
  */
-export const groupGlobal = (state: GroupGlobalState = initialState, action: Action): GroupGlobalState => {
+export const groupGlobal = (state: GroupGlobalState = groupGlobalStateInitialValue, action: Action): GroupGlobalState => {
 	switch(action.type) {
 		// When a group is selected, it is marked as such
 		case SELECT_GROUP: {
@@ -27,7 +20,7 @@ export const groupGlobal = (state: GroupGlobalState = initialState, action: Acti
 			const group = selectGroupAction.group;
 
 			return {
-				...initialState,
+				...groupGlobalStateInitialValue,
 				selectedGroup: group
 			};
 		}
@@ -53,15 +46,4 @@ export const groupGlobal = (state: GroupGlobalState = initialState, action: Acti
 		default:
 			return state;
 	}
-};
-
-/**
- * Not a reducer per se but an utility to map the state for persistence
- * @param state the current state
- * @returns the mapped state
- */
-export const mapGroupGlobalForPersistence = (state: GroupGlobalState): GroupGlobalState => {
-	return {
-		...state
-	};
 };
