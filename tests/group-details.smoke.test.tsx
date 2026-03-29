@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { GroupDetailsScreenComponent } from 'app/components/presentational/group/details/screen';
 import { GroupInternal } from 'app/data/models/internal/group';
@@ -31,11 +31,15 @@ describe('GroupDetailsScreenComponent', () => {
 		const nameInput = screen.getByLabelText(i18n.t('group.details.placeholders.name'));
 		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
 
-		expect(saveButton).toBeDisabled();
+		await waitFor(() => {
+			expect(saveButton).toBeDisabled();
+		});
 
 		await user.type(nameInput, 'Saga Shelf');
 
-		expect(saveButton).toBeEnabled();
+		await waitFor(() => {
+			expect(saveButton).toBeEnabled();
+		});
 
 		await user.click(saveButton);
 
@@ -48,5 +52,42 @@ describe('GroupDetailsScreenComponent', () => {
 		unmount();
 
 		expect(document.body).not.toHaveClass('app-dark-screen-active');
+	});
+
+	test('asks confirmation and retries save when same-name warning is requested', async() => {
+		const saveGroup = jest.fn();
+		const group: GroupInternal = {
+			id: 'group-id',
+			name: 'Saga Shelf'
+		};
+
+		const { rerender } = render(
+			<GroupDetailsScreenComponent
+				isLoading={false}
+				group={group}
+				sameNameConfirmationRequested={false}
+				saveGroup={saveGroup}
+				notifyFormStatus={jest.fn()}
+				goBack={jest.fn()}
+			/>
+		);
+
+		rerender(
+			<GroupDetailsScreenComponent
+				isLoading={false}
+				group={group}
+				sameNameConfirmationRequested={true}
+				saveGroup={saveGroup}
+				notifyFormStatus={jest.fn()}
+				goBack={jest.fn()}
+			/>
+		);
+
+		const user = userEvent.setup();
+		await user.click(screen.getByRole('button', { name: i18n.t('common.alert.default.okButton') }));
+
+		await waitFor(() => {
+			expect(saveGroup).toHaveBeenCalledWith(group, true);
+		});
 	});
 });

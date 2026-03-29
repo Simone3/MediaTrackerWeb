@@ -1,6 +1,13 @@
 import { Component, ReactNode } from 'react';
+import { Formik, FormikProps } from 'formik';
+import { ObjectSchema } from 'yup';
 import { CategoryInternal } from 'app/data/models/internal/category';
+import { AppError } from 'app/data/models/internal/error';
 import { MediaItemFilterInternal, MediaItemSortByInternal } from 'app/data/models/internal/media-items/media-item';
+import { BookSortByInternal } from 'app/data/models/internal/media-items/book';
+import { MovieSortByInternal } from 'app/data/models/internal/media-items/movie';
+import { TvShowSortByInternal } from 'app/data/models/internal/media-items/tv-show';
+import { VideogameSortByInternal } from 'app/data/models/internal/media-items/videogame';
 import { i18n } from 'app/utilities/i18n';
 import {
 	MEDIA_ITEM_FILTER_FORM_GROUP_VALUES,
@@ -10,46 +17,21 @@ import {
 	MEDIA_ITEM_FILTER_FORM_STATUS_VALUES,
 	MediaItemFilterFormValues
 } from 'app/components/presentational/media-item/list/filter-form/data/media-item';
-import { AppError } from 'app/data/models/internal/error';
+import { BookFilterFormValues, bookFilterFormMapper, bookFilterFormValidationSchema } from 'app/components/presentational/media-item/list/filter-form/data/book';
+import { MovieFilterFormValues, movieFilterFormMapper, movieFilterFormValidationSchema } from 'app/components/presentational/media-item/list/filter-form/data/movie';
+import { TvShowFilterFormValues, tvShowFilterFormMapper, tvShowFilterFormValidationSchema } from 'app/components/presentational/media-item/list/filter-form/data/tv-show';
+import { VideogameFilterFormValues, videogameFilterFormMapper, videogameFilterFormValidationSchema } from 'app/components/presentational/media-item/list/filter-form/data/videogame';
 
-type MediaItemFilterKnownSortField = 'ACTIVE' | 'IMPORTANCE' | 'RELEASE_DATE' | 'COMPLETION_DATE' | 'NAME';
-type MediaItemFilterKnownSortBy = MediaItemSortByInternal & {
-	field: MediaItemFilterKnownSortField;
+type MediaItemFilterFormDefinition = {
+	initialValues: MediaItemFilterFormValues;
+	validationSchema: ObjectSchema<MediaItemFilterFormValues>;
+	onSubmit: (values: MediaItemFilterFormValues) => void;
 }
-
-const DEFAULT_MEDIA_ITEM_SORT_BY: MediaItemFilterKnownSortBy[] = [{
-	field: 'ACTIVE',
-	ascending: false
-}, {
-	field: 'IMPORTANCE',
-	ascending: false
-}, {
-	field: 'RELEASE_DATE',
-	ascending: true
-}];
 
 /**
  * Presentational component to display a modal dialog with the media item filter options
  */
-export class MediaItemFilterModalComponent extends Component<MediaItemFilterModalComponentProps, MediaItemFilterModalComponentState> {
-	public state: MediaItemFilterModalComponentState = {
-		formValues: this.buildFormValuesFromProps(this.props)
-	};
-
-	/**
-	 * @override
-	 */
-	public componentDidUpdate(prevProps: Readonly<MediaItemFilterModalComponentProps>): void {
-		const openedNow = !prevProps.visible && this.props.visible;
-		const categoryChanged = prevProps.category.mediaType !== this.props.category.mediaType;
-		const filterChanged = prevProps.initialFilter !== this.props.initialFilter;
-		const sortChanged = prevProps.initialSortBy !== this.props.initialSortBy;
-
-		if(openedNow || categoryChanged || filterChanged || sortChanged) {
-			this.syncFormValuesFromProps();
-		}
-	}
-
+export class MediaItemFilterModalComponent extends Component<MediaItemFilterModalComponentProps> {
 	/**
 	 * @override
 	 */
@@ -58,9 +40,7 @@ export class MediaItemFilterModalComponent extends Component<MediaItemFilterModa
 			return null;
 		}
 
-		const {
-			formValues
-		} = this.state;
+		const formDefinition = this.buildFormDefinition();
 
 		return (
 			<div
@@ -80,372 +60,199 @@ export class MediaItemFilterModalComponent extends Component<MediaItemFilterModa
 					<h2 id='media-item-filter-title' className='media-item-filter-title'>
 						{i18n.t('mediaItem.list.filter.title')}
 					</h2>
-					<div className='media-item-filter-form'>
-						<div className='media-item-filter-field'>
-							<label className='media-item-filter-label' htmlFor='media-item-filter-status'>
-								{i18n.t('mediaItem.list.filter.prompts.status')}
-							</label>
-							<select
-								id='media-item-filter-status'
-								className='media-item-filter-select'
-								value={formValues.status}
-								onChange={(event) => {
-									this.setFormField('status', event.target.value as MediaItemFilterFormValues['status']);
-								}}>
-								{MEDIA_ITEM_FILTER_FORM_STATUS_VALUES.map((status) => {
-									return (
-										<option key={status} value={status}>
-											{i18n.t(`mediaItem.list.filter.values.status.${status}`)}
-										</option>
-									);
-								})}
-							</select>
-						</div>
-
-						<div className='media-item-filter-field'>
-							<label className='media-item-filter-label' htmlFor='media-item-filter-importance'>
-								{i18n.t('mediaItem.list.filter.prompts.importance')}
-							</label>
-							<select
-								id='media-item-filter-importance'
-								className='media-item-filter-select'
-								value={formValues.importanceLevel}
-								onChange={(event) => {
-									this.setFormField('importanceLevel', event.target.value as MediaItemFilterFormValues['importanceLevel']);
-								}}>
-								{MEDIA_ITEM_FILTER_FORM_IMPORTANCE_VALUES.map((importance) => {
-									return (
-										<option key={importance} value={importance}>
-											{importance === 'NONE' ?
-												i18n.t('mediaItem.list.filter.values.importance.all') :
-												i18n.t(`mediaItem.common.importance.${importance}`)}
-										</option>
-									);
-								})}
-							</select>
-						</div>
-
-						<div className='media-item-filter-field'>
-							<label className='media-item-filter-label' htmlFor='media-item-filter-group'>
-								{i18n.t('mediaItem.list.filter.prompts.group')}
-							</label>
-							<select
-								id='media-item-filter-group'
-								className='media-item-filter-select'
-								value={formValues.group}
-								onChange={(event) => {
-									this.setFormField('group', event.target.value as MediaItemFilterFormValues['group']);
-								}}>
-								{MEDIA_ITEM_FILTER_FORM_GROUP_VALUES.map((group) => {
-									return (
-										<option key={group} value={group}>
-											{i18n.t(`mediaItem.list.filter.values.group.${group}`)}
-										</option>
-									);
-								})}
-							</select>
-						</div>
-
-						<div className='media-item-filter-field'>
-							<label className='media-item-filter-label' htmlFor='media-item-filter-own-platform'>
-								{i18n.t('mediaItem.list.filter.prompts.ownPlatform')}
-							</label>
-							<select
-								id='media-item-filter-own-platform'
-								className='media-item-filter-select'
-								value={formValues.ownPlatform}
-								onChange={(event) => {
-									this.setFormField('ownPlatform', event.target.value as MediaItemFilterFormValues['ownPlatform']);
-								}}>
-								{MEDIA_ITEM_FILTER_FORM_OWN_PLATFORM_VALUES.map((ownPlatform) => {
-									return (
-										<option key={ownPlatform} value={ownPlatform}>
-											{i18n.t(`mediaItem.list.filter.values.ownPlatform.${ownPlatform}`)}
-										</option>
-									);
-								})}
-							</select>
-						</div>
-
-						<div className='media-item-filter-field'>
-							<label className='media-item-filter-label' htmlFor='media-item-filter-sort-by'>
-								{i18n.t('mediaItem.list.filter.prompts.sort')}
-							</label>
-							<select
-								id='media-item-filter-sort-by'
-								className='media-item-filter-select'
-								value={formValues.sortBy}
-								onChange={(event) => {
-									this.setFormField('sortBy', event.target.value as MediaItemFilterFormValues['sortBy']);
-								}}>
-								{MEDIA_ITEM_FILTER_FORM_SORT_VALUES.map((sortBy) => {
-									return (
-										<option key={sortBy} value={sortBy}>
-											{i18n.t(`mediaItem.list.filter.values.sort.${sortBy}`)}
-										</option>
-									);
-								})}
-							</select>
-						</div>
-					</div>
-					<div className='media-item-filter-actions'>
-						<button type='button' className='media-item-filter-button media-item-filter-button-secondary' onClick={this.props.close}>
-							{i18n.t('common.alert.default.cancelButton')}
-						</button>
-						<button
-							type='button'
-							className='media-item-filter-button media-item-filter-button-primary'
-							onClick={() => {
-								this.submitCurrentFilter();
-							}}>
-							{i18n.t('common.alert.default.applyButton')}
-						</button>
-					</div>
+					<Formik<MediaItemFilterFormValues>
+						initialValues={formDefinition.initialValues}
+						initialErrors={{}}
+						validationSchema={formDefinition.validationSchema}
+						validateOnMount={true}
+						enableReinitialize={true}
+						onSubmit={formDefinition.onSubmit}>
+						{(formikProps: FormikProps<MediaItemFilterFormValues>) => {
+							return this.renderForm(formikProps);
+						}}
+					</Formik>
 				</section>
 			</div>
 		);
 	}
 
 	/**
-	 * Syncs local form values from current input props
+	 * Builds the correct Formik setup for the selected media type
+	 * @returns the Formik setup
 	 */
-	private syncFormValuesFromProps(): void {
-		this.setState({
-			formValues: this.buildFormValuesFromProps(this.props)
-		});
-	}
+	private buildFormDefinition(): MediaItemFilterFormDefinition {
+		const {
+			category,
+			initialFilter,
+			initialSortBy,
+			submitFilter
+		} = this.props;
 
-	/**
-	 * Builds form values from props
-	 * @param props component props
-	 * @returns form values
-	 */
-	private buildFormValuesFromProps(props: MediaItemFilterModalComponentProps): MediaItemFilterFormValues {
-		return {
-			importanceLevel: this.toImportanceFormValue(props.initialFilter.importanceLevels),
-			group: this.toGroupFormValue(props.initialFilter.groups),
-			ownPlatform: this.toOwnPlatformFormValue(props.initialFilter.ownPlatforms),
-			status: this.toStatusFormValue(props.initialFilter.status),
-			sortBy: this.toSortByFormValue(props.initialSortBy)
-		};
-	}
+		switch(category.mediaType) {
+			case 'BOOK': {
+				return {
+					initialValues: bookFilterFormMapper.toFormValues(initialFilter, initialSortBy as BookSortByInternal[]),
+					validationSchema: bookFilterFormValidationSchema,
+					onSubmit: (values: BookFilterFormValues) => {
+						submitFilter(bookFilterFormMapper.toFilterModel(values), bookFilterFormMapper.toSortByModel(values));
+					}
+				};
+			}
 
-	/**
-	 * Handles a single form field update
-	 * @param key field key
-	 * @param value field value
-	 */
-	private setFormField<K extends keyof MediaItemFilterFormValues>(key: K, value: MediaItemFilterFormValues[K]): void {
-		this.setState((prevState) => {
-			return {
-				formValues: {
-					...prevState.formValues,
-					[key]: value
-				}
-			};
-		});
-	}
+			case 'MOVIE': {
+				return {
+					initialValues: movieFilterFormMapper.toFormValues(initialFilter, initialSortBy as MovieSortByInternal[]),
+					validationSchema: movieFilterFormValidationSchema,
+					onSubmit: (values: MovieFilterFormValues) => {
+						submitFilter(movieFilterFormMapper.toFilterModel(values), movieFilterFormMapper.toSortByModel(values));
+					}
+				};
+			}
 
-	/**
-	 * Submits the current form values to parent callback
-	 */
-	private submitCurrentFilter(): void {
-		const filter = this.toFilterModel(this.state.formValues);
-		const sortBy = this.toSortByModel(this.state.formValues);
-		this.props.submitFilter(filter, sortBy);
-	}
+			case 'TV_SHOW': {
+				return {
+					initialValues: tvShowFilterFormMapper.toFormValues(initialFilter, initialSortBy as TvShowSortByInternal[]),
+					validationSchema: tvShowFilterFormValidationSchema,
+					onSubmit: (values: TvShowFilterFormValues) => {
+						submitFilter(tvShowFilterFormMapper.toFilterModel(values), tvShowFilterFormMapper.toSortByModel(values));
+					}
+				};
+			}
 
-	/**
-	 * Maps form values to the internal filter model
-	 * @param formValues form values
-	 * @returns filter model
-	 */
-	private toFilterModel(formValues: MediaItemFilterFormValues): MediaItemFilterInternal {
-		return {
-			importanceLevels: this.toImportanceModel(formValues.importanceLevel),
-			groups: this.toGroupModel(formValues.group),
-			ownPlatforms: this.toOwnPlatformModel(formValues.ownPlatform),
-			status: this.toStatusModel(formValues.status)
-		};
-	}
-
-	/**
-	 * Maps form values to the internal sort model
-	 * @param formValues form values
-	 * @returns sort model
-	 */
-	private toSortByModel(formValues: MediaItemFilterFormValues): MediaItemFilterKnownSortBy[] {
-		switch(formValues.sortBy) {
-			case 'DEFAULT':
-				return DEFAULT_MEDIA_ITEM_SORT_BY.map((sortBy) => {
-					return {
-						field: sortBy.field,
-						ascending: sortBy.ascending
-					};
-				});
-
-			case 'COMPLETION_DATE':
-				return [{
-					field: 'COMPLETION_DATE',
-					ascending: false
-				}];
-
-			case 'NAME':
-				return [{
-					field: 'NAME',
-					ascending: true
-				}];
+			case 'VIDEOGAME': {
+				return {
+					initialValues: videogameFilterFormMapper.toFormValues(initialFilter, initialSortBy as VideogameSortByInternal[]),
+					validationSchema: videogameFilterFormValidationSchema,
+					onSubmit: (values: VideogameFilterFormValues) => {
+						submitFilter(videogameFilterFormMapper.toFilterModel(values), videogameFilterFormMapper.toSortByModel(values));
+					}
+				};
+			}
 
 			default:
-				throw AppError.GENERIC.withDetails(`Cannot map sort form value!`);
+				throw AppError.GENERIC.withDetails('Cannot build media item filter form for media type');
 		}
 	}
 
 	/**
-	 * Maps the internal status filter to the form model
-	 * @param source status filter
-	 * @returns form status value
+	 * Renders the Formik-backed filter form
+	 * @param formikProps the current Formik state
+	 * @returns the filter form
 	 */
-	private toStatusFormValue(source: MediaItemFilterInternal['status']): MediaItemFilterFormValues['status'] {
-		if(source === 'COMPLETE') {
-			return 'COMPLETE';
-		}
-		if(source === 'CURRENT') {
-			return 'CURRENT';
-		}
-		return 'ALL';
-	}
+	private renderForm(formikProps: FormikProps<MediaItemFilterFormValues>): ReactNode {
+		return (
+			<form className='media-item-filter-form' onSubmit={formikProps.handleSubmit}>
+				<div className='media-item-filter-field'>
+					<label className='media-item-filter-label' htmlFor='media-item-filter-status'>
+						{i18n.t('mediaItem.list.filter.prompts.status')}
+					</label>
+					<select
+						id='media-item-filter-status'
+						name='status'
+						className='media-item-filter-select'
+						value={formikProps.values.status}
+						onChange={formikProps.handleChange}>
+						{MEDIA_ITEM_FILTER_FORM_STATUS_VALUES.map((status) => {
+							return (
+								<option key={status} value={status}>
+									{i18n.t(`mediaItem.list.filter.values.status.${status}`)}
+								</option>
+							);
+						})}
+					</select>
+				</div>
 
-	/**
-	 * Maps the internal importance filter to the form model
-	 * @param source importance filter
-	 * @returns form importance value
-	 */
-	private toImportanceFormValue(source: MediaItemFilterInternal['importanceLevels']): MediaItemFilterFormValues['importanceLevel'] {
-		return source && source.length > 0 ? source[0] : 'NONE';
-	}
+				<div className='media-item-filter-field'>
+					<label className='media-item-filter-label' htmlFor='media-item-filter-importance'>
+						{i18n.t('mediaItem.list.filter.prompts.importance')}
+					</label>
+					<select
+						id='media-item-filter-importance'
+						name='importanceLevel'
+						className='media-item-filter-select'
+						value={formikProps.values.importanceLevel}
+						onChange={formikProps.handleChange}>
+						{MEDIA_ITEM_FILTER_FORM_IMPORTANCE_VALUES.map((importance) => {
+							return (
+								<option key={importance} value={importance}>
+									{importance === 'NONE' ?
+										i18n.t('mediaItem.list.filter.values.importance.all') :
+										i18n.t(`mediaItem.common.importance.${importance}`)}
+								</option>
+							);
+						})}
+					</select>
+				</div>
 
-	/**
-	 * Maps the internal group filter to the form model
-	 * @param source group filter
-	 * @returns form group value
-	 */
-	private toGroupFormValue(source: MediaItemFilterInternal['groups']): MediaItemFilterFormValues['group'] {
-		if(source) {
-			if(source.anyGroup) {
-				return 'ANY';
-			}
-			if(source.noGroup) {
-				return 'NONE';
-			}
-		}
-		return 'ALL';
-	}
+				<div className='media-item-filter-field'>
+					<label className='media-item-filter-label' htmlFor='media-item-filter-group'>
+						{i18n.t('mediaItem.list.filter.prompts.group')}
+					</label>
+					<select
+						id='media-item-filter-group'
+						name='group'
+						className='media-item-filter-select'
+						value={formikProps.values.group}
+						onChange={formikProps.handleChange}>
+						{MEDIA_ITEM_FILTER_FORM_GROUP_VALUES.map((group) => {
+							return (
+								<option key={group} value={group}>
+									{i18n.t(`mediaItem.list.filter.values.group.${group}`)}
+								</option>
+							);
+						})}
+					</select>
+				</div>
 
-	/**
-	 * Maps the internal own platform filter to the form model
-	 * @param source own platform filter
-	 * @returns form own platform value
-	 */
-	private toOwnPlatformFormValue(source: MediaItemFilterInternal['ownPlatforms']): MediaItemFilterFormValues['ownPlatform'] {
-		if(source) {
-			if(source.anyOwnPlatform) {
-				return 'ANY';
-			}
-			if(source.noOwnPlatform) {
-				return 'NONE';
-			}
-		}
-		return 'ALL';
-	}
+				<div className='media-item-filter-field'>
+					<label className='media-item-filter-label' htmlFor='media-item-filter-own-platform'>
+						{i18n.t('mediaItem.list.filter.prompts.ownPlatform')}
+					</label>
+					<select
+						id='media-item-filter-own-platform'
+						name='ownPlatform'
+						className='media-item-filter-select'
+						value={formikProps.values.ownPlatform}
+						onChange={formikProps.handleChange}>
+						{MEDIA_ITEM_FILTER_FORM_OWN_PLATFORM_VALUES.map((ownPlatform) => {
+							return (
+								<option key={ownPlatform} value={ownPlatform}>
+									{i18n.t(`mediaItem.list.filter.values.ownPlatform.${ownPlatform}`)}
+								</option>
+							);
+						})}
+					</select>
+				</div>
 
-	/**
-	 * Maps the internal sort model to the form model
-	 * @param sortBy sort model
-	 * @returns form sort value
-	 */
-	private toSortByFormValue(sortBy: MediaItemSortByInternal[]): MediaItemFilterFormValues['sortBy'] {
-		const typedSortBy = sortBy as MediaItemFilterKnownSortBy[];
-		if(typedSortBy.length === 1) {
-			if(typedSortBy[0].field === 'NAME') {
-				return 'NAME';
-			}
-			if(typedSortBy[0].field === 'COMPLETION_DATE') {
-				return 'COMPLETION_DATE';
-			}
-		}
-		return 'DEFAULT';
-	}
-
-	/**
-	 * Maps the form status value to internal model
-	 * @param source form status value
-	 * @returns internal status filter
-	 */
-	private toStatusModel(source: MediaItemFilterFormValues['status']): MediaItemFilterInternal['status'] {
-		switch(source) {
-			case 'ALL':
-				return undefined;
-			case 'COMPLETE':
-				return 'COMPLETE';
-			case 'CURRENT':
-				return 'CURRENT';
-			default:
-				throw AppError.GENERIC.withDetails(`Cannot map status filter!`);
-		}
-	}
-
-	/**
-	 * Maps the form importance value to internal model
-	 * @param source form importance value
-	 * @returns internal importance filter
-	 */
-	private toImportanceModel(source: MediaItemFilterFormValues['importanceLevel']): MediaItemFilterInternal['importanceLevels'] {
-		return source === 'NONE' ? undefined : [ source ];
-	}
-
-	/**
-	 * Maps the form group value to internal model
-	 * @param source form group value
-	 * @returns internal group filter
-	 */
-	private toGroupModel(source: MediaItemFilterFormValues['group']): MediaItemFilterInternal['groups'] {
-		switch(source) {
-			case 'ALL':
-				return undefined;
-			case 'ANY':
-				return {
-					anyGroup: true
-				};
-			case 'NONE':
-				return {
-					noGroup: true
-				};
-			default:
-				throw AppError.GENERIC.withDetails(`Cannot map group filter!`);
-		}
-	}
-
-	/**
-	 * Maps the form own platform value to internal model
-	 * @param source form own platform value
-	 * @returns internal own platform filter
-	 */
-	private toOwnPlatformModel(source: MediaItemFilterFormValues['ownPlatform']): MediaItemFilterInternal['ownPlatforms'] {
-		switch(source) {
-			case 'ALL':
-				return undefined;
-			case 'ANY':
-				return {
-					anyOwnPlatform: true
-				};
-			case 'NONE':
-				return {
-					noOwnPlatform: true
-				};
-			default:
-				throw AppError.GENERIC.withDetails(`Cannot map own platform filter!`);
-		}
+				<div className='media-item-filter-field'>
+					<label className='media-item-filter-label' htmlFor='media-item-filter-sort-by'>
+						{i18n.t('mediaItem.list.filter.prompts.sort')}
+					</label>
+					<select
+						id='media-item-filter-sort-by'
+						name='sortBy'
+						className='media-item-filter-select'
+						value={formikProps.values.sortBy}
+						onChange={formikProps.handleChange}>
+						{MEDIA_ITEM_FILTER_FORM_SORT_VALUES.map((sortBy) => {
+							return (
+								<option key={sortBy} value={sortBy}>
+									{i18n.t(`mediaItem.list.filter.values.sort.${sortBy}`)}
+								</option>
+							);
+						})}
+					</select>
+				</div>
+				<div className='media-item-filter-actions'>
+					<button type='button' className='media-item-filter-button media-item-filter-button-secondary' onClick={this.props.close}>
+						{i18n.t('common.alert.default.cancelButton')}
+					</button>
+					<button type='submit' className='media-item-filter-button media-item-filter-button-primary'>
+						{i18n.t('common.alert.default.applyButton')}
+					</button>
+				</div>
+			</form>
+		);
 	}
 }
 
@@ -493,7 +300,3 @@ export type MediaItemFilterModalComponentOutput = {
  * MediaItemFilterModalComponent's props
  */
 export type MediaItemFilterModalComponentProps = MediaItemFilterModalComponentInput & MediaItemFilterModalComponentOutput;
-
-type MediaItemFilterModalComponentState = {
-	formValues: MediaItemFilterFormValues;
-}

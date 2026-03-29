@@ -1,5 +1,69 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+jest.mock('app/controllers/core/entities/media-items/book', () => {
+	return {
+		bookDefinitionsController: {
+			getDefaultSortBy: () => [{
+				field: 'ACTIVE',
+				ascending: false
+			}, {
+				field: 'IMPORTANCE',
+				ascending: false
+			}, {
+				field: 'RELEASE_DATE',
+				ascending: true
+			}]
+		}
+	};
+});
+jest.mock('app/controllers/core/entities/media-items/movie', () => {
+	return {
+		movieDefinitionsController: {
+			getDefaultSortBy: () => [{
+				field: 'ACTIVE',
+				ascending: false
+			}, {
+				field: 'IMPORTANCE',
+				ascending: false
+			}, {
+				field: 'RELEASE_DATE',
+				ascending: true
+			}]
+		}
+	};
+});
+jest.mock('app/controllers/core/entities/media-items/tv-show', () => {
+	return {
+		tvShowDefinitionsController: {
+			getDefaultSortBy: () => [{
+				field: 'ACTIVE',
+				ascending: false
+			}, {
+				field: 'IMPORTANCE',
+				ascending: false
+			}, {
+				field: 'RELEASE_DATE',
+				ascending: true
+			}]
+		}
+	};
+});
+jest.mock('app/controllers/core/entities/media-items/videogame', () => {
+	return {
+		videogameDefinitionsController: {
+			getDefaultSortBy: () => [{
+				field: 'ACTIVE',
+				ascending: false
+			}, {
+				field: 'IMPORTANCE',
+				ascending: false
+			}, {
+				field: 'RELEASE_DATE',
+				ascending: true
+			}]
+		}
+	};
+});
 import { MediaItemFilterModalComponent } from 'app/components/presentational/media-item/list/filter-modal';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { i18n } from 'app/utilities/i18n';

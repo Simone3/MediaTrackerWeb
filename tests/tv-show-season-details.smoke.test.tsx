@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TvShowSeasonDetailsScreenComponent } from 'app/components/presentational/tv-show-season/details/screen';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
@@ -34,7 +34,9 @@ describe('TvShowSeasonDetailsScreenComponent', () => {
 		const watchedInput = screen.getByLabelText(i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber'));
 		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
 
-		expect(saveButton).toBeDisabled();
+		await waitFor(() => {
+			expect(saveButton).toBeDisabled();
+		});
 
 		await user.type(numberInput, '2');
 		await user.type(episodesInput, '10');
@@ -44,7 +46,9 @@ describe('TvShowSeasonDetailsScreenComponent', () => {
 			episodesNumber: 10,
 			watchedEpisodesNumber: 7
 		}))).toBeInTheDocument();
-		expect(saveButton).toBeEnabled();
+		await waitFor(() => {
+			expect(saveButton).toBeEnabled();
+		});
 
 		await user.click(saveButton);
 
@@ -58,5 +62,37 @@ describe('TvShowSeasonDetailsScreenComponent', () => {
 		unmount();
 
 		expect(document.body).not.toHaveClass('app-dark-screen-active');
+	});
+
+	test('keeps season number locked when editing an existing season', async() => {
+		const saveTvShowSeason = jest.fn();
+		const season: TvShowSeasonInternal = {
+			number: 2,
+			episodesNumber: 10,
+			watchedEpisodesNumber: 7
+		};
+
+		render(
+			<TvShowSeasonDetailsScreenComponent
+				tvShowSeason={season}
+				addingNewSeason={false}
+				saveTvShowSeason={saveTvShowSeason}
+				notifyFormStatus={jest.fn()}
+				goBack={jest.fn()}
+			/>
+		);
+
+		const user = userEvent.setup();
+		const numberInput = screen.getByLabelText(i18n.t('tvShowSeason.details.placeholders.number'));
+		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
+
+		expect(numberInput).toBeDisabled();
+		await waitFor(() => {
+			expect(saveButton).toBeEnabled();
+		});
+
+		await user.click(saveButton);
+
+		expect(saveTvShowSeason).toHaveBeenCalledWith(season);
 	});
 });

@@ -1,5 +1,8 @@
 import { Component, ReactNode } from 'react';
 import { EntityDetailsFrameComponent } from 'app/components/presentational/generic/entity-details-frame';
+import { Formik, FormikProps } from 'formik';
+import { GroupFormViewComponent } from 'app/components/presentational/group/details/form/view';
+import { groupFormValidationSchema } from 'app/components/presentational/group/details/form/data';
 import { SameNameConfirmationDialogComponent, shouldOpenSameNameConfirmation } from 'app/components/presentational/generic/same-name-confirmation';
 import { GroupInternal } from 'app/data/models/internal/group';
 import groupIcon from 'app/resources/images/ic_input_group.svg';
@@ -12,38 +15,20 @@ const GROUP_DETAILS_ACCENT = '#7db4ff';
  * "view group data" sections
  */
 export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenComponentInput & GroupDetailsScreenComponentOutput, GroupDetailsScreenComponentState> {
+	private formikProps?: FormikProps<GroupInternal>;
+
 	public state: GroupDetailsScreenComponentState = {
-		formValues: {
-			id: '',
-			name: ''
-		},
 		confirmSameNameVisible: false
 	};
 
 	/**
 	 * @override
 	 */
-	public componentDidMount(): void {
-		this.syncFormValuesWithProps();
-	}
-
-	/**
-	 * @override
-	 */
-	public componentDidUpdate(prevProps: Readonly<GroupDetailsScreenComponentInput & GroupDetailsScreenComponentOutput>, prevState: Readonly<GroupDetailsScreenComponentState>): void {
-		if(this.areGroupsDifferent(prevProps.group, this.props.group)) {
-			this.syncFormValuesWithProps();
-			return;
-		}
-
+	public componentDidUpdate(prevProps: Readonly<GroupDetailsScreenComponentInput & GroupDetailsScreenComponentOutput>): void {
 		if(shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
 			this.setState({
 				confirmSameNameVisible: true
 			});
-		}
-
-		if(prevState.formValues !== this.state.formValues) {
-			this.notifyFormStatus();
 		}
 	}
 
@@ -52,158 +37,86 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 	 */
 	public render(): ReactNode {
 		const {
-			isLoading
+			isLoading,
+			group
 		} = this.props;
 		const {
-			formValues,
 			confirmSameNameVisible
 		} = this.state;
-		const isValid = this.isFormValid(formValues);
-		const title = formValues.id ? formValues.name : i18n.t('group.details.title.new');
 
 		return (
-			<EntityDetailsFrameComponent
-				screenClassName='group-details-screen'
-				bodyClassName='app-dark-screen-active'
-				accentColor={GROUP_DETAILS_ACCENT}
-				icon={<img src={groupIcon} alt='' className='entity-details-icon' />}
-				title={title}
-				subtitle={i18n.t('group.list.emptyHint')}
-				saveLabel={i18n.t('common.buttons.save')}
-				saveDisabled={!isValid || isLoading}
-				loadingVisible={isLoading}
-				onSave={() => {
-					this.submitForm(false);
-				}}
-				onSubmit={(event) => {
-					event.preventDefault();
-					this.submitForm(false);
-				}}
-				dialogs={
-					<SameNameConfirmationDialogComponent
-						visible={confirmSameNameVisible}
-						title={i18n.t('group.common.alert.addSameName.title')}
-						message={i18n.t('group.common.alert.addSameName.message')}
-						onConfirm={() => {
-							this.setState({
-								confirmSameNameVisible: false
-							}, () => {
-								this.submitForm(true);
-							});
-						}}
-						onCancel={() => {
-							this.setState({
-								confirmSameNameVisible: false
-							});
-						}}
-					/>
-				}>
-				<section className='entity-details-panel'>
-					<div className='entity-details-grid'>
-						<div className='entity-details-field entity-details-field-span-2'>
-							<label className='entity-details-label' htmlFor='group-name'>
-								{i18n.t('group.details.placeholders.name')}
-							</label>
-							<input
-								id='group-name'
-								className='entity-details-input'
-								type='text'
-								value={formValues.name}
-								placeholder={i18n.t('group.details.placeholders.name')}
-								onChange={(event) => {
-									this.setFormField('name', event.target.value);
-								}}
+			<Formik<GroupInternal>
+				initialValues={group}
+				validationSchema={groupFormValidationSchema}
+				validateOnMount={true}
+				enableReinitialize={true}
+				innerRef={this.handleFormikRef}
+				onSubmit={(values) => {
+					this.props.saveGroup(values, false);
+				}}>
+				{(formikProps: FormikProps<GroupInternal>) => {
+					const title = formikProps.values.id ? formikProps.values.name : i18n.t('group.details.title.new');
+
+					return (
+						<EntityDetailsFrameComponent
+							screenClassName='group-details-screen'
+							bodyClassName='app-dark-screen-active'
+							accentColor={GROUP_DETAILS_ACCENT}
+							icon={<img src={groupIcon} alt='' className='entity-details-icon' />}
+							title={title}
+							subtitle={i18n.t('group.list.emptyHint')}
+							saveLabel={i18n.t('common.buttons.save')}
+							saveDisabled={!formikProps.isValid || isLoading}
+							loadingVisible={isLoading}
+							onSave={() => {
+								void formikProps.submitForm();
+							}}
+							onSubmit={formikProps.handleSubmit}
+							dialogs={
+								<SameNameConfirmationDialogComponent
+									visible={confirmSameNameVisible}
+									title={i18n.t('group.common.alert.addSameName.title')}
+									message={i18n.t('group.common.alert.addSameName.message')}
+									onConfirm={() => {
+										this.setState({
+											confirmSameNameVisible: false
+										}, () => {
+											this.submitFormWithSameNameConfirmation();
+										});
+									}}
+									onCancel={() => {
+										this.setState({
+											confirmSameNameVisible: false
+										});
+									}}
+								/>
+							}>
+							<GroupFormViewComponent
+								{...formikProps}
+								notifyFormStatus={this.props.notifyFormStatus}
 							/>
-						</div>
-					</div>
-				</section>
-			</EntityDetailsFrameComponent>
+						</EntityDetailsFrameComponent>
+					);
+				}}
+			</Formik>
 		);
 	}
 
 	/**
-	 * Syncs local form values from Redux source group
+	 * Keeps a reference to the current Formik state
+	 * @param formikProps the current Formik state
 	 */
-	private syncFormValuesWithProps(): void {
-		this.setState({
-			formValues: {
-				...this.props.group
-			}
-		}, () => {
-			this.notifyFormStatus();
-		});
-	}
+	private handleFormikRef = (formikProps: FormikProps<GroupInternal> | null): void => {
+		this.formikProps = formikProps || undefined;
+	};
 
 	/**
-	 * Handles a single field update
-	 * @param key the field key
-	 * @param value the field value
+	 * Saves the current Formik values after the user confirmed the duplicate-name alert
 	 */
-	private setFormField<K extends keyof GroupInternal>(key: K, value: GroupInternal[K]): void {
-		this.setState((prevState) => {
-			return {
-				formValues: {
-					...prevState.formValues,
-					[key]: value
-				}
-			};
-		});
-	}
-
-	/**
-	 * Submits the current form values if valid
-	 * @param confirmSameName if true, bypasses duplicate-name confirmation in saga
-	 */
-	private submitForm(confirmSameName: boolean): void {
-		const {
-			formValues
-		} = this.state;
-
-		if(!this.isFormValid(formValues)) {
-			this.notifyFormStatus();
-			return;
+	private submitFormWithSameNameConfirmation(): void {
+		if(this.formikProps) {
+			this.props.saveGroup(this.formikProps.values, true);
 		}
-
-		this.props.saveGroup(formValues, confirmSameName);
-	}
-
-	/**
-	 * Notifies Redux about current form validity and dirty status
-	 */
-	private notifyFormStatus(): void {
-		const {
-			formValues
-		} = this.state;
-
-		this.props.notifyFormStatus(this.isFormValid(formValues), this.isFormDirty(formValues));
-	}
-
-	/**
-	 * Validates current form values
-	 * @param group group values
-	 * @returns true if valid
-	 */
-	private isFormValid(group: GroupInternal): boolean {
-		return Boolean(group.name && group.name.trim());
-	}
-
-	/**
-	 * Checks if current form differs from Redux group
-	 * @param group group values
-	 * @returns true if dirty
-	 */
-	private isFormDirty(group: GroupInternal): boolean {
-		return this.areGroupsDifferent(group, this.props.group);
-	}
-
-	/**
-	 * Checks if two groups are different
-	 * @param left first group
-	 * @param right second group
-	 * @returns true if different
-	 */
-	private areGroupsDifferent(left: GroupInternal, right: GroupInternal): boolean {
-		return left.id !== right.id || left.name !== right.name;
 	}
 }
 
@@ -248,6 +161,5 @@ export type GroupDetailsScreenComponentOutput = {
 }
 
 type GroupDetailsScreenComponentState = {
-	formValues: GroupInternal;
 	confirmSameNameVisible: boolean;
 }

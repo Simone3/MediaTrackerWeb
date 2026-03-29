@@ -267,6 +267,34 @@
     - `app/components/presentational/category/details/form/view/index.tsx`
     - `app/components/presentational/category/details/screen/index.tsx`
     - `tests/category-details.smoke.test.tsx`
+- The same RN-era Formik + Yup restore is now back for the other non-media-item-details forms that originally used it.
+  - Correct behavior on web now:
+    - group details, own-platform details, and TV-show-season details are Formik-backed again, with Yup schemas matching the old RN field models instead of hand-rolled component-state validation
+    - those screens keep the current web dark-shell layout, save buttons, loading states, and same-name confirmations, but now rely on Formik for `dirty` / `isValid` reporting just like the restored category form
+    - the media-item filter modal is also Formik-backed again and now restores the old per-media-type Yup schema plus mapper setup for books, movies, TV shows, and videogames
+    - the filter modal once again derives its `DEFAULT` sort mapping from the media-type-specific definitions controllers instead of hardcoding that conversion inline
+    - media item details are intentionally still excluded from this restore, per the current migration scope
+  - Relevant files:
+    - `app/components/presentational/group/details/form/data/index.ts`
+    - `app/components/presentational/group/details/form/view/index.tsx`
+    - `app/components/presentational/group/details/screen/index.tsx`
+    - `app/components/presentational/own-platform/details/form/data/index.ts`
+    - `app/components/presentational/own-platform/details/form/view/index.tsx`
+    - `app/components/presentational/own-platform/details/screen/index.tsx`
+    - `app/components/presentational/tv-show-season/details/form/data/index.ts`
+    - `app/components/presentational/tv-show-season/details/form/view/index.tsx`
+    - `app/components/presentational/tv-show-season/details/screen/index.tsx`
+    - `app/components/presentational/media-item/list/filter-form/data/media-item.ts`
+    - `app/components/presentational/media-item/list/filter-form/data/book.ts`
+    - `app/components/presentational/media-item/list/filter-form/data/movie.ts`
+    - `app/components/presentational/media-item/list/filter-form/data/tv-show.ts`
+    - `app/components/presentational/media-item/list/filter-form/data/videogame.ts`
+    - `app/components/presentational/media-item/list/filter-modal/index.tsx`
+    - `tests/group-details.smoke.test.tsx`
+    - `tests/own-platform-details.smoke.test.tsx`
+    - `tests/tv-show-season-details.smoke.test.tsx`
+    - `tests/media-item-filter-modal.smoke.test.tsx`
+    - `tests/media-item-filter-form-mappers.test.ts`
 - Category three-dots options had regressed to direct edit navigation.
 - Correct behavior on web now:
   - clicking three dots highlights the category

@@ -1,5 +1,8 @@
 import { Component, ReactNode } from 'react';
 import { EntityDetailsFrameComponent } from 'app/components/presentational/generic/entity-details-frame';
+import { Formik, FormikProps } from 'formik';
+import { tvShowSeasonValidationSchema } from 'app/components/presentational/tv-show-season/details/form/data';
+import { TvShowSeasonFormViewComponent } from 'app/components/presentational/tv-show-season/details/form/view';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import seasonIcon from 'app/resources/images/ic_input_season_number.svg';
 import { i18n } from 'app/utilities/i18n';
@@ -12,216 +15,55 @@ const TV_SHOW_SEASON_DETAILS_COMPLETE_ACCENT = '#7ad18f';
  * Presentational component that contains the whole "TV show season details" screen, that works as the "add new TV show season", "update TV show season" and
  * "view TV show season data" sections
  */
-export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDetailsScreenComponentInput & TvShowSeasonDetailsScreenComponentOutput, TvShowSeasonDetailsScreenComponentState> {
-	public state: TvShowSeasonDetailsScreenComponentState = {
-		formValues: {
-			number: undefined as unknown as number,
-			episodesNumber: undefined,
-			watchedEpisodesNumber: undefined
-		}
-	};
-
-	/**
-	 * @override
-	 */
-	public componentDidMount(): void {
-		this.syncFormValuesWithProps();
-	}
-
-	/**
-	 * @override
-	 */
-	public componentDidUpdate(prevProps: Readonly<TvShowSeasonDetailsScreenComponentInput & TvShowSeasonDetailsScreenComponentOutput>, prevState: Readonly<TvShowSeasonDetailsScreenComponentState>): void {
-		if(this.areSeasonsDifferent(prevProps.tvShowSeason, this.props.tvShowSeason)) {
-			this.syncFormValuesWithProps();
-			return;
-		}
-
-		if(prevState.formValues !== this.state.formValues) {
-			this.notifyFormStatus();
-		}
-	}
-
+export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDetailsScreenComponentInput & TvShowSeasonDetailsScreenComponentOutput> {
 	/**
 	 * @override
 	 */
 	public render(): ReactNode {
 		const {
-			formValues
-		} = this.state;
-		const {
+			tvShowSeason,
 			addingNewSeason
 		} = this.props;
-		const isValid = this.isFormValid(formValues);
-		const title = addingNewSeason ?
-			i18n.t('tvShowSeason.details.title.new') :
-			i18n.t('tvShowSeason.details.title.existing', { seasonNumber: formValues.number });
-		const seasonSummary = this.getSeasonSummary(formValues);
 
 		return (
-			<EntityDetailsFrameComponent
-				screenClassName='tv-show-season-details-screen'
-				bodyClassName='app-dark-screen-active'
-				accentColor={this.getSeasonAccent(formValues)}
-				icon={<img src={seasonIcon} alt='' className='entity-details-icon' />}
-				title={title}
-				subtitle={seasonSummary}
-				saveLabel={i18n.t('common.buttons.save')}
-				saveDisabled={!isValid}
-				onSave={() => {
-					this.submitForm();
-				}}
-				onSubmit={(event) => {
-					event.preventDefault();
-					this.submitForm();
+			<Formik<TvShowSeasonInternal>
+				initialValues={tvShowSeason}
+				validationSchema={tvShowSeasonValidationSchema}
+				validateOnMount={true}
+				enableReinitialize={true}
+				onSubmit={(values) => {
+					this.props.saveTvShowSeason(values);
 				}}>
-				<section className='entity-details-panel'>
-					<div className='entity-details-grid'>
-						<div className='entity-details-field entity-details-field-span-2'>
-							<label className='entity-details-label' htmlFor='tv-show-season-number'>
-								{i18n.t('tvShowSeason.details.placeholders.number')}
-							</label>
-							<input
-								id='tv-show-season-number'
-								className='entity-details-input'
-								type='number'
-								value={formValues.number ?? ''}
-								placeholder={i18n.t('tvShowSeason.details.placeholders.number')}
-								disabled={!addingNewSeason}
-								onChange={(event) => {
-									const value = event.target.value ? Number(event.target.value) : undefined;
-									this.setFormField('number', value);
-								}}
+				{(formikProps: FormikProps<TvShowSeasonInternal>) => {
+					const title = addingNewSeason ?
+						i18n.t('tvShowSeason.details.title.new') :
+						i18n.t('tvShowSeason.details.title.existing', { seasonNumber: formikProps.values.number });
+					const seasonSummary = this.getSeasonSummary(formikProps.values);
+
+					return (
+						<EntityDetailsFrameComponent
+							screenClassName='tv-show-season-details-screen'
+							bodyClassName='app-dark-screen-active'
+							accentColor={this.getSeasonAccent(formikProps.values)}
+							icon={<img src={seasonIcon} alt='' className='entity-details-icon' />}
+							title={title}
+							subtitle={seasonSummary}
+							saveLabel={i18n.t('common.buttons.save')}
+							saveDisabled={!formikProps.isValid}
+							onSave={() => {
+								void formikProps.submitForm();
+							}}
+							onSubmit={formikProps.handleSubmit}>
+							<TvShowSeasonFormViewComponent
+								{...formikProps}
+								addingNewSeason={addingNewSeason}
+								notifyFormStatus={this.props.notifyFormStatus}
 							/>
-						</div>
-						<div className='entity-details-field'>
-							<label className='entity-details-label' htmlFor='tv-show-season-episodes'>
-								{i18n.t('tvShowSeason.details.placeholders.episodesNumber')}
-							</label>
-							<input
-								id='tv-show-season-episodes'
-								className='entity-details-input'
-								type='number'
-								value={formValues.episodesNumber ?? ''}
-								placeholder={i18n.t('tvShowSeason.details.placeholders.episodesNumber')}
-								onChange={(event) => {
-									const value = event.target.value ? Number(event.target.value) : undefined;
-									this.setFormField('episodesNumber', value);
-								}}
-							/>
-						</div>
-						<div className='entity-details-field'>
-							<label className='entity-details-label' htmlFor='tv-show-season-watched'>
-								{i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber')}
-							</label>
-							<input
-								id='tv-show-season-watched'
-								className='entity-details-input'
-								type='number'
-								value={formValues.watchedEpisodesNumber ?? ''}
-								placeholder={i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber')}
-								onChange={(event) => {
-									const value = event.target.value ? Number(event.target.value) : undefined;
-									this.setFormField('watchedEpisodesNumber', value);
-								}}
-							/>
-						</div>
-					</div>
-				</section>
-			</EntityDetailsFrameComponent>
+						</EntityDetailsFrameComponent>
+					);
+				}}
+			</Formik>
 		);
-	}
-
-	/**
-	 * Syncs local form values from Redux source season
-	 */
-	private syncFormValuesWithProps(): void {
-		this.setState({
-			formValues: {
-				...this.props.tvShowSeason
-			}
-		}, () => {
-			this.notifyFormStatus();
-		});
-	}
-
-	/**
-	 * Handles a single field update
-	 * @param key field key
-	 * @param value field value
-	 */
-	private setFormField<K extends keyof TvShowSeasonInternal>(key: K, value: TvShowSeasonInternal[K]): void {
-		this.setState((prevState) => {
-			return {
-				formValues: {
-					...prevState.formValues,
-					[key]: value
-				}
-			};
-		});
-	}
-
-	/**
-	 * Submits form if valid
-	 */
-	private submitForm(): void {
-		const {
-			formValues
-		} = this.state;
-
-		if(!this.isFormValid(formValues)) {
-			this.notifyFormStatus();
-			return;
-		}
-
-		this.props.saveTvShowSeason(formValues);
-	}
-
-	/**
-	 * Notifies Redux about current form validity and dirty status
-	 */
-	private notifyFormStatus(): void {
-		const {
-			formValues
-		} = this.state;
-
-		this.props.notifyFormStatus(this.isFormValid(formValues), this.isFormDirty(formValues));
-	}
-
-	/**
-	 * Checks validity
-	 * @param tvShowSeason season values
-	 * @returns true if valid
-	 */
-	private isFormValid(tvShowSeason: TvShowSeasonInternal): boolean {
-		if(tvShowSeason.number === undefined || Number.isNaN(tvShowSeason.number)) {
-			return false;
-		}
-		if(tvShowSeason.episodesNumber !== undefined && tvShowSeason.watchedEpisodesNumber !== undefined) {
-			return tvShowSeason.watchedEpisodesNumber <= tvShowSeason.episodesNumber;
-		}
-		return true;
-	}
-
-	/**
-	 * Checks if form is dirty
-	 * @param tvShowSeason season values
-	 * @returns true if dirty
-	 */
-	private isFormDirty(tvShowSeason: TvShowSeasonInternal): boolean {
-		return this.areSeasonsDifferent(tvShowSeason, this.props.tvShowSeason);
-	}
-
-	/**
-	 * Checks if two seasons differ
-	 * @param left first season
-	 * @param right second season
-	 * @returns true if different
-	 */
-	private areSeasonsDifferent(left: TvShowSeasonInternal, right: TvShowSeasonInternal): boolean {
-		return left.number !== right.number ||
-			left.episodesNumber !== right.episodesNumber ||
-			left.watchedEpisodesNumber !== right.watchedEpisodesNumber;
 	}
 
 	/**
@@ -294,8 +136,4 @@ export type TvShowSeasonDetailsScreenComponentOutput = {
 	 * Callback to navigate back
 	 */
 	goBack: () => void;
-}
-
-type TvShowSeasonDetailsScreenComponentState = {
-	formValues: TvShowSeasonInternal;
 }
