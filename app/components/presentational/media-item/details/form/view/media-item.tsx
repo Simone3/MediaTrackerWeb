@@ -1,0 +1,972 @@
+import { Component, KeyboardEvent, ReactNode } from 'react';
+import { FormikProps } from 'formik';
+import { config } from 'app/config/config';
+import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
+import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
+import downloadIcon from 'app/resources/images/ic_download.svg';
+import googleIcon from 'app/resources/images/ic_google.png';
+import howLongToBeatIcon from 'app/resources/images/ic_howlongtobeat.png';
+import justWatchIcon from 'app/resources/images/ic_justwatch.png';
+import defaultMediaItemImage from 'app/resources/images/im_media_item_form_default.png';
+import wikipediaIcon from 'app/resources/images/ic_wikipedia.png';
+import { i18n } from 'app/utilities/i18n';
+import { mediaItemUtils } from 'app/utilities/media-item-utils';
+import { areMediaItemDetailsDifferent, MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
+
+type MediaItemActionButton = {
+	key: string;
+	label: string;
+	icon: string;
+	disabled: boolean;
+	onClick: () => void;
+};
+
+type MediaItemDetailsSectionKey = 'basics' | 'profile' | 'collection' | 'progress';
+
+/**
+ * Converts optional Date to input string
+ * @param currentDate the date
+ * @returns yyyy-mm-dd or empty string
+ */
+export const dateToInputValue = (currentDate?: Date): string => {
+	if(!currentDate) {
+		return '';
+	}
+
+	const year = `${currentDate.getFullYear()}`.padStart(4, '0');
+	const month = `${currentDate.getMonth() + 1}`.padStart(2, '0');
+	const day = `${currentDate.getDate()}`.padStart(2, '0');
+	return `${year}-${month}-${day}`;
+};
+
+/**
+ * Converts an input date string to Date
+ * @param value yyyy-mm-dd input value
+ * @returns date or undefined
+ */
+export const inputValueToDate = (value: string): Date | undefined => {
+	if(!value) {
+		return undefined;
+	}
+
+	const [ year, month, day ] = value.split('-').map(Number);
+	return new Date(year, month - 1, day);
+};
+
+/**
+ * Converts an optional number to an input-safe value
+ * @param value number
+ * @returns input value
+ */
+export const numberToInputValue = (value?: number): number | '' => {
+	return value !== undefined ? value : '';
+};
+
+/**
+ * Converts an input text value to optional number
+ * @param value input string
+ * @returns number or undefined
+ */
+export const inputValueToNumber = (value: string): number | undefined => {
+	if(!value) {
+		return undefined;
+	}
+
+	const parsed = Number(value);
+	return Number.isNaN(parsed) ? undefined : parsed;
+};
+
+/**
+ * Converts an optional string array to an inline input value
+ * @param values array values
+ * @returns comma-separated string
+ */
+export const inlineTextToInputValue = (values?: string[]): string => {
+	if(!values || values.length === 0) {
+		return '';
+	}
+
+	return values.join(', ');
+};
+
+/**
+ * Converts an inline text value to an optional string array
+ * @param value current input value
+ * @returns array or undefined
+ */
+export const inputValueToInlineText = (value: string): string[] | undefined => {
+	const trimmedValue = value.trim();
+
+	if(!trimmedValue) {
+		return undefined;
+	}
+
+	if(!value.includes(',')) {
+		return [ value ];
+	}
+
+	const tokens = value
+		.split(',')
+		.map((token) => {
+			return token.trim();
+		})
+		.filter((token) => {
+			return token.length > 0;
+		});
+
+	return tokens.length > 0 ? tokens : undefined;
+};
+
+/**
+ * Builds the TV show seasons summary line
+ * @param seasons TV show seasons
+ * @returns summary label
+ */
+export const getTvShowSeasonsSummaryLabel = (seasons?: TvShowSeasonInternal[]): string => {
+	if(!seasons || seasons.length === 0) {
+		return i18n.t('tvShowSeason.list.empty');
+	}
+
+	const counters = mediaItemUtils.getTvShowCounters(seasons);
+	return i18n.t('mediaItem.details.labels.seasons', {
+		seasonsNumber: counters.seasonsNumber,
+		episodesNumber: counters.episodesNumber,
+		watchedEpisodesNumber: counters.watchedEpisodesNumber
+	});
+};
+
+/**
+ * Presentational component that contains all generic media item form input fields, all handled by the Formik container component
+ */
+export class MediaItemFormViewComponent extends Component<MediaItemFormViewComponentProps> {
+	/**
+	 * @override
+	 */
+	public componentDidMount(): void {
+		this.notifyFormState();
+		this.props.persistFormDraft(this.props.values);
+	}
+
+	/**
+	 * @override
+	 */
+	public componentDidUpdate(prevProps: Readonly<MediaItemFormViewComponentProps>): void {
+		if(prevProps.isValid !== this.props.isValid ||
+			prevProps.values !== this.props.values ||
+			prevProps.baseMediaItem !== this.props.baseMediaItem) {
+			this.notifyFormState();
+		}
+
+		if(prevProps.values !== this.props.values) {
+			this.props.persistFormDraft(this.props.values);
+		}
+	}
+
+	/**
+	 * @override
+	 */
+	public render(): ReactNode {
+		return (
+			<>
+				{this.renderImageActionsRow(this.props.values)}
+				{this.renderFormSections(this.props.values)}
+			</>
+		);
+	}
+
+	/**
+	 * Notifies Redux about current form validity and dirty status
+	 */
+	private notifyFormState(): void {
+		this.props.notifyFormStatus(
+			this.props.isValid,
+			areMediaItemDetailsDifferent(this.props.values, this.props.baseMediaItem)
+		);
+	}
+
+	/**
+	 * Renders the top image and action row
+	 * @param mediaItem current media item
+	 * @returns the component
+	 */
+	private renderImageActionsRow(mediaItem: MediaItemDetailsFormValues): ReactNode {
+		if(!mediaItem.id && !mediaItem.catalogId) {
+			return null;
+		}
+
+		const buttons = this.getActionButtons(mediaItem);
+		const mediaTypeLabel = i18n.t(`category.mediaTypes.${mediaItem.mediaType}`);
+
+		return (
+			<section className='media-item-details-panel media-item-details-media-panel'>
+				<div className='media-item-details-image-wrapper'>
+					<img
+						className='media-item-details-image'
+						src={mediaItem.imageUrl || defaultMediaItemImage}
+						alt={`${mediaItem.name || mediaTypeLabel} cover`}
+					/>
+				</div>
+				<div className='media-item-details-image-actions'>
+					{buttons.map((button) => {
+						return (
+							<button
+								key={button.key}
+								type='button'
+								className='media-item-details-image-action'
+								disabled={button.disabled}
+								aria-label={button.label}
+								title={button.label}
+								onClick={button.onClick}>
+								<img className='media-item-details-image-action-icon' src={button.icon} alt='' />
+							</button>
+						);
+					})}
+				</div>
+			</section>
+		);
+	}
+
+	/**
+	 * Renders the main form sections
+	 * @param mediaItem current media item
+	 * @returns the component
+	 */
+	private renderFormSections(mediaItem: MediaItemDetailsFormValues): ReactNode {
+		return (
+			<div className='media-item-details-main'>
+				{this.renderSection('basics', (
+					<div className='media-item-details-grid'>
+						{this.renderNameField(mediaItem, 'media-item-details-field media-item-details-field-span-2')}
+						{this.renderDescriptionField(mediaItem, 'media-item-details-field media-item-details-field-span-2')}
+						{this.renderReleaseDateField(mediaItem)}
+					</div>
+				))}
+				{this.renderSection('profile', (
+					<div className='media-item-details-grid'>
+						{this.props.primarySpecificFields}
+						{this.renderGenresField(mediaItem, 'media-item-details-field media-item-details-field-span-2')}
+					</div>
+				))}
+				{this.renderSection('collection', (
+					<div className='media-item-details-grid'>
+						{this.renderImportanceField(mediaItem)}
+						{this.renderOwnPlatformField(mediaItem)}
+						{this.renderGroupField(mediaItem)}
+						{this.renderOrderInGroupField(mediaItem)}
+					</div>
+				))}
+				{this.renderSection('progress', (
+					<div className='media-item-details-grid'>
+						{this.renderUserCommentField(mediaItem, 'media-item-details-field media-item-details-field-span-2')}
+						{this.renderCompletionDatesField(mediaItem, 'media-item-details-field media-item-details-field-span-2')}
+					</div>
+				))}
+			</div>
+		);
+	}
+
+	/**
+	 * Renders a form section card
+	 * @param sectionKey section key
+	 * @param children section content
+	 * @returns the component
+	 */
+	private renderSection(sectionKey: MediaItemDetailsSectionKey, children: ReactNode): ReactNode {
+		return (
+			<section className='media-item-details-panel'>
+				<div className='media-item-details-section-heading'>
+					<h2 className='media-item-details-section-title'>{i18n.t(`mediaItem.details.sections.${sectionKey}.title`)}</h2>
+				</div>
+				{children}
+			</section>
+		);
+	}
+
+	/**
+	 * Renders the catalog-aware name field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderNameField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor='media-item-name'>
+					{i18n.t('mediaItem.details.placeholders.name')}
+				</label>
+				<div className='media-item-details-search-row'>
+					<input
+						id='media-item-name'
+						className='media-item-details-input'
+						type='text'
+						value={mediaItem.name}
+						onChange={(event) => {
+							if(this.props.catalogSearchResults && this.props.catalogSearchResults.length > 0) {
+								this.props.resetMediaItemsCatalogSearch();
+							}
+
+							this.setFormField('name', event.target.value);
+						}}
+						onKeyDown={(event) => {
+							this.handleNameFieldKeyDown(event);
+						}}
+					/>
+					<button
+						type='button'
+						className='media-item-details-button media-item-details-button-secondary media-item-details-search-button'
+						disabled={!mediaItem.name.trim()}
+						onClick={() => {
+							this.submitCatalogSearch();
+						}}>
+						Search
+					</button>
+				</div>
+				{this.renderCatalogSearchResults()}
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the description field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderDescriptionField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor='media-item-description'>
+					{i18n.t('mediaItem.details.placeholders.description')}
+				</label>
+				<textarea
+					id='media-item-description'
+					className='media-item-details-textarea'
+					value={mediaItem.description || ''}
+					onChange={(event) => {
+						this.setFormField('description', event.target.value || undefined);
+					}}
+				/>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the release date field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderReleaseDateField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor='media-item-release-date'>
+					{i18n.t('mediaItem.details.placeholders.releaseDate')}
+				</label>
+				<input
+					id='media-item-release-date'
+					className='media-item-details-input'
+					type='date'
+					value={this.dateToInputValue(mediaItem.releaseDate)}
+					onChange={(event) => {
+						this.setFormField('releaseDate', this.inputValueToDate(event.target.value));
+					}}
+				/>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the common genres field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderGenresField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		return this.renderArrayTextInputField(
+			'media-item-genres',
+			i18n.t('mediaItem.details.placeholders.genres'),
+			mediaItem.genres,
+			(values) => {
+				this.setFormField('genres', values);
+			},
+			fieldClassName
+		);
+	}
+
+	/**
+	 * Renders the importance field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderImportanceField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor='media-item-importance'>
+					{i18n.t('mediaItem.details.prompts.importance')}
+				</label>
+				<select
+					id='media-item-importance'
+					className='media-item-details-select'
+					value={mediaItem.importance}
+					onChange={(event) => {
+						this.setFormField('importance', event.target.value as MediaItemInternal['importance']);
+					}}>
+					{MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES.map((importance) => {
+						return (
+							<option key={importance} value={importance}>
+								{i18n.t(`mediaItem.common.importance.${importance}`)}
+							</option>
+						);
+					})}
+				</select>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the own platform field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderOwnPlatformField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		const ownPlatform = mediaItem.ownPlatform;
+
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor='media-item-own-platform'>
+					{i18n.t('mediaItem.details.placeholders.ownPlatform')}
+				</label>
+				<button
+					id='media-item-own-platform'
+					type='button'
+					className='media-item-details-picker-button'
+					onClick={this.props.requestOwnPlatformSelection}>
+					<span className='media-item-details-picker-value'>
+						{ownPlatform && (
+							<span className='media-item-details-picker-swatch' style={{ backgroundColor: ownPlatform.color }} />
+						)}
+						<span>{ownPlatform?.name || i18n.t('ownPlatform.list.none')}</span>
+					</span>
+					<span className='media-item-details-picker-action'>{i18n.t('common.buttons.select')}</span>
+				</button>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the group field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderGroupField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor='media-item-group'>
+					{i18n.t('mediaItem.details.placeholders.group')}
+				</label>
+				<button
+					id='media-item-group'
+					type='button'
+					className='media-item-details-picker-button'
+					onClick={this.props.requestGroupSelection}>
+					<span className='media-item-details-picker-value'>
+						{mediaItem.group?.name || i18n.t('group.list.none')}
+					</span>
+					<span className='media-item-details-picker-action'>{i18n.t('common.buttons.select')}</span>
+				</button>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the order-in-group field only when a group is selected
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderOrderInGroupField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		if(!mediaItem.group) {
+			return null;
+		}
+
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor='media-item-order-in-group'>
+					{i18n.t('mediaItem.details.placeholders.orderInGroup')}
+				</label>
+				<input
+					id='media-item-order-in-group'
+					className='media-item-details-input'
+					type='number'
+					value={this.numberToInputValue(mediaItem.orderInGroup)}
+					onChange={(event) => {
+						this.setFormField('orderInGroup', this.inputValueToNumber(event.target.value));
+					}}
+				/>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the user comment field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderUserCommentField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor='media-item-user-comment'>
+					{i18n.t('mediaItem.details.placeholders.userComment')}
+				</label>
+				<textarea
+					id='media-item-user-comment'
+					className='media-item-details-textarea'
+					value={mediaItem.userComment || ''}
+					onChange={(event) => {
+						this.setFormField('userComment', event.target.value || undefined);
+					}}
+				/>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders the completion dates field
+	 * @param mediaItem current media item
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	private renderCompletionDatesField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		const completionDates = mediaItem.completedOn || [];
+
+		return (
+			<div className={fieldClassName}>
+				<p className='media-item-details-label'>
+					{i18n.t('mediaItem.details.placeholders.completedOn')}
+				</p>
+				<div className='media-item-details-completion-list'>
+					{completionDates.length === 0 && (
+						<p className='media-item-details-inline-hint'>{i18n.t('mediaItem.details.completion.empty')}</p>
+					)}
+					{completionDates.map((completedOn, index) => {
+						return (
+							<div className='media-item-details-completion-row' key={`completed-on-${index}`}>
+								<input
+									id={`media-item-completed-on-${index}`}
+									className='media-item-details-input'
+									type='date'
+									value={this.dateToInputValue(completedOn)}
+									onChange={(event) => {
+										this.updateCompletionDate(index, event.target.value);
+									}}
+								/>
+								<button
+									type='button'
+									className='media-item-details-button media-item-details-button-secondary media-item-details-small-button'
+									onClick={() => {
+										this.removeCompletionDate(index);
+									}}>
+									{i18n.t('common.buttons.remove')}
+								</button>
+							</div>
+						);
+					})}
+					<button
+						type='button'
+						className='media-item-details-button media-item-details-button-secondary media-item-details-inline-button'
+						onClick={() => {
+							this.addCompletionDate();
+						}}>
+						{i18n.t('mediaItem.details.buttons.addDate')}
+					</button>
+				</div>
+			</div>
+		);
+	}
+
+	/**
+	 * Renders catalog search suggestions
+	 * @returns the component
+	 */
+	private renderCatalogSearchResults(): ReactNode {
+		const {
+			catalogSearchResults
+		} = this.props;
+
+		if(!catalogSearchResults || catalogSearchResults.length === 0) {
+			return null;
+		}
+
+		return (
+			<div className='media-item-details-search-results'>
+				{catalogSearchResults.map((result) => {
+					return (
+						<button
+							key={result.catalogId}
+							type='button'
+							className='media-item-details-search-result'
+							onClick={() => {
+								this.props.resetMediaItemsCatalogSearch();
+								this.props.loadMediaItemCatalogDetails(result.catalogId);
+							}}>
+							{this.formatCatalogSearchResult(result)}
+						</button>
+					);
+				})}
+			</div>
+		);
+	}
+
+	/**
+	 * Formats a catalog search result label
+	 * @param result catalog search result
+	 * @returns label
+	 */
+	private formatCatalogSearchResult(result: SearchMediaItemCatalogResultInternal): string {
+		if(!result.releaseDate) {
+			return result.name;
+		}
+
+		return i18n.t('mediaItem.details.catalog.result.fullLabel', {
+			name: result.name,
+			releaseDate: result.releaseDate.getFullYear()
+		});
+	}
+
+	/**
+	 * Renders a single-line text input for array values
+	 * @param id field ID
+	 * @param label field label
+	 * @param values field values
+	 * @param onChange change handler
+	 * @param fieldClassName layout class name
+	 * @returns the component
+	 */
+	protected renderArrayTextInputField(
+		id: string,
+		label: string,
+		values: string[] | undefined,
+		onChange: (newValues: string[] | undefined) => void,
+		fieldClassName: string = 'media-item-details-field'
+	): ReactNode {
+		return (
+			<div className={fieldClassName}>
+				<label className='media-item-details-label' htmlFor={id}>
+					{label}
+				</label>
+				<input
+					id={id}
+					className='media-item-details-input'
+					type='text'
+					value={this.inlineTextToInputValue(values)}
+					onChange={(event) => {
+						onChange(this.inputValueToInlineText(event.target.value));
+					}}
+				/>
+			</div>
+		);
+	}
+
+	/**
+	 * Builds the action buttons for the sidebar shortcuts
+	 * @param mediaItem current media item
+	 * @returns action buttons
+	 */
+	private getActionButtons(mediaItem: MediaItemDetailsFormValues): MediaItemActionButton[] {
+		const buttons: MediaItemActionButton[] = [
+			{
+				key: 'google',
+				label: i18n.t('mediaItem.details.buttons.google'),
+				icon: googleIcon,
+				disabled: !mediaItem.name,
+				onClick: () => {
+					this.openExternalLink(config.external.googleSearch(encodeURIComponent(mediaItem.name)));
+				}
+			},
+			{
+				key: 'wikipedia',
+				label: i18n.t('mediaItem.details.buttons.wikipedia'),
+				icon: wikipediaIcon,
+				disabled: !mediaItem.name,
+				onClick: () => {
+					this.openExternalLink(config.external.wikipediaSearch(encodeURIComponent(mediaItem.name)));
+				}
+			}
+		];
+
+		if(mediaItem.mediaType === 'MOVIE' || mediaItem.mediaType === 'TV_SHOW') {
+			buttons.push({
+				key: 'just-watch',
+				label: i18n.t('mediaItem.details.buttons.justWatch'),
+				icon: justWatchIcon,
+				disabled: !mediaItem.name,
+				onClick: () => {
+					this.openExternalLink(config.external.justWatchSearch(encodeURIComponent(mediaItem.name)));
+				}
+			});
+		}
+
+		if(mediaItem.mediaType === 'VIDEOGAME') {
+			buttons.push({
+				key: 'how-long-to-beat',
+				label: i18n.t('mediaItem.details.buttons.howLongToBeat'),
+				icon: howLongToBeatIcon,
+				disabled: !mediaItem.name,
+				onClick: () => {
+					this.openExternalLink(config.external.howLongToBeatSearch(encodeURIComponent(mediaItem.name)));
+				}
+			});
+		}
+
+		buttons.push({
+			key: 'reload-catalog',
+			label: i18n.t('mediaItem.details.buttons.downloadCatalog'),
+			icon: downloadIcon,
+			disabled: !mediaItem.catalogId,
+			onClick: () => {
+				if(mediaItem.catalogId) {
+					this.props.requestCatalogReload(mediaItem.catalogId);
+				}
+			}
+		});
+
+		return buttons;
+	}
+
+	/**
+	 * Opens an external link in a new tab
+	 * @param url target URL
+	 */
+	private openExternalLink(url: string): void {
+		window.open(url, '_blank', 'noopener,noreferrer');
+	}
+
+	/**
+	 * Submits the current name as a catalog search term
+	 */
+	private submitCatalogSearch(): void {
+		const term = this.props.values.name.trim();
+
+		if(!term) {
+			return;
+		}
+
+		this.props.searchMediaItemsCatalog(term);
+	}
+
+	/**
+	 * Handles keyboard interactions on the name field
+	 * @param event keyboard event
+	 */
+	private handleNameFieldKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
+		if(event.key !== 'Enter') {
+			return;
+		}
+
+		event.preventDefault();
+		this.submitCatalogSearch();
+	}
+
+	/**
+	 * Adds a completion date entry
+	 */
+	private addCompletionDate(): void {
+		const completionDates = this.props.values.completedOn ? [ ...this.props.values.completedOn ] : [];
+
+		completionDates.push(new Date());
+		this.setFormField('completedOn', completionDates);
+	}
+
+	/**
+	 * Updates a completion date entry
+	 * @param index row index
+	 * @param value date input value
+	 */
+	private updateCompletionDate(index: number, value: string): void {
+		const completionDates = this.props.values.completedOn ? [ ...this.props.values.completedOn ] : [];
+		const parsedDate = this.inputValueToDate(value);
+
+		if(!parsedDate) {
+			completionDates.splice(index, 1);
+		}
+		else {
+			completionDates[index] = parsedDate;
+		}
+
+		this.setFormField('completedOn', completionDates.length > 0 ? completionDates : undefined);
+	}
+
+	/**
+	 * Removes a completion date entry
+	 * @param index row index
+	 */
+	private removeCompletionDate(index: number): void {
+		const completionDates = this.props.values.completedOn ? [ ...this.props.values.completedOn ] : [];
+
+		completionDates.splice(index, 1);
+		this.setFormField('completedOn', completionDates.length > 0 ? completionDates : undefined);
+	}
+
+	/**
+	 * Builds the TV show seasons summary line
+	 * @param seasons TV show seasons
+	 * @returns summary label
+	 */
+	protected getTvShowSeasonsSummary(seasons?: TvShowSeasonInternal[]): string {
+		if(!seasons || seasons.length === 0) {
+			return i18n.t('tvShowSeason.list.empty');
+		}
+
+		const counters = mediaItemUtils.getTvShowCounters(seasons);
+		return i18n.t('mediaItem.details.labels.seasons', {
+			seasonsNumber: counters.seasonsNumber,
+			episodesNumber: counters.episodesNumber,
+			watchedEpisodesNumber: counters.watchedEpisodesNumber
+		});
+	}
+
+	/**
+	 * Handles a single field update
+	 * @param key the field key
+	 * @param value the field value
+	 */
+	protected setFormField<K extends keyof MediaItemDetailsFormValues>(key: K, value: MediaItemDetailsFormValues[K]): void {
+		void this.props.setFieldValue(key, value);
+	}
+
+	/**
+	 * Converts optional Date to input string
+	 * @param currentDate the date
+	 * @returns yyyy-mm-dd or empty string
+	 */
+	protected dateToInputValue(currentDate?: Date): string {
+		return dateToInputValue(currentDate);
+	}
+
+	/**
+	 * Converts an input date string to Date
+	 * @param value yyyy-mm-dd input value
+	 * @returns date or undefined
+	 */
+	protected inputValueToDate(value: string): Date | undefined {
+		return inputValueToDate(value);
+	}
+
+	/**
+	 * Converts an optional number to an input-safe value
+	 * @param value number
+	 * @returns input value
+	 */
+	protected numberToInputValue(value?: number): number | '' {
+		return numberToInputValue(value);
+	}
+
+	/**
+	 * Converts an input text value to optional number
+	 * @param value input string
+	 * @returns number or undefined
+	 */
+	protected inputValueToNumber(value: string): number | undefined {
+		return inputValueToNumber(value);
+	}
+
+	/**
+	 * Converts an optional string array to an inline input value
+	 * @param values array values
+	 * @returns comma-separated string
+	 */
+	protected inlineTextToInputValue(values?: string[]): string {
+		return inlineTextToInputValue(values);
+	}
+
+	/**
+	 * Converts an inline text value to an optional string array
+	 * @param value current input value
+	 * @returns array or undefined
+	 */
+	protected inputValueToInlineText(value: string): string[] | undefined {
+		return inputValueToInlineText(value);
+	}
+}
+
+/**
+ * MediaItemFormViewComponent's common input props
+ */
+export type MediaItemFormViewComponentCommonInput = {
+	/**
+	 * The Redux media item used as dirty-state reference
+	 */
+	baseMediaItem: MediaItemInternal;
+
+	/**
+	 * The current media item catalog search results
+	 */
+	catalogSearchResults?: SearchMediaItemCatalogResultInternal[];
+
+	/**
+	 * Callback to request group selection
+	 */
+	requestGroupSelection: () => void;
+
+	/**
+	 * Callback to request own platform selection
+	 */
+	requestOwnPlatformSelection: () => void;
+
+	/**
+	 * Callback to search media items catalog
+	 */
+	searchMediaItemsCatalog: (term: string) => void;
+
+	/**
+	 * Callback to load media item catalog details
+	 */
+	loadMediaItemCatalogDetails: (catalogId: string) => void;
+
+	/**
+	 * Callback to clear media items catalog search results
+	 */
+	resetMediaItemsCatalogSearch: () => void;
+
+	/**
+	 * Callback to open the reload-catalog confirmation dialog
+	 */
+	requestCatalogReload: (catalogId: string) => void;
+};
+
+/**
+ * MediaItemFormViewComponent's input props
+ */
+export type MediaItemFormViewComponentInput = MediaItemFormViewComponentCommonInput & {
+	/**
+	 * Inputs for the specific media item
+	 */
+	primarySpecificFields?: ReactNode[];
+};
+
+/**
+ * MediaItemFormViewComponent's common output props
+ */
+export type MediaItemFormViewComponentCommonOutput = {
+	/**
+	 * Callback to notify the current status of the form
+	 * @param valid true if the form is valid, i.e. no validation error occurred
+	 * @param dirty true if the form is dirty, i.e. one or more fields are different from the Redux media item
+	 */
+	notifyFormStatus: (valid: boolean, dirty: boolean) => void;
+
+	/**
+	 * Callback to persist the current unsaved form draft
+	 * @param mediaItem the current form values
+	 */
+	persistFormDraft: (mediaItem: MediaItemInternal) => void;
+};
+
+/**
+ * MediaItemFormViewComponent's props
+ */
+export type MediaItemFormViewComponentProps = FormikProps<MediaItemDetailsFormValues> & MediaItemFormViewComponentInput & MediaItemFormViewComponentCommonOutput;

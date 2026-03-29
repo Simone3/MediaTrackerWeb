@@ -273,7 +273,6 @@
     - those screens keep the current web dark-shell layout, save buttons, loading states, and same-name confirmations, but now rely on Formik for `dirty` / `isValid` reporting just like the restored category form
     - the media-item filter modal is also Formik-backed again and now restores the old per-media-type Yup schema plus mapper setup for books, movies, TV shows, and videogames
     - the filter modal once again derives its `DEFAULT` sort mapping from the media-type-specific definitions controllers instead of hardcoding that conversion inline
-    - media item details are intentionally still excluded from this restore, per the current migration scope
   - Relevant files:
     - `app/components/presentational/group/details/form/data/index.ts`
     - `app/components/presentational/group/details/form/view/index.tsx`
@@ -295,6 +294,33 @@
     - `tests/tv-show-season-details.smoke.test.tsx`
     - `tests/media-item-filter-modal.smoke.test.tsx`
     - `tests/media-item-filter-form-mappers.test.ts`
+- Media item details are now back on the same RN-era shared Formik + Yup architecture as the original mobile app.
+  - Correct behavior on web now:
+    - the old generic media-item details form structure is restored again, with shared generic form logic plus separate book, movie, TV-show, and videogame visual implementations
+    - the old generic media-type switcher is back and now chooses the correct Formik wrapper for the 4 media-item forms on web just like the original RN app
+    - Yup validation is restored per media type for media item details too, matching the old RN schemas instead of the large web-only hand-rolled validation block
+    - the current web dark-shell layout, save CTA, same-name confirmation, draft persistence, picker syncing, catalog search/reload flow, and TV-show seasons hand-off all remain in place on top of that restored shared form stack
+    - book, movie, TV-show, and videogame detail screens now all exercise the same restored generic/shared form path instead of only book and TV show coverage
+  - Relevant files:
+    - `app/components/presentational/generic/media-switcher/index.tsx`
+    - `app/components/presentational/media-item/details/form/data/media-item.ts`
+    - `app/components/presentational/media-item/details/form/data/book.ts`
+    - `app/components/presentational/media-item/details/form/data/movie.ts`
+    - `app/components/presentational/media-item/details/form/data/tv-show.ts`
+    - `app/components/presentational/media-item/details/form/data/videogame.ts`
+    - `app/components/presentational/media-item/details/form/view/media-item.tsx`
+    - `app/components/presentational/media-item/details/form/view/book.tsx`
+    - `app/components/presentational/media-item/details/form/view/movie.tsx`
+    - `app/components/presentational/media-item/details/form/view/tv-show.tsx`
+    - `app/components/presentational/media-item/details/form/view/videogame.tsx`
+    - `app/components/presentational/media-item/details/form/wrapper/media-item.tsx`
+    - `app/components/presentational/media-item/details/form/wrapper/book.tsx`
+    - `app/components/presentational/media-item/details/form/wrapper/movie.tsx`
+    - `app/components/presentational/media-item/details/form/wrapper/tv-show.tsx`
+    - `app/components/presentational/media-item/details/form/wrapper/videogame.tsx`
+    - `app/components/presentational/media-item/details/form/switcher/index.tsx`
+    - `app/components/presentational/media-item/details/screen/index.tsx`
+    - `tests/media-item-details.smoke.test.tsx`
 - Category three-dots options had regressed to direct edit navigation.
 - Correct behavior on web now:
   - clicking three dots highlights the category

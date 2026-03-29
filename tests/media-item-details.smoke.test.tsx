@@ -5,8 +5,10 @@ import { MediaItemDetailsScreenComponent } from 'app/components/presentational/m
 import { DEFAULT_BOOK } from 'app/data/models/internal/media-items/book';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
+import { DEFAULT_MOVIE } from 'app/data/models/internal/media-items/movie';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { TvShowInternal } from 'app/data/models/internal/media-items/tv-show';
+import { DEFAULT_VIDEOGAME } from 'app/data/models/internal/media-items/videogame';
 import { i18n } from 'app/utilities/i18n';
 
 type DetailsProps = React.ComponentProps<typeof MediaItemDetailsScreenComponent>;
@@ -71,7 +73,9 @@ describe('MediaItemDetailsScreenComponent', () => {
 		const authorsInput = screen.getByLabelText(i18n.t('mediaItem.details.placeholders.creators.BOOK'));
 		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
 
-		expect(saveButton).toBeDisabled();
+		await waitFor(() => {
+			expect(saveButton).toBeDisabled();
+		});
 
 		await user.type(nameInput, 'Dune');
 		await user.type(pagesInput, '412');
@@ -185,7 +189,7 @@ describe('MediaItemDetailsScreenComponent', () => {
 		expect(screen.queryByLabelText(i18n.t('mediaItem.details.placeholders.nextEpisodeAirDate'))).not.toBeInTheDocument();
 	});
 
-	test('renders the old shared book form controls and syncs selected entities', () => {
+	test('renders the old shared book form controls and syncs selected entities', async() => {
 		const mediaItem: MediaItemInternal = {
 			...DEFAULT_BOOK,
 			id: 'book-id',
@@ -223,8 +227,36 @@ describe('MediaItemDetailsScreenComponent', () => {
 			selectedOwnPlatform
 		}));
 
-		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.ownPlatform'))).toHaveTextContent('Kindle');
-		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.group'))).toHaveTextContent('Sci-Fi Saga');
+		await waitFor(() => {
+			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.ownPlatform'))).toHaveTextContent('Kindle');
+			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.group'))).toHaveTextContent('Sci-Fi Saga');
+		});
+	});
+
+	test('renders movie-specific shared form controls', () => {
+		render(createScreen({
+			mediaItem: {
+				...DEFAULT_MOVIE,
+				name: 'Arrival'
+			}
+		}));
+
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.duration.MOVIE'))).toBeInTheDocument();
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.creators.MOVIE'))).toBeInTheDocument();
+		expect(screen.queryByLabelText(i18n.t('mediaItem.details.placeholders.creators.BOOK'))).not.toBeInTheDocument();
+	});
+
+	test('renders videogame-specific shared form controls', () => {
+		render(createScreen({
+			mediaItem: {
+				...DEFAULT_VIDEOGAME,
+				name: 'Hades'
+			}
+		}));
+
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.duration.VIDEOGAME'))).toBeInTheDocument();
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.publishers'))).toBeInTheDocument();
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.platforms'))).toBeInTheDocument();
 	});
 
 	test('renders completion date controls and picker actions', async() => {
