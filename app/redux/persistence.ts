@@ -1,43 +1,48 @@
 import { State, mapStateForPersistence } from 'app/redux/state/state';
 
 const STORAGE_KEY = 'media-tracker-redux-state';
-const DATE_FIELD_KEYS = new Set([ 'releaseDate', 'nextEpisodeAirDate', 'completeHandlingTimestamp' ]);
-const DATE_ARRAY_FIELD_KEYS = new Set([ 'completedOn' ]);
 
 const canUseSessionStorage = (): boolean => {
 	return typeof window !== 'undefined' && Boolean(window.sessionStorage);
 };
 
-const reviveDateArrayEntry = (entry: unknown): unknown => {
-	const revivedDate = typeof entry === 'string' ? new Date(entry) : undefined;
-	return !revivedDate || Number.isNaN(revivedDate.getTime()) ? entry : revivedDate;
+const encodeDates = (value: unknown): unknown => {
+	if(value instanceof Date) {
+		return { _type: 'Date', _value: value.toISOString() };
+	}
+
+	if(Array.isArray(value)) {
+		return value.map(encodeDates);
+	}
+
+	if(value && typeof value === 'object') {
+		return Object.fromEntries(
+			Object.entries(value).map(([ k, v ]) => {
+				return [ k, encodeDates(v) ];
+			})
+		);
+	}
+
+	return value;
 };
 
-const revivePersistedValue = (value: unknown, key?: string): unknown => {
+const decodeDates = (value: unknown): unknown => {
 	if(Array.isArray(value)) {
-		if(key && DATE_ARRAY_FIELD_KEYS.has(key)) {
-			return value.map(reviveDateArrayEntry);
+		return value.map(decodeDates);
+	}
+
+	if(value && typeof value === 'object') {
+		if('_type' in value && value._type === 'Date' && '_value' in value) {
+			return new Date(value._value as string);
 		}
-
-		return value.map((entry: unknown): unknown => {
-			return revivePersistedValue(entry);
-		});
+		return Object.fromEntries(
+			Object.entries(value).map(([ k, v ]) => {
+				return [ k, decodeDates(v) ];
+			})
+		);
 	}
 
-	if(typeof value === 'string' && key && DATE_FIELD_KEYS.has(key)) {
-		const revivedDate = new Date(value);
-		return Number.isNaN(revivedDate.getTime()) ? value : revivedDate;
-	}
-
-	if(!value || typeof value !== 'object') {
-		return value;
-	}
-
-	const result: Record<string, unknown> = {};
-	for(const [ childKey, childValue ] of Object.entries(value)) {
-		result[childKey] = revivePersistedValue(childValue, childKey);
-	}
-	return result;
+	return value;
 };
 
 const clearPersistedValue = (): void => {
@@ -72,7 +77,7 @@ export const loadPersistedReduxState = (): State | undefined => {
 
 	let revivedState: State;
 	try {
-		revivedState = revivePersistedValue(JSON.parse(serializedState)) as State;
+		revivedState = decodeDates(JSON.parse(serializedState)) as State;
 	}
 	catch(error) {
 		console.log(error);
@@ -99,7 +104,7 @@ export const persistReduxState = (state: State): void => {
 	}
 
 	try {
-		window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(mapStateForPersistence(state)));
+		window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(encodeDates(mapStateForPersistence(state))));
 	}
 	catch(error) {
 		console.log(error);
