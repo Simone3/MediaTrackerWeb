@@ -17,7 +17,7 @@
     "class-validator": "0.15.1",
     "date-fns": "4.1.0",
     "firebase": "12.11.0",
-    "formik": "^2.4.9",
+    "formik": "2.4.9",
     "i18n-js": "4.5.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -25,7 +25,8 @@
     "react-router-dom": "7.13.1",
     "redux-saga": "1.4.2",
     "reflect-metadata": "0.2.2",
-    "string-strip-html": "13.5.3"
+    "string-strip-html": "13.5.3",
+    "yup": "1.7.1"
   },
   "devDependencies": {
     "@babel/core": "7.29.0",

@@ -254,10 +254,11 @@
     - `tests/media-items-screen.smoke.test.tsx`
 - `formik` had been removed during the web dependency refresh even though the old RN app relied on it for entity forms.
   - Correct behavior on web now:
-    - `formik` is restored as a runtime dependency using the current stable `2.4.9` release, which is compatible with the repo's React `19` setup via Formik's `react >=16.8.0` peer range
+    - `formik` is restored as a runtime dependency pinned to `2.4.9`, which is compatible with the repo's React `19` setup via Formik's `react >=16.8.0` peer range
+    - `yup` is also restored as a runtime dependency pinned to `1.7.1`, matching the old RN validation approach
     - the categories details flow is once again Formik-backed instead of hand-rolled local component state
     - the category form fields now match the old RN field definition directly: `CategoryInternal` values with `name`, `mediaType`, and `color` managed by Formik plus the existing `id`
-    - Formik now owns the category form `dirty` / `isValid` status that gets reported back into Redux, while the current web shell, save button, loading state, and same-name confirmation dialog remain unchanged
+    - Yup now owns the category validation schema again, while Formik reports the form `dirty` / `isValid` status back into Redux and the current web shell, save button, loading state, and same-name confirmation dialog remain unchanged
     - editing an existing category still keeps the media-type selector locked, matching the old RN form behavior
   - Relevant files:
     - `package.json`

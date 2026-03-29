@@ -2,7 +2,7 @@ import { Component, ReactNode } from 'react';
 import { Formik, FormikProps } from 'formik';
 import { CategoryFormViewComponent } from 'app/components/presentational/category/details/form/view';
 import { SameNameConfirmationDialogComponent, shouldOpenSameNameConfirmation } from 'app/components/presentational/generic/same-name-confirmation';
-import { validateCategoryForm } from 'app/components/presentational/category/details/form/data';
+import { categoryFormValidationSchema } from 'app/components/presentational/category/details/form/data';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { i18n } from 'app/utilities/i18n';
@@ -60,8 +60,8 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 			<section className='category-details-screen'>
 				<Formik<CategoryInternal>
 					initialValues={category}
-					initialErrors={validateCategoryForm(category)}
-					validate={validateCategoryForm}
+					validationSchema={categoryFormValidationSchema}
+					validateOnMount={true}
 					enableReinitialize={true}
 					innerRef={this.handleFormikRef}
 					onSubmit={(values) => {

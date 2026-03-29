@@ -26,7 +26,9 @@ describe('CategoryDetailsScreenComponent', () => {
 		const nameInput = screen.getByLabelText(i18n.t('category.details.placeholders.name'));
 		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
 
-		expect(saveButton).toBeDisabled();
+		await waitFor(() => {
+			expect(saveButton).toBeDisabled();
+		});
 
 		await user.type(nameInput, 'Sci-Fi');
 		await user.click(screen.getByRole('button', { name: i18n.t('category.mediaTypes.MOVIE') }));
@@ -78,6 +80,9 @@ describe('CategoryDetailsScreenComponent', () => {
 		);
 
 		const user = userEvent.setup();
+		await waitFor(() => {
+			expect(screen.getByRole('button', { name: i18n.t('common.buttons.save') })).toBeEnabled();
+		});
 		await user.click(screen.getByRole('button', { name: i18n.t('common.alert.default.okButton') }));
 
 		await waitFor(() => {
@@ -109,6 +114,9 @@ describe('CategoryDetailsScreenComponent', () => {
 		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
 
 		expect(movieButton).toBeDisabled();
+		await waitFor(() => {
+			expect(saveButton).toBeEnabled();
+		});
 
 		await user.click(saveButton);
 
