@@ -16,8 +16,16 @@ export const MediaItemFormSwitcherComponent = (props: MediaItemFormSwitcherCompo
 	return (
 		<MediaTypeSwitcherComponent
 			discriminator={props.initialValues}
-			book={<BookFormComponent {...props} />}
-			movie={<MovieFormComponent {...props} />}
+			book={
+				<BookFormComponent
+					{...props}
+				/>
+			}
+			movie={
+				<MovieFormComponent
+					{...props}
+				/>
+			}
 			tvShow={
 				<TvShowFormComponent
 					{...props}
@@ -25,7 +33,11 @@ export const MediaItemFormSwitcherComponent = (props: MediaItemFormSwitcherCompo
 					loadSeasonsTimestamp={props.tvShowSeasonsLoadTimestamp}
 				/>
 			}
-			videogame={<VideogameFormComponent {...props} />}
+			videogame={
+				<VideogameFormComponent
+					{...props}
+				/>
+			}
 		/>
 	);
 };

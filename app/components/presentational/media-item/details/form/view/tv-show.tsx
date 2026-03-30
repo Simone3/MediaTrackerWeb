@@ -1,16 +1,5 @@
 import { ReactElement } from 'react';
-import {
-	dateToInputValue,
-	getTvShowSeasonsSummaryLabel,
-	inlineTextToInputValue,
-	inputValueToDate,
-	inputValueToInlineText,
-	inputValueToNumber,
-	MediaItemFormViewComponent,
-	MediaItemFormViewComponentCommonInput,
-	MediaItemFormViewComponentCommonOutput,
-	numberToInputValue
-} from 'app/components/presentational/media-item/details/form/view/media-item';
+import { dateToInputValue, getTvShowSeasonsSummaryLabel, inlineTextToInputValue, inputValueToDate, inputValueToInlineText, inputValueToNumber, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
 import { MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { FormikProps } from 'formik';

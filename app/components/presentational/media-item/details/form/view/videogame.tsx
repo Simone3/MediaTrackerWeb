@@ -1,13 +1,5 @@
 import { ReactElement } from 'react';
-import {
-	inlineTextToInputValue,
-	inputValueToInlineText,
-	inputValueToNumber,
-	MediaItemFormViewComponent,
-	MediaItemFormViewComponentCommonInput,
-	MediaItemFormViewComponentCommonOutput,
-	numberToInputValue
-} from 'app/components/presentational/media-item/details/form/view/media-item';
+import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
 import { MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
 import { FormikProps } from 'formik';
 import { i18n } from 'app/utilities/i18n';

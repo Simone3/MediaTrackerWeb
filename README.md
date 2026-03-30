@@ -3,15 +3,15 @@ Just a Codex experiment for now.
 
 TODO:
 - final manual code check -> from /presentational
-  - restore formik and component switcher etc.
-  - refactor into generic text input, date picker, etc.
-  - authinput, authlink, authsubmit generalizable?
+  - search media references, no switch/ifs etc. (see e.g. getCreatorNames)
+  - manual check again all form components
+  - refactor into generic text input, date picker, etc. - authinput, authlink, authsubmit generalizable?
   - find unused properties
   - migrate to an eslint.config.js file
   - app-dark-screen-active added and removed?
-  - remove blank lines after classes...
+  - remove blank lines after classes
   - CATEGORIES_MOBILE_BREAKPOINT rename and move
-  - test reload with date / date array fields, does it work?
+  - remove all multi-line imports
 - fully test on chrome/firefox (production build)
 - fully test on mobile (need to deploy first?)
 - check dev vs. prod configs
@@ -21,7 +21,7 @@ TODO:
   - restore config-sample.ts
   - Firebase API key is public?
   - is it useless to gitignore the configs?
-- "merge" web and be to deploy them as a single app?
+- "merge" web and be to deploy them as a single app? first, upgrade back-end dependencies
 - limit signups in prod firebase? are there login attempts limits?
 
 
