@@ -12,28 +12,48 @@ import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, Co
  */
 export class TvShowFormComponent extends Component<TvShowFormComponentProps> {
 	private formikProps?: FormikProps<MediaItemDetailsFormValues>;
+	private loadedSeasonsTimestamp?: Date;
 
 	/**
 	 * @override
 	 */
-	public componentDidUpdate(prevProps: Readonly<TvShowFormComponentProps>): void {
-		if(!this.formikProps || prevProps.loadSeasonsTimestamp === this.props.loadSeasonsTimestamp || !this.props.loadSeasonsTimestamp) {
-			return;
-		}
+	public componentDidMount(): void {
+		this.checkLoadSeasons();
+	}
 
-		void this.formikProps.setValues({
-			...this.formikProps.values,
-			seasons: this.props.loadSeasons.length > 0 ? [ ...this.props.loadSeasons ] : undefined
-		});
+	/**
+	 * @override
+	 */
+	public componentDidUpdate(): void {
+		this.checkLoadSeasons();
 	}
 
 	/**
 	 * @override
 	 */
 	public render(): ReactNode {
+		const commonProps: CommonMediaItemFormComponentInputMain & CommonMediaItemFormComponentOutput = {
+			isLoading: this.props.isLoading,
+			initialValues: this.props.initialValues,
+			baseMediaItem: this.props.baseMediaItem,
+			sameNameConfirmationRequested: this.props.sameNameConfirmationRequested,
+			catalogSearchResults: this.props.catalogSearchResults,
+			catalogDetails: this.props.catalogDetails,
+			selectedGroup: this.props.selectedGroup,
+			selectedOwnPlatform: this.props.selectedOwnPlatform,
+			notifyFormStatus: this.props.notifyFormStatus,
+			saveMediaItem: this.props.saveMediaItem,
+			persistFormDraft: this.props.persistFormDraft,
+			requestGroupSelection: this.props.requestGroupSelection,
+			requestOwnPlatformSelection: this.props.requestOwnPlatformSelection,
+			searchMediaItemsCatalog: this.props.searchMediaItemsCatalog,
+			loadMediaItemCatalogDetails: this.props.loadMediaItemCatalogDetails,
+			resetMediaItemsCatalogSearch: this.props.resetMediaItemsCatalogSearch
+		};
+
 		return (
 			<CommonMediaItemFormComponent
-				{...this.props}
+				{...commonProps}
 				validationSchema={tvShowFormValidationSchema as ObjectSchema<MediaItemDetailsFormValues>}>
 				{(formikProps, requestCatalogReload) => {
 					this.formikProps = formikProps;
@@ -58,6 +78,27 @@ export class TvShowFormComponent extends Component<TvShowFormComponentProps> {
 			</CommonMediaItemFormComponent>
 		);
 	}
+
+	/**
+	 * Checks if we need to (re)load the list of seasons after it has been updated by the seasons flow
+	 */
+	private checkLoadSeasons(): void {
+		const {
+			loadSeasons,
+			loadSeasonsTimestamp
+		} = this.props;
+
+		if(!this.formikProps || !loadSeasonsTimestamp || loadSeasonsTimestamp === this.loadedSeasonsTimestamp) {
+			return;
+		}
+
+		this.loadedSeasonsTimestamp = loadSeasonsTimestamp;
+
+		void this.formikProps.setValues({
+			...this.formikProps.values,
+			seasons: loadSeasons.length > 0 ? [ ...loadSeasons ] : undefined
+		});
+	}
 }
 
 /**
@@ -73,4 +114,9 @@ export type TvShowFormComponentProps = CommonMediaItemFormComponentInputMain & C
 	 * Check field for `loadSeasons` to see if an update has been published after the previous reload
 	 */
 	loadSeasonsTimestamp: Date | undefined;
+
+	/**
+	 * Callback to open TV show seasons flow
+	 */
+	handleTvShowSeasons: (currentSeasons?: TvShowSeasonInternal[]) => void;
 };

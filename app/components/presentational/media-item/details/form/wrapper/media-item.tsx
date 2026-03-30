@@ -7,7 +7,6 @@ import { LoadingIndicatorComponent } from 'app/components/presentational/generic
 import { SameNameConfirmationDialogComponent, shouldOpenSameNameConfirmation } from 'app/components/presentational/generic/same-name-confirmation';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { CatalogMediaItemInternal, MediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
-import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { i18n } from 'app/utilities/i18n';
 import { MediaItemDetailsFormValues, mergeCatalogDetailsIntoMediaItem, normalizeMediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
@@ -302,11 +301,6 @@ export type CommonMediaItemFormComponentOutput = {
 	 * @param mediaItem the current form values
 	 */
 	persistFormDraft: (mediaItem: MediaItemInternal) => void;
-
-	/**
-	 * Callback to open TV show seasons flow
-	 */
-	handleTvShowSeasons: (currentSeasons?: TvShowSeasonInternal[]) => void;
 
 	/**
 	 * Callback to request group selection

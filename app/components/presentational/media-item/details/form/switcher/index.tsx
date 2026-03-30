@@ -1,9 +1,8 @@
 import { ReactElement } from 'react';
 import { MediaTypeSwitcherComponent } from 'app/components/presentational/generic/media-switcher';
-import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { BookFormComponent } from 'app/components/presentational/media-item/details/form/wrapper/book';
 import { MovieFormComponent } from 'app/components/presentational/media-item/details/form/wrapper/movie';
-import { TvShowFormComponent } from 'app/components/presentational/media-item/details/form/wrapper/tv-show';
+import { TvShowFormContainer } from 'app/components/containers/media-item/details/form/tv-show';
 import { VideogameFormComponent } from 'app/components/presentational/media-item/details/form/wrapper/videogame';
 import { CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from 'app/components/presentational/media-item/details/form/wrapper/media-item';
 
@@ -27,10 +26,8 @@ export const MediaItemFormSwitcherComponent = (props: MediaItemFormSwitcherCompo
 				/>
 			}
 			tvShow={
-				<TvShowFormComponent
+				<TvShowFormContainer
 					{...props}
-					loadSeasons={props.tvShowSeasons}
-					loadSeasonsTimestamp={props.tvShowSeasonsLoadTimestamp}
 				/>
 			}
 			videogame={
@@ -45,14 +42,4 @@ export const MediaItemFormSwitcherComponent = (props: MediaItemFormSwitcherCompo
 /**
  * MediaItemFormSwitcherComponent's props
  */
-export type MediaItemFormSwitcherComponentProps = CommonMediaItemFormComponentInputMain & CommonMediaItemFormComponentOutput & {
-	/**
-	 * TV show seasons loaded from seasons flow
-	 */
-	tvShowSeasons: TvShowSeasonInternal[];
-
-	/**
-	 * Timestamp updated when seasons flow is completed
-	 */
-	tvShowSeasonsLoadTimestamp: Date | undefined;
-};
+export type MediaItemFormSwitcherComponentProps = CommonMediaItemFormComponentInputMain & CommonMediaItemFormComponentOutput;

@@ -152,6 +152,19 @@
   - good reference implementations when category behavior looks wrong
 
 ## Recent fix worth remembering
+- The media-item details flow on web had been threading TV-show season state/handlers through generic `media-item` screen, switcher, and common-wrapper props.
+  - Correct behavior/structure on web now:
+    - the generic media-item details screen/switcher/common wrapper only expose shared media-item props again
+    - TV-show-only seasons state/dispatch now live in the dedicated `app/components/containers/media-item/details/form/tv-show.ts` container, matching the older RN separation more closely
+    - the TV-show form wrapper now reloads handled seasons on mount/update from the Redux timestamp, so returning from the seasons flow still restores the edited seasons without leaking TV-show-only props into generic components
+  - Relevant files:
+    - `app/components/containers/media-item/details/form/tv-show.ts`
+    - `app/components/containers/media-item/details/screen.ts`
+    - `app/components/presentational/media-item/details/screen/index.tsx`
+    - `app/components/presentational/media-item/details/form/switcher/index.tsx`
+    - `app/components/presentational/media-item/details/form/wrapper/media-item.tsx`
+    - `app/components/presentational/media-item/details/form/wrapper/tv-show.tsx`
+    - `tests/media-item-details.smoke.test.tsx`
 - The production REST JSON invoker still carried the old React Native `Accept-Charset` request header into the browser build.
   - Correct behavior on web now:
     - Axios still sends the intended JSON request headers (`Content-Type` and `Accept`)

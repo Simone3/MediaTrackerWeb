@@ -4,7 +4,6 @@ import { MediaItemDetailsFormValues, areMediaItemDetailsDifferent, mergeCatalogD
 import { MediaItemInternal, CatalogMediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
-import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 
 /**
  * Presentational component that contains the whole "media item details" screen, that works as the "add new media item", "update media item" and
@@ -50,8 +49,6 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 				initialValues={this.state.initialValues}
 				baseMediaItem={this.props.mediaItem}
 				sameNameConfirmationRequested={this.props.sameNameConfirmationRequested}
-				tvShowSeasons={this.props.tvShowSeasons}
-				tvShowSeasonsLoadTimestamp={this.props.tvShowSeasonsLoadTimestamp}
 				catalogSearchResults={this.props.catalogSearchResults}
 				catalogDetails={this.props.catalogDetails}
 				selectedGroup={this.props.selectedGroup}
@@ -59,7 +56,6 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 				saveMediaItem={this.props.saveMediaItem}
 				notifyFormStatus={this.props.notifyFormStatus}
 				persistFormDraft={this.props.persistFormDraft}
-				handleTvShowSeasons={this.props.handleTvShowSeasons}
 				requestGroupSelection={this.props.requestGroupSelection}
 				requestOwnPlatformSelection={this.props.requestOwnPlatformSelection}
 				searchMediaItemsCatalog={this.props.searchMediaItemsCatalog}
@@ -82,13 +78,6 @@ export class MediaItemDetailsScreenComponent extends Component<MediaItemDetailsS
 
 		if(!hasDraft && this.props.catalogDetails) {
 			formValues = mergeCatalogDetailsIntoMediaItem(formValues, this.props.catalogDetails);
-		}
-
-		if(formValues.mediaType === 'TV_SHOW' && this.props.tvShowSeasonsLoadTimestamp) {
-			formValues = {
-				...formValues,
-				seasons: this.props.tvShowSeasons.length > 0 ? [ ...this.props.tvShowSeasons ] : undefined
-			};
 		}
 
 		return {
@@ -122,16 +111,6 @@ export type MediaItemDetailsScreenComponentInput = {
 	 * If true, the user must confirm save with duplicated name
 	 */
 	sameNameConfirmationRequested: boolean;
-
-	/**
-	 * TV show seasons loaded from seasons flow
-	 */
-	tvShowSeasons: TvShowSeasonInternal[];
-
-	/**
-	 * Timestamp updated when seasons flow is completed
-	 */
-	tvShowSeasonsLoadTimestamp: Date | undefined;
 
 	/**
 	 * Current catalog search results
@@ -177,11 +156,6 @@ export type MediaItemDetailsScreenComponentOutput = {
 	 * Callback to discard the current unsaved form draft
 	 */
 	discardFormDraft: () => void;
-
-	/**
-	 * Callback to open TV show seasons flow
-	 */
-	handleTvShowSeasons: (currentSeasons?: TvShowSeasonInternal[]) => void;
 
 	/**
 	 * Callback to request group selection

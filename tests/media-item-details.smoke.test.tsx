@@ -7,11 +7,18 @@ import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { DEFAULT_MOVIE } from 'app/data/models/internal/media-items/movie';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
-import { TvShowInternal } from 'app/data/models/internal/media-items/tv-show';
+import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
+import { START_TV_SHOW_SEASONS_HANDLING } from 'app/redux/actions/tv-show-season/const';
+import { tvShowSeasonsListStateInitialValue } from 'app/redux/state/tv-show-season';
 import { DEFAULT_VIDEOGAME } from 'app/data/models/internal/media-items/videogame';
 import { i18n } from 'app/utilities/i18n';
+import { Provider } from 'react-redux';
+import { Action, createStore } from 'redux';
 
 type DetailsProps = React.ComponentProps<typeof MediaItemDetailsScreenComponent>;
+type DetailsScreenTestState = {
+	tvShowSeasonsList: typeof tvShowSeasonsListStateInitialValue;
+};
 
 const buildProps = (overrides: Partial<DetailsProps> = {}): DetailsProps => {
 	return {
@@ -19,8 +26,6 @@ const buildProps = (overrides: Partial<DetailsProps> = {}): DetailsProps => {
 		mediaItem: DEFAULT_BOOK,
 		draftMediaItem: undefined,
 		sameNameConfirmationRequested: false,
-		tvShowSeasons: [],
-		tvShowSeasonsLoadTimestamp: undefined,
 		catalogSearchResults: undefined,
 		catalogDetails: undefined,
 		selectedGroup: undefined,
@@ -29,7 +34,6 @@ const buildProps = (overrides: Partial<DetailsProps> = {}): DetailsProps => {
 		notifyFormStatus: jest.fn(),
 		persistFormDraft: jest.fn(),
 		discardFormDraft: jest.fn(),
-		handleTvShowSeasons: jest.fn(),
 		requestGroupSelection: jest.fn(),
 		requestOwnPlatformSelection: jest.fn(),
 		searchMediaItemsCatalog: jest.fn(),
@@ -43,29 +47,81 @@ const createScreen = (overrides: Partial<DetailsProps> = {}): React.ReactElement
 	return React.createElement(MediaItemDetailsScreenComponent, buildProps(overrides));
 };
 
+const createDetailsStore = (overrides: Partial<DetailsScreenTestState['tvShowSeasonsList']> = {}) => {
+	const initialState: DetailsScreenTestState = {
+		tvShowSeasonsList: {
+			...tvShowSeasonsListStateInitialValue,
+			...overrides
+		}
+	};
+	const dispatchedActions: Array<Action & { tvShowSeasons?: TvShowSeasonInternal[] }> = [];
+	const store = createStore((state: DetailsScreenTestState = initialState, action: Action & { tvShowSeasons?: TvShowSeasonInternal[] }) => {
+		dispatchedActions.push(action);
+
+		switch(action.type) {
+			case START_TV_SHOW_SEASONS_HANDLING: {
+				return {
+					...state,
+					tvShowSeasonsList: {
+						...state.tvShowSeasonsList,
+						tvShowSeasons: action.tvShowSeasons || []
+					}
+				};
+			}
+
+			default:
+				return state;
+		}
+	});
+
+	return {
+		store,
+		dispatchedActions
+	};
+};
+
+const renderScreen = (
+	overrides: Partial<DetailsProps> = {},
+	tvShowSeasonsStateOverrides: Partial<DetailsScreenTestState['tvShowSeasonsList']> = {}
+) => {
+	const {
+		store,
+		dispatchedActions
+	} = createDetailsStore(tvShowSeasonsStateOverrides);
+	const renderedScreen = render(
+		<Provider store={store}>
+			{createScreen(overrides)}
+		</Provider>
+	);
+
+	return {
+		store,
+		dispatchedActions,
+		...renderedScreen
+	};
+};
+
 describe('MediaItemDetailsScreenComponent', () => {
 	test('submits a valid media item from form input', async() => {
 		const saveMediaItem = jest.fn();
 		const notifyFormStatus = jest.fn();
 		const persistFormDraft = jest.fn();
-		const handleTvShowSeasons = jest.fn();
 		const requestGroupSelection = jest.fn();
 		const requestOwnPlatformSelection = jest.fn();
 		const searchMediaItemsCatalog = jest.fn();
 		const loadMediaItemCatalogDetails = jest.fn();
 		const resetMediaItemsCatalogSearch = jest.fn();
 
-		render(createScreen({
+		renderScreen({
 			saveMediaItem,
 			notifyFormStatus,
 			persistFormDraft,
-			handleTvShowSeasons,
 			requestGroupSelection,
 			requestOwnPlatformSelection,
 			searchMediaItemsCatalog,
 			loadMediaItemCatalogDetails,
 			resetMediaItemsCatalogSearch
-		}));
+		});
 
 		const user = userEvent.setup();
 		const nameInput = screen.getByLabelText(i18n.t('mediaItem.details.placeholders.name'));
@@ -93,7 +149,6 @@ describe('MediaItemDetailsScreenComponent', () => {
 		}, false);
 		expect(notifyFormStatus).toHaveBeenCalled();
 		expect(persistFormDraft).toHaveBeenCalled();
-		expect(handleTvShowSeasons).not.toHaveBeenCalled();
 		expect(requestGroupSelection).not.toHaveBeenCalled();
 		expect(requestOwnPlatformSelection).not.toHaveBeenCalled();
 		expect(searchMediaItemsCatalog).not.toHaveBeenCalled();
@@ -130,8 +185,7 @@ describe('MediaItemDetailsScreenComponent', () => {
 		});
 	});
 
-	test('opens TV show seasons handler from the details form', async() => {
-		const handleTvShowSeasons = jest.fn();
+	test('dispatches the TV show seasons flow from the details form', async() => {
 		const tvShow: TvShowInternal = {
 			id: 'tv-show-id',
 			name: 'Dark',
@@ -146,16 +200,21 @@ describe('MediaItemDetailsScreenComponent', () => {
 				}
 			]
 		};
-
-		render(createScreen({
-			mediaItem: tvShow,
-			handleTvShowSeasons
-		}));
+		const {
+			dispatchedActions,
+			store
+		} = renderScreen({
+			mediaItem: tvShow
+		});
 
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.details.placeholders.seasons') }));
 
-		expect(handleTvShowSeasons).toHaveBeenCalledWith(tvShow.seasons);
+		expect(dispatchedActions).toContainEqual(expect.objectContaining({
+			type: START_TV_SHOW_SEASONS_HANDLING,
+			tvShowSeasons: tvShow.seasons
+		}));
+		expect(store.getState().tvShowSeasonsList.tvShowSeasons).toEqual(tvShow.seasons);
 		expect(screen.getByText(i18n.t('mediaItem.details.labels.seasons', {
 			seasonsNumber: 1,
 			watchedEpisodesNumber: 8,
@@ -172,9 +231,9 @@ describe('MediaItemDetailsScreenComponent', () => {
 			importance: '300'
 		};
 
-		render(createScreen({
+		renderScreen({
 			mediaItem: tvShow
-		}));
+		});
 
 		expect(screen.getByText(i18n.t('mediaItem.details.placeholders.production'))).toBeInTheDocument();
 		expect(screen.queryByLabelText(i18n.t('mediaItem.details.placeholders.nextEpisodeAirDate'))).not.toBeInTheDocument();
@@ -209,9 +268,9 @@ describe('MediaItemDetailsScreenComponent', () => {
 			icon: 'kindle'
 		};
 
-		const { rerender } = render(createScreen({
+		const { rerender } = renderScreen({
 			mediaItem
-		}));
+		});
 
 		expect(screen.queryByText('Status')).not.toBeInTheDocument();
 		expect(screen.getByRole('button', { name: i18n.t('mediaItem.details.buttons.google') })).toBeInTheDocument();
@@ -221,11 +280,15 @@ describe('MediaItemDetailsScreenComponent', () => {
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.group'))).toHaveTextContent(i18n.t('group.list.none'));
 		expect(screen.getByText(i18n.t('mediaItem.details.placeholders.completedOn'))).toBeInTheDocument();
 
-		rerender(createScreen({
-			mediaItem,
-			selectedGroup,
-			selectedOwnPlatform
-		}));
+		rerender(
+			<Provider store={createDetailsStore().store}>
+				{createScreen({
+					mediaItem,
+					selectedGroup,
+					selectedOwnPlatform
+				})}
+			</Provider>
+		);
 
 		await waitFor(() => {
 			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.ownPlatform'))).toHaveTextContent('Kindle');
@@ -234,12 +297,12 @@ describe('MediaItemDetailsScreenComponent', () => {
 	});
 
 	test('renders movie-specific shared form controls', () => {
-		render(createScreen({
+		renderScreen({
 			mediaItem: {
 				...DEFAULT_MOVIE,
 				name: 'Arrival'
 			}
-		}));
+		});
 
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.duration.MOVIE'))).toBeInTheDocument();
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.creators.MOVIE'))).toBeInTheDocument();
@@ -247,12 +310,12 @@ describe('MediaItemDetailsScreenComponent', () => {
 	});
 
 	test('renders videogame-specific shared form controls', () => {
-		render(createScreen({
+		renderScreen({
 			mediaItem: {
 				...DEFAULT_VIDEOGAME,
 				name: 'Hades'
 			}
-		}));
+		});
 
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.duration.VIDEOGAME'))).toBeInTheDocument();
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.publishers'))).toBeInTheDocument();
@@ -260,13 +323,13 @@ describe('MediaItemDetailsScreenComponent', () => {
 	});
 
 	test('renders completion date controls and picker actions', async() => {
-		render(createScreen({
+		renderScreen({
 			mediaItem: {
 				...DEFAULT_BOOK,
 				name: 'Dune',
 				importance: '300'
 			}
-		}));
+		});
 
 		expect(screen.getAllByText(i18n.t('common.buttons.select'))).toHaveLength(2);
 		expect(screen.getByText(i18n.t('mediaItem.details.completion.empty'))).toBeInTheDocument();
@@ -279,7 +342,7 @@ describe('MediaItemDetailsScreenComponent', () => {
 	});
 
 	test('hides the media image/actions block for a brand new item without catalog data', () => {
-		render(createScreen());
+		renderScreen();
 
 		expect(screen.queryByRole('button', { name: i18n.t('mediaItem.details.buttons.google') })).not.toBeInTheDocument();
 		expect(screen.queryByRole('button', { name: i18n.t('mediaItem.details.buttons.wikipedia') })).not.toBeInTheDocument();
@@ -287,12 +350,12 @@ describe('MediaItemDetailsScreenComponent', () => {
 	});
 
 	test('renders the dark media-style shell sections and cleans up the body class', () => {
-		const { unmount } = render(createScreen({
+		const { unmount } = renderScreen({
 			mediaItem: {
 				...DEFAULT_BOOK,
 				name: 'Dune'
 			}
-		}));
+		});
 
 		expect(document.body).toHaveClass('app-dark-screen-active');
 		expect(screen.queryByRole('heading', { name: 'Quick actions' })).not.toBeInTheDocument();
@@ -317,10 +380,10 @@ describe('MediaItemDetailsScreenComponent', () => {
 			icon: 'kindle'
 		};
 
-		render(createScreen({
+		renderScreen({
 			selectedOwnPlatform,
 			saveMediaItem
-		}));
+		});
 
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.ownPlatform'))).toHaveTextContent('Kindle');
 
@@ -341,9 +404,9 @@ describe('MediaItemDetailsScreenComponent', () => {
 			savedDraft = mediaItem;
 		});
 
-		const { unmount } = render(createScreen({
+		const { unmount } = renderScreen({
 			persistFormDraft
-		}));
+		});
 
 		const user = userEvent.setup();
 		await user.type(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.name')), 'Dune');
@@ -358,16 +421,16 @@ describe('MediaItemDetailsScreenComponent', () => {
 
 		unmount();
 
-		render(createScreen({
+		renderScreen({
 			draftMediaItem: savedDraft
-		}));
+		});
 
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.name'))).toHaveValue('Dune');
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.duration.BOOK'))).toHaveValue(412);
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.userComment'))).toHaveValue('Keep this draft');
 	});
 
-	test('restores handled tv show seasons after remounting from the seasons flow', () => {
+	test('restores handled tv show seasons after remounting from the seasons flow', async() => {
 		const draftMediaItem: TvShowInternal = {
 			id: 'tv-show-id',
 			name: 'Dark',
@@ -395,17 +458,20 @@ describe('MediaItemDetailsScreenComponent', () => {
 			}
 		];
 
-		render(createScreen({
+		renderScreen({
 			mediaItem: draftMediaItem,
-			draftMediaItem: draftMediaItem,
+			draftMediaItem: draftMediaItem
+		}, {
 			tvShowSeasons: handledSeasons,
-			tvShowSeasonsLoadTimestamp: new Date('2026-03-14T12:00:00.000Z')
-		}));
+			completeHandlingTimestamp: new Date('2026-03-14T12:00:00.000Z')
+		});
 
-		expect(screen.getByText(i18n.t('mediaItem.details.labels.seasons', {
-			seasonsNumber: 2,
-			watchedEpisodesNumber: 14,
-			episodesNumber: 18
-		}))).toBeInTheDocument();
+		await waitFor(() => {
+			expect(screen.getByText(i18n.t('mediaItem.details.labels.seasons', {
+				seasonsNumber: 2,
+				watchedEpisodesNumber: 14,
+				episodesNumber: 18
+			}))).toBeInTheDocument();
+		});
 	});
 });
