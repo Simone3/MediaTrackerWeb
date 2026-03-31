@@ -1,6 +1,6 @@
 import { BookInternal } from 'app/data/models/internal/media-items/book';
 import { ObjectSchema, array, number, object, string } from 'yup';
-import { mediaItemFormValidationShape } from './media-item';
+import { applyNormalizedTextArrayField, mediaItemFormValidationShape, normalizeMediaItemFormValues } from './media-item';
 
 /**
  * The book form validation schema shape
@@ -15,3 +15,15 @@ const bookFormValidationShape = {
  * The book form validation schema
  */
 export const bookFormValidationSchema = object().required().shape(bookFormValidationShape) as ObjectSchema<BookInternal>;
+
+/**
+ * Normalizes book-specific form values before save
+ * @param values current form values
+ * @returns normalized values
+ */
+export const normalizeBookFormValues = (values: BookInternal): BookInternal => {
+	const normalizedValues = normalizeMediaItemFormValues(values);
+
+	applyNormalizedTextArrayField(normalizedValues, 'authors', values.authors);
+	return normalizedValues;
+};

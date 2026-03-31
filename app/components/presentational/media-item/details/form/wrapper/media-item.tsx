@@ -9,13 +9,12 @@ import { GroupInternal } from 'app/data/models/internal/group';
 import { CatalogMediaItemInternal, MediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { i18n } from 'app/utilities/i18n';
-import { MediaItemDetailsFormValues, mergeCatalogDetailsIntoMediaItem, normalizeMediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
 
 /**
  * Presentational component that handles the Formik wrapper component for the generic media item form
  */
-export class CommonMediaItemFormComponent extends Component<CommonMediaItemFormComponentProps, CommonMediaItemFormComponentState> {
-	private formikProps?: FormikProps<MediaItemDetailsFormValues>;
+export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal = MediaItemInternal> extends Component<CommonMediaItemFormComponentProps<TMediaItem>, CommonMediaItemFormComponentState> {
+	private formikProps?: FormikProps<TMediaItem>;
 	private initialDraftHandled = false;
 	private loadedCatalogId?: string;
 
@@ -45,7 +44,7 @@ export class CommonMediaItemFormComponent extends Component<CommonMediaItemFormC
 	/**
 	 * @override
 	 */
-	public componentDidUpdate(prevProps: Readonly<CommonMediaItemFormComponentProps>): void {
+	public componentDidUpdate(prevProps: Readonly<CommonMediaItemFormComponentProps<TMediaItem>>): void {
 		if(prevProps.initialValues.id !== this.props.initialValues.id ||
 			prevProps.initialValues.mediaType !== this.props.initialValues.mediaType) {
 			this.initialDraftHandled = false;
@@ -80,16 +79,16 @@ export class CommonMediaItemFormComponent extends Component<CommonMediaItemFormC
 		} = this.state;
 
 		return (
-			<Formik<MediaItemDetailsFormValues>
+			<Formik<TMediaItem>
 				initialValues={initialValues}
 				validationSchema={validationSchema}
 				validateOnMount={true}
 				enableReinitialize={true}
 				innerRef={this.handleFormikRef}
 				onSubmit={(values) => {
-					this.props.saveMediaItem(normalizeMediaItemDetailsFormValues(values), false);
+					this.props.saveMediaItem(this.normalizeFormValues(values), false);
 				}}>
-				{(formikProps: FormikProps<MediaItemDetailsFormValues>) => {
+				{(formikProps: FormikProps<TMediaItem>) => {
 					const title = formikProps.values.id ? formikProps.values.name : i18n.t(`mediaItem.details.title.new.${formikProps.values.mediaType}`);
 
 					return (
@@ -178,9 +177,43 @@ export class CommonMediaItemFormComponent extends Component<CommonMediaItemFormC
 	 * Keeps a reference to the current Formik state
 	 * @param formikProps the current Formik state
 	 */
-	private handleFormikRef = (formikProps: FormikProps<MediaItemDetailsFormValues> | null): void => {
+	private handleFormikRef = (formikProps: FormikProps<TMediaItem> | null): void => {
 		this.formikProps = formikProps || undefined;
 	};
+
+	/**
+	 * Normalizes current form values before save
+	 * @param values current form values
+	 * @returns normalized values
+	 */
+	private normalizeFormValues(values: TMediaItem): TMediaItem {
+		if(this.props.normalizeFormValues) {
+			return this.props.normalizeFormValues(values);
+		}
+
+		return values;
+	}
+
+	/**
+	 * Removes the transport-only catalog load ID from catalog payloads before storing them in Formik
+	 * @param value catalog payload
+	 * @returns payload without catalog load ID
+	 */
+	private removeCatalogLoadId<TCatalogValue extends object>(
+		value: TCatalogValue & {
+			catalogLoadId?: string;
+		}
+	): TCatalogValue {
+		const sanitizedValue = {
+			...value
+		};
+
+		delete (sanitizedValue as {
+			catalogLoadId?: string;
+		}).catalogLoadId;
+
+		return sanitizedValue;
+	}
 
 	/**
 	 * Restores the current draft once after the form has mounted
@@ -212,7 +245,21 @@ export class CommonMediaItemFormComponent extends Component<CommonMediaItemFormC
 		}
 
 		this.loadedCatalogId = catalogDetails.catalogLoadId;
-		void this.formikProps.setValues(mergeCatalogDetailsIntoMediaItem(this.formikProps.values, catalogDetails));
+		const defaultCatalogValues = this.removeCatalogLoadId(this.props.defaultCatalogItem);
+		const catalogValues = this.removeCatalogLoadId(catalogDetails as Partial<TMediaItem> & {
+			catalogLoadId?: string;
+		});
+		let nextValues: TMediaItem = {
+			...this.formikProps.values,
+			...defaultCatalogValues,
+			...catalogValues
+		};
+
+		if(this.props.onLoadCatalogDetails) {
+			nextValues = this.props.onLoadCatalogDetails(this.formikProps.values, nextValues);
+		}
+
+		void this.formikProps.setValues(nextValues);
 	}
 
 	/**
@@ -300,7 +347,7 @@ export class CommonMediaItemFormComponent extends Component<CommonMediaItemFormC
 	 */
 	private submitFormWithSameNameConfirmation(): void {
 		if(this.formikProps) {
-			this.props.saveMediaItem(normalizeMediaItemDetailsFormValues(this.formikProps.values), true);
+			this.props.saveMediaItem(this.normalizeFormValues(this.formikProps.values), true);
 		}
 	}
 }
@@ -308,7 +355,7 @@ export class CommonMediaItemFormComponent extends Component<CommonMediaItemFormC
 /**
  * CommonMediaItemFormComponent's input props
  */
-export type CommonMediaItemFormComponentInputMain = {
+export type CommonMediaItemFormComponentInputMain<TMediaItem extends MediaItemInternal = MediaItemInternal> = {
 	/**
 	 * Flag to tell if the component is currently waiting on an async operation. If true, shows the loading screen.
 	 */
@@ -317,12 +364,12 @@ export type CommonMediaItemFormComponentInputMain = {
 	/**
 	 * The saved media item used as Formik initial values
 	 */
-	initialValues: MediaItemDetailsFormValues;
+	initialValues: TMediaItem;
 
 	/**
 	 * The current unsaved form draft restored after mount, if any
 	 */
-	restoredDraft?: MediaItemDetailsFormValues;
+	restoredDraft?: TMediaItem;
 
 	/**
 	 * If true, the user must confirm save with duplicated name
@@ -353,16 +400,38 @@ export type CommonMediaItemFormComponentInputMain = {
 /**
  * CommonMediaItemFormComponent's configuration props
  */
-export type CommonMediaItemFormComponentInputConfig = {
+export type CommonMediaItemFormComponentInputConfig<TMediaItem extends MediaItemInternal = MediaItemInternal> = {
 	/**
 	 * Form content renderer
 	 */
-	children: (props: FormikProps<MediaItemDetailsFormValues>, requestCatalogReload: (catalogId: string) => void) => ReactNode;
+	children: (props: FormikProps<TMediaItem>, requestCatalogReload: (catalogId: string) => void) => ReactNode;
+
+	/**
+	 * The default empty catalog media item fields
+	 */
+	defaultCatalogItem: Partial<TMediaItem> & {
+		catalogLoadId?: string;
+	};
+
+	/**
+	 * Optional hook to adapt merged catalog values
+	 * @param currentValues current form values
+	 * @param mergedValues merged values after loading catalog details
+	 * @returns final values to commit to Formik
+	 */
+	onLoadCatalogDetails?: (currentValues: TMediaItem, mergedValues: TMediaItem) => TMediaItem;
+
+	/**
+	 * Optional hook to normalize values before save
+	 * @param values current form values
+	 * @returns normalized values
+	 */
+	normalizeFormValues?: (values: TMediaItem) => TMediaItem;
 
 	/**
 	 * The media item form validation schema
 	 */
-	validationSchema: ObjectSchema<MediaItemDetailsFormValues>;
+	validationSchema: ObjectSchema<TMediaItem>;
 };
 
 /**
@@ -418,7 +487,7 @@ export type CommonMediaItemFormComponentOutput = {
 /**
  * CommonMediaItemFormComponent's props
  */
-export type CommonMediaItemFormComponentProps = CommonMediaItemFormComponentInputMain & CommonMediaItemFormComponentInputConfig & CommonMediaItemFormComponentOutput;
+export type CommonMediaItemFormComponentProps<TMediaItem extends MediaItemInternal = MediaItemInternal> = CommonMediaItemFormComponentInputMain<TMediaItem> & CommonMediaItemFormComponentInputConfig<TMediaItem> & CommonMediaItemFormComponentOutput;
 
 type CommonMediaItemFormComponentState = {
 	confirmSameNameVisible: boolean;

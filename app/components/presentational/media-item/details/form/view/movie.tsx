@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
-import { MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
+import { MovieInternal } from 'app/data/models/internal/media-items/movie';
 import { FormikProps } from 'formik';
 import { i18n } from 'app/utilities/i18n';
 
@@ -12,6 +12,7 @@ import { i18n } from 'app/utilities/i18n';
 export const MovieFormViewComponent = (props: MovieFormViewComponentProps): ReactElement => {
 	return (
 		<MediaItemFormViewComponent
+			<MovieInternal>
 			{...props}
 			primarySpecificFields={[
 				<div className='media-item-details-field' key='durationMinutes'>
@@ -50,4 +51,4 @@ export const MovieFormViewComponent = (props: MovieFormViewComponentProps): Reac
 /**
  * MovieFormViewComponent's props
  */
-export type MovieFormViewComponentProps = FormikProps<MediaItemDetailsFormValues> & MediaItemFormViewComponentCommonInput & MediaItemFormViewComponentCommonOutput;
+export type MovieFormViewComponentProps = FormikProps<MovieInternal> & MediaItemFormViewComponentCommonInput & MediaItemFormViewComponentCommonOutput<MovieInternal>;

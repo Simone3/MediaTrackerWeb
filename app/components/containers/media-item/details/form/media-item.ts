@@ -3,7 +3,7 @@ import { getMediaItemCatalogDetails, resetMediaItemsCatalogSearch, saveMediaItem
 import { requestOwnPlatformSelection } from 'app/redux/actions/own-platform/generators';
 import { CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from 'app/components/presentational/media-item/details/form/wrapper/media-item';
 import { AppError } from 'app/data/models/internal/error';
-import { MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
+import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { State } from 'app/redux/state/state';
 import { Dispatch } from 'redux';
 
@@ -12,7 +12,7 @@ import { Dispatch } from 'redux';
  * @param state the Redux state
  * @returns the initial form values
  */
-const buildInitialMediaItemFormValues = (state: State): MediaItemDetailsFormValues => {
+const buildInitialMediaItemFormValues = (state: State): MediaItemInternal => {
 	const {
 		mediaItem
 	} = state.mediaItemDetails;
@@ -22,7 +22,7 @@ const buildInitialMediaItemFormValues = (state: State): MediaItemDetailsFormValu
 	}
 
 	return {
-		...(mediaItem as MediaItemDetailsFormValues)
+		...mediaItem
 	};
 };
 
@@ -31,7 +31,7 @@ const buildInitialMediaItemFormValues = (state: State): MediaItemDetailsFormValu
  * @param state the Redux state
  * @returns the restored draft, if any
  */
-const buildRestoredMediaItemFormDraft = (state: State): MediaItemDetailsFormValues | undefined => {
+const buildRestoredMediaItemFormDraft = (state: State): MediaItemInternal | undefined => {
 	const {
 		formDraft
 	} = state.mediaItemDetails;
@@ -41,7 +41,7 @@ const buildRestoredMediaItemFormDraft = (state: State): MediaItemDetailsFormValu
 	}
 
 	return {
-		...(formDraft as MediaItemDetailsFormValues)
+		...formDraft
 	};
 };
 

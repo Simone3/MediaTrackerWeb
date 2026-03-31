@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
-import { MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
+import { VideogameInternal } from 'app/data/models/internal/media-items/videogame';
 import { FormikProps } from 'formik';
 import { i18n } from 'app/utilities/i18n';
 
@@ -12,6 +12,7 @@ import { i18n } from 'app/utilities/i18n';
 export const VideogameFormViewComponent = (props: VideogameFormViewComponentProps): ReactElement => {
 	return (
 		<MediaItemFormViewComponent
+			<VideogameInternal>
 			{...props}
 			primarySpecificFields={[
 				<div className='media-item-details-field' key='averageLengthHours'>
@@ -78,4 +79,4 @@ export const VideogameFormViewComponent = (props: VideogameFormViewComponentProp
 /**
  * VideogameFormViewComponent's props
  */
-export type VideogameFormViewComponentProps = FormikProps<MediaItemDetailsFormValues> & MediaItemFormViewComponentCommonInput & MediaItemFormViewComponentCommonOutput;
+export type VideogameFormViewComponentProps = FormikProps<VideogameInternal> & MediaItemFormViewComponentCommonInput & MediaItemFormViewComponentCommonOutput<VideogameInternal>;

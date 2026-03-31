@@ -1,8 +1,7 @@
 import { ReactElement } from 'react';
-import { ObjectSchema } from 'yup';
 import { BookFormViewComponent } from 'app/components/presentational/media-item/details/form/view/book';
-import { bookFormValidationSchema } from 'app/components/presentational/media-item/details/form/data/book';
-import { MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
+import { bookFormValidationSchema, normalizeBookFormValues } from 'app/components/presentational/media-item/details/form/data/book';
+import { BookInternal, DEFAULT_CATALOG_BOOK } from 'app/data/models/internal/media-items/book';
 import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from './media-item';
 
 /**
@@ -13,8 +12,11 @@ import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, Co
 export const BookFormComponent = (props: BookFormComponentProps): ReactElement => {
 	return (
 		<CommonMediaItemFormComponent
+			<BookInternal>
 			{...props}
-			validationSchema={bookFormValidationSchema as ObjectSchema<MediaItemDetailsFormValues>}>
+			defaultCatalogItem={DEFAULT_CATALOG_BOOK}
+			normalizeFormValues={normalizeBookFormValues}
+			validationSchema={bookFormValidationSchema}>
 			{(formikProps, requestCatalogReload) => {
 				return (
 					<BookFormViewComponent
@@ -38,4 +40,4 @@ export const BookFormComponent = (props: BookFormComponentProps): ReactElement =
 /**
  * BookFormComponent's props
  */
-export type BookFormComponentProps = CommonMediaItemFormComponentInputMain & CommonMediaItemFormComponentOutput;
+export type BookFormComponentProps = CommonMediaItemFormComponentInputMain<BookInternal> & CommonMediaItemFormComponentOutput;

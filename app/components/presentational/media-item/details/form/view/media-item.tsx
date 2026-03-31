@@ -2,7 +2,6 @@ import { Component, KeyboardEvent, ReactNode } from 'react';
 import { FormikProps } from 'formik';
 import { config } from 'app/config/config';
 import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
-import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import downloadIcon from 'app/resources/images/ic_download.svg';
 import googleIcon from 'app/resources/images/ic_google.png';
 import howLongToBeatIcon from 'app/resources/images/ic_howlongtobeat.png';
@@ -10,8 +9,6 @@ import justWatchIcon from 'app/resources/images/ic_justwatch.png';
 import defaultMediaItemImage from 'app/resources/images/im_media_item_form_default.png';
 import wikipediaIcon from 'app/resources/images/ic_wikipedia.png';
 import { i18n } from 'app/utilities/i18n';
-import { mediaItemUtils } from 'app/utilities/media-item-utils';
-import { MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
 
 type MediaItemActionButton = {
 	key: string;
@@ -118,27 +115,9 @@ export const inputValueToInlineText = (value: string): string[] | undefined => {
 };
 
 /**
- * Builds the TV show seasons summary line
- * @param seasons TV show seasons
- * @returns summary label
- */
-export const getTvShowSeasonsSummaryLabel = (seasons?: TvShowSeasonInternal[]): string => {
-	if(!seasons || seasons.length === 0) {
-		return i18n.t('tvShowSeason.list.empty');
-	}
-
-	const counters = mediaItemUtils.getTvShowCounters(seasons);
-	return i18n.t('mediaItem.details.labels.seasons', {
-		seasonsNumber: counters.seasonsNumber,
-		episodesNumber: counters.episodesNumber,
-		watchedEpisodesNumber: counters.watchedEpisodesNumber
-	});
-};
-
-/**
  * Presentational component that contains all generic media item form input fields, all handled by the Formik container component
  */
-export class MediaItemFormViewComponent extends Component<MediaItemFormViewComponentProps> {
+export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = MediaItemInternal> extends Component<MediaItemFormViewComponentProps<TMediaItem>> {
 	/**
 	 * @override
 	 */
@@ -150,7 +129,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	/**
 	 * @override
 	 */
-	public componentDidUpdate(prevProps: Readonly<MediaItemFormViewComponentProps>): void {
+	public componentDidUpdate(prevProps: Readonly<MediaItemFormViewComponentProps<TMediaItem>>): void {
 		if(prevProps.isValid !== this.props.isValid ||
 			prevProps.values !== this.props.values) {
 			this.notifyFormState();
@@ -188,7 +167,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	 * @param mediaItem current media item
 	 * @returns the component
 	 */
-	private renderImageActionsRow(mediaItem: MediaItemDetailsFormValues): ReactNode {
+	private renderImageActionsRow(mediaItem: TMediaItem): ReactNode {
 		if(!mediaItem.id && !mediaItem.catalogId) {
 			return null;
 		}
@@ -230,7 +209,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	 * @param mediaItem current media item
 	 * @returns the component
 	 */
-	private renderFormSections(mediaItem: MediaItemDetailsFormValues): ReactNode {
+	private renderFormSections(mediaItem: TMediaItem): ReactNode {
 		return (
 			<div className='media-item-details-main'>
 				{this.renderSection('basics', (
@@ -287,7 +266,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	 * @param fieldClassName layout class name
 	 * @returns the component
 	 */
-	private renderNameField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+	private renderNameField(mediaItem: TMediaItem, fieldClassName: string = 'media-item-details-field'): ReactNode {
 		return (
 			<div className={fieldClassName}>
 				<label className='media-item-details-label' htmlFor='media-item-name'>
@@ -331,7 +310,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	 * @param fieldClassName layout class name
 	 * @returns the component
 	 */
-	private renderDescriptionField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+	private renderDescriptionField(mediaItem: TMediaItem, fieldClassName: string = 'media-item-details-field'): ReactNode {
 		return (
 			<div className={fieldClassName}>
 				<label className='media-item-details-label' htmlFor='media-item-description'>
@@ -355,7 +334,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	 * @param fieldClassName layout class name
 	 * @returns the component
 	 */
-	private renderReleaseDateField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+	private renderReleaseDateField(mediaItem: TMediaItem, fieldClassName: string = 'media-item-details-field'): ReactNode {
 		return (
 			<div className={fieldClassName}>
 				<label className='media-item-details-label' htmlFor='media-item-release-date'>
@@ -380,7 +359,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	 * @param fieldClassName layout class name
 	 * @returns the component
 	 */
-	private renderGenresField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+	private renderGenresField(mediaItem: TMediaItem, fieldClassName: string = 'media-item-details-field'): ReactNode {
 		return this.renderArrayTextInputField(
 			'media-item-genres',
 			i18n.t('mediaItem.details.placeholders.genres'),
@@ -398,7 +377,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	 * @param fieldClassName layout class name
 	 * @returns the component
 	 */
-	private renderImportanceField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+	private renderImportanceField(mediaItem: TMediaItem, fieldClassName: string = 'media-item-details-field'): ReactNode {
 		return (
 			<div className={fieldClassName}>
 				<label className='media-item-details-label' htmlFor='media-item-importance'>
@@ -429,7 +408,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	 * @param fieldClassName layout class name
 	 * @returns the component
 	 */
-	private renderOwnPlatformField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+	private renderOwnPlatformField(mediaItem: TMediaItem, fieldClassName: string = 'media-item-details-field'): ReactNode {
 		const ownPlatform = mediaItem.ownPlatform;
 
 		return (
@@ -460,7 +439,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	 * @param fieldClassName layout class name
 	 * @returns the component
 	 */
-	private renderGroupField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+	private renderGroupField(mediaItem: TMediaItem, fieldClassName: string = 'media-item-details-field'): ReactNode {
 		return (
 			<div className={fieldClassName}>
 				<label className='media-item-details-label' htmlFor='media-item-group'>
@@ -486,7 +465,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	 * @param fieldClassName layout class name
 	 * @returns the component
 	 */
-	private renderOrderInGroupField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+	private renderOrderInGroupField(mediaItem: TMediaItem, fieldClassName: string = 'media-item-details-field'): ReactNode {
 		if(!mediaItem.group) {
 			return null;
 		}
@@ -515,7 +494,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	 * @param fieldClassName layout class name
 	 * @returns the component
 	 */
-	private renderUserCommentField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+	private renderUserCommentField(mediaItem: TMediaItem, fieldClassName: string = 'media-item-details-field'): ReactNode {
 		return (
 			<div className={fieldClassName}>
 				<label className='media-item-details-label' htmlFor='media-item-user-comment'>
@@ -539,7 +518,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	 * @param fieldClassName layout class name
 	 * @returns the component
 	 */
-	private renderCompletionDatesField(mediaItem: MediaItemDetailsFormValues, fieldClassName: string = 'media-item-details-field'): ReactNode {
+	private renderCompletionDatesField(mediaItem: TMediaItem, fieldClassName: string = 'media-item-details-field'): ReactNode {
 		const completionDates = mediaItem.completedOn || [];
 
 		return (
@@ -675,7 +654,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	 * @param mediaItem current media item
 	 * @returns action buttons
 	 */
-	private getActionButtons(mediaItem: MediaItemDetailsFormValues): MediaItemActionButton[] {
+	private getActionButtons(mediaItem: TMediaItem): MediaItemActionButton[] {
 		const buttons: MediaItemActionButton[] = [
 			{
 				key: 'google',
@@ -811,30 +790,12 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	}
 
 	/**
-	 * Builds the TV show seasons summary line
-	 * @param seasons TV show seasons
-	 * @returns summary label
-	 */
-	protected getTvShowSeasonsSummary(seasons?: TvShowSeasonInternal[]): string {
-		if(!seasons || seasons.length === 0) {
-			return i18n.t('tvShowSeason.list.empty');
-		}
-
-		const counters = mediaItemUtils.getTvShowCounters(seasons);
-		return i18n.t('mediaItem.details.labels.seasons', {
-			seasonsNumber: counters.seasonsNumber,
-			episodesNumber: counters.episodesNumber,
-			watchedEpisodesNumber: counters.watchedEpisodesNumber
-		});
-	}
-
-	/**
 	 * Handles a single field update
 	 * @param key the field key
 	 * @param value the field value
 	 */
-	protected setFormField<K extends keyof MediaItemDetailsFormValues>(key: K, value: MediaItemDetailsFormValues[K]): void {
-		void this.props.setFieldValue(key, value);
+	protected setFormField<K extends keyof TMediaItem>(key: K, value: TMediaItem[K]): void {
+		void this.props.setFieldValue(key as string, value);
 	}
 
 	/**
@@ -945,7 +906,7 @@ export type MediaItemFormViewComponentInput = MediaItemFormViewComponentCommonIn
 /**
  * MediaItemFormViewComponent's common output props
  */
-export type MediaItemFormViewComponentCommonOutput = {
+export type MediaItemFormViewComponentCommonOutput<TMediaItem extends MediaItemInternal = MediaItemInternal> = {
 	/**
 	 * Callback to notify the current status of the form
 	 * @param valid true if the form is valid, i.e. no validation error occurred
@@ -957,10 +918,10 @@ export type MediaItemFormViewComponentCommonOutput = {
 	 * Callback to persist the current unsaved form draft
 	 * @param mediaItem the current form values
 	 */
-	persistFormDraft: (mediaItem: MediaItemInternal) => void;
+	persistFormDraft: (mediaItem: TMediaItem) => void;
 };
 
 /**
  * MediaItemFormViewComponent's props
  */
-export type MediaItemFormViewComponentProps = FormikProps<MediaItemDetailsFormValues> & MediaItemFormViewComponentInput & MediaItemFormViewComponentCommonOutput;
+export type MediaItemFormViewComponentProps<TMediaItem extends MediaItemInternal = MediaItemInternal> = FormikProps<TMediaItem> & MediaItemFormViewComponentInput & MediaItemFormViewComponentCommonOutput<TMediaItem>;

@@ -1,9 +1,27 @@
 import { ReactElement } from 'react';
-import { dateToInputValue, getTvShowSeasonsSummaryLabel, inlineTextToInputValue, inputValueToDate, inputValueToInlineText, inputValueToNumber, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
-import { MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
-import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
+import { dateToInputValue, inlineTextToInputValue, inputValueToDate, inputValueToInlineText, inputValueToNumber, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { FormikProps } from 'formik';
 import { i18n } from 'app/utilities/i18n';
+import { mediaItemUtils } from 'app/utilities/media-item-utils';
+
+/**
+ * Builds the TV show seasons summary line
+ * @param seasons TV show seasons
+ * @returns summary label
+ */
+const getTvShowSeasonsSummaryLabel = (seasons?: TvShowSeasonInternal[]): string => {
+	if(!seasons || seasons.length === 0) {
+		return i18n.t('tvShowSeason.list.empty');
+	}
+
+	const counters = mediaItemUtils.getTvShowCounters(seasons);
+	return i18n.t('mediaItem.details.labels.seasons', {
+		seasonsNumber: counters.seasonsNumber,
+		episodesNumber: counters.episodesNumber,
+		watchedEpisodesNumber: counters.watchedEpisodesNumber
+	});
+};
 
 /**
  * Presentational component that contains all TV show form input fields, all handled by the Formik container component
@@ -15,6 +33,7 @@ export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): Re
 
 	return (
 		<MediaItemFormViewComponent
+			<TvShowInternal>
 			{...props}
 			primarySpecificFields={[
 				<div className='media-item-details-field' key='averageEpisodeRuntimeMinutes'>
@@ -113,7 +132,7 @@ export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): Re
 /**
  * TvShowFormViewComponent's input props
  */
-export type TvShowFormViewComponentProps = FormikProps<MediaItemDetailsFormValues> & MediaItemFormViewComponentCommonInput & MediaItemFormViewComponentCommonOutput & {
+export type TvShowFormViewComponentProps = FormikProps<TvShowInternal> & MediaItemFormViewComponentCommonInput & MediaItemFormViewComponentCommonOutput<TvShowInternal> & {
 	/**
 	 * Callback to open TV show seasons flow
 	 */

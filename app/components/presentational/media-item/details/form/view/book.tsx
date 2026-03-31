@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
 import { i18n } from 'app/utilities/i18n';
-import { MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
+import { BookInternal } from 'app/data/models/internal/media-items/book';
 import { FormikProps } from 'formik';
 
 /**
@@ -12,6 +12,7 @@ import { FormikProps } from 'formik';
 export const BookFormViewComponent = (props: BookFormViewComponentProps): ReactElement => {
 	return (
 		<MediaItemFormViewComponent
+			<BookInternal>
 			{...props}
 			primarySpecificFields={[
 				<div className='media-item-details-field' key='pagesNumber'>
@@ -50,4 +51,4 @@ export const BookFormViewComponent = (props: BookFormViewComponentProps): ReactE
 /**
  * BookFormViewComponent's props
  */
-export type BookFormViewComponentProps = FormikProps<MediaItemDetailsFormValues> & MediaItemFormViewComponentCommonInput & MediaItemFormViewComponentCommonOutput;
+export type BookFormViewComponentProps = FormikProps<BookInternal> & MediaItemFormViewComponentCommonInput & MediaItemFormViewComponentCommonOutput<BookInternal>;

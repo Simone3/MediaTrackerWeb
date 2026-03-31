@@ -1,7 +1,6 @@
 import { ReactElement } from 'react';
-import { ObjectSchema } from 'yup';
-import { movieFormValidationSchema } from 'app/components/presentational/media-item/details/form/data/movie';
-import { MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
+import { movieFormValidationSchema, normalizeMovieFormValues } from 'app/components/presentational/media-item/details/form/data/movie';
+import { DEFAULT_CATALOG_MOVIE, MovieInternal } from 'app/data/models/internal/media-items/movie';
 import { MovieFormViewComponent } from 'app/components/presentational/media-item/details/form/view/movie';
 import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from './media-item';
 
@@ -13,8 +12,11 @@ import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, Co
 export const MovieFormComponent = (props: MovieFormComponentProps): ReactElement => {
 	return (
 		<CommonMediaItemFormComponent
+			<MovieInternal>
 			{...props}
-			validationSchema={movieFormValidationSchema as ObjectSchema<MediaItemDetailsFormValues>}>
+			defaultCatalogItem={DEFAULT_CATALOG_MOVIE}
+			normalizeFormValues={normalizeMovieFormValues}
+			validationSchema={movieFormValidationSchema}>
 			{(formikProps, requestCatalogReload) => {
 				return (
 					<MovieFormViewComponent
@@ -38,4 +40,4 @@ export const MovieFormComponent = (props: MovieFormComponentProps): ReactElement
 /**
  * MovieFormComponent's props
  */
-export type MovieFormComponentProps = CommonMediaItemFormComponentInputMain & CommonMediaItemFormComponentOutput;
+export type MovieFormComponentProps = CommonMediaItemFormComponentInputMain<MovieInternal> & CommonMediaItemFormComponentOutput;

@@ -1,7 +1,6 @@
 import { ReactElement } from 'react';
-import { ObjectSchema } from 'yup';
-import { MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
-import { videogameFormValidationSchema } from 'app/components/presentational/media-item/details/form/data/videogame';
+import { DEFAULT_CATALOG_VIDEOGAME, VideogameInternal } from 'app/data/models/internal/media-items/videogame';
+import { videogameFormValidationSchema, normalizeVideogameFormValues } from 'app/components/presentational/media-item/details/form/data/videogame';
 import { VideogameFormViewComponent } from 'app/components/presentational/media-item/details/form/view/videogame';
 import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from './media-item';
 
@@ -13,8 +12,11 @@ import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, Co
 export const VideogameFormComponent = (props: VideogameFormComponentProps): ReactElement => {
 	return (
 		<CommonMediaItemFormComponent
+			<VideogameInternal>
 			{...props}
-			validationSchema={videogameFormValidationSchema as ObjectSchema<MediaItemDetailsFormValues>}>
+			defaultCatalogItem={DEFAULT_CATALOG_VIDEOGAME}
+			normalizeFormValues={normalizeVideogameFormValues}
+			validationSchema={videogameFormValidationSchema}>
 			{(formikProps, requestCatalogReload) => {
 				return (
 					<VideogameFormViewComponent
@@ -38,4 +40,4 @@ export const VideogameFormComponent = (props: VideogameFormComponentProps): Reac
 /**
  * VideogameFormComponent's props
  */
-export type VideogameFormComponentProps = CommonMediaItemFormComponentInputMain & CommonMediaItemFormComponentOutput;
+export type VideogameFormComponentProps = CommonMediaItemFormComponentInputMain<VideogameInternal> & CommonMediaItemFormComponentOutput;

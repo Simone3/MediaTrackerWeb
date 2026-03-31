@@ -1,17 +1,15 @@
 import { Component, ReactNode } from 'react';
 import { FormikProps } from 'formik';
-import { ObjectSchema } from 'yup';
-import { tvShowFormValidationSchema } from 'app/components/presentational/media-item/details/form/data/tv-show';
-import { MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
+import { tvShowFormValidationSchema, normalizeTvShowFormValues, preserveTvShowSeasonProgress } from 'app/components/presentational/media-item/details/form/data/tv-show';
 import { TvShowFormViewComponent } from 'app/components/presentational/media-item/details/form/view/tv-show';
-import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
+import { DEFAULT_CATALOG_TV_SHOW, TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from './media-item';
 
 /**
  * Presentational component that handles the Formik wrapper component for the TV show form
  */
 export class TvShowFormComponent extends Component<TvShowFormComponentProps> {
-	private formikProps?: FormikProps<MediaItemDetailsFormValues>;
+	private formikProps?: FormikProps<TvShowInternal>;
 	private loadedSeasonsTimestamp?: Date;
 
 	/**
@@ -34,8 +32,12 @@ export class TvShowFormComponent extends Component<TvShowFormComponentProps> {
 	public render(): ReactNode {
 		return (
 			<CommonMediaItemFormComponent
+				<TvShowInternal>
 				{...this.props}
-				validationSchema={tvShowFormValidationSchema as ObjectSchema<MediaItemDetailsFormValues>}>
+				defaultCatalogItem={DEFAULT_CATALOG_TV_SHOW}
+				normalizeFormValues={normalizeTvShowFormValues}
+				onLoadCatalogDetails={preserveTvShowSeasonProgress}
+				validationSchema={tvShowFormValidationSchema}>
 				{(formikProps, requestCatalogReload) => {
 					this.formikProps = formikProps;
 
@@ -84,7 +86,7 @@ export class TvShowFormComponent extends Component<TvShowFormComponentProps> {
 /**
  * TvShowFormComponent's props
  */
-export type TvShowFormComponentProps = CommonMediaItemFormComponentInputMain & CommonMediaItemFormComponentOutput & {
+export type TvShowFormComponentProps = CommonMediaItemFormComponentInputMain<TvShowInternal> & CommonMediaItemFormComponentOutput & {
 	/**
 	 * List of seasons to be loaded into Formik
 	 */
