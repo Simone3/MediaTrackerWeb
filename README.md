@@ -12,6 +12,7 @@ TODO:
   - remove blank lines after classes
   - CATEGORIES_MOBILE_BREAKPOINT rename and move
   - remove all multi-line imports
+  - re-review logic code starting from screens and moving down (especially for media item parts)
 - fully test on chrome/firefox (production build)
 - fully test on mobile (need to deploy first?)
 - check dev vs. prod configs

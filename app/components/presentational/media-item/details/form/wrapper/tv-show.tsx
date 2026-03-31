@@ -32,28 +32,9 @@ export class TvShowFormComponent extends Component<TvShowFormComponentProps> {
 	 * @override
 	 */
 	public render(): ReactNode {
-		const commonProps: CommonMediaItemFormComponentInputMain & CommonMediaItemFormComponentOutput = {
-			isLoading: this.props.isLoading,
-			initialValues: this.props.initialValues,
-			restoredDraft: this.props.restoredDraft,
-			sameNameConfirmationRequested: this.props.sameNameConfirmationRequested,
-			catalogSearchResults: this.props.catalogSearchResults,
-			catalogDetails: this.props.catalogDetails,
-			selectedGroup: this.props.selectedGroup,
-			selectedOwnPlatform: this.props.selectedOwnPlatform,
-			notifyFormStatus: this.props.notifyFormStatus,
-			saveMediaItem: this.props.saveMediaItem,
-			persistFormDraft: this.props.persistFormDraft,
-			requestGroupSelection: this.props.requestGroupSelection,
-			requestOwnPlatformSelection: this.props.requestOwnPlatformSelection,
-			searchMediaItemsCatalog: this.props.searchMediaItemsCatalog,
-			loadMediaItemCatalogDetails: this.props.loadMediaItemCatalogDetails,
-			resetMediaItemsCatalogSearch: this.props.resetMediaItemsCatalogSearch
-		};
-
 		return (
 			<CommonMediaItemFormComponent
-				{...commonProps}
+				{...this.props}
 				validationSchema={tvShowFormValidationSchema as ObjectSchema<MediaItemDetailsFormValues>}>
 				{(formikProps, requestCatalogReload) => {
 					this.formikProps = formikProps;
@@ -64,13 +45,13 @@ export class TvShowFormComponent extends Component<TvShowFormComponentProps> {
 							catalogSearchResults={this.props.catalogSearchResults}
 							notifyFormStatus={this.props.notifyFormStatus}
 							persistFormDraft={this.props.persistFormDraft}
-							handleTvShowSeasons={this.props.handleTvShowSeasons}
 							requestGroupSelection={this.props.requestGroupSelection}
 							requestOwnPlatformSelection={this.props.requestOwnPlatformSelection}
 							searchMediaItemsCatalog={this.props.searchMediaItemsCatalog}
 							loadMediaItemCatalogDetails={this.props.loadMediaItemCatalogDetails}
 							resetMediaItemsCatalogSearch={this.props.resetMediaItemsCatalogSearch}
 							requestCatalogReload={requestCatalogReload}
+							handleTvShowSeasons={this.props.handleTvShowSeasons}
 						/>
 					);
 				}}
