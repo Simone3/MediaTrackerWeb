@@ -152,18 +152,23 @@
   - good reference implementations when category behavior looks wrong
 
 ## Recent fix worth remembering
-- The media-item details flow on web had been threading TV-show season state/handlers through generic `media-item` screen, switcher, and common-wrapper props.
+- The media-item details flow on web had accumulated most of its Redux mapping in the screen container instead of the form-layer containers used by the older RN app.
   - Correct behavior/structure on web now:
-    - the generic media-item details screen/switcher/common wrapper only expose shared media-item props again
-    - TV-show-only seasons state/dispatch now live in the dedicated `app/components/containers/media-item/details/form/tv-show.ts` container, matching the older RN separation more closely
-    - the TV-show form wrapper now reloads handled seasons on mount/update from the Redux timestamp, so returning from the seasons flow still restores the edited seasons without leaking TV-show-only props into generic components
+    - the details screen is back to being a thin shell that just handles the dark-screen body class and the browser-leave guard
+    - a dedicated switcher container now selects the correct form by `mediaItem.mediaType`
+    - book, movie, TV-show, and videogame forms now each have their own container again under `app/components/containers/media-item/details/form/**`
+    - shared form Redux wiring now lives in `commonMediaItemFormMapStateToProps` and `commonMediaItemFormMapDispatchToProps`, so common save/draft/catalog/group/platform props are owned by the form layer instead of the screen container
+    - the TV-show form container still adds the seasons-specific Redux state/dispatch on top, while the TV-show wrapper keeps reloading handled seasons from the Redux timestamp on mount/update
   - Relevant files:
+    - `app/components/containers/media-item/details/form/media-item.ts`
+    - `app/components/containers/media-item/details/form/switcher.ts`
+    - `app/components/containers/media-item/details/form/book.ts`
+    - `app/components/containers/media-item/details/form/movie.ts`
     - `app/components/containers/media-item/details/form/tv-show.ts`
+    - `app/components/containers/media-item/details/form/videogame.ts`
     - `app/components/containers/media-item/details/screen.ts`
     - `app/components/presentational/media-item/details/screen/index.tsx`
     - `app/components/presentational/media-item/details/form/switcher/index.tsx`
-    - `app/components/presentational/media-item/details/form/wrapper/media-item.tsx`
-    - `app/components/presentational/media-item/details/form/wrapper/tv-show.tsx`
     - `tests/media-item-details.smoke.test.tsx`
 - The production REST JSON invoker still carried the old React Native `Accept-Charset` request header into the browser build.
   - Correct behavior on web now:

@@ -1,64 +1,115 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MediaItemDetailsScreenComponent } from 'app/components/presentational/media-item/details/screen';
-import { DEFAULT_BOOK } from 'app/data/models/internal/media-items/book';
+import { MediaItemDetailsScreenContainer } from 'app/components/containers/media-item/details/screen';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
+import { DEFAULT_BOOK } from 'app/data/models/internal/media-items/book';
 import { DEFAULT_MOVIE } from 'app/data/models/internal/media-items/movie';
+import { DEFAULT_VIDEOGAME } from 'app/data/models/internal/media-items/videogame';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
+import { SAVE_MEDIA_ITEM, SET_MEDIA_ITEM_FORM_DRAFT, SET_MEDIA_ITEM_FORM_STATUS } from 'app/redux/actions/media-item/const';
 import { START_TV_SHOW_SEASONS_HANDLING } from 'app/redux/actions/tv-show-season/const';
-import { tvShowSeasonsListStateInitialValue } from 'app/redux/state/tv-show-season';
-import { DEFAULT_VIDEOGAME } from 'app/data/models/internal/media-items/videogame';
+import { GroupGlobalState, GroupsListState, groupGlobalStateInitialValue, groupsListStateInitialValue } from 'app/redux/state/group';
+import { MediaItemDetailsState, mediaItemDetailsStateInitialValue } from 'app/redux/state/media-item';
+import { OwnPlatformGlobalState, OwnPlatformsListState, ownPlatformGlobalStateInitialValue, ownPlatformsListStateInitialValue } from 'app/redux/state/own-platform';
+import { TvShowSeasonsListState, tvShowSeasonsListStateInitialValue } from 'app/redux/state/tv-show-season';
 import { i18n } from 'app/utilities/i18n';
 import { Provider } from 'react-redux';
-import { Action, createStore } from 'redux';
+import { MemoryRouter } from 'react-router-dom';
+import { Action, Store, createStore } from 'redux';
 
-type DetailsProps = React.ComponentProps<typeof MediaItemDetailsScreenComponent>;
 type DetailsScreenTestState = {
-	tvShowSeasonsList: typeof tvShowSeasonsListStateInitialValue;
+	mediaItemDetails: MediaItemDetailsState;
+	groupGlobal: GroupGlobalState;
+	groupsList: GroupsListState;
+	ownPlatformGlobal: OwnPlatformGlobalState;
+	ownPlatformsList: OwnPlatformsListState;
+	tvShowSeasonsList: TvShowSeasonsListState;
 };
 
-const buildProps = (overrides: Partial<DetailsProps> = {}): DetailsProps => {
-	return {
-		isLoading: false,
-		mediaItem: DEFAULT_BOOK,
-		draftMediaItem: undefined,
-		sameNameConfirmationRequested: false,
-		catalogSearchResults: undefined,
-		catalogDetails: undefined,
-		selectedGroup: undefined,
-		selectedOwnPlatform: undefined,
-		saveMediaItem: jest.fn(),
-		notifyFormStatus: jest.fn(),
-		persistFormDraft: jest.fn(),
-		discardFormDraft: jest.fn(),
-		requestGroupSelection: jest.fn(),
-		requestOwnPlatformSelection: jest.fn(),
-		searchMediaItemsCatalog: jest.fn(),
-		loadMediaItemCatalogDetails: jest.fn(),
-		resetMediaItemsCatalogSearch: jest.fn(),
-		...overrides
-	};
+type DetailsScreenStateOverrides = {
+	mediaItemDetails?: Partial<MediaItemDetailsState>;
+	groupGlobal?: Partial<GroupGlobalState>;
+	groupsList?: Partial<GroupsListState>;
+	ownPlatformGlobal?: Partial<OwnPlatformGlobalState>;
+	ownPlatformsList?: Partial<OwnPlatformsListState>;
+	tvShowSeasonsList?: Partial<TvShowSeasonsListState>;
 };
 
-const createScreen = (overrides: Partial<DetailsProps> = {}): React.ReactElement => {
-	return React.createElement(MediaItemDetailsScreenComponent, buildProps(overrides));
+type DetailsScreenAction = Action & {
+	confirmSameName?: boolean;
+	dirty?: boolean;
+	mediaItem?: MediaItemInternal;
+	tvShowSeasons?: TvShowSeasonInternal[];
+	valid?: boolean;
 };
 
-const createDetailsStore = (overrides: Partial<DetailsScreenTestState['tvShowSeasonsList']> = {}) => {
+const createScreenElement = (store: Store<DetailsScreenTestState>): React.ReactElement => {
+	return (
+		<Provider store={store}>
+			<MemoryRouter>
+				<MediaItemDetailsScreenContainer/>
+			</MemoryRouter>
+		</Provider>
+	);
+};
+
+const createDetailsStore = (overrides: DetailsScreenStateOverrides = {}) => {
 	const initialState: DetailsScreenTestState = {
+		mediaItemDetails: {
+			...mediaItemDetailsStateInitialValue,
+			mediaItem: DEFAULT_BOOK,
+			...overrides.mediaItemDetails
+		},
+		groupGlobal: {
+			...groupGlobalStateInitialValue,
+			...overrides.groupGlobal
+		},
+		groupsList: {
+			...groupsListStateInitialValue,
+			...overrides.groupsList
+		},
+		ownPlatformGlobal: {
+			...ownPlatformGlobalStateInitialValue,
+			...overrides.ownPlatformGlobal
+		},
+		ownPlatformsList: {
+			...ownPlatformsListStateInitialValue,
+			...overrides.ownPlatformsList
+		},
 		tvShowSeasonsList: {
 			...tvShowSeasonsListStateInitialValue,
-			...overrides
+			...overrides.tvShowSeasonsList
 		}
 	};
-	const dispatchedActions: Array<Action & { tvShowSeasons?: TvShowSeasonInternal[] }> = [];
-	const store = createStore((state: DetailsScreenTestState = initialState, action: Action & { tvShowSeasons?: TvShowSeasonInternal[] }) => {
+	const dispatchedActions: DetailsScreenAction[] = [];
+	const store = createStore((state: DetailsScreenTestState = initialState, action: DetailsScreenAction) => {
 		dispatchedActions.push(action);
 
 		switch(action.type) {
+			case SET_MEDIA_ITEM_FORM_DRAFT: {
+				return {
+					...state,
+					mediaItemDetails: {
+						...state.mediaItemDetails,
+						formDraft: action.mediaItem
+					}
+				};
+			}
+
+			case SET_MEDIA_ITEM_FORM_STATUS: {
+				return {
+					...state,
+					mediaItemDetails: {
+						...state.mediaItemDetails,
+						valid: Boolean(action.valid),
+						dirty: Boolean(action.dirty)
+					}
+				};
+			}
+
 			case START_TV_SHOW_SEASONS_HANDLING: {
 				return {
 					...state,
@@ -75,53 +126,31 @@ const createDetailsStore = (overrides: Partial<DetailsScreenTestState['tvShowSea
 	});
 
 	return {
-		store,
-		dispatchedActions
+		dispatchedActions,
+		store
 	};
 };
 
-const renderScreen = (
-	overrides: Partial<DetailsProps> = {},
-	tvShowSeasonsStateOverrides: Partial<DetailsScreenTestState['tvShowSeasonsList']> = {}
-) => {
+const renderScreen = (overrides: DetailsScreenStateOverrides = {}) => {
 	const {
-		store,
-		dispatchedActions
-	} = createDetailsStore(tvShowSeasonsStateOverrides);
-	const renderedScreen = render(
-		<Provider store={store}>
-			{createScreen(overrides)}
-		</Provider>
-	);
+		dispatchedActions,
+		store
+	} = createDetailsStore(overrides);
+	const renderedScreen = render(createScreenElement(store));
 
 	return {
-		store,
 		dispatchedActions,
+		store,
 		...renderedScreen
 	};
 };
 
-describe('MediaItemDetailsScreenComponent', () => {
+describe('MediaItemDetailsScreenContainer', () => {
 	test('submits a valid media item from form input', async() => {
-		const saveMediaItem = jest.fn();
-		const notifyFormStatus = jest.fn();
-		const persistFormDraft = jest.fn();
-		const requestGroupSelection = jest.fn();
-		const requestOwnPlatformSelection = jest.fn();
-		const searchMediaItemsCatalog = jest.fn();
-		const loadMediaItemCatalogDetails = jest.fn();
-		const resetMediaItemsCatalogSearch = jest.fn();
-
-		renderScreen({
-			saveMediaItem,
-			notifyFormStatus,
-			persistFormDraft,
-			requestGroupSelection,
-			requestOwnPlatformSelection,
-			searchMediaItemsCatalog,
-			loadMediaItemCatalogDetails,
-			resetMediaItemsCatalogSearch
-		});
+		const {
+			dispatchedActions,
+			store
+		} = renderScreen();
 
 		const user = userEvent.setup();
 		const nameInput = screen.getByLabelText(i18n.t('mediaItem.details.placeholders.name'));
@@ -140,24 +169,24 @@ describe('MediaItemDetailsScreenComponent', () => {
 
 		await user.click(saveButton);
 
-		expect(saveMediaItem).toHaveBeenCalledTimes(1);
-		expect(saveMediaItem).toHaveBeenCalledWith({
-			...DEFAULT_BOOK,
+		expect(dispatchedActions).toContainEqual(expect.objectContaining({
+			type: SAVE_MEDIA_ITEM,
+			mediaItem: {
+				...DEFAULT_BOOK,
+				name: 'Dune',
+				pagesNumber: 412,
+				authors: [ 'Frank Herbert' ]
+			},
+			confirmSameName: false
+		}));
+		expect(store.getState().mediaItemDetails.formDraft).toMatchObject({
 			name: 'Dune',
 			pagesNumber: 412,
 			authors: [ 'Frank Herbert' ]
-		}, false);
-		expect(notifyFormStatus).toHaveBeenCalled();
-		expect(persistFormDraft).toHaveBeenCalled();
-		expect(requestGroupSelection).not.toHaveBeenCalled();
-		expect(requestOwnPlatformSelection).not.toHaveBeenCalled();
-		expect(searchMediaItemsCatalog).not.toHaveBeenCalled();
-		expect(loadMediaItemCatalogDetails).not.toHaveBeenCalled();
-		expect(resetMediaItemsCatalogSearch).not.toHaveBeenCalled();
+		});
 	});
 
 	test('asks confirmation and retries save when same-name warning is requested', async() => {
-		const saveMediaItem = jest.fn();
 		const mediaItem: MediaItemInternal = {
 			id: 'media-id',
 			name: 'Dune',
@@ -165,23 +194,30 @@ describe('MediaItemDetailsScreenComponent', () => {
 			status: 'ACTIVE',
 			importance: '300'
 		};
+		const initialRender = renderScreen({
+			mediaItemDetails: {
+				mediaItem
+			}
+		});
+		const confirmedRender = createDetailsStore({
+			mediaItemDetails: {
+				...mediaItemDetailsStateInitialValue,
+				mediaItem,
+				saveStatus: 'REQUIRES_CONFIRMATION'
+			}
+		});
 
-		const { rerender } = render(createScreen({
-			mediaItem,
-			saveMediaItem
-		}));
-
-		rerender(createScreen({
-			mediaItem,
-			sameNameConfirmationRequested: true,
-			saveMediaItem
-		}));
+		initialRender.rerender(createScreenElement(confirmedRender.store));
 
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: i18n.t('common.alert.default.okButton') }));
 
 		await waitFor(() => {
-			expect(saveMediaItem).toHaveBeenCalledWith(mediaItem, true);
+			expect(confirmedRender.dispatchedActions).toContainEqual(expect.objectContaining({
+				type: SAVE_MEDIA_ITEM,
+				mediaItem,
+				confirmSameName: true
+			}));
 		});
 	});
 
@@ -204,7 +240,9 @@ describe('MediaItemDetailsScreenComponent', () => {
 			dispatchedActions,
 			store
 		} = renderScreen({
-			mediaItem: tvShow
+			mediaItemDetails: {
+				mediaItem: tvShow
+			}
 		});
 
 		const user = userEvent.setup();
@@ -232,7 +270,9 @@ describe('MediaItemDetailsScreenComponent', () => {
 		};
 
 		renderScreen({
-			mediaItem: tvShow
+			mediaItemDetails: {
+				mediaItem: tvShow
+			}
 		});
 
 		expect(screen.getByText(i18n.t('mediaItem.details.placeholders.production'))).toBeInTheDocument();
@@ -267,9 +307,22 @@ describe('MediaItemDetailsScreenComponent', () => {
 			color: '#f5a623',
 			icon: 'kindle'
 		};
-
-		const { rerender } = renderScreen({
-			mediaItem
+		const initialRender = renderScreen({
+			mediaItemDetails: {
+				mediaItem
+			}
+		});
+		const selectedEntitiesRender = createDetailsStore({
+			mediaItemDetails: {
+				...mediaItemDetailsStateInitialValue,
+				mediaItem
+			},
+			groupGlobal: {
+				selectedGroup
+			},
+			ownPlatformGlobal: {
+				selectedOwnPlatform
+			}
 		});
 
 		expect(screen.queryByText('Status')).not.toBeInTheDocument();
@@ -280,15 +333,7 @@ describe('MediaItemDetailsScreenComponent', () => {
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.group'))).toHaveTextContent(i18n.t('group.list.none'));
 		expect(screen.getByText(i18n.t('mediaItem.details.placeholders.completedOn'))).toBeInTheDocument();
 
-		rerender(
-			<Provider store={createDetailsStore().store}>
-				{createScreen({
-					mediaItem,
-					selectedGroup,
-					selectedOwnPlatform
-				})}
-			</Provider>
-		);
+		initialRender.rerender(createScreenElement(selectedEntitiesRender.store));
 
 		await waitFor(() => {
 			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.ownPlatform'))).toHaveTextContent('Kindle');
@@ -298,9 +343,11 @@ describe('MediaItemDetailsScreenComponent', () => {
 
 	test('renders movie-specific shared form controls', () => {
 		renderScreen({
-			mediaItem: {
-				...DEFAULT_MOVIE,
-				name: 'Arrival'
+			mediaItemDetails: {
+				mediaItem: {
+					...DEFAULT_MOVIE,
+					name: 'Arrival'
+				}
 			}
 		});
 
@@ -311,9 +358,11 @@ describe('MediaItemDetailsScreenComponent', () => {
 
 	test('renders videogame-specific shared form controls', () => {
 		renderScreen({
-			mediaItem: {
-				...DEFAULT_VIDEOGAME,
-				name: 'Hades'
+			mediaItemDetails: {
+				mediaItem: {
+					...DEFAULT_VIDEOGAME,
+					name: 'Hades'
+				}
 			}
 		});
 
@@ -324,10 +373,12 @@ describe('MediaItemDetailsScreenComponent', () => {
 
 	test('renders completion date controls and picker actions', async() => {
 		renderScreen({
-			mediaItem: {
-				...DEFAULT_BOOK,
-				name: 'Dune',
-				importance: '300'
+			mediaItemDetails: {
+				mediaItem: {
+					...DEFAULT_BOOK,
+					name: 'Dune',
+					importance: '300'
+				}
 			}
 		});
 
@@ -351,9 +402,11 @@ describe('MediaItemDetailsScreenComponent', () => {
 
 	test('renders the dark media-style shell sections and cleans up the body class', () => {
 		const { unmount } = renderScreen({
-			mediaItem: {
-				...DEFAULT_BOOK,
-				name: 'Dune'
+			mediaItemDetails: {
+				mediaItem: {
+					...DEFAULT_BOOK,
+					name: 'Dune'
+				}
 			}
 		});
 
@@ -372,17 +425,18 @@ describe('MediaItemDetailsScreenComponent', () => {
 	});
 
 	test('hydrates selected own platform on mount and saves it', async() => {
-		const saveMediaItem = jest.fn();
 		const selectedOwnPlatform: OwnPlatformInternal = {
 			id: 'platform-id',
 			name: 'Kindle',
 			color: '#f5a623',
 			icon: 'kindle'
 		};
-
-		renderScreen({
-			selectedOwnPlatform,
-			saveMediaItem
+		const {
+			dispatchedActions
+		} = renderScreen({
+			ownPlatformGlobal: {
+				selectedOwnPlatform
+			}
 		});
 
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.ownPlatform'))).toHaveTextContent('Kindle');
@@ -391,27 +445,26 @@ describe('MediaItemDetailsScreenComponent', () => {
 		await user.type(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.name')), 'Dune');
 		await user.click(screen.getByRole('button', { name: i18n.t('common.buttons.save') }));
 
-		expect(saveMediaItem).toHaveBeenCalledWith({
-			...DEFAULT_BOOK,
-			name: 'Dune',
-			ownPlatform: selectedOwnPlatform
-		}, false);
+		expect(dispatchedActions).toContainEqual(expect.objectContaining({
+			type: SAVE_MEDIA_ITEM,
+			mediaItem: {
+				...DEFAULT_BOOK,
+				name: 'Dune',
+				ownPlatform: selectedOwnPlatform
+			},
+			confirmSameName: false
+		}));
 	});
 
 	test('restores unsaved draft after remounting from picker navigation', async() => {
-		let savedDraft: MediaItemInternal | undefined;
-		const persistFormDraft = jest.fn((mediaItem: MediaItemInternal) => {
-			savedDraft = mediaItem;
-		});
-
-		const { unmount } = renderScreen({
-			persistFormDraft
-		});
-
+		const firstRender = renderScreen();
 		const user = userEvent.setup();
+
 		await user.type(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.name')), 'Dune');
 		await user.type(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.duration.BOOK')), '412');
 		await user.type(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.userComment')), 'Keep this draft');
+
+		const savedDraft = firstRender.store.getState().mediaItemDetails.formDraft;
 
 		expect(savedDraft).toMatchObject({
 			name: 'Dune',
@@ -419,10 +472,12 @@ describe('MediaItemDetailsScreenComponent', () => {
 			userComment: 'Keep this draft'
 		});
 
-		unmount();
+		firstRender.unmount();
 
 		renderScreen({
-			draftMediaItem: savedDraft
+			mediaItemDetails: {
+				formDraft: savedDraft
+			}
 		});
 
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.name'))).toHaveValue('Dune');
@@ -459,11 +514,14 @@ describe('MediaItemDetailsScreenComponent', () => {
 		];
 
 		renderScreen({
-			mediaItem: draftMediaItem,
-			draftMediaItem: draftMediaItem
-		}, {
-			tvShowSeasons: handledSeasons,
-			completeHandlingTimestamp: new Date('2026-03-14T12:00:00.000Z')
+			mediaItemDetails: {
+				mediaItem: draftMediaItem,
+				formDraft: draftMediaItem
+			},
+			tvShowSeasonsList: {
+				tvShowSeasons: handledSeasons,
+				completeHandlingTimestamp: new Date('2026-03-14T12:00:00.000Z')
+			}
 		});
 
 		await waitFor(() => {

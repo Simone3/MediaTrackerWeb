@@ -1,10 +1,10 @@
 import { ReactElement } from 'react';
 import { MediaTypeSwitcherComponent } from 'app/components/presentational/generic/media-switcher';
-import { BookFormComponent } from 'app/components/presentational/media-item/details/form/wrapper/book';
-import { MovieFormComponent } from 'app/components/presentational/media-item/details/form/wrapper/movie';
+import { BookFormContainer } from 'app/components/containers/media-item/details/form/book';
+import { MovieFormContainer } from 'app/components/containers/media-item/details/form/movie';
 import { TvShowFormContainer } from 'app/components/containers/media-item/details/form/tv-show';
-import { VideogameFormComponent } from 'app/components/presentational/media-item/details/form/wrapper/videogame';
-import { CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from 'app/components/presentational/media-item/details/form/wrapper/media-item';
+import { VideogameFormContainer } from 'app/components/containers/media-item/details/form/videogame';
+import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 
 /**
  * Presentational component that switches on the correct media item form based on its media type
@@ -14,26 +14,18 @@ import { CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutp
 export const MediaItemFormSwitcherComponent = (props: MediaItemFormSwitcherComponentProps): ReactElement => {
 	return (
 		<MediaTypeSwitcherComponent
-			discriminator={props.initialValues}
+			discriminator={props.mediaItem}
 			book={
-				<BookFormComponent
-					{...props}
-				/>
+				<BookFormContainer/>
 			}
 			movie={
-				<MovieFormComponent
-					{...props}
-				/>
+				<MovieFormContainer/>
 			}
 			tvShow={
-				<TvShowFormContainer
-					{...props}
-				/>
+				<TvShowFormContainer/>
 			}
 			videogame={
-				<VideogameFormComponent
-					{...props}
-				/>
+				<VideogameFormContainer/>
 			}
 		/>
 	);
@@ -42,4 +34,9 @@ export const MediaItemFormSwitcherComponent = (props: MediaItemFormSwitcherCompo
 /**
  * MediaItemFormSwitcherComponent's props
  */
-export type MediaItemFormSwitcherComponentProps = CommonMediaItemFormComponentInputMain & CommonMediaItemFormComponentOutput;
+export type MediaItemFormSwitcherComponentProps = {
+	/**
+	 * Media item used to select the correct form container
+	 */
+	mediaItem: MediaItemInternal;
+};
