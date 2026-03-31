@@ -86,7 +86,7 @@ export type MediaItemDetailsState = {
 	readonly mediaItem?: MediaItemInternal;
 
 	/**
-	 * The current unsaved form draft, preserved across picker navigation on web
+	 * The current unsaved form draft, restored after mount so Formik dirty can still compare against the saved media item
 	 */
 	readonly formDraft?: MediaItemInternal;
 
@@ -96,7 +96,7 @@ export type MediaItemDetailsState = {
 	readonly valid: boolean;
 
 	/**
-	 * If the currently loaded media item is dirty (one or more fields are different from initial values)
+	 * If the currently loaded media item is dirty (one or more fields are different from the saved media item / Formik initial values)
 	 */
 	readonly dirty: boolean;
 

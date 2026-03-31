@@ -35,7 +35,7 @@ export class TvShowFormComponent extends Component<TvShowFormComponentProps> {
 		const commonProps: CommonMediaItemFormComponentInputMain & CommonMediaItemFormComponentOutput = {
 			isLoading: this.props.isLoading,
 			initialValues: this.props.initialValues,
-			baseMediaItem: this.props.baseMediaItem,
+			restoredDraft: this.props.restoredDraft,
 			sameNameConfirmationRequested: this.props.sameNameConfirmationRequested,
 			catalogSearchResults: this.props.catalogSearchResults,
 			catalogDetails: this.props.catalogDetails,
@@ -61,7 +61,6 @@ export class TvShowFormComponent extends Component<TvShowFormComponentProps> {
 					return (
 						<TvShowFormViewComponent
 							{...formikProps}
-							baseMediaItem={this.props.baseMediaItem}
 							catalogSearchResults={this.props.catalogSearchResults}
 							notifyFormStatus={this.props.notifyFormStatus}
 							persistFormDraft={this.props.persistFormDraft}

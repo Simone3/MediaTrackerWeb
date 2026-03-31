@@ -3,7 +3,7 @@ import { GroupInternal } from 'app/data/models/internal/group';
 import { DEFAULT_CATALOG_BOOK, BookInternal } from 'app/data/models/internal/media-items/book';
 import { CatalogMediaItemInternal, MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MEDIA_ITEM_STATUS_INTERNAL_VALUES, MediaItemImportanceInternal, MediaItemInternal, MediaItemStatusInternal } from 'app/data/models/internal/media-items/media-item';
 import { DEFAULT_CATALOG_MOVIE, MovieInternal } from 'app/data/models/internal/media-items/movie';
-import { DEFAULT_CATALOG_TV_SHOW, TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
+import { DEFAULT_CATALOG_TV_SHOW, TvShowInternal } from 'app/data/models/internal/media-items/tv-show';
 import { DEFAULT_CATALOG_VIDEOGAME, VideogameInternal } from 'app/data/models/internal/media-items/videogame';
 import { OWN_PLATFORM_ICON_INTERNAL_VALUES, OwnPlatformIconInternal, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { NumberSchema, ObjectSchema, array, boolean, date, mixed, number, object, string } from 'yup';
@@ -87,89 +87,6 @@ const applyNormalizedTextArray = (
 	else {
 		delete mutableTarget[key];
 	}
-};
-
-/**
- * Converts an optional Date to comparable string
- * @param currentDate the date
- * @returns comparable value
- */
-const dateToComparable = (currentDate?: Date): string => {
-	return currentDate ? currentDate.toISOString() : '';
-};
-
-/**
- * Checks whether two optional string arrays are different
- * @param left left array
- * @param right right array
- * @returns true if different
- */
-const areStringArraysDifferent = (left?: string[], right?: string[]): boolean => {
-	const leftValues = left || [];
-	const rightValues = right || [];
-
-	if(leftValues.length !== rightValues.length) {
-		return true;
-	}
-
-	for(let index = 0; index < leftValues.length; index += 1) {
-		if(leftValues[index] !== rightValues[index]) {
-			return true;
-		}
-	}
-
-	return false;
-};
-
-/**
- * Checks whether two optional date arrays are different
- * @param left left array
- * @param right right array
- * @returns true if different
- */
-const areDateArraysDifferent = (left?: Date[], right?: Date[]): boolean => {
-	const leftValues = left || [];
-	const rightValues = right || [];
-
-	if(leftValues.length !== rightValues.length) {
-		return true;
-	}
-
-	for(let index = 0; index < leftValues.length; index += 1) {
-		if(dateToComparable(leftValues[index]) !== dateToComparable(rightValues[index])) {
-			return true;
-		}
-	}
-
-	return false;
-};
-
-/**
- * Checks whether two optional TV show season arrays are different
- * @param left left array
- * @param right right array
- * @returns true if different
- */
-const areTvShowSeasonsDifferent = (left?: TvShowSeasonInternal[], right?: TvShowSeasonInternal[]): boolean => {
-	const leftValues = left || [];
-	const rightValues = right || [];
-
-	if(leftValues.length !== rightValues.length) {
-		return true;
-	}
-
-	for(let index = 0; index < leftValues.length; index += 1) {
-		const leftSeason = leftValues[index];
-		const rightSeason = rightValues[index];
-
-		if(leftSeason.number !== rightSeason.number ||
-			leftSeason.episodesNumber !== rightSeason.episodesNumber ||
-			leftSeason.watchedEpisodesNumber !== rightSeason.watchedEpisodesNumber) {
-			return true;
-		}
-	}
-
-	return false;
 };
 
 /**
@@ -260,71 +177,4 @@ export const normalizeMediaItemDetailsFormValues = (values: MediaItemDetailsForm
 	applyNormalizedTextArray(normalizedValues, 'platforms', values.platforms);
 
 	return normalizedValues;
-};
-
-/**
- * Checks if two media items differ on fields handled by this form
- * @param left first media item
- * @param right second media item
- * @returns true if different
- */
-export const areMediaItemDetailsDifferent = (left: MediaItemDetailsFormValues, right: MediaItemDetailsFormValues): boolean => {
-	const commonDifferent = left.id !== right.id ||
-		left.name !== right.name ||
-		left.mediaType !== right.mediaType ||
-		left.importance !== right.importance ||
-		left.description !== right.description ||
-		left.userComment !== right.userComment ||
-		left.group?.id !== right.group?.id ||
-		left.orderInGroup !== right.orderInGroup ||
-		left.ownPlatform?.id !== right.ownPlatform?.id ||
-		dateToComparable(left.releaseDate) !== dateToComparable(right.releaseDate) ||
-		areStringArraysDifferent(left.genres, right.genres) ||
-		areDateArraysDifferent(left.completedOn, right.completedOn);
-
-	if(commonDifferent) {
-		return true;
-	}
-
-	switch(left.mediaType) {
-		case 'BOOK': {
-			const leftBook = left as BookInternal;
-			const rightBook = right as BookInternal;
-
-			return leftBook.pagesNumber !== rightBook.pagesNumber ||
-				areStringArraysDifferent(leftBook.authors, rightBook.authors);
-		}
-
-		case 'MOVIE': {
-			const leftMovie = left as MovieInternal;
-			const rightMovie = right as MovieInternal;
-
-			return leftMovie.durationMinutes !== rightMovie.durationMinutes ||
-				areStringArraysDifferent(leftMovie.directors, rightMovie.directors);
-		}
-
-		case 'TV_SHOW': {
-			const leftTvShow = left as TvShowInternal;
-			const rightTvShow = right as TvShowInternal;
-
-			return leftTvShow.averageEpisodeRuntimeMinutes !== rightTvShow.averageEpisodeRuntimeMinutes ||
-				leftTvShow.inProduction !== rightTvShow.inProduction ||
-				dateToComparable(leftTvShow.nextEpisodeAirDate) !== dateToComparable(rightTvShow.nextEpisodeAirDate) ||
-				areStringArraysDifferent(leftTvShow.creators, rightTvShow.creators) ||
-				areTvShowSeasonsDifferent(leftTvShow.seasons, rightTvShow.seasons);
-		}
-
-		case 'VIDEOGAME': {
-			const leftVideogame = left as VideogameInternal;
-			const rightVideogame = right as VideogameInternal;
-
-			return leftVideogame.averageLengthHours !== rightVideogame.averageLengthHours ||
-				areStringArraysDifferent(leftVideogame.developers, rightVideogame.developers) ||
-				areStringArraysDifferent(leftVideogame.publishers, rightVideogame.publishers) ||
-				areStringArraysDifferent(leftVideogame.platforms, rightVideogame.platforms);
-		}
-
-		default:
-			return false;
-	}
 };

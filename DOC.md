@@ -152,6 +152,19 @@
   - good reference implementations when category behavior looks wrong
 
 ## Recent fix worth remembering
+- The media-item details form on web had replaced Formik's `dirty` tracking with a manual deep-compare helper because Redux draft persistence was being fed back into `initialValues`.
+  - Correct behavior/structure on web now:
+    - the saved media item is once again the sole source of Formik `initialValues`, closer to the old RN flow
+    - any persisted `formDraft` is restored after mount instead of becoming the new `initialValues`, so remounting from picker navigation still restores unsaved edits without resetting `dirty`
+    - media-item dirty tracking now comes directly from `formik.dirty` again, and the custom `areMediaItemDetailsDifferent` helper layer has been removed
+    - catalog details still merge into the live form, but an already restored draft keeps winning over any stale persisted catalog payload from a previous mount
+  - Relevant files:
+    - `app/components/containers/media-item/details/form/media-item.ts`
+    - `app/components/presentational/media-item/details/form/wrapper/media-item.tsx`
+    - `app/components/presentational/media-item/details/form/view/media-item.tsx`
+    - `app/components/presentational/media-item/details/form/data/media-item.ts`
+    - `app/redux/state/media-item.ts`
+    - `tests/media-item-details.smoke.test.tsx`
 - The media-item details flow on web had accumulated most of its Redux mapping in the screen container instead of the form-layer containers used by the older RN app.
   - Correct behavior/structure on web now:
     - the details screen is back to being a thin shell that just handles the dark-screen body class and the browser-leave guard

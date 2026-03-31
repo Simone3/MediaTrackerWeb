@@ -11,7 +11,7 @@ import defaultMediaItemImage from 'app/resources/images/im_media_item_form_defau
 import wikipediaIcon from 'app/resources/images/ic_wikipedia.png';
 import { i18n } from 'app/utilities/i18n';
 import { mediaItemUtils } from 'app/utilities/media-item-utils';
-import { areMediaItemDetailsDifferent, MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
+import { MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
 
 type MediaItemActionButton = {
 	key: string;
@@ -152,8 +152,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	 */
 	public componentDidUpdate(prevProps: Readonly<MediaItemFormViewComponentProps>): void {
 		if(prevProps.isValid !== this.props.isValid ||
-			prevProps.values !== this.props.values ||
-			prevProps.baseMediaItem !== this.props.baseMediaItem) {
+			prevProps.values !== this.props.values) {
 			this.notifyFormState();
 		}
 
@@ -180,7 +179,7 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
 	private notifyFormState(): void {
 		this.props.notifyFormStatus(
 			this.props.isValid,
-			areMediaItemDetailsDifferent(this.props.values, this.props.baseMediaItem)
+			this.props.dirty
 		);
 	}
 
@@ -898,11 +897,6 @@ export class MediaItemFormViewComponent extends Component<MediaItemFormViewCompo
  */
 export type MediaItemFormViewComponentCommonInput = {
 	/**
-	 * The Redux media item used as dirty-state reference
-	 */
-	baseMediaItem: MediaItemInternal;
-
-	/**
 	 * The current media item catalog search results
 	 */
 	catalogSearchResults?: SearchMediaItemCatalogResultInternal[];
@@ -955,7 +949,7 @@ export type MediaItemFormViewComponentCommonOutput = {
 	/**
 	 * Callback to notify the current status of the form
 	 * @param valid true if the form is valid, i.e. no validation error occurred
-	 * @param dirty true if the form is dirty, i.e. one or more fields are different from the Redux media item
+	 * @param dirty true if the form is dirty, i.e. one or more fields are different from the saved Formik initial values
 	 */
 	notifyFormStatus: (valid: boolean, dirty: boolean) => void;
 

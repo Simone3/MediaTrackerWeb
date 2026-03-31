@@ -19,7 +19,6 @@ export const VideogameFormComponent = (props: VideogameFormComponentProps): Reac
 				return (
 					<VideogameFormViewComponent
 						{...formikProps}
-						baseMediaItem={props.baseMediaItem}
 						catalogSearchResults={props.catalogSearchResults}
 						notifyFormStatus={props.notifyFormStatus}
 						persistFormDraft={props.persistFormDraft}

@@ -16,6 +16,8 @@ import { MediaItemDetailsFormValues, mergeCatalogDetailsIntoMediaItem, normalize
  */
 export class CommonMediaItemFormComponent extends Component<CommonMediaItemFormComponentProps, CommonMediaItemFormComponentState> {
 	private formikProps?: FormikProps<MediaItemDetailsFormValues>;
+	private initialDraftHandled = false;
+	private loadedCatalogId?: string;
 
 	public state: CommonMediaItemFormComponentState = {
 		confirmSameNameVisible: false,
@@ -26,16 +28,40 @@ export class CommonMediaItemFormComponent extends Component<CommonMediaItemFormC
 	/**
 	 * @override
 	 */
+	public componentDidMount(): void {
+		this.checkRestoreDraft();
+
+		if(this.props.restoredDraft && this.props.catalogDetails?.catalogLoadId) {
+			this.loadedCatalogId = this.props.catalogDetails.catalogLoadId;
+		}
+		else {
+			this.checkLoadCatalogDetails();
+		}
+
+		this.checkLoadSelectedGroupOnMount();
+		this.checkLoadSelectedOwnPlatformOnMount();
+	}
+
+	/**
+	 * @override
+	 */
 	public componentDidUpdate(prevProps: Readonly<CommonMediaItemFormComponentProps>): void {
+		if(prevProps.initialValues.id !== this.props.initialValues.id ||
+			prevProps.initialValues.mediaType !== this.props.initialValues.mediaType) {
+			this.initialDraftHandled = false;
+			this.loadedCatalogId = undefined;
+		}
+
 		if(shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
 			this.setState({
 				confirmSameNameVisible: true
 			});
 		}
 
-		this.checkLoadCatalogDetails(prevProps.catalogDetails);
-		this.checkLoadSelectedGroup(prevProps.selectedGroup);
-		this.checkLoadSelectedOwnPlatform(prevProps.selectedOwnPlatform);
+		this.checkRestoreDraft();
+		this.checkLoadCatalogDetails();
+		this.checkLoadSelectedGroup();
+		this.checkLoadSelectedOwnPlatform();
 	}
 
 	/**
@@ -157,27 +183,43 @@ export class CommonMediaItemFormComponent extends Component<CommonMediaItemFormC
 	};
 
 	/**
-	 * Checks if catalog details must be merged into the current form
-	 * @param prevCatalogDetails previous catalog details
+	 * Restores the current draft once after the form has mounted
 	 */
-	private checkLoadCatalogDetails(prevCatalogDetails?: CatalogMediaItemInternal): void {
+	private checkRestoreDraft(): void {
+		if(this.initialDraftHandled || !this.formikProps) {
+			return;
+		}
+
+		this.initialDraftHandled = true;
+
+		if(this.props.restoredDraft) {
+			void this.formikProps.setValues({
+				...this.props.restoredDraft
+			});
+		}
+	}
+
+	/**
+	 * Checks if catalog details must be merged into the current form
+	 */
+	private checkLoadCatalogDetails(): void {
 		const {
 			catalogDetails
 		} = this.props;
 
-		if(!this.formikProps || !catalogDetails || prevCatalogDetails?.catalogLoadId === catalogDetails.catalogLoadId) {
+		if(!this.formikProps || !catalogDetails || this.loadedCatalogId === catalogDetails.catalogLoadId) {
 			return;
 		}
 
+		this.loadedCatalogId = catalogDetails.catalogLoadId;
 		void this.formikProps.setValues(mergeCatalogDetailsIntoMediaItem(this.formikProps.values, catalogDetails));
 	}
 
 	/**
-	 * Checks if the selected group has changed in Redux
-	 * @param prevSelectedGroup previous selected group
+	 * Loads the selected group from Redux into the form
 	 */
-	private checkLoadSelectedGroup(prevSelectedGroup?: GroupInternal): void {
-		if(!this.formikProps || prevSelectedGroup?.id === this.props.selectedGroup?.id) {
+	private loadSelectedGroup(): void {
+		if(!this.formikProps) {
 			return;
 		}
 
@@ -186,15 +228,60 @@ export class CommonMediaItemFormComponent extends Component<CommonMediaItemFormC
 	}
 
 	/**
-	 * Checks if the selected own platform has changed in Redux
-	 * @param prevSelectedOwnPlatform previous selected own platform
+	 * Checks if the selected group must be loaded during the initial mount
 	 */
-	private checkLoadSelectedOwnPlatform(prevSelectedOwnPlatform?: OwnPlatformInternal): void {
-		if(!this.formikProps || prevSelectedOwnPlatform?.id === this.props.selectedOwnPlatform?.id) {
+	private checkLoadSelectedGroupOnMount(): void {
+		const currentGroupId = this.props.restoredDraft?.group?.id || this.props.initialValues.group?.id;
+		const currentOrderInGroup = this.props.restoredDraft?.orderInGroup ?? this.props.initialValues.orderInGroup;
+
+		if(this.props.selectedGroup?.id !== currentGroupId ||
+			(!this.props.selectedGroup && currentOrderInGroup !== undefined)) {
+			this.loadSelectedGroup();
+		}
+	}
+
+	/**
+	 * Checks if the selected group has changed in Redux
+	 */
+	private checkLoadSelectedGroup(): void {
+		if(!this.formikProps || this.props.selectedGroup?.id === this.formikProps.values.group?.id) {
+			return;
+		}
+
+		this.loadSelectedGroup();
+	}
+
+	/**
+	 * Loads the selected own platform from Redux into the form
+	 */
+	private loadSelectedOwnPlatform(): void {
+		if(!this.formikProps) {
 			return;
 		}
 
 		void this.formikProps.setFieldValue('ownPlatform', this.props.selectedOwnPlatform);
+	}
+
+	/**
+	 * Checks if the selected own platform must be loaded during the initial mount
+	 */
+	private checkLoadSelectedOwnPlatformOnMount(): void {
+		const currentOwnPlatformId = this.props.restoredDraft?.ownPlatform?.id || this.props.initialValues.ownPlatform?.id;
+
+		if(this.props.selectedOwnPlatform?.id !== currentOwnPlatformId) {
+			this.loadSelectedOwnPlatform();
+		}
+	}
+
+	/**
+	 * Checks if the selected own platform has changed in Redux
+	 */
+	private checkLoadSelectedOwnPlatform(): void {
+		if(!this.formikProps || this.props.selectedOwnPlatform?.id === this.formikProps.values.ownPlatform?.id) {
+			return;
+		}
+
+		this.loadSelectedOwnPlatform();
 	}
 
 	/**
@@ -228,14 +315,14 @@ export type CommonMediaItemFormComponentInputMain = {
 	isLoading: boolean;
 
 	/**
-	 * The current Formik initial values
+	 * The saved media item used as Formik initial values
 	 */
 	initialValues: MediaItemDetailsFormValues;
 
 	/**
-	 * The Redux media item used as dirty-state reference
+	 * The current unsaved form draft restored after mount, if any
 	 */
-	baseMediaItem: MediaItemInternal;
+	restoredDraft?: MediaItemDetailsFormValues;
 
 	/**
 	 * If true, the user must confirm save with duplicated name

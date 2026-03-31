@@ -19,7 +19,6 @@ export const MovieFormComponent = (props: MovieFormComponentProps): ReactElement
 				return (
 					<MovieFormViewComponent
 						{...formikProps}
-						baseMediaItem={props.baseMediaItem}
 						catalogSearchResults={props.catalogSearchResults}
 						notifyFormStatus={props.notifyFormStatus}
 						persistFormDraft={props.persistFormDraft}

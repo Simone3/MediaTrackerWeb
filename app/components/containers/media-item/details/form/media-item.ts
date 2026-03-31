@@ -3,40 +3,45 @@ import { getMediaItemCatalogDetails, resetMediaItemsCatalogSearch, saveMediaItem
 import { requestOwnPlatformSelection } from 'app/redux/actions/own-platform/generators';
 import { CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from 'app/components/presentational/media-item/details/form/wrapper/media-item';
 import { AppError } from 'app/data/models/internal/error';
-import { MediaItemDetailsFormValues, mergeCatalogDetailsIntoMediaItem } from 'app/components/presentational/media-item/details/form/data/media-item';
+import { MediaItemDetailsFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
 import { State } from 'app/redux/state/state';
 import { Dispatch } from 'redux';
 
 /**
- * Common helper to build initial media-item form values from Redux state
+ * Common helper to build the saved media-item values used as Formik initial values
  * @param state the Redux state
  * @returns the initial form values
  */
 const buildInitialMediaItemFormValues = (state: State): MediaItemDetailsFormValues => {
 	const {
-		mediaItem,
-		formDraft,
-		catalogDetails
+		mediaItem
 	} = state.mediaItemDetails;
 
 	if(!mediaItem) {
 		throw AppError.GENERIC.withDetails('App navigated to the media item form with undefined details');
 	}
 
-	const hasDraft = Boolean(formDraft);
-	const sourceMediaItem = (formDraft || mediaItem) as MediaItemDetailsFormValues;
-	let formValues: MediaItemDetailsFormValues = {
-		...sourceMediaItem
+	return {
+		...(mediaItem as MediaItemDetailsFormValues)
 	};
+};
 
-	if(!hasDraft && catalogDetails) {
-		formValues = mergeCatalogDetailsIntoMediaItem(formValues, catalogDetails);
+/**
+ * Common helper to build the optional media-item draft restored after mount
+ * @param state the Redux state
+ * @returns the restored draft, if any
+ */
+const buildRestoredMediaItemFormDraft = (state: State): MediaItemDetailsFormValues | undefined => {
+	const {
+		formDraft
+	} = state.mediaItemDetails;
+
+	if(!formDraft) {
+		return undefined;
 	}
 
 	return {
-		...formValues,
-		group: state.groupGlobal.selectedGroup,
-		ownPlatform: state.ownPlatformGlobal.selectedOwnPlatform
+		...(formDraft as MediaItemDetailsFormValues)
 	};
 };
 
@@ -59,7 +64,7 @@ export const commonMediaItemFormMapStateToProps = (state: State): CommonMediaIte
 	return {
 		isLoading: mediaItemLoading || catalogLoading || groupsLoading || platformsLoading,
 		initialValues: buildInitialMediaItemFormValues(state),
-		baseMediaItem: details.mediaItem,
+		restoredDraft: buildRestoredMediaItemFormDraft(state),
 		sameNameConfirmationRequested: details.saveStatus === 'REQUIRES_CONFIRMATION',
 		catalogSearchResults: details.catalogSearchResults,
 		catalogDetails: details.catalogDetails,

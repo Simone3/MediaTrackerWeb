@@ -19,7 +19,6 @@ export const BookFormComponent = (props: BookFormComponentProps): ReactElement =
 				return (
 					<BookFormViewComponent
 						{...formikProps}
-						baseMediaItem={props.baseMediaItem}
 						catalogSearchResults={props.catalogSearchResults}
 						notifyFormStatus={props.notifyFormStatus}
 						persistFormDraft={props.persistFormDraft}

@@ -474,7 +474,7 @@ describe('MediaItemDetailsScreenContainer', () => {
 
 		firstRender.unmount();
 
-		renderScreen({
+		const restoredRender = renderScreen({
 			mediaItemDetails: {
 				formDraft: savedDraft
 			}
@@ -483,6 +483,10 @@ describe('MediaItemDetailsScreenContainer', () => {
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.name'))).toHaveValue('Dune');
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.duration.BOOK'))).toHaveValue(412);
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.userComment'))).toHaveValue('Keep this draft');
+
+		await waitFor(() => {
+			expect(restoredRender.store.getState().mediaItemDetails.dirty).toBe(true);
+		});
 	});
 
 	test('restores handled tv show seasons after remounting from the seasons flow', async() => {
