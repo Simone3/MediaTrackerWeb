@@ -276,6 +276,7 @@ describe('MediaItemDetailsScreenContainer', () => {
 		});
 
 		expect(screen.getByText(i18n.t('mediaItem.details.placeholders.production'))).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('mediaItem.details.buttons.justWatch') })).toBeInTheDocument();
 		expect(screen.queryByLabelText(i18n.t('mediaItem.details.placeholders.nextEpisodeAirDate'))).not.toBeInTheDocument();
 
 		const user = userEvent.setup();
@@ -346,6 +347,7 @@ describe('MediaItemDetailsScreenContainer', () => {
 			mediaItemDetails: {
 				mediaItem: {
 					...DEFAULT_MOVIE,
+					id: 'movie-id',
 					name: 'Arrival'
 				}
 			}
@@ -353,6 +355,7 @@ describe('MediaItemDetailsScreenContainer', () => {
 
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.duration.MOVIE'))).toBeInTheDocument();
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.creators.MOVIE'))).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('mediaItem.details.buttons.justWatch') })).toBeInTheDocument();
 		expect(screen.queryByLabelText(i18n.t('mediaItem.details.placeholders.creators.BOOK'))).not.toBeInTheDocument();
 	});
 
@@ -361,6 +364,7 @@ describe('MediaItemDetailsScreenContainer', () => {
 			mediaItemDetails: {
 				mediaItem: {
 					...DEFAULT_VIDEOGAME,
+					id: 'videogame-id',
 					name: 'Hades'
 				}
 			}
@@ -369,6 +373,7 @@ describe('MediaItemDetailsScreenContainer', () => {
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.duration.VIDEOGAME'))).toBeInTheDocument();
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.publishers'))).toBeInTheDocument();
 		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.platforms'))).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('mediaItem.details.buttons.howLongToBeat') })).toBeInTheDocument();
 	});
 
 	test('renders completion date controls and picker actions', async() => {

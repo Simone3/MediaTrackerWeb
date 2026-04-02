@@ -187,6 +187,7 @@
   - Correct behavior/structure on web now:
     - `app/components/presentational/media-item/details/form/data/media-item.ts` is back to shared-only validation and normalization for generic media-item fields
     - `app/components/presentational/media-item/details/form/view/media-item.tsx` is back to rendering only shared media-item UI, with the TV-show seasons summary helper moved into the TV-show view
+    - the shared form view now also receives media-specific sidebar actions from the movie, TV-show, and videogame view files instead of branching on `mediaType` itself
     - each specific form data module now owns its own save normalization, and the TV-show data module also owns the watched-season preservation logic for catalog reloads
     - the common Formik wrapper now accepts per-media-type catalog defaults plus optional normalize/catalog-load hooks, so the specific wrappers decide how their extra fields are reset and saved
     - focused unit coverage now guards the shared normalization, book-specific normalization, and TV-show season-preservation behavior
@@ -197,7 +198,9 @@
     - `app/components/presentational/media-item/details/form/data/tv-show.ts`
     - `app/components/presentational/media-item/details/form/data/videogame.ts`
     - `app/components/presentational/media-item/details/form/view/media-item.tsx`
+    - `app/components/presentational/media-item/details/form/view/movie.tsx`
     - `app/components/presentational/media-item/details/form/view/tv-show.tsx`
+    - `app/components/presentational/media-item/details/form/view/videogame.tsx`
     - `app/components/presentational/media-item/details/form/wrapper/media-item.tsx`
     - `app/components/presentational/media-item/details/form/wrapper/book.tsx`
     - `app/components/presentational/media-item/details/form/wrapper/movie.tsx`
@@ -209,6 +212,7 @@
     - `app/components/containers/media-item/details/form/tv-show.ts`
     - `app/components/containers/media-item/details/form/videogame.ts`
     - `tests/media-item-form-data.test.ts`
+    - `tests/media-item-details.smoke.test.tsx`
 - The production REST JSON invoker still carried the old React Native `Accept-Charset` request header into the browser build.
   - Correct behavior on web now:
     - Axios still sends the intended JSON request headers (`Content-Type` and `Accept`)

@@ -1,7 +1,9 @@
 import { ReactElement } from 'react';
-import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { config } from 'app/config/config';
 import { MovieInternal } from 'app/data/models/internal/media-items/movie';
 import { FormikProps } from 'formik';
+import justWatchIcon from 'app/resources/images/ic_justwatch.png';
 import { i18n } from 'app/utilities/i18n';
 
 /**
@@ -10,10 +12,23 @@ import { i18n } from 'app/utilities/i18n';
  * @returns the component
  */
 export const MovieFormViewComponent = (props: MovieFormViewComponentProps): ReactElement => {
+	const extraActionButtons: MediaItemActionButton[] = [
+		{
+			key: 'just-watch',
+			label: i18n.t('mediaItem.details.buttons.justWatch'),
+			icon: justWatchIcon,
+			disabled: !props.values.name,
+			onClick: () => {
+				window.open(config.external.justWatchSearch(encodeURIComponent(props.values.name)), '_blank', 'noopener,noreferrer');
+			}
+		}
+	];
+
 	return (
 		<MediaItemFormViewComponent
 			<MovieInternal>
 			{...props}
+			extraActionButtons={extraActionButtons}
 			primarySpecificFields={[
 				<div className='media-item-details-field' key='durationMinutes'>
 					<label className='media-item-details-label' htmlFor='media-item-duration-minutes'>

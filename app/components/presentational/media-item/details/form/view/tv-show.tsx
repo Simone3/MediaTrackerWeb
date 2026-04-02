@@ -1,7 +1,9 @@
 import { ReactElement } from 'react';
-import { dateToInputValue, inlineTextToInputValue, inputValueToDate, inputValueToInlineText, inputValueToNumber, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { dateToInputValue, inlineTextToInputValue, inputValueToDate, inputValueToInlineText, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { config } from 'app/config/config';
 import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { FormikProps } from 'formik';
+import justWatchIcon from 'app/resources/images/ic_justwatch.png';
 import { i18n } from 'app/utilities/i18n';
 import { mediaItemUtils } from 'app/utilities/media-item-utils';
 
@@ -30,11 +32,23 @@ const getTvShowSeasonsSummaryLabel = (seasons?: TvShowSeasonInternal[]): string 
  */
 export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): ReactElement => {
 	const seasonsSummary = getTvShowSeasonsSummaryLabel(props.values.seasons);
+	const extraActionButtons: MediaItemActionButton[] = [
+		{
+			key: 'just-watch',
+			label: i18n.t('mediaItem.details.buttons.justWatch'),
+			icon: justWatchIcon,
+			disabled: !props.values.name,
+			onClick: () => {
+				window.open(config.external.justWatchSearch(encodeURIComponent(props.values.name)), '_blank', 'noopener,noreferrer');
+			}
+		}
+	];
 
 	return (
 		<MediaItemFormViewComponent
 			<TvShowInternal>
 			{...props}
+			extraActionButtons={extraActionButtons}
 			primarySpecificFields={[
 				<div className='media-item-details-field' key='averageEpisodeRuntimeMinutes'>
 					<label className='media-item-details-label' htmlFor='media-item-episode-runtime'>

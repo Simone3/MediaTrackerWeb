@@ -1,7 +1,9 @@
 import { ReactElement } from 'react';
-import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { config } from 'app/config/config';
 import { VideogameInternal } from 'app/data/models/internal/media-items/videogame';
 import { FormikProps } from 'formik';
+import howLongToBeatIcon from 'app/resources/images/ic_howlongtobeat.png';
 import { i18n } from 'app/utilities/i18n';
 
 /**
@@ -10,10 +12,23 @@ import { i18n } from 'app/utilities/i18n';
  * @returns the component
  */
 export const VideogameFormViewComponent = (props: VideogameFormViewComponentProps): ReactElement => {
+	const extraActionButtons: MediaItemActionButton[] = [
+		{
+			key: 'how-long-to-beat',
+			label: i18n.t('mediaItem.details.buttons.howLongToBeat'),
+			icon: howLongToBeatIcon,
+			disabled: !props.values.name,
+			onClick: () => {
+				window.open(config.external.howLongToBeatSearch(encodeURIComponent(props.values.name)), '_blank', 'noopener,noreferrer');
+			}
+		}
+	];
+
 	return (
 		<MediaItemFormViewComponent
 			<VideogameInternal>
 			{...props}
+			extraActionButtons={extraActionButtons}
 			primarySpecificFields={[
 				<div className='media-item-details-field' key='averageLengthHours'>
 					<label className='media-item-details-label' htmlFor='media-item-average-length'>

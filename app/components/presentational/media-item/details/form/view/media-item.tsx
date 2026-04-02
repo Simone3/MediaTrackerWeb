@@ -4,13 +4,11 @@ import { config } from 'app/config/config';
 import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import downloadIcon from 'app/resources/images/ic_download.svg';
 import googleIcon from 'app/resources/images/ic_google.png';
-import howLongToBeatIcon from 'app/resources/images/ic_howlongtobeat.png';
-import justWatchIcon from 'app/resources/images/ic_justwatch.png';
 import defaultMediaItemImage from 'app/resources/images/im_media_item_form_default.png';
 import wikipediaIcon from 'app/resources/images/ic_wikipedia.png';
 import { i18n } from 'app/utilities/i18n';
 
-type MediaItemActionButton = {
+export type MediaItemActionButton = {
 	key: string;
 	label: string;
 	icon: string;
@@ -676,28 +674,8 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 			}
 		];
 
-		if(mediaItem.mediaType === 'MOVIE' || mediaItem.mediaType === 'TV_SHOW') {
-			buttons.push({
-				key: 'just-watch',
-				label: i18n.t('mediaItem.details.buttons.justWatch'),
-				icon: justWatchIcon,
-				disabled: !mediaItem.name,
-				onClick: () => {
-					this.openExternalLink(config.external.justWatchSearch(encodeURIComponent(mediaItem.name)));
-				}
-			});
-		}
-
-		if(mediaItem.mediaType === 'VIDEOGAME') {
-			buttons.push({
-				key: 'how-long-to-beat',
-				label: i18n.t('mediaItem.details.buttons.howLongToBeat'),
-				icon: howLongToBeatIcon,
-				disabled: !mediaItem.name,
-				onClick: () => {
-					this.openExternalLink(config.external.howLongToBeatSearch(encodeURIComponent(mediaItem.name)));
-				}
-			});
+		if(this.props.extraActionButtons) {
+			buttons.push(...this.props.extraActionButtons);
 		}
 
 		buttons.push({
@@ -901,6 +879,11 @@ export type MediaItemFormViewComponentInput = MediaItemFormViewComponentCommonIn
 	 * Inputs for the specific media item
 	 */
 	primarySpecificFields?: ReactNode[];
+
+	/**
+	 * Media-specific sidebar action buttons
+	 */
+	extraActionButtons?: MediaItemActionButton[];
 };
 
 /**
