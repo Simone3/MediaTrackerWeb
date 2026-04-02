@@ -5,6 +5,7 @@ import { videogameCatalogDetailsMapper, videogameCatalogSearchMapper, videogameF
 import { AddMediaItemResponse, DeleteMediaItemResponse, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
 import { AddVideogameRequest, FilterVideogamesRequest, FilterVideogamesResponse, GetVideogameFromCatalogResponse, SearchVideogameCatalogResponse, SearchVideogamesRequest, SearchVideogamesResponse, UpdateVideogameRequest } from 'app/data/models/api/media-items/videogame';
 import { CatalogVideogameInternal, DEFAULT_VIDEOGAME, SearchVideogameCatalogResultInternal, VideogameFilterInternal, VideogameInternal, VideogameSortByInternal } from 'app/data/models/internal/media-items/videogame';
+import { getVideogameCreatorNames, getVideogameDurationValue } from 'app/utilities/media-item-definitions';
 import { miscUtils } from 'app/utilities/misc-utils';
 
 /**
@@ -192,14 +193,14 @@ export class VideogameDefinitionsControllerImpl implements VideogameDefinitionsC
 	 * @override
 	 */
 	public getCreatorNames(mediaItem: VideogameInternal): string[] | undefined {
-		return mediaItem.developers;
+		return getVideogameCreatorNames(mediaItem);
 	}
 
 	/**
 	 * @override
 	 */
 	public getDurationValue(mediaItem: VideogameInternal): number | undefined {
-		return mediaItem.averageLengthHours;
+		return getVideogameDurationValue(mediaItem);
 	}
 
 	/**

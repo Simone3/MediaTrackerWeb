@@ -335,7 +335,7 @@
     - the media-item filter modal is also Formik-backed again and now restores the old per-media-type Yup schema plus mapper setup for books, movies, TV shows, and videogames
     - the modal itself is thin again like the RN version, while a dedicated `MediaItemFilterFormComponent` now owns the `MediaTypeSwitcherComponent` split into per-media-type Formik wrappers plus a shared web filter-form view
     - the filter modal once again derives its `DEFAULT` sort mapping from the media-type-specific definitions controllers instead of hardcoding that conversion inline
-    - the shared media-item list row is now generic again too: creator names, duration labels, active status icons, the TV-show production marker, and the neutral-active TV-show rule now come from dedicated per-media row-data modules instead of being hardcoded in the shared row component
+    - the shared media-item list row is now generic again too: the exported row component is just a `MediaTypeSwitcherComponent`, the shared row view only renders generic UI from injected row data, and creator/duration extraction is shared with the media definitions layer instead of being redefined inside the row modules
   - Relevant files:
     - `app/components/presentational/group/details/form/data/index.ts`
     - `app/components/presentational/group/details/form/view/index.tsx`
@@ -362,12 +362,18 @@
     - `app/components/presentational/media-item/list/filter-form/wrapper/tv-show.tsx`
     - `app/components/presentational/media-item/list/filter-form/wrapper/videogame.tsx`
     - `app/components/presentational/media-item/list/filter-modal/index.tsx`
+    - `app/components/presentational/media-item/list/row/book.tsx`
     - `app/components/presentational/media-item/list/row/index.tsx`
+    - `app/components/presentational/media-item/list/row/movie.tsx`
+    - `app/components/presentational/media-item/list/row/tv-show.tsx`
+    - `app/components/presentational/media-item/list/row/videogame.tsx`
     - `app/components/presentational/media-item/list/row/data/media-item.ts`
     - `app/components/presentational/media-item/list/row/data/book.ts`
     - `app/components/presentational/media-item/list/row/data/movie.ts`
     - `app/components/presentational/media-item/list/row/data/tv-show.ts`
     - `app/components/presentational/media-item/list/row/data/videogame.ts`
+    - `app/components/presentational/media-item/list/row/view/media-item.tsx`
+    - `app/utilities/media-item-definitions.ts`
     - `tests/group-details.smoke.test.tsx`
     - `tests/own-platform-details.smoke.test.tsx`
     - `tests/tv-show-season-details.smoke.test.tsx`

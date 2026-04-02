@@ -5,6 +5,7 @@ import { movieCatalogDetailsMapper, movieCatalogSearchMapper, movieFilterMapper,
 import { AddMediaItemResponse, DeleteMediaItemResponse, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
 import { AddMovieRequest, FilterMoviesRequest, FilterMoviesResponse, GetMovieFromCatalogResponse, SearchMovieCatalogResponse, SearchMoviesRequest, SearchMoviesResponse, UpdateMovieRequest } from 'app/data/models/api/media-items/movie';
 import { CatalogMovieInternal, DEFAULT_MOVIE, MovieFilterInternal, MovieInternal, MovieSortByInternal, SearchMovieCatalogResultInternal } from 'app/data/models/internal/media-items/movie';
+import { getMovieCreatorNames, getMovieDurationValue } from 'app/utilities/media-item-definitions';
 import { miscUtils } from 'app/utilities/misc-utils';
 
 /**
@@ -192,14 +193,14 @@ export class MovieDefinitionsControllerImpl implements MovieDefinitionsControlle
 	 * @override
 	 */
 	public getCreatorNames(mediaItem: MovieInternal): string[] | undefined {
-		return mediaItem.directors;
+		return getMovieCreatorNames(mediaItem);
 	}
 
 	/**
 	 * @override
 	 */
 	public getDurationValue(mediaItem: MovieInternal): number | undefined {
-		return mediaItem.durationMinutes;
+		return getMovieDurationValue(mediaItem);
 	}
 
 	/**

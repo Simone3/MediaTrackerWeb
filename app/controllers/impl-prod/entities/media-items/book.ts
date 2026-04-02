@@ -5,6 +5,7 @@ import { bookCatalogDetailsMapper, bookCatalogSearchMapper, bookFilterMapper, bo
 import { AddBookRequest, FilterBooksRequest, FilterBooksResponse, GetBookFromCatalogResponse, SearchBookCatalogResponse, SearchBooksRequest, SearchBooksResponse, UpdateBookRequest } from 'app/data/models/api/media-items/book';
 import { AddMediaItemResponse, DeleteMediaItemResponse, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
 import { BookFilterInternal, BookInternal, BookSortByInternal, CatalogBookInternal, DEFAULT_BOOK, SearchBookCatalogResultInternal } from 'app/data/models/internal/media-items/book';
+import { getBookCreatorNames, getBookDurationValue } from 'app/utilities/media-item-definitions';
 import { miscUtils } from 'app/utilities/misc-utils';
 
 /**
@@ -192,14 +193,14 @@ export class BookDefinitionsControllerImpl implements BookDefinitionsController 
 	 * @override
 	 */
 	public getCreatorNames(mediaItem: BookInternal): string[] | undefined {
-		return mediaItem.authors;
+		return getBookCreatorNames(mediaItem);
 	}
 
 	/**
 	 * @override
 	 */
 	public getDurationValue(mediaItem: BookInternal): number | undefined {
-		return mediaItem.pagesNumber;
+		return getBookDurationValue(mediaItem);
 	}
 
 	/**

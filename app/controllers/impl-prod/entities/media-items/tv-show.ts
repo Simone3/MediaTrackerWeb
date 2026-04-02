@@ -5,6 +5,7 @@ import { tvShowCatalogDetailsMapper, tvShowCatalogSearchMapper, tvShowFilterMapp
 import { AddMediaItemResponse, DeleteMediaItemResponse, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
 import { AddTvShowRequest, FilterTvShowsRequest, FilterTvShowsResponse, GetTvShowFromCatalogResponse, SearchTvShowCatalogResponse, SearchTvShowsRequest, SearchTvShowsResponse, UpdateTvShowRequest } from 'app/data/models/api/media-items/tv-show';
 import { CatalogTvShowInternal, DEFAULT_TV_SHOW, SearchTvShowCatalogResultInternal, TvShowFilterInternal, TvShowInternal, TvShowSortByInternal } from 'app/data/models/internal/media-items/tv-show';
+import { getTvShowCreatorNames, getTvShowDurationValue } from 'app/utilities/media-item-definitions';
 import { miscUtils } from 'app/utilities/misc-utils';
 
 /**
@@ -192,14 +193,14 @@ export class TvShowDefinitionsControllerImpl implements TvShowDefinitionsControl
 	 * @override
 	 */
 	public getCreatorNames(mediaItem: TvShowInternal): string[] | undefined {
-		return mediaItem.creators;
+		return getTvShowCreatorNames(mediaItem);
 	}
 
 	/**
 	 * @override
 	 */
 	public getDurationValue(mediaItem: TvShowInternal): number | undefined {
-		return mediaItem.averageEpisodeRuntimeMinutes;
+		return getTvShowDurationValue(mediaItem);
 	}
 
 	/**

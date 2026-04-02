@@ -1,19 +1,6 @@
-import { bookMediaItemRowDataDefinition } from 'app/components/presentational/media-item/list/row/data/book';
-import { movieMediaItemRowDataDefinition } from 'app/components/presentational/media-item/list/row/data/movie';
-import { tvShowMediaItemRowDataDefinition } from 'app/components/presentational/media-item/list/row/data/tv-show';
-import { videogameMediaItemRowDataDefinition } from 'app/components/presentational/media-item/list/row/data/videogame';
-import { MediaTypeInternal } from 'app/data/models/internal/category';
 import { AppError } from 'app/data/models/internal/error';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { i18n } from 'app/utilities/i18n';
-
-export type MediaItemRowDataDefinition<TMediaItemInternal extends MediaItemInternal = MediaItemInternal> = {
-	getCreatorNames: (mediaItem: TMediaItemInternal) => string[] | undefined;
-	getDurationLabel: (mediaItem: TMediaItemInternal) => string | undefined;
-	getSecondaryMetadataMarkers: (mediaItem: TMediaItemInternal) => string[];
-	activeStatusIcon: string;
-	hasRemainingActiveProgress: (mediaItem: TMediaItemInternal) => boolean;
-};
 
 export type MediaItemRowData = {
 	creatorNames?: string[];
@@ -22,30 +9,6 @@ export type MediaItemRowData = {
 	activeStatusIcon: string;
 	hasRemainingActiveProgress: boolean;
 	statusLabel: string;
-};
-
-/**
- * Helper to get the media-type-specific row data definition
- * @param mediaType the media type
- * @returns the definition
- */
-const getMediaItemRowDataDefinition = (mediaType: MediaTypeInternal): MediaItemRowDataDefinition => {
-	switch(mediaType) {
-		case 'BOOK':
-			return bookMediaItemRowDataDefinition;
-
-		case 'MOVIE':
-			return movieMediaItemRowDataDefinition;
-
-		case 'TV_SHOW':
-			return tvShowMediaItemRowDataDefinition;
-
-		case 'VIDEOGAME':
-			return videogameMediaItemRowDataDefinition;
-
-		default:
-			throw AppError.GENERIC.withDetails(`Media type not recognized for media item row data`);
-	}
 };
 
 /**
@@ -76,19 +39,19 @@ const getStatusLabel = (mediaItem: MediaItemInternal): string => {
 };
 
 /**
- * Helper to gather the full row presentation data for a media item
+ * Helper to build generic row data from media-type-specific inputs
  * @param mediaItem the media item
- * @returns the row data
+ * @param rowData the media-type-specific row data
+ * @returns the completed row data
  */
-export const getMediaItemRowData = (mediaItem: MediaItemInternal): MediaItemRowData => {
-	const definition = getMediaItemRowDataDefinition(mediaItem.mediaType);
-
+export const buildMediaItemRowData = (mediaItem: MediaItemInternal, rowData: MediaItemRowDataInput): MediaItemRowData => {
 	return {
-		creatorNames: definition.getCreatorNames(mediaItem),
-		durationLabel: definition.getDurationLabel(mediaItem),
-		secondaryMetadataMarkers: definition.getSecondaryMetadataMarkers(mediaItem),
-		activeStatusIcon: definition.activeStatusIcon,
-		hasRemainingActiveProgress: definition.hasRemainingActiveProgress(mediaItem),
+		...rowData,
+		secondaryMetadataMarkers: rowData.secondaryMetadataMarkers ? rowData.secondaryMetadataMarkers : [],
 		statusLabel: getStatusLabel(mediaItem)
 	};
+};
+
+type MediaItemRowDataInput = Omit<MediaItemRowData, 'secondaryMetadataMarkers' | 'statusLabel'> & {
+	secondaryMetadataMarkers?: string[];
 };
