@@ -20,14 +20,8 @@ jest.mock('app/controllers/core/entities/media-items/movie', () => {
 	return {
 		movieDefinitionsController: {
 			getDefaultSortBy: () => [{
-				field: 'ACTIVE',
+				field: 'NAME',
 				ascending: false
-			}, {
-				field: 'IMPORTANCE',
-				ascending: false
-			}, {
-				field: 'RELEASE_DATE',
-				ascending: true
 			}]
 		}
 	};
@@ -110,6 +104,42 @@ describe('MediaItemFilterModalComponent', () => {
 			{
 				field: 'NAME',
 				ascending: true
+			}
+		]);
+	});
+
+	test('uses the media-type switcher path for movie default sorting', async() => {
+		const category: CategoryInternal = {
+			id: 'category-id',
+			name: 'Movies',
+			mediaType: 'MOVIE',
+			color: '#ef6c00'
+		};
+		const submitFilter = jest.fn();
+
+		render(
+			<MediaItemFilterModalComponent
+				visible={true}
+				category={category}
+				initialFilter={{}}
+				initialSortBy={[]}
+				submitFilter={submitFilter}
+				close={jest.fn()}
+			/>
+		);
+
+		const user = userEvent.setup();
+		await user.click(screen.getByRole('button', { name: i18n.t('common.alert.default.applyButton') }));
+
+		expect(submitFilter).toHaveBeenCalledWith(expect.objectContaining({
+			importanceLevels: undefined,
+			groups: undefined,
+			ownPlatforms: undefined,
+			status: undefined
+		}), [
+			{
+				field: 'NAME',
+				ascending: false
 			}
 		]);
 	});

@@ -333,6 +333,7 @@
     - group details, own-platform details, and TV-show-season details are Formik-backed again, with Yup schemas matching the old RN field models instead of hand-rolled component-state validation
     - those screens keep the current web dark-shell layout, save buttons, loading states, and same-name confirmations, but now rely on Formik for `dirty` / `isValid` reporting just like the restored category form
     - the media-item filter modal is also Formik-backed again and now restores the old per-media-type Yup schema plus mapper setup for books, movies, TV shows, and videogames
+    - the modal itself is thin again like the RN version, while a dedicated `MediaItemFilterFormComponent` now owns the `MediaTypeSwitcherComponent` split into per-media-type Formik wrappers plus a shared web filter-form view
     - the filter modal once again derives its `DEFAULT` sort mapping from the media-type-specific definitions controllers instead of hardcoding that conversion inline
   - Relevant files:
     - `app/components/presentational/group/details/form/data/index.ts`
@@ -349,6 +350,16 @@
     - `app/components/presentational/media-item/list/filter-form/data/movie.ts`
     - `app/components/presentational/media-item/list/filter-form/data/tv-show.ts`
     - `app/components/presentational/media-item/list/filter-form/data/videogame.ts`
+    - `app/components/presentational/media-item/list/filter-form/view/media-item.tsx`
+    - `app/components/presentational/media-item/list/filter-form/view/book.tsx`
+    - `app/components/presentational/media-item/list/filter-form/view/movie.tsx`
+    - `app/components/presentational/media-item/list/filter-form/view/tv-show.tsx`
+    - `app/components/presentational/media-item/list/filter-form/view/videogame.tsx`
+    - `app/components/presentational/media-item/list/filter-form/wrapper/index.tsx`
+    - `app/components/presentational/media-item/list/filter-form/wrapper/book.tsx`
+    - `app/components/presentational/media-item/list/filter-form/wrapper/movie.tsx`
+    - `app/components/presentational/media-item/list/filter-form/wrapper/tv-show.tsx`
+    - `app/components/presentational/media-item/list/filter-form/wrapper/videogame.tsx`
     - `app/components/presentational/media-item/list/filter-modal/index.tsx`
     - `tests/group-details.smoke.test.tsx`
     - `tests/own-platform-details.smoke.test.tsx`
