@@ -1,34 +1,19 @@
 import { config } from 'app/config/config';
 import { buildOwnPlatformMaskStyle } from 'app/components/presentational/own-platform/common/icon-registry';
-import { MediaTypeInternal } from 'app/data/models/internal/category';
+import { getMediaItemRowData, MediaItemRowData } from 'app/components/presentational/media-item/list/row/data/media-item';
 import { AppError } from 'app/data/models/internal/error';
-import { BookInternal } from 'app/data/models/internal/media-items/book';
 import { MediaItemImportanceInternal, MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
-import { MovieInternal } from 'app/data/models/internal/media-items/movie';
-import { TvShowInternal } from 'app/data/models/internal/media-items/tv-show';
-import { VideogameInternal } from 'app/data/models/internal/media-items/videogame';
 import actionMoreIcon from 'app/resources/images/ic_action_more.svg';
 import importanceOneIcon from 'app/resources/images/ic_importance_1.svg';
 import importanceTwoIcon from 'app/resources/images/ic_importance_2.svg';
 import importanceThreeIcon from 'app/resources/images/ic_importance_3.svg';
 import importanceFourIcon from 'app/resources/images/ic_importance_4.svg';
 import statusCompleteIcon from 'app/resources/images/ic_status_complete.svg';
-import statusPlayingIcon from 'app/resources/images/ic_status_playing.svg';
-import statusReadingIcon from 'app/resources/images/ic_status_reading.svg';
 import statusRedoingIcon from 'app/resources/images/ic_status_redoing.svg';
 import statusUpcomingIcon from 'app/resources/images/ic_status_upcoming.svg';
-import statusWatchingIcon from 'app/resources/images/ic_status_watching.svg';
-import { i18n } from 'app/utilities/i18n';
-import { mediaItemUtils } from 'app/utilities/media-item-utils';
 import { format } from 'date-fns';
 import React, { CSSProperties, ReactElement } from 'react';
-
-const activeStatusIcons: Record<MediaTypeInternal, string> = {
-	BOOK: statusReadingIcon,
-	MOVIE: statusWatchingIcon,
-	TV_SHOW: statusWatchingIcon,
-	VIDEOGAME: statusPlayingIcon
-};
+import { i18n } from 'app/utilities/i18n';
 
 const importanceIcons: Record<MediaItemImportanceInternal, string> = {
 	400: importanceOneIcon,
@@ -48,54 +33,6 @@ const getMaskedIconStyle = (icon: string, color: string): MaskedIconStyle => {
 		'--media-item-row-icon-url': `url(${icon})`,
 		'--media-item-row-icon-color': color
 	};
-};
-
-/**
- * Helper to get creator names without importing the controller layer
- * @param mediaItem the media item
- * @returns the creator names, if any
- */
-const getCreatorNames = (mediaItem: MediaItemInternal): string[] | undefined => {
-	switch(mediaItem.mediaType) {
-		case 'BOOK':
-			return (mediaItem as BookInternal).authors;
-
-		case 'MOVIE':
-			return (mediaItem as MovieInternal).directors;
-
-		case 'TV_SHOW':
-			return (mediaItem as TvShowInternal).creators;
-
-		case 'VIDEOGAME':
-			return (mediaItem as VideogameInternal).developers;
-
-		default:
-			throw AppError.GENERIC.withDetails(`Media type not recognized for media item creators`);
-	}
-};
-
-/**
- * Helper to get the duration value without importing the controller layer
- * @param mediaItem the media item
- * @returns the duration value, if any
- */
-const getDurationValue = (mediaItem: MediaItemInternal): number | undefined => {
-	switch(mediaItem.mediaType) {
-		case 'BOOK':
-			return (mediaItem as BookInternal).pagesNumber;
-
-		case 'MOVIE':
-			return (mediaItem as MovieInternal).durationMinutes;
-
-		case 'TV_SHOW':
-			return (mediaItem as TvShowInternal).averageEpisodeRuntimeMinutes;
-
-		case 'VIDEOGAME':
-			return (mediaItem as VideogameInternal).averageLengthHours;
-
-		default:
-			throw AppError.GENERIC.withDetails(`Media type not recognized for media item duration`);
-	}
 };
 
 /**
@@ -144,27 +81,24 @@ const getFourthRow = (mediaItem: MediaItemInternal): string | undefined => {
 /**
  * Helper to build the second text row
  * @param mediaItem the media item
+ * @param rowData the media-type-specific row data
  * @returns the row text, if any
  */
-const getSecondRow = (mediaItem: MediaItemInternal): string | undefined => {
-	const duration = getDurationValue(mediaItem);
-	const creators = getCreatorNames(mediaItem);
+const getSecondRow = (mediaItem: MediaItemInternal, rowData: MediaItemRowData): string | undefined => {
 	const values: string[] = [];
 
 	if(mediaItem.releaseDate) {
 		values.push(String(mediaItem.releaseDate.getFullYear()));
 	}
 
-	if(duration) {
-		values.push(i18n.t(`mediaItem.list.duration.${mediaItem.mediaType}`, { duration: duration }));
+	if(rowData.durationLabel) {
+		values.push(rowData.durationLabel);
 	}
 
-	if(mediaItem.mediaType === 'TV_SHOW' && (mediaItem as TvShowInternal).inProduction) {
-		values.push(i18n.t('mediaItem.list.production'));
-	}
+	values.push(...rowData.secondaryMetadataMarkers);
 
-	if(creators && creators.length > 0) {
-		values.push(creators.join(', '));
+	if(rowData.creatorNames && rowData.creatorNames.length > 0) {
+		values.push(rowData.creatorNames.join(', '));
 	}
 
 	return values.length > 0 ? values.join(' • ') : undefined;
@@ -173,11 +107,12 @@ const getSecondRow = (mediaItem: MediaItemInternal): string | undefined => {
 /**
  * Helper to render the row detail lines
  * @param mediaItem the media item
+ * @param rowData the media-type-specific row data
  * @returns the detail rows
  */
-const getDetailRows = (mediaItem: MediaItemInternal): MediaItemRowDetail[] => {
+const getDetailRows = (mediaItem: MediaItemInternal, rowData: MediaItemRowData): MediaItemRowDetail[] => {
 	const detailRows: MediaItemRowDetail[] = [];
-	const secondRow = getSecondRow(mediaItem);
+	const secondRow = getSecondRow(mediaItem, rowData);
 	const thirdRow = getThirdRow(mediaItem);
 	const fourthRow = getFourthRow(mediaItem);
 
@@ -208,12 +143,13 @@ const getDetailRows = (mediaItem: MediaItemInternal): MediaItemRowDetail[] => {
 /**
  * Helper to choose the status icon
  * @param mediaItem the media item
+ * @param rowData the media-type-specific row data
  * @returns the icon asset path
  */
-const getStatusIcon = (mediaItem: MediaItemInternal): string => {
+const getStatusIcon = (mediaItem: MediaItemInternal, rowData: MediaItemRowData): string => {
 	switch(mediaItem.status) {
 		case 'ACTIVE':
-			return activeStatusIcons[mediaItem.mediaType];
+			return rowData.activeStatusIcon;
 
 		case 'UPCOMING':
 			return statusUpcomingIcon;
@@ -235,27 +171,20 @@ const getStatusIcon = (mediaItem: MediaItemInternal): string => {
 /**
  * Helper to define the status circle colors
  * @param mediaItem the media item
+ * @param rowData the media-type-specific row data
  * @returns the status colors
  */
-const getStatusColors = (mediaItem: MediaItemInternal): IconColors => {
+const getStatusColors = (mediaItem: MediaItemInternal, rowData: MediaItemRowData): IconColors => {
 	switch(mediaItem.status) {
-		case 'ACTIVE':
-			if(mediaItem.mediaType === 'TV_SHOW') {
-				const tvShow = mediaItem as TvShowInternal;
-				if(mediaItemUtils.getTvShowCounters(tvShow.seasons).episodesToWatchNumber <= 0) {
-					return {
-						icon: config.ui.colors.white,
-						background: config.ui.colors.lightGrey,
-						border: config.ui.colors.lightGrey
-					};
-				}
-			}
+		case 'ACTIVE': {
+			const activeColor = rowData.hasRemainingActiveProgress ? config.ui.colors.green : config.ui.colors.lightGrey;
 
 			return {
 				icon: config.ui.colors.white,
-				background: config.ui.colors.green,
-				border: config.ui.colors.green
+				background: activeColor,
+				border: activeColor
 			};
+		}
 
 		case 'UPCOMING':
 			return {
@@ -291,33 +220,6 @@ const getStatusColors = (mediaItem: MediaItemInternal): IconColors => {
 };
 
 /**
- * Helper to define an accessible label for the status icon
- * @param mediaItem the media item
- * @returns the label
- */
-const getStatusLabel = (mediaItem: MediaItemInternal): string => {
-	switch(mediaItem.status) {
-		case 'ACTIVE':
-			return i18n.t(`mediaItem.list.markActive.${mediaItem.mediaType}`);
-
-		case 'COMPLETE':
-			return i18n.t(`mediaItem.list.markComplete.${mediaItem.mediaType}`);
-
-		case 'REDO':
-			return i18n.t(`mediaItem.list.markRedo.${mediaItem.mediaType}`);
-
-		case 'UPCOMING':
-			return i18n.t('mediaItem.list.status.upcoming');
-
-		case 'NEW':
-			return i18n.t(`mediaItem.common.importance.${mediaItem.importance}`);
-
-		default:
-			throw AppError.GENERIC.withDetails(`Status not recognized for media item status label`);
-	}
-};
-
-/**
  * Helper to define the left-side accent color
  * @param mediaItem the media item
  * @param statusColors the already computed status colors
@@ -333,11 +235,12 @@ const getRowAccentColor = (mediaItem: MediaItemInternal, statusColors: IconColor
  * @returns the component
  */
 export const MediaItemRowComponent = (props: MediaItemRowComponentInput & MediaItemRowComponentOutput): ReactElement => {
-	const detailRows = getDetailRows(props.mediaItem);
+	const rowData = getMediaItemRowData(props.mediaItem);
+	const detailRows = getDetailRows(props.mediaItem, rowData);
 	const ownPlatform = props.mediaItem.ownPlatform;
 	const ownPlatformColor = ownPlatform ? ownPlatform.color : config.ui.colors.grey;
-	const statusColors = getStatusColors(props.mediaItem);
-	const statusIcon = getStatusIcon(props.mediaItem);
+	const statusColors = getStatusColors(props.mediaItem, rowData);
+	const statusIcon = getStatusIcon(props.mediaItem, rowData);
 	const cardClassName = props.highlighted ? 'media-item-row media-item-row-highlighted' : 'media-item-row';
 
 	return (
@@ -386,7 +289,7 @@ export const MediaItemRowComponent = (props: MediaItemRowComponentInput & MediaI
 				<span
 					className='media-item-row-status'
 					role='img'
-					aria-label={getStatusLabel(props.mediaItem)}
+					aria-label={rowData.statusLabel}
 					style={{
 						backgroundColor: statusColors.background,
 						borderColor: statusColors.border

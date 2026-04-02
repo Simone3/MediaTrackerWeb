@@ -209,4 +209,3 @@ export class TvShowDefinitionsControllerImpl implements TvShowDefinitionsControl
 		return DEFAULT_TV_SHOW;
 	}
 }
-

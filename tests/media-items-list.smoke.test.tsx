@@ -362,6 +362,60 @@ describe('MediaItemsListComponent', () => {
 		expect(screen.getByLabelText(i18n.t('mediaItem.list.markActive.TV_SHOW'))).toBeInTheDocument();
 	});
 
+	test('keeps active tv shows without episodes left on the neutral status color', () => {
+		const category: CategoryInternal = {
+			id: 'category-id',
+			name: 'My Shows',
+			mediaType: 'TV_SHOW',
+			color: '#3f51b5'
+		};
+		const mediaItem: TvShowInternal = {
+			id: 'media-id',
+			name: 'Dark',
+			mediaType: 'TV_SHOW',
+			status: 'ACTIVE',
+			importance: '300',
+			seasons: [ {
+				number: 1,
+				episodesNumber: 10,
+				watchedEpisodesNumber: 10
+			} ]
+		};
+
+		render(
+			<MediaItemsListComponent
+				category={category}
+				mediaItems={[ mediaItem ]}
+				highlightedMediaItem={undefined}
+				currentViewGroup={undefined}
+				isSearchMode={false}
+				currentSearchTerm={undefined}
+				showEmptyState={false}
+				showSkeletons={false}
+				openSearch={jest.fn()}
+				submitSearch={jest.fn()}
+				closeSearch={jest.fn()}
+				openFilters={jest.fn()}
+				selectMediaItem={jest.fn()}
+				highlightMediaItem={jest.fn()}
+				editMediaItem={jest.fn()}
+				deleteMediaItem={jest.fn()}
+				markMediaItemAsActive={jest.fn()}
+				markMediaItemAsComplete={jest.fn()}
+				markMediaItemAsRedo={jest.fn()}
+				viewMediaItemGroup={jest.fn()}
+				closeMediaItemMenu={jest.fn()}
+				exitViewGroupMode={jest.fn()}
+			/>
+		);
+
+		expect(screen.getByText('Dark').closest('li')?.style.getPropertyValue('--media-item-row-accent')).toBe(config.ui.colors.lightGrey);
+		expect(screen.getByLabelText(i18n.t('mediaItem.list.markActive.TV_SHOW'))).toHaveStyle({
+			backgroundColor: config.ui.colors.lightGrey,
+			borderColor: config.ui.colors.lightGrey
+		});
+	});
+
 	test('keeps the new-item chrome neutral while leaving the left accent transparent', () => {
 		const category: CategoryInternal = {
 			id: 'category-id',

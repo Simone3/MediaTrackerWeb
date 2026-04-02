@@ -209,4 +209,3 @@ export class MovieDefinitionsControllerImpl implements MovieDefinitionsControlle
 		return DEFAULT_MOVIE;
 	}
 }
-
