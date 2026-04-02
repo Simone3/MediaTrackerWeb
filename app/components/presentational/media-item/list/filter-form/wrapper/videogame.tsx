@@ -3,7 +3,7 @@ import { Formik, FormikProps } from 'formik';
 import { VideogameSortByInternal } from 'app/data/models/internal/media-items/videogame';
 import { VideogameFilterFormValues, videogameFilterFormMapper, videogameFilterFormValidationSchema } from 'app/components/presentational/media-item/list/filter-form/data/videogame';
 import { VideogameFilterFormViewComponent } from 'app/components/presentational/media-item/list/filter-form/view/videogame';
-import { MediaItemFilterFormComponentInput, MediaItemFilterFormComponentOutput } from '.';
+import { MediaItemFilterFormComponentInput, MediaItemFilterFormComponentOutput } from './media-item';
 
 /**
  * Presentational component that handles the Formik wrapper component for the videogame filter form

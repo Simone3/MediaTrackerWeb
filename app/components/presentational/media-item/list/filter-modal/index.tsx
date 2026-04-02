@@ -1,7 +1,7 @@
 import { Component, ReactNode } from 'react';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { MediaItemFilterInternal, MediaItemSortByInternal } from 'app/data/models/internal/media-items/media-item';
-import { MediaItemFilterFormComponent } from 'app/components/presentational/media-item/list/filter-form/wrapper';
+import { MediaItemFilterFormComponent } from 'app/components/presentational/media-item/list/filter-form/wrapper/media-item';
 import { i18n } from 'app/utilities/i18n';
 
 /**
