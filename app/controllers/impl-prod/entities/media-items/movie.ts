@@ -1,11 +1,10 @@
 import { config } from 'app/config/config';
 import { backEndInvoker } from 'app/controllers/core/common/back-end-invoker';
-import { MovieCatalogController, MovieController, MovieDefinitionsController } from 'app/controllers/core/entities/media-items/movie';
+import { MovieCatalogController, MovieController } from 'app/controllers/core/entities/media-items/movie';
 import { movieCatalogDetailsMapper, movieCatalogSearchMapper, movieFilterMapper, movieMapper, movieSortMapper } from 'app/data/mappers/media-items/movie';
 import { AddMediaItemResponse, DeleteMediaItemResponse, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
 import { AddMovieRequest, FilterMoviesRequest, FilterMoviesResponse, GetMovieFromCatalogResponse, SearchMovieCatalogResponse, SearchMoviesRequest, SearchMoviesResponse, UpdateMovieRequest } from 'app/data/models/api/media-items/movie';
-import { CatalogMovieInternal, DEFAULT_MOVIE, MovieFilterInternal, MovieInternal, MovieSortByInternal, SearchMovieCatalogResultInternal } from 'app/data/models/internal/media-items/movie';
-import { getMovieCreatorNames, getMovieDurationValue } from 'app/utilities/media-item-definitions';
+import { CatalogMovieInternal, MovieFilterInternal, MovieInternal, MovieSortByInternal, SearchMovieCatalogResultInternal } from 'app/data/models/internal/media-items/movie';
 import { miscUtils } from 'app/utilities/misc-utils';
 
 /**
@@ -145,68 +144,5 @@ export class MovieCatalogBackEndController implements MovieCatalogController {
 		});
 		
 		return movieCatalogDetailsMapper.toInternal(response.catalogMovie);
-	}
-}
-
-/**
- * Production implementation of the MovieDefinitionsController
- * @see MovieDefinitionsController
- */
-export class MovieDefinitionsControllerImpl implements MovieDefinitionsController {
-
-	/**
-	 * @override
-	 */
-	public getDefaultFilter(): MovieFilterInternal {
-		return {
-			status: 'CURRENT'
-		};
-	}
-
-	/**
-	 * @override
-	 */
-	public getDefaultSortBy(): MovieSortByInternal[] {
-		return [{
-			field: 'ACTIVE',
-			ascending: false
-		}, {
-			field: 'IMPORTANCE',
-			ascending: false
-		}, {
-			field: 'RELEASE_DATE',
-			ascending: true
-		}];
-	}
-
-	/**
-	 * @override
-	 */
-	public getViewGroupSortBy(): MovieSortByInternal[] {
-		return [{
-			field: 'GROUP',
-			ascending: true
-		}];
-	}
-
-	/**
-	 * @override
-	 */
-	public getCreatorNames(mediaItem: MovieInternal): string[] | undefined {
-		return getMovieCreatorNames(mediaItem);
-	}
-
-	/**
-	 * @override
-	 */
-	public getDurationValue(mediaItem: MovieInternal): number | undefined {
-		return getMovieDurationValue(mediaItem);
-	}
-
-	/**
-	 * @override
-	 */
-	public getDefaultMediaItem(): MovieInternal {
-		return DEFAULT_MOVIE;
 	}
 }

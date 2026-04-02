@@ -1,11 +1,10 @@
 import { config } from 'app/config/config';
 import { backEndInvoker } from 'app/controllers/core/common/back-end-invoker';
-import { BookCatalogController, BookController, BookDefinitionsController } from 'app/controllers/core/entities/media-items/book';
+import { BookCatalogController, BookController } from 'app/controllers/core/entities/media-items/book';
 import { bookCatalogDetailsMapper, bookCatalogSearchMapper, bookFilterMapper, bookMapper, bookSortMapper } from 'app/data/mappers/media-items/book';
 import { AddBookRequest, FilterBooksRequest, FilterBooksResponse, GetBookFromCatalogResponse, SearchBookCatalogResponse, SearchBooksRequest, SearchBooksResponse, UpdateBookRequest } from 'app/data/models/api/media-items/book';
 import { AddMediaItemResponse, DeleteMediaItemResponse, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
-import { BookFilterInternal, BookInternal, BookSortByInternal, CatalogBookInternal, DEFAULT_BOOK, SearchBookCatalogResultInternal } from 'app/data/models/internal/media-items/book';
-import { getBookCreatorNames, getBookDurationValue } from 'app/utilities/media-item-definitions';
+import { BookFilterInternal, BookInternal, BookSortByInternal, CatalogBookInternal, SearchBookCatalogResultInternal } from 'app/data/models/internal/media-items/book';
 import { miscUtils } from 'app/utilities/misc-utils';
 
 /**
@@ -145,68 +144,5 @@ export class BookCatalogBackEndController implements BookCatalogController {
 		});
 		
 		return bookCatalogDetailsMapper.toInternal(response.catalogBook);
-	}
-}
-
-/**
- * Production implementation of the BookDefinitionsController
- * @see BookDefinitionsController
- */
-export class BookDefinitionsControllerImpl implements BookDefinitionsController {
-
-	/**
-	 * @override
-	 */
-	public getDefaultFilter(): BookFilterInternal {
-		return {
-			status: 'CURRENT'
-		};
-	}
-
-	/**
-	 * @override
-	 */
-	public getDefaultSortBy(): BookSortByInternal[] {
-		return [{
-			field: 'ACTIVE',
-			ascending: false
-		}, {
-			field: 'IMPORTANCE',
-			ascending: false
-		}, {
-			field: 'RELEASE_DATE',
-			ascending: true
-		}];
-	}
-
-	/**
-	 * @override
-	 */
-	public getViewGroupSortBy(): BookSortByInternal[] {
-		return [{
-			field: 'GROUP',
-			ascending: true
-		}];
-	}
-
-	/**
-	 * @override
-	 */
-	public getCreatorNames(mediaItem: BookInternal): string[] | undefined {
-		return getBookCreatorNames(mediaItem);
-	}
-
-	/**
-	 * @override
-	 */
-	public getDurationValue(mediaItem: BookInternal): number | undefined {
-		return getBookDurationValue(mediaItem);
-	}
-
-	/**
-	 * @override
-	 */
-	public getDefaultMediaItem(): BookInternal {
-		return DEFAULT_BOOK;
 	}
 }

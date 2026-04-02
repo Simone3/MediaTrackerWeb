@@ -1,11 +1,10 @@
 import { config } from 'app/config/config';
 import { backEndInvoker } from 'app/controllers/core/common/back-end-invoker';
-import { VideogameCatalogController, VideogameController, VideogameDefinitionsController } from 'app/controllers/core/entities/media-items/videogame';
+import { VideogameCatalogController, VideogameController } from 'app/controllers/core/entities/media-items/videogame';
 import { videogameCatalogDetailsMapper, videogameCatalogSearchMapper, videogameFilterMapper, videogameMapper, videogameSortMapper } from 'app/data/mappers/media-items/videogame';
 import { AddMediaItemResponse, DeleteMediaItemResponse, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
 import { AddVideogameRequest, FilterVideogamesRequest, FilterVideogamesResponse, GetVideogameFromCatalogResponse, SearchVideogameCatalogResponse, SearchVideogamesRequest, SearchVideogamesResponse, UpdateVideogameRequest } from 'app/data/models/api/media-items/videogame';
-import { CatalogVideogameInternal, DEFAULT_VIDEOGAME, SearchVideogameCatalogResultInternal, VideogameFilterInternal, VideogameInternal, VideogameSortByInternal } from 'app/data/models/internal/media-items/videogame';
-import { getVideogameCreatorNames, getVideogameDurationValue } from 'app/utilities/media-item-definitions';
+import { CatalogVideogameInternal, SearchVideogameCatalogResultInternal, VideogameFilterInternal, VideogameInternal, VideogameSortByInternal } from 'app/data/models/internal/media-items/videogame';
 import { miscUtils } from 'app/utilities/misc-utils';
 
 /**
@@ -145,68 +144,5 @@ export class VideogameCatalogBackEndController implements VideogameCatalogContro
 		});
 		
 		return videogameCatalogDetailsMapper.toInternal(response.catalogVideogame);
-	}
-}
-
-/**
- * Production implementation of the VideogameDefinitionsController
- * @see VideogameDefinitionsController
- */
-export class VideogameDefinitionsControllerImpl implements VideogameDefinitionsController {
-
-	/**
-	 * @override
-	 */
-	public getDefaultFilter(): VideogameFilterInternal {
-		return {
-			status: 'CURRENT'
-		};
-	}
-
-	/**
-	 * @override
-	 */
-	public getDefaultSortBy(): VideogameSortByInternal[] {
-		return [{
-			field: 'ACTIVE',
-			ascending: false
-		}, {
-			field: 'IMPORTANCE',
-			ascending: false
-		}, {
-			field: 'RELEASE_DATE',
-			ascending: true
-		}];
-	}
-
-	/**
-	 * @override
-	 */
-	public getViewGroupSortBy(): VideogameSortByInternal[] {
-		return [{
-			field: 'GROUP',
-			ascending: true
-		}];
-	}
-
-	/**
-	 * @override
-	 */
-	public getCreatorNames(mediaItem: VideogameInternal): string[] | undefined {
-		return getVideogameCreatorNames(mediaItem);
-	}
-
-	/**
-	 * @override
-	 */
-	public getDurationValue(mediaItem: VideogameInternal): number | undefined {
-		return getVideogameDurationValue(mediaItem);
-	}
-
-	/**
-	 * @override
-	 */
-	public getDefaultMediaItem(): VideogameInternal {
-		return DEFAULT_VIDEOGAME;
 	}
 }

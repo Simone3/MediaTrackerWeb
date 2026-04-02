@@ -1,8 +1,10 @@
 import { config } from 'app/config/config';
 import { MediaItemCatalogController, MediaItemController, MediaItemDefinitionsController } from 'app/controllers/core/entities/media-items/media-item';
 import { BookMockedCatalogController, BookMockedController } from 'app/controllers/impl-mocks/entities/media-items/book';
-import { BookBackEndController, BookCatalogBackEndController, BookDefinitionsControllerImpl } from 'app/controllers/impl-prod/entities/media-items/book';
+import { BookBackEndController, BookCatalogBackEndController } from 'app/controllers/impl-prod/entities/media-items/book';
 import { BookFilterInternal, BookInternal, BookSortByInternal, CatalogBookInternal, SearchBookCatalogResultInternal } from 'app/data/models/internal/media-items/book';
+
+export { bookDefinitionsController } from 'app/controllers/core/entities/media-items/definitions/book';
 
 /**
  * The data controller for books
@@ -31,8 +33,3 @@ export const bookController: BookController = config.mocks.mediaItems ? new Book
  * Singleton implementation of the book catalog controller
  */
 export const bookCatalogController: BookCatalogController = config.mocks.mediaItems ? new BookMockedCatalogController() : new BookCatalogBackEndController();
-
-/**
- * Singleton implementation of the book definitions controller
- */
-export const bookDefinitionsController: BookDefinitionsController = new BookDefinitionsControllerImpl();

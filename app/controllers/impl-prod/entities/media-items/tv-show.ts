@@ -1,11 +1,10 @@
 import { config } from 'app/config/config';
 import { backEndInvoker } from 'app/controllers/core/common/back-end-invoker';
-import { TvShowCatalogController, TvShowController, TvShowDefinitionsController } from 'app/controllers/core/entities/media-items/tv-show';
+import { TvShowCatalogController, TvShowController } from 'app/controllers/core/entities/media-items/tv-show';
 import { tvShowCatalogDetailsMapper, tvShowCatalogSearchMapper, tvShowFilterMapper, tvShowMapper, tvShowSortMapper } from 'app/data/mappers/media-items/tv-show';
 import { AddMediaItemResponse, DeleteMediaItemResponse, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
 import { AddTvShowRequest, FilterTvShowsRequest, FilterTvShowsResponse, GetTvShowFromCatalogResponse, SearchTvShowCatalogResponse, SearchTvShowsRequest, SearchTvShowsResponse, UpdateTvShowRequest } from 'app/data/models/api/media-items/tv-show';
-import { CatalogTvShowInternal, DEFAULT_TV_SHOW, SearchTvShowCatalogResultInternal, TvShowFilterInternal, TvShowInternal, TvShowSortByInternal } from 'app/data/models/internal/media-items/tv-show';
-import { getTvShowCreatorNames, getTvShowDurationValue } from 'app/utilities/media-item-definitions';
+import { CatalogTvShowInternal, SearchTvShowCatalogResultInternal, TvShowFilterInternal, TvShowInternal, TvShowSortByInternal } from 'app/data/models/internal/media-items/tv-show';
 import { miscUtils } from 'app/utilities/misc-utils';
 
 /**
@@ -145,68 +144,5 @@ export class TvShowCatalogBackEndController implements TvShowCatalogController {
 		});
 		
 		return tvShowCatalogDetailsMapper.toInternal(response.catalogTvShow);
-	}
-}
-
-/**
- * Production implementation of the TvShowDefinitionsController
- * @see TvShowDefinitionsController
- */
-export class TvShowDefinitionsControllerImpl implements TvShowDefinitionsController {
-
-	/**
-	 * @override
-	 */
-	public getDefaultFilter(): TvShowFilterInternal {
-		return {
-			status: 'CURRENT'
-		};
-	}
-
-	/**
-	 * @override
-	 */
-	public getDefaultSortBy(): TvShowSortByInternal[] {
-		return [{
-			field: 'ACTIVE',
-			ascending: false
-		}, {
-			field: 'IMPORTANCE',
-			ascending: false
-		}, {
-			field: 'RELEASE_DATE',
-			ascending: true
-		}];
-	}
-
-	/**
-	 * @override
-	 */
-	public getViewGroupSortBy(): TvShowSortByInternal[] {
-		return [{
-			field: 'GROUP',
-			ascending: true
-		}];
-	}
-
-	/**
-	 * @override
-	 */
-	public getCreatorNames(mediaItem: TvShowInternal): string[] | undefined {
-		return getTvShowCreatorNames(mediaItem);
-	}
-
-	/**
-	 * @override
-	 */
-	public getDurationValue(mediaItem: TvShowInternal): number | undefined {
-		return getTvShowDurationValue(mediaItem);
-	}
-
-	/**
-	 * @override
-	 */
-	public getDefaultMediaItem(): TvShowInternal {
-		return DEFAULT_TV_SHOW;
 	}
 }

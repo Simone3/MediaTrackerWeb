@@ -1,8 +1,10 @@
 import { config } from 'app/config/config';
 import { MediaItemCatalogController, MediaItemController, MediaItemDefinitionsController } from 'app/controllers/core/entities/media-items/media-item';
 import { VideogameMockedCatalogController, VideogameMockedController } from 'app/controllers/impl-mocks/entities/media-items/videogame';
-import { VideogameBackEndController, VideogameCatalogBackEndController, VideogameDefinitionsControllerImpl } from 'app/controllers/impl-prod/entities/media-items/videogame';
+import { VideogameBackEndController, VideogameCatalogBackEndController } from 'app/controllers/impl-prod/entities/media-items/videogame';
 import { CatalogVideogameInternal, SearchVideogameCatalogResultInternal, VideogameFilterInternal, VideogameInternal, VideogameSortByInternal } from 'app/data/models/internal/media-items/videogame';
+
+export { videogameDefinitionsController } from 'app/controllers/core/entities/media-items/definitions/videogame';
 
 /**
  * The data controller for videogames
@@ -31,8 +33,3 @@ export const videogameController: VideogameController = config.mocks.mediaItems 
  * Singleton implementation of the videogame catalog controller
  */
 export const videogameCatalogController: VideogameCatalogController = config.mocks.mediaItems ? new VideogameMockedCatalogController() : new VideogameCatalogBackEndController();
-
-/**
- * Singleton implementation of the videogame definitions controller
- */
-export const videogameDefinitionsController: VideogameDefinitionsController = new VideogameDefinitionsControllerImpl();
