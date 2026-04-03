@@ -83,16 +83,21 @@
   - when debugging "why did this screen open?", always check navigation saga
 
 ### Controllers and data sources
-- `app/controllers/core/...`
-  - abstraction points used by the rest of the app
-- `app/controllers/impl-mocks/...`
+- `app/controllers/interfaces/...`
+  - controller interfaces and shared types only
+- `app/controllers/implementations/mocks/...`
   - mocked data implementations
-- `app/controllers/impl-prod/...`
-  - real backend / Firebase implementations
-- Selection happens in the `core` controller files based on `config.mocks.*`
+- `app/controllers/implementations/real/...`
+  - real backend / Firebase implementations plus definitions-only controller implementations
+- `app/controllers/main/...`
+  - singleton wiring / selection layer used by the app
+- Selection now happens in the `main` controller files based on `config.mocks.*`
+- Media-item definitions controllers are intentionally wired separately from backend/media-item controllers:
+  - `app/controllers/main/entities/media-items-definitions/...`
+  - `app/controllers/implementations/real/entities/media-items-definitions/...`
 - Example:
-  - `app/controllers/core/entities/category.ts`
-  - `app/controllers/core/entities/user.ts`
+  - `app/controllers/main/entities/category.ts`
+  - `app/controllers/main/entities/user.ts`
 
 ## Config notes
 - Runtime config loader: `app/config/config.ts`
@@ -219,7 +224,7 @@
     - the browser-forbidden `Accept-Charset` header is no longer added, so the console no longer logs `Refused to set unsafe header "Accept-Charset"`
     - a focused invoker test now guards that browser-compatible header set
   - Relevant files:
-    - `app/controllers/impl-prod/common/rest-json-invoker.ts`
+    - `app/controllers/implementations/real/common/rest-json-invoker.ts`
     - `tests/rest-json-invoker.test.ts`
 - The inline media-item status shortcuts on web could leave `active` behind when moving an item from `ACTIVE`/`COMPLETE` into `COMPLETE` or `REDO`.
   - Correct behavior on web now:
@@ -374,28 +379,66 @@
     - `app/components/presentational/media-item/list/row/data/tv-show.ts`
     - `app/components/presentational/media-item/list/row/data/videogame.ts`
     - `app/components/presentational/media-item/list/row/view/media-item.tsx`
-    - `app/controllers/core/entities/media-items/definitions/book.ts`
-    - `app/controllers/core/entities/media-items/definitions/movie.ts`
-    - `app/controllers/core/entities/media-items/definitions/tv-show.ts`
-    - `app/controllers/core/entities/media-items/definitions/videogame.ts`
-    - `app/controllers/impl-definitions/entities/media-items/book.ts`
-    - `app/controllers/impl-definitions/entities/media-items/movie.ts`
-    - `app/controllers/impl-definitions/entities/media-items/tv-show.ts`
-    - `app/controllers/impl-definitions/entities/media-items/videogame.ts`
-    - `app/controllers/core/entities/media-items/book.ts`
-    - `app/controllers/core/entities/media-items/movie.ts`
-    - `app/controllers/core/entities/media-items/tv-show.ts`
-    - `app/controllers/core/entities/media-items/videogame.ts`
-    - `app/controllers/impl-prod/entities/media-items/book.ts`
-    - `app/controllers/impl-prod/entities/media-items/movie.ts`
-    - `app/controllers/impl-prod/entities/media-items/tv-show.ts`
-    - `app/controllers/impl-prod/entities/media-items/videogame.ts`
+    - `app/controllers/interfaces/entities/media-items/book.ts`
+    - `app/controllers/interfaces/entities/media-items/movie.ts`
+    - `app/controllers/interfaces/entities/media-items/tv-show.ts`
+    - `app/controllers/interfaces/entities/media-items/videogame.ts`
+    - `app/controllers/main/entities/media-items/factories.ts`
+    - `app/controllers/main/entities/media-items-definitions/book.ts`
+    - `app/controllers/main/entities/media-items-definitions/movie.ts`
+    - `app/controllers/main/entities/media-items-definitions/tv-show.ts`
+    - `app/controllers/main/entities/media-items-definitions/videogame.ts`
+    - `app/controllers/main/entities/media-items/book.ts`
+    - `app/controllers/main/entities/media-items/movie.ts`
+    - `app/controllers/main/entities/media-items/tv-show.ts`
+    - `app/controllers/main/entities/media-items/videogame.ts`
+    - `app/controllers/implementations/real/entities/media-items-definitions/book.ts`
+    - `app/controllers/implementations/real/entities/media-items-definitions/movie.ts`
+    - `app/controllers/implementations/real/entities/media-items-definitions/tv-show.ts`
+    - `app/controllers/implementations/real/entities/media-items-definitions/videogame.ts`
+    - `app/controllers/implementations/real/entities/media-items/book.ts`
+    - `app/controllers/implementations/real/entities/media-items/movie.ts`
+    - `app/controllers/implementations/real/entities/media-items/tv-show.ts`
+    - `app/controllers/implementations/real/entities/media-items/videogame.ts`
     - `tests/group-details.smoke.test.tsx`
     - `tests/own-platform-details.smoke.test.tsx`
     - `tests/tv-show-season-details.smoke.test.tsx`
     - `tests/media-item-filter-modal.smoke.test.tsx`
     - `tests/media-item-filter-form-mappers.test.ts`
     - `tests/media-items-list.smoke.test.tsx`
+- The controller tree is now split explicitly into interfaces, implementations, and main wiring entrypoints.
+  - Correct behavior on web now:
+    - controller interface files no longer instantiate concrete controllers, so shared and presentational code can import contracts without accidentally pulling in backend/Firebase wiring
+    - mocked and real implementations now live under one `implementations` tree, while singleton selection happens only in `app/controllers/main`
+    - media-item controller factories now live alongside the other controller entrypoints in `app/controllers/main/entities/media-items/factories.ts`
+    - common singleton wiring for backend invokers and storage also moved into `app/controllers/main/common`, keeping the import graph aligned with the folder structure
+  - Relevant files:
+    - `app/controllers/interfaces/common/back-end-invoker.ts`
+    - `app/controllers/interfaces/common/local-storage.ts`
+    - `app/controllers/interfaces/common/rest-json-invoker.ts`
+    - `app/controllers/interfaces/entities/category.ts`
+    - `app/controllers/interfaces/entities/group.ts`
+    - `app/controllers/interfaces/entities/own-platform.ts`
+    - `app/controllers/interfaces/entities/user.ts`
+    - `app/controllers/interfaces/entities/media-items/media-item.ts`
+    - `app/controllers/implementations/mocks/common/mock-helper.ts`
+    - `app/controllers/implementations/mocks/entities/category.ts`
+    - `app/controllers/implementations/mocks/entities/group.ts`
+    - `app/controllers/implementations/mocks/entities/own-platform.ts`
+    - `app/controllers/implementations/mocks/entities/user.ts`
+    - `app/controllers/implementations/mocks/entities/media-items/media-item.ts`
+    - `app/controllers/main/common/back-end-invoker.ts`
+    - `app/controllers/main/common/local-storage.ts`
+    - `app/controllers/main/common/rest-json-invoker.ts`
+    - `app/controllers/main/entities/category.ts`
+    - `app/controllers/main/entities/group.ts`
+    - `app/controllers/main/entities/own-platform.ts`
+    - `app/controllers/main/entities/user.ts`
+    - `app/controllers/main/entities/media-items/factories.ts`
+    - `tests/back-end-invoker.test.ts`
+    - `tests/rest-json-invoker.test.ts`
+    - `tests/user-firebase-controller.test.ts`
+    - `tests/list-fetch-failure-state.test.ts`
 - Media item details are now back on the same RN-era shared Formik + Yup architecture as the original mobile app.
   - Correct behavior on web now:
     - the old generic media-item details form structure is restored again, with shared generic form logic plus separate book, movie, TV-show, and videogame visual implementations

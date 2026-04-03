@@ -1,5 +1,5 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
-import { categoryController } from 'app/controllers/core/entities/category';
+import { categoryController } from 'app/controllers/main/entities/category';
 import { CategoryFilterInternal, CategoryInternal } from 'app/data/models/internal/category';
 import { AppError } from 'app/data/models/internal/error';
 import { SAVE_CATEGORY } from 'app/redux/actions/category/const';

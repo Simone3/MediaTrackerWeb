@@ -1,6 +1,6 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
 import { AppError } from 'app/data/models/internal/error';
-import { mediaItemControllerFactory } from 'app/factories/controller-factories';
+import { mediaItemControllerFactory } from 'app/controllers/main/entities/media-items/factories';
 import { setError } from 'app/redux/actions/error/generators';
 import { MARK_MEDIA_ITEM_AS_ACTIVE, MARK_MEDIA_ITEM_AS_COMPLETE, MARK_MEDIA_ITEM_AS_REDO } from 'app/redux/actions/media-item/const';
 import { completeInlineUpdatingMediaItem, failInlineUpdatingMediaItem, startInlineUpdatingMediaItem } from 'app/redux/actions/media-item/generators';

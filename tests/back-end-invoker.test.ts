@@ -6,26 +6,26 @@ jest.mock('app/config/config', () => ({
 	}
 }));
 
-jest.mock('app/controllers/core/common/rest-json-invoker', () => ({
+jest.mock('app/controllers/main/common/rest-json-invoker', () => ({
 	restJsonInvoker: {
 		invoke: jest.fn()
 	}
 }));
 
-jest.mock('app/controllers/core/entities/user', () => ({
+jest.mock('app/controllers/main/entities/user', () => ({
 	userController: {
 		getCurrentUserAccessToken: jest.fn()
 	}
 }));
 
-import { BackEndInvokerRestJson } from 'app/controllers/impl-prod/common/back-end-invoker';
+import { BackEndInvokerRestJson } from 'app/controllers/implementations/real/common/back-end-invoker';
 
-const restJsonInvokerMock = jest.requireMock('app/controllers/core/common/rest-json-invoker') as {
+const restJsonInvokerMock = jest.requireMock('app/controllers/main/common/rest-json-invoker') as {
 	restJsonInvoker: {
 		invoke: jest.Mock;
 	};
 };
-const userControllerMock = jest.requireMock('app/controllers/core/entities/user') as {
+const userControllerMock = jest.requireMock('app/controllers/main/entities/user') as {
 	userController: {
 		getCurrentUserAccessToken: jest.Mock;
 	};

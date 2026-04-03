@@ -1,5 +1,5 @@
 import { buildMediaItemRowData, MediaItemRowData } from 'app/components/presentational/media-item/list/row/data/media-item';
-import { tvShowDefinitionsController } from 'app/controllers/core/entities/media-items/definitions/tv-show';
+import { tvShowDefinitionsController } from 'app/controllers/main/entities/media-items-definitions/tv-show';
 import { TvShowInternal } from 'app/data/models/internal/media-items/tv-show';
 import statusWatchingIcon from 'app/resources/images/ic_status_watching.svg';
 import { i18n } from 'app/utilities/i18n';

@@ -15,7 +15,7 @@ import { GroupsListState } from 'app/redux/state/group';
 import { MediaItemsListState } from 'app/redux/state/media-item';
 import { OwnPlatformsListState } from 'app/redux/state/own-platform';
 
-jest.mock('app/factories/controller-factories', () => {
+jest.mock('app/controllers/main/entities/media-items/factories', () => {
 	return {
 		mediaItemDefinitionsControllerFactory: {
 			get: jest.fn()

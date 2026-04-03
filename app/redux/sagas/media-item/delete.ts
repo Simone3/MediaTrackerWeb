@@ -1,6 +1,6 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
 import { AppError } from 'app/data/models/internal/error';
-import { mediaItemControllerFactory } from 'app/factories/controller-factories';
+import { mediaItemControllerFactory } from 'app/controllers/main/entities/media-items/factories';
 import { setError } from 'app/redux/actions/error/generators';
 import { DELETE_MEDIA_ITEM } from 'app/redux/actions/media-item/const';
 import { completeDeletingMediaItem, failDeletingMediaItem, startDeletingMediaItem } from 'app/redux/actions/media-item/generators';

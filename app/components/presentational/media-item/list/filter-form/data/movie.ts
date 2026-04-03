@@ -1,5 +1,5 @@
 import { MediaItemFilterFormMapper, MediaItemFilterFormSortBy, MediaItemFilterFormValues, mediaItemFilterFormValidationShape } from 'app/components/presentational/media-item/list/filter-form/data/media-item';
-import { movieDefinitionsController } from 'app/controllers/core/entities/media-items/movie';
+import { movieDefinitionsController } from 'app/controllers/main/entities/media-items-definitions/movie';
 import { AppError } from 'app/data/models/internal/error';
 import { MovieFilterInternal, MovieSortByInternal } from 'app/data/models/internal/media-items/movie';
 import { ObjectSchema, object } from 'yup';

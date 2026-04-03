@@ -1,5 +1,5 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
-import { categoryController } from 'app/controllers/core/entities/category';
+import { categoryController } from 'app/controllers/main/entities/category';
 import { AppError } from 'app/data/models/internal/error';
 import { DELETE_CATEGORY } from 'app/redux/actions/category/const';
 import { completeDeletingCategory, failDeletingCategory, startDeletingCategory } from 'app/redux/actions/category/generators';

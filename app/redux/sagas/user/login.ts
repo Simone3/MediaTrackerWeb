@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from '@redux-saga/core/effects';
-import { userController } from 'app/controllers/core/entities/user';
+import { userController } from 'app/controllers/main/entities/user';
 import { AppError } from 'app/data/models/internal/error';
 import { UserInternal } from 'app/data/models/internal/user';
 import { setError } from 'app/redux/actions/error/generators';

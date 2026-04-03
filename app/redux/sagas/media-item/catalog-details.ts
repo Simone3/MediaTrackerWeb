@@ -1,7 +1,7 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
 import { AppError } from 'app/data/models/internal/error';
 import { CatalogMediaItemInternal } from 'app/data/models/internal/media-items/media-item';
-import { mediaItemCatalogControllerFactory } from 'app/factories/controller-factories';
+import { mediaItemCatalogControllerFactory } from 'app/controllers/main/entities/media-items/factories';
 import { setError } from 'app/redux/actions/error/generators';
 import { GET_MEDIA_ITEM_CATALOG_DETAILS } from 'app/redux/actions/media-item/const';
 import { completeGettingMediaItemCatalogDetails, failGettingMediaItemCatalogDetails, startGettingMediaItemCatalogDetails } from 'app/redux/actions/media-item/generators';

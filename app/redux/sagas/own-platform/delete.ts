@@ -1,5 +1,5 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
-import { ownPlatformController } from 'app/controllers/core/entities/own-platform';
+import { ownPlatformController } from 'app/controllers/main/entities/own-platform';
 import { AppError } from 'app/data/models/internal/error';
 import { setError } from 'app/redux/actions/error/generators';
 import { DELETE_OWN_PLATFORM } from 'app/redux/actions/own-platform/const';

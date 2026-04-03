@@ -1,7 +1,7 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
 import { AppError } from 'app/data/models/internal/error';
 import { MediaItemFilterInternal, MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
-import { mediaItemControllerFactory } from 'app/factories/controller-factories';
+import { mediaItemControllerFactory } from 'app/controllers/main/entities/media-items/factories';
 import { setError } from 'app/redux/actions/error/generators';
 import { SAVE_MEDIA_ITEM } from 'app/redux/actions/media-item/const';
 import { askConfirmationBeforeSavingMediaItem, completeSavingMediaItem, failSavingMediaItem, startSavingMediaItem } from 'app/redux/actions/media-item/generators';

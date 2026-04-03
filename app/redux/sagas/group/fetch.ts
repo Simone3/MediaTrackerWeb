@@ -1,5 +1,5 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
-import { groupController } from 'app/controllers/core/entities/group';
+import { groupController } from 'app/controllers/main/entities/group';
 import { AppError } from 'app/data/models/internal/error';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { setError } from 'app/redux/actions/error/generators';

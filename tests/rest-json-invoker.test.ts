@@ -26,7 +26,7 @@ jest.mock('axios', () => {
 	};
 });
 
-import { RestJsonInvokerAxios } from 'app/controllers/impl-prod/common/rest-json-invoker';
+import { RestJsonInvokerAxios } from 'app/controllers/implementations/real/common/rest-json-invoker';
 
 const axiosMock = jest.requireMock('axios') as {
 	default: {

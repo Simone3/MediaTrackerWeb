@@ -1,5 +1,5 @@
 import { MediaItemFilterFormMapper, MediaItemFilterFormSortBy, MediaItemFilterFormValues, mediaItemFilterFormValidationShape } from 'app/components/presentational/media-item/list/filter-form/data/media-item';
-import { bookDefinitionsController } from 'app/controllers/core/entities/media-items/book';
+import { bookDefinitionsController } from 'app/controllers/main/entities/media-items-definitions/book';
 import { AppError } from 'app/data/models/internal/error';
 import { BookFilterInternal, BookSortByInternal } from 'app/data/models/internal/media-items/book';
 import { ObjectSchema, object } from 'yup';

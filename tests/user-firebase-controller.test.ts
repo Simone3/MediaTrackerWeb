@@ -22,7 +22,7 @@ jest.mock('firebase/auth', () => ({
 	signOut: jest.fn()
 }));
 
-import { UserFirebaseController } from 'app/controllers/impl-prod/entities/user';
+import { UserFirebaseController } from 'app/controllers/implementations/real/entities/user';
 
 const firebaseAppMock = jest.requireMock('firebase/app') as {
 	getApps: jest.Mock;

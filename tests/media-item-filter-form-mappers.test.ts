@@ -1,4 +1,4 @@
-jest.mock('app/controllers/core/entities/media-items/book', () => {
+jest.mock('app/controllers/main/entities/media-items-definitions/book', () => {
 	return {
 		bookDefinitionsController: {
 			getDefaultSortBy: () => [{
@@ -14,7 +14,7 @@ jest.mock('app/controllers/core/entities/media-items/book', () => {
 		}
 	};
 });
-jest.mock('app/controllers/core/entities/media-items/movie', () => {
+jest.mock('app/controllers/main/entities/media-items-definitions/movie', () => {
 	return {
 		movieDefinitionsController: {
 			getDefaultSortBy: () => [{
@@ -30,7 +30,7 @@ jest.mock('app/controllers/core/entities/media-items/movie', () => {
 		}
 	};
 });
-jest.mock('app/controllers/core/entities/media-items/tv-show', () => {
+jest.mock('app/controllers/main/entities/media-items-definitions/tv-show', () => {
 	return {
 		tvShowDefinitionsController: {
 			getDefaultSortBy: () => [{
@@ -46,7 +46,7 @@ jest.mock('app/controllers/core/entities/media-items/tv-show', () => {
 		}
 	};
 });
-jest.mock('app/controllers/core/entities/media-items/videogame', () => {
+jest.mock('app/controllers/main/entities/media-items-definitions/videogame', () => {
 	return {
 		videogameDefinitionsController: {
 			getDefaultSortBy: () => [{
