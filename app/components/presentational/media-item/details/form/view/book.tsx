@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
 import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { TextInputComponent } from 'app/components/presentational/generic/text-input';
 import { i18n } from 'app/utilities/i18n';
 import { BookInternal } from 'app/data/models/internal/media-items/book';
 import { FormikProps } from 'formik';
@@ -18,9 +19,9 @@ export const BookFormViewComponent = (props: BookFormViewComponentProps): ReactE
 					<label className='media-item-details-label' htmlFor='media-item-pages-number'>
 						{i18n.t('mediaItem.details.placeholders.duration.BOOK')}
 					</label>
-					<input
+					<TextInputComponent
 						id='media-item-pages-number'
-						className='media-item-details-input'
+						variant='mediaItemDetails'
 						type='number'
 						value={numberToInputValue(props.values.pagesNumber)}
 						onChange={(event) => {
@@ -32,9 +33,9 @@ export const BookFormViewComponent = (props: BookFormViewComponentProps): ReactE
 					<label className='media-item-details-label' htmlFor='media-item-book-authors'>
 						{i18n.t('mediaItem.details.placeholders.creators.BOOK')}
 					</label>
-					<input
+					<TextInputComponent
 						id='media-item-book-authors'
-						className='media-item-details-input'
+						variant='mediaItemDetails'
 						type='text'
 						value={inlineTextToInputValue(props.values.authors)}
 						onChange={(event) => {

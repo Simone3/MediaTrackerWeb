@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
 import { dateToInputValue, inlineTextToInputValue, inputValueToDate, inputValueToInlineText, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { TextInputComponent } from 'app/components/presentational/generic/text-input';
 import { config } from 'app/config/config';
 import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { FormikProps } from 'formik';
@@ -53,9 +54,9 @@ export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): Re
 					<label className='media-item-details-label' htmlFor='media-item-episode-runtime'>
 						{i18n.t('mediaItem.details.placeholders.duration.TV_SHOW')}
 					</label>
-					<input
+					<TextInputComponent
 						id='media-item-episode-runtime'
-						className='media-item-details-input'
+						variant='mediaItemDetails'
 						type='number'
 						value={numberToInputValue(props.values.averageEpisodeRuntimeMinutes)}
 						onChange={(event) => {
@@ -67,9 +68,9 @@ export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): Re
 					<label className='media-item-details-label' htmlFor='media-item-tv-show-creators'>
 						{i18n.t('mediaItem.details.placeholders.creators.TV_SHOW')}
 					</label>
-					<input
+					<TextInputComponent
 						id='media-item-tv-show-creators'
-						className='media-item-details-input'
+						variant='mediaItemDetails'
 						type='text'
 						value={inlineTextToInputValue(props.values.creators)}
 						onChange={(event) => {
@@ -124,9 +125,9 @@ export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): Re
 								<label className='media-item-details-label' htmlFor='media-item-next-episode-air-date'>
 									{i18n.t('mediaItem.details.placeholders.nextEpisodeAirDate')}
 								</label>
-								<input
+								<TextInputComponent
 									id='media-item-next-episode-air-date'
-									className='media-item-details-input'
+									variant='mediaItemDetails'
 									type='date'
 									value={dateToInputValue(props.values.nextEpisodeAirDate)}
 									onChange={(event) => {

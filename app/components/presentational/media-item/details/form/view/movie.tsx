@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
 import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { TextInputComponent } from 'app/components/presentational/generic/text-input';
 import { config } from 'app/config/config';
 import { MovieInternal } from 'app/data/models/internal/media-items/movie';
 import { FormikProps } from 'formik';
@@ -33,9 +34,9 @@ export const MovieFormViewComponent = (props: MovieFormViewComponentProps): Reac
 					<label className='media-item-details-label' htmlFor='media-item-duration-minutes'>
 						{i18n.t('mediaItem.details.placeholders.duration.MOVIE')}
 					</label>
-					<input
+					<TextInputComponent
 						id='media-item-duration-minutes'
-						className='media-item-details-input'
+						variant='mediaItemDetails'
 						type='number'
 						value={numberToInputValue(props.values.durationMinutes)}
 						onChange={(event) => {
@@ -47,9 +48,9 @@ export const MovieFormViewComponent = (props: MovieFormViewComponentProps): Reac
 					<label className='media-item-details-label' htmlFor='media-item-movie-directors'>
 						{i18n.t('mediaItem.details.placeholders.creators.MOVIE')}
 					</label>
-					<input
+					<TextInputComponent
 						id='media-item-movie-directors'
-						className='media-item-details-input'
+						variant='mediaItemDetails'
 						type='text'
 						value={inlineTextToInputValue(props.values.directors)}
 						onChange={(event) => {

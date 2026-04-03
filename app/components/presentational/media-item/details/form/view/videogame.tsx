@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
 import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { TextInputComponent } from 'app/components/presentational/generic/text-input';
 import { config } from 'app/config/config';
 import { VideogameInternal } from 'app/data/models/internal/media-items/videogame';
 import { FormikProps } from 'formik';
@@ -33,9 +34,9 @@ export const VideogameFormViewComponent = (props: VideogameFormViewComponentProp
 					<label className='media-item-details-label' htmlFor='media-item-average-length'>
 						{i18n.t('mediaItem.details.placeholders.duration.VIDEOGAME')}
 					</label>
-					<input
+					<TextInputComponent
 						id='media-item-average-length'
-						className='media-item-details-input'
+						variant='mediaItemDetails'
 						type='number'
 						value={numberToInputValue(props.values.averageLengthHours)}
 						onChange={(event) => {
@@ -47,9 +48,9 @@ export const VideogameFormViewComponent = (props: VideogameFormViewComponentProp
 					<label className='media-item-details-label' htmlFor='media-item-videogame-developers'>
 						{i18n.t('mediaItem.details.placeholders.creators.VIDEOGAME')}
 					</label>
-					<input
+					<TextInputComponent
 						id='media-item-videogame-developers'
-						className='media-item-details-input'
+						variant='mediaItemDetails'
 						type='text'
 						value={inlineTextToInputValue(props.values.developers)}
 						onChange={(event) => {
@@ -61,9 +62,9 @@ export const VideogameFormViewComponent = (props: VideogameFormViewComponentProp
 					<label className='media-item-details-label' htmlFor='media-item-videogame-publishers'>
 						{i18n.t('mediaItem.details.placeholders.publishers')}
 					</label>
-					<input
+					<TextInputComponent
 						id='media-item-videogame-publishers'
-						className='media-item-details-input'
+						variant='mediaItemDetails'
 						type='text'
 						value={inlineTextToInputValue(props.values.publishers)}
 						onChange={(event) => {
@@ -75,9 +76,9 @@ export const VideogameFormViewComponent = (props: VideogameFormViewComponentProp
 					<label className='media-item-details-label' htmlFor='media-item-videogame-platforms'>
 						{i18n.t('mediaItem.details.placeholders.platforms')}
 					</label>
-					<input
+					<TextInputComponent
 						id='media-item-videogame-platforms'
-						className='media-item-details-input'
+						variant='mediaItemDetails'
 						type='text'
 						value={inlineTextToInputValue(props.values.platforms)}
 						onChange={(event) => {

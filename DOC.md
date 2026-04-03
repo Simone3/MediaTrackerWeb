@@ -53,6 +53,7 @@
   - `app/components/presentational/generic/entity-management-list`
   - `app/components/presentational/generic/entity-details-frame`
   - `app/components/presentational/generic/same-name-confirmation`
+  - `app/components/presentational/generic/text-input`
   - `app/components/presentational/auth/common/credentials-screen`
   - `app/components/presentational/own-platform/common/icon-registry.ts`
 - Most components are still class components.
@@ -131,6 +132,7 @@
   - `entity-details-frame` now owns the dark details-page shell for group, own-platform, and TV-show-season forms.
   - `same-name-confirmation` now centralizes the duplicate-name confirmation dialog behavior used across category/group/platform/media-item details.
   - `credentials-screen` now holds the shared login/signup email-password screen structure.
+  - `text-input` now centralizes the text-like `<input>` wiring used by auth, entity details, category details, media-item details, and the media-item list search field through a small `variant` prop instead of repeating raw `<input>` elements in each screen.
   - `own-platform/common/icon-registry.ts` is now the single source of truth for own-platform icon assets and masked icon styles used across list/details/media-item views.
 
 ## High-signal files to open first

@@ -1,5 +1,6 @@
 import { Component, ReactNode } from 'react';
 import { FormikProps } from 'formik';
+import { TextInputComponent } from 'app/components/presentational/generic/text-input';
 import { config } from 'app/config/config';
 import { buildOwnPlatformMaskStyle } from 'app/components/presentational/own-platform/common/icon-registry';
 import { OWN_PLATFORM_ICON_INTERNAL_VALUES, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
@@ -45,10 +46,10 @@ export class OwnPlatformFormViewComponent extends Component<OwnPlatformFormViewC
 						<label className='entity-details-label' htmlFor='own-platform-name'>
 							{i18n.t('ownPlatform.details.placeholders.name')}
 						</label>
-						<input
+						<TextInputComponent
 							id='own-platform-name'
 							name='name'
-							className='entity-details-input'
+							variant='entityDetails'
 							type='text'
 							value={values.name}
 							placeholder={i18n.t('ownPlatform.details.placeholders.name')}

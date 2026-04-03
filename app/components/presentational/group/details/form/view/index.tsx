@@ -1,5 +1,6 @@
 import { Component, ReactNode } from 'react';
 import { FormikProps } from 'formik';
+import { TextInputComponent } from 'app/components/presentational/generic/text-input';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { i18n } from 'app/utilities/i18n';
 
@@ -42,10 +43,10 @@ export class GroupFormViewComponent extends Component<GroupFormViewComponentProp
 						<label className='entity-details-label' htmlFor='group-name'>
 							{i18n.t('group.details.placeholders.name')}
 						</label>
-						<input
+						<TextInputComponent
 							id='group-name'
 							name='name'
-							className='entity-details-input'
+							variant='entityDetails'
 							type='text'
 							value={values.name}
 							placeholder={i18n.t('group.details.placeholders.name')}

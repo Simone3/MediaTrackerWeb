@@ -1,5 +1,6 @@
 import { Component, KeyboardEvent, ReactNode } from 'react';
 import { FormikProps } from 'formik';
+import { TextInputComponent } from 'app/components/presentational/generic/text-input';
 import { config } from 'app/config/config';
 import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import downloadIcon from 'app/resources/images/ic_download.svg';
@@ -271,9 +272,9 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 					{i18n.t('mediaItem.details.placeholders.name')}
 				</label>
 				<div className='media-item-details-search-row'>
-					<input
+					<TextInputComponent
 						id='media-item-name'
-						className='media-item-details-input'
+						variant='mediaItemDetails'
 						type='text'
 						value={mediaItem.name}
 						onChange={(event) => {
@@ -338,9 +339,9 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<label className='media-item-details-label' htmlFor='media-item-release-date'>
 					{i18n.t('mediaItem.details.placeholders.releaseDate')}
 				</label>
-				<input
+				<TextInputComponent
 					id='media-item-release-date'
-					className='media-item-details-input'
+					variant='mediaItemDetails'
 					type='date'
 					value={this.dateToInputValue(mediaItem.releaseDate)}
 					onChange={(event) => {
@@ -473,9 +474,9 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<label className='media-item-details-label' htmlFor='media-item-order-in-group'>
 					{i18n.t('mediaItem.details.placeholders.orderInGroup')}
 				</label>
-				<input
+				<TextInputComponent
 					id='media-item-order-in-group'
-					className='media-item-details-input'
+					variant='mediaItemDetails'
 					type='number'
 					value={this.numberToInputValue(mediaItem.orderInGroup)}
 					onChange={(event) => {
@@ -531,9 +532,9 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 					{completionDates.map((completedOn, index) => {
 						return (
 							<div className='media-item-details-completion-row' key={`completed-on-${index}`}>
-								<input
+								<TextInputComponent
 									id={`media-item-completed-on-${index}`}
-									className='media-item-details-input'
+									variant='mediaItemDetails'
 									type='date'
 									value={this.dateToInputValue(completedOn)}
 									onChange={(event) => {
@@ -634,9 +635,9 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<label className='media-item-details-label' htmlFor={id}>
 					{label}
 				</label>
-				<input
+				<TextInputComponent
 					id={id}
-					className='media-item-details-input'
+					variant='mediaItemDetails'
 					type='text'
 					value={this.inlineTextToInputValue(values)}
 					onChange={(event) => {

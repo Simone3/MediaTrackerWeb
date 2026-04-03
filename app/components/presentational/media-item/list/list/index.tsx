@@ -1,6 +1,7 @@
 import React, { Component, ReactElement, ReactNode } from 'react';
 import { MediaItemContextMenuAnchorRect, MediaItemContextMenuComponent } from 'app/components/presentational/media-item/list/context-menu';
 import { MediaItemRowComponent } from 'app/components/presentational/media-item/list/row';
+import { TextInputComponent } from 'app/components/presentational/generic/text-input';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { i18n } from 'app/utilities/i18n';
@@ -122,10 +123,10 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 							event.preventDefault();
 							this.submitSearchOrClose();
 						}}>
-						<input
+						<TextInputComponent
 							ref={this.searchInputRef}
 							id='media-items-list-search'
-							className='media-items-list-search-input'
+							variant='mediaItemsListSearch'
 							type='search'
 							value={this.state.searchTerm}
 							placeholder={searchPlaceholder}

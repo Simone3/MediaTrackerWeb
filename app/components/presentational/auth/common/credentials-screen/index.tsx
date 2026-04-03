@@ -1,9 +1,9 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { AuthTextInputComponent } from 'app/components/presentational/auth/common/auth-input';
 import { AppTitleComponent } from 'app/components/presentational/auth/common/app-title';
 import { AuthLinkComponent } from 'app/components/presentational/auth/common/auth-link';
 import { AuthSubmitComponent } from 'app/components/presentational/auth/common/auth-submit';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
+import { TextInputComponent } from 'app/components/presentational/generic/text-input';
 import { UserSecretInternal } from 'app/data/models/internal/user';
 import { i18n } from 'app/utilities/i18n';
 
@@ -66,7 +66,8 @@ export const AuthCredentialsScreenComponent = (props: AuthCredentialsScreenCompo
 						<div className='auth-form-inputs'>
 							<label className='auth-field'>
 								<span className='auth-field-label'>{props.emailLabel}</span>
-								<AuthTextInputComponent
+								<TextInputComponent
+									variant='auth'
 									onChangeText={(value) => {
 										setCredentials((previousCredentials) => {
 											return {
@@ -84,7 +85,8 @@ export const AuthCredentialsScreenComponent = (props: AuthCredentialsScreenCompo
 							</label>
 							<label className='auth-field'>
 								<span className='auth-field-label'>{props.passwordLabel}</span>
-								<AuthTextInputComponent
+								<TextInputComponent
+									variant='auth'
 									onChangeText={(value) => {
 										setCredentials((previousCredentials) => {
 											return {
