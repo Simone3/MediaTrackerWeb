@@ -52,7 +52,7 @@ export type SearchMovieCatalogResultInternal = SearchMediaItemCatalogResultInter
 };
 
 /**
- * The default initial videogame, internal type just for display purposes
+ * The default initial movie, internal type just for display purposes
  */
 export const DEFAULT_MOVIE: MovieInternal = {
 	id: '',

@@ -128,7 +128,7 @@ export class FilterCategoriesRequest extends CommonRequest {
 }
 
 /**
- * Response for the 'filter movies' API
+ * Response for the 'filter categories' API
  */
 export class FilterCategoriesResponse extends CommonResponse {
 
