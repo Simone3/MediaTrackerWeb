@@ -132,7 +132,7 @@
   - `entity-details-frame` now owns the dark details-page shell for group, own-platform, and TV-show-season forms.
   - `same-name-confirmation` now centralizes the duplicate-name confirmation dialog behavior used across category/group/platform/media-item details.
   - `credentials-screen` now holds the shared login/signup email-password screen structure.
-  - `text-input` now centralizes the text-like `<input>` wiring used by auth, entity details, category details, media-item details, and the media-item list search field through a small `variant` prop instead of repeating raw `<input>` elements in each screen.
+  - `text-input` now centralizes the text-like `<input>` wiring used across the app, with one shared default form style for normal inputs and a single auth-specific visual variant for the login/signup screens.
   - `own-platform/common/icon-registry.ts` is now the single source of truth for own-platform icon assets and masked icon styles used across list/details/media-item views.
 
 ## High-signal files to open first

@@ -49,7 +49,6 @@ export class OwnPlatformFormViewComponent extends Component<OwnPlatformFormViewC
 						<TextInputComponent
 							id='own-platform-name'
 							name='name'
-							variant='entityDetails'
 							type='text'
 							value={values.name}
 							placeholder={i18n.t('ownPlatform.details.placeholders.name')}

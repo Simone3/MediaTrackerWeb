@@ -46,7 +46,6 @@ export class GroupFormViewComponent extends Component<GroupFormViewComponentProp
 						<TextInputComponent
 							id='group-name'
 							name='name'
-							variant='entityDetails'
 							type='text'
 							value={values.name}
 							placeholder={i18n.t('group.details.placeholders.name')}

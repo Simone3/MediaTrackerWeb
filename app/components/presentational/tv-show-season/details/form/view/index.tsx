@@ -45,7 +45,6 @@ export class TvShowSeasonFormViewComponent extends Component<TvShowSeasonFormVie
 						</label>
 						<TextInputComponent
 							id='tv-show-season-number'
-							variant='entityDetails'
 							type='number'
 							value={values.number ?? ''}
 							placeholder={i18n.t('tvShowSeason.details.placeholders.number')}
@@ -61,7 +60,6 @@ export class TvShowSeasonFormViewComponent extends Component<TvShowSeasonFormVie
 						</label>
 						<TextInputComponent
 							id='tv-show-season-episodes'
-							variant='entityDetails'
 							type='number'
 							value={values.episodesNumber ?? ''}
 							placeholder={i18n.t('tvShowSeason.details.placeholders.episodesNumber')}
@@ -76,7 +74,6 @@ export class TvShowSeasonFormViewComponent extends Component<TvShowSeasonFormVie
 						</label>
 						<TextInputComponent
 							id='tv-show-season-watched'
-							variant='entityDetails'
 							type='number'
 							value={values.watchedEpisodesNumber ?? ''}
 							placeholder={i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber')}

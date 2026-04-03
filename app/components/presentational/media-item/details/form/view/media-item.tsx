@@ -274,7 +274,6 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<div className='media-item-details-search-row'>
 					<TextInputComponent
 						id='media-item-name'
-						variant='mediaItemDetails'
 						type='text'
 						value={mediaItem.name}
 						onChange={(event) => {
@@ -341,7 +340,6 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				</label>
 				<TextInputComponent
 					id='media-item-release-date'
-					variant='mediaItemDetails'
 					type='date'
 					value={this.dateToInputValue(mediaItem.releaseDate)}
 					onChange={(event) => {
@@ -476,7 +474,6 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				</label>
 				<TextInputComponent
 					id='media-item-order-in-group'
-					variant='mediaItemDetails'
 					type='number'
 					value={this.numberToInputValue(mediaItem.orderInGroup)}
 					onChange={(event) => {
@@ -534,7 +531,6 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 							<div className='media-item-details-completion-row' key={`completed-on-${index}`}>
 								<TextInputComponent
 									id={`media-item-completed-on-${index}`}
-									variant='mediaItemDetails'
 									type='date'
 									value={this.dateToInputValue(completedOn)}
 									onChange={(event) => {
@@ -637,7 +633,6 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				</label>
 				<TextInputComponent
 					id={id}
-					variant='mediaItemDetails'
 					type='text'
 					value={this.inlineTextToInputValue(values)}
 					onChange={(event) => {

@@ -48,7 +48,6 @@ export class CategoryFormViewComponent extends Component<CategoryFormViewCompone
 					<TextInputComponent
 						id='category-name'
 						name='name'
-						variant='categoryDetails'
 						type='text'
 						value={values.name}
 						onChange={handleChange}

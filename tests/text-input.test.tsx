@@ -20,7 +20,8 @@ describe('TextInputComponent', () => {
 		const input = screen.getByPlaceholderText('Password');
 
 		expect(input).toHaveAttribute('type', 'password');
-		expect(input).toHaveClass('auth-input');
+		expect(input).toHaveClass('text-input');
+		expect(input).toHaveClass('text-input-auth');
 
 		fireEvent.change(input, {
 			target: {
@@ -35,20 +36,19 @@ describe('TextInputComponent', () => {
 	test('forwards refs and applies the requested variant class', () => {
 		const inputRef = React.createRef<HTMLInputElement>();
 
-		render(
-			<TextInputComponent
-				ref={inputRef}
-				variant='mediaItemsListSearch'
-				type='search'
-				defaultValue='Dark'
-				onChange={() => {
+			render(
+				<TextInputComponent
+					ref={inputRef}
+					type='search'
+					defaultValue='Dark'
+					onChange={() => {
 					return undefined;
 				}}
 			/>
 		);
 
 		expect(inputRef.current).not.toBeNull();
-		expect(inputRef.current).toHaveClass('media-items-list-search-input');
+		expect(inputRef.current).toHaveClass('text-input');
 		expect(inputRef.current).toHaveAttribute('type', 'search');
 		expect(inputRef.current?.value).toBe('Dark');
 	});

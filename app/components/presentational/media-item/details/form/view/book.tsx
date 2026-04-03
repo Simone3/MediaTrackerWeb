@@ -21,7 +21,6 @@ export const BookFormViewComponent = (props: BookFormViewComponentProps): ReactE
 					</label>
 					<TextInputComponent
 						id='media-item-pages-number'
-						variant='mediaItemDetails'
 						type='number'
 						value={numberToInputValue(props.values.pagesNumber)}
 						onChange={(event) => {
@@ -35,7 +34,6 @@ export const BookFormViewComponent = (props: BookFormViewComponentProps): ReactE
 					</label>
 					<TextInputComponent
 						id='media-item-book-authors'
-						variant='mediaItemDetails'
 						type='text'
 						value={inlineTextToInputValue(props.values.authors)}
 						onChange={(event) => {

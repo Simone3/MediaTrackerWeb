@@ -36,7 +36,6 @@ export const VideogameFormViewComponent = (props: VideogameFormViewComponentProp
 					</label>
 					<TextInputComponent
 						id='media-item-average-length'
-						variant='mediaItemDetails'
 						type='number'
 						value={numberToInputValue(props.values.averageLengthHours)}
 						onChange={(event) => {
@@ -50,7 +49,6 @@ export const VideogameFormViewComponent = (props: VideogameFormViewComponentProp
 					</label>
 					<TextInputComponent
 						id='media-item-videogame-developers'
-						variant='mediaItemDetails'
 						type='text'
 						value={inlineTextToInputValue(props.values.developers)}
 						onChange={(event) => {
@@ -64,7 +62,6 @@ export const VideogameFormViewComponent = (props: VideogameFormViewComponentProp
 					</label>
 					<TextInputComponent
 						id='media-item-videogame-publishers'
-						variant='mediaItemDetails'
 						type='text'
 						value={inlineTextToInputValue(props.values.publishers)}
 						onChange={(event) => {
@@ -78,7 +75,6 @@ export const VideogameFormViewComponent = (props: VideogameFormViewComponentProp
 					</label>
 					<TextInputComponent
 						id='media-item-videogame-platforms'
-						variant='mediaItemDetails'
 						type='text'
 						value={inlineTextToInputValue(props.values.platforms)}
 						onChange={(event) => {

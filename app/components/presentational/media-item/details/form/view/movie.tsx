@@ -36,7 +36,6 @@ export const MovieFormViewComponent = (props: MovieFormViewComponentProps): Reac
 					</label>
 					<TextInputComponent
 						id='media-item-duration-minutes'
-						variant='mediaItemDetails'
 						type='number'
 						value={numberToInputValue(props.values.durationMinutes)}
 						onChange={(event) => {
@@ -50,7 +49,6 @@ export const MovieFormViewComponent = (props: MovieFormViewComponentProps): Reac
 					</label>
 					<TextInputComponent
 						id='media-item-movie-directors'
-						variant='mediaItemDetails'
 						type='text'
 						value={inlineTextToInputValue(props.values.directors)}
 						onChange={(event) => {

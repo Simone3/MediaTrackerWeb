@@ -1,23 +1,10 @@
 import React, { ChangeEvent, ForwardedRef, ReactElement, forwardRef } from 'react';
 
-const TEXT_INPUT_VARIANT_CLASS_NAMES = {
-	auth: 'auth-input',
-	categoryDetails: 'category-details-input',
-	entityDetails: 'entity-details-input',
-	mediaItemDetails: 'media-item-details-input',
-	mediaItemsListSearch: 'media-items-list-search-input'
-} as const;
-
-/**
- * Supported style variants for the shared text input
- */
-export type TextInputComponentVariant = keyof typeof TEXT_INPUT_VARIANT_CLASS_NAMES;
-
 /**
  * All props of TextInputComponent
  */
 export type TextInputComponentProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
-	variant: TextInputComponentVariant;
+	variant?: 'auth';
 	onChange?: React.ChangeEventHandler<HTMLInputElement>;
 	onChangeText?: (value: string) => void;
 	secureTextEntry?: boolean;
@@ -36,7 +23,7 @@ const TextInputComponentImplementation = (
 		...otherProps
 	} = props;
 	const resolvedType = secureTextEntry ? 'password' : type || 'text';
-	const variantClassName = TEXT_INPUT_VARIANT_CLASS_NAMES[variant];
+	const variantClassName = variant === 'auth' ? 'text-input text-input-auth' : 'text-input';
 	const resolvedClassName = className ? `${variantClassName} ${className}` : variantClassName;
 
 	return (

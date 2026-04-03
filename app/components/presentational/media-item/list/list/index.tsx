@@ -126,7 +126,6 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 						<TextInputComponent
 							ref={this.searchInputRef}
 							id='media-items-list-search'
-							variant='mediaItemsListSearch'
 							type='search'
 							value={this.state.searchTerm}
 							placeholder={searchPlaceholder}

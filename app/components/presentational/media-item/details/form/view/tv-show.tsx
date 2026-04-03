@@ -56,7 +56,6 @@ export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): Re
 					</label>
 					<TextInputComponent
 						id='media-item-episode-runtime'
-						variant='mediaItemDetails'
 						type='number'
 						value={numberToInputValue(props.values.averageEpisodeRuntimeMinutes)}
 						onChange={(event) => {
@@ -70,7 +69,6 @@ export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): Re
 					</label>
 					<TextInputComponent
 						id='media-item-tv-show-creators'
-						variant='mediaItemDetails'
 						type='text'
 						value={inlineTextToInputValue(props.values.creators)}
 						onChange={(event) => {
@@ -127,7 +125,6 @@ export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): Re
 								</label>
 								<TextInputComponent
 									id='media-item-next-episode-air-date'
-									variant='mediaItemDetails'
 									type='date'
 									value={dateToInputValue(props.values.nextEpisodeAirDate)}
 									onChange={(event) => {
