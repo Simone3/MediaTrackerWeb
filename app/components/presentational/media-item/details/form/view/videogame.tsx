@@ -25,8 +25,7 @@ export const VideogameFormViewComponent = (props: VideogameFormViewComponentProp
 	];
 
 	return (
-		<MediaItemFormViewComponent
-			<VideogameInternal>
+		<MediaItemFormViewComponent<VideogameInternal>
 			{...props}
 			extraActionButtons={extraActionButtons}
 			primarySpecificFields={[

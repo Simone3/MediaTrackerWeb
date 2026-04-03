@@ -45,8 +45,7 @@ export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): Re
 	];
 
 	return (
-		<MediaItemFormViewComponent
-			<TvShowInternal>
+		<MediaItemFormViewComponent<TvShowInternal>
 			{...props}
 			extraActionButtons={extraActionButtons}
 			primarySpecificFields={[

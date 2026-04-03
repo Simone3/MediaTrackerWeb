@@ -25,8 +25,7 @@ export const MovieFormViewComponent = (props: MovieFormViewComponentProps): Reac
 	];
 
 	return (
-		<MediaItemFormViewComponent
-			<MovieInternal>
+		<MediaItemFormViewComponent<MovieInternal>
 			{...props}
 			extraActionButtons={extraActionButtons}
 			primarySpecificFields={[

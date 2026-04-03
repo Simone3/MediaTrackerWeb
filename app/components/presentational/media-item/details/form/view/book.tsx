@@ -11,8 +11,7 @@ import { FormikProps } from 'formik';
  */
 export const BookFormViewComponent = (props: BookFormViewComponentProps): ReactElement => {
 	return (
-		<MediaItemFormViewComponent
-			<BookInternal>
+		<MediaItemFormViewComponent<BookInternal>
 			{...props}
 			primarySpecificFields={[
 				<div className='media-item-details-field' key='pagesNumber'>
