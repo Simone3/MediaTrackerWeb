@@ -232,6 +232,7 @@ module.exports = defineConfig([
 					return: { after: true },
 					case: { after: true },
 					try: { after: true },
+					finally: { after: true },
 					const: { after: true },
 					throw: { after: true }
 				}

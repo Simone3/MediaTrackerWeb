@@ -114,7 +114,7 @@ describe('MediaItemContextMenuComponent', () => {
 			expect(deleteCallback).toHaveBeenCalledWith(mediaItem);
 			expect(close).toHaveBeenCalledTimes(1);
 		}
-		finally{
+		finally {
 			Object.defineProperty(window, 'innerWidth', {
 				configurable: true,
 				writable: true,

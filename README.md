@@ -3,8 +3,7 @@ Just a Codex experiment for now.
 
 TODO:
 
-- migrate to an eslint.config.js file
-- fix linting on tests
+- missing and deprecated rules
 - make it add more tests
 
 - check dev vs. prod configs
