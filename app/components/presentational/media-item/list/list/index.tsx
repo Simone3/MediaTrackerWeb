@@ -1,5 +1,6 @@
 import React, { Component, ReactElement, ReactNode } from 'react';
 import { InputComponent } from 'app/components/presentational/generic/input';
+import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { MediaItemContextMenuAnchorRect, MediaItemContextMenuComponent } from 'app/components/presentational/media-item/list/context-menu';
 import { MediaItemRowComponent } from 'app/components/presentational/media-item/list/row';
 import { GroupInternal } from 'app/data/models/internal/group';
@@ -136,16 +137,24 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 								});
 							}}
 						/>
-						<button
+						<PillButtonComponent
 							type='submit'
+							tone='secondary'
+							size='compact'
+							appearance='subtle'
 							className='media-items-list-action'
 							disabled={!isSearchMode && !this.state.searchTerm.trim()}>
 							{i18n.t('mediaItem.list.buttons.search')}
-						</button>
+						</PillButtonComponent>
 					</form>
-					<button type='button' className='media-items-list-action' onClick={openFilters}>
+					<PillButtonComponent
+						tone='secondary'
+						size='compact'
+						appearance='subtle'
+						className='media-items-list-action'
+						onClick={openFilters}>
 						{i18n.t('mediaItem.list.filter.title')}
-					</button>
+					</PillButtonComponent>
 				</div>
 				{currentViewGroup && (
 					<div className='media-items-list-view-group-banner'>
@@ -153,9 +162,13 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 							<span className='media-items-list-view-group-label'>{i18n.t('mediaItem.list.viewGroup')}</span>
 							<strong className='media-items-list-view-group-name'>{currentViewGroup.name}</strong>
 						</div>
-						<button type='button' className='media-items-list-view-group-exit' onClick={exitViewGroupMode}>
+						<PillButtonComponent
+							tone='secondary'
+							size='compact'
+							appearance='subtle'
+							onClick={exitViewGroupMode}>
 							Back
-						</button>
+						</PillButtonComponent>
 					</div>
 				)}
 				{listContent}

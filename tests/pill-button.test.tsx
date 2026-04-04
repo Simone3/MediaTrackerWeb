@@ -22,9 +22,13 @@ describe('PillButtonComponent', () => {
 		expect(buttonRef.current).toBe(button);
 	});
 
-	test('supports alternate tones, compact size, and custom classes', () => {
+	test('supports alternate tones, sizes, appearances, and custom classes', () => {
 		render(
-			<PillButtonComponent tone='secondary' size='compact' className='test-extra-class'>
+			<PillButtonComponent
+				tone='secondary'
+				size='compact'
+				appearance='subtle'
+				className='test-extra-class'>
 				Cancel
 			</PillButtonComponent>
 		);
@@ -35,6 +39,7 @@ describe('PillButtonComponent', () => {
 
 		expect(button).toHaveClass('pill-button-secondary');
 		expect(button).toHaveClass('pill-button-compact');
+		expect(button).toHaveClass('pill-button-subtle');
 		expect(button).toHaveClass('test-extra-class');
 	});
 });

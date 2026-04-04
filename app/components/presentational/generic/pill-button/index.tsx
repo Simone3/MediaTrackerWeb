@@ -2,6 +2,7 @@ import React, { ForwardedRef, ReactElement, forwardRef } from 'react';
 
 export type PillButtonTone = 'primary' | 'secondary' | 'danger';
 export type PillButtonSize = 'default' | 'compact';
+export type PillButtonAppearance = 'default' | 'subtle';
 
 /**
  * All props of PillButtonComponent
@@ -9,6 +10,7 @@ export type PillButtonSize = 'default' | 'compact';
 export type PillButtonComponentProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 	tone?: PillButtonTone;
 	size?: PillButtonSize;
+	appearance?: PillButtonAppearance;
 };
 
 const PillButtonComponentImplementation = (
@@ -18,12 +20,14 @@ const PillButtonComponentImplementation = (
 	const {
 		tone = 'primary',
 		size = 'default',
+		appearance = 'default',
 		className,
 		type = 'button',
 		...otherProps
 	} = props;
 	const sizeClassName = size === 'compact' ? ' pill-button-compact' : '';
-	const baseClassName = `pill-button pill-button-${tone}${sizeClassName}`;
+	const appearanceClassName = appearance === 'subtle' ? ' pill-button-subtle' : '';
+	const baseClassName = `pill-button pill-button-${tone}${sizeClassName}${appearanceClassName}`;
 	const resolvedClassName = className ? `${baseClassName} ${className}` : baseClassName;
 
 	return (
