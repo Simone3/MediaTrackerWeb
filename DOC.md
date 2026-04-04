@@ -108,6 +108,15 @@
 - Runtime config loader: `app/config/config.ts`
 - Dev config: `app/config/properties/config-dev.ts`
 - Prod config: `app/config/properties/config-prod.ts`
+- Active config is selected from `MEDIA_TRACKER_APP_ENV`.
+- Webpack now injects `MEDIA_TRACKER_APP_ENV` into the browser bundle at build/start time through `__MEDIA_TRACKER_APP_ENV__`, so the config switch works in the actual web runtime instead of only in Node/Jest.
+- Current defaults:
+  - `npm start` runs webpack in development mode, so the app defaults to `dev`
+  - `npm run build` runs webpack in production mode, so the app defaults to `prod`
+- You can explicitly override either default with the shell env var, for example:
+  - `MEDIA_TRACKER_APP_ENV=prod npm start`
+  - `MEDIA_TRACKER_APP_ENV=dev npm run build`
+- On static hosting such as Render, this choice is baked in at build time; set `MEDIA_TRACKER_APP_ENV` in the Render environment (or prepend it to the build command) before `npm run build`.
 - The old unused `app/config/properties/config-sample.ts` helper has been removed; the repo now only keeps the actual dev/prod config files that are already versioned.
 - `app/config/type-config.ts` now only keeps the config fields still read by the web app.
 - `config.firebase` is intentionally narrowed to the Firebase Web Auth fields the app actually uses: `apiKey`, `authDomain`, `projectId`, and `appId`.
