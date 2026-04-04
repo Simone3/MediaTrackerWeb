@@ -10,7 +10,7 @@ import { CategoryGlobalState, categoryGlobalStateInitialValue } from 'app/redux/
  * @returns the new state
  */
 export const categoryGlobal = (state: CategoryGlobalState = categoryGlobalStateInitialValue, action: Action): CategoryGlobalState => {
-	switch (action.type) {
+	switch(action.type) {
 		// When a category is selected, it is marked as such
 		case SELECT_CATEGORY: {
 			const selectCategoryAction = action as SelectCategoryAction;

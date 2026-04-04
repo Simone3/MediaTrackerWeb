@@ -50,7 +50,7 @@ export const preserveTvShowSeasonProgress = (currentValues: TvShowInternal, merg
 	const currentSeasons = currentValues.seasons;
 	const newSeasons = mergedValues.seasons;
 
-	if (!newSeasons || newSeasons.length === 0 || !currentSeasons || currentSeasons.length === 0) {
+	if(!newSeasons || newSeasons.length === 0 || !currentSeasons || currentSeasons.length === 0) {
 		return mergedValues;
 	}
 
@@ -61,7 +61,7 @@ export const preserveTvShowSeasonProgress = (currentValues: TvShowInternal, merg
 				return season.number === newSeason.number;
 			});
 
-			if (!currentSeason) {
+			if(!currentSeason) {
 				return newSeason;
 			}
 

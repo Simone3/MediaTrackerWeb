@@ -70,7 +70,7 @@ export class TvShowFormComponent extends Component<TvShowFormComponentProps> {
 			loadSeasonsTimestamp
 		} = this.props;
 
-		if (!this.formikProps || !loadSeasonsTimestamp || loadSeasonsTimestamp === this.loadedSeasonsTimestamp) {
+		if(!this.formikProps || !loadSeasonsTimestamp || loadSeasonsTimestamp === this.loadedSeasonsTimestamp) {
 			return;
 		}
 

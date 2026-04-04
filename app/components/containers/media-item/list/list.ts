@@ -6,7 +6,7 @@ import { deleteMediaItem, highlightMediaItem, loadMediaItemDetails, markMediaIte
 import { State } from 'app/redux/state/state';
 
 const mapStateToProps = (state: State): MediaItemsListComponentInput => {
-	if (!state.categoryGlobal.selectedCategory) {
+	if(!state.categoryGlobal.selectedCategory) {
 		throw AppError.GENERIC.withDetails('Category cannot be null while rendering the media items list');
 	}
 

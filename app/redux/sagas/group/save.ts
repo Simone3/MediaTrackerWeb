@@ -22,13 +22,13 @@ const saveGroupSaga = function * (action: SaveGroupAction): SagaIterator {
 	const state = (yield select()) as State;
 	const category = state.categoryGlobal.selectedCategory;
 	const user = state.userGlobal.user;
-	if (!category || !user) {
+	if(!category || !user) {
 		throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while saving group');
 	}
 
 	try {
 		// If we are adding a new group and the user has not confirmed a same-name creation...
-		if (!group.id && !action.confirmSameName) {
+		if(!group.id && !action.confirmSameName) {
 			// Check if there are other groups with the same name
 			const filter: GroupFilterInternal = {
 				name: group.name
@@ -36,7 +36,7 @@ const saveGroupSaga = function * (action: SaveGroupAction): SagaIterator {
 			const mediaItemsWithSameName = (yield call(groupController.filter.bind(groupController), user.id, category.id, filter)) as GroupInternal[];
 			
 			// If so, dispatch confirmation request action and exit
-			if (mediaItemsWithSameName.length > 0) {
+			if(mediaItemsWithSameName.length > 0) {
 				yield put(askConfirmationBeforeSavingGroup());
 				return;
 			}

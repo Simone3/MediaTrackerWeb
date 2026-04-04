@@ -45,7 +45,7 @@ const navigationActions = [
  */
 const navigationSaga = function * (action: Action): SagaIterator {
 	try {
-		switch (action.type) {
+		switch(action.type) {
 			case SELECT_CATEGORY: {
 				yield call(navigationService.navigate.bind(navigationService), AppScreens.MediaItemsList);
 				break;

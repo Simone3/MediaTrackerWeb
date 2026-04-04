@@ -12,7 +12,7 @@ export class MediaItemFilterModalComponent extends Component<MediaItemFilterModa
 	 * @override
 	 */
 	public render(): ReactNode {
-		if (!this.props.visible) {
+		if(!this.props.visible) {
 			return null;
 		}
 

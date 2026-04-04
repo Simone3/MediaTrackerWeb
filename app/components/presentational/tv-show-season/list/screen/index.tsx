@@ -128,7 +128,7 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 					confirmLabel={i18n.t('common.alert.default.okButton')}
 					cancelLabel={i18n.t('common.alert.default.cancelButton')}
 					onConfirm={() => {
-						if (pendingDeleteTvShowSeason) {
+						if(pendingDeleteTvShowSeason) {
 							this.props.deleteTvShowSeason(pendingDeleteTvShowSeason);
 						}
 						this.setState({
@@ -164,11 +164,11 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 		const episodesNumber = tvShowSeason.episodesNumber ? tvShowSeason.episodesNumber : 0;
 		const watchedEpisodesNumber = tvShowSeason.watchedEpisodesNumber ? tvShowSeason.watchedEpisodesNumber : 0;
 
-		if (episodesNumber > 0 && watchedEpisodesNumber === episodesNumber) {
+		if(episodesNumber > 0 && watchedEpisodesNumber === episodesNumber) {
 			return TV_SHOW_SEASONS_SCREEN_COMPLETE_ACCENT;
 		}
 
-		if (watchedEpisodesNumber > 0) {
+		if(watchedEpisodesNumber > 0) {
 			return TV_SHOW_SEASONS_SCREEN_ACTIVE_ACCENT;
 		}
 

@@ -81,7 +81,7 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 	 * Helper to invoke the fetch callback if the input fetch flag is true
 	 */
 	private requestFetchIfRequired(): void {
-		if (this.props.requiresFetch) {
+		if(this.props.requiresFetch) {
 			this.props.fetchCategories();
 		}
 	}
@@ -92,7 +92,7 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 	private handleResize = (): void => {
 		const isMobileLayout = this.isMobileLayout();
 
-		if (isMobileLayout !== this.state.isMobileLayout) {
+		if(isMobileLayout !== this.state.isMobileLayout) {
 			this.setState({
 				isMobileLayout
 			});

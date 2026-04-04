@@ -14,8 +14,8 @@ class MediaItemUtils {
 		let episodesNumber = 0;
 		let watchedEpisodesNumber = 0;
 
-		if (tvShowSeasons) {
-			for (const season of tvShowSeasons) {
+		if(tvShowSeasons) {
+			for(const season of tvShowSeasons) {
 				seasonsNumber += 1;
 				episodesNumber += season.episodesNumber ? season.episodesNumber : 0;
 				watchedEpisodesNumber += season.watchedEpisodesNumber ? season.watchedEpisodesNumber : 0;

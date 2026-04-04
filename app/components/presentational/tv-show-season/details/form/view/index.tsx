@@ -22,7 +22,7 @@ export class TvShowSeasonFormViewComponent extends Component<TvShowSeasonFormVie
 		const validChanged = prevProps.isValid !== this.props.isValid;
 		const dirtyChanged = prevProps.dirty !== this.props.dirty;
 
-		if (validChanged || dirtyChanged) {
+		if(validChanged || dirtyChanged) {
 			this.notifyFormStatus();
 		}
 	}

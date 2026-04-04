@@ -48,7 +48,7 @@ export class RestJsonInvokerAxios implements RestJsonInvoker {
 					this.logSuccessfulResponse(options, rawResponseBody);
 
 					// Check if we "trust" the API response to be valid...
-					if (parameters.assumeWellFormedResponse) {
+					if(parameters.assumeWellFormedResponse) {
 						// Skip validation and return the raw response
 						resolve(rawResponseBody as TResponse);
 					}
@@ -64,7 +64,7 @@ export class RestJsonInvokerAxios implements RestJsonInvoker {
 					}
 				})
 				.catch((error) => {
-					if (this.isTimeout(error)) {
+					if(this.isTimeout(error)) {
 						reject(AppError.BACKEND_TIMEOUT.withDetails(error));
 					}
 					else {
@@ -80,7 +80,7 @@ export class RestJsonInvokerAxios implements RestJsonInvoker {
 	 * @returns true if it's a timeout error
 	 */
 	private isTimeout(error: unknown): boolean {
-		if (this.isAxiosError(error)) {
+		if(this.isAxiosError(error)) {
 			const axiosError = error as AxiosError;
 			return (axiosError.response && axiosError.response.status === 408) || axiosError.code === 'ECONNABORTED';
 		}
@@ -94,7 +94,7 @@ export class RestJsonInvokerAxios implements RestJsonInvoker {
 	 * @returns true if it's an AxiosError
 	 */
 	private isAxiosError(error: unknown): boolean {
-		if (error) {
+		if(error) {
 			const possiblyAxiosError = error as AxiosError;
 			return possiblyAxiosError.isAxiosError;
 		}
@@ -108,7 +108,7 @@ export class RestJsonInvokerAxios implements RestJsonInvoker {
 	 * @returns true if it's the timeout cancel error
 	 */
 	private isCancelError(error: unknown): boolean {
-		if (error) {
+		if(error) {
 			const possiblyCancel = error as Cancel;
 			return possiblyCancel.message === this.TIMEOUT_CANCEL_MESSAGE;
 		}
@@ -121,7 +121,7 @@ export class RestJsonInvokerAxios implements RestJsonInvoker {
 	 * @param options the request options
 	 */
 	private logRequest(options: AxiosRequestConfig): void {
-		if (config.logging.logInvocations) {
+		if(config.logging.logInvocations) {
 			const headers = options.headers as { [key: string]: string } | undefined;
 			const hasAuthorizationHeader = Boolean(headers && (headers.Authorization || headers.authorization));
 
@@ -135,7 +135,7 @@ export class RestJsonInvokerAxios implements RestJsonInvoker {
 	 * @param rawResponseBody the response body
 	 */
 	private logSuccessfulResponse(options: AxiosRequestConfig, rawResponseBody: unknown): void {
-		if (config.logging.logInvocations) {
+		if(config.logging.logInvocations) {
 			console.log(`Received response from ${options.method} ${options.url}: ${JSON.stringify(rawResponseBody)}`);
 		}
 	}

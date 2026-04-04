@@ -11,7 +11,7 @@ import { TvShowSeasonDetailsState, tvShowSeasonDetailsStateInitialValue } from '
  * @returns the new state
  */
 export const tvShowSeasonDetails = (state: TvShowSeasonDetailsState = tvShowSeasonDetailsStateInitialValue, action: Action): TvShowSeasonDetailsState => {
-	switch (action.type) {
+	switch(action.type) {
 		// When the details page is started with a new tvShowSeason, the status is reset and the default tvShowSeason is loaded
 		case LOAD_NEW_TV_SHOW_SEASON_DETAILS: {
 			return {

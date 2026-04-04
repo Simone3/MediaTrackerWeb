@@ -23,23 +23,23 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 	 * @override
 	 */
 	public componentDidUpdate(prevProps: Readonly<MediaItemsListComponentInput & MediaItemsListComponentOutput>): void {
-		if (
+		if(
 			prevProps.category.id !== this.props.category.id ||
 			prevProps.currentSearchTerm !== this.props.currentSearchTerm
 		) {
 			const nextSearchTerm = this.props.currentSearchTerm || '';
-			if (nextSearchTerm !== this.state.searchTerm) {
+			if(nextSearchTerm !== this.state.searchTerm) {
 				this.setState({
 					searchTerm: nextSearchTerm
 				});
 			}
 		}
 
-		if (!prevProps.isSearchMode && this.props.isSearchMode) {
+		if(!prevProps.isSearchMode && this.props.isSearchMode) {
 			this.searchInputRef.current?.focus();
 		}
 
-		if (prevProps.highlightedMediaItem && !this.props.highlightedMediaItem && this.state.menuAnchorRect) {
+		if(prevProps.highlightedMediaItem && !this.props.highlightedMediaItem && this.state.menuAnchorRect) {
 			this.setState({
 				menuAnchorRect: undefined
 			});
@@ -74,10 +74,10 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 		const searchPlaceholder = i18n.t(`mediaItem.list.search.${category.mediaType}`);
 		let listContent: ReactNode;
 
-		if (showSkeletons) {
+		if(showSkeletons) {
 			listContent = this.renderSkeletons();
 		}
-		else if (showEmptyState) {
+		else if(showEmptyState) {
 			listContent = this.renderNone(emptyMessage);
 		}
 		else {
@@ -247,14 +247,14 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 	 */
 	private submitSearchOrClose(): void {
 		const searchTerm = this.state.searchTerm.trim();
-		if (!searchTerm) {
-			if (this.props.isSearchMode) {
+		if(!searchTerm) {
+			if(this.props.isSearchMode) {
 				this.props.closeSearch();
 			}
 			return;
 		}
 
-		if (!this.props.isSearchMode) {
+		if(!this.props.isSearchMode) {
 			this.props.openSearch();
 		}
 

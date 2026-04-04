@@ -12,7 +12,7 @@ import { OwnPlatformGlobalState, ownPlatformGlobalStateInitialValue } from 'app/
  * @returns the new state
  */
 export const ownPlatformGlobal = (state: OwnPlatformGlobalState = ownPlatformGlobalStateInitialValue, action: Action): OwnPlatformGlobalState => {
-	switch (action.type) {
+	switch(action.type) {
 		// When a own platform is selected, it is marked as such
 		case SELECT_OWN_PLATFORM: {
 			const selectOwnPlatformAction = action as SelectOwnPlatformAction;

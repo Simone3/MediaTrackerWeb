@@ -11,19 +11,19 @@ import { ErrorState, errorStateInitialValue } from 'app/redux/state/error';
  * @returns the new state
  */
 export const error = (state: ErrorState = errorStateInitialValue, action: Action): ErrorState => {
-	switch (action.type) {
+	switch(action.type) {
 		case SET_ERROR: {
 			const setErrorAction = action as SetErrorAction;
 
 			let parsedError: AppError | string;
-			if (setErrorAction.error instanceof AppError || typeof setErrorAction.error === 'string') {
+			if(setErrorAction.error instanceof AppError || typeof setErrorAction.error === 'string') {
 				parsedError = setErrorAction.error;
 			}
 			else {
 				parsedError = AppError.GENERIC.withDetails(setErrorAction.error);
 			}
 
-			if (!parsedError) {
+			if(!parsedError) {
 				throw AppError.GENERIC.withDetails('Cannot display an empty error');
 			}
 

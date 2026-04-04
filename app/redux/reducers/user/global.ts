@@ -10,7 +10,7 @@ import { UserGlobalState, userGlobalStateInitialValue } from 'app/redux/state/us
  * @returns the new state
  */
 export const userGlobal = (state: UserGlobalState = userGlobalStateInitialValue, action: Action): UserGlobalState => {
-	switch (action.type) {
+	switch(action.type) {
 		// When the user is retrived from local storage, the current user (may or may not be defined) is updated and the status changes
 		case COMPLETE_CHECKING_USER_LOGIN_STATUS: {
 			const completeCheckingUserLoginStatusAction = action as CompleteCheckingUserLoginStatusAction;

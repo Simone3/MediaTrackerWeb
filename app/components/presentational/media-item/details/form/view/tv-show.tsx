@@ -15,7 +15,7 @@ import { mediaItemUtils } from 'app/utilities/media-item-utils';
  * @returns summary label
  */
 const getTvShowSeasonsSummaryLabel = (seasons?: TvShowSeasonInternal[]): string => {
-	if (!seasons || seasons.length === 0) {
+	if(!seasons || seasons.length === 0) {
 		return i18n.t('tvShowSeason.list.empty');
 	}
 

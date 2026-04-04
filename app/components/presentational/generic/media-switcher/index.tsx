@@ -13,7 +13,7 @@ export class MediaTypeSwitcherComponent extends Component<MediaTypeSwitcherCompo
 	public render(): ReactNode {
 		const mediaType = this.parseDiscriminator();
 
-		switch (mediaType) {
+		switch(mediaType) {
 			case 'BOOK':
 				return this.props.book;
 
@@ -40,7 +40,7 @@ export class MediaTypeSwitcherComponent extends Component<MediaTypeSwitcherCompo
 			discriminator
 		} = this.props;
 
-		if (typeof discriminator === 'string') {
+		if(typeof discriminator === 'string') {
 			return discriminator;
 		}
 

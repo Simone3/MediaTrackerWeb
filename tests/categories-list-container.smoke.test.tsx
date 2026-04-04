@@ -32,7 +32,7 @@ describe('CategoriesListContainer', () => {
 			}
 		};
 		const store = createStore((state: CategoriesListContainerTestState = initialState, action: Action & { category?: CategoryInternal }) => {
-			switch (action.type) {
+			switch(action.type) {
 				case HIGHLIGHT_CATEGORY: {
 					return {
 						...state,

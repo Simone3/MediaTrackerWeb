@@ -17,7 +17,7 @@ export type MediaItemRowData = {
  * @returns the label
  */
 const getStatusLabel = (mediaItem: MediaItemInternal): string => {
-	switch (mediaItem.status) {
+	switch(mediaItem.status) {
 		case 'ACTIVE':
 			return i18n.t(`mediaItem.list.markActive.${mediaItem.mediaType}`);
 

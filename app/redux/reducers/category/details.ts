@@ -11,7 +11,7 @@ import { CategoryDetailsState, categoryDetailsStateInitialValue } from 'app/redu
  * @returns the new state
  */
 export const categoryDetails = (state: CategoryDetailsState = categoryDetailsStateInitialValue, action: Action): CategoryDetailsState => {
-	switch (action.type) {
+	switch(action.type) {
 		// When the details page is started with a new category, the status is reset and the default category is loaded
 		case LOAD_NEW_CATEGORY_DETAILS: {
 			return {

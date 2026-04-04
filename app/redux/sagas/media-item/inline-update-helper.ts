@@ -14,7 +14,7 @@ export type InlineMediaItemUpdateActionType = typeof MARK_MEDIA_ITEM_AS_ACTIVE |
 export const applyInlineMediaItemUpdate = (sourceMediaItem: MediaItemInternal, actionType: InlineMediaItemUpdateActionType, now: Date = new Date()): MediaItemInternal => {
 	const mediaItem = { ...sourceMediaItem };
 
-	switch (actionType) {
+	switch(actionType) {
 		case MARK_MEDIA_ITEM_AS_ACTIVE: {
 			mediaItem.active = true;
 			mediaItem.status = 'ACTIVE';

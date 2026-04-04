@@ -37,7 +37,12 @@ const stylisticRules = {
 	'@stylistic/key-spacing': [ 'warn', { beforeColon: false, afterColon: true, mode: 'strict' }],
 	'@stylistic/keyword-spacing': [ 'warn', {
 		before: true,
-		after: true
+		after: true,
+		overrides: {
+			if: { after: false },
+			for: { after: false },
+			switch: { after: false }
+		}
 	}],
 	'@stylistic/line-comment-position': [ 'warn', { position: 'above' }],
 	'@stylistic/lines-around-comment': [ 'warn', {

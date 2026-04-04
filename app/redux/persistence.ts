@@ -7,15 +7,15 @@ const canUseSessionStorage = (): boolean => {
 };
 
 const encodeDates = (value: unknown): unknown => {
-	if (value instanceof Date) {
+	if(value instanceof Date) {
 		return { _type: 'Date', _value: value.toISOString() };
 	}
 
-	if (Array.isArray(value)) {
+	if(Array.isArray(value)) {
 		return value.map(encodeDates);
 	}
 
-	if (value && typeof value === 'object') {
+	if(value && typeof value === 'object') {
 		return Object.fromEntries(
 			Object.entries(value).map(([ k, v ]) => {
 				return [ k, encodeDates(v) ];
@@ -27,12 +27,12 @@ const encodeDates = (value: unknown): unknown => {
 };
 
 const decodeDates = (value: unknown): unknown => {
-	if (Array.isArray(value)) {
+	if(Array.isArray(value)) {
 		return value.map(decodeDates);
 	}
 
-	if (value && typeof value === 'object') {
-		if ('_type' in value && value._type === 'Date' && '_value' in value) {
+	if(value && typeof value === 'object') {
+		if('_type' in value && value._type === 'Date' && '_value' in value) {
 			return new Date(value._value as string);
 		}
 		return Object.fromEntries(
@@ -46,7 +46,7 @@ const decodeDates = (value: unknown): unknown => {
 };
 
 const clearPersistedValue = (): void => {
-	if (!canUseSessionStorage()) {
+	if(!canUseSessionStorage()) {
 		return;
 	}
 
@@ -59,7 +59,7 @@ const clearPersistedValue = (): void => {
 };
 
 export const loadPersistedReduxState = (): State | undefined => {
-	if (!canUseSessionStorage()) {
+	if(!canUseSessionStorage()) {
 		return undefined;
 	}
 
@@ -71,7 +71,7 @@ export const loadPersistedReduxState = (): State | undefined => {
 		console.log(error);
 		return undefined;
 	}
-	if (!serializedState) {
+	if(!serializedState) {
 		return undefined;
 	}
 
@@ -85,7 +85,7 @@ export const loadPersistedReduxState = (): State | undefined => {
 		return undefined;
 	}
 
-	if (revivedState.userGlobal.status !== 'REQUIRES_CHECK') {
+	if(revivedState.userGlobal.status !== 'REQUIRES_CHECK') {
 		clearPersistedValue();
 		return undefined;
 	}
@@ -94,11 +94,11 @@ export const loadPersistedReduxState = (): State | undefined => {
 };
 
 export const persistReduxState = (state: State): void => {
-	if (!canUseSessionStorage()) {
+	if(!canUseSessionStorage()) {
 		return;
 	}
 
-	if (state.userGlobal.status !== 'AUTHENTICATED') {
+	if(state.userGlobal.status !== 'AUTHENTICATED') {
 		clearPersistedValue();
 		return;
 	}

@@ -22,12 +22,12 @@ const saveCategorySaga = function * (action: SaveCategoryAction): SagaIterator {
 		// Get values from state
 		const state = (yield select()) as State;
 		const user = state.userGlobal.user;
-		if (!user) {
+		if(!user) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while saving category');
 		}
 
 		// If we are adding a new category and the user has not confirmed a same-name creation...
-		if (!category.id && !action.confirmSameName) {
+		if(!category.id && !action.confirmSameName) {
 			// Check if there are other categories with the same name
 			const filter: CategoryFilterInternal = {
 				name: category.name
@@ -35,7 +35,7 @@ const saveCategorySaga = function * (action: SaveCategoryAction): SagaIterator {
 			const mediaItemsWithSameName = (yield call(categoryController.filter.bind(categoryController), user.id, filter)) as CategoryInternal[];
 			
 			// If so, dispatch confirmation request action and exit
-			if (mediaItemsWithSameName.length > 0) {
+			if(mediaItemsWithSameName.length > 0) {
 				yield put(askConfirmationBeforeSavingCategory());
 				return;
 			}

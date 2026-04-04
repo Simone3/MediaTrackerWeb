@@ -11,7 +11,7 @@ import { MediaItemDetailsState, mediaItemDetailsStateInitialValue } from 'app/re
  * @returns the new state
  */
 export const mediaItemDetails = (state: MediaItemDetailsState = mediaItemDetailsStateInitialValue, action: Action): MediaItemDetailsState => {
-	switch (action.type) {
+	switch(action.type) {
 		// When the details page is started with a new media item, the status and other support fields are reset and the default media item is loaded
 		case LOAD_NEW_MEDIA_ITEM_DETAILS: {
 			const loadNewMediaItemAction = action as LoadNewMediaItemDetailsAction;

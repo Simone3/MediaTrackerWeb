@@ -39,7 +39,7 @@ class VideogameFilterFormMapper extends MediaItemFilterFormMapper<VideogameFilte
 	 * @override
 	 */
 	public toSortByModel(formValues: VideogameFilterFormValues): VideogameSortByInternal[] {
-		switch (formValues.sortBy) {
+		switch(formValues.sortBy) {
 			case 'DEFAULT':
 				return videogameDefinitionsController.getDefaultSortBy();
 
@@ -66,11 +66,11 @@ class VideogameFilterFormMapper extends MediaItemFilterFormMapper<VideogameFilte
 	 * @returns the target
 	 */
 	private toSortByFormValue(sortBy: VideogameSortByInternal[]): MediaItemFilterFormSortBy {
-		if (sortBy.length === 1) {
-			if (sortBy[0].field === 'NAME') {
+		if(sortBy.length === 1) {
+			if(sortBy[0].field === 'NAME') {
 				return 'NAME';
 			}
-			if (sortBy[0].field === 'COMPLETION_DATE') {
+			if(sortBy[0].field === 'COMPLETION_DATE') {
 				return 'COMPLETION_DATE';
 			}
 		}

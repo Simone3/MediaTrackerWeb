@@ -11,7 +11,7 @@ import { GroupsListState, groupsListStateInitialValue } from 'app/redux/state/gr
  * @returns the new state
  */
 export const groupsList = (state: GroupsListState = groupsListStateInitialValue, action: Action): GroupsListState => {
-	switch (action.type) {
+	switch(action.type) {
 		// When the app starts fetching the list of groups, the status changes to show the loading indicator
 		case START_FETCHING_GROUPS: {
 			return {

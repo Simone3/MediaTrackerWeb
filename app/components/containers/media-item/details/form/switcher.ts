@@ -4,7 +4,7 @@ import { AppError } from 'app/data/models/internal/error';
 import { State } from 'app/redux/state/state';
 
 const mapStateToProps = (state: State): MediaItemFormSwitcherComponentProps => {
-	if (!state.mediaItemDetails.mediaItem) {
+	if(!state.mediaItemDetails.mediaItem) {
 		throw AppError.GENERIC.withDetails('App navigated to the media item details screen with undefined details');
 	}
 

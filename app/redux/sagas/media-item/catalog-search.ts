@@ -20,7 +20,7 @@ const searchMediaItemsCatalogSaga = function * (action: SearchMediaItemsCatalogA
 		// Get values from state
 		const state = (yield select()) as State;
 		const category = state.categoryGlobal.selectedCategory;
-		if (!category) {
+		if(!category) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find category while searching media items catalog');
 		}
 		

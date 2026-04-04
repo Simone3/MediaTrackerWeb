@@ -22,7 +22,7 @@ export class GroupFormViewComponent extends Component<GroupFormViewComponentProp
 		const validChanged = prevProps.isValid !== this.props.isValid;
 		const dirtyChanged = prevProps.dirty !== this.props.dirty;
 
-		if (validChanged || dirtyChanged) {
+		if(validChanged || dirtyChanged) {
 			this.notifyFormStatus();
 		}
 	}

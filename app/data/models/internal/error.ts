@@ -75,8 +75,8 @@ export class AppError extends Error {
 	 */
 	public withDetails(errorDetails: unknown): AppError {
 		let convertedErrorDetails: string | AppError;
-		if (errorDetails) {
-			if (errorDetails instanceof AppError) {
+		if(errorDetails) {
+			if(errorDetails instanceof AppError) {
 				convertedErrorDetails = errorDetails;
 			}
 			else {

@@ -13,7 +13,7 @@ import { MediaItemsListState, mediaItemsListStateInitialValue } from 'app/redux/
  * @returns the new state
  */
 export const mediaItemsList = (state: MediaItemsListState = mediaItemsListStateInitialValue, action: Action): MediaItemsListState => {
-	switch (action.type) {
+	switch(action.type) {
 		// When a category is selected (i.e. the media items page is opened), its default settings are loaded
 		case SELECT_CATEGORY: {
 			const openMediaItemsListAction = action as SelectCategoryAction;

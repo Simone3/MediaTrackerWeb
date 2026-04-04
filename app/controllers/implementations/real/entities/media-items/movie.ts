@@ -60,7 +60,7 @@ export class MovieBackEndController implements MovieController {
 	 * @override
 	 */
 	public async save(userId: string, categoryId: string, movie: MovieInternal): Promise<void> {
-		if (movie.id) {
+		if(movie.id) {
 			const request: UpdateMovieRequest = {
 				movie: movieMapper.toExternal(movie)
 			};

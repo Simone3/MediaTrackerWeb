@@ -9,7 +9,7 @@ import { UserOperationsState, userOperationsStateInitialValue } from 'app/redux/
  * @returns the new state
  */
 export const userOperations = (state: UserOperationsState = userOperationsStateInitialValue, action: Action): UserOperationsState => {
-	switch (action.type) {
+	switch(action.type) {
 		// When the app starts the check process, the operation status changes
 		case START_CHECKING_USER_LOGIN_STATUS: {
 			return {

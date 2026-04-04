@@ -25,13 +25,13 @@ const saveMediaItemSaga = function * (action: SaveMediaItemAction): SagaIterator
 	const state = (yield select()) as State;
 	const category = state.categoryGlobal.selectedCategory;
 	const user = state.userGlobal.user;
-	if (!category || !user) {
+	if(!category || !user) {
 		throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while saving media item');
 	}
 
 	try {
 		// If we are adding a new media item and the user has not confirmed a same-name creation...
-		if (!mediaItem.id && !action.confirmSameName) {
+		if(!mediaItem.id && !action.confirmSameName) {
 			// Check if there are other media items with the same name
 			const filter: MediaItemFilterInternal = {
 				name: mediaItem.name
@@ -39,7 +39,7 @@ const saveMediaItemSaga = function * (action: SaveMediaItemAction): SagaIterator
 			const mediaItemsWithSameName = (yield call(mediaItemController.filter.bind(mediaItemController), user.id, category.id, filter)) as MediaItemInternal[];
 			
 			// If so, dispatch confirmation request action and exit
-			if (mediaItemsWithSameName.length > 0) {
+			if(mediaItemsWithSameName.length > 0) {
 				yield put(askConfirmationBeforeSavingMediaItem());
 				return;
 			}

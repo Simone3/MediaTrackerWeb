@@ -20,7 +20,7 @@ const deleteOwnPlatformSaga = function * (action: DeleteOwnPlatformAction): Saga
 		const state = (yield select()) as State;
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
-		if (!category || !user) {
+		if(!category || !user) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while deleting own platform');
 		}
 

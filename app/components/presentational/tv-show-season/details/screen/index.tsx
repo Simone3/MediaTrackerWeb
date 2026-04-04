@@ -71,7 +71,7 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 	 * @returns summary label
 	 */
 	private getSeasonSummary(tvShowSeason: TvShowSeasonInternal): string {
-		if (tvShowSeason.number === undefined && tvShowSeason.episodesNumber === undefined && tvShowSeason.watchedEpisodesNumber === undefined) {
+		if(tvShowSeason.number === undefined && tvShowSeason.episodesNumber === undefined && tvShowSeason.watchedEpisodesNumber === undefined) {
 			return i18n.t('tvShowSeason.list.emptyHint');
 		}
 
@@ -90,11 +90,11 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 		const episodesNumber = tvShowSeason.episodesNumber ? tvShowSeason.episodesNumber : 0;
 		const watchedEpisodesNumber = tvShowSeason.watchedEpisodesNumber ? tvShowSeason.watchedEpisodesNumber : 0;
 
-		if (episodesNumber > 0 && watchedEpisodesNumber === episodesNumber) {
+		if(episodesNumber > 0 && watchedEpisodesNumber === episodesNumber) {
 			return TV_SHOW_SEASON_DETAILS_COMPLETE_ACCENT;
 		}
 
-		if (watchedEpisodesNumber > 0) {
+		if(watchedEpisodesNumber > 0) {
 			return TV_SHOW_SEASON_DETAILS_ACTIVE_ACCENT;
 		}
 

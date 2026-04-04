@@ -20,7 +20,7 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 		const mode = state.mediaItemsList.mode;
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
-		if (!category || !user) {
+		if(!category || !user) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find category while fetching media items');
 		}
 
@@ -30,12 +30,12 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 
 		// Retrieve media items from controller
 		let mediaItems: MediaItemInternal[];
-		switch (mode) {
+		switch(mode) {
 			// Normal fetching mode is the standard one, based on the current filter and sort options
 			case 'NORMAL': {
 				const filter = state.mediaItemsList.filter;
 				const sortBy = state.mediaItemsList.sortBy;
-				if (!filter || !sortBy) {
+				if(!filter || !sortBy) {
 					throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find filter and sort options');
 				}
 
@@ -47,7 +47,7 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 			// Search fetching mode allows to search media items by term
 			case 'SEARCH': {
 				const term = state.mediaItemsList.searchTerm;
-				if (!term) {
+				if(!term) {
 					throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find search term');
 				}
 
@@ -59,7 +59,7 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 			// View group fetching mode allows to list all media items in a group
 			case 'VIEW_GROUP': {
 				const viewGroup = state.mediaItemsList.viewGroup;
-				if (!viewGroup) {
+				if(!viewGroup) {
 					throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find view group value');
 				}
 

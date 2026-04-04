@@ -10,7 +10,7 @@ import { CategoriesListState, categoriesListStateInitialValue } from 'app/redux/
  * @returns the new state
  */
 export const categoriesList = (state: CategoriesListState = categoriesListStateInitialValue, action: Action): CategoriesListState => {
-	switch (action.type) {
+	switch(action.type) {
 		// When the app starts fetching the list of categories, the status changes to show the loading indicator
 		case START_FETCHING_CATEGORIES: {
 			return {

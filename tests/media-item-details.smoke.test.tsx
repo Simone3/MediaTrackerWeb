@@ -88,7 +88,7 @@ const createDetailsStore = (overrides: DetailsScreenStateOverrides = {}) => {
 	const store = createStore((state: DetailsScreenTestState = initialState, action: DetailsScreenAction) => {
 		dispatchedActions.push(action);
 
-		switch (action.type) {
+		switch(action.type) {
 			case SET_MEDIA_ITEM_FORM_DRAFT: {
 				return {
 					...state,

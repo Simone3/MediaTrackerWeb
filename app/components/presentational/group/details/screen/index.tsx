@@ -25,7 +25,7 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 	 * @override
 	 */
 	public componentDidUpdate(prevProps: Readonly<GroupDetailsScreenComponentInput & GroupDetailsScreenComponentOutput>): void {
-		if (shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
+		if(shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
 			this.setState({
 				confirmSameNameVisible: true
 			});
@@ -113,7 +113,7 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 	 * Saves the current Formik values after the user confirmed the duplicate-name alert
 	 */
 	private submitFormWithSameNameConfirmation(): void {
-		if (this.formikProps) {
+		if(this.formikProps) {
 			this.props.saveGroup(this.formikProps.values, true);
 		}
 	}

@@ -11,7 +11,7 @@ import { OwnPlatformDetailsState, ownPlatformDetailsStateInitialValue } from 'ap
  * @returns the new state
  */
 export const ownPlatformDetails = (state: OwnPlatformDetailsState = ownPlatformDetailsStateInitialValue, action: Action): OwnPlatformDetailsState => {
-	switch (action.type) {
+	switch(action.type) {
 		// When the details page is started with a new own platform, the status is reset and the default own platform is loaded
 		case LOAD_NEW_OWN_PLATFORM_DETAILS: {
 			return {

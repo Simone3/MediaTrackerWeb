@@ -81,7 +81,7 @@ class BookSortMapper extends MediaItemSortMapper<BookSortByInternal, BookSortBy>
 	 * @returns the mapping target
 	 */
 	protected toExternalField(source: BookSortFieldInternal): string {
-		switch (source) {
+		switch(source) {
 			case 'AUTHOR': return BookSortField.AUTHOR;
 			default: return this.commonToExternalField(source);
 		}
@@ -93,7 +93,7 @@ class BookSortMapper extends MediaItemSortMapper<BookSortByInternal, BookSortBy>
 	 * @returns the mapping target
 	 */
 	protected toInternalField(source: string): BookSortFieldInternal {
-		switch (source) {
+		switch(source) {
 			case BookSortField.AUTHOR: return 'AUTHOR';
 			default: return this.commonToInternalField(source);
 		}

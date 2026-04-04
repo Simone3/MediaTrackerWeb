@@ -18,7 +18,7 @@ const fetchCategoriesSaga = function * (): SagaIterator {
 		// Get values from state
 		const state = (yield select()) as State;
 		const user = state.userGlobal.user;
-		if (!user) {
+		if(!user) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while fetching categories');
 		}
 

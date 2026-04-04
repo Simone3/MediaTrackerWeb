@@ -60,7 +60,7 @@ export class VideogameBackEndController implements VideogameController {
 	 * @override
 	 */
 	public async save(userId: string, categoryId: string, videogame: VideogameInternal): Promise<void> {
-		if (videogame.id) {
+		if(videogame.id) {
 			const request: UpdateVideogameRequest = {
 				videogame: videogameMapper.toExternal(videogame)
 			};

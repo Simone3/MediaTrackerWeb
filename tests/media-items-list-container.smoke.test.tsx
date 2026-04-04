@@ -52,7 +52,7 @@ describe('MediaItemsListContainer', () => {
 			}
 		};
 		const store = createStore((state: MediaItemsListContainerTestState = initialState, action: Action & { mediaItem?: MediaItemInternal }) => {
-			switch (action.type) {
+			switch(action.type) {
 				case HIGHLIGHT_MEDIA_ITEM: {
 					return {
 						...state,
@@ -116,7 +116,7 @@ describe('MediaItemsListContainer', () => {
 			}
 		};
 		const store = createStore((state: MediaItemsListContainerTestState = initialState, action: Action & { mediaItem?: MediaItemInternal; term?: string }) => {
-			switch (action.type) {
+			switch(action.type) {
 				case START_MEDIA_ITEMS_SEARCH_MODE: {
 					return {
 						...state,

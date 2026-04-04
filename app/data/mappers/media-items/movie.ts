@@ -81,7 +81,7 @@ class MovieSortMapper extends MediaItemSortMapper<MovieSortByInternal, MovieSort
 	 * @returns the mapping target
 	 */
 	protected toExternalField(source: MovieSortFieldInternal): string {
-		switch (source) {
+		switch(source) {
 			case 'DIRECTOR': return MovieSortField.DIRECTOR;
 			default: return this.commonToExternalField(source);
 		}
@@ -93,7 +93,7 @@ class MovieSortMapper extends MediaItemSortMapper<MovieSortByInternal, MovieSort
 	 * @returns the mapping target
 	 */
 	protected toInternalField(source: string): MovieSortFieldInternal {
-		switch (source) {
+		switch(source) {
 			case MovieSortField.DIRECTOR: return 'DIRECTOR';
 			default: return this.commonToInternalField(source);
 		}

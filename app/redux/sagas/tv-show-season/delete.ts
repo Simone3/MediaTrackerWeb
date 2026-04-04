@@ -18,7 +18,7 @@ const deleteTvShowSeasonSaga = function * (action: DeleteTvShowSeasonAction): Sa
 	// Get values from state
 	const state = (yield select()) as State;
 	let seasons = state.tvShowSeasonsList.tvShowSeasons;
-	if (!seasons) {
+	if(!seasons) {
 		throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while deleting TV show season');
 	}
 	seasons = [ ...seasons ];
@@ -29,7 +29,7 @@ const deleteTvShowSeasonSaga = function * (action: DeleteTvShowSeasonAction): Sa
 	});
 
 	// Season must exist
-	if (index < 0) {
+	if(index < 0) {
 		yield put(setError(AppError.GENERIC.withDetails('Season not found')));
 		return;
 	}

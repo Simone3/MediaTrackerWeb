@@ -25,7 +25,7 @@ export class CategoryFormViewComponent extends Component<CategoryFormViewCompone
 		const validChanged = prevProps.isValid !== this.props.isValid;
 		const dirtyChanged = prevProps.dirty !== this.props.dirty;
 
-		if (validChanged || dirtyChanged) {
+		if(validChanged || dirtyChanged) {
 			this.notifyFormStatus();
 		}
 	}

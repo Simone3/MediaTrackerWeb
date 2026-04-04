@@ -11,7 +11,7 @@ import { OwnPlatformsListState, ownPlatformsListStateInitialValue } from 'app/re
  * @returns the new state
  */
 export const ownPlatformsList = (state: OwnPlatformsListState = ownPlatformsListStateInitialValue, action: Action): OwnPlatformsListState => {
-	switch (action.type) {
+	switch(action.type) {
 		// When the app starts fetching the list of own platforms, the status changes to show the loading indicator
 		case START_FETCHING_OWN_PLATFORMS: {
 			return {

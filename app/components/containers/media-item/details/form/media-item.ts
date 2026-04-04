@@ -17,7 +17,7 @@ const buildInitialMediaItemFormValues = (state: State): MediaItemInternal => {
 		mediaItem
 	} = state.mediaItemDetails;
 
-	if (!mediaItem) {
+	if(!mediaItem) {
 		throw AppError.GENERIC.withDetails('App navigated to the media item form with undefined details');
 	}
 
@@ -36,7 +36,7 @@ const buildRestoredMediaItemFormDraft = (state: State): MediaItemInternal | unde
 		formDraft
 	} = state.mediaItemDetails;
 
-	if (!formDraft) {
+	if(!formDraft) {
 		return undefined;
 	}
 
@@ -57,7 +57,7 @@ export const commonMediaItemFormMapStateToProps = (state: State): CommonMediaIte
 	const groupsLoading = state.groupsList.status === 'DELETING' || state.groupsList.status === 'FETCHING';
 	const platformsLoading = state.ownPlatformsList.status === 'DELETING' || state.ownPlatformsList.status === 'FETCHING';
 
-	if (!details.mediaItem) {
+	if(!details.mediaItem) {
 		throw AppError.GENERIC.withDetails('App navigated to the media item form with undefined details');
 	}
 

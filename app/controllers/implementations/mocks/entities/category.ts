@@ -49,7 +49,7 @@ export class CategoryMockedController extends MockControllerHelper implements Ca
 	 */
 	public async filter(userId: string, filter?: CategoryFilterInternal): Promise<CategoryInternal[]> {
 		return this.resolveResult(() => {
-			if (filter && filter.name) {
+			if(filter && filter.name) {
 				return this.getUserCategories(userId).filter((category) => {
 					return filter.name && filter.name.toUpperCase() === category.name.toUpperCase();
 				});
@@ -67,7 +67,7 @@ export class CategoryMockedController extends MockControllerHelper implements Ca
 		return this.resolveResult(() => {
 			const categories = this.getUserCategories(userId).slice();
 
-			if (category.id) {
+			if(category.id) {
 				const i = categories.findIndex((cat) => {
 					return category.id === cat.id;
 				});
@@ -108,7 +108,7 @@ export class CategoryMockedController extends MockControllerHelper implements Ca
 	 */
 	private getUserCategories(userId: string): CategoryInternal[] {
 		let userCategories: CategoryInternal[];
-		if (userId in this.categories) {
+		if(userId in this.categories) {
 			userCategories = this.categories[userId];
 		}
 		else {

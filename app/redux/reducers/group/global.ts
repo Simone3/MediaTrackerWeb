@@ -12,7 +12,7 @@ import { GroupGlobalState, groupGlobalStateInitialValue } from 'app/redux/state/
  * @returns the new state
  */
 export const groupGlobal = (state: GroupGlobalState = groupGlobalStateInitialValue, action: Action): GroupGlobalState => {
-	switch (action.type) {
+	switch(action.type) {
 		// When a group is selected, it is marked as such
 		case SELECT_GROUP: {
 			const selectGroupAction = action as SelectGroupAction;

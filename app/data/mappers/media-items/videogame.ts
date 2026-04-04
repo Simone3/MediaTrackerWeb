@@ -85,7 +85,7 @@ class VideogameSortMapper extends MediaItemSortMapper<VideogameSortByInternal, V
 	 * @returns the mapping target
 	 */
 	protected toExternalField(source: VideogameSortFieldInternal): string {
-		switch (source) {
+		switch(source) {
 			case 'DEVELOPER': return VideogameSortField.DEVELOPER;
 			default: return this.commonToExternalField(source);
 		}
@@ -97,7 +97,7 @@ class VideogameSortMapper extends MediaItemSortMapper<VideogameSortByInternal, V
 	 * @returns the mapping target
 	 */
 	protected toInternalField(source: string): VideogameSortFieldInternal {
-		switch (source) {
+		switch(source) {
 			case VideogameSortField.DEVELOPER: return 'DEVELOPER';
 			default: return this.commonToInternalField(source);
 		}

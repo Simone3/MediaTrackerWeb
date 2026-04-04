@@ -28,7 +28,7 @@ type MediaItemDetailsSectionKey = 'basics' | 'profile' | 'collection' | 'progres
  * @returns yyyy-mm-dd or empty string
  */
 export const dateToInputValue = (currentDate?: Date): string => {
-	if (!currentDate) {
+	if(!currentDate) {
 		return '';
 	}
 
@@ -44,7 +44,7 @@ export const dateToInputValue = (currentDate?: Date): string => {
  * @returns date or undefined
  */
 export const inputValueToDate = (value: string): Date | undefined => {
-	if (!value) {
+	if(!value) {
 		return undefined;
 	}
 
@@ -67,7 +67,7 @@ export const numberToInputValue = (value?: number): number | '' => {
  * @returns number or undefined
  */
 export const inputValueToNumber = (value: string): number | undefined => {
-	if (!value) {
+	if(!value) {
 		return undefined;
 	}
 
@@ -81,7 +81,7 @@ export const inputValueToNumber = (value: string): number | undefined => {
  * @returns comma-separated string
  */
 export const inlineTextToInputValue = (values?: string[]): string => {
-	if (!values || values.length === 0) {
+	if(!values || values.length === 0) {
 		return '';
 	}
 
@@ -96,11 +96,11 @@ export const inlineTextToInputValue = (values?: string[]): string => {
 export const inputValueToInlineText = (value: string): string[] | undefined => {
 	const trimmedValue = value.trim();
 
-	if (!trimmedValue) {
+	if(!trimmedValue) {
 		return undefined;
 	}
 
-	if (!value.includes(',')) {
+	if(!value.includes(',')) {
 		return [ value ];
 	}
 
@@ -132,12 +132,12 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 	 * @override
 	 */
 	public componentDidUpdate(prevProps: Readonly<MediaItemFormViewComponentProps<TMediaItem>>): void {
-		if (prevProps.isValid !== this.props.isValid ||
+		if(prevProps.isValid !== this.props.isValid ||
 			prevProps.values !== this.props.values) {
 			this.notifyFormState();
 		}
 
-		if (prevProps.values !== this.props.values) {
+		if(prevProps.values !== this.props.values) {
 			this.props.persistFormDraft(this.props.values);
 		}
 	}
@@ -170,7 +170,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 	 * @returns the component
 	 */
 	private renderImageActionsRow(mediaItem: TMediaItem): ReactNode {
-		if (!mediaItem.id && !mediaItem.catalogId) {
+		if(!mediaItem.id && !mediaItem.catalogId) {
 			return null;
 		}
 
@@ -280,7 +280,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 						type='text'
 						value={mediaItem.name}
 						onChange={(event) => {
-							if (this.props.catalogSearchResults && this.props.catalogSearchResults.length > 0) {
+							if(this.props.catalogSearchResults && this.props.catalogSearchResults.length > 0) {
 								this.props.resetMediaItemsCatalogSearch();
 							}
 
@@ -464,7 +464,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 	 * @returns the component
 	 */
 	private renderOrderInGroupField(mediaItem: TMediaItem, fieldClassName: string = 'media-item-details-field'): ReactNode {
-		if (!mediaItem.group) {
+		if(!mediaItem.group) {
 			return null;
 		}
 
@@ -570,7 +570,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 			catalogSearchResults
 		} = this.props;
 
-		if (!catalogSearchResults || catalogSearchResults.length === 0) {
+		if(!catalogSearchResults || catalogSearchResults.length === 0) {
 			return null;
 		}
 
@@ -600,7 +600,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 	 * @returns label
 	 */
 	private formatCatalogSearchResult(result: SearchMediaItemCatalogResultInternal): string {
-		if (!result.releaseDate) {
+		if(!result.releaseDate) {
 			return result.name;
 		}
 
@@ -670,7 +670,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 			}
 		];
 
-		if (this.props.extraActionButtons) {
+		if(this.props.extraActionButtons) {
 			buttons.push(...this.props.extraActionButtons);
 		}
 
@@ -680,7 +680,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 			icon: downloadIcon,
 			disabled: !mediaItem.catalogId,
 			onClick: () => {
-				if (mediaItem.catalogId) {
+				if(mediaItem.catalogId) {
 					this.props.requestCatalogReload(mediaItem.catalogId);
 				}
 			}
@@ -703,7 +703,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 	private submitCatalogSearch(): void {
 		const term = this.props.values.name.trim();
 
-		if (!term) {
+		if(!term) {
 			return;
 		}
 
@@ -715,7 +715,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 	 * @param event keyboard event
 	 */
 	private handleNameFieldKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
-		if (event.key !== 'Enter') {
+		if(event.key !== 'Enter') {
 			return;
 		}
 
@@ -742,7 +742,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 		const completionDates = this.props.values.completedOn ? [ ...this.props.values.completedOn ] : [];
 		const parsedDate = this.inputValueToDate(value);
 
-		if (!parsedDate) {
+		if(!parsedDate) {
 			completionDates.splice(index, 1);
 		}
 		else {

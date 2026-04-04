@@ -17,7 +17,7 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 	 * @override
 	 */
 	public componentDidUpdate(prevProps: Readonly<MediaItemContextMenuComponentInput & MediaItemContextMenuComponentOutput>): void {
-		if (prevProps.mediaItem?.id !== this.props.mediaItem?.id && this.state.deleteConfirmationVisible) {
+		if(prevProps.mediaItem?.id !== this.props.mediaItem?.id && this.state.deleteConfirmationVisible) {
 			this.setState({
 				deleteConfirmationVisible: false
 			});
@@ -33,7 +33,7 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 			close
 		} = this.props;
 
-		if (!mediaItem) {
+		if(!mediaItem) {
 			return null;
 		}
 
@@ -102,7 +102,7 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 			}
 		];
 
-		if (visibility.canMarkAsRedo) {
+		if(visibility.canMarkAsRedo) {
 			actions.push({
 				label: i18n.t(`mediaItem.list.markRedo.${mediaItem.mediaType}`),
 				onClick: () => {
@@ -112,7 +112,7 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 			});
 		}
 
-		if (visibility.canMarkAsActive) {
+		if(visibility.canMarkAsActive) {
 			actions.push({
 				label: i18n.t(`mediaItem.list.markActive.${mediaItem.mediaType}`),
 				onClick: () => {
@@ -122,7 +122,7 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 			});
 		}
 
-		if (visibility.canMarkAsComplete) {
+		if(visibility.canMarkAsComplete) {
 			actions.push({
 				label: i18n.t(`mediaItem.list.markComplete.${mediaItem.mediaType}`),
 				onClick: () => {
@@ -132,7 +132,7 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 			});
 		}
 
-		if (visibility.canViewGroup && mediaItem.group) {
+		if(visibility.canViewGroup && mediaItem.group) {
 			actions.push({
 				label: i18n.t('mediaItem.list.viewGroup'),
 				onClick: () => {

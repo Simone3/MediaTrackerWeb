@@ -119,10 +119,10 @@ export const DEFAULT_CATALOG_TV_SHOW: OptionalToUndefined<CatalogTvShowInternal>
  * @returns negative, 0 or positive value based on comparison
  */
 export const compareTvShowSeasons = (first: TvShowSeasonInternal, second: TvShowSeasonInternal): number => {
-	if (first.number < second.number) {
+	if(first.number < second.number) {
 		return -1;
 	}
-	else if (first.number > second.number) {
+	else if(first.number > second.number) {
 		return 1;
 	}
 	else {

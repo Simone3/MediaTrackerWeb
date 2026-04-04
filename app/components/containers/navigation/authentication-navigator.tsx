@@ -18,13 +18,13 @@ class AuthenticationNavigator extends Component<AuthenticationNavigatorProps> {
 			userStatus
 		} = this.props;
 
-		if (userStatus === 'REQUIRES_CHECK') {
+		if(userStatus === 'REQUIRES_CHECK') {
 			return <AuthLoadingScreenContainer />;
 		}
-		if (userStatus === 'UNAUTHENTICATED') {
+		if(userStatus === 'UNAUTHENTICATED') {
 			return <UnauthenticatedNavigator />;
 		}
-		if (userStatus === 'AUTHENTICATED') {
+		if(userStatus === 'AUTHENTICATED') {
 			return <AuthenticatedNavigator />;
 		}
 		throw Error('Unhandled user status');

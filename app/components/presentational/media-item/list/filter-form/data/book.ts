@@ -39,7 +39,7 @@ class BookFilterFormMapper extends MediaItemFilterFormMapper<BookFilterInternal,
 	 * @override
 	 */
 	public toSortByModel(formValues: BookFilterFormValues): BookSortByInternal[] {
-		switch (formValues.sortBy) {
+		switch(formValues.sortBy) {
 			case 'DEFAULT':
 				return bookDefinitionsController.getDefaultSortBy();
 
@@ -66,11 +66,11 @@ class BookFilterFormMapper extends MediaItemFilterFormMapper<BookFilterInternal,
 	 * @returns the target
 	 */
 	private toSortByFormValue(sortBy: BookSortByInternal[]): MediaItemFilterFormSortBy {
-		if (sortBy.length === 1) {
-			if (sortBy[0].field === 'NAME') {
+		if(sortBy.length === 1) {
+			if(sortBy[0].field === 'NAME') {
 				return 'NAME';
 			}
-			if (sortBy[0].field === 'COMPLETION_DATE') {
+			if(sortBy[0].field === 'COMPLETION_DATE') {
 				return 'COMPLETION_DATE';
 			}
 		}

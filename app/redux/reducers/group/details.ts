@@ -11,7 +11,7 @@ import { GroupDetailsState, groupDetailsStateInitialValue } from 'app/redux/stat
  * @returns the new state
  */
 export const groupDetails = (state: GroupDetailsState = groupDetailsStateInitialValue, action: Action): GroupDetailsState => {
-	switch (action.type) {
+	switch(action.type) {
 		// When the details page is started with a new group, the status is reset and the default group is loaded
 		case LOAD_NEW_GROUP_DETAILS: {
 			return {

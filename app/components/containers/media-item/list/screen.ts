@@ -8,7 +8,7 @@ import { State } from 'app/redux/state/state';
 const mapStateToProps = (state: State): MediaItemsListScreenComponentInput => {
 	const listState = state.mediaItemsList;
 	const category = state.categoryGlobal.selectedCategory;
-	if (!category) {
+	if(!category) {
 		throw AppError.GENERIC.withDetails('App navigated to the media items details screen without category data');
 	}
 

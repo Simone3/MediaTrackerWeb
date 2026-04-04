@@ -9,7 +9,7 @@ const mapStateToProps = (state: State): MediaItemFilterModalComponentInput => {
 	const category = state.categoryGlobal.selectedCategory;
 	const currentFilter = state.mediaItemsList.filter;
 	const currentSortBy = state.mediaItemsList.sortBy;
-	if (!category || !currentFilter || !currentSortBy) {
+	if(!category || !currentFilter || !currentSortBy) {
 		throw AppError.GENERIC.withDetails('List state has no linked category/filter/sort, cannot display filter modal');
 	}
 

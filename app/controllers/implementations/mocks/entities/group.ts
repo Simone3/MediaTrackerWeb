@@ -38,7 +38,7 @@ export class GroupMockedController extends MockControllerHelper implements Group
 		return this.resolveResult(() => {
 			const categoryGroups = this.getCategoryGroups(userId, categoryId);
 
-			if (filter && filter.name) {
+			if(filter && filter.name) {
 				return categoryGroups.filter((group) => {
 					return filter.name && filter.name.toUpperCase() === group.name.toUpperCase();
 				});
@@ -56,7 +56,7 @@ export class GroupMockedController extends MockControllerHelper implements Group
 		return this.resolveResult(() => {
 			const categoryGroups = this.getCategoryGroups(userId, categoryId);
 			
-			if (group.id) {
+			if(group.id) {
 				const i = categoryGroups.findIndex((item) => {
 					return item.id === group.id;
 				});
@@ -99,7 +99,7 @@ export class GroupMockedController extends MockControllerHelper implements Group
 	 */
 	private getCategoryGroups(userId: string, categoryId: string): GroupInternal[] {
 		let categoryGroups: GroupInternal[];
-		if (userId in this.groups && categoryId in this.groups[userId]) {
+		if(userId in this.groups && categoryId in this.groups[userId]) {
 			categoryGroups = this.groups[userId][categoryId];
 		}
 		else {

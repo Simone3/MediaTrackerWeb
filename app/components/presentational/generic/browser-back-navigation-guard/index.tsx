@@ -9,7 +9,7 @@ const getCurrentPath = (pathname: string, search: string, hash: string): string 
 };
 
 const getCurrentHistoryState = (): Record<string, unknown> => {
-	if (typeof window === 'undefined' || !window.history.state || typeof window.history.state !== 'object') {
+	if(typeof window === 'undefined' || !window.history.state || typeof window.history.state !== 'object') {
 		return {};
 	}
 
@@ -67,7 +67,7 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 		const currentHistoryPath = getGuardedPathFromHistoryState();
 		guardArmedRef.current = currentHistoryPath === currentPath;
 
-		if (when && !guardArmedRef.current) {
+		if(when && !guardArmedRef.current) {
 			pushGuardHistoryState(currentPath);
 			guardArmedRef.current = true;
 		}
@@ -75,13 +75,13 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 
 	useEffect(() => {
 		const handlePopState = (): void => {
-			if (!guardArmedRef.current) {
+			if(!guardArmedRef.current) {
 				return;
 			}
 
 			guardArmedRef.current = false;
 
-			if (whenRef.current) {
+			if(whenRef.current) {
 				pendingNavigationRef.current = {
 					type: 'BROWSER_BACK'
 				};
@@ -101,7 +101,7 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 
 	useEffect(() => {
 		const handleDocumentClick = (event: MouseEvent): void => {
-			if (
+			if(
 				!whenRef.current ||
 				event.defaultPrevented ||
 				event.button !== 0 ||
@@ -114,27 +114,27 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 			}
 
 			const target = event.target;
-			if (!(target instanceof Element)) {
+			if(!(target instanceof Element)) {
 				return;
 			}
 
 			// Intercept same-origin anchor navigation, including sidebar links rendered outside the guarded subtree.
 			const linkElement = target.closest('a[href]');
-			if (!(linkElement instanceof HTMLAnchorElement)) {
+			if(!(linkElement instanceof HTMLAnchorElement)) {
 				return;
 			}
 
-			if ((linkElement.target && linkElement.target !== '_self') || linkElement.hasAttribute('download')) {
+			if((linkElement.target && linkElement.target !== '_self') || linkElement.hasAttribute('download')) {
 				return;
 			}
 
 			const nextUrl = new URL(linkElement.href, window.location.href);
-			if (nextUrl.origin !== window.location.origin) {
+			if(nextUrl.origin !== window.location.origin) {
 				return;
 			}
 
 			const nextPath = getCurrentPath(nextUrl.pathname, nextUrl.search, nextUrl.hash);
-			if (nextPath === currentPathRef.current) {
+			if(nextPath === currentPathRef.current) {
 				return;
 			}
 
@@ -154,7 +154,7 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 	}, []);
 
 	useBeforeUnload((event) => {
-		if (!whenRef.current) {
+		if(!whenRef.current) {
 			return;
 		}
 
@@ -162,7 +162,7 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 	});
 
 	const rearmGuard = (): void => {
-		if (getGuardedPathFromHistoryState() !== currentPathRef.current) {
+		if(getGuardedPathFromHistoryState() !== currentPathRef.current) {
 			pushGuardHistoryState(currentPathRef.current);
 		}
 
@@ -184,7 +184,7 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 					setDialogVisible(false);
 					onConfirmLeave?.();
 
-					if (!pendingNavigation || pendingNavigation.type === 'BROWSER_BACK') {
+					if(!pendingNavigation || pendingNavigation.type === 'BROWSER_BACK') {
 						window.history.back();
 						return;
 					}
@@ -196,7 +196,7 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 					pendingNavigationRef.current = undefined;
 					setDialogVisible(false);
 
-					if (pendingNavigation?.type === 'BROWSER_BACK') {
+					if(pendingNavigation?.type === 'BROWSER_BACK') {
 						rearmGuard();
 					}
 				}}

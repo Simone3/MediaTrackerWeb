@@ -50,7 +50,7 @@ export class CategoryBackEndController implements CategoryController {
 	 * @override
 	 */
 	public async saveCategory(userId: string, category: CategoryInternal): Promise<void> {
-		if (category.id) {
+		if(category.id) {
 			const request: UpdateCategoryRequest = {
 				category: categoryMapper.toExternal(category)
 			};

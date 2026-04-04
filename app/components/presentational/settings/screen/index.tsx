@@ -59,7 +59,7 @@ export class SettingsScreenComponent extends Component<SettingsScreenComponentPr
 					confirmLabel={i18n.t('common.alert.default.okButton')}
 					cancelLabel={i18n.t('common.alert.default.cancelButton')}
 					onConfirm={() => {
-						if (confirmDialog) {
+						if(confirmDialog) {
 							confirmDialog.onConfirm();
 						}
 						this.closeConfirmDialog();

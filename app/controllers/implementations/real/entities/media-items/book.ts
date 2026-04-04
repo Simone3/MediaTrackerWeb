@@ -60,7 +60,7 @@ export class BookBackEndController implements BookController {
 	 * @override
 	 */
 	public async save(userId: string, categoryId: string, book: BookInternal): Promise<void> {
-		if (book.id) {
+		if(book.id) {
 			const request: UpdateBookRequest = {
 				book: bookMapper.toExternal(book)
 			};

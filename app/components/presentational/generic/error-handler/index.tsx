@@ -20,7 +20,7 @@ export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps,
 			error
 		} = this.props;
 
-		if (!error || error === prevProps.error) {
+		if(!error || error === prevProps.error) {
 			return;
 		}
 
@@ -30,7 +30,7 @@ export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps,
 		});
 		this.props.clearError();
 
-		if (this.clearTimeoutId) {
+		if(this.clearTimeoutId) {
 			clearTimeout(this.clearTimeoutId);
 		}
 
@@ -45,7 +45,7 @@ export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps,
 	 * @override
 	 */
 	public componentWillUnmount(): void {
-		if (this.clearTimeoutId) {
+		if(this.clearTimeoutId) {
 			clearTimeout(this.clearTimeoutId);
 		}
 	}

@@ -43,7 +43,7 @@ export const mediaItemFormValidationShape = {
  * @returns normalized array or undefined
  */
 const normalizeTextArray = (values?: string[]): string[] | undefined => {
-	if (!values || values.length === 0) {
+	if(!values || values.length === 0) {
 		return undefined;
 	}
 
@@ -72,7 +72,7 @@ export const applyNormalizedTextArrayField = <T extends object>(
 	const mutableTarget = target as Record<string, unknown>;
 	const normalizedValues = normalizeTextArray(values);
 
-	if (normalizedValues) {
+	if(normalizedValues) {
 		mutableTarget[key as string] = normalizedValues;
 	}
 	else {
@@ -90,7 +90,7 @@ export const normalizeMediaItemFormValues = <T extends MediaItemInternal>(values
 		...values
 	};
 
-	if (values.group?.id) {
+	if(values.group?.id) {
 		normalizedValues.orderInGroup = values.orderInGroup;
 	}
 	else {

@@ -25,10 +25,10 @@ const TextareaComponentImplementation = (
 			ref={ref}
 			className={resolvedClassName}
 			onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
-				if (otherProps.onChange) {
+				if(otherProps.onChange) {
 					otherProps.onChange(event);
 				}
-				if (onChangeValue) {
+				if(onChangeValue) {
 					onChangeValue(event.target.value);
 				}
 			}}
