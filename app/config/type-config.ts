@@ -1,5 +1,7 @@
 import type { FirebaseOptions } from 'firebase/app';
 
+type FirebaseAuthConfig = Pick<FirebaseOptions, 'apiKey' | 'authDomain' | 'projectId' | 'appId'>;
+
 /**
  * Type for configuration files
  */
@@ -9,31 +11,16 @@ export type Config = {
 		baseUrl: string;
 		assumeWellFormedResponse: boolean;
 	};
-	firebase: FirebaseOptions;
+	firebase: FirebaseAuthConfig;
 	ui: {
 		colors: {
-			colorPrimary: string;
-			colorPrimaryDark: string;
-			colorAccent: string;
-			colorContrastText: string;
-			colorModalBackground: string;
-			colorModalContent: string;
-			colorModalButton: string;
-			colorModalButtonDisabled: string;
-			colorFormInputs: string;
-			colorDefaultIcon: string;
-			separator: string;
-			blue: string;
-			red: string;
 			green: string;
 			orange: string;
-			yellow: string;
 			purple: string;
 			cyan: string;
 			grey: string;
 			lightGrey: string;
 			white: string;
-			black: string;
 			availableCategoryColors: string[];
 			availableOwnPlatformColors: string[];
 		};
