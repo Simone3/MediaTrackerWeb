@@ -1,19 +1,19 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { TextInputComponent } from 'app/components/presentational/generic/text-input';
+import { InputComponent } from 'app/components/presentational/generic/input';
 
-describe('TextInputComponent', () => {
+describe('InputComponent', () => {
 	test('uses the auth variant, resolves password mode, and proxies change callbacks', () => {
 		const onChange = jest.fn();
-		const onChangeText = jest.fn();
+		const onChangeValue = jest.fn();
 
 		render(
-			<TextInputComponent
+			<InputComponent
 				variant='auth'
 				placeholder='Password'
 				secureTextEntry={true}
 				onChange={onChange}
-				onChangeText={onChangeText}
+				onChangeValue={onChangeValue}
 			/>
 		);
 
@@ -30,18 +30,18 @@ describe('TextInputComponent', () => {
 		});
 
 		expect(onChange).toHaveBeenCalledTimes(1);
-		expect(onChangeText).toHaveBeenCalledWith('hunter2');
+		expect(onChangeValue).toHaveBeenCalledWith('hunter2');
 	});
 
-	test('forwards refs and applies the requested variant class', () => {
+	test('forwards refs and applies the shared input class', () => {
 		const inputRef = React.createRef<HTMLInputElement>();
 
-			render(
-				<TextInputComponent
-					ref={inputRef}
-					type='search'
-					defaultValue='Dark'
-					onChange={() => {
+		render(
+			<InputComponent
+				ref={inputRef}
+				type='search'
+				defaultValue='Dark'
+				onChange={() => {
 					return undefined;
 				}}
 			/>

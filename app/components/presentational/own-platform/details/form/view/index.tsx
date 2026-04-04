@@ -1,6 +1,7 @@
 import { Component, ReactNode } from 'react';
 import { FormikProps } from 'formik';
-import { TextInputComponent } from 'app/components/presentational/generic/text-input';
+import { InputComponent } from 'app/components/presentational/generic/input';
+import { SelectComponent } from 'app/components/presentational/generic/select';
 import { config } from 'app/config/config';
 import { buildOwnPlatformMaskStyle } from 'app/components/presentational/own-platform/common/icon-registry';
 import { OWN_PLATFORM_ICON_INTERNAL_VALUES, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
@@ -46,7 +47,7 @@ export class OwnPlatformFormViewComponent extends Component<OwnPlatformFormViewC
 						<label className='entity-details-label' htmlFor='own-platform-name'>
 							{i18n.t('ownPlatform.details.placeholders.name')}
 						</label>
-						<TextInputComponent
+						<InputComponent
 							id='own-platform-name'
 							name='name'
 							type='text'
@@ -75,10 +76,9 @@ export class OwnPlatformFormViewComponent extends Component<OwnPlatformFormViewC
 									aria-hidden={true}
 								/>
 							</span>
-							<select
+							<SelectComponent
 								id='own-platform-icon'
 								name='icon'
-								className='entity-details-select'
 								value={values.icon}
 								onChange={(event) => {
 									void setFieldValue('icon', event.target.value as OwnPlatformInternal['icon']);
@@ -90,7 +90,7 @@ export class OwnPlatformFormViewComponent extends Component<OwnPlatformFormViewC
 										</option>
 									);
 								})}
-							</select>
+							</SelectComponent>
 						</div>
 					</div>
 					<div className='entity-details-field entity-details-field-span-2'>

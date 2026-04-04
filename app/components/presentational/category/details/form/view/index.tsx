@@ -1,7 +1,7 @@
 import { Component, ReactNode } from 'react';
 import { FormikProps } from 'formik';
 import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
-import { TextInputComponent } from 'app/components/presentational/generic/text-input';
+import { InputComponent } from 'app/components/presentational/generic/input';
 import { config } from 'app/config/config';
 import { CategoryInternal, MEDIA_TYPES_INTERNAL } from 'app/data/models/internal/category';
 import { i18n } from 'app/utilities/i18n';
@@ -45,7 +45,7 @@ export class CategoryFormViewComponent extends Component<CategoryFormViewCompone
 					<label className='category-details-label' htmlFor='category-name'>
 						{i18n.t('category.details.placeholders.name')}
 					</label>
-					<TextInputComponent
+					<InputComponent
 						id='category-name'
 						name='name'
 						type='text'

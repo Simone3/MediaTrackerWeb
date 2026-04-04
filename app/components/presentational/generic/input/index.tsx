@@ -1,21 +1,21 @@
 import React, { ChangeEvent, ForwardedRef, ReactElement, forwardRef } from 'react';
 
 /**
- * All props of TextInputComponent
+ * All props of InputComponent
  */
-export type TextInputComponentProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
+export type InputComponentProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> & {
 	variant?: 'auth';
 	onChange?: React.ChangeEventHandler<HTMLInputElement>;
-	onChangeText?: (value: string) => void;
+	onChangeValue?: (value: string) => void;
 	secureTextEntry?: boolean;
 };
 
-const TextInputComponentImplementation = (
-	props: TextInputComponentProps,
+const InputComponentImplementation = (
+	props: InputComponentProps,
 	ref: ForwardedRef<HTMLInputElement>
 ): ReactElement => {
 	const {
-		onChangeText,
+		onChangeValue,
 		secureTextEntry,
 		className,
 		type,
@@ -36,8 +36,8 @@ const TextInputComponentImplementation = (
 				if(otherProps.onChange) {
 					otherProps.onChange(event);
 				}
-				if(onChangeText) {
-					onChangeText(event.target.value);
+				if(onChangeValue) {
+					onChangeValue(event.target.value);
 				}
 			}}
 		/>
@@ -45,8 +45,8 @@ const TextInputComponentImplementation = (
 };
 
 /**
- * Shared input component used by text-like fields across the app
+ * Shared input component used by single-line native inputs across the app
  */
-export const TextInputComponent = forwardRef<HTMLInputElement, TextInputComponentProps>(TextInputComponentImplementation);
+export const InputComponent = forwardRef<HTMLInputElement, InputComponentProps>(InputComponentImplementation);
 
-TextInputComponent.displayName = 'TextInputComponent';
+InputComponent.displayName = 'InputComponent';

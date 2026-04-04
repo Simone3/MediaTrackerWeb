@@ -1,6 +1,6 @@
 import { Component, ReactNode } from 'react';
 import { FormikProps } from 'formik';
-import { TextInputComponent } from 'app/components/presentational/generic/text-input';
+import { InputComponent } from 'app/components/presentational/generic/input';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { i18n } from 'app/utilities/i18n';
 
@@ -43,7 +43,7 @@ export class TvShowSeasonFormViewComponent extends Component<TvShowSeasonFormVie
 						<label className='entity-details-label' htmlFor='tv-show-season-number'>
 							{i18n.t('tvShowSeason.details.placeholders.number')}
 						</label>
-						<TextInputComponent
+						<InputComponent
 							id='tv-show-season-number'
 							type='number'
 							value={values.number ?? ''}
@@ -58,7 +58,7 @@ export class TvShowSeasonFormViewComponent extends Component<TvShowSeasonFormVie
 						<label className='entity-details-label' htmlFor='tv-show-season-episodes'>
 							{i18n.t('tvShowSeason.details.placeholders.episodesNumber')}
 						</label>
-						<TextInputComponent
+						<InputComponent
 							id='tv-show-season-episodes'
 							type='number'
 							value={values.episodesNumber ?? ''}
@@ -72,7 +72,7 @@ export class TvShowSeasonFormViewComponent extends Component<TvShowSeasonFormVie
 						<label className='entity-details-label' htmlFor='tv-show-season-watched'>
 							{i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber')}
 						</label>
-						<TextInputComponent
+						<InputComponent
 							id='tv-show-season-watched'
 							type='number'
 							value={values.watchedEpisodesNumber ?? ''}

@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
 import { FormikProps } from 'formik';
+import { SelectComponent } from 'app/components/presentational/generic/select';
 import {
 	MEDIA_ITEM_FILTER_FORM_GROUP_VALUES,
 	MEDIA_ITEM_FILTER_FORM_IMPORTANCE_VALUES,
@@ -24,10 +25,9 @@ export const MediaItemFilterFormViewComponent = <TFormValues extends MediaItemFi
 				<label className='media-item-filter-label' htmlFor='media-item-filter-status'>
 					{i18n.t('mediaItem.list.filter.prompts.status')}
 				</label>
-				<select
+				<SelectComponent
 					id='media-item-filter-status'
 					name='status'
-					className='media-item-filter-select'
 					value={props.values.status}
 					onChange={props.handleChange}>
 					{MEDIA_ITEM_FILTER_FORM_STATUS_VALUES.map((status) => {
@@ -37,17 +37,16 @@ export const MediaItemFilterFormViewComponent = <TFormValues extends MediaItemFi
 							</option>
 						);
 					})}
-				</select>
+				</SelectComponent>
 			</div>
 
 			<div className='media-item-filter-field'>
 				<label className='media-item-filter-label' htmlFor='media-item-filter-importance'>
 					{i18n.t('mediaItem.list.filter.prompts.importance')}
 				</label>
-				<select
+				<SelectComponent
 					id='media-item-filter-importance'
 					name='importanceLevel'
-					className='media-item-filter-select'
 					value={props.values.importanceLevel}
 					onChange={props.handleChange}>
 					{MEDIA_ITEM_FILTER_FORM_IMPORTANCE_VALUES.map((importance) => {
@@ -59,17 +58,16 @@ export const MediaItemFilterFormViewComponent = <TFormValues extends MediaItemFi
 							</option>
 						);
 					})}
-				</select>
+				</SelectComponent>
 			</div>
 
 			<div className='media-item-filter-field'>
 				<label className='media-item-filter-label' htmlFor='media-item-filter-group'>
 					{i18n.t('mediaItem.list.filter.prompts.group')}
 				</label>
-				<select
+				<SelectComponent
 					id='media-item-filter-group'
 					name='group'
-					className='media-item-filter-select'
 					value={props.values.group}
 					onChange={props.handleChange}>
 					{MEDIA_ITEM_FILTER_FORM_GROUP_VALUES.map((group) => {
@@ -79,17 +77,16 @@ export const MediaItemFilterFormViewComponent = <TFormValues extends MediaItemFi
 							</option>
 						);
 					})}
-				</select>
+				</SelectComponent>
 			</div>
 
 			<div className='media-item-filter-field'>
 				<label className='media-item-filter-label' htmlFor='media-item-filter-own-platform'>
 					{i18n.t('mediaItem.list.filter.prompts.ownPlatform')}
 				</label>
-				<select
+				<SelectComponent
 					id='media-item-filter-own-platform'
 					name='ownPlatform'
-					className='media-item-filter-select'
 					value={props.values.ownPlatform}
 					onChange={props.handleChange}>
 					{MEDIA_ITEM_FILTER_FORM_OWN_PLATFORM_VALUES.map((ownPlatform) => {
@@ -99,17 +96,16 @@ export const MediaItemFilterFormViewComponent = <TFormValues extends MediaItemFi
 							</option>
 						);
 					})}
-				</select>
+				</SelectComponent>
 			</div>
 
 			<div className='media-item-filter-field'>
 				<label className='media-item-filter-label' htmlFor='media-item-filter-sort-by'>
 					{i18n.t('mediaItem.list.filter.prompts.sort')}
 				</label>
-				<select
+				<SelectComponent
 					id='media-item-filter-sort-by'
 					name='sortBy'
-					className='media-item-filter-select'
 					value={props.values.sortBy}
 					onChange={props.handleChange}>
 					{MEDIA_ITEM_FILTER_FORM_SORT_VALUES.map((sortBy) => {
@@ -119,7 +115,7 @@ export const MediaItemFilterFormViewComponent = <TFormValues extends MediaItemFi
 							</option>
 						);
 					})}
-				</select>
+				</SelectComponent>
 			</div>
 			<div className='media-item-filter-actions'>
 				<button type='button' className='media-item-filter-button media-item-filter-button-secondary' onClick={props.close}>

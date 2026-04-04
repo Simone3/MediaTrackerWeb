@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
+import { InputComponent } from 'app/components/presentational/generic/input';
 import { dateToInputValue, inlineTextToInputValue, inputValueToDate, inputValueToInlineText, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
-import { TextInputComponent } from 'app/components/presentational/generic/text-input';
 import { config } from 'app/config/config';
 import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { FormikProps } from 'formik';
@@ -54,7 +54,7 @@ export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): Re
 					<label className='media-item-details-label' htmlFor='media-item-episode-runtime'>
 						{i18n.t('mediaItem.details.placeholders.duration.TV_SHOW')}
 					</label>
-					<TextInputComponent
+					<InputComponent
 						id='media-item-episode-runtime'
 						type='number'
 						value={numberToInputValue(props.values.averageEpisodeRuntimeMinutes)}
@@ -67,7 +67,7 @@ export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): Re
 					<label className='media-item-details-label' htmlFor='media-item-tv-show-creators'>
 						{i18n.t('mediaItem.details.placeholders.creators.TV_SHOW')}
 					</label>
-					<TextInputComponent
+					<InputComponent
 						id='media-item-tv-show-creators'
 						type='text'
 						value={inlineTextToInputValue(props.values.creators)}
@@ -123,7 +123,7 @@ export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): Re
 								<label className='media-item-details-label' htmlFor='media-item-next-episode-air-date'>
 									{i18n.t('mediaItem.details.placeholders.nextEpisodeAirDate')}
 								</label>
-								<TextInputComponent
+								<InputComponent
 									id='media-item-next-episode-air-date'
 									type='date'
 									value={dateToInputValue(props.values.nextEpisodeAirDate)}

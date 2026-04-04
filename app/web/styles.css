@@ -1763,22 +1763,6 @@ body.app-dark-screen-active .app-shell-content {
 	color: #97a8c9;
 }
 
-.media-item-filter-select {
-	width: 100%;
-	border: 1px solid rgba(159, 183, 231, 0.16);
-	border-radius: 16px;
-	padding: 13px 14px;
-	background: rgba(255, 255, 255, 0.04);
-	color: #f6f8ff;
-	color-scheme: dark;
-}
-
-.media-item-filter-select:focus {
-	outline: none;
-	border-color: #7ea8ff;
-	box-shadow: 0 0 0 3px rgba(64, 140, 255, 0.18);
-}
-
 .media-item-filter-actions {
 	display: flex;
 	justify-content: flex-end;
@@ -2088,9 +2072,8 @@ body.app-dark-screen-active .app-shell-content {
 }
 
 .text-input,
-.media-item-details-select,
-.media-item-details-textarea,
-.entity-details-select {
+.select-input,
+.textarea-input {
 	width: 100%;
 	border: 1px solid rgba(159, 183, 231, 0.16);
 	border-radius: 16px;
@@ -2103,11 +2086,11 @@ body.app-dark-screen-active .app-shell-content {
 }
 
 .text-input::placeholder,
-.media-item-details-textarea::placeholder {
+.textarea-input::placeholder {
 	color: #7f90b3;
 }
 
-.media-item-details-textarea {
+.textarea-input {
 	min-height: 130px;
 	resize: vertical;
 	line-height: 1.5;
@@ -2285,8 +2268,8 @@ body.app-dark-screen-active .app-shell-content {
 }
 
 .text-input:focus,
-.media-item-details-select:focus,
-.media-item-details-textarea:focus,
+.select-input:focus,
+.textarea-input:focus,
 .media-item-details-picker-button:focus,
 .media-item-details-search-result:focus,
 .media-item-details-image-action:focus {
@@ -2957,7 +2940,7 @@ body.app-dark-screen-active .app-shell-content {
 	gap: 12px;
 }
 
-.entity-details-select-row .entity-details-select {
+.entity-details-select-row .select-input {
 	flex: 1 1 auto;
 	min-width: 0;
 }
@@ -2985,14 +2968,15 @@ body.app-dark-screen-active .app-shell-content {
 }
 
 .text-input:disabled,
-.entity-details-select:disabled {
+.select-input:disabled,
+.textarea-input:disabled {
 	background: rgba(255, 255, 255, 0.02);
 	color: #7f8ab2;
 	cursor: not-allowed;
 }
 
 .text-input:focus,
-.entity-details-select:focus,
+.select-input:focus,
 .entity-details-color:focus-visible {
 	outline: none;
 	border-color: #7ea8ff;

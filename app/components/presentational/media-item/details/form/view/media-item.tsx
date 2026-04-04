@@ -1,6 +1,8 @@
 import { Component, KeyboardEvent, ReactNode } from 'react';
 import { FormikProps } from 'formik';
-import { TextInputComponent } from 'app/components/presentational/generic/text-input';
+import { InputComponent } from 'app/components/presentational/generic/input';
+import { SelectComponent } from 'app/components/presentational/generic/select';
+import { TextareaComponent } from 'app/components/presentational/generic/textarea';
 import { config } from 'app/config/config';
 import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import downloadIcon from 'app/resources/images/ic_download.svg';
@@ -272,7 +274,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 					{i18n.t('mediaItem.details.placeholders.name')}
 				</label>
 				<div className='media-item-details-search-row'>
-					<TextInputComponent
+					<InputComponent
 						id='media-item-name'
 						type='text'
 						value={mediaItem.name}
@@ -314,9 +316,8 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<label className='media-item-details-label' htmlFor='media-item-description'>
 					{i18n.t('mediaItem.details.placeholders.description')}
 				</label>
-				<textarea
+				<TextareaComponent
 					id='media-item-description'
-					className='media-item-details-textarea'
 					value={mediaItem.description || ''}
 					onChange={(event) => {
 						this.setFormField('description', event.target.value || undefined);
@@ -338,7 +339,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<label className='media-item-details-label' htmlFor='media-item-release-date'>
 					{i18n.t('mediaItem.details.placeholders.releaseDate')}
 				</label>
-				<TextInputComponent
+				<InputComponent
 					id='media-item-release-date'
 					type='date'
 					value={this.dateToInputValue(mediaItem.releaseDate)}
@@ -380,9 +381,8 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<label className='media-item-details-label' htmlFor='media-item-importance'>
 					{i18n.t('mediaItem.details.prompts.importance')}
 				</label>
-				<select
+				<SelectComponent
 					id='media-item-importance'
-					className='media-item-details-select'
 					value={mediaItem.importance}
 					onChange={(event) => {
 						this.setFormField('importance', event.target.value as MediaItemInternal['importance']);
@@ -394,7 +394,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 							</option>
 						);
 					})}
-				</select>
+				</SelectComponent>
 			</div>
 		);
 	}
@@ -472,7 +472,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<label className='media-item-details-label' htmlFor='media-item-order-in-group'>
 					{i18n.t('mediaItem.details.placeholders.orderInGroup')}
 				</label>
-				<TextInputComponent
+				<InputComponent
 					id='media-item-order-in-group'
 					type='number'
 					value={this.numberToInputValue(mediaItem.orderInGroup)}
@@ -496,9 +496,8 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<label className='media-item-details-label' htmlFor='media-item-user-comment'>
 					{i18n.t('mediaItem.details.placeholders.userComment')}
 				</label>
-				<textarea
+				<TextareaComponent
 					id='media-item-user-comment'
-					className='media-item-details-textarea'
 					value={mediaItem.userComment || ''}
 					onChange={(event) => {
 						this.setFormField('userComment', event.target.value || undefined);
@@ -529,7 +528,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 					{completionDates.map((completedOn, index) => {
 						return (
 							<div className='media-item-details-completion-row' key={`completed-on-${index}`}>
-								<TextInputComponent
+								<InputComponent
 									id={`media-item-completed-on-${index}`}
 									type='date'
 									value={this.dateToInputValue(completedOn)}
@@ -631,7 +630,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<label className='media-item-details-label' htmlFor={id}>
 					{label}
 				</label>
-				<TextInputComponent
+				<InputComponent
 					id={id}
 					type='text'
 					value={this.inlineTextToInputValue(values)}
