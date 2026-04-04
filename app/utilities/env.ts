@@ -3,7 +3,6 @@
  * @returns a key-value map of environment values
  */
 const getRuntimeEnv = (): {[key: string]: string | undefined} => {
-	// eslint-disable-next-line no-undef
 	const runtime = globalThis as {
 		process?: {
 			env?: {[key: string]: string | undefined};
