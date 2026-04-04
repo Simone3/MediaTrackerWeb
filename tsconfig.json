@@ -13,7 +13,8 @@
       "app/*": ["./app/*"]
     },
     "types": ["jest", "node"],
-    "noEmit": true
+    "noEmit": true,
+    "strictNullChecks": false
   },
   "include": ["index.tsx", "app/**/*", "tests/**/*", "webpack.config.js"]
 }

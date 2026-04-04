@@ -3,9 +3,6 @@ Just a Codex experiment for now.
 
 TODO:
 
-- missing and deprecated rules
-- make it add more tests
-
 - check dev vs. prod configs
   - how to inject them in a webapp?
   - do we need .env file?
@@ -13,6 +10,8 @@ TODO:
   - restore config-sample.ts
   - Firebase API key is public?
   - is it useless to gitignore the configs?
+
+- make it add more tests
 
 - re-review logic code starting from screens and moving down (especially for media item parts)
 
