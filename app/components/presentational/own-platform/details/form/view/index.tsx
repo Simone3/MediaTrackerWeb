@@ -1,5 +1,6 @@
 import { Component, ReactNode } from 'react';
 import { FormikProps } from 'formik';
+import { ColorPickerComponent } from 'app/components/presentational/generic/color-picker';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { SelectComponent } from 'app/components/presentational/generic/select';
 import { config } from 'app/config/config';
@@ -97,32 +98,18 @@ export class OwnPlatformFormViewComponent extends Component<OwnPlatformFormViewC
 						<p className='entity-details-label'>
 							{i18n.t('common.fields.color')}
 						</p>
-						<div
+						<ColorPickerComponent
 							id='own-platform-color'
-							className='entity-details-color-grid'
-							role='group'
-							aria-label={i18n.t('common.fields.color')}>
-							{config.ui.colors.availableOwnPlatformColors.map((color) => {
-								const selected = values.color === color;
-								const buttonClassName = selected ?
-									'entity-details-color entity-details-color-selected' :
-									'entity-details-color';
-
-								return (
-									<button
-										key={color}
-										type='button'
-										className={buttonClassName}
-										style={{ backgroundColor: color }}
-										onClick={() => {
-											void setFieldValue('color', color);
-										}}
-										aria-label={i18n.t('common.a11y.selectColor', { color: color })}
-										aria-pressed={selected}
-									/>
-								);
-							})}
-						</div>
+							ariaLabel={i18n.t('common.fields.color')}
+							colors={config.ui.colors.availableOwnPlatformColors}
+							selectedColor={values.color}
+							getColorAriaLabel={(color) => {
+								return i18n.t('common.a11y.selectColor', { color: color });
+							}}
+							onSelectColor={(color) => {
+								void setFieldValue('color', color);
+							}}
+						/>
 					</div>
 				</div>
 			</section>

@@ -1,6 +1,7 @@
 import { Component, ReactNode } from 'react';
 import { FormikProps } from 'formik';
 import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
+import { ColorPickerComponent } from 'app/components/presentational/generic/color-picker';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { config } from 'app/config/config';
 import { CategoryInternal, MEDIA_TYPES_INTERNAL } from 'app/data/models/internal/category';
@@ -85,28 +86,17 @@ export class CategoryFormViewComponent extends Component<CategoryFormViewCompone
 				</div>
 				<div className='category-details-section'>
 					<p className='category-details-label'>{i18n.t('common.fields.color')}</p>
-					<div className='category-details-colors'>
-						{config.ui.colors.availableCategoryColors.map((color) => {
-							const selected = values.color === color;
-							const buttonClassName = selected ?
-								'category-details-color category-details-color-selected' :
-								'category-details-color';
-
-							return (
-								<button
-									key={color}
-									type='button'
-									className={buttonClassName}
-									style={{ backgroundColor: color }}
-									onClick={() => {
-										void setFieldValue('color', color);
-									}}
-									aria-label={i18n.t('common.a11y.selectColor', { color: color })}
-									aria-pressed={selected}
-								/>
-							);
-						})}
-					</div>
+					<ColorPickerComponent
+						ariaLabel={i18n.t('common.fields.color')}
+						colors={config.ui.colors.availableCategoryColors}
+						selectedColor={values.color}
+						getColorAriaLabel={(color) => {
+							return i18n.t('common.a11y.selectColor', { color: color });
+						}}
+						onSelectColor={(color) => {
+							void setFieldValue('color', color);
+						}}
+					/>
 				</div>
 			</>
 		);

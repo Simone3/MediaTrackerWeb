@@ -1171,13 +1171,13 @@ body.app-dark-screen-active .app-shell-content {
 	font-weight: 700;
 }
 
-.category-details-colors {
+.color-picker {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 10px;
 }
 
-.category-details-color {
+.color-picker-option {
 	flex: 0 0 auto;
 	width: 36px;
 	height: 36px;
@@ -1187,17 +1187,17 @@ body.app-dark-screen-active .app-shell-content {
 	transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.category-details-color:hover {
+.color-picker-option:hover:not([disabled]) {
 	transform: translateY(-1px);
 }
 
-.category-details-color:focus-visible {
+.color-picker-option:focus-visible {
 	outline: none;
 	border-color: rgba(12, 18, 28, 0.42);
 	box-shadow: 0 0 0 3px rgba(126, 168, 255, 0.22);
 }
 
-.category-details-color-selected {
+.color-picker-option-selected {
 	border-color: #dfe8fb;
 	box-shadow: 0 0 0 3px rgba(126, 168, 255, 0.28);
 	transform: translateY(-1px);
@@ -2976,43 +2976,10 @@ body.app-dark-screen-active .app-shell-content {
 }
 
 .text-input:focus,
-.select-input:focus,
-.entity-details-color:focus-visible {
+.select-input:focus {
 	outline: none;
 	border-color: #7ea8ff;
 	box-shadow: 0 0 0 3px rgba(121, 165, 255, 0.18);
-}
-
-.entity-details-color-grid {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 10px;
-}
-
-.entity-details-color {
-	flex: 0 0 auto;
-	width: 36px;
-	height: 36px;
-	border-radius: 14px;
-	border: 2px solid rgba(12, 18, 28, 0.42);
-	cursor: pointer;
-	transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
-
-.entity-details-color:hover:not([disabled]) {
-	transform: translateY(-1px);
-}
-
-.entity-details-color-selected {
-	border-color: #dfe8fb;
-	box-shadow: 0 0 0 3px rgba(126, 168, 255, 0.28);
-	transform: translateY(-1px);
-}
-
-.entity-details-color:focus-visible {
-	outline: none;
-	border-color: rgba(12, 18, 28, 0.42);
-	box-shadow: 0 0 0 3px rgba(126, 168, 255, 0.22);
 }
 
 .entity-details-screen .loading-indicator-container-parent-size {
@@ -3446,7 +3413,7 @@ body.app-dark-screen-active .loading-indicator-spinner {
 		justify-content: center;
 	}
 
-	.category-details-color {
+	.color-picker-option {
 		width: 34px;
 		height: 34px;
 	}

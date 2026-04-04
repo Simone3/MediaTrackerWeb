@@ -53,6 +53,7 @@
   - `app/components/presentational/generic/entity-management-list`
   - `app/components/presentational/generic/entity-details-frame`
   - `app/components/presentational/generic/same-name-confirmation`
+  - `app/components/presentational/generic/color-picker`
   - `app/components/presentational/generic/input`
   - `app/components/presentational/generic/select`
   - `app/components/presentational/generic/textarea`
@@ -135,6 +136,7 @@
   - `same-name-confirmation` now centralizes the duplicate-name confirmation dialog behavior used across category/group/platform/media-item details.
   - `credentials-screen` now holds the shared login/signup email-password screen structure.
   - `input`, `select`, and `textarea` now centralize the native form controls used across the app, with one shared default style for normal forms plus a single auth-specific visual variant for the login/signup input fields.
+  - `color-picker` now centralizes the reusable color-swatch selection UI used by the category and own-platform details forms, replacing the old parallel category/entity color-grid implementations.
   - `own-platform/common/icon-registry.ts` is now the single source of truth for own-platform icon assets and masked icon styles used across list/details/media-item views.
 
 ## High-signal files to open first
