@@ -1,6 +1,7 @@
 import { Component, ReactNode } from 'react';
 import { Formik, FormikProps } from 'formik';
 import { CategoryFormViewComponent } from 'app/components/presentational/category/details/form/view';
+import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { SameNameConfirmationDialogComponent, shouldOpenSameNameConfirmation } from 'app/components/presentational/generic/same-name-confirmation';
 import { categoryFormValidationSchema } from 'app/components/presentational/category/details/form/data';
 import { CategoryInternal } from 'app/data/models/internal/category';
@@ -76,13 +77,13 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 									<div className='category-details-header'>
 										<h1 className='category-details-title'>{detailsTitle}</h1>
 										<div className='category-details-actions'>
-											<button
+											<PillButtonComponent
 												type='submit'
 												form='category-details-form'
-												className='category-details-button category-details-button-primary'
+												tone='primary'
 												disabled={!formikProps.isValid || isLoading}>
 												{i18n.t('common.buttons.save')}
-											</button>
+											</PillButtonComponent>
 										</div>
 									</div>
 									<form

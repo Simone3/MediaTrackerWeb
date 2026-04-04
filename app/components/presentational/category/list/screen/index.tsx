@@ -3,6 +3,7 @@ import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/cate
 import { CategoriesListContainer } from 'app/components/containers/category/list/list';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
+import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { i18n } from 'app/utilities/i18n';
 
 /**
@@ -59,12 +60,9 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 							<p className='categories-screen-count'>{countLabel}</p>
 						</div>
 						{!this.state.isMobileLayout &&
-							<button
-								type='button'
-								className='categories-screen-add-button'
-								onClick={loadNewCategoryDetails}>
+							<PillButtonComponent tone='secondary' onClick={loadNewCategoryDetails}>
 								+ {i18n.t('category.list.add')}
-							</button>}
+							</PillButtonComponent>}
 					</header>
 					<CategoriesListContainer />
 					{this.state.isMobileLayout &&

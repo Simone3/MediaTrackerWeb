@@ -1,5 +1,6 @@
 import { CSSProperties, SubmitEventHandler, ReactElement, ReactNode, useEffect } from 'react';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
+import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 
 /**
  * Shared shell for the entity-details forms.
@@ -33,13 +34,12 @@ export const EntityDetailsFrameComponent = (props: EntityDetailsFrameComponentPr
 						</div>
 					</div>
 					<div className='entity-details-actions'>
-						<button
-							type='button'
-							className='entity-details-button entity-details-button-primary'
+						<PillButtonComponent
+							tone='primary'
 							disabled={props.saveDisabled}
 							onClick={props.onSave}>
 							{props.saveLabel}
-						</button>
+						</PillButtonComponent>
 					</div>
 				</header>
 				<form

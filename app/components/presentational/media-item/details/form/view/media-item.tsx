@@ -1,6 +1,7 @@
 import { Component, KeyboardEvent, ReactNode } from 'react';
 import { FormikProps } from 'formik';
 import { InputComponent } from 'app/components/presentational/generic/input';
+import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { SelectComponent } from 'app/components/presentational/generic/select';
 import { TextareaComponent } from 'app/components/presentational/generic/textarea';
 import { config } from 'app/config/config';
@@ -289,15 +290,15 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 							this.handleNameFieldKeyDown(event);
 						}}
 					/>
-					<button
-						type='button'
-						className='media-item-details-button media-item-details-button-secondary media-item-details-search-button'
+					<PillButtonComponent
+						tone='secondary'
+						className='media-item-details-search-button'
 						disabled={!mediaItem.name.trim()}
 						onClick={() => {
 							this.submitCatalogSearch();
 						}}>
 						Search
-					</button>
+					</PillButtonComponent>
 				</div>
 				{this.renderCatalogSearchResults()}
 			</div>
@@ -536,25 +537,25 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 										this.updateCompletionDate(index, event.target.value);
 									}}
 								/>
-								<button
-									type='button'
-									className='media-item-details-button media-item-details-button-secondary media-item-details-small-button'
+								<PillButtonComponent
+									tone='secondary'
+									className='media-item-details-small-button'
 									onClick={() => {
 										this.removeCompletionDate(index);
 									}}>
 									{i18n.t('common.buttons.remove')}
-								</button>
+								</PillButtonComponent>
 							</div>
 						);
 					})}
-					<button
-						type='button'
-						className='media-item-details-button media-item-details-button-secondary media-item-details-inline-button'
+					<PillButtonComponent
+						tone='secondary'
+						className='media-item-details-inline-button'
 						onClick={() => {
 							this.addCompletionDate();
 						}}>
 						{i18n.t('mediaItem.details.buttons.addDate')}
-					</button>
+					</PillButtonComponent>
 				</div>
 			</div>
 		);

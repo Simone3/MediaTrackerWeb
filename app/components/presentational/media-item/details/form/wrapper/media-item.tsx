@@ -4,6 +4,7 @@ import { ObjectSchema } from 'yup';
 import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
+import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { SameNameConfirmationDialogComponent, shouldOpenSameNameConfirmation } from 'app/components/presentational/generic/same-name-confirmation';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { CatalogMediaItemInternal, MediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
@@ -106,15 +107,14 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 										</div>
 									</div>
 									<div className='media-item-details-actions'>
-										<button
-											type='button'
-											className='media-item-details-button media-item-details-button-primary'
+										<PillButtonComponent
+											tone='primary'
 											disabled={!formikProps.isValid || !formikProps.values.name.trim() || isLoading}
 											onClick={() => {
 												void formikProps.submitForm();
 											}}>
 											{i18n.t('common.buttons.save')}
-										</button>
+										</PillButtonComponent>
 									</div>
 								</header>
 								<form className='media-item-details-form' onSubmit={formikProps.handleSubmit}>

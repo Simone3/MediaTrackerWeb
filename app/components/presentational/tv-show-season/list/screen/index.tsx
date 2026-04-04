@@ -1,6 +1,7 @@
 import { CSSProperties, Component, ReactNode } from 'react';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { EntityManagementScreenComponent } from 'app/components/presentational/generic/entity-management-screen';
+import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import seasonIcon from 'app/resources/images/ic_input_season_number.svg';
 import { i18n } from 'app/utilities/i18n';
@@ -46,12 +47,9 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 						return (
 							<div className='entity-management-screen-actions'>
 								{defaultAddAction}
-								<button
-									type='button'
-									className='entity-management-screen-button entity-management-screen-button-primary'
-									onClick={this.props.completeHandling}>
+								<PillButtonComponent tone='primary' onClick={this.props.completeHandling}>
 									{i18n.t('common.buttons.done')}
-								</button>
+								</PillButtonComponent>
 							</div>
 						);
 					}}>

@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
 import { InputComponent } from 'app/components/presentational/generic/input';
+import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { dateToInputValue, inlineTextToInputValue, inputValueToDate, inputValueToInlineText, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
 import { config } from 'app/config/config';
 import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
@@ -81,15 +82,15 @@ export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): Re
 						{i18n.t('mediaItem.details.placeholders.seasons')}
 					</label>
 					<div className='media-item-details-tv-show-inline-row media-item-details-tv-show-seasons-row'>
-						<button
+						<PillButtonComponent
 							id='media-item-tv-show-seasons-handler'
-							type='button'
-							className='media-item-details-button media-item-details-button-secondary media-item-details-inline-button'
+							tone='secondary'
+							className='media-item-details-inline-button'
 							onClick={() => {
 								props.handleTvShowSeasons(props.values.seasons);
 							}}>
 							{i18n.t('tvShowSeason.list.title')}
-						</button>
+						</PillButtonComponent>
 						<p className='media-item-details-inline-hint'>{seasonsSummary}</p>
 					</div>
 				</div>,

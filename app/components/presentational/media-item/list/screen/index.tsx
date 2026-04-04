@@ -5,6 +5,7 @@ import { MediaIconComponent } from 'app/components/presentational/category/commo
 import { MediaItemFilterModalContainer } from 'app/components/containers/media-item/list/filter-modal';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
+import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { i18n } from 'app/utilities/i18n';
 
@@ -70,14 +71,13 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 							<p className='media-items-screen-count'>{countLabel}</p>
 						</div>
 						{!this.state.isMobileLayout &&
-							<button
-								type='button'
-								className='media-items-screen-add-button'
+							<PillButtonComponent
+								tone='secondary'
 								onClick={() => {
 									loadNewMediaItemDetails(category);
 								}}>
 								+ {i18n.t(`mediaItem.list.add.${category.mediaType}`)}
-							</button>}
+							</PillButtonComponent>}
 					</header>
 					<MediaItemsListContainer/>
 					{this.state.isMobileLayout &&

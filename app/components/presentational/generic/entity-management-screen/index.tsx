@@ -2,6 +2,7 @@ import { CSSProperties, ReactElement, ReactNode, useEffect, useState } from 'rea
 import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
+import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 
 /**
  * Shared screen shell for the dark entity-management pages.
@@ -33,12 +34,9 @@ export const EntityManagementScreenComponent = (props: EntityManagementScreenCom
 
 	const defaultAddAction = !isMobileLayout && props.onAdd && props.addButtonLabel ?
 		(
-			<button
-				type='button'
-				className='entity-management-screen-button entity-management-screen-button-secondary'
-				onClick={props.onAdd}>
+			<PillButtonComponent tone='secondary' onClick={props.onAdd}>
 				+ {props.addButtonLabel}
-			</button>
+			</PillButtonComponent>
 		) :
 		null;
 	const headerActions = props.renderHeaderActions ?

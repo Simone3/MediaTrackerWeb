@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
 import { FormikProps } from 'formik';
+import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { SelectComponent } from 'app/components/presentational/generic/select';
 import {
 	MEDIA_ITEM_FILTER_FORM_GROUP_VALUES,
@@ -118,12 +119,12 @@ export const MediaItemFilterFormViewComponent = <TFormValues extends MediaItemFi
 				</SelectComponent>
 			</div>
 			<div className='media-item-filter-actions'>
-				<button type='button' className='media-item-filter-button media-item-filter-button-secondary' onClick={props.close}>
+				<PillButtonComponent tone='secondary' onClick={props.close}>
 					{i18n.t('common.alert.default.cancelButton')}
-				</button>
-				<button type='submit' className='media-item-filter-button media-item-filter-button-primary'>
+				</PillButtonComponent>
+				<PillButtonComponent type='submit' tone='primary'>
 					{i18n.t('common.alert.default.applyButton')}
-				</button>
+				</PillButtonComponent>
 			</div>
 		</form>
 	);

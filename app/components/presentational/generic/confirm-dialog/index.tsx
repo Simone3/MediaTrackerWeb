@@ -1,4 +1,5 @@
 import { ReactElement } from 'react';
+import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 
 /**
  * Presentational component to display a simple confirmation dialog
@@ -16,12 +17,12 @@ export const ConfirmDialogComponent = (props: ConfirmDialogComponentProps): Reac
 				<h2 id='confirm-dialog-title' className='confirm-dialog-title'>{props.title}</h2>
 				<p className='confirm-dialog-message'>{props.message}</p>
 				<div className='confirm-dialog-actions'>
-					<button type='button' className='confirm-dialog-button confirm-dialog-button-secondary' onClick={props.onCancel}>
+					<PillButtonComponent tone='secondary' size='compact' onClick={props.onCancel}>
 						{props.cancelLabel}
-					</button>
-					<button type='button' className='confirm-dialog-button confirm-dialog-button-primary' onClick={props.onConfirm}>
+					</PillButtonComponent>
+					<PillButtonComponent tone='primary' size='compact' onClick={props.onConfirm}>
 						{props.confirmLabel}
-					</button>
+					</PillButtonComponent>
 				</div>
 			</div>
 		</div>
