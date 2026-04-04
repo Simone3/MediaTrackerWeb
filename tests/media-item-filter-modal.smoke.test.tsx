@@ -1,66 +1,75 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MediaItemFilterModalComponent } from 'app/components/presentational/media-item/list/filter-modal';
+import { CategoryInternal } from 'app/data/models/internal/category';
+import { i18n } from 'app/utilities/i18n';
+
 jest.mock('app/controllers/main/entities/media-items-definitions/book', () => {
 	return {
 		bookDefinitionsController: {
-			getDefaultSortBy: () => [{
-				field: 'ACTIVE',
-				ascending: false
-			}, {
-				field: 'IMPORTANCE',
-				ascending: false
-			}, {
-				field: 'RELEASE_DATE',
-				ascending: true
-			}]
+			getDefaultSortBy: () => {
+				return [{
+					field: 'ACTIVE',
+					ascending: false
+				}, {
+					field: 'IMPORTANCE',
+					ascending: false
+				}, {
+					field: 'RELEASE_DATE',
+					ascending: true
+				}];
+			}
 		}
 	};
 });
 jest.mock('app/controllers/main/entities/media-items-definitions/movie', () => {
 	return {
 		movieDefinitionsController: {
-			getDefaultSortBy: () => [{
-				field: 'NAME',
-				ascending: false
-			}]
+			getDefaultSortBy: () => {
+				return [{
+					field: 'NAME',
+					ascending: false
+				}];
+			}
 		}
 	};
 });
 jest.mock('app/controllers/main/entities/media-items-definitions/tv-show', () => {
 	return {
 		tvShowDefinitionsController: {
-			getDefaultSortBy: () => [{
-				field: 'ACTIVE',
-				ascending: false
-			}, {
-				field: 'IMPORTANCE',
-				ascending: false
-			}, {
-				field: 'RELEASE_DATE',
-				ascending: true
-			}]
+			getDefaultSortBy: () => {
+				return [{
+					field: 'ACTIVE',
+					ascending: false
+				}, {
+					field: 'IMPORTANCE',
+					ascending: false
+				}, {
+					field: 'RELEASE_DATE',
+					ascending: true
+				}];
+			}
 		}
 	};
 });
 jest.mock('app/controllers/main/entities/media-items-definitions/videogame', () => {
 	return {
 		videogameDefinitionsController: {
-			getDefaultSortBy: () => [{
-				field: 'ACTIVE',
-				ascending: false
-			}, {
-				field: 'IMPORTANCE',
-				ascending: false
-			}, {
-				field: 'RELEASE_DATE',
-				ascending: true
-			}]
+			getDefaultSortBy: () => {
+				return [{
+					field: 'ACTIVE',
+					ascending: false
+				}, {
+					field: 'IMPORTANCE',
+					ascending: false
+				}, {
+					field: 'RELEASE_DATE',
+					ascending: true
+				}];
+			}
 		}
 	};
 });
-import { MediaItemFilterModalComponent } from 'app/components/presentational/media-item/list/filter-modal';
-import { CategoryInternal } from 'app/data/models/internal/category';
-import { i18n } from 'app/utilities/i18n';
 
 describe('MediaItemFilterModalComponent', () => {
 	test('submits selected filter and sort values', async() => {

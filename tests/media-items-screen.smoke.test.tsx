@@ -6,13 +6,17 @@ import { i18n } from 'app/utilities/i18n';
 
 jest.mock('app/components/containers/media-item/list/list', () => {
 	return {
-		MediaItemsListContainer: () => <div data-testid='media-items-list-container' />
+		MediaItemsListContainer: () => {
+			return <div data-testid='media-items-list-container' />;
+		}
 	};
 });
 
 jest.mock('app/components/containers/media-item/list/filter-modal', () => {
 	return {
-		MediaItemFilterModalContainer: () => <div data-testid='media-item-filter-modal-container' />
+		MediaItemFilterModalContainer: () => {
+			return <div data-testid='media-item-filter-modal-container' />;
+		}
 	};
 });
 

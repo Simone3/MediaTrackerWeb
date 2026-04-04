@@ -375,11 +375,11 @@ describe('MediaItemsListComponent', () => {
 			mediaType: 'TV_SHOW',
 			status: 'ACTIVE',
 			importance: '300',
-			seasons: [ {
+			seasons: [{
 				number: 1,
 				episodesNumber: 10,
 				watchedEpisodesNumber: 10
-			} ]
+			}]
 		};
 
 		render(

@@ -1,37 +1,37 @@
-jest.mock('app/config/config', () => ({
-	config: {
-		firebase: {
-			apiKey: 'test-api-key',
-			authDomain: 'test-auth-domain',
-			projectId: 'test-project-id',
-			appId: 'test-app-id'
-		}
-	}
-}));
-
-jest.mock('firebase/app', () => ({
-	getApps: jest.fn(),
-	initializeApp: jest.fn()
-}));
-
-jest.mock('firebase/auth', () => ({
-	createUserWithEmailAndPassword: jest.fn(),
-	getAuth: jest.fn(),
-	onAuthStateChanged: jest.fn(),
-	signInWithEmailAndPassword: jest.fn(),
-	signOut: jest.fn()
-}));
-
 import { UserFirebaseController } from 'app/controllers/implementations/real/entities/user';
 
-const firebaseAppMock = jest.requireMock('firebase/app') as {
-	getApps: jest.Mock;
-	initializeApp: jest.Mock;
-};
-const firebaseAuthMock = jest.requireMock('firebase/auth') as {
-	getAuth: jest.Mock;
-	onAuthStateChanged: jest.Mock;
-};
+jest.mock('app/config/config', () => {
+	return {
+		config: {
+			firebase: {
+				apiKey: 'test-api-key',
+				authDomain: 'test-auth-domain',
+				projectId: 'test-project-id',
+				appId: 'test-app-id'
+			}
+		}
+	};
+});
+
+jest.mock('firebase/app', () => {
+	return {
+		getApps: jest.fn(),
+		initializeApp: jest.fn()
+	};
+});
+
+jest.mock('firebase/auth', () => {
+	return {
+		createUserWithEmailAndPassword: jest.fn(),
+		getAuth: jest.fn(),
+		onAuthStateChanged: jest.fn(),
+		signInWithEmailAndPassword: jest.fn(),
+		signOut: jest.fn()
+	};
+});
+
+const firebaseAppMock = jest.requireMock('firebase/app');
+const firebaseAuthMock = jest.requireMock('firebase/auth');
 
 describe('UserFirebaseController', () => {
 	beforeEach(() => {
@@ -40,7 +40,7 @@ describe('UserFirebaseController', () => {
 		firebaseAppMock.initializeApp.mockReturnValue({ name: 'firebase-app' });
 	});
 
-	it('waits for Firebase auth initialization before reading the access token', async () => {
+	it('waits for Firebase auth initialization before reading the access token', async() => {
 		const getIdTokenMock = jest.fn().mockResolvedValue('token-123');
 		const auth = {
 			currentUser: null as unknown
@@ -67,7 +67,7 @@ describe('UserFirebaseController', () => {
 		expect(getIdTokenMock).toHaveBeenCalledTimes(1);
 	});
 
-	it('returns undefined when Firebase auth initializes without a persisted user', async () => {
+	it('returns undefined when Firebase auth initializes without a persisted user', async() => {
 		const auth = {
 			currentUser: null
 		};

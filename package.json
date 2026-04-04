@@ -7,7 +7,7 @@
     "build": "webpack --mode production",
     "typecheck": "tsc --noEmit",
     "test": "jest",
-    "lint": "eslint 'app/**/*.ts' 'app/**/*.tsx' 'index.tsx'"
+    "lint": "eslint 'app/**/*.ts' 'app/**/*.tsx' 'tests/**/*.ts' 'tests/**/*.tsx' 'index.tsx'"
   },
   "dependencies": {
     "@reduxjs/toolkit": "2.11.2",

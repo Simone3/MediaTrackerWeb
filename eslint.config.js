@@ -12,7 +12,7 @@ module.exports = defineConfig([
 	...tsPlugin.configs['flat/recommended-type-checked'],
 	importPlugin.flatConfigs.typescript,
 	{
-		files: [ 'app/**/*.ts', 'app/**/*.tsx', 'index.tsx' ],
+		files: [ 'app/**/*.ts', 'app/**/*.tsx', 'tests/**/*.ts', 'tests/**/*.tsx', 'index.tsx' ],
 		plugins: {
 			jsdoc: jsdocPlugin,
 			react: reactPlugin
@@ -402,6 +402,32 @@ module.exports = defineConfig([
 			/* ************* react ************* */
 
 			'react/display-name': 'off'
+		}
+	},
+	{
+		files: [ 'tests/**/*.ts', 'tests/**/*.tsx' ],
+		languageOptions: {
+			globals: {
+				...globals.jest
+			}
+		},
+		rules: {
+			'@typescript-eslint/explicit-function-return-type': 'off',
+			'@typescript-eslint/no-deprecated': 'off',
+			'@typescript-eslint/no-floating-promises': 'off',
+			'@typescript-eslint/no-unnecessary-type-assertion': 'off',
+			'@typescript-eslint/no-unsafe-assignment': 'off',
+			'@typescript-eslint/no-unsafe-call': 'off',
+			'@typescript-eslint/no-unsafe-member-access': 'off',
+			'@typescript-eslint/require-await': 'off',
+			'no-empty-function': 'off',
+			'no-unsafe-optional-chaining': 'off'
+		}
+	},
+	{
+		files: [ 'tests/setup-tests.ts' ],
+		rules: {
+			'import/no-unassigned-import': 'off'
 		}
 	}
 ]);

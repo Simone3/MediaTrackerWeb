@@ -1,72 +1,81 @@
+import { bookFilterFormMapper } from 'app/components/presentational/media-item/list/filter-form/data/book';
+import { movieFilterFormMapper } from 'app/components/presentational/media-item/list/filter-form/data/movie';
+import { tvShowFilterFormMapper } from 'app/components/presentational/media-item/list/filter-form/data/tv-show';
+import { videogameFilterFormMapper } from 'app/components/presentational/media-item/list/filter-form/data/videogame';
+import { MediaItemFilterFormValues } from 'app/components/presentational/media-item/list/filter-form/data/media-item';
+
 jest.mock('app/controllers/main/entities/media-items-definitions/book', () => {
 	return {
 		bookDefinitionsController: {
-			getDefaultSortBy: () => [{
-				field: 'ACTIVE',
-				ascending: false
-			}, {
-				field: 'IMPORTANCE',
-				ascending: false
-			}, {
-				field: 'RELEASE_DATE',
-				ascending: true
-			}]
+			getDefaultSortBy: () => {
+				return [{
+					field: 'ACTIVE',
+					ascending: false
+				}, {
+					field: 'IMPORTANCE',
+					ascending: false
+				}, {
+					field: 'RELEASE_DATE',
+					ascending: true
+				}];
+			}
 		}
 	};
 });
 jest.mock('app/controllers/main/entities/media-items-definitions/movie', () => {
 	return {
 		movieDefinitionsController: {
-			getDefaultSortBy: () => [{
-				field: 'ACTIVE',
-				ascending: false
-			}, {
-				field: 'IMPORTANCE',
-				ascending: false
-			}, {
-				field: 'RELEASE_DATE',
-				ascending: true
-			}]
+			getDefaultSortBy: () => {
+				return [{
+					field: 'ACTIVE',
+					ascending: false
+				}, {
+					field: 'IMPORTANCE',
+					ascending: false
+				}, {
+					field: 'RELEASE_DATE',
+					ascending: true
+				}];
+			}
 		}
 	};
 });
 jest.mock('app/controllers/main/entities/media-items-definitions/tv-show', () => {
 	return {
 		tvShowDefinitionsController: {
-			getDefaultSortBy: () => [{
-				field: 'ACTIVE',
-				ascending: false
-			}, {
-				field: 'IMPORTANCE',
-				ascending: false
-			}, {
-				field: 'RELEASE_DATE',
-				ascending: true
-			}]
+			getDefaultSortBy: () => {
+				return [{
+					field: 'ACTIVE',
+					ascending: false
+				}, {
+					field: 'IMPORTANCE',
+					ascending: false
+				}, {
+					field: 'RELEASE_DATE',
+					ascending: true
+				}];
+			}
 		}
 	};
 });
 jest.mock('app/controllers/main/entities/media-items-definitions/videogame', () => {
 	return {
 		videogameDefinitionsController: {
-			getDefaultSortBy: () => [{
-				field: 'ACTIVE',
-				ascending: false
-			}, {
-				field: 'IMPORTANCE',
-				ascending: false
-			}, {
-				field: 'RELEASE_DATE',
-				ascending: true
-			}]
+			getDefaultSortBy: () => {
+				return [{
+					field: 'ACTIVE',
+					ascending: false
+				}, {
+					field: 'IMPORTANCE',
+					ascending: false
+				}, {
+					field: 'RELEASE_DATE',
+					ascending: true
+				}];
+			}
 		}
 	};
 });
-import { bookFilterFormMapper } from 'app/components/presentational/media-item/list/filter-form/data/book';
-import { movieFilterFormMapper } from 'app/components/presentational/media-item/list/filter-form/data/movie';
-import { tvShowFilterFormMapper } from 'app/components/presentational/media-item/list/filter-form/data/tv-show';
-import { videogameFilterFormMapper } from 'app/components/presentational/media-item/list/filter-form/data/videogame';
-import { MediaItemFilterFormValues } from 'app/components/presentational/media-item/list/filter-form/data/media-item';
 
 const defaultFormValues: MediaItemFilterFormValues = {
 	status: 'ALL',

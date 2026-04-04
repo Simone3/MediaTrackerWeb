@@ -131,7 +131,7 @@
 - That refresh also removed unused direct packages such as `formik`, `yup`, `prettier`, `react-test-renderer`, redundant `@types/*` packages for libraries that now ship their own types, and the old `typescript-eslint` meta package in favor of the direct parser package now used by `eslint.config.js`.
 - `firebase` stays as a real runtime dependency because the prod user controller and config typings still import `firebase/app` and `firebase/auth`.
 - `tests/setup-tests.ts` now installs `TextEncoder`/`TextDecoder` from Node `util` so the Jest/jsdom environment works with React Router `7`.
-- Linting now runs on ESLint `9` flat config through the root `eslint.config.js`; the npm lint script no longer forces legacy mode, and the repo still scopes the checked files directly instead of relying on a separate `.eslintignore`.
+- Linting now runs on ESLint `9` flat config through the root `eslint.config.js`; the npm lint script now checks both `app/**` and `tests/**`, while a small test-only override keeps Jest globals enabled and relaxes a few app-focused strict TypeScript safety/deprecation rules so test style/import consistency stays enforced without noisy mock-related failures.
 - VS Code now has matching workspace ESLint settings in `.vscode/settings.json`, keeping `eslint.useFlatConfig=true` while still explicitly validating TS/TSX files so the editor matches the CLI lint results.
 - A shared-UI refactor also moved several repeated web-only patterns into reusable presentational primitives instead of keeping parallel copies in each screen.
   - `responsive-action-menu` now fully owns the shared category/media-item action menu shell, header, and action-list rendering, with each caller only supplying the title plus action labels/callbacks.

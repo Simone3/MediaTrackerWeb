@@ -44,7 +44,9 @@ describe('CategoriesListScreenComponent', () => {
 				status: 'FETCHED',
 				highlightedCategory: undefined
 			}
-		}) => state);
+		}) => {
+			return state;
+		});
 
 		render(
 			<Provider store={store}>
@@ -80,7 +82,9 @@ describe('CategoriesListScreenComponent', () => {
 				status: 'FETCHED',
 				highlightedCategory: undefined
 			}
-		}) => state);
+		}) => {
+			return state;
+		});
 
 		render(
 			<Provider store={store}>

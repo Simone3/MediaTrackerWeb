@@ -1,13 +1,17 @@
-jest.mock('app/config/config', () => ({
-	config: {
-		backEnd: {
-			defaultTimeoutMilliseconds: 1000
-		},
-		logging: {
-			logInvocations: false
+import { RestJsonInvokerAxios } from 'app/controllers/implementations/real/common/rest-json-invoker';
+
+jest.mock('app/config/config', () => {
+	return {
+		config: {
+			backEnd: {
+				defaultTimeoutMilliseconds: 1000
+			},
+			logging: {
+				logInvocations: false
+			}
 		}
-	}
-}));
+	};
+});
 
 jest.mock('axios', () => {
 	return {
@@ -26,16 +30,7 @@ jest.mock('axios', () => {
 	};
 });
 
-import { RestJsonInvokerAxios } from 'app/controllers/implementations/real/common/rest-json-invoker';
-
-const axiosMock = jest.requireMock('axios') as {
-	default: {
-		request: jest.Mock;
-		CancelToken: {
-			source: jest.Mock;
-		};
-	};
-};
+const axiosMock = jest.requireMock('axios');
 
 describe('RestJsonInvokerAxios', () => {
 	beforeEach(() => {
@@ -53,7 +48,7 @@ describe('RestJsonInvokerAxios', () => {
 		jest.useRealTimers();
 	});
 
-	test('does not send the browser-forbidden Accept-Charset header', async () => {
+	test('does not send the browser-forbidden Accept-Charset header', async() => {
 		const invoker = new RestJsonInvokerAxios();
 
 		const response = await invoker.invoke({

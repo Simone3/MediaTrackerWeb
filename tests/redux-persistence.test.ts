@@ -172,10 +172,10 @@ describe('redux persistence', () => {
 		expect(restoredState?.mediaItemDetails?.catalogStatus).toBe('IDLE');
 		expect(restoredState?.mediaItemDetails?.mediaItem?.releaseDate).toBeInstanceOf(Date);
 		expect(restoredState?.mediaItemDetails?.mediaItem?.completedOn?.[0]).toBeInstanceOf(Date);
-		expect((restoredState?.mediaItemDetails?.mediaItem?.releaseDate as Date).toISOString()).toBe('2024-02-01T00:00:00.000Z');
-		expect((restoredState?.mediaItemDetails?.mediaItem?.completedOn?.[0] as Date).toISOString()).toBe('2024-03-04T00:00:00.000Z');
+		expect((restoredState?.mediaItemDetails?.mediaItem?.releaseDate).toISOString()).toBe('2024-02-01T00:00:00.000Z');
+		expect((restoredState?.mediaItemDetails?.mediaItem?.completedOn?.[0]).toISOString()).toBe('2024-03-04T00:00:00.000Z');
 		expect(restoredState?.tvShowSeasonsList?.completeHandlingTimestamp).toBeInstanceOf(Date);
-		expect((restoredState?.tvShowSeasonsList?.completeHandlingTimestamp as Date).toISOString()).toBe('2024-04-05T00:00:00.000Z');
+		expect((restoredState?.tvShowSeasonsList?.completeHandlingTimestamp).toISOString()).toBe('2024-04-05T00:00:00.000Z');
 	});
 
 	test('clears persisted state when the user is not authenticated', () => {

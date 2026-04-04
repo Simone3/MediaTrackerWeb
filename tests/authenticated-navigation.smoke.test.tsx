@@ -5,17 +5,29 @@ import { screenToPath } from 'app/utilities/navigation-routes';
 import { AppScreens } from 'app/utilities/screens';
 import { MemoryRouter } from 'react-router-dom';
 
-jest.mock('app/components/containers/navigation/media-navigator', () => ({
-	MediaNavigator: () => <div>Media section</div>
-}));
+jest.mock('app/components/containers/navigation/media-navigator', () => {
+	return {
+		MediaNavigator: () => {
+			return <div>Media section</div>;
+		}
+	};
+});
 
-jest.mock('app/components/containers/navigation/settings-navigator', () => ({
-	SettingsNavigator: () => <div>Settings section</div>
-}));
+jest.mock('app/components/containers/navigation/settings-navigator', () => {
+	return {
+		SettingsNavigator: () => {
+			return <div>Settings section</div>;
+		}
+	};
+});
 
-jest.mock('app/components/containers/navigation/credits-navigator', () => ({
-	CreditsNavigator: () => <div>Credits section</div>
-}));
+jest.mock('app/components/containers/navigation/credits-navigator', () => {
+	return {
+		CreditsNavigator: () => {
+			return <div>Credits section</div>;
+		}
+	};
+});
 
 describe('AuthenticatedNavigator', () => {
 	test('keeps the media icon active for nested media routes', () => {
