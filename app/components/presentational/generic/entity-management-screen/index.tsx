@@ -1,8 +1,8 @@
 import { CSSProperties, ReactElement, ReactNode, useEffect, useState } from 'react';
-import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
+import { MOBILE_LAYOUT_BREAKPOINT } from 'app/utilities/layout';
 
 /**
  * Shared screen shell for the dark entity-management pages.
@@ -11,12 +11,12 @@ import { PillButtonComponent } from 'app/components/presentational/generic/pill-
  */
 export const EntityManagementScreenComponent = (props: EntityManagementScreenComponentProps): ReactElement => {
 	const [ isMobileLayout, setIsMobileLayout ] = useState<boolean>(() => {
-		return window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
+		return window.innerWidth <= MOBILE_LAYOUT_BREAKPOINT;
 	});
 
 	useEffect(() => {
 		const handleResize = (): void => {
-			const nextIsMobileLayout = window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
+			const nextIsMobileLayout = window.innerWidth <= MOBILE_LAYOUT_BREAKPOINT;
 			setIsMobileLayout((currentIsMobileLayout) => {
 				return currentIsMobileLayout === nextIsMobileLayout ? currentIsMobileLayout : nextIsMobileLayout;
 			});

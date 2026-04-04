@@ -1,5 +1,4 @@
 import { Component, CSSProperties, ReactNode } from 'react';
-import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 import { MediaItemsListContainer } from 'app/components/containers/media-item/list/list';
 import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
 import { MediaItemFilterModalContainer } from 'app/components/containers/media-item/list/filter-modal';
@@ -8,6 +7,7 @@ import { LoadingIndicatorComponent } from 'app/components/presentational/generic
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { i18n } from 'app/utilities/i18n';
+import { MOBILE_LAYOUT_BREAKPOINT } from 'app/utilities/layout';
 
 /**
  * Presentational component that contains the whole "media items list" screen, that lists all media items of the current category
@@ -122,7 +122,7 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 	 * @returns true if mobile layout should be used
 	 */
 	private isMobileLayout(): boolean {
-		return window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
+		return window.innerWidth <= MOBILE_LAYOUT_BREAKPOINT;
 	}
 }
 

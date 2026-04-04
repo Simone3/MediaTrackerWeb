@@ -1,9 +1,9 @@
 import { Component, ReactNode } from 'react';
-import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 import { CategoriesListContainer } from 'app/components/containers/category/list/list';
 import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
+import { MOBILE_LAYOUT_BREAKPOINT } from 'app/utilities/layout';
 import { i18n } from 'app/utilities/i18n';
 
 /**
@@ -104,7 +104,7 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 	 * @returns true if mobile layout should be used
 	 */
 	private isMobileLayout(): boolean {
-		return window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
+		return window.innerWidth <= MOBILE_LAYOUT_BREAKPOINT;
 	}
 }
 

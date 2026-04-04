@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 import { MediaItemContextMenuComponent } from 'app/components/presentational/media-item/list/context-menu';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { i18n } from 'app/utilities/i18n';
+import { MOBILE_LAYOUT_BREAKPOINT } from 'app/utilities/layout';
 
 describe('MediaItemContextMenuComponent', () => {
 	const group: GroupInternal = {
@@ -79,7 +79,7 @@ describe('MediaItemContextMenuComponent', () => {
 			Object.defineProperty(window, 'innerWidth', {
 				configurable: true,
 				writable: true,
-				value: CATEGORIES_MOBILE_BREAKPOINT
+				value: MOBILE_LAYOUT_BREAKPOINT
 			});
 
 			const deleteCallback = jest.fn();

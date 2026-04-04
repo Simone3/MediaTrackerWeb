@@ -143,6 +143,7 @@
   - `color-picker` now centralizes the reusable color-swatch selection UI used by the category and own-platform details forms, replacing the old parallel category/entity color-grid implementations.
   - `pill-button` now centralizes the shared pill-shaped save/add/apply/cancel/confirm action buttons plus the compact subtle media-item list toolbar buttons, while picker buttons, menu buttons, and the floating action button still keep their own dedicated components/styles.
   - `own-platform/common/icon-registry.ts` is now the single source of truth for own-platform icon assets and masked icon styles used across list/details/media-item views.
+- The shared responsive mobile cutoff now lives in `app/utilities/layout.ts` as `MOBILE_LAYOUT_BREAKPOINT` instead of the old category-list-specific constant, because the same `960px` threshold is reused across category, media-item, and generic management/menu screens.
 
 ## High-signal files to open first
 - `app/AGENTS.md`

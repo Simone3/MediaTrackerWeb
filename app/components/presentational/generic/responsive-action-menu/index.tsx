@@ -1,5 +1,5 @@
 import { CSSProperties, ReactElement, useEffect, useId, useState } from 'react';
-import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
+import { MOBILE_LAYOUT_BREAKPOINT } from 'app/utilities/layout';
 
 const VIEWPORT_PADDING = 16;
 const DESKTOP_OFFSET = 12;
@@ -65,7 +65,7 @@ export const ResponsiveActionMenuComponent = (props: ResponsiveActionMenuCompone
 	} = props;
 	const titleId = useId();
 	const [ isMobileLayout, setIsMobileLayout ] = useState<boolean>(() => {
-		return window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
+		return window.innerWidth <= MOBILE_LAYOUT_BREAKPOINT;
 	});
 	const popoverHeight = MENU_HEADER_HEIGHT + (actions.length * MENU_ACTION_HEIGHT);
 
@@ -80,7 +80,7 @@ export const ResponsiveActionMenuComponent = (props: ResponsiveActionMenuCompone
 			}
 		};
 		const handleResize = (): void => {
-			const nextIsMobileLayout = window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
+			const nextIsMobileLayout = window.innerWidth <= MOBILE_LAYOUT_BREAKPOINT;
 			setIsMobileLayout((currentIsMobileLayout) => {
 				return currentIsMobileLayout === nextIsMobileLayout ? currentIsMobileLayout : nextIsMobileLayout;
 			});

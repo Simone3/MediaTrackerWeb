@@ -1,1 +1,0 @@
-export const CATEGORIES_MOBILE_BREAKPOINT = 960;
