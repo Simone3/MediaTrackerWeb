@@ -110,7 +110,7 @@
 - The old unused `app/config/properties/config-sample.ts` helper has been removed; the repo now only keeps the actual dev/prod config files that are already versioned.
 - `app/config/type-config.ts` now only keeps the config fields still read by the web app.
 - `config.firebase` is intentionally narrowed to the Firebase Web Auth fields the app actually uses: `apiKey`, `authDomain`, `projectId`, and `appId`.
-- The old unused theme-only color entries were removed from config; the web app now keeps only the colors that are still read directly plus the shared available-color arrays for categories and own platforms.
+- The old unused theme-only color entries were removed from config; `blue`, `red`, and `yellow` are still kept as named palette entries for consistency because they feed the shared available-color arrays for categories and own platforms.
 - Current dev config uses mocks for:
   - user
   - categories
