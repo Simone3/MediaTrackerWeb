@@ -766,6 +766,7 @@
 ## Testing notes
 - Jest setup is lightweight and mostly smoke-test oriented.
 - Tests live in `tests/`.
+- Generated Jest coverage reports now live under `/coverage` and are gitignored like the production `/dist` bundle output.
 - Prefer focused tests around the exact container/component being changed.
 - Useful pattern:
   - render presentational component directly for UI behavior
