@@ -80,7 +80,7 @@ export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps,
 	 */
 	private getAppErrorDescription(error: AppError): string {
 		let originalAppError: AppError = error;
-		while (originalAppError.errorDetails && originalAppError.errorDetails instanceof AppError) {
+		while(originalAppError.errorDetails && originalAppError.errorDetails instanceof AppError) {
 			originalAppError = originalAppError.errorDetails;
 		}
 		return i18n.t(originalAppError.errorDescription);

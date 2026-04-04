@@ -95,7 +95,8 @@ const stylisticRules = {
 		overrides: {
 			if: { after: false },
 			for: { after: false },
-			switch: { after: false }
+			switch: { after: false },
+			while: { after: false }
 		}
 	}],
 	'@stylistic/line-comment-position': [ 'warn', { position: 'above' }],
