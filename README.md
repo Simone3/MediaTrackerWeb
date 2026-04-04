@@ -3,15 +3,6 @@ Just a Codex experiment for now.
 
 TODO:
 
-- final manual code check -> from /presentational
-  - refactor into generic text input, date picker, etc. - authinput, authlink, authsubmit generalizable?
-  - find unused properties
-  - app-dark-screen-active added and removed?
-  - remove blank lines after classes (change agents.md too!)
-  - CATEGORIES_MOBILE_BREAKPOINT rename and move
-  - remove all multi-line imports
-  - re-review logic code starting from screens and moving down (especially for media item parts)
-
 - migrate to an eslint.config.js file
 - fix linting on tests
 - make it add more tests
@@ -24,6 +15,8 @@ TODO:
   - Firebase API key is public?
   - is it useless to gitignore the configs?
 
+- re-review logic code starting from screens and moving down (especially for media item parts)
+
 - fully test on chrome/firefox (production build)
 - fully test on mobile (need to deploy first?)
 
@@ -35,6 +28,8 @@ TODO:
   - formatting advice
   - do not commit
   - make it generate agents instructions based on the current doc file!
+  - make it summarize my code style
+  - no carets etc. in package.json
 - rewrite doc -> make it rewrite a true documentation
 - rewrite readme
 

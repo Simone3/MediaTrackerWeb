@@ -10,7 +10,7 @@
 - Work only in this repository and only on the current branch.
 - Do NOT introduce extra libraries unless you justify them briefly and they clearly reduce work or risk.
 - Just use plain React with Typescript and CSS; no frameworks like Vite or NextJS.
-- Keep the code style consistent (spacing, new lines, etc.). However, do remove any empty line just after the start of code blocks (functions, ifs, etc. but NOT classes).
+- Keep the code style consistent (spacing, new lines, etc.).
 - Testing: add/keep a minimal but meaningful test setup (unit for key logic + at least 1-2 smoke tests for critical flows). All tests must pass before closing a feature or fix.
 - You MUST commit the code when you complete any task I give you. All commits must start with "Codex: ". All ignored files should be left alone, do not remove gitignore patterns.
 
