@@ -7,7 +7,6 @@ import { CategoryFilterInternal, CategoryInternal } from 'app/data/models/intern
  * @see CategoryController
  */
 export class CategoryMockedController extends MockControllerHelper implements CategoryController {
-
 	protected delay = 0;
 	protected errorProbability = 0;
 

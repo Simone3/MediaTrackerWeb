@@ -2,14 +2,7 @@ import { ReactElement } from 'react';
 import { FormikProps } from 'formik';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { SelectComponent } from 'app/components/presentational/generic/select';
-import {
-	MEDIA_ITEM_FILTER_FORM_GROUP_VALUES,
-	MEDIA_ITEM_FILTER_FORM_IMPORTANCE_VALUES,
-	MEDIA_ITEM_FILTER_FORM_OWN_PLATFORM_VALUES,
-	MEDIA_ITEM_FILTER_FORM_SORT_VALUES,
-	MEDIA_ITEM_FILTER_FORM_STATUS_VALUES,
-	MediaItemFilterFormValues
-} from 'app/components/presentational/media-item/list/filter-form/data/media-item';
+import { MEDIA_ITEM_FILTER_FORM_GROUP_VALUES, MEDIA_ITEM_FILTER_FORM_IMPORTANCE_VALUES, MEDIA_ITEM_FILTER_FORM_OWN_PLATFORM_VALUES, MEDIA_ITEM_FILTER_FORM_SORT_VALUES, MEDIA_ITEM_FILTER_FORM_STATUS_VALUES, MediaItemFilterFormValues } from 'app/components/presentational/media-item/list/filter-form/data/media-item';
 import { i18n } from 'app/utilities/i18n';
 
 /**

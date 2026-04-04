@@ -28,7 +28,6 @@ const mediaRelativePath = (screen: string): string => {
  * The navigator for the main section of the authenticated app, with the categories and media items lists
  */
 export class MediaNavigator extends Component {
-
 	/**
 	 * @override
 	 */

@@ -11,7 +11,6 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * @see OwnPlatformController
  */
 export class OwnPlatformBackEndController implements OwnPlatformController {
-
 	/**
 	 * @override
 	 */

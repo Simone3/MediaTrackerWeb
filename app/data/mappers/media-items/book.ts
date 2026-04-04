@@ -6,7 +6,6 @@ import { BookFilterInternal, BookInternal, BookSortByInternal, BookSortFieldInte
  * Mapper for books
  */
 class BookMapper extends MediaItemMapper<BookInternal, IdentifiedBook> {
-		
 	/**
 	 * @override
 	 */
@@ -37,7 +36,6 @@ class BookMapper extends MediaItemMapper<BookInternal, IdentifiedBook> {
  * Mapper for book filters
  */
 class BookFilterMapper extends MediaItemFilterMapper<BookFilterInternal, BookFilter> {
-	
 	/**
 	 * @override
 	 */
@@ -57,7 +55,6 @@ class BookFilterMapper extends MediaItemFilterMapper<BookFilterInternal, BookFil
  * Mapper for book sort options
  */
 class BookSortMapper extends MediaItemSortMapper<BookSortByInternal, BookSortBy> {
-	
 	/**
 	 * @override
 	 */
@@ -107,7 +104,6 @@ class BookSortMapper extends MediaItemSortMapper<BookSortByInternal, BookSortBy>
  * Mapper for book catalog search results
  */
 class BookCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchBookCatalogResultInternal, SearchBookCatalogResult> {
-		
 	/**
 	 * @override
 	 */
@@ -127,7 +123,6 @@ class BookCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchBookCat
  * Mapper for book catalog details
  */
 class BookCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogBookInternal, CatalogBook> {
-	
 	/**
 	 * @override
 	 */

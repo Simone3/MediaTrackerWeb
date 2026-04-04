@@ -12,7 +12,6 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * @see VideogameController
  */
 export class VideogameBackEndController implements VideogameController {
-
 	/**
 	 * @override
 	 */
@@ -115,7 +114,6 @@ export class VideogameBackEndController implements VideogameController {
  * @see VideogameCatalogController
  */
 export class VideogameCatalogBackEndController implements VideogameCatalogController {
-
 	/**
 	 * @override
 	 */

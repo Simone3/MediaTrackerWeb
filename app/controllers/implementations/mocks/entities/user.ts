@@ -9,7 +9,6 @@ import { UserInternal, UserSecretInternal } from 'app/data/models/internal/user'
  * @see UserController
  */
 export class UserMockedController extends MockControllerHelper implements UserController {
-
 	private static readonly LOCAL_STORAGE_KEY = 'mocked-user';
 
 	protected delay = 0;

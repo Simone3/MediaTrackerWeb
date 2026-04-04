@@ -4,7 +4,6 @@ import { AppError } from 'app/data/models/internal/error';
  * Simple abstract class that offers some utility methods to mock controllers
  */
 export abstract class MockControllerHelper {
-
 	/**
 	 * Result delay in milliseconds, can be overridden by implementations
 	 */

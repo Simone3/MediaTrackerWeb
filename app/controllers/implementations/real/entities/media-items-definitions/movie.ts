@@ -5,7 +5,6 @@ import { DEFAULT_MOVIE, MovieFilterInternal, MovieInternal, MovieSortByInternal 
  * Shared implementation of the Movie definitions controller
  */
 export class MovieDefinitionsControllerImpl implements MediaItemDefinitionsController<MovieInternal, MovieSortByInternal, MovieFilterInternal> {
-
 	/**
 	 * @override
 	 */

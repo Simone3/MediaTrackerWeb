@@ -5,7 +5,6 @@ import { DEFAULT_VIDEOGAME, VideogameFilterInternal, VideogameInternal, Videogam
  * Shared implementation of the Videogame definitions controller
  */
 export class VideogameDefinitionsControllerImpl implements MediaItemDefinitionsController<VideogameInternal, VideogameSortByInternal, VideogameFilterInternal> {
-
 	/**
 	 * @override
 	 */

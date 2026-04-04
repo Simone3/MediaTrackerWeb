@@ -7,7 +7,6 @@ import { GroupFilterInternal, GroupInternal } from 'app/data/models/internal/gro
  * @see GroupController
  */
 export class GroupMockedController extends MockControllerHelper implements GroupController {
-
 	protected delay = 0;
 	protected errorProbability = 0;
 

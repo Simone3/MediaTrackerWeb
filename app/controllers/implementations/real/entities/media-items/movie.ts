@@ -12,7 +12,6 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * @see MovieController
  */
 export class MovieBackEndController implements MovieController {
-
 	/**
 	 * @override
 	 */
@@ -115,7 +114,6 @@ export class MovieBackEndController implements MovieController {
  * @see MovieCatalogController
  */
 export class MovieCatalogBackEndController implements MovieCatalogController {
-
 	/**
 	 * @override
 	 */

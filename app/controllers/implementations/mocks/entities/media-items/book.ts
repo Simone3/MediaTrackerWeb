@@ -7,7 +7,6 @@ import { BookFilterInternal, BookInternal, BookSortByInternal, CatalogBookIntern
  * @see BookController
  */
 export class BookMockedController extends MediaItemMockedController<BookInternal, BookSortByInternal, BookFilterInternal> implements BookController {
-
 	protected readonly mediaItems: {[user: string]: {[category: string]: BookInternal[]}} = {
 		test: {
 			1: [{
@@ -46,5 +45,4 @@ export class BookMockedController extends MediaItemMockedController<BookInternal
  * @see BookCatalogController
  */
 export class BookMockedCatalogController extends MediaItemMockedCatalogController<SearchBookCatalogResultInternal, CatalogBookInternal> implements BookCatalogController {
-
 }

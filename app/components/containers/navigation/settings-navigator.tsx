@@ -6,7 +6,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
  * The navigator for the settings section of the app
  */
 export class SettingsNavigator extends Component {
-	
 	/**
 	 * @override
 	 */

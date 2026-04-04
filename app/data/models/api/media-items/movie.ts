@@ -6,7 +6,6 @@ import { IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNeste
  * Model for a movie, publicly exposed via API
  */
 export class Movie extends MediaItem {
-
 	/**
 	 * The movie director(s)
 	 */
@@ -27,7 +26,6 @@ export class Movie extends MediaItem {
  * Model for a movie with an ID property, publicly exposed via API
  */
 export class IdentifiedMovie extends Movie {
-
 	/**
 	 * The movie unique ID
 	 */
@@ -40,14 +38,12 @@ export class IdentifiedMovie extends Movie {
  * Movie filtering options, publicly exposed via API
  */
 export class MovieFilter extends MediaItemFilter {
-
 }
 
 /**
  * Values for movie ordering options, publicly exposed via API
  */
 export class MovieSortField extends MediaItemSortField {
-
 	public static readonly DIRECTOR: string = 'DIRECTOR';
 	
 	public static values(): string[] {
@@ -59,7 +55,6 @@ export class MovieSortField extends MediaItemSortField {
  * Movies sort by options, publicly exposed via API
  */
 export class MovieSortBy extends MediaItemSortBy {
-
 	/**
 	 * The sort by field
 	 */
@@ -73,7 +68,6 @@ export class MovieSortBy extends MediaItemSortBy {
  * Request for the 'add movie' API
  */
 export class AddMovieRequest extends AddMediaItemRequest {
-
 	/**
 	 * The movie to add
 	 */
@@ -89,7 +83,6 @@ export class AddMovieRequest extends AddMediaItemRequest {
  * Request for the 'update movie' API
  */
 export class UpdateMovieRequest extends UpdateMediaItemRequest {
-
 	/**
 	 * The new movie data to save
 	 */
@@ -105,7 +98,6 @@ export class UpdateMovieRequest extends UpdateMediaItemRequest {
  * Request for the 'filter movies' API
  */
 export class FilterMoviesRequest extends FilterMediaItemsRequest {
-
 	/**
 	 * Filtering options
 	 */
@@ -132,7 +124,6 @@ export class FilterMoviesRequest extends FilterMediaItemsRequest {
  * Response for the 'filter movies' API
  */
 export class FilterMoviesResponse extends FilterMediaItemsResponse {
-
 	/**
 	 * The retrieved movies
 	 */
@@ -149,7 +140,6 @@ export class FilterMoviesResponse extends FilterMediaItemsResponse {
  * Request for the 'search movies' API
  */
 export class SearchMoviesRequest extends SearchMediaItemsRequest {
-
 	/**
 	 * Currently active filtering options
 	 */
@@ -165,7 +155,6 @@ export class SearchMoviesRequest extends SearchMediaItemsRequest {
  * Response for the 'search movies' API
  */
 export class SearchMoviesResponse extends SearchMediaItemsResponse {
-
 	/**
 	 * The retrieved movies
 	 */
@@ -182,7 +171,6 @@ export class SearchMoviesResponse extends SearchMediaItemsResponse {
  * Model for a movie from the catalog, publicly exposed via API
  */
 export class CatalogMovie extends CatalogMediaItem {
-
 	/**
 	 * The movie director(s)
 	 */
@@ -203,21 +191,18 @@ export class CatalogMovie extends CatalogMediaItem {
  * Movie catalog search result, publicly exposed via API
  */
 export class SearchMovieCatalogResult extends SearchMediaItemCatalogResult {
-
 }
 
 /**
  * Response for the 'search catalog' API
  */
 export class SearchMovieCatalogResponse extends SearchMediaItemCatalogResponse {
-
 }
 
 /**
  * Response for the 'get from catalog' API
  */
 export class GetMovieFromCatalogResponse extends GetMediaItemFromCatalogResponse {
-
 	/**
 	 * The movie details
 	 */

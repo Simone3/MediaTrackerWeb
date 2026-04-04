@@ -6,7 +6,6 @@ import { CatalogVideogameInternal, SearchVideogameCatalogResultInternal, Videoga
  * Mapper for videogames
  */
 class VideogameMapper extends MediaItemMapper<VideogameInternal, IdentifiedVideogame> {
-		
 	/**
 	 * @override
 	 */
@@ -41,7 +40,6 @@ class VideogameMapper extends MediaItemMapper<VideogameInternal, IdentifiedVideo
  * Mapper for videogame filters
  */
 class VideogameFilterMapper extends MediaItemFilterMapper<VideogameFilterInternal, VideogameFilter> {
-	
 	/**
 	 * @override
 	 */
@@ -61,7 +59,6 @@ class VideogameFilterMapper extends MediaItemFilterMapper<VideogameFilterInterna
  * Mapper for videogame sort options
  */
 class VideogameSortMapper extends MediaItemSortMapper<VideogameSortByInternal, VideogameSortBy> {
-	
 	/**
 	 * @override
 	 */
@@ -111,7 +108,6 @@ class VideogameSortMapper extends MediaItemSortMapper<VideogameSortByInternal, V
  * Mapper for videogame catalog search results
  */
 class VideogameCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchVideogameCatalogResultInternal, SearchVideogameCatalogResult> {
-		
 	/**
 	 * @override
 	 */
@@ -131,7 +127,6 @@ class VideogameCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchVi
  * Mapper for videogame catalog details
  */
 class VideogameCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogVideogameInternal, CatalogVideogame> {
-	
 	/**
 	 * @override
 	 */

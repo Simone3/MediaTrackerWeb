@@ -6,7 +6,6 @@ import { CatalogMovieInternal, MovieFilterInternal, MovieInternal, MovieSortByIn
  * Mapper for movies
  */
 class MovieMapper extends MediaItemMapper<MovieInternal, IdentifiedMovie> {
-		
 	/**
 	 * @override
 	 */
@@ -37,7 +36,6 @@ class MovieMapper extends MediaItemMapper<MovieInternal, IdentifiedMovie> {
  * Mapper for movie filters
  */
 class MovieFilterMapper extends MediaItemFilterMapper<MovieFilterInternal, MovieFilter> {
-	
 	/**
 	 * @override
 	 */
@@ -57,7 +55,6 @@ class MovieFilterMapper extends MediaItemFilterMapper<MovieFilterInternal, Movie
  * Mapper for movie sort options
  */
 class MovieSortMapper extends MediaItemSortMapper<MovieSortByInternal, MovieSortBy> {
-	
 	/**
 	 * @override
 	 */
@@ -107,7 +104,6 @@ class MovieSortMapper extends MediaItemSortMapper<MovieSortByInternal, MovieSort
  * Mapper for movie catalog search results
  */
 class MovieCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchMovieCatalogResultInternal, SearchMovieCatalogResult> {
-		
 	/**
 	 * @override
 	 */
@@ -127,7 +123,6 @@ class MovieCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchMovieC
  * Mapper for movie catalog details
  */
 class MovieCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogMovieInternal, CatalogMovie> {
-	
 	/**
 	 * @override
 	 */

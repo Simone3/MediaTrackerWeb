@@ -4,7 +4,6 @@ import React, { Component, MouseEvent, ReactNode } from 'react';
  * Presentational component to display a redirect link for the auth screens
  */
 export class AuthLinkComponent extends Component<AuthLinkComponentProps> {
-
 	/**
 	 * @override
 	 */

@@ -9,7 +9,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
  * The navigator for the unauthenticated section of the app
  */
 export class UnauthenticatedNavigator extends Component {
-	
 	/**
 	 * @override
 	 */

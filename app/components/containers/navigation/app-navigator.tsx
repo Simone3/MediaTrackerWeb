@@ -24,7 +24,6 @@ const NavigationServiceBridge = (): null => {
  * The root container that wraps the navigation logic
  */
 export class AppNavigationContainer extends Component {
-	
 	/**
 	 * @override
 	 */

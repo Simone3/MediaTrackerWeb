@@ -12,7 +12,6 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * @see BookController
  */
 export class BookBackEndController implements BookController {
-
 	/**
 	 * @override
 	 */
@@ -115,7 +114,6 @@ export class BookBackEndController implements BookController {
  * @see BookCatalogController
  */
 export class BookCatalogBackEndController implements BookCatalogController {
-
 	/**
 	 * @override
 	 */

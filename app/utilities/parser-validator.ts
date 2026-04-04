@@ -4,7 +4,6 @@ import { ClassType, transformAndValidate, TransformValidationOptions } from 'cla
  * Common parser/validator that contains some util methods for extending classes
  */
 class ParserValidator {
-
 	/**
 	 * Helper to parse and validate the given object against the given class
 	 * @param classType the class containing the object fields, with optional validation annotations

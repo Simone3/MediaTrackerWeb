@@ -6,7 +6,6 @@ import { IsBoolean, IsDateString, IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional
  * Model for a TV show season, publicly exposed via API
  */
 export class TvShowSeason {
-
 	/**
 	 * The season number
 	 */
@@ -33,7 +32,6 @@ export class TvShowSeason {
  * Model for a TV show, publicly exposed via API
  */
 export class TvShow extends MediaItem {
-
 	/**
 	 * The TV show creator(s)
 	 */
@@ -79,7 +77,6 @@ export class TvShow extends MediaItem {
  * Model for a TV show with an ID property, publicly exposed via API
  */
 export class IdentifiedTvShow extends TvShow {
-
 	/**
 	 * The TV show unique ID
 	 */
@@ -92,14 +89,12 @@ export class IdentifiedTvShow extends TvShow {
  * TvShow filtering options, publicly exposed via API
  */
 export class TvShowFilter extends MediaItemFilter {
-
 }
 
 /**
  * Values for TV show ordering options, publicly exposed via API
  */
 export class TvShowSortField extends MediaItemSortField {
-
 	public static readonly CREATOR: string = 'CREATOR';
 	
 	public static values(): string[] {
@@ -111,7 +106,6 @@ export class TvShowSortField extends MediaItemSortField {
  * TvShows sort by options, publicly exposed via API
  */
 export class TvShowSortBy extends MediaItemSortBy {
-
 	/**
 	 * The sort by field
 	 */
@@ -125,7 +119,6 @@ export class TvShowSortBy extends MediaItemSortBy {
  * Request for the 'add TV show' API
  */
 export class AddTvShowRequest extends AddMediaItemRequest {
-
 	/**
 	 * The TV show to add
 	 */
@@ -141,7 +134,6 @@ export class AddTvShowRequest extends AddMediaItemRequest {
  * Request for the 'update TV show' API
  */
 export class UpdateTvShowRequest extends UpdateMediaItemRequest {
-
 	/**
 	 * The new TV show data to save
 	 */
@@ -157,7 +149,6 @@ export class UpdateTvShowRequest extends UpdateMediaItemRequest {
  * Request for the 'filter TV shows' API
  */
 export class FilterTvShowsRequest extends FilterMediaItemsRequest {
-
 	/**
 	 * Filtering options
 	 */
@@ -184,7 +175,6 @@ export class FilterTvShowsRequest extends FilterMediaItemsRequest {
  * Response for the 'filter TV shows' API
  */
 export class FilterTvShowsResponse extends FilterMediaItemsResponse {
-
 	/**
 	 * The retrieved TV shows
 	 */
@@ -201,7 +191,6 @@ export class FilterTvShowsResponse extends FilterMediaItemsResponse {
  * Request for the 'search TV shows' API
  */
 export class SearchTvShowsRequest extends SearchMediaItemsRequest {
-
 	/**
 	 * Currently active filtering options
 	 */
@@ -217,7 +206,6 @@ export class SearchTvShowsRequest extends SearchMediaItemsRequest {
  * Response for the 'search TV shows' API
  */
 export class SearchTvShowsResponse extends SearchMediaItemsResponse {
-
 	/**
 	 * The retrieved TV shows
 	 */
@@ -234,7 +222,6 @@ export class SearchTvShowsResponse extends SearchMediaItemsResponse {
  * Model for a TV show season from the catalog, publicly exposed via API
  */
 export class CatalogTvShowSeason {
-
 	/**
 	 * The season number
 	 */
@@ -254,7 +241,6 @@ export class CatalogTvShowSeason {
  * Model for a TV show from the catalog, publicly exposed via API
  */
 export class CatalogTvShow extends CatalogMediaItem {
-
 	/**
 	 * The TV show creator(s)
 	 */
@@ -300,21 +286,18 @@ export class CatalogTvShow extends CatalogMediaItem {
  * TvShow catalog search result, publicly exposed via API
  */
 export class SearchTvShowCatalogResult extends SearchMediaItemCatalogResult {
-
 }
 
 /**
  * Response for the 'search catalog' API
  */
 export class SearchTvShowCatalogResponse extends SearchMediaItemCatalogResponse {
-
 }
 
 /**
  * Response for the 'get from catalog' API
  */
 export class GetTvShowFromCatalogResponse extends GetMediaItemFromCatalogResponse {
-
 	/**
 	 * The TV show details
 	 */

@@ -7,7 +7,6 @@ import { CatalogMovieInternal, MovieFilterInternal, MovieInternal, MovieSortByIn
  * @see MovieController
  */
 export class MovieMockedController extends MediaItemMockedController<MovieInternal, MovieSortByInternal, MovieFilterInternal> implements MovieController {
-
 	protected readonly mediaItems: {[user: string]: {[category: string]: MovieInternal[]}} = {
 		test: {
 			2: [{
@@ -86,7 +85,6 @@ export class MovieMockedController extends MediaItemMockedController<MovieIntern
  * @see MovieCatalogController
  */
 export class MovieMockedCatalogController extends MediaItemMockedCatalogController<SearchMovieCatalogResultInternal, CatalogMovieInternal> implements MovieCatalogController {
-
 	protected readonly catalogList: SearchMovieCatalogResultInternal[] = [{
 		catalogId: '1',
 		name: 'Catalog Movie 1',

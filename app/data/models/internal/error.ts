@@ -2,7 +2,6 @@
  * An application error that can be thrown or promise-rejected in the code and then handled with a negative user message
  */
 export class AppError extends Error {
-
 	public static GENERIC = new AppError('generic.application', 'error.flash.messages.genericApplication');
 	public static BACKEND_TIMEOUT = new AppError('backend.timeout', 'error.flash.messages.backendTimeout');
 	public static BACKEND_GENERIC_ERROR = new AppError('backend.generic', 'error.flash.messages.backendGeneric');

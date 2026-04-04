@@ -32,7 +32,6 @@ const navigationItems = [
  * The navigator to switch between the main authenticated app sections via side menu
  */
 export class AuthenticatedNavigator extends Component {
-	
 	/**
 	 * @override
 	 */

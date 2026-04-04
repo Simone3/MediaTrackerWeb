@@ -1,13 +1,5 @@
 import { AppError } from 'app/data/models/internal/error';
-import {
-	MediaItemFilterInternal,
-	MediaItemGroupFilterInternal,
-	MediaItemImportanceInternal,
-	MediaItemOwnPlatformFilterInternal,
-	MediaItemSortByInternal,
-	MediaItemStatusFilterInternal,
-	MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES
-} from 'app/data/models/internal/media-items/media-item';
+import { MediaItemFilterInternal, MediaItemGroupFilterInternal, MediaItemImportanceInternal, MediaItemOwnPlatformFilterInternal, MediaItemSortByInternal, MediaItemStatusFilterInternal, MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES } from 'app/data/models/internal/media-items/media-item';
 import { ValuesOf } from 'app/utilities/helper-types';
 import { mixed } from 'yup';
 

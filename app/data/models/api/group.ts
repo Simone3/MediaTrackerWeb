@@ -6,7 +6,6 @@ import { IsDefined, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'cla
  * Model for a group, publicly exposed via API
  */
 export class Group {
-
 	/**
 	 * The group name
 	 */
@@ -19,7 +18,6 @@ export class Group {
  * Model for a group with an ID property, publicly exposed via API
  */
 export class IdentifiedGroup extends Group {
-
 	/**
 	 * The group unique ID
 	 */
@@ -32,7 +30,6 @@ export class IdentifiedGroup extends Group {
  * Request for the 'add group' API
  */
 export class AddGroupRequest extends CommonSaveRequest {
-
 	/**
 	 * The group to add
 	 */
@@ -48,21 +45,18 @@ export class AddGroupRequest extends CommonSaveRequest {
  * Response for the 'add group' API
  */
 export class AddGroupResponse extends CommonAddResponse {
-
 }
 
 /**
  * Response for the 'delete group' API
  */
 export class DeleteGroupResponse extends CommonResponse {
-
 }
 
 /**
  * Response for the 'get all groups' API
  */
 export class GetAllGroupsResponse extends CommonResponse {
-
 	@IsDefined()
 	@IsDefined({ each: true })
 	@Type(() => {
@@ -76,7 +70,6 @@ export class GetAllGroupsResponse extends CommonResponse {
  * Group filtering options, publicly exposed via API
  */
 export class GroupFilter {
-
 	/**
 	 * Filter for name (case-insensitive exact match)
 	 */
@@ -89,7 +82,6 @@ export class GroupFilter {
  * Request for the 'filter groups' API
  */
 export class FilterGroupsRequest extends CommonRequest {
-
 	/**
 	 * Filtering options
 	 */
@@ -105,7 +97,6 @@ export class FilterGroupsRequest extends CommonRequest {
  * Response for the 'filter groups' API
  */
 export class FilterGroupsResponse extends CommonResponse {
-
 	@IsDefined()
 	@IsDefined({ each: true })
 	@Type(() => {
@@ -119,7 +110,6 @@ export class FilterGroupsResponse extends CommonResponse {
  * Request for the 'update group' API
  */
 export class UpdateGroupRequest extends CommonSaveRequest {
-
 	/**
 	 * The group to update
 	 */
@@ -135,5 +125,4 @@ export class UpdateGroupRequest extends CommonSaveRequest {
  * Response for the 'update group' API
  */
 export class UpdateGroupResponse extends CommonResponse {
-
 }

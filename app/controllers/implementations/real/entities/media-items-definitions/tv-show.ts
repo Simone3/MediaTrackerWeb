@@ -5,7 +5,6 @@ import { DEFAULT_TV_SHOW, TvShowFilterInternal, TvShowInternal, TvShowSortByInte
  * Shared implementation of the TV show definitions controller
  */
 export class TvShowDefinitionsControllerImpl implements MediaItemDefinitionsController<TvShowInternal, TvShowSortByInternal, TvShowFilterInternal> {
-
 	/**
 	 * @override
 	 */

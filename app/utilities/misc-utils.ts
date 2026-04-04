@@ -4,7 +4,6 @@ import { PathParams } from 'app/utilities/helper-types';
  * Helper class with misc useful methods
  */
 class MiscUtils {
-
 	/**
 	 * Helper to build a URL
 	 * @param urlParts list of URL parts to be appended in order

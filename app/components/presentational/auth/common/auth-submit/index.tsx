@@ -4,7 +4,6 @@ import React, { Component, MouseEvent, ReactNode } from 'react';
  * Presentational component to display a submit button for the auth screens
  */
 export class AuthSubmitComponent extends Component<AuthSubmitComponentProps> {
-
 	/**
 	 * @override
 	 */

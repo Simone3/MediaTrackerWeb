@@ -6,7 +6,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
  * The navigator for the credits section of the app
  */
 export class CreditsNavigator extends Component {
-	
 	/**
 	 * @override
 	 */

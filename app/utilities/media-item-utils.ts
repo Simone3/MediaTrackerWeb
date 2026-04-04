@@ -4,7 +4,6 @@ import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-sh
  * Helper class with useful methods for media items
  */
 class MediaItemUtils {
-
 	/**
 	 * Helper to count the number of seasons and episodes of a TV show
 	 * @param tvShowSeasons the TV show seasons

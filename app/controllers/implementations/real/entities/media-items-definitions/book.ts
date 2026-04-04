@@ -5,7 +5,6 @@ import { BookFilterInternal, BookInternal, BookSortByInternal, DEFAULT_BOOK } fr
  * Shared implementation of the Book definitions controller
  */
 export class BookDefinitionsControllerImpl implements MediaItemDefinitionsController<BookInternal, BookSortByInternal, BookFilterInternal> {
-
 	/**
 	 * @override
 	 */

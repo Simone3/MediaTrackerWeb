@@ -11,7 +11,6 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * @see GroupController
  */
 export class GroupBackEndController implements GroupController {
-
 	/**
 	 * @override
 	 */

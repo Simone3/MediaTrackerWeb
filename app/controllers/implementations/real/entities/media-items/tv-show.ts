@@ -12,7 +12,6 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * @see TvShowController
  */
 export class TvShowBackEndController implements TvShowController {
-
 	/**
 	 * @override
 	 */
@@ -115,7 +114,6 @@ export class TvShowBackEndController implements TvShowController {
  * @see TvShowCatalogController
  */
 export class TvShowCatalogBackEndController implements TvShowCatalogController {
-
 	/**
 	 * @override
 	 */

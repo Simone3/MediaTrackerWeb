@@ -8,7 +8,6 @@ import { i18n } from 'app/utilities/i18n';
  * Presentational component that contains the add new user form
  */
 export class UserSignupScreenComponent extends Component<UserSignupScreenComponentProps> {
-	
 	/**
 	 * @override
 	 */

@@ -7,7 +7,6 @@ import { CatalogTvShowInternal, SearchTvShowCatalogResultInternal, TvShowFilterI
  * @see TvShowController
  */
 export class TvShowMockedController extends MediaItemMockedController<TvShowInternal, TvShowSortByInternal, TvShowFilterInternal> implements TvShowController {
-
 	protected readonly mediaItems: {[user: string]: {[category: string]: TvShowInternal[]}} = {
 		test: {
 			3: [{
@@ -77,7 +76,6 @@ export class TvShowMockedController extends MediaItemMockedController<TvShowInte
  * @see TvShowCatalogController
  */
 export class TvShowMockedCatalogController extends MediaItemMockedCatalogController<SearchTvShowCatalogResultInternal, CatalogTvShowInternal> implements TvShowCatalogController {
-
 	protected readonly catalogList: SearchTvShowCatalogResultInternal[] = [{
 		catalogId: '1',
 		name: 'Catalog TvShow 1',

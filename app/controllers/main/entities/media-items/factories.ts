@@ -16,7 +16,6 @@ import { MediaFactory } from 'app/factories/abstract-factories';
  * Factory for the media item controller
  */
 export const mediaItemControllerFactory = new class MediaItemControllerFactory extends MediaFactory<MediaItemController<MediaItemInternal, MediaItemSortByInternal, MediaItemFilterInternal>> {
-
 	/**
 	 * @override
 	 */
@@ -49,7 +48,6 @@ export const mediaItemControllerFactory = new class MediaItemControllerFactory e
  * Factory for the media item definitions controller
  */
 export const mediaItemDefinitionsControllerFactory = new class MediaItemDefinitionsControllerFactory extends MediaFactory<MediaItemDefinitionsController<MediaItemInternal, MediaItemSortByInternal, MediaItemFilterInternal>> {
-
 	/**
 	 * @override
 	 */
@@ -82,7 +80,6 @@ export const mediaItemDefinitionsControllerFactory = new class MediaItemDefiniti
  * Factory for the media item catalog controller
  */
 export const mediaItemCatalogControllerFactory = new class MediaItemCatalogControllerFactory extends MediaFactory<MediaItemCatalogController<SearchMediaItemCatalogResultInternal, CatalogMediaItemInternal>> {
-
 	/**
 	 * @override
 	 */

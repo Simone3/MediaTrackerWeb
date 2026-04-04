@@ -11,7 +11,6 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * @see CategoryController
  */
 export class CategoryBackEndController implements CategoryController {
-
 	/**
 	 * @override
 	 */

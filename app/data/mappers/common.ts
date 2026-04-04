@@ -8,7 +8,6 @@ import { config } from 'app/config/config';
  * @template TParams supporting parameters
  */
 export abstract class ModelMapper<TInternal, TExternal, TParams> {
-
 	/**
 	 * Transforms a list of internal models into a list of external models
 	 * @param sources the mapping sources

@@ -9,7 +9,6 @@ import { MovieSortByInternal } from 'app/data/models/internal/media-items/movie'
  * @see MediaItemController
  */
 export abstract class MediaItemMockedController<TMediaItemInternal extends MediaItemInternal, TMediaItemSortByInternal extends MediaItemSortByInternal, TMediaItemFilterInternal extends MediaItemFilterInternal> extends MockControllerHelper implements MediaItemController<TMediaItemInternal, TMediaItemSortByInternal, TMediaItemFilterInternal> {
-
 	protected delay = 0;
 	protected errorProbability = 0;
 
@@ -175,7 +174,6 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
  * @see MediaItemCatalogController
  */
 export class MediaItemMockedCatalogController<TSearchMediaItemCatalogResultInternal extends SearchMediaItemCatalogResultInternal, TCatalogMediaItemInternal extends CatalogMediaItemInternal> extends MockControllerHelper implements MediaItemCatalogController<TSearchMediaItemCatalogResultInternal, TCatalogMediaItemInternal> {
-
 	protected delay = 0;
 	protected errorProbability = 0;
 	

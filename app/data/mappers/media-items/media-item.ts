@@ -135,7 +135,6 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
  * @template TMediaItemFilter the class of the API media item entity
  */
 export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends MediaItemFilterInternal, TMediaItemFilter extends MediaItemFilter> extends ModelMapper<TMediaItemFilterInternal, TMediaItemFilter, never> {
-	
 	/**
 	 * Common mapping helper for implementations
 	 * @param source the mapping source
@@ -287,7 +286,6 @@ export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends Med
  * @template TMediaItemSortBy the class of the API media item entity
  */
 export abstract class MediaItemSortMapper<TMediaItemSortByInternal extends MediaItemSortByInternal, TMediaItemSortBy extends MediaItemSortBy> extends ModelMapper<TMediaItemSortByInternal, TMediaItemSortBy, never> {
-	
 	/**
 	 * Common mapping helper for implementations
 	 * @param source the mapping source
@@ -350,7 +348,6 @@ export abstract class MediaItemSortMapper<TMediaItemSortByInternal extends Media
  * @template TSearchMediaItemCatalogResult the class of the API media item entity
  */
 export abstract class MediaItemCatalogSearchMapper<TSearchMediaItemCatalogResultInternal extends SearchMediaItemCatalogResultInternal, TSearchMediaItemCatalogResult extends SearchMediaItemCatalogResult> extends ModelMapper<TSearchMediaItemCatalogResultInternal, TSearchMediaItemCatalogResult, never> {
-	
 	/**
 	 * Common mapping helper for implementations
 	 * @param source the mapping source
@@ -384,7 +381,6 @@ export abstract class MediaItemCatalogSearchMapper<TSearchMediaItemCatalogResult
  * @template TCatalogMediaItem the class of the API media item entity
  */
 export abstract class MediaItemCatalogDetailsMapper<TCatalogMediaItemInternal extends CatalogMediaItemInternal, TCatalogMediaItem extends CatalogMediaItem> extends ModelMapper<TCatalogMediaItemInternal, TCatalogMediaItem, never> {
-	
 	/**
 	 * Common mapping helper for implementations
 	 * @param source the mapping source

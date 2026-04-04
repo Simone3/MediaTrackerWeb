@@ -10,7 +10,6 @@ import axios, { AxiosError, AxiosRequestConfig, Cancel } from 'axios';
  * @see RestJsonInvoker
  */
 export class RestJsonInvokerAxios implements RestJsonInvoker {
-
 	private readonly TIMEOUT_CANCEL_MESSAGE = 'custom-timeout';
 
 	/**

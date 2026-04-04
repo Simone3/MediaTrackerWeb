@@ -7,7 +7,6 @@ import { dateUtils } from 'app/utilities/date-utils';
  * Mapper for TV shows
  */
 class TvShowMapper extends MediaItemMapper<TvShowInternal, IdentifiedTvShow> {
-		
 	/**
 	 * @override
 	 */
@@ -84,7 +83,6 @@ class TvShowMapper extends MediaItemMapper<TvShowInternal, IdentifiedTvShow> {
  * Mapper for TV show filters
  */
 class TvShowFilterMapper extends MediaItemFilterMapper<TvShowFilterInternal, TvShowFilter> {
-	
 	/**
 	 * @override
 	 */
@@ -104,7 +102,6 @@ class TvShowFilterMapper extends MediaItemFilterMapper<TvShowFilterInternal, TvS
  * Mapper for TV show sort options
  */
 class TvShowSortMapper extends MediaItemSortMapper<TvShowSortByInternal, TvShowSortBy> {
-	
 	/**
 	 * @override
 	 */
@@ -154,7 +151,6 @@ class TvShowSortMapper extends MediaItemSortMapper<TvShowSortByInternal, TvShowS
  * Mapper for TV show catalog search results
  */
 class TvShowCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchTvShowCatalogResultInternal, SearchTvShowCatalogResult> {
-		
 	/**
 	 * @override
 	 */
@@ -174,7 +170,6 @@ class TvShowCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchTvSho
  * Mapper for TV show catalog details
  */
 class TvShowCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogTvShowInternal, CatalogTvShow> {
-	
 	/**
 	 * @override
 	 */

@@ -6,7 +6,6 @@ import appLogo from 'app/resources/images/ic_app_logo.png';
  * Presentational component to display the app title with the app logo
  */
 export class AppTitleComponent extends Component<AppTitleComponentProps> {
-	
 	/**
 	 * @override
 	 */

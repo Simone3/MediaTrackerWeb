@@ -6,7 +6,6 @@ import { CategoryInternal, MediaTypeInternal } from 'app/data/models/internal/ca
  * @template P the optional extra parameters
  */
 export abstract class MediaFactory<R, P = undefined> {
-
 	/**
 	 * Gets the correct value from a category or a media type
 	 * @param categoryOrMediaType the category or the media type

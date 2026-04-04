@@ -2,7 +2,6 @@
  * Some utilities for dates
  */
 class DateUtils {
-
 	/**
 	 * Helper to format a date to ISO string with a null check
 	 * @param date the optionally undefined date

@@ -7,7 +7,6 @@ import { OwnPlatformFilterInternal, OwnPlatformInternal } from 'app/data/models/
  * @see Own platformController
  */
 export class OwnPlatformMockedController extends MockControllerHelper implements OwnPlatformController {
-
 	protected delay = 0;
 	protected errorProbability = 0;
 

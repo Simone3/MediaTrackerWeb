@@ -10,7 +10,6 @@ import { UserGlobalState, UserOperationsState, mapUserGlobalForPersistence, mapU
  * The global application state (handled by Redux)
  */
 export class State {
-
 	/**
 	 * Portion of the state with the global error data
 	 */

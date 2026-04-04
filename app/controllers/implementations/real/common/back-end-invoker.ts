@@ -9,7 +9,6 @@ import { InvocationParams } from 'app/utilities/helper-types';
  * @see BackEndInvoker
  */
 export class BackEndInvokerRestJson implements BackEndInvoker {
-
 	/**
 	 * @override
 	 */
