@@ -1,12 +1,12 @@
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { MediaItemsListComponent, MediaItemsListComponentInput, MediaItemsListComponentOutput } from 'app/components/presentational/media-item/list/list';
 import { AppError } from 'app/data/models/internal/error';
 import { deleteMediaItem, highlightMediaItem, loadMediaItemDetails, markMediaItemAsActive, markMediaItemAsComplete, markMediaItemAsRedo, removeMediaItemHighlight, searchMediaItems, startMediaItemsSearchMode, startMediaItemsSetFiltersMode, startMediaItemsViewGroupMode, stopMediaItemsSearchMode, stopMediaItemsViewGroupMode } from 'app/redux/actions/media-item/generators';
 import { State } from 'app/redux/state/state';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: State): MediaItemsListComponentInput => {
-	if(!state.categoryGlobal.selectedCategory) {
+	if (!state.categoryGlobal.selectedCategory) {
 		throw AppError.GENERIC.withDetails('Category cannot be null while rendering the media items list');
 	}
 

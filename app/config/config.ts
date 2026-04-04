@@ -16,7 +16,7 @@ const environment = getEnvValue('MEDIA_TRACKER_APP_ENV') || 'dev';
 
 // Get config based on environment
 let envConfig: Config;
-switch(environment) {
+switch (environment) {
 	case 'dev':
 		envConfig = devConfig;
 		break;

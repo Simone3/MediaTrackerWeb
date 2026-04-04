@@ -1,5 +1,5 @@
-import { GroupInternal } from 'app/data/models/internal/group';
 import { Action } from 'redux';
+import { GroupInternal } from 'app/data/models/internal/group';
 
 /**
  * The fetch groups action

@@ -23,10 +23,10 @@ export class AuthLinkComponent extends Component<AuthLinkComponentProps> {
 				type='button'
 				className={resolvedClassName}
 				onClick={(event: MouseEvent<HTMLButtonElement>) => {
-					if(otherProps.onClick) {
+					if (otherProps.onClick) {
 						otherProps.onClick(event);
 					}
-					if(onPress) {
+					if (onPress) {
 						onPress(event);
 					}
 				}}>

@@ -16,7 +16,7 @@ export class CategoriesListComponent extends Component<CategoriesListComponentIn
 	 * @override
 	 */
 	public componentDidUpdate(prevProps: Readonly<CategoriesListComponentInput & CategoriesListComponentOutput>): void {
-		if(prevProps.highlightedCategory && !this.props.highlightedCategory && this.state.menuAnchorRect) {
+		if (prevProps.highlightedCategory && !this.props.highlightedCategory && this.state.menuAnchorRect) {
 			this.setState({
 				menuAnchorRect: undefined
 			});
@@ -96,10 +96,10 @@ export class CategoriesListComponent extends Component<CategoriesListComponentIn
 		} = this.props;
 		let listContent: ReactNode;
 
-		if(showSkeletons) {
+		if (showSkeletons) {
 			listContent = this.renderSkeletons();
 		}
-		else if(showEmptyState) {
+		else if (showEmptyState) {
 			listContent = this.renderNone();
 		}
 		else {
@@ -181,7 +181,7 @@ export type CategoriesListComponentInput = {
 	 * Whether the list should render loading skeletons
 	 */
 	showSkeletons: boolean;
-}
+};
 
 /**
  * CategoriesListComponent's output props
@@ -212,8 +212,8 @@ export type CategoriesListComponentOutput = {
 	 */
 	closeCategoryMenu: () => void;
 
-}
+};
 
 type CategoriesListComponentState = {
 	menuAnchorRect: CategoryContextMenuAnchorRect | undefined;
-}
+};

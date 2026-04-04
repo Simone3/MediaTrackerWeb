@@ -1,9 +1,9 @@
 import { ReactElement } from 'react';
+import { FormikProps } from 'formik';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
 import { i18n } from 'app/utilities/i18n';
 import { BookInternal } from 'app/data/models/internal/media-items/book';
-import { FormikProps } from 'formik';
 
 /**
  * Presentational component that contains all book form input fields, all handled by the Formik container component

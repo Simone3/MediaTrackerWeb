@@ -1,8 +1,8 @@
+import { Action } from 'redux';
 import { DEFAULT_OWN_PLATFORM } from 'app/data/models/internal/own-platform';
 import { ASK_CONFIRMATION_BEFORE_SAVING_OWN_PLATFORM, COMPLETE_SAVING_OWN_PLATFORM, FAIL_SAVING_OWN_PLATFORM, LOAD_NEW_OWN_PLATFORM_DETAILS, LOAD_OWN_PLATFORM_DETAILS, REQUEST_OWN_PLATFORM_SAVE, SET_OWN_PLATFORM_FORM_STATUS, START_SAVING_OWN_PLATFORM } from 'app/redux/actions/own-platform/const';
 import { LoadOwnPlatformDetailsAction, SetOwnPlatformFormStatusAction, StartSavingOwnPlatformAction } from 'app/redux/actions/own-platform/types';
 import { OwnPlatformDetailsState, ownPlatformDetailsStateInitialValue } from 'app/redux/state/own-platform';
-import { Action } from 'redux';
 
 /**
  * Reducer for the own platform details portion of the global state
@@ -11,7 +11,7 @@ import { Action } from 'redux';
  * @returns the new state
  */
 export const ownPlatformDetails = (state: OwnPlatformDetailsState = ownPlatformDetailsStateInitialValue, action: Action): OwnPlatformDetailsState => {
-	switch(action.type) {
+	switch (action.type) {
 		// When the details page is started with a new own platform, the status is reset and the default own platform is loaded
 		case LOAD_NEW_OWN_PLATFORM_DETAILS: {
 			return {

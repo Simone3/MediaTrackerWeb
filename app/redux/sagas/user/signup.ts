@@ -1,4 +1,5 @@
 import { call, put, takeLatest } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { userController } from 'app/controllers/main/entities/user';
 import { AppError } from 'app/data/models/internal/error';
 import { UserInternal } from 'app/data/models/internal/user';
@@ -6,7 +7,6 @@ import { setError } from 'app/redux/actions/error/generators';
 import { SIGN_USER_UP } from 'app/redux/actions/user/const';
 import { completeSigningUserUp, failSigningUserUp, startSigningUserUp } from 'app/redux/actions/user/generators';
 import { SignUserUpAction } from 'app/redux/actions/user/types';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Worker saga that signs a user up

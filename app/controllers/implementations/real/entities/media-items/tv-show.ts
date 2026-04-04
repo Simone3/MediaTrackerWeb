@@ -60,7 +60,7 @@ export class TvShowBackEndController implements TvShowController {
 	 * @override
 	 */
 	public async save(userId: string, categoryId: string, tvShow: TvShowInternal): Promise<void> {
-		if(tvShow.id) {
+		if (tvShow.id) {
 			const request: UpdateTvShowRequest = {
 				tvShow: tvShowMapper.toExternal(tvShow)
 			};

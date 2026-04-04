@@ -61,7 +61,7 @@ const renderSkeletonRows: <T>(props: EntityManagementListComponentProps<T>) => R
 export const EntityManagementListComponent: <T>(props: EntityManagementListComponentProps<T>) => ReactElement = (props) => {
 	let listContent: ReactNode;
 
-	if(props.showSkeletons) {
+	if (props.showSkeletons) {
 		listContent = (
 			<ul className='entity-management-list-items'>
 				{props.noneOption && renderNoneOption(props.noneOption, props.selectedLabel)}

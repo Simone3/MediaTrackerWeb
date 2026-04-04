@@ -59,7 +59,7 @@ export class SettingsScreenComponent extends Component<SettingsScreenComponentPr
 					confirmLabel={i18n.t('common.alert.default.okButton')}
 					cancelLabel={i18n.t('common.alert.default.cancelButton')}
 					onConfirm={() => {
-						if(confirmDialog) {
+						if (confirmDialog) {
 							confirmDialog.onConfirm();
 						}
 						this.closeConfirmDialog();
@@ -122,7 +122,7 @@ export type SettingsScreenComponentInput = {
 	 * Flag to tell if the component is currently waiting on an async operation. If true, shows the loading screen.
 	 */
 	isLoading: boolean;
-}
+};
 
 /**
  * SettingsScreenComponent's output props
@@ -132,7 +132,7 @@ export type SettingsScreenComponentOutput = {
 	 * Callback to log the user out
 	 */
 	logout: () => void;
-}
+};
 
 /**
  * SettingsScreenComponent's props
@@ -145,4 +145,4 @@ type SettingsScreenComponentState = {
 		message: string;
 		onConfirm: () => void;
 	};
-}
+};

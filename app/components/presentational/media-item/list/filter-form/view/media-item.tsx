@@ -131,13 +131,13 @@ export type MediaItemFilterFormViewComponentInput = {
 	 * Callback when the form requests to be closed
 	 */
 	close: () => void;
-}
+};
 
 /**
  * MediaItemFilterFormViewComponent's output props
  */
 export type MediaItemFilterFormViewComponentOutput = {
-}
+};
 
 /**
  * All props of MediaItemFilterFormViewComponent

@@ -25,7 +25,7 @@ class NavigationService {
 	 * @param routeName the screen name
 	 */
 	public navigate(routeName: string): void {
-		if(!this.navigator) {
+		if (!this.navigator) {
 			throw AppError.GENERIC.withDetails('Navigation service was not initialized');
 		}
 
@@ -36,7 +36,7 @@ class NavigationService {
 	 * Navigates back the stack
 	 */
 	public back(): void {
-		if(!this.navigator) {
+		if (!this.navigator) {
 			throw AppError.GENERIC.withDetails('Navigation service was not initialized');
 		}
 

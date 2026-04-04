@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
+import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from './media-item';
 import { BookFormViewComponent } from 'app/components/presentational/media-item/details/form/view/book';
 import { bookFormValidationSchema, normalizeBookFormValues } from 'app/components/presentational/media-item/details/form/data/book';
 import { BookInternal, DEFAULT_CATALOG_BOOK } from 'app/data/models/internal/media-items/book';
-import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from './media-item';
 
 /**
  * Presentational component that handles the Formik wrapper component for the book form

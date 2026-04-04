@@ -1,6 +1,6 @@
-import { UserInternal, UserSecretInternal } from 'app/data/models/internal/user';
 import { CHECK_USER_LOGIN_STATUS, COMPLETE_CHECKING_USER_LOGIN_STATUS, COMPLETE_LOGGING_USER_IN, COMPLETE_LOGGING_USER_OUT, COMPLETE_SIGNING_USER_UP, FAIL_CHECKING_USER_LOGIN_STATUS, FAIL_LOGGING_USER_IN, FAIL_LOGGING_USER_OUT, FAIL_SIGNING_USER_UP, LOG_USER_IN, LOG_USER_OUT, SIGN_USER_UP, START_CHECKING_USER_LOGIN_STATUS, START_LOGGING_USER_IN, START_LOGGING_USER_OUT, START_SIGNING_USER_UP } from './const';
 import { CheckUserLoginStatusAction, CompleteCheckingUserLoginStatusAction, CompleteLoggingUserInAction, CompleteLoggingUserOutAction, CompleteSigningUserUpAction, FailCheckingUserLoginStatusAction, FailLoggingUserInAction, FailLoggingUserOutAction, FailSigningUserUpAction, LogUserInAction, LogUserOutAction, SignUserUpAction, StartCheckingUserLoginStatusAction, StartLoggingUserInAction, StartLoggingUserOutAction, StartSigningUserUpAction } from './types';
+import { UserInternal, UserSecretInternal } from 'app/data/models/internal/user';
 
 /**
  * Generator for the check user login status action, which causes the start checking user login status action, the async operation and then the complete/fail checking user login status action

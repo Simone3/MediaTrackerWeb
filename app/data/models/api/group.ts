@@ -1,6 +1,6 @@
-import { CommonAddResponse, CommonRequest, CommonResponse, CommonSaveRequest } from 'app/data/models/api/common';
 import { Type } from 'class-transformer';
 import { IsDefined, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { CommonAddResponse, CommonRequest, CommonResponse, CommonSaveRequest } from 'app/data/models/api/common';
 
 /**
  * Model for a group, publicly exposed via API

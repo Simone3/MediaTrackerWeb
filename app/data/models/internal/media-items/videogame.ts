@@ -17,14 +17,14 @@ type CoreVideogameDataInternal = {
 export type VideogameInternal = MediaItemInternal & CoreVideogameDataInternal & {
 	
 	averageLengthHours?: number;
-}
+};
 
 /**
  * Videogame filtering options, internal type just for display purposes
  */
 export type VideogameFilterInternal = MediaItemFilterInternal & {
 
-}
+};
 
 /**
  * Values for videogame ordering options, internal type just for display purposes
@@ -37,7 +37,7 @@ export type VideogameSortFieldInternal = MediaItemSortFieldInternal | 'DEVELOPER
 export type VideogameSortByInternal = MediaItemSortByInternal & {
 
 	field: VideogameSortFieldInternal;
-}
+};
 
 /**
  * Model for a catalog videogame, internal type just for display purposes

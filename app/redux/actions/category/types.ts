@@ -1,5 +1,5 @@
-import { CategoryInternal } from 'app/data/models/internal/category';
 import { Action } from 'redux';
+import { CategoryInternal } from 'app/data/models/internal/category';
 
 /**
  * The fetch categories action

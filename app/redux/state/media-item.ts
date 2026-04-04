@@ -45,7 +45,7 @@ export type MediaItemsListState = {
 	 * The currently highlighted (e.g. context menu is open) media item, or undefined if none is highlighted
 	 */
 	readonly highlightedMediaItem: MediaItemInternal | undefined;
-}
+};
 
 /**
  * The initial value for the media items list state
@@ -119,7 +119,7 @@ export type MediaItemDetailsState = {
 	 * The current status of the media item saving process
 	 */
 	readonly saveStatus: MediaItemSaveStatus;
-}
+};
 
 /**
  * The initial value for the media item details state

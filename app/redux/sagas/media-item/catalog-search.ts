@@ -1,4 +1,5 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { AppError } from 'app/data/models/internal/error';
 import { SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import { mediaItemCatalogControllerFactory } from 'app/controllers/main/entities/media-items/factories';
@@ -7,7 +8,6 @@ import { SEARCH_MEDIA_ITEMS_CATALOG } from 'app/redux/actions/media-item/const';
 import { completeSearchingMediaItemsCatalog, failSearchingMediaItemsCatalog, startSearchingMediaItemsCatalog } from 'app/redux/actions/media-item/generators';
 import { SearchMediaItemsCatalogAction } from 'app/redux/actions/media-item/types';
 import { State } from 'app/redux/state/state';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Worker saga that searches the media items catalog
@@ -20,7 +20,7 @@ const searchMediaItemsCatalogSaga = function * (action: SearchMediaItemsCatalogA
 		// Get values from state
 		const state = (yield select()) as State;
 		const category = state.categoryGlobal.selectedCategory;
-		if(!category) {
+		if (!category) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find category while searching media items catalog');
 		}
 		

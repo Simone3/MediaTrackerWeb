@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { AuthenticatedNavigator } from 'app/components/containers/navigation/authenticated-navigator';
 import { i18n } from 'app/utilities/i18n';
 import { screenToPath } from 'app/utilities/navigation-routes';
 import { AppScreens } from 'app/utilities/screens';
-import { MemoryRouter } from 'react-router-dom';
 
 jest.mock('app/components/containers/navigation/media-navigator', () => {
 	return {

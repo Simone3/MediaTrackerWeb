@@ -1,6 +1,6 @@
-import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { COMPLETE_DELETING_TV_SHOW_SEASON, COMPLETE_INLINE_UPDATING_TV_SHOW_SEASON, COMPLETE_SAVING_TV_SHOW_SEASON, COMPLETE_TV_SHOW_SEASONS_HANDLING, DELETE_TV_SHOW_SEASON, FAIL_SAVING_TV_SHOW_SEASON, INLINE_UPDATE_TV_SHOW_SEASON, LOAD_NEW_TV_SHOW_SEASON_DETAILS, LOAD_TV_SHOW_SEASON_DETAILS, SAVE_TV_SHOW_SEASON, SET_TV_SHOW_SEASON_FORM_STATUS, START_TV_SHOW_SEASONS_HANDLING } from './const';
 import { CompleteDeletingTvShowSeasonAction, CompleteInlineUpdatingTvShowSeasonAction, CompleteSavingTvShowSeasonAction, CompleteTvShowSeasonsHandlingAction, DeleteTvShowSeasonAction, FailSavingTvShowSeasonAction, InlineUpdateTvShowSeasonAction, LoadNewTvShowSeasonDetailsAction, LoadTvShowSeasonDetailsAction, SaveTvShowSeasonAction, SetTvShowSeasonFormStatusAction, StartTvShowSeasonsHandlingAction } from './types';
+import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 
 /**
  * Generator for the start handling TV show seasons action, which saves in the state the initial list of seasons

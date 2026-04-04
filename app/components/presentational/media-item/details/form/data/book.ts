@@ -1,6 +1,6 @@
-import { BookInternal } from 'app/data/models/internal/media-items/book';
 import { ObjectSchema, array, number, object, string } from 'yup';
 import { applyNormalizedTextArrayField, mediaItemFormValidationShape, normalizeMediaItemFormValues } from './media-item';
+import { BookInternal } from 'app/data/models/internal/media-items/book';
 
 /**
  * The book form validation schema shape

@@ -1,4 +1,5 @@
 import { all, call } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { watchDeleteCategorySaga } from 'app/redux/sagas/category/delete';
 import { watchFetchCategoriesSaga } from 'app/redux/sagas/category/fetch';
 import { watchSaveCategorySaga } from 'app/redux/sagas/category/save';
@@ -22,7 +23,6 @@ import { watchCheckUserLoginStatusSaga } from 'app/redux/sagas/user/check-login'
 import { watchUserLoginSaga } from 'app/redux/sagas/user/login';
 import { watchUserLogoutSaga } from 'app/redux/sagas/user/logout';
 import { watchUserSignupSaga } from 'app/redux/sagas/user/signup';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * The root saga to be fed to the ReduxSaga middleware

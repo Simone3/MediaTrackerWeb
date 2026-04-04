@@ -1,8 +1,8 @@
+import { Action } from 'redux';
 import { mediaItemDefinitionsControllerFactory } from 'app/controllers/main/entities/media-items/factories';
 import { ASK_CONFIRMATION_BEFORE_SAVING_MEDIA_ITEM, COMPLETE_GETTING_MEDIA_ITEM_CATALOG_DETAILS, COMPLETE_SAVING_MEDIA_ITEM, COMPLETE_SEARCHING_MEDIA_ITEMS_CATALOG, FAIL_GETTING_MEDIA_ITEM_CATALOG_DETAILS, FAIL_SAVING_MEDIA_ITEM, FAIL_SEARCHING_MEDIA_ITEMS_CATALOG, LOAD_MEDIA_ITEM_DETAILS, LOAD_NEW_MEDIA_ITEM_DETAILS, REQUEST_MEDIA_ITEM_SAVE, RESET_MEDIA_ITEMS_CATALOG_SEARCH, RESET_MEDIA_ITEM_CATALOG_DETAILS, SET_MEDIA_ITEM_FORM_DRAFT, SET_MEDIA_ITEM_FORM_STATUS, START_GETTING_MEDIA_ITEM_CATALOG_DETAILS, START_SAVING_MEDIA_ITEM, START_SEARCHING_MEDIA_ITEMS_CATALOG } from 'app/redux/actions/media-item/const';
 import { CompleteGettingMediaItemCatalogDetailsAction, CompleteSearchingMediaItemsCatalogAction, LoadMediaItemDetailsAction, LoadNewMediaItemDetailsAction, SetMediaItemFormDraftAction, SetMediaItemFormStatusAction, StartSavingMediaItemAction } from 'app/redux/actions/media-item/types';
 import { MediaItemDetailsState, mediaItemDetailsStateInitialValue } from 'app/redux/state/media-item';
-import { Action } from 'redux';
 
 /**
  * Reducer for the media item details portion of the global state
@@ -11,7 +11,7 @@ import { Action } from 'redux';
  * @returns the new state
  */
 export const mediaItemDetails = (state: MediaItemDetailsState = mediaItemDetailsStateInitialValue, action: Action): MediaItemDetailsState => {
-	switch(action.type) {
+	switch (action.type) {
 		// When the details page is started with a new media item, the status and other support fields are reset and the default media item is loaded
 		case LOAD_NEW_MEDIA_ITEM_DETAILS: {
 			const loadNewMediaItemAction = action as LoadNewMediaItemDetailsAction;

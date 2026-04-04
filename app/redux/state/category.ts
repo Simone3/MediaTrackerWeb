@@ -10,7 +10,7 @@ export type CategoryGlobalState = {
 	 * Undefined means no category has been selected yet
 	 */
 	selectedCategory: CategoryInternal | undefined;
-}
+};
 
 /**
  * The initial value for the global category state
@@ -49,7 +49,7 @@ export type CategoriesListState = {
 	 * The currently highlighted (e.g. context menu is open) category, or undefined if none is highlighted
 	 */
 	readonly highlightedCategory: CategoryInternal | undefined;
-}
+};
 
 /**
  * The initial value for the categories list state
@@ -97,7 +97,7 @@ export type CategoryDetailsState = {
 	 * The current status of the category saving process
 	 */
 	readonly saveStatus: CategorySaveStatus;
-}
+};
 
 /**
  * The initial value for the category details state

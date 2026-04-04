@@ -1,9 +1,9 @@
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { OwnPlatformsListScreenComponent, OwnPlatformsListScreenComponentInput, OwnPlatformsListScreenComponentOutput } from 'app/components/presentational/own-platform/list/screen';
 import { deleteOwnPlatform, fetchOwnPlatforms, loadNewOwnPlatformDetails, loadOwnPlatformDetails, selectOwnPlatform } from 'app/redux/actions/own-platform/generators';
 import { State } from 'app/redux/state/state';
 import { navigationService } from 'app/utilities/navigation-service';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: State): OwnPlatformsListScreenComponentInput => {
 	const listState = state.ownPlatformsList;

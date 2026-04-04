@@ -1,3 +1,4 @@
+import { Action, combineReducers } from 'redux';
 import { COMPLETE_LOGGING_USER_OUT } from 'app/redux/actions/user/const';
 import { categoryDetails } from 'app/redux/reducers/category/details';
 import { categoryGlobal } from 'app/redux/reducers/category/global';
@@ -16,7 +17,6 @@ import { tvShowSeasonsList } from 'app/redux/reducers/tv-show-season/list';
 import { userGlobal } from 'app/redux/reducers/user/global';
 import { userOperations } from 'app/redux/reducers/user/operations';
 import { State } from 'app/redux/state/state';
-import { Action, combineReducers } from 'redux';
 
 /**
  * Combination of all app reducers
@@ -48,7 +48,7 @@ export const allReduces = combineReducers({
  */
 export const rootReducer = (state: State | undefined, action: Action): State => {
 	// When the user logs out, the whole state is reset (child reducers all set their initial state)
-	if(action.type === COMPLETE_LOGGING_USER_OUT) {
+	if (action.type === COMPLETE_LOGGING_USER_OUT) {
 		state = undefined;
 	}
 

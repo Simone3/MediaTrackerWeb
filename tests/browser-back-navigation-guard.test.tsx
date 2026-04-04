@@ -1,8 +1,8 @@
 import React from 'react';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserBackNavigationGuardComponent } from 'app/components/presentational/generic/browser-back-navigation-guard';
 import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserBackNavigationGuardComponent } from 'app/components/presentational/generic/browser-back-navigation-guard';
 
 const renderGuard = (overrides: Partial<React.ComponentProps<typeof BrowserBackNavigationGuardComponent>> = {}) => {
 	return render(

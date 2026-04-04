@@ -38,7 +38,7 @@ export type AuthLoadingScreenComponentOutput = {
 	 * Callback to request the user login status
 	 */
 	fetchLoginStatus: () => void;
-}
+};
 
 /**
  * AuthLoadingScreenComponent's props

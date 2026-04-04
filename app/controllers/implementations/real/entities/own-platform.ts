@@ -52,7 +52,7 @@ export class OwnPlatformBackEndController implements OwnPlatformController {
 	 * @override
 	 */
 	public async saveOwnPlatform(userId: string, categoryId: string, ownPlatform: OwnPlatformInternal): Promise<void> {
-		if(ownPlatform.id) {
+		if (ownPlatform.id) {
 			const request: UpdateOwnPlatformRequest = {
 				ownPlatform: ownPlatformMapper.toExternal(ownPlatform)
 			};

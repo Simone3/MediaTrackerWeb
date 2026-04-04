@@ -1,8 +1,8 @@
+import { NumberSchema, ObjectSchema, array, boolean, date, mixed, number, object, string } from 'yup';
 import { MEDIA_TYPES_INTERNAL, MediaTypeInternal } from 'app/data/models/internal/category';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MEDIA_ITEM_STATUS_INTERNAL_VALUES, MediaItemImportanceInternal, MediaItemInternal, MediaItemStatusInternal } from 'app/data/models/internal/media-items/media-item';
 import { OWN_PLATFORM_ICON_INTERNAL_VALUES, OwnPlatformIconInternal, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
-import { NumberSchema, ObjectSchema, array, boolean, date, mixed, number, object, string } from 'yup';
 
 /**
  * The generic media item form validation schema shape
@@ -43,7 +43,7 @@ export const mediaItemFormValidationShape = {
  * @returns normalized array or undefined
  */
 const normalizeTextArray = (values?: string[]): string[] | undefined => {
-	if(!values || values.length === 0) {
+	if (!values || values.length === 0) {
 		return undefined;
 	}
 
@@ -72,7 +72,7 @@ export const applyNormalizedTextArrayField = <T extends object>(
 	const mutableTarget = target as Record<string, unknown>;
 	const normalizedValues = normalizeTextArray(values);
 
-	if(normalizedValues) {
+	if (normalizedValues) {
 		mutableTarget[key as string] = normalizedValues;
 	}
 	else {
@@ -90,7 +90,7 @@ export const normalizeMediaItemFormValues = <T extends MediaItemInternal>(values
 		...values
 	};
 
-	if(values.group?.id) {
+	if (values.group?.id) {
 		normalizedValues.orderInGroup = values.orderInGroup;
 	}
 	else {

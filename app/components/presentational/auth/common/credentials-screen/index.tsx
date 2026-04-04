@@ -8,7 +8,7 @@ import { UserSecretInternal } from 'app/data/models/internal/user';
 import { i18n } from 'app/utilities/i18n';
 
 const submitCredentials = (credentials: UserSecretInternal, props: AuthCredentialsScreenComponentProps): void => {
-	if(!credentials.email || !credentials.password || props.isLoading) {
+	if (!credentials.email || !credentials.password || props.isLoading) {
 		return;
 	}
 

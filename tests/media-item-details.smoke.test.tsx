@@ -1,6 +1,9 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
+import { Action, Store, createStore } from 'redux';
 import { MediaItemDetailsScreenContainer } from 'app/components/containers/media-item/details/screen';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
@@ -16,9 +19,6 @@ import { MediaItemDetailsState, mediaItemDetailsStateInitialValue } from 'app/re
 import { OwnPlatformGlobalState, OwnPlatformsListState, ownPlatformGlobalStateInitialValue, ownPlatformsListStateInitialValue } from 'app/redux/state/own-platform';
 import { TvShowSeasonsListState, tvShowSeasonsListStateInitialValue } from 'app/redux/state/tv-show-season';
 import { i18n } from 'app/utilities/i18n';
-import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
-import { Action, Store, createStore } from 'redux';
 
 type DetailsScreenTestState = {
 	mediaItemDetails: MediaItemDetailsState;
@@ -88,7 +88,7 @@ const createDetailsStore = (overrides: DetailsScreenStateOverrides = {}) => {
 	const store = createStore((state: DetailsScreenTestState = initialState, action: DetailsScreenAction) => {
 		dispatchedActions.push(action);
 
-		switch(action.type) {
+		switch (action.type) {
 			case SET_MEDIA_ITEM_FORM_DRAFT: {
 				return {
 					...state,

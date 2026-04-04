@@ -1,3 +1,5 @@
+import { Component, ReactNode } from 'react';
+import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
 import { CreditsNavigator } from 'app/components/containers/navigation/credits-navigator';
 import { MediaNavigator } from 'app/components/containers/navigation/media-navigator';
 import { SettingsNavigator } from 'app/components/containers/navigation/settings-navigator';
@@ -7,8 +9,6 @@ import settingsIcon from 'app/resources/images/ic_settings.svg';
 import { i18n } from 'app/utilities/i18n';
 import { screenToPath } from 'app/utilities/navigation-routes';
 import { AppScreens, AppSections } from 'app/utilities/screens';
-import { Component, ReactNode } from 'react';
-import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
 
 const navigationItems = [
 	{

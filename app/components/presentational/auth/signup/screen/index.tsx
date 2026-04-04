@@ -42,7 +42,7 @@ export type UserSignupScreenComponentInput = {
 	 * Flag to tell if the component is currently waiting on an async operation. If true, shows the loading screen.
 	 */
 	isLoading: boolean;
-}
+};
 
 /**
  * UserSignupScreenComponent's output props
@@ -52,7 +52,7 @@ export type UserSignupScreenComponentOutput = {
 	 * Callback for the signup attempt
 	 */
 	signup: (user: UserSecretInternal) => void;
-}
+};
 
 /**
  * UserSignupScreenComponent's props

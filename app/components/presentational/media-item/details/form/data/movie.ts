@@ -1,6 +1,6 @@
-import { MovieInternal } from 'app/data/models/internal/media-items/movie';
 import { ObjectSchema, array, number, object, string } from 'yup';
 import { applyNormalizedTextArrayField, mediaItemFormValidationShape, normalizeMediaItemFormValues } from './media-item';
+import { MovieInternal } from 'app/data/models/internal/media-items/movie';
 
 /**
  * The movie form validation schema shape

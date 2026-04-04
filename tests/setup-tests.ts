@@ -6,10 +6,10 @@ const globalObject = globalThis as typeof globalThis & {
 	TextEncoder?: typeof TextEncoder;
 };
 
-if(!globalObject.TextEncoder) {
+if (!globalObject.TextEncoder) {
 	globalObject.TextEncoder = TextEncoder;
 }
 
-if(!globalObject.TextDecoder) {
+if (!globalObject.TextDecoder) {
 	globalObject.TextDecoder = TextDecoder;
 }

@@ -7,7 +7,7 @@ import { AppError } from 'app/data/models/internal/error';
  */
 export class LocalStorageAsync implements LocalStorage {
 	private getBrowserStorage(): Storage {
-		if(typeof window === 'undefined' || !window.localStorage) {
+		if (typeof window === 'undefined' || !window.localStorage) {
 			throw AppError.GENERIC.withDetails('Browser localStorage is not available in this environment');
 		}
 		return window.localStorage;

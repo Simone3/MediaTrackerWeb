@@ -127,7 +127,7 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 					confirmLabel={i18n.t('common.alert.default.okButton')}
 					cancelLabel={i18n.t('common.alert.default.cancelButton')}
 					onConfirm={() => {
-						if(pendingDeleteOwnPlatform) {
+						if (pendingDeleteOwnPlatform) {
 							this.props.deleteOwnPlatform(pendingDeleteOwnPlatform);
 						}
 						this.setState({
@@ -148,7 +148,7 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 	 * Helper to invoke the fetch callback if the input fetch flag is true
 	 */
 	private requestFetchIfRequired(): void {
-		if(this.props.requiresFetch) {
+		if (this.props.requiresFetch) {
 			this.props.fetchOwnPlatforms();
 		}
 	}
@@ -197,7 +197,7 @@ export type OwnPlatformsListScreenComponentInput = {
 	 * Whether the list should render loading skeleton rows
 	 */
 	showSkeletons: boolean;
-}
+};
 
 /**
  * OwnPlatformsListScreenComponent's output props
@@ -232,8 +232,8 @@ export type OwnPlatformsListScreenComponentOutput = {
 	 * Callback to navigate back
 	 */
 	goBack: () => void;
-}
+};
 
 type OwnPlatformsListScreenComponentState = {
 	pendingDeleteOwnPlatform?: OwnPlatformInternal;
-}
+};

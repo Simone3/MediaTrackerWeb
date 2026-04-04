@@ -1,10 +1,10 @@
 import { call, put, takeLatest } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { userController } from 'app/controllers/main/entities/user';
 import { AppError } from 'app/data/models/internal/error';
 import { setError } from 'app/redux/actions/error/generators';
 import { LOG_USER_OUT } from 'app/redux/actions/user/const';
 import { completeLoggingUserOut, failLoggingUserOut, startLoggingUserOut } from 'app/redux/actions/user/generators';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Worker saga that logs a user out

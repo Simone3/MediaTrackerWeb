@@ -1,9 +1,9 @@
 import { ReactElement } from 'react';
 import { Formik, FormikProps } from 'formik';
+import { MediaItemFilterFormComponentInput, MediaItemFilterFormComponentOutput } from './media-item';
 import { MovieSortByInternal } from 'app/data/models/internal/media-items/movie';
 import { MovieFilterFormValues, movieFilterFormMapper, movieFilterFormValidationSchema } from 'app/components/presentational/media-item/list/filter-form/data/movie';
 import { MovieFilterFormViewComponent } from 'app/components/presentational/media-item/list/filter-form/view/movie';
-import { MediaItemFilterFormComponentInput, MediaItemFilterFormComponentOutput } from './media-item';
 
 /**
  * Presentational component that handles the Formik wrapper component for the movie filter form

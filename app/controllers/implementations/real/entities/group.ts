@@ -52,7 +52,7 @@ export class GroupBackEndController implements GroupController {
 	 * @override
 	 */
 	public async saveGroup(userId: string, categoryId: string, group: GroupInternal): Promise<void> {
-		if(group.id) {
+		if (group.id) {
 			const request: UpdateGroupRequest = {
 				group: groupMapper.toExternal(group)
 			};

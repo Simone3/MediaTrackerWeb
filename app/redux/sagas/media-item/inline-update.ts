@@ -1,4 +1,5 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { AppError } from 'app/data/models/internal/error';
 import { mediaItemControllerFactory } from 'app/controllers/main/entities/media-items/factories';
 import { setError } from 'app/redux/actions/error/generators';
@@ -7,7 +8,6 @@ import { completeInlineUpdatingMediaItem, failInlineUpdatingMediaItem, startInli
 import { MarkMediaItemAsActiveAction, MarkMediaItemAsCompleteAction, MarkMediaItemAsRedoAction } from 'app/redux/actions/media-item/types';
 import { applyInlineMediaItemUpdate, InlineMediaItemUpdateActionType } from 'app/redux/sagas/media-item/inline-update-helper';
 import { State } from 'app/redux/state/state';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Worker saga that updates a media item "inline" (with pre-defined changes from the list screen)
@@ -23,7 +23,7 @@ const inlineMediaItemUpdateSaga = function * (action: MarkMediaItemAsActiveActio
 		const state = (yield select()) as State;
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
-		if(!category || !user) {
+		if (!category || !user) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while inline updating media item');
 		}
 		

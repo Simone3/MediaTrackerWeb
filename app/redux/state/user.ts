@@ -14,7 +14,7 @@ export type UserGlobalState = {
 	 * The current status of the user
 	 */
 	readonly status: UserStatus;
-}
+};
 
 /**
  * The initial value for the global user state
@@ -58,7 +58,7 @@ export type UserOperationsState = {
 	 * The current status of the logout operation
 	 */
 	readonly logoutStatus: UserOperationStatus;
-}
+};
 
 /**
  * The initial value for the user operations state

@@ -1,9 +1,9 @@
+import { Type } from 'class-transformer';
+import { IsBoolean, IsDateString, IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { CommonAddResponse, CommonRequest, CommonResponse, CommonSaveRequest } from 'app/data/models/api/common';
 import { Group } from 'app/data/models/api/group';
 import { OwnPlatform } from 'app/data/models/api/own-platform';
 import { ValuesOf } from 'app/utilities/helper-types';
-import { Type } from 'class-transformer';
-import { IsBoolean, IsDateString, IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 /**
  * Util class to extract common fields to both media item entities and catalog entries

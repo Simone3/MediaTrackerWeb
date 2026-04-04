@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Provider } from 'react-redux';
+import { Action, createStore } from 'redux';
 import { CategoriesListContainer } from 'app/components/containers/category/list/list';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { HIGHLIGHT_CATEGORY, REMOVE_CATEGORY_HIGHLIGHT } from 'app/redux/actions/category/const';
 import { i18n } from 'app/utilities/i18n';
-import { Provider } from 'react-redux';
-import { Action, createStore } from 'redux';
 
 type CategoriesListContainerTestState = {
 	categoriesList: {
@@ -32,7 +32,7 @@ describe('CategoriesListContainer', () => {
 			}
 		};
 		const store = createStore((state: CategoriesListContainerTestState = initialState, action: Action & { category?: CategoryInternal }) => {
-			switch(action.type) {
+			switch (action.type) {
 				case HIGHLIGHT_CATEGORY: {
 					return {
 						...state,

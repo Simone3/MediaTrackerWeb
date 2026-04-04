@@ -11,9 +11,9 @@ export type InvocationParams<TRequest, TResponse> = {
 	responseBodyClass: ClassType<TResponse>;
 	timeoutMilliseconds?: number;
 	queryParams?: QueryParams;
-	headers?: {[key: string]: string};
+	headers?: { [key: string]: string };
 	assumeWellFormedResponse?: boolean;
-}
+};
 
 /**
  * Helper type for URL query params

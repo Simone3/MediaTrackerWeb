@@ -2,19 +2,19 @@
  * Reads environment values in both browser and Node-like runtimes.
  * @returns a key-value map of environment values
  */
-const getRuntimeEnv = (): {[key: string]: string | undefined} => {
+const getRuntimeEnv = (): { [key: string]: string | undefined } => {
 	const runtime = globalThis as {
 		process?: {
-			env?: {[key: string]: string | undefined};
+			env?: { [key: string]: string | undefined };
 		};
-		__MEDIA_TRACKER_ENV__?: {[key: string]: string | undefined};
+		__MEDIA_TRACKER_ENV__?: { [key: string]: string | undefined };
 	};
 
-	if(runtime.process && runtime.process.env) {
+	if (runtime.process && runtime.process.env) {
 		return runtime.process.env;
 	}
 
-	if(runtime.__MEDIA_TRACKER_ENV__) {
+	if (runtime.__MEDIA_TRACKER_ENV__) {
 		return runtime.__MEDIA_TRACKER_ENV__;
 	}
 

@@ -1,6 +1,6 @@
-import { CategoryInternal } from 'app/data/models/internal/category';
 import { ASK_CONFIRMATION_BEFORE_SAVING_CATEGORY, COMPLETE_DELETING_CATEGORY, COMPLETE_FETCHING_CATEGORIES, COMPLETE_SAVING_CATEGORY, DELETE_CATEGORY, FAIL_DELETING_CATEGORY, FAIL_FETCHING_CATEGORIES, FAIL_SAVING_CATEGORY, FETCH_CATEGORIES, HIGHLIGHT_CATEGORY, LOAD_CATEGORY_DETAILS, LOAD_NEW_CATEGORY_DETAILS, REMOVE_CATEGORY_HIGHLIGHT, SAVE_CATEGORY, SELECT_CATEGORY, SET_CATEGORY_FORM_STATUS, START_DELETING_CATEGORY, START_FETCHING_CATEGORIES, START_SAVING_CATEGORY } from './const';
 import { AskConfirmationBeforeSavingCategoryAction, CompleteDeletingCategoryAction, CompleteFetchingCategoriesAction, CompleteSavingCategoryAction, DeleteCategoryAction, FailDeletingCategoryAction, FailFetchingCategoriesAction, FailSavingCategoryAction, FetchCategoriesAction, HighlightCategoryAction, LoadCategoryDetailsAction, LoadNewCategoryDetailsAction, RemoveCategoryHighlightAction, SaveCategoryAction, SelectCategoryAction, SetCategoryFormStatusAction, StartDeletingCategoryAction, StartFetchingCategoriesAction, StartSavingCategoryAction } from './types';
+import { CategoryInternal } from 'app/data/models/internal/category';
 
 /**
  * Generator for the fetch categories list action, which causes the request categories action, the async categories fetch and then the receive categories action

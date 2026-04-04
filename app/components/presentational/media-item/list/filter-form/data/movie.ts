@@ -1,8 +1,8 @@
+import { ObjectSchema, object } from 'yup';
 import { MediaItemFilterFormMapper, MediaItemFilterFormSortBy, MediaItemFilterFormValues, mediaItemFilterFormValidationShape } from 'app/components/presentational/media-item/list/filter-form/data/media-item';
 import { movieDefinitionsController } from 'app/controllers/main/entities/media-items-definitions/movie';
 import { AppError } from 'app/data/models/internal/error';
 import { MovieFilterInternal, MovieSortByInternal } from 'app/data/models/internal/media-items/movie';
-import { ObjectSchema, object } from 'yup';
 
 /**
  * The movie filter form model
@@ -39,7 +39,7 @@ class MovieFilterFormMapper extends MediaItemFilterFormMapper<MovieFilterInterna
 	 * @override
 	 */
 	public toSortByModel(formValues: MovieFilterFormValues): MovieSortByInternal[] {
-		switch(formValues.sortBy) {
+		switch (formValues.sortBy) {
 			case 'DEFAULT':
 				return movieDefinitionsController.getDefaultSortBy();
 
@@ -66,11 +66,11 @@ class MovieFilterFormMapper extends MediaItemFilterFormMapper<MovieFilterInterna
 	 * @returns the target
 	 */
 	private toSortByFormValue(sortBy: MovieSortByInternal[]): MediaItemFilterFormSortBy {
-		if(sortBy.length === 1) {
-			if(sortBy[0].field === 'NAME') {
+		if (sortBy.length === 1) {
+			if (sortBy[0].field === 'NAME') {
 				return 'NAME';
 			}
-			if(sortBy[0].field === 'COMPLETION_DATE') {
+			if (sortBy[0].field === 'COMPLETION_DATE') {
 				return 'COMPLETION_DATE';
 			}
 		}

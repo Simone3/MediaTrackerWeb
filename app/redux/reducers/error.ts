@@ -1,8 +1,8 @@
+import { Action } from 'redux';
 import { AppError } from 'app/data/models/internal/error';
 import { CLEAR_ERROR, SET_ERROR } from 'app/redux/actions/error/const';
 import { SetErrorAction } from 'app/redux/actions/error/types';
 import { ErrorState, errorStateInitialValue } from 'app/redux/state/error';
-import { Action } from 'redux';
 
 /**
  * Reducer for the error portion of the global state
@@ -11,19 +11,19 @@ import { Action } from 'redux';
  * @returns the new state
  */
 export const error = (state: ErrorState = errorStateInitialValue, action: Action): ErrorState => {
-	switch(action.type) {
+	switch (action.type) {
 		case SET_ERROR: {
 			const setErrorAction = action as SetErrorAction;
 
 			let parsedError: AppError | string;
-			if(setErrorAction.error instanceof AppError || typeof setErrorAction.error === 'string') {
+			if (setErrorAction.error instanceof AppError || typeof setErrorAction.error === 'string') {
 				parsedError = setErrorAction.error;
 			}
 			else {
 				parsedError = AppError.GENERIC.withDetails(setErrorAction.error);
 			}
 
-			if(!parsedError) {
+			if (!parsedError) {
 				throw AppError.GENERIC.withDetails('Cannot display an empty error');
 			}
 

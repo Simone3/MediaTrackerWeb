@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+import React, { CSSProperties, ReactElement } from 'react';
 import { config } from 'app/config/config';
 import { MediaItemRowData } from 'app/components/presentational/media-item/list/row/data/media-item';
 import { buildOwnPlatformMaskStyle } from 'app/components/presentational/own-platform/common/icon-registry';
@@ -12,8 +14,6 @@ import statusCompleteIcon from 'app/resources/images/ic_status_complete.svg';
 import statusRedoingIcon from 'app/resources/images/ic_status_redoing.svg';
 import statusUpcomingIcon from 'app/resources/images/ic_status_upcoming.svg';
 import { i18n } from 'app/utilities/i18n';
-import { format } from 'date-fns';
-import React, { CSSProperties, ReactElement } from 'react';
 
 const importanceIcons: Record<MediaItemImportanceInternal, string> = {
 	400: importanceOneIcon,
@@ -41,11 +41,11 @@ const getMaskedIconStyle = (icon: string, color: string): MaskedIconStyle => {
  * @returns the row text, if any
  */
 const getThirdRow = (mediaItem: MediaItemInternal): string | undefined => {
-	if(mediaItem.status === 'COMPLETE' && mediaItem.completedOn && mediaItem.completedOn.length > 0) {
+	if (mediaItem.status === 'COMPLETE' && mediaItem.completedOn && mediaItem.completedOn.length > 0) {
 		const completionDates = mediaItem.completedOn;
 		const lastCompletionDate = format(completionDates[completionDates.length - 1], config.ui.dateFormat);
 
-		if(completionDates.length === 1) {
+		if (completionDates.length === 1) {
 			return i18n.t('mediaItem.list.completed.single', { date: lastCompletionDate });
 		}
 
@@ -55,7 +55,7 @@ const getThirdRow = (mediaItem: MediaItemInternal): string | undefined => {
 		});
 	}
 
-	if(mediaItem.genres && mediaItem.genres.length > 0) {
+	if (mediaItem.genres && mediaItem.genres.length > 0) {
 		return mediaItem.genres.join(', ');
 	}
 
@@ -68,7 +68,7 @@ const getThirdRow = (mediaItem: MediaItemInternal): string | undefined => {
  * @returns the row text, if any
  */
 const getFourthRow = (mediaItem: MediaItemInternal): string | undefined => {
-	if(mediaItem.group && mediaItem.orderInGroup) {
+	if (mediaItem.group && mediaItem.orderInGroup) {
 		return i18n.t('mediaItem.list.group', {
 			order: mediaItem.orderInGroup,
 			groupName: mediaItem.group.name
@@ -87,17 +87,17 @@ const getFourthRow = (mediaItem: MediaItemInternal): string | undefined => {
 const getSecondRow = (mediaItem: MediaItemInternal, rowData: MediaItemRowData): string | undefined => {
 	const values: string[] = [];
 
-	if(mediaItem.releaseDate) {
+	if (mediaItem.releaseDate) {
 		values.push(String(mediaItem.releaseDate.getFullYear()));
 	}
 
-	if(rowData.durationLabel) {
+	if (rowData.durationLabel) {
 		values.push(rowData.durationLabel);
 	}
 
 	values.push(...rowData.secondaryMetadataMarkers);
 
-	if(rowData.creatorNames && rowData.creatorNames.length > 0) {
+	if (rowData.creatorNames && rowData.creatorNames.length > 0) {
 		values.push(rowData.creatorNames.join(', '));
 	}
 
@@ -116,21 +116,21 @@ const getDetailRows = (mediaItem: MediaItemInternal, rowData: MediaItemRowData):
 	const thirdRow = getThirdRow(mediaItem);
 	const fourthRow = getFourthRow(mediaItem);
 
-	if(secondRow) {
+	if (secondRow) {
 		detailRows.push({
 			value: secondRow,
 			emphasized: false
 		});
 	}
 
-	if(thirdRow) {
+	if (thirdRow) {
 		detailRows.push({
 			value: thirdRow,
 			emphasized: true
 		});
 	}
 
-	if(fourthRow) {
+	if (fourthRow) {
 		detailRows.push({
 			value: fourthRow,
 			emphasized: true
@@ -147,7 +147,7 @@ const getDetailRows = (mediaItem: MediaItemInternal, rowData: MediaItemRowData):
  * @returns the icon asset path
  */
 const getStatusIcon = (mediaItem: MediaItemInternal, rowData: MediaItemRowData): string => {
-	switch(mediaItem.status) {
+	switch (mediaItem.status) {
 		case 'ACTIVE':
 			return rowData.activeStatusIcon;
 
@@ -175,7 +175,7 @@ const getStatusIcon = (mediaItem: MediaItemInternal, rowData: MediaItemRowData):
  * @returns the status colors
  */
 const getStatusColors = (mediaItem: MediaItemInternal, rowData: MediaItemRowData): IconColors => {
-	switch(mediaItem.status) {
+	switch (mediaItem.status) {
 		case 'ACTIVE': {
 			const activeColor = rowData.hasRemainingActiveProgress ? config.ui.colors.green : config.ui.colors.lightGrey;
 
@@ -257,18 +257,18 @@ export const MediaItemRowViewComponent = (props: MediaItemRowViewComponentProps)
 						i18n.t('mediaItem.list.accessibility.ownPlatform.owned', { name: ownPlatform.name }) :
 						i18n.t('mediaItem.list.accessibility.ownPlatform.notOwned')}>
 					<span className='media-item-row-platform-shell' aria-hidden={true}>
-							{ownPlatform && (
-								<span
-									className='media-item-row-icon media-item-row-platform-icon'
-									style={buildOwnPlatformMaskStyle(
-										ownPlatform.icon,
-										ownPlatformColor,
-										'--media-item-row-icon-url',
-										'--media-item-row-icon-color'
-									)}
-									aria-hidden={true}
-								/>
-							)}
+						{ownPlatform && (
+							<span
+								className='media-item-row-icon media-item-row-platform-icon'
+								style={buildOwnPlatformMaskStyle(
+									ownPlatform.icon,
+									ownPlatformColor,
+									'--media-item-row-icon-url',
+									'--media-item-row-icon-color'
+								)}
+								aria-hidden={true}
+							/>
+						)}
 					</span>
 				</span>
 				<span className='media-item-row-data'>

@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
+import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from './media-item';
 import { DEFAULT_CATALOG_VIDEOGAME, VideogameInternal } from 'app/data/models/internal/media-items/videogame';
 import { videogameFormValidationSchema, normalizeVideogameFormValues } from 'app/components/presentational/media-item/details/form/data/videogame';
 import { VideogameFormViewComponent } from 'app/components/presentational/media-item/details/form/view/videogame';
-import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from './media-item';
 
 /**
  * Presentational component that handles the Formik wrapper component for the videogame form

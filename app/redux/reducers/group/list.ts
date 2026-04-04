@@ -1,8 +1,8 @@
+import { Action } from 'redux';
 import { SELECT_CATEGORY } from 'app/redux/actions/category/const';
 import { COMPLETE_DELETING_GROUP, COMPLETE_FETCHING_GROUPS, COMPLETE_SAVING_GROUP, FAIL_DELETING_GROUP, FAIL_FETCHING_GROUPS, HIGHLIGHT_GROUP, INVALIDATE_GROUPS, REMOVE_GROUP_HIGHLIGHT, START_DELETING_GROUP, START_FETCHING_GROUPS } from 'app/redux/actions/group/const';
 import { CompleteFetchingGroupsAction, HighlightGroupAction } from 'app/redux/actions/group/types';
 import { GroupsListState, groupsListStateInitialValue } from 'app/redux/state/group';
-import { Action } from 'redux';
 
 /**
  * Reducer for the groups list portion of the global state
@@ -11,7 +11,7 @@ import { Action } from 'redux';
  * @returns the new state
  */
 export const groupsList = (state: GroupsListState = groupsListStateInitialValue, action: Action): GroupsListState => {
-	switch(action.type) {
+	switch (action.type) {
 		// When the app starts fetching the list of groups, the status changes to show the loading indicator
 		case START_FETCHING_GROUPS: {
 			return {

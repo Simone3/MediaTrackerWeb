@@ -1,9 +1,9 @@
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { GroupsListScreenComponent, GroupsListScreenComponentInput, GroupsListScreenComponentOutput } from 'app/components/presentational/group/list/screen';
 import { deleteGroup, fetchGroups, loadGroupDetails, loadNewGroupDetails, selectGroup } from 'app/redux/actions/group/generators';
 import { State } from 'app/redux/state/state';
 import { navigationService } from 'app/utilities/navigation-service';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: State): GroupsListScreenComponentInput => {
 	const listState = state.groupsList;

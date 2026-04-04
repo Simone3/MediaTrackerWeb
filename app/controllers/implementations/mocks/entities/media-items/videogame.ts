@@ -7,7 +7,7 @@ import { CatalogVideogameInternal, SearchVideogameCatalogResultInternal, Videoga
  * @see VideogameController
  */
 export class VideogameMockedController extends MediaItemMockedController<VideogameInternal, VideogameSortByInternal, VideogameFilterInternal> implements VideogameController {
-	protected readonly mediaItems: {[user: string]: {[category: string]: VideogameInternal[]}} = {
+	protected readonly mediaItems: { [user: string]: { [category: string]: VideogameInternal[] } } = {
 		test: {
 			4: [{
 				id: '1',

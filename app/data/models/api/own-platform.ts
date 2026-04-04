@@ -1,6 +1,6 @@
-import { CommonAddResponse, CommonRequest, CommonResponse, CommonSaveRequest } from 'app/data/models/api/common';
 import { Type } from 'class-transformer';
 import { IsDefined, IsHexColor, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { CommonAddResponse, CommonRequest, CommonResponse, CommonSaveRequest } from 'app/data/models/api/common';
 
 /**
  * Model for a platform where some user owns some media items, publicly exposed via API

@@ -1,10 +1,10 @@
+import { Component, ReactNode } from 'react';
+import { connect } from 'react-redux';
 import { AuthLoadingScreenContainer } from 'app/components/containers/auth/loading';
 import { AuthenticatedNavigator } from 'app/components/containers/navigation/authenticated-navigator';
 import { UnauthenticatedNavigator } from 'app/components/containers/navigation/unauthenticated-navigator';
 import { State } from 'app/redux/state/state';
 import { UserStatus } from 'app/redux/state/user';
-import { Component, ReactNode } from 'react';
-import { connect } from 'react-redux';
 
 /**
  * The navigator to switch between unauthenticated and authenticated flows
@@ -18,13 +18,13 @@ class AuthenticationNavigator extends Component<AuthenticationNavigatorProps> {
 			userStatus
 		} = this.props;
 
-		if(userStatus === 'REQUIRES_CHECK') {
+		if (userStatus === 'REQUIRES_CHECK') {
 			return <AuthLoadingScreenContainer />;
 		}
-		if(userStatus === 'UNAUTHENTICATED') {
+		if (userStatus === 'UNAUTHENTICATED') {
 			return <UnauthenticatedNavigator />;
 		}
-		if(userStatus === 'AUTHENTICATED') {
+		if (userStatus === 'AUTHENTICATED') {
 			return <AuthenticatedNavigator />;
 		}
 		throw Error('Unhandled user status');
@@ -36,7 +36,7 @@ class AuthenticationNavigator extends Component<AuthenticationNavigatorProps> {
  */
 type AuthenticationNavigatorProps = {
 	userStatus: UserStatus;
-}
+};
 
 const mapStateToProps = (state: State): AuthenticationNavigatorProps => {
 	return {

@@ -1,5 +1,5 @@
-import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { Action } from 'redux';
+import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 
 /**
  * The start handling TV show seasons action

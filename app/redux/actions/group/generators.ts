@@ -1,6 +1,6 @@
-import { GroupInternal } from 'app/data/models/internal/group';
 import { ASK_CONFIRMATION_BEFORE_SAVING_GROUP, COMPLETE_DELETING_GROUP, COMPLETE_FETCHING_GROUPS, COMPLETE_SAVING_GROUP, DELETE_GROUP, FAIL_DELETING_GROUP, FAIL_FETCHING_GROUPS, FAIL_SAVING_GROUP, FETCH_GROUPS, LOAD_GROUP_DETAILS, LOAD_NEW_GROUP_DETAILS, REQUEST_GROUP_SELECTION, SAVE_GROUP, SELECT_GROUP, SET_GROUP_FORM_STATUS, START_DELETING_GROUP, START_FETCHING_GROUPS, START_SAVING_GROUP } from './const';
 import { AskConfirmationBeforeSavingGroupAction, CompleteDeletingGroupAction, CompleteFetchingGroupsAction, CompleteSavingGroupAction, DeleteGroupAction, FailDeletingGroupAction, FailFetchingGroupsAction, FailSavingGroupAction, FetchGroupsAction, LoadGroupDetailsAction, LoadNewGroupDetailsAction, RequestGroupSelectionAction, SaveGroupAction, SelectGroupAction, SetGroupFormStatusAction, StartDeletingGroupAction, StartFetchingGroupsAction, StartSavingGroupAction } from './types';
+import { GroupInternal } from 'app/data/models/internal/group';
 
 /**
  * Generator for the fetch groups list action, which causes the request groups action, the async groups fetch and then the receive groups action

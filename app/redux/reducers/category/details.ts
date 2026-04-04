@@ -1,8 +1,8 @@
+import { Action } from 'redux';
 import { DEFAULT_CATEGORY } from 'app/data/models/internal/category';
 import { ASK_CONFIRMATION_BEFORE_SAVING_CATEGORY, COMPLETE_SAVING_CATEGORY, FAIL_SAVING_CATEGORY, LOAD_CATEGORY_DETAILS, LOAD_NEW_CATEGORY_DETAILS, REQUEST_CATEGORY_SAVE, SET_CATEGORY_FORM_STATUS, START_SAVING_CATEGORY } from 'app/redux/actions/category/const';
 import { LoadCategoryDetailsAction, SetCategoryFormStatusAction, StartSavingCategoryAction } from 'app/redux/actions/category/types';
 import { CategoryDetailsState, categoryDetailsStateInitialValue } from 'app/redux/state/category';
-import { Action } from 'redux';
 
 /**
  * Reducer for the category details portion of the global state
@@ -11,7 +11,7 @@ import { Action } from 'redux';
  * @returns the new state
  */
 export const categoryDetails = (state: CategoryDetailsState = categoryDetailsStateInitialValue, action: Action): CategoryDetailsState => {
-	switch(action.type) {
+	switch (action.type) {
 		// When the details page is started with a new category, the status is reset and the default category is loaded
 		case LOAD_NEW_CATEGORY_DETAILS: {
 			return {

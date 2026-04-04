@@ -1,4 +1,5 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { AppError } from 'app/data/models/internal/error';
 import { mediaItemControllerFactory } from 'app/controllers/main/entities/media-items/factories';
 import { setError } from 'app/redux/actions/error/generators';
@@ -6,7 +7,6 @@ import { DELETE_MEDIA_ITEM } from 'app/redux/actions/media-item/const';
 import { completeDeletingMediaItem, failDeletingMediaItem, startDeletingMediaItem } from 'app/redux/actions/media-item/generators';
 import { DeleteMediaItemAction } from 'app/redux/actions/media-item/types';
 import { State } from 'app/redux/state/state';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Worker saga that deletes a media item
@@ -20,7 +20,7 @@ const deleteMediaItemSaga = function * (action: DeleteMediaItemAction): SagaIter
 		const state = (yield select()) as State;
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
-		if(!category || !user) {
+		if (!category || !user) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while deleting media item');
 		}
 		

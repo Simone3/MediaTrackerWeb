@@ -10,7 +10,7 @@ export type GroupGlobalState = {
 	 * Undefined means no group has been selected yet
 	 */
 	selectedGroup: GroupInternal | undefined;
-}
+};
 
 /**
  * The initial value for the global group state
@@ -49,7 +49,7 @@ export type GroupsListState = {
 	 * The currently highlighted (e.g. context menu is open) group, or undefined if none is highlighted
 	 */
 	readonly highlightedGroup: GroupInternal | undefined;
-}
+};
 
 /**
  * The initial value for the groups list state
@@ -97,7 +97,7 @@ export type GroupDetailsState = {
 	 * The current status of the group saving process
 	 */
 	readonly saveStatus: GroupSaveStatus;
-}
+};
 
 /**
  * The initial value for the group details state

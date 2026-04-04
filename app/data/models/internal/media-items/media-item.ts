@@ -14,7 +14,7 @@ type CoreMediaItemDataInternal = {
 	releaseDate?: Date;
 	imageUrl?: string;
 	catalogId?: string;
-}
+};
 
 /**
  * Array of all media item importance levels, internal type just for display purposes
@@ -52,7 +52,7 @@ export type MediaItemInternal = CoreMediaItemDataInternal & {
 	completedOn?: Date[];
 	active?: boolean;
 	markedAsRedo?: boolean;
-}
+};
 
 /**
  * Media items groups filtering options, internal type just for display purposes
@@ -62,7 +62,7 @@ export type MediaItemGroupFilterInternal = {
 	anyGroup?: boolean;
 	noGroup?: boolean;
 	groupIds?: string[];
-}
+};
 
 /**
  * Media items own platforms filtering options, internal type just for display purposes
@@ -72,7 +72,7 @@ export type MediaItemOwnPlatformFilterInternal = {
 	anyOwnPlatform?: boolean;
 	noOwnPlatform?: boolean;
 	ownPlatformIds?: string[];
-}
+};
 
 /**
  * The media type "status" filter, internal type just for display purposes
@@ -89,7 +89,7 @@ export type MediaItemFilterInternal = {
 	ownPlatforms?: MediaItemOwnPlatformFilterInternal;
 	status?: MediaItemStatusFilterInternal;
 	name?: string;
-}
+};
 
 /**
  * Sort fields for a generic media item, internal type just for display purposes
@@ -102,7 +102,7 @@ export type MediaItemSortFieldInternal = 'IMPORTANCE' | 'NAME' | 'GROUP' | 'OWN_
 export type MediaItemSortByInternal = {
 
 	ascending: boolean;
-}
+};
 
 /**
  * A generic catalog media item, internal type just for display purposes
@@ -110,7 +110,7 @@ export type MediaItemSortByInternal = {
 export type CatalogMediaItemInternal = CoreMediaItemDataInternal & {
 
 	catalogLoadId: string;
-}
+};
 
 /**
  * Media item catalog search result, internal type just for display purposes
@@ -120,4 +120,4 @@ export type SearchMediaItemCatalogResultInternal = {
 	catalogId: string;
 	name: string;
 	releaseDate?: Date;
-}
+};

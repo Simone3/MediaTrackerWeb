@@ -1,6 +1,6 @@
 import { Component, ReactNode } from 'react';
-import { EntityDetailsFrameComponent } from 'app/components/presentational/generic/entity-details-frame';
 import { Formik, FormikProps } from 'formik';
+import { EntityDetailsFrameComponent } from 'app/components/presentational/generic/entity-details-frame';
 import { GroupFormViewComponent } from 'app/components/presentational/group/details/form/view';
 import { groupFormValidationSchema } from 'app/components/presentational/group/details/form/data';
 import { SameNameConfirmationDialogComponent, shouldOpenSameNameConfirmation } from 'app/components/presentational/generic/same-name-confirmation';
@@ -25,7 +25,7 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 	 * @override
 	 */
 	public componentDidUpdate(prevProps: Readonly<GroupDetailsScreenComponentInput & GroupDetailsScreenComponentOutput>): void {
-		if(shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
+		if (shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
 			this.setState({
 				confirmSameNameVisible: true
 			});
@@ -113,7 +113,7 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 	 * Saves the current Formik values after the user confirmed the duplicate-name alert
 	 */
 	private submitFormWithSameNameConfirmation(): void {
-		if(this.formikProps) {
+		if (this.formikProps) {
 			this.props.saveGroup(this.formikProps.values, true);
 		}
 	}
@@ -137,7 +137,7 @@ export type GroupDetailsScreenComponentInput = {
 	 * If true, the user must confirm save with duplicated name
 	 */
 	sameNameConfirmationRequested: boolean;
-}
+};
 
 /**
  * GroupDetailsScreenComponent's output props
@@ -157,8 +157,8 @@ export type GroupDetailsScreenComponentOutput = {
 	 * Callback to navigate back
 	 */
 	goBack: () => void;
-}
+};
 
 type GroupDetailsScreenComponentState = {
 	confirmSameNameVisible: boolean;
-}
+};

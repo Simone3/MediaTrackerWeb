@@ -1,11 +1,11 @@
 import { ReactElement } from 'react';
-import { CategoryInternal } from 'app/data/models/internal/category';
-import { MediaItemFilterInternal, MediaItemSortByInternal } from 'app/data/models/internal/media-items/media-item';
-import { MediaTypeSwitcherComponent } from 'app/components/presentational/generic/media-switcher';
 import { BookFilterFormComponent } from './book';
 import { MovieFilterFormComponent } from './movie';
 import { TvShowFilterFormComponent } from './tv-show';
 import { VideogameFilterFormComponent } from './videogame';
+import { MediaTypeSwitcherComponent } from 'app/components/presentational/generic/media-switcher';
+import { MediaItemFilterInternal, MediaItemSortByInternal } from 'app/data/models/internal/media-items/media-item';
+import { CategoryInternal } from 'app/data/models/internal/category';
 
 /**
  * Presentational component that switches on the correct media item filter form component based on its media type
@@ -42,7 +42,7 @@ export type MediaItemFilterFormComponentInput = {
 	 * The linked category
 	 */
 	category: CategoryInternal;
-}
+};
 
 /**
  * MediaItemFilterFormComponent's output props
@@ -57,7 +57,7 @@ export type MediaItemFilterFormComponentOutput = {
 	 * Callback when the form requests to be closed
 	 */
 	close: () => void;
-}
+};
 
 /**
  * MediaItemFilterFormComponent's props

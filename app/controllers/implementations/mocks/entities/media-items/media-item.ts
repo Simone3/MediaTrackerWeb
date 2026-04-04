@@ -12,7 +12,7 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 	protected delay = 0;
 	protected errorProbability = 0;
 
-	protected readonly mediaItems: {[user: string]: {[category: string]: TMediaItemInternal[]}} = {};
+	protected readonly mediaItems: { [user: string]: { [category: string]: TMediaItemInternal[] } } = {};
 
 	/**
 	 * @override
@@ -48,7 +48,7 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 		return this.resolveResult(() => {
 			const categoryMediaItems = this.getCategoryMediaItems(userId, categoryId);
 			
-			if(mediaItem.id) {
+			if (mediaItem.id) {
 				const i = categoryMediaItems.findIndex((item) => {
 					return item.id === mediaItem.id;
 				});
@@ -90,19 +90,19 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 	 * @returns the sorted media items
 	 */
 	protected mockSort(mediaItems: TMediaItemInternal[], sortBy?: TMediaItemSortByInternal[]): TMediaItemInternal[] {
-		if(!sortBy) {
+		if (!sortBy) {
 			return mediaItems;
 		}
 
 		console.log(`Back-End would sort by ${JSON.stringify(sortBy)} - mocked implementation is non complete...`);
 		
 		const mockSortBy = sortBy as unknown as MovieSortByInternal[];
-		if(mockSortBy[0].field === 'NAME') {
+		if (mockSortBy[0].field === 'NAME') {
 			return mediaItems.sort((first, second) => {
-				if(first.name < second.name) {
+				if (first.name < second.name) {
 					return -1;
 				}
-				if(first.name > second.name) {
+				if (first.name > second.name) {
 					return 1;
 				}
 				return 0;
@@ -120,7 +120,7 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 	 * @returns the filtered media items
 	 */
 	protected mockFilter(mediaItems: TMediaItemInternal[], filter?: TMediaItemFilterInternal): TMediaItemInternal[] {
-		if(!filter) {
+		if (!filter) {
 			return mediaItems;
 		}
 
@@ -130,19 +130,19 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 		const groupsIdsFilter = filter.groups ? filter.groups.groupIds : undefined;
 		const importanceFilter = filter.importanceLevels;
 
-		if(nameFilter) {
+		if (nameFilter) {
 			mediaItems = mediaItems.filter((item) => {
 				return nameFilter.toUpperCase() === item.name.toUpperCase();
 			});
 		}
 		
-		if(groupsIdsFilter && groupsIdsFilter.length > 0) {
+		if (groupsIdsFilter && groupsIdsFilter.length > 0) {
 			mediaItems = mediaItems.filter((item) => {
 				return item.group && groupsIdsFilter.includes(item.group.id);
 			});
 		}
 
-		if(importanceFilter) {
+		if (importanceFilter) {
 			mediaItems = mediaItems.filter((item) => {
 				return importanceFilter.includes(item.importance);
 			});
@@ -159,7 +159,7 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 	 */
 	private getCategoryMediaItems(userId: string, categoryId: string): TMediaItemInternal[] {
 		let categoryMediaItems: TMediaItemInternal[];
-		if(userId in this.mediaItems && categoryId in this.mediaItems[userId]) {
+		if (userId in this.mediaItems && categoryId in this.mediaItems[userId]) {
 			categoryMediaItems = this.mediaItems[userId][categoryId];
 		}
 		else {
@@ -178,7 +178,7 @@ export class MediaItemMockedCatalogController<TSearchMediaItemCatalogResultInter
 	protected errorProbability = 0;
 	
 	protected readonly catalogList: TSearchMediaItemCatalogResultInternal[] = [];
-	protected readonly catalogDetails: {[catalogId: string]: TCatalogMediaItemInternal} = {};
+	protected readonly catalogDetails: { [catalogId: string]: TCatalogMediaItemInternal } = {};
 	
 	/**
 	 * @override
@@ -198,7 +198,7 @@ export class MediaItemMockedCatalogController<TSearchMediaItemCatalogResultInter
 	 */
 	public async getDetails(catalogId: string): Promise<TCatalogMediaItemInternal> {
 		return this.resolveResult(() => {
-			if(catalogId in this.catalogDetails) {
+			if (catalogId in this.catalogDetails) {
 				const catalog = this.catalogDetails[catalogId];
 				return {
 					...catalog,

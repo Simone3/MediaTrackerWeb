@@ -20,7 +20,7 @@ export type TvShowSeasonInternal = {
 	number: number;
 	episodesNumber?: number;
 	watchedEpisodesNumber?: number;
-}
+};
 
 /**
  * Model for a TV Show, internal type just for display purposes
@@ -28,14 +28,14 @@ export type TvShowSeasonInternal = {
 export type TvShowInternal = MediaItemInternal & CoreTvShowDataInternal & {
 
 	seasons?: TvShowSeasonInternal[];
-}
+};
 
 /**
  * TV Show filtering options, internal type just for display purposes
  */
 export type TvShowFilterInternal = MediaItemFilterInternal & {
 
-}
+};
 
 /**
  * Values for TV show ordering options, internal type just for display purposes
@@ -48,7 +48,7 @@ export type TvShowSortFieldInternal = MediaItemSortFieldInternal | 'CREATOR';
 export type TvShowSortByInternal = MediaItemSortByInternal & {
 
 	field: TvShowSortFieldInternal;
-}
+};
 
 /**
  * Model for a catalog TV Show season, internal type just for display purposes
@@ -57,7 +57,7 @@ export type CatalogTvShowSeasonInternal = {
 
 	number: number;
 	episodesNumber?: number;
-}
+};
 
 /**
  * Model for a catalog TV Show, internal type just for display purposes
@@ -119,10 +119,10 @@ export const DEFAULT_CATALOG_TV_SHOW: OptionalToUndefined<CatalogTvShowInternal>
  * @returns negative, 0 or positive value based on comparison
  */
 export const compareTvShowSeasons = (first: TvShowSeasonInternal, second: TvShowSeasonInternal): number => {
-	if(first.number < second.number) {
+	if (first.number < second.number) {
 		return -1;
 	}
-	else if(first.number > second.number) {
+	else if (first.number > second.number) {
 		return 1;
 	}
 	else {

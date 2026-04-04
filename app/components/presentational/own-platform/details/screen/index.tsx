@@ -25,7 +25,7 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 	 * @override
 	 */
 	public componentDidUpdate(prevProps: Readonly<OwnPlatformDetailsScreenComponentInput & OwnPlatformDetailsScreenComponentOutput>): void {
-		if(shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
+		if (shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
 			this.setState({
 				confirmSameNameVisible: true
 			});
@@ -113,7 +113,7 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 	 * Saves the current Formik values after the user confirmed the duplicate-name alert
 	 */
 	private submitFormWithSameNameConfirmation(): void {
-		if(this.formikProps) {
+		if (this.formikProps) {
 			this.props.saveOwnPlatform(this.formikProps.values, true);
 		}
 	}
@@ -137,7 +137,7 @@ export type OwnPlatformDetailsScreenComponentInput = {
 	 * If true, the user must confirm save with duplicated name
 	 */
 	sameNameConfirmationRequested: boolean;
-}
+};
 
 /**
  * OwnPlatformDetailsScreenComponent's output props
@@ -157,8 +157,8 @@ export type OwnPlatformDetailsScreenComponentOutput = {
 	 * Callback to navigate back
 	 */
 	goBack: () => void;
-}
+};
 
 type OwnPlatformDetailsScreenComponentState = {
 	confirmSameNameVisible: boolean;
-}
+};

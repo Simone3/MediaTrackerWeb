@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { FormikProps } from 'formik';
-import { TvShowFilterFormValues } from 'app/components/presentational/media-item/list/filter-form/data/tv-show';
 import { MediaItemFilterFormViewComponent, MediaItemFilterFormViewComponentInput, MediaItemFilterFormViewComponentOutput } from './media-item';
+import { TvShowFilterFormValues } from 'app/components/presentational/media-item/list/filter-form/data/tv-show';
 
 /**
  * Presentational component that contains all TV show filter form input fields, all handled by the Formik container component

@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Provider } from 'react-redux';
+import { Action, createStore } from 'redux';
 import { MediaItemsListContainer } from 'app/components/containers/media-item/list/list';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { HIGHLIGHT_MEDIA_ITEM, REMOVE_MEDIA_ITEM_HIGHLIGHT, SEARCH_MEDIA_ITEMS, START_MEDIA_ITEMS_SEARCH_MODE, STOP_MEDIA_ITEMS_SEARCH_MODE } from 'app/redux/actions/media-item/const';
 import { i18n } from 'app/utilities/i18n';
-import { Provider } from 'react-redux';
-import { Action, createStore } from 'redux';
 
 type MediaItemsListContainerTestState = {
 	categoryGlobal: {
@@ -52,7 +52,7 @@ describe('MediaItemsListContainer', () => {
 			}
 		};
 		const store = createStore((state: MediaItemsListContainerTestState = initialState, action: Action & { mediaItem?: MediaItemInternal }) => {
-			switch(action.type) {
+			switch (action.type) {
 				case HIGHLIGHT_MEDIA_ITEM: {
 					return {
 						...state,
@@ -116,7 +116,7 @@ describe('MediaItemsListContainer', () => {
 			}
 		};
 		const store = createStore((state: MediaItemsListContainerTestState = initialState, action: Action & { mediaItem?: MediaItemInternal; term?: string }) => {
-			switch(action.type) {
+			switch (action.type) {
 				case START_MEDIA_ITEMS_SEARCH_MODE: {
 					return {
 						...state,

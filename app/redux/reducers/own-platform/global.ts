@@ -1,9 +1,9 @@
+import { Action } from 'redux';
 import { LOAD_MEDIA_ITEM_DETAILS, LOAD_NEW_MEDIA_ITEM_DETAILS } from 'app/redux/actions/media-item/const';
 import { LoadMediaItemDetailsAction } from 'app/redux/actions/media-item/types';
 import { SELECT_OWN_PLATFORM } from 'app/redux/actions/own-platform/const';
 import { SelectOwnPlatformAction } from 'app/redux/actions/own-platform/types';
 import { OwnPlatformGlobalState, ownPlatformGlobalStateInitialValue } from 'app/redux/state/own-platform';
-import { Action } from 'redux';
 
 /**
  * Reducer for the global own platform portion of the global state
@@ -12,7 +12,7 @@ import { Action } from 'redux';
  * @returns the new state
  */
 export const ownPlatformGlobal = (state: OwnPlatformGlobalState = ownPlatformGlobalStateInitialValue, action: Action): OwnPlatformGlobalState => {
-	switch(action.type) {
+	switch (action.type) {
 		// When a own platform is selected, it is marked as such
 		case SELECT_OWN_PLATFORM: {
 			const selectOwnPlatformAction = action as SelectOwnPlatformAction;

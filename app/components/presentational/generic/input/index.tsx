@@ -33,10 +33,10 @@ const InputComponentImplementation = (
 			type={resolvedType}
 			className={resolvedClassName}
 			onChange={(event: ChangeEvent<HTMLInputElement>) => {
-				if(otherProps.onChange) {
+				if (otherProps.onChange) {
 					otherProps.onChange(event);
 				}
-				if(onChangeValue) {
+				if (onChangeValue) {
 					onChangeValue(event.target.value);
 				}
 			}}

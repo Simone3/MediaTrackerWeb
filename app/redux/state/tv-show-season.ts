@@ -19,7 +19,7 @@ export type TvShowSeasonsListState = {
 	 * The currently highlighted (e.g. context menu is open) TV show season, or undefined if none is highlighted
 	 */
 	readonly highlightedTvShowSeason: TvShowSeasonInternal | undefined;
-}
+};
 
 /**
  * The initial value for the TV show seasons list state
@@ -71,7 +71,7 @@ export type TvShowSeasonDetailsState = {
 	 * The current status of the TV show season saving process
 	 */
 	readonly saveStatus: TvShowSeasonSaveStatus;
-}
+};
 
 /**
  * The initial value for the TV show season details state

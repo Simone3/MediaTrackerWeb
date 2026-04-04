@@ -10,7 +10,7 @@ export class OwnPlatformMockedController extends MockControllerHelper implements
 	protected delay = 0;
 	protected errorProbability = 0;
 
-	protected readonly ownPlatforms: {[user: string]: {[category: string]: OwnPlatformInternal[]}} = {
+	protected readonly ownPlatforms: { [user: string]: { [category: string]: OwnPlatformInternal[] } } = {
 		test: {
 			2: [{
 				id: '1',
@@ -47,7 +47,7 @@ export class OwnPlatformMockedController extends MockControllerHelper implements
 		return this.resolveResult(() => {
 			const categoryOwnPlatforms = this.getCategoryOwnPlatforms(userId, categoryId);
 
-			if(filter && filter.name) {
+			if (filter && filter.name) {
 				return categoryOwnPlatforms.filter((platform) => {
 					return filter.name && filter.name.toUpperCase() === platform.name.toUpperCase();
 				});
@@ -65,7 +65,7 @@ export class OwnPlatformMockedController extends MockControllerHelper implements
 		return this.resolveResult(() => {
 			const categoryOwnPlatforms = this.getCategoryOwnPlatforms(userId, categoryId);
 			
-			if(ownPlatform.id) {
+			if (ownPlatform.id) {
 				const i = categoryOwnPlatforms.findIndex((item) => {
 					return item.id === ownPlatform.id;
 				});
@@ -108,7 +108,7 @@ export class OwnPlatformMockedController extends MockControllerHelper implements
 	 */
 	private getCategoryOwnPlatforms(userId: string, categoryId: string): OwnPlatformInternal[] {
 		let categoryOwnPlatforms: OwnPlatformInternal[];
-		if(userId in this.ownPlatforms && categoryId in this.ownPlatforms[userId]) {
+		if (userId in this.ownPlatforms && categoryId in this.ownPlatforms[userId]) {
 			categoryOwnPlatforms = this.ownPlatforms[userId][categoryId];
 		}
 		else {

@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { CategoriesListScreenComponent } from 'app/components/presentational/category/list/screen';
-import { i18n } from 'app/utilities/i18n';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import { CategoriesListScreenComponent } from 'app/components/presentational/category/list/screen';
+import { i18n } from 'app/utilities/i18n';
 
 type CategoriesScreenTestState = {
 	categoriesList: {

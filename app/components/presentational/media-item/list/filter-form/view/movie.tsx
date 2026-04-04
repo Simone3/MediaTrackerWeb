@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { FormikProps } from 'formik';
-import { MovieFilterFormValues } from 'app/components/presentational/media-item/list/filter-form/data/movie';
 import { MediaItemFilterFormViewComponent, MediaItemFilterFormViewComponentInput, MediaItemFilterFormViewComponentOutput } from './media-item';
+import { MovieFilterFormValues } from 'app/components/presentational/media-item/list/filter-form/data/movie';
 
 /**
  * Presentational component that contains all movie filter form input fields, all handled by the Formik container component

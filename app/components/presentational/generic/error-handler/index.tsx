@@ -20,7 +20,7 @@ export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps,
 			error
 		} = this.props;
 
-		if(!error || error === prevProps.error) {
+		if (!error || error === prevProps.error) {
 			return;
 		}
 
@@ -30,7 +30,7 @@ export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps,
 		});
 		this.props.clearError();
 
-		if(this.clearTimeoutId) {
+		if (this.clearTimeoutId) {
 			clearTimeout(this.clearTimeoutId);
 		}
 
@@ -45,7 +45,7 @@ export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps,
 	 * @override
 	 */
 	public componentWillUnmount(): void {
-		if(this.clearTimeoutId) {
+		if (this.clearTimeoutId) {
 			clearTimeout(this.clearTimeoutId);
 		}
 	}
@@ -63,10 +63,10 @@ export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps,
 				{this.props.children}
 				{visibleError ?
 					(
-					<div className='error-handler-toast' role='alert'>
-						<strong className='error-handler-toast-title'>{i18n.t('error.flash.title')}</strong>
-						<span className='error-handler-toast-description'>{visibleError}</span>
-					</div>
+						<div className='error-handler-toast' role='alert'>
+							<strong className='error-handler-toast-title'>{i18n.t('error.flash.title')}</strong>
+							<span className='error-handler-toast-description'>{visibleError}</span>
+						</div>
 					) :
 					null}
 			</div>
@@ -80,7 +80,7 @@ export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps,
 	 */
 	private getAppErrorDescription(error: AppError): string {
 		let originalAppError: AppError = error;
-		while(originalAppError.errorDetails && originalAppError.errorDetails instanceof AppError) {
+		while (originalAppError.errorDetails && originalAppError.errorDetails instanceof AppError) {
 			originalAppError = originalAppError.errorDetails;
 		}
 		return i18n.t(originalAppError.errorDescription);

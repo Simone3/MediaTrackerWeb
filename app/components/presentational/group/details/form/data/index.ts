@@ -1,5 +1,5 @@
-import { GroupInternal } from 'app/data/models/internal/group';
 import { ObjectSchema, object, string } from 'yup';
+import { GroupInternal } from 'app/data/models/internal/group';
 
 /**
  * The group form validation schema

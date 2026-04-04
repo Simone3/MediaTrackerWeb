@@ -1,8 +1,8 @@
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { SettingsScreenComponent, SettingsScreenComponentInput, SettingsScreenComponentOutput } from 'app/components/presentational/settings/screen';
 import { logUserOut } from 'app/redux/actions/user/generators';
 import { State } from 'app/redux/state/state';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: State): SettingsScreenComponentInput => {
 	return {

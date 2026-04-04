@@ -1,8 +1,8 @@
+import { ObjectSchema, object } from 'yup';
 import { MediaItemFilterFormMapper, MediaItemFilterFormSortBy, MediaItemFilterFormValues, mediaItemFilterFormValidationShape } from 'app/components/presentational/media-item/list/filter-form/data/media-item';
 import { bookDefinitionsController } from 'app/controllers/main/entities/media-items-definitions/book';
 import { AppError } from 'app/data/models/internal/error';
 import { BookFilterInternal, BookSortByInternal } from 'app/data/models/internal/media-items/book';
-import { ObjectSchema, object } from 'yup';
 
 /**
  * The book filter form model
@@ -39,7 +39,7 @@ class BookFilterFormMapper extends MediaItemFilterFormMapper<BookFilterInternal,
 	 * @override
 	 */
 	public toSortByModel(formValues: BookFilterFormValues): BookSortByInternal[] {
-		switch(formValues.sortBy) {
+		switch (formValues.sortBy) {
 			case 'DEFAULT':
 				return bookDefinitionsController.getDefaultSortBy();
 
@@ -66,11 +66,11 @@ class BookFilterFormMapper extends MediaItemFilterFormMapper<BookFilterInternal,
 	 * @returns the target
 	 */
 	private toSortByFormValue(sortBy: BookSortByInternal[]): MediaItemFilterFormSortBy {
-		if(sortBy.length === 1) {
-			if(sortBy[0].field === 'NAME') {
+		if (sortBy.length === 1) {
+			if (sortBy[0].field === 'NAME') {
 				return 'NAME';
 			}
-			if(sortBy[0].field === 'COMPLETION_DATE') {
+			if (sortBy[0].field === 'COMPLETION_DATE') {
 				return 'COMPLETION_DATE';
 			}
 		}

@@ -23,7 +23,7 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 	 * @override
 	 */
 	public componentDidUpdate(prevProps: Readonly<CategoryDetailsScreenComponentInput & CategoryDetailsScreenComponentOutput>): void {
-		if(shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
+		if (shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
 			this.setState({
 				confirmSameNameVisible: true
 			});
@@ -120,7 +120,7 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 	 * Saves the current Formik values after the user confirmed the duplicate-name alert
 	 */
 	private submitFormWithSameNameConfirmation(): void {
-		if(this.formikProps) {
+		if (this.formikProps) {
 			this.props.saveCategory(this.formikProps.values, true);
 		}
 	}
@@ -144,7 +144,7 @@ export type CategoryDetailsScreenComponentInput = {
 	 * If true, the user must confirm save with duplicated name
 	 */
 	sameNameConfirmationRequested: boolean;
-}
+};
 
 /**
  * CategoryDetailsScreenComponent's output props
@@ -159,8 +159,8 @@ export type CategoryDetailsScreenComponentOutput = {
 	 * Callback to notify form validity and dirty status
 	 */
 	notifyFormStatus: (valid: boolean, dirty: boolean) => void;
-}
+};
 
 type CategoryDetailsScreenComponentState = {
 	confirmSameNameVisible: boolean;
-}
+};

@@ -24,10 +24,10 @@ export class AuthSubmitComponent extends Component<AuthSubmitComponentProps> {
 				type={type}
 				className={resolvedClassName}
 				onClick={(event: MouseEvent<HTMLButtonElement>) => {
-					if(otherProps.onClick) {
+					if (otherProps.onClick) {
 						otherProps.onClick(event);
 					}
-					if(onPress) {
+					if (onPress) {
 						onPress(event);
 					}
 				}}>

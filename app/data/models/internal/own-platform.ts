@@ -10,7 +10,7 @@ export type OwnPlatformInternal = {
 	name: string;
 	color: string;
 	icon: OwnPlatformIconInternal;
-}
+};
 
 /**
  * Array of all own platform icons, internal type just for display purposes
@@ -28,7 +28,7 @@ export type OwnPlatformIconInternal = ValuesOf<typeof OWN_PLATFORM_ICON_INTERNAL
 export type OwnPlatformFilterInternal = {
 
 	name?: string;
-}
+};
 
 /**
  * The default initial own platform, internal type just for display purposes

@@ -112,7 +112,7 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 					confirmLabel={i18n.t('common.alert.default.okButton')}
 					cancelLabel={i18n.t('common.alert.default.cancelButton')}
 					onConfirm={() => {
-						if(pendingDeleteGroup) {
+						if (pendingDeleteGroup) {
 							this.props.deleteGroup(pendingDeleteGroup);
 						}
 						this.setState({
@@ -133,7 +133,7 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 	 * Helper to invoke the fetch callback if the input fetch flag is true
 	 */
 	private requestFetchIfRequired(): void {
-		if(this.props.requiresFetch) {
+		if (this.props.requiresFetch) {
 			this.props.fetchGroups();
 		}
 	}
@@ -203,7 +203,7 @@ export type GroupsListScreenComponentInput = {
 	 * Whether the list should render loading skeleton rows
 	 */
 	showSkeletons: boolean;
-}
+};
 
 /**
  * GroupsListScreenComponent's output props
@@ -238,8 +238,8 @@ export type GroupsListScreenComponentOutput = {
 	 * Callback to navigate back
 	 */
 	goBack: () => void;
-}
+};
 
 type GroupsListScreenComponentState = {
 	pendingDeleteGroup?: GroupInternal;
-}
+};

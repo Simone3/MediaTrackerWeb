@@ -1,6 +1,6 @@
-import { UserSettingsScreenContainer } from 'app/components/containers/settings/screen';
 import { Component, ReactNode } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { UserSettingsScreenContainer } from 'app/components/containers/settings/screen';
 
 /**
  * The navigator for the settings section of the app

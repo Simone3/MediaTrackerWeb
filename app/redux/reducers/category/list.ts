@@ -1,7 +1,7 @@
+import { Action } from 'redux';
 import { COMPLETE_DELETING_CATEGORY, COMPLETE_FETCHING_CATEGORIES, COMPLETE_SAVING_CATEGORY, FAIL_DELETING_CATEGORY, FAIL_FETCHING_CATEGORIES, HIGHLIGHT_CATEGORY, INVALIDATE_CATEGORIES, REMOVE_CATEGORY_HIGHLIGHT, START_DELETING_CATEGORY, START_FETCHING_CATEGORIES } from 'app/redux/actions/category/const';
 import { CompleteFetchingCategoriesAction, HighlightCategoryAction } from 'app/redux/actions/category/types';
 import { CategoriesListState, categoriesListStateInitialValue } from 'app/redux/state/category';
-import { Action } from 'redux';
 
 /**
  * Reducer for the categories list portion of the global state
@@ -10,7 +10,7 @@ import { Action } from 'redux';
  * @returns the new state
  */
 export const categoriesList = (state: CategoriesListState = categoriesListStateInitialValue, action: Action): CategoriesListState => {
-	switch(action.type) {
+	switch (action.type) {
 		// When the app starts fetching the list of categories, the status changes to show the loading indicator
 		case START_FETCHING_CATEGORIES: {
 			return {

@@ -1,9 +1,9 @@
 import { ReactElement } from 'react';
+import { FormikProps } from 'formik';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
 import { config } from 'app/config/config';
 import { VideogameInternal } from 'app/data/models/internal/media-items/videogame';
-import { FormikProps } from 'formik';
 import howLongToBeatIcon from 'app/resources/images/ic_howlongtobeat.png';
 import { i18n } from 'app/utilities/i18n';
 

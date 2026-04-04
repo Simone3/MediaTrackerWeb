@@ -1,4 +1,5 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { ownPlatformController } from 'app/controllers/main/entities/own-platform';
 import { AppError } from 'app/data/models/internal/error';
 import { OwnPlatformFilterInternal, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
@@ -7,7 +8,6 @@ import { SAVE_OWN_PLATFORM } from 'app/redux/actions/own-platform/const';
 import { askConfirmationBeforeSavingOwnPlatform, completeSavingOwnPlatform, failSavingOwnPlatform, startSavingOwnPlatform } from 'app/redux/actions/own-platform/generators';
 import { SaveOwnPlatformAction } from 'app/redux/actions/own-platform/types';
 import { State } from 'app/redux/state/state';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Worker saga that saves a own platform
@@ -22,13 +22,13 @@ const saveOwnPlatformSaga = function * (action: SaveOwnPlatformAction): SagaIter
 	const state = (yield select()) as State;
 	const category = state.categoryGlobal.selectedCategory;
 	const user = state.userGlobal.user;
-	if(!category || !user) {
+	if (!category || !user) {
 		throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while saving own platform');
 	}
 
 	try {
 		// If we are adding a new own platform and the user has not confirmed a same-name creation...
-		if(!ownPlatform.id && !action.confirmSameName) {
+		if (!ownPlatform.id && !action.confirmSameName) {
 			// Check if there are other own platforms with the same name
 			const filter: OwnPlatformFilterInternal = {
 				name: ownPlatform.name
@@ -36,7 +36,7 @@ const saveOwnPlatformSaga = function * (action: SaveOwnPlatformAction): SagaIter
 			const mediaItemsWithSameName = (yield call(ownPlatformController.filter.bind(ownPlatformController), user.id, category.id, filter)) as OwnPlatformInternal[];
 			
 			// If so, dispatch confirmation request action and exit
-			if(mediaItemsWithSameName.length > 0) {
+			if (mediaItemsWithSameName.length > 0) {
 				yield put(askConfirmationBeforeSavingOwnPlatform());
 				return;
 			}

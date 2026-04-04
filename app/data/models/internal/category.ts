@@ -20,7 +20,7 @@ export type CategoryInternal = {
 	name: string;
 	mediaType: MediaTypeInternal;
 	color: string;
-}
+};
 
 /**
  * A filter for categories, internal type just for display purposes
@@ -28,7 +28,7 @@ export type CategoryInternal = {
 export type CategoryFilterInternal = {
 
 	name?: string;
-}
+};
 
 /**
  * The default initial category, internal type just for display purposes

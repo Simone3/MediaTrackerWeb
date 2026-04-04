@@ -4,7 +4,7 @@ import { AppScreens, AppSections } from 'app/utilities/screens';
 /**
  * Centralized map between app section/screen IDs and web paths
  */
-export const navigationRoutes: {[screen: string]: string} = {
+export const navigationRoutes: { [screen: string]: string } = {
 	[AppSections.Unauthenticated]: '/auth',
 	[AppSections.Authenticated]: '/app',
 	[AppSections.Media]: '/media',
@@ -33,12 +33,12 @@ export const navigationRoutes: {[screen: string]: string} = {
  * @returns the mapped web path
  */
 export const screenToPath = (routeName: string): string => {
-	if(routeName.startsWith('/')) {
+	if (routeName.startsWith('/')) {
 		return routeName;
 	}
 
 	const path = navigationRoutes[routeName];
-	if(!path) {
+	if (!path) {
 		throw AppError.GENERIC.withDetails(`Route ${routeName} has no mapped web path`);
 	}
 	return path;

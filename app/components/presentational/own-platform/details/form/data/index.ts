@@ -1,5 +1,5 @@
-import { OWN_PLATFORM_ICON_INTERNAL_VALUES, OwnPlatformIconInternal, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { ObjectSchema, mixed, object, string } from 'yup';
+import { OWN_PLATFORM_ICON_INTERNAL_VALUES, OwnPlatformIconInternal, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 
 /**
  * The own platform form validation schema

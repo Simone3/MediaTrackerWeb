@@ -1,5 +1,5 @@
-import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
 import { Component, CSSProperties, ReactNode } from 'react';
+import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { i18n } from 'app/utilities/i18n';
 

@@ -1,3 +1,4 @@
+import { stripHtml } from 'string-strip-html';
 import { ModelMapper } from 'app/data/mappers/common';
 import { groupMapper } from 'app/data/mappers/group';
 import { ownPlatformMapper } from 'app/data/mappers/own-platform';
@@ -5,7 +6,6 @@ import { CatalogMediaItem, MediaItem, MediaItemFilter, MediaItemGroupFilter, Med
 import { AppError } from 'app/data/models/internal/error';
 import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemGroupFilterInternal, MediaItemInternal, MediaItemOwnPlatformFilterInternal, MediaItemSortByInternal, MediaItemSortFieldInternal, MediaItemStatusFilterInternal, MediaItemStatusInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import { dateUtils } from 'app/utilities/date-utils';
-import { stripHtml } from 'string-strip-html';
 
 /**
  * Abstract mapper for media items
@@ -34,18 +34,18 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 			imageUrl: source.imageUrl
 		};
 
-		if(source.group && source.orderInGroup) {
+		if (source.group && source.orderInGroup) {
 			target.group = {
 				groupId: source.group.id,
 				groupData: groupMapper.toExternal(source.group),
 				orderInGroup: source.orderInGroup
 			};
 		}
-		else if(source.group || source.orderInGroup) {
+		else if (source.group || source.orderInGroup) {
 			throw AppError.GENERIC.withDetails('Should never have "group" and not "orderInGroup" or vice-versa: either both or none');
 		}
 
-		if(source.ownPlatform) {
+		if (source.ownPlatform) {
 			target.ownPlatform = {
 				ownPlatformId: source.ownPlatform.id,
 				ownPlatformData: ownPlatformMapper.toExternal(source.ownPlatform)
@@ -81,7 +81,7 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 			imageUrl: source.imageUrl
 		};
 
-		if(source.group && source.group.groupData) {
+		if (source.group && source.group.groupData) {
 			target.group = groupMapper.toInternal({
 				...source.group.groupData,
 				uid: source.group.groupId
@@ -90,7 +90,7 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 			target.orderInGroup = source.group.orderInGroup;
 		}
 
-		if(source.ownPlatform && source.ownPlatform.ownPlatformData) {
+		if (source.ownPlatform && source.ownPlatform.ownPlatformData) {
 			target.ownPlatform = ownPlatformMapper.toInternal({
 				...source.ownPlatform.ownPlatformData,
 				uid: source.ownPlatform.ownPlatformId
@@ -106,19 +106,19 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 	 * @returns the internal "status"
 	 */
 	private buildStatusLabel(source: MediaItem): MediaItemStatusInternal {
-		if(source.completedOn && source.completedOn.length > 0 && !source.markedAsRedo) {
+		if (source.completedOn && source.completedOn.length > 0 && !source.markedAsRedo) {
 			// Items that have been completed
 			return 'COMPLETE';
 		}
-		else if(source.active) {
+		else if (source.active) {
 			// Items marked as currently active (e.g. currently reading)
 			return 'ACTIVE';
 		}
-		else if(source.completedOn && source.completedOn.length > 0 && source.markedAsRedo) {
+		else if (source.completedOn && source.completedOn.length > 0 && source.markedAsRedo) {
 			// Items that have been completed but have been marked for redo (e.g. rewatch)
 			return 'REDO';
 		}
-		else if(source.releaseDate && new Date(source.releaseDate) > new Date()) {
+		else if (source.releaseDate && new Date(source.releaseDate) > new Date()) {
 			// Items with a future release date
 			return 'UPCOMING';
 		}
@@ -171,7 +171,7 @@ export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends Med
 	 * @returns the target
 	 */
 	private toExternalGroupFilter(source: MediaItemGroupFilterInternal | undefined): MediaItemGroupFilter | undefined {
-		if(source) {
+		if (source) {
 			return {
 				anyGroup: source.anyGroup,
 				noGroup: source.noGroup,
@@ -189,7 +189,7 @@ export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends Med
 	 * @returns the target
 	 */
 	private toExternalOwnPlatformFilter(source: MediaItemOwnPlatformFilterInternal | undefined): MediaItemOwnPlatformFilter | undefined {
-		if(source) {
+		if (source) {
 			return {
 				anyOwnPlatform: source.anyOwnPlatform,
 				noOwnPlatform: source.noOwnPlatform,
@@ -207,7 +207,7 @@ export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends Med
 	 * @returns the target
 	 */
 	private toInternalGroupFilter(source: MediaItemGroupFilter | undefined): MediaItemGroupFilterInternal | undefined {
-		if(source) {
+		if (source) {
 			return {
 				anyGroup: source.anyGroup,
 				noGroup: source.noGroup,
@@ -225,7 +225,7 @@ export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends Med
 	 * @returns the target
 	 */
 	private toInternalOwnPlatformFilter(source: MediaItemOwnPlatformFilter | undefined): MediaItemOwnPlatformFilterInternal | undefined {
-		if(source) {
+		if (source) {
 			return {
 				anyOwnPlatform: source.anyOwnPlatform,
 				noOwnPlatform: source.noOwnPlatform,
@@ -244,8 +244,8 @@ export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends Med
 	 * @returns the target
 	 */
 	private setStatusFilterExternal(source: MediaItemStatusFilterInternal | undefined, target: MediaItemFilter): MediaItemFilter {
-		if(source) {
-			switch(source) {
+		if (source) {
+			switch (source) {
 				case 'CURRENT':
 					target.complete = false;
 					break;
@@ -268,10 +268,10 @@ export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends Med
 	 * @returns the target
 	 */
 	private toInternalStatusFilter(source: MediaItemFilter): MediaItemStatusFilterInternal | undefined {
-		if(source.complete) {
+		if (source.complete) {
 			return 'COMPLETE';
 		}
-		else if(source.complete === false) {
+		else if (source.complete === false) {
 			return 'CURRENT';
 		}
 		else {
@@ -314,7 +314,7 @@ export abstract class MediaItemSortMapper<TMediaItemSortByInternal extends Media
 	 * @returns the mapping target
 	 */
 	protected commonToExternalField(source: MediaItemSortFieldInternal): string {
-		switch(source) {
+		switch (source) {
 			case 'IMPORTANCE': return MediaItemSortField.IMPORTANCE;
 			case 'NAME': return MediaItemSortField.NAME;
 			case 'GROUP': return MediaItemSortField.GROUP;
@@ -332,7 +332,7 @@ export abstract class MediaItemSortMapper<TMediaItemSortByInternal extends Media
 	 * @returns the mapping target
 	 */
 	protected commonToInternalField(source: MediaItemSortField): MediaItemSortFieldInternal {
-		switch(source) {
+		switch (source) {
 			case MediaItemSortField.IMPORTANCE: return 'IMPORTANCE';
 			case MediaItemSortField.NAME: return 'NAME';
 			case MediaItemSortField.GROUP: return 'GROUP';

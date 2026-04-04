@@ -1,6 +1,6 @@
-import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { ASK_CONFIRMATION_BEFORE_SAVING_OWN_PLATFORM, COMPLETE_DELETING_OWN_PLATFORM, COMPLETE_FETCHING_OWN_PLATFORMS, COMPLETE_SAVING_OWN_PLATFORM, DELETE_OWN_PLATFORM, FAIL_DELETING_OWN_PLATFORM, FAIL_FETCHING_OWN_PLATFORMS, FAIL_SAVING_OWN_PLATFORM, FETCH_OWN_PLATFORMS, LOAD_NEW_OWN_PLATFORM_DETAILS, LOAD_OWN_PLATFORM_DETAILS, REQUEST_OWN_PLATFORM_SELECTION, SAVE_OWN_PLATFORM, SELECT_OWN_PLATFORM, SET_OWN_PLATFORM_FORM_STATUS, START_DELETING_OWN_PLATFORM, START_FETCHING_OWN_PLATFORMS, START_SAVING_OWN_PLATFORM } from './const';
 import { AskConfirmationBeforeSavingOwnPlatformAction, CompleteDeletingOwnPlatformAction, CompleteFetchingOwnPlatformsAction, CompleteSavingOwnPlatformAction, DeleteOwnPlatformAction, FailDeletingOwnPlatformAction, FailFetchingOwnPlatformsAction, FailSavingOwnPlatformAction, FetchOwnPlatformsAction, LoadNewOwnPlatformDetailsAction, LoadOwnPlatformDetailsAction, RequestOwnPlatformSelectionAction, SaveOwnPlatformAction, SelectOwnPlatformAction, SetOwnPlatformFormStatusAction, StartDeletingOwnPlatformAction, StartFetchingOwnPlatformsAction, StartSavingOwnPlatformAction } from './types';
+import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 
 /**
  * Generator for the fetch own platforms list action, which causes the request own platforms action, the async own platforms fetch and then the receive own platforms action

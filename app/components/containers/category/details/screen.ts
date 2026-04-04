@@ -1,12 +1,12 @@
+import React, { ReactElement } from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { BrowserBackNavigationGuardComponent } from 'app/components/presentational/generic/browser-back-navigation-guard';
 import { CategoryDetailsScreenComponent, CategoryDetailsScreenComponentInput, CategoryDetailsScreenComponentOutput } from 'app/components/presentational/category/details/screen';
 import { DEFAULT_CATEGORY } from 'app/data/models/internal/category';
 import { saveCategory, setCategoryFormStatus } from 'app/redux/actions/category/generators';
 import { State } from 'app/redux/state/state';
 import { i18n } from 'app/utilities/i18n';
-import React, { ReactElement } from 'react';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
 type CategoryDetailsScreenContainerStateProps = CategoryDetailsScreenComponentInput & {
 	blockBrowserBack: boolean;

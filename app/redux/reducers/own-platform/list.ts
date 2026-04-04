@@ -1,8 +1,8 @@
+import { Action } from 'redux';
 import { SELECT_CATEGORY } from 'app/redux/actions/category/const';
 import { COMPLETE_DELETING_OWN_PLATFORM, COMPLETE_FETCHING_OWN_PLATFORMS, COMPLETE_SAVING_OWN_PLATFORM, FAIL_DELETING_OWN_PLATFORM, FAIL_FETCHING_OWN_PLATFORMS, HIGHLIGHT_OWN_PLATFORM, INVALIDATE_OWN_PLATFORMS, REMOVE_OWN_PLATFORM_HIGHLIGHT, START_DELETING_OWN_PLATFORM, START_FETCHING_OWN_PLATFORMS } from 'app/redux/actions/own-platform/const';
 import { CompleteFetchingOwnPlatformsAction, HighlightOwnPlatformAction } from 'app/redux/actions/own-platform/types';
 import { OwnPlatformsListState, ownPlatformsListStateInitialValue } from 'app/redux/state/own-platform';
-import { Action } from 'redux';
 
 /**
  * Reducer for the own platforms list portion of the global state
@@ -11,7 +11,7 @@ import { Action } from 'redux';
  * @returns the new state
  */
 export const ownPlatformsList = (state: OwnPlatformsListState = ownPlatformsListStateInitialValue, action: Action): OwnPlatformsListState => {
-	switch(action.type) {
+	switch (action.type) {
 		// When the app starts fetching the list of own platforms, the status changes to show the loading indicator
 		case START_FETCHING_OWN_PLATFORMS: {
 			return {

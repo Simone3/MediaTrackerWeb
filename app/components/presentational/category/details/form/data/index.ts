@@ -1,5 +1,5 @@
-import { CategoryInternal, MEDIA_TYPES_INTERNAL, MediaTypeInternal } from 'app/data/models/internal/category';
 import { ObjectSchema, mixed, object, string } from 'yup';
+import { CategoryInternal, MEDIA_TYPES_INTERNAL, MediaTypeInternal } from 'app/data/models/internal/category';
 
 /**
  * The category form validation schema

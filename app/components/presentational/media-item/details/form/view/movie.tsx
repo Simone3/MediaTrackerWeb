@@ -1,9 +1,9 @@
 import { ReactElement } from 'react';
+import { FormikProps } from 'formik';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
 import { config } from 'app/config/config';
 import { MovieInternal } from 'app/data/models/internal/media-items/movie';
-import { FormikProps } from 'formik';
 import justWatchIcon from 'app/resources/images/ic_justwatch.png';
 import { i18n } from 'app/utilities/i18n';
 

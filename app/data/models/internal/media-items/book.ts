@@ -15,14 +15,14 @@ type CoreBookDataInternal = {
  */
 export type BookInternal = MediaItemInternal & CoreBookDataInternal & {
 
-}
+};
 
 /**
  * Book filtering options, internal type just for display purposes
  */
 export type BookFilterInternal = MediaItemFilterInternal & {
 
-}
+};
 
 /**
  * Values for book ordering options, internal type just for display purposes
@@ -35,7 +35,7 @@ export type BookSortFieldInternal = MediaItemSortFieldInternal | 'AUTHOR';
 export type BookSortByInternal = MediaItemSortByInternal & {
 
 	field: BookSortFieldInternal;
-}
+};
 
 /**
  * Model for a catalog book, internal type just for display purposes

@@ -1,5 +1,5 @@
-import { UserInternal, UserSecretInternal } from 'app/data/models/internal/user';
 import { Action } from 'redux';
+import { UserInternal, UserSecretInternal } from 'app/data/models/internal/user';
 
 /**
  * The check user login status action

@@ -1,9 +1,9 @@
+import { Action } from 'redux';
 import { SELECT_GROUP } from 'app/redux/actions/group/const';
 import { SelectGroupAction } from 'app/redux/actions/group/types';
 import { LOAD_MEDIA_ITEM_DETAILS, LOAD_NEW_MEDIA_ITEM_DETAILS } from 'app/redux/actions/media-item/const';
 import { LoadMediaItemDetailsAction } from 'app/redux/actions/media-item/types';
 import { GroupGlobalState, groupGlobalStateInitialValue } from 'app/redux/state/group';
-import { Action } from 'redux';
 
 /**
  * Reducer for the global group portion of the global state
@@ -12,7 +12,7 @@ import { Action } from 'redux';
  * @returns the new state
  */
 export const groupGlobal = (state: GroupGlobalState = groupGlobalStateInitialValue, action: Action): GroupGlobalState => {
-	switch(action.type) {
+	switch (action.type) {
 		// When a group is selected, it is marked as such
 		case SELECT_GROUP: {
 			const selectGroupAction = action as SelectGroupAction;

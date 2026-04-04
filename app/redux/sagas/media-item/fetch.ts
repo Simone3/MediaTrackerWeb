@@ -1,4 +1,5 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { AppError } from 'app/data/models/internal/error';
 import { MediaItemFilterInternal, MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { mediaItemControllerFactory, mediaItemDefinitionsControllerFactory } from 'app/controllers/main/entities/media-items/factories';
@@ -6,7 +7,6 @@ import { setError } from 'app/redux/actions/error/generators';
 import { FETCH_MEDIA_ITEMS, SEARCH_MEDIA_ITEMS, START_MEDIA_ITEMS_VIEW_GROUP_MODE } from 'app/redux/actions/media-item/const';
 import { completeFetchingMediaItems, failFetchingMediaItems, startFetchingMediaItems } from 'app/redux/actions/media-item/generators';
 import { State } from 'app/redux/state/state';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Worker saga that fetches the media items
@@ -20,7 +20,7 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 		const mode = state.mediaItemsList.mode;
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
-		if(!category || !user) {
+		if (!category || !user) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find category while fetching media items');
 		}
 
@@ -30,12 +30,12 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 
 		// Retrieve media items from controller
 		let mediaItems: MediaItemInternal[];
-		switch(mode) {
+		switch (mode) {
 			// Normal fetching mode is the standard one, based on the current filter and sort options
 			case 'NORMAL': {
 				const filter = state.mediaItemsList.filter;
 				const sortBy = state.mediaItemsList.sortBy;
-				if(!filter || !sortBy) {
+				if (!filter || !sortBy) {
 					throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find filter and sort options');
 				}
 
@@ -47,7 +47,7 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 			// Search fetching mode allows to search media items by term
 			case 'SEARCH': {
 				const term = state.mediaItemsList.searchTerm;
-				if(!term) {
+				if (!term) {
 					throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find search term');
 				}
 
@@ -59,7 +59,7 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 			// View group fetching mode allows to list all media items in a group
 			case 'VIEW_GROUP': {
 				const viewGroup = state.mediaItemsList.viewGroup;
-				if(!viewGroup) {
+				if (!viewGroup) {
 					throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find view group value');
 				}
 

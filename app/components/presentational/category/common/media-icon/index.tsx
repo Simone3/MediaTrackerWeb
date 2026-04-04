@@ -1,9 +1,9 @@
+import { ReactElement } from 'react';
 import { MediaTypeInternal } from 'app/data/models/internal/category';
 import bookIcon from 'app/resources/images/ic_media_book.svg';
 import movieIcon from 'app/resources/images/ic_media_movie.svg';
 import tvShowIcon from 'app/resources/images/ic_media_tvshow.svg';
 import videogameIcon from 'app/resources/images/ic_media_videogame.svg';
-import { ReactElement } from 'react';
 
 const mediaTypeToIcon: Record<MediaTypeInternal, string> = {
 	BOOK: bookIcon,
@@ -31,4 +31,4 @@ type MediaIconComponentProps = {
 	mediaType: MediaTypeInternal;
 	className?: string;
 	alt?: string;
-}
+};

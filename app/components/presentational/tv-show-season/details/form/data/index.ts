@@ -1,5 +1,5 @@
-import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { ObjectSchema, number, object } from 'yup';
+import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 
 /**
  * The TV show season form validation schema

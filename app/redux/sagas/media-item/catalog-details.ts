@@ -1,4 +1,5 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { AppError } from 'app/data/models/internal/error';
 import { CatalogMediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { mediaItemCatalogControllerFactory } from 'app/controllers/main/entities/media-items/factories';
@@ -7,7 +8,6 @@ import { GET_MEDIA_ITEM_CATALOG_DETAILS } from 'app/redux/actions/media-item/con
 import { completeGettingMediaItemCatalogDetails, failGettingMediaItemCatalogDetails, startGettingMediaItemCatalogDetails } from 'app/redux/actions/media-item/generators';
 import { GetMediaItemCatalogDetailsAction } from 'app/redux/actions/media-item/types';
 import { State } from 'app/redux/state/state';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Worker saga that gets the media item catalog details
@@ -20,7 +20,7 @@ const getMediaItemCatalogDetailsSaga = function * (action: GetMediaItemCatalogDe
 		// Get values from state
 		const state = (yield select()) as State;
 		const category = state.categoryGlobal.selectedCategory;
-		if(!category) {
+		if (!category) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find category while getting media item catalog details');
 		}
 		

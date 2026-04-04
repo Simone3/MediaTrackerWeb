@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
+import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from './media-item';
 import { movieFormValidationSchema, normalizeMovieFormValues } from 'app/components/presentational/media-item/details/form/data/movie';
 import { DEFAULT_CATALOG_MOVIE, MovieInternal } from 'app/data/models/internal/media-items/movie';
 import { MovieFormViewComponent } from 'app/components/presentational/media-item/details/form/view/movie';
-import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from './media-item';
 
 /**
  * Presentational component that handles the Formik wrapper component for the movie form

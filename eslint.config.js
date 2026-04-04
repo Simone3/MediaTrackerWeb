@@ -1,19 +1,115 @@
 const { defineConfig } = require('eslint/config');
 const js = require('@eslint/js');
+const stylisticPlugin = require('@stylistic/eslint-plugin');
 const globals = require('globals');
 const tsPlugin = require('@typescript-eslint/eslint-plugin');
 const tsParser = require('@typescript-eslint/parser');
 const importPlugin = require('eslint-plugin-import');
+const jestPlugin = require('eslint-plugin-jest');
 const jsdocPlugin = require('eslint-plugin-jsdoc');
 const reactPlugin = require('eslint-plugin-react');
+
+const sharedFiles = [ 'app/**/*.ts', 'app/**/*.tsx', 'tests/**/*.ts', 'tests/**/*.tsx', 'index.tsx' ];
+const testFiles = [ 'tests/**/*.ts', 'tests/**/*.tsx' ];
+const importResolverExtensions = [ '.js', '.jsx', '.ts', '.tsx', '.d.ts', '.json', '.css', '.svg', '.png' ];
+
+const stylisticRules = {
+	'@stylistic/indent': [ 'warn', 'tab', { SwitchCase: 1 }],
+	'@stylistic/comma-dangle': [ 'warn', 'never' ],
+	'@stylistic/no-extra-parens': [ 'warn', 'all', {
+		conditionalAssign: false,
+		ignoreJSX: 'all',
+		nestedBinaryExpressions: false,
+		returnAssign: false
+	}],
+	'@stylistic/no-extra-semi': 'warn',
+	'@stylistic/no-floating-decimal': 'warn',
+	'@stylistic/block-spacing': [ 'warn', 'always' ],
+	'@stylistic/brace-style': [ 'warn', 'stroustrup', { allowSingleLine: false }],
+	'@stylistic/comma-spacing': [ 'warn', { before: false, after: true }],
+	'@stylistic/comma-style': [ 'warn', 'last' ],
+	'@stylistic/computed-property-spacing': [ 'warn', 'never' ],
+	'@stylistic/eol-last': 'warn',
+	'@stylistic/function-call-spacing': [ 'warn', 'never' ],
+	'@stylistic/function-paren-newline': [ 'warn', 'consistent' ],
+	'@stylistic/generator-star-spacing': [ 'warn', { before: true, after: true }],
+	'@stylistic/jsx-quotes': [ 'warn', 'prefer-single' ],
+	'@stylistic/key-spacing': [ 'warn', { beforeColon: false, afterColon: true, mode: 'strict' }],
+	'@stylistic/keyword-spacing': [ 'warn', {
+		before: true,
+		after: true
+	}],
+	'@stylistic/line-comment-position': [ 'warn', { position: 'above' }],
+	'@stylistic/lines-around-comment': [ 'warn', {
+		beforeBlockComment: false,
+		afterBlockComment: false,
+		beforeLineComment: true,
+		afterLineComment: false,
+		allowBlockStart: true,
+		allowBlockEnd: true,
+		allowObjectStart: true,
+		allowObjectEnd: true,
+		allowArrayStart: true,
+		allowArrayEnd: true
+	}],
+	'@stylistic/lines-between-class-members': [ 'warn', 'always', { exceptAfterSingleLine: true }],
+	'@stylistic/max-statements-per-line': [ 'warn', { max: 1 }],
+	'@stylistic/multiline-comment-style': [ 'warn', 'separate-lines' ],
+	'@stylistic/multiline-ternary': [ 'warn', 'always-multiline' ],
+	'@stylistic/new-parens': 'warn',
+	'@stylistic/newline-per-chained-call': [ 'warn', { ignoreChainWithDepth: 4 }],
+	'@stylistic/no-confusing-arrow': 'warn',
+	'@stylistic/no-mixed-spaces-and-tabs': [ 'warn' ],
+	'@stylistic/no-multi-spaces': 'warn',
+	'@stylistic/no-multiple-empty-lines': [ 'warn', { max: 1 }],
+	'@stylistic/no-trailing-spaces': [ 'warn', {
+		ignoreComments: false,
+		skipBlankLines: true
+	}],
+	'@stylistic/no-whitespace-before-property': 'warn',
+	'@stylistic/object-curly-newline': [ 'warn', {
+		ObjectExpression: { consistent: true },
+		ObjectPattern: { consistent: true }
+	}],
+	'@stylistic/object-curly-spacing': [ 'warn', 'always' ],
+	'@stylistic/object-property-newline': [ 'warn', { allowAllPropertiesOnSameLine: true }],
+	'@stylistic/one-var-declaration-per-line': [ 'warn', 'always' ],
+	'@stylistic/operator-linebreak': [ 'warn', 'after' ],
+	'@stylistic/quote-props': [ 'warn', 'as-needed' ],
+	'@stylistic/quotes': [ 'warn', 'single', { avoidEscape: false, allowTemplateLiterals: 'always' }],
+	'@stylistic/semi': [ 'warn', 'always' ],
+	'@stylistic/semi-spacing': [ 'warn', { before: false, after: true }],
+	'@stylistic/semi-style': [ 'warn', 'last' ],
+	'@stylistic/space-before-blocks': [ 'warn', 'always' ],
+	'@stylistic/space-before-function-paren': [ 'warn', 'never' ],
+	'@stylistic/space-in-parens': [ 'warn', 'never' ],
+	'@stylistic/space-infix-ops': [ 'warn', { int32Hint: false }],
+	'@stylistic/space-unary-ops': [ 'warn', { words: true, nonwords: false }],
+	'@stylistic/spaced-comment': [ 'warn', 'always' ],
+	'@stylistic/switch-colon-spacing': [ 'warn', { after: true, before: false }],
+	'@stylistic/template-curly-spacing': [ 'warn', 'never' ],
+	'@stylistic/wrap-iife': [ 'warn', 'inside' ],
+	'@stylistic/yield-star-spacing': [ 'warn', { before: true, after: true }]
+};
+
+const jestRules = {
+	'jest/no-commented-out-tests': 'warn',
+	'jest/no-disabled-tests': 'warn',
+	'jest/no-focused-tests': 'error',
+	'jest/no-identical-title': 'error',
+	'jest/no-test-prefixes': 'error',
+	'jest/valid-describe-callback': 'error',
+	'jest/valid-expect': 'error'
+};
 
 module.exports = defineConfig([
 	js.configs.recommended,
 	...tsPlugin.configs['flat/recommended-type-checked'],
 	importPlugin.flatConfigs.typescript,
 	{
-		files: [ 'app/**/*.ts', 'app/**/*.tsx', 'tests/**/*.ts', 'tests/**/*.tsx', 'index.tsx' ],
+		files: sharedFiles,
 		plugins: {
+			'@stylistic': stylisticPlugin,
 			jsdoc: jsdocPlugin,
 			react: reactPlugin
 		},
@@ -47,6 +143,15 @@ module.exports = defineConfig([
 			},
 			'import/parsers': {
 				'@typescript-eslint/parser': [ '.ts', '.tsx' ]
+			},
+			'import/resolver': {
+				typescript: {
+					alwaysTryTypes: true,
+					project: './tsconfig.json'
+				},
+				node: {
+					extensions: importResolverExtensions
+				}
 			}
 		},
 		rules: {
@@ -65,9 +170,12 @@ module.exports = defineConfig([
 			'@typescript-eslint/no-unused-vars': [ 'warn', { vars: 'all', args: 'after-used' }],
 			'@typescript-eslint/no-use-before-define': [ 'error', { typedefs: false }],
 
+			/* ************* @stylistic ************* */
+
+			...stylisticRules,
+
 			/* ************* eslint ************* */
 
-			'comma-dangle': [ 'warn', 'never' ],
 			'for-direction': 'warn',
 			'getter-return': [ 'warn', { allowImplicit: true }],
 			'no-await-in-loop': 'off',
@@ -84,14 +192,6 @@ module.exports = defineConfig([
 			'no-empty-character-class': 'warn',
 			'no-ex-assign': 'warn',
 			'no-extra-boolean-cast': 'warn',
-			'no-extra-parens': [ 'warn', 'all', {
-				conditionalAssign: false,
-				enforceForArrowConditionals: false,
-				ignoreJSX: 'all',
-				nestedBinaryExpressions: false,
-				returnAssign: false
-			}],
-			'no-extra-semi': 'warn',
 			'no-func-assign': 'warn',
 			'no-inner-declarations': [ 'warn', 'both' ],
 			'no-invalid-regexp': 'warn',
@@ -127,7 +227,6 @@ module.exports = defineConfig([
 			'no-extra-bind': 'warn',
 			'no-extra-label': 'warn',
 			'no-fallthrough': 'warn',
-			'no-floating-decimal': 'warn',
 			'no-global-assign': 'warn',
 			'no-implicit-coercion': 'warn',
 			'no-implicit-globals': 'warn',
@@ -138,13 +237,13 @@ module.exports = defineConfig([
 			'no-lone-blocks': 'warn',
 			'no-loop-func': 'warn',
 			'no-magic-numbers': 'off',
-			'no-multi-spaces': 'warn',
 			'no-multi-str': 'warn',
 			'no-new': 'warn',
 			'no-new-func': 'warn',
 			'no-new-wrappers': 'warn',
 			'no-octal': 'warn',
 			'no-octal-escape': 'warn',
+			'no-object-constructor': 'warn',
 			'no-param-reassign': 'off',
 			'no-proto': 'warn',
 			'no-redeclare': 'warn',
@@ -166,11 +265,8 @@ module.exports = defineConfig([
 			'no-with': 'warn',
 			radix: 'warn',
 			'vars-on-top': 'warn',
-			'wrap-iife': [ 'warn', 'inside' ],
-			yoda: [ 'warn', 'never' ],
 			strict: [ 'warn', 'global' ],
 			'init-declarations': 'off',
-			'no-catch-shadow': 'warn',
 			'no-delete-var': 'warn',
 			'no-label-var': 'warn',
 			'no-restricted-globals': 'warn',
@@ -186,30 +282,16 @@ module.exports = defineConfig([
 			'no-buffer-constructor': 'warn',
 			'no-mixed-requires': [ 'warn', true ],
 			'no-new-require': 'warn',
+			'no-new-native-nonconstructor': 'warn',
 			'no-path-concat': 'warn',
 			'no-process-env': 'warn',
 			'no-process-exit': 'warn',
 			'no-restricted-modules': 'off',
 			'no-sync': [ 'warn', { allowAtRootLevel: false }],
-			'array-bracket-newline': 'off',
-			'array-bracket-spacing': [ 'warn', 'always', {
-				singleValue: true,
-				objectsInArrays: false,
-				arraysInArrays: false
-			}],
-			'array-element-newline': 'off',
-			'block-spacing': [ 'warn', 'always' ],
-			'brace-style': [ 'warn', 'stroustrup', { allowSingleLine: false }],
-			'comma-spacing': [ 'warn', { before: false, after: true }],
-			'comma-style': [ 'warn', 'last' ],
-			'computed-property-spacing': [ 'warn', 'never' ],
 			'consistent-this': [ 'warn', 'that' ],
-			'eol-last': 'warn',
 			'func-names': 'off',
-			'func-call-spacing': [ 'warn', 'never' ],
 			'func-name-matching': 'off',
 			'func-style': [ 'warn', 'expression' ],
-			'function-paren-newline': [ 'warn', 'consistent' ],
 			'id-blacklist': 'off',
 			'id-length': [ 'warn', {
 				min: 1,
@@ -218,105 +300,32 @@ module.exports = defineConfig([
 				exceptions: [ '_', 'i', 'j', 'x', 'y', 'z', 'q' ]
 			}],
 			'id-match': 'off',
-			'implicit-arrow-linebreak': 'off',
-			'jsx-quotes': [ 'warn', 'prefer-single' ],
-			'key-spacing': [ 'warn', { beforeColon: false, afterColon: true, mode: 'strict' }],
-			'keyword-spacing': [ 'warn', {
-				before: true,
-				after: false,
-				overrides: {
-					else: { after: true },
-					import: { after: true },
-					export: { after: true },
-					from: { after: true },
-					return: { after: true },
-					case: { after: true },
-					try: { after: true },
-					finally: { after: true },
-					const: { after: true },
-					throw: { after: true }
-				}
-			}],
-			'line-comment-position': [ 'warn', { position: 'above' }],
-			'lines-around-comment': [ 'warn', {
-				beforeBlockComment: false,
-				afterBlockComment: false,
-				beforeLineComment: true,
-				afterLineComment: false,
-				allowBlockStart: true,
-				allowBlockEnd: true,
-				allowObjectStart: true,
-				allowObjectEnd: true,
-				allowArrayStart: true,
-				allowArrayEnd: true
-			}],
-			'lines-between-class-members': [ 'warn', 'always', { exceptAfterSingleLine: true }],
 			'max-depth': 'off',
-			'max-len': 'off',
 			'max-nested-callbacks': 'off',
 			'max-params': 'off',
 			'max-statements': 'off',
-			'max-statements-per-line': [ 'warn', { max: 1 }],
-			'multiline-comment-style': [ 'warn', 'separate-lines' ],
-			'multiline-ternary': [ 'warn', 'always-multiline' ],
-			'new-parens': 'warn',
-			'newline-per-chained-call': [ 'warn', { ignoreChainWithDepth: 4 }],
 			'no-array-constructor': 'warn',
 			'no-bitwise': 'warn',
 			'no-continue': 'off',
 			'no-inline-comments': 'warn',
 			'no-lonely-if': 'warn',
-			'no-mixed-spaces-and-tabs': [ 'warn' ],
-			'no-multiple-empty-lines': [ 'warn', { max: 1 }],
 			'no-negated-condition': 'off',
 			'no-nested-ternary': 'warn',
-			'no-new-object': 'warn',
 			'no-plusplus': [ 'warn', { allowForLoopAfterthoughts: true }],
 			'no-restricted-syntax': 'off',
 			'no-ternary': 'off',
-			'no-trailing-spaces': [ 'warn', {
-				ignoreComments: false,
-				skipBlankLines: true
-			}],
 			'no-unneeded-ternary': 'warn',
-			'no-whitespace-before-property': 'warn',
-			'object-curly-newline': [ 'warn', {
-				ObjectExpression: { consistent: true },
-				ObjectPattern: { consistent: true }
-			}],
-			'object-curly-spacing': [ 'warn', 'always' ],
-			'object-property-newline': [ 'warn', { allowAllPropertiesOnSameLine: true }],
 			'one-var': 'off',
-			'one-var-declaration-per-line': [ 'warn', 'always' ],
 			'operator-assignment': [ 'warn', 'always' ],
-			'operator-linebreak': [ 'warn', 'after' ],
-			'quote-props': [ 'warn', 'as-needed' ],
-			quotes: [ 'warn', 'single', { avoidEscape: false, allowTemplateLiterals: true }],
 			'require-jsdoc': 'off',
-			semi: [ 'warn', 'always' ],
-			'semi-spacing': [ 'warn', { before: false, after: true }],
-			'semi-style': [ 'warn', 'last' ],
 			'sort-keys': [ 0 ],
 			'sort-vars': [ 'warn', { ignoreCase: true }],
-			'space-before-blocks': [ 'warn', 'always' ],
-			'space-before-function-paren': [ 'warn', 'never' ],
-			'space-in-parens': [ 'warn', 'never' ],
-			'space-infix-ops': [ 'warn', { int32Hint: false }],
-			'space-unary-ops': [ 'warn', { words: true, nonwords: false }],
-			'spaced-comment': [ 'warn', 'always' ],
-			'switch-colon-spacing': [ 'warn', { after: true, before: false }],
-			'wrap-regex': 'off',
 			'arrow-body-style': [ 'warn', 'always' ],
-			'arrow-parens': [ 'warn', 'always' ],
-			'arrow-spacing': [ 'warn', { before: true, after: true }],
 			'constructor-super': 'warn',
-			'generator-star-spacing': [ 'warn', { before: true, after: true }],
 			'no-class-assign': 'warn',
-			'no-confusing-arrow': 'warn',
 			'no-const-assign': 'warn',
 			'no-dupe-class-members': 'off',
 			'no-duplicate-imports': 'warn',
-			'no-new-symbol': 'warn',
 			'no-restricted-imports': 'off',
 			'no-this-before-super': 'warn',
 			'no-useless-computed-key': 'warn',
@@ -330,8 +339,6 @@ module.exports = defineConfig([
 			'prefer-template': 'warn',
 			'require-yield': 'warn',
 			'symbol-description': 'warn',
-			'template-curly-spacing': [ 'warn', 'never' ],
-			'yield-star-spacing': [ 'warn', { before: true, after: true }],
 
 			/* ************* eslint-plugin-jsdoc ************* */
 
@@ -354,7 +361,7 @@ module.exports = defineConfig([
 
 			/* ************* eslint-plugin-import ************* */
 
-			'import/no-unresolved': 'off',
+			'import/no-unresolved': 'error',
 			'import/named': 'off',
 			'import/default': 'warn',
 			'import/namespace': 'off',
@@ -362,13 +369,13 @@ module.exports = defineConfig([
 			'import/no-absolute-path': 'off',
 			'import/no-dynamic-require': 'warn',
 			'import/no-internal-modules': [ 'warn', {
-				allow: [ 'request-promise-native/errors', '@redux-saga/**', 'react-navigation-stack/lib/typescript/types', 'react-dom/client', 'firebase/**' ]
+				allow: [ 'app/**', 'tests/**', 'request-promise-native/errors', '@redux-saga/**', 'react-navigation-stack/lib/typescript/types', 'react-dom/client', 'firebase/**' ]
 			}],
 			'import/no-webpack-loader-syntax': 'off',
 			'import/no-self-import': 'off',
 			'import/no-cycle': 'off',
 			'import/no-useless-path-segments': 'off',
-			'import/no-relative-parent-imports': 'warn',
+			'import/no-relative-parent-imports': 'off',
 			'import/no-unused-modules': 'off',
 
 			'import/export': 'warn',
@@ -387,7 +394,7 @@ module.exports = defineConfig([
 			'import/exports-last': 'off',
 			'import/no-duplicates': 'warn',
 			'import/no-namespace': 'warn',
-			'import/extensions': [ 'warn', 'never', { png: 'off', svg: 'off' }],
+			'import/extensions': [ 'warn', 'never', { png: 'off', svg: 'off', css: 'always', json: 'always' }],
 			'import/order': 'warn',
 			'import/newline-after-import': 'warn',
 			'import/prefer-default-export': 'off',
@@ -406,13 +413,22 @@ module.exports = defineConfig([
 		}
 	},
 	{
-		files: [ 'tests/**/*.ts', 'tests/**/*.tsx' ],
+		files: testFiles,
+		plugins: {
+			jest: jestPlugin
+		},
 		languageOptions: {
 			globals: {
 				...globals.jest
 			}
 		},
+		settings: {
+			jest: {
+				version: require('jest/package.json').version
+			}
+		},
 		rules: {
+			...jestRules,
 			'@typescript-eslint/explicit-function-return-type': 'off',
 			'@typescript-eslint/no-deprecated': 'off',
 			'@typescript-eslint/no-floating-promises': 'off',

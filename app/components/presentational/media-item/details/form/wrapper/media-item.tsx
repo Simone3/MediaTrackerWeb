@@ -31,7 +31,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 	public componentDidMount(): void {
 		this.checkRestoreDraft();
 
-		if(this.props.restoredDraft && this.props.catalogDetails?.catalogLoadId) {
+		if (this.props.restoredDraft && this.props.catalogDetails?.catalogLoadId) {
 			this.loadedCatalogId = this.props.catalogDetails.catalogLoadId;
 		}
 		else {
@@ -46,13 +46,13 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 	 * @override
 	 */
 	public componentDidUpdate(prevProps: Readonly<CommonMediaItemFormComponentProps<TMediaItem>>): void {
-		if(prevProps.initialValues.id !== this.props.initialValues.id ||
+		if (prevProps.initialValues.id !== this.props.initialValues.id ||
 			prevProps.initialValues.mediaType !== this.props.initialValues.mediaType) {
 			this.initialDraftHandled = false;
 			this.loadedCatalogId = undefined;
 		}
 
-		if(shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
+		if (shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
 			this.setState({
 				confirmSameNameVisible: true
 			});
@@ -153,7 +153,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 										confirmReloadCatalogVisible: false,
 										pendingReloadCatalogId: undefined
 									}, () => {
-										if(pendingReloadCatalogId) {
+										if (pendingReloadCatalogId) {
 											this.props.loadMediaItemCatalogDetails(pendingReloadCatalogId);
 										}
 									});
@@ -187,7 +187,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 	 * @returns normalized values
 	 */
 	private normalizeFormValues(values: TMediaItem): TMediaItem {
-		if(this.props.normalizeFormValues) {
+		if (this.props.normalizeFormValues) {
 			return this.props.normalizeFormValues(values);
 		}
 
@@ -219,13 +219,13 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 	 * Restores the current draft once after the form has mounted
 	 */
 	private checkRestoreDraft(): void {
-		if(this.initialDraftHandled || !this.formikProps) {
+		if (this.initialDraftHandled || !this.formikProps) {
 			return;
 		}
 
 		this.initialDraftHandled = true;
 
-		if(this.props.restoredDraft) {
+		if (this.props.restoredDraft) {
 			void this.formikProps.setValues({
 				...this.props.restoredDraft
 			});
@@ -240,7 +240,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 			catalogDetails
 		} = this.props;
 
-		if(!this.formikProps || !catalogDetails || this.loadedCatalogId === catalogDetails.catalogLoadId) {
+		if (!this.formikProps || !catalogDetails || this.loadedCatalogId === catalogDetails.catalogLoadId) {
 			return;
 		}
 
@@ -255,7 +255,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 			...catalogValues
 		};
 
-		if(this.props.onLoadCatalogDetails) {
+		if (this.props.onLoadCatalogDetails) {
 			nextValues = this.props.onLoadCatalogDetails(this.formikProps.values, nextValues);
 		}
 
@@ -266,7 +266,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 	 * Loads the selected group from Redux into the form
 	 */
 	private loadSelectedGroup(): void {
-		if(!this.formikProps) {
+		if (!this.formikProps) {
 			return;
 		}
 
@@ -281,7 +281,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 		const currentGroupId = this.props.restoredDraft?.group?.id || this.props.initialValues.group?.id;
 		const currentOrderInGroup = this.props.restoredDraft?.orderInGroup ?? this.props.initialValues.orderInGroup;
 
-		if(this.props.selectedGroup?.id !== currentGroupId ||
+		if (this.props.selectedGroup?.id !== currentGroupId ||
 			(!this.props.selectedGroup && currentOrderInGroup !== undefined)) {
 			this.loadSelectedGroup();
 		}
@@ -291,7 +291,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 	 * Checks if the selected group has changed in Redux
 	 */
 	private checkLoadSelectedGroup(): void {
-		if(!this.formikProps || this.props.selectedGroup?.id === this.formikProps.values.group?.id) {
+		if (!this.formikProps || this.props.selectedGroup?.id === this.formikProps.values.group?.id) {
 			return;
 		}
 
@@ -302,7 +302,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 	 * Loads the selected own platform from Redux into the form
 	 */
 	private loadSelectedOwnPlatform(): void {
-		if(!this.formikProps) {
+		if (!this.formikProps) {
 			return;
 		}
 
@@ -315,7 +315,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 	private checkLoadSelectedOwnPlatformOnMount(): void {
 		const currentOwnPlatformId = this.props.restoredDraft?.ownPlatform?.id || this.props.initialValues.ownPlatform?.id;
 
-		if(this.props.selectedOwnPlatform?.id !== currentOwnPlatformId) {
+		if (this.props.selectedOwnPlatform?.id !== currentOwnPlatformId) {
 			this.loadSelectedOwnPlatform();
 		}
 	}
@@ -324,7 +324,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 	 * Checks if the selected own platform has changed in Redux
 	 */
 	private checkLoadSelectedOwnPlatform(): void {
-		if(!this.formikProps || this.props.selectedOwnPlatform?.id === this.formikProps.values.ownPlatform?.id) {
+		if (!this.formikProps || this.props.selectedOwnPlatform?.id === this.formikProps.values.ownPlatform?.id) {
 			return;
 		}
 
@@ -346,7 +346,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 	 * Saves the current Formik values after the user confirmed the duplicate-name alert
 	 */
 	private submitFormWithSameNameConfirmation(): void {
-		if(this.formikProps) {
+		if (this.formikProps) {
 			this.props.saveMediaItem(this.normalizeFormValues(this.formikProps.values), true);
 		}
 	}

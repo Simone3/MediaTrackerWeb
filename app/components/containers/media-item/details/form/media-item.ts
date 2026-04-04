@@ -1,3 +1,4 @@
+import { Dispatch } from 'redux';
 import { requestGroupSelection } from 'app/redux/actions/group/generators';
 import { getMediaItemCatalogDetails, resetMediaItemsCatalogSearch, saveMediaItem, searchMediaItemsCatalog, setMediaItemFormDraft, setMediaItemFormStatus } from 'app/redux/actions/media-item/generators';
 import { requestOwnPlatformSelection } from 'app/redux/actions/own-platform/generators';
@@ -5,7 +6,6 @@ import { CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutp
 import { AppError } from 'app/data/models/internal/error';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { State } from 'app/redux/state/state';
-import { Dispatch } from 'redux';
 
 /**
  * Common helper to build the saved media-item values used as Formik initial values
@@ -17,7 +17,7 @@ const buildInitialMediaItemFormValues = (state: State): MediaItemInternal => {
 		mediaItem
 	} = state.mediaItemDetails;
 
-	if(!mediaItem) {
+	if (!mediaItem) {
 		throw AppError.GENERIC.withDetails('App navigated to the media item form with undefined details');
 	}
 
@@ -36,7 +36,7 @@ const buildRestoredMediaItemFormDraft = (state: State): MediaItemInternal | unde
 		formDraft
 	} = state.mediaItemDetails;
 
-	if(!formDraft) {
+	if (!formDraft) {
 		return undefined;
 	}
 
@@ -57,7 +57,7 @@ export const commonMediaItemFormMapStateToProps = (state: State): CommonMediaIte
 	const groupsLoading = state.groupsList.status === 'DELETING' || state.groupsList.status === 'FETCHING';
 	const platformsLoading = state.ownPlatformsList.status === 'DELETING' || state.ownPlatformsList.status === 'FETCHING';
 
-	if(!details.mediaItem) {
+	if (!details.mediaItem) {
 		throw AppError.GENERIC.withDetails('App navigated to the media item form with undefined details');
 	}
 

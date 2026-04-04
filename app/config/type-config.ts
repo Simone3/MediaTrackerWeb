@@ -46,4 +46,4 @@ export type Config = {
 		logInvocations: boolean;
 		logMapping: boolean;
 	};
-}
+};

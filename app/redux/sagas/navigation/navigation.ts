@@ -1,4 +1,6 @@
 import { call, put, takeLatest } from '@redux-saga/core/effects';
+import { Action } from 'redux';
+import { SagaIterator } from 'redux-saga';
 import { AppError } from 'app/data/models/internal/error';
 import { COMPLETE_SAVING_CATEGORY, LOAD_CATEGORY_DETAILS, LOAD_NEW_CATEGORY_DETAILS, SELECT_CATEGORY } from 'app/redux/actions/category/const';
 import { setError } from 'app/redux/actions/error/generators';
@@ -8,8 +10,6 @@ import { COMPLETE_SAVING_OWN_PLATFORM, LOAD_NEW_OWN_PLATFORM_DETAILS, LOAD_OWN_P
 import { COMPLETE_SAVING_TV_SHOW_SEASON, COMPLETE_TV_SHOW_SEASONS_HANDLING, LOAD_NEW_TV_SHOW_SEASON_DETAILS, LOAD_TV_SHOW_SEASON_DETAILS, START_TV_SHOW_SEASONS_HANDLING } from 'app/redux/actions/tv-show-season/const';
 import { navigationService } from 'app/utilities/navigation-service';
 import { AppScreens } from 'app/utilities/screens';
-import { Action } from 'redux';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * All actions that trigger navigation
@@ -45,7 +45,7 @@ const navigationActions = [
  */
 const navigationSaga = function * (action: Action): SagaIterator {
 	try {
-		switch(action.type) {
+		switch (action.type) {
 			case SELECT_CATEGORY: {
 				yield call(navigationService.navigate.bind(navigationService), AppScreens.MediaItemsList);
 				break;

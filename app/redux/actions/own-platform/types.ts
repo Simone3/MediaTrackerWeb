@@ -1,5 +1,5 @@
-import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { Action } from 'redux';
+import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 
 /**
  * The fetch own platforms action

@@ -22,7 +22,7 @@ export class TvShowSeasonFormViewComponent extends Component<TvShowSeasonFormVie
 		const validChanged = prevProps.isValid !== this.props.isValid;
 		const dirtyChanged = prevProps.dirty !== this.props.dirty;
 
-		if(validChanged || dirtyChanged) {
+		if (validChanged || dirtyChanged) {
 			this.notifyFormStatus();
 		}
 	}
@@ -117,7 +117,7 @@ type TvShowSeasonFormViewComponentInput = {
 	 * If we are adding a new season (true) or updating an existing one (false)
 	 */
 	addingNewSeason: boolean;
-}
+};
 
 type TvShowSeasonFormViewComponentOutput = {
 	/**
@@ -126,7 +126,7 @@ type TvShowSeasonFormViewComponentOutput = {
 	 * @param dirty true if the form is dirty, i.e. one or more fields are different from initial values
 	 */
 	notifyFormStatus: (valid: boolean, dirty: boolean) => void;
-}
+};
 
 /**
  * All props of TvShowSeasonFormViewComponent

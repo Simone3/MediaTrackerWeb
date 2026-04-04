@@ -1,8 +1,8 @@
+import { ObjectSchema, object } from 'yup';
 import { MediaItemFilterFormMapper, MediaItemFilterFormSortBy, MediaItemFilterFormValues, mediaItemFilterFormValidationShape } from 'app/components/presentational/media-item/list/filter-form/data/media-item';
 import { tvShowDefinitionsController } from 'app/controllers/main/entities/media-items-definitions/tv-show';
 import { AppError } from 'app/data/models/internal/error';
 import { TvShowFilterInternal, TvShowSortByInternal } from 'app/data/models/internal/media-items/tv-show';
-import { ObjectSchema, object } from 'yup';
 
 /**
  * The TV show filter form model
@@ -39,7 +39,7 @@ class TvShowFilterFormMapper extends MediaItemFilterFormMapper<TvShowFilterInter
 	 * @override
 	 */
 	public toSortByModel(formValues: TvShowFilterFormValues): TvShowSortByInternal[] {
-		switch(formValues.sortBy) {
+		switch (formValues.sortBy) {
 			case 'DEFAULT':
 				return tvShowDefinitionsController.getDefaultSortBy();
 
@@ -66,11 +66,11 @@ class TvShowFilterFormMapper extends MediaItemFilterFormMapper<TvShowFilterInter
 	 * @returns the target
 	 */
 	private toSortByFormValue(sortBy: TvShowSortByInternal[]): MediaItemFilterFormSortBy {
-		if(sortBy.length === 1) {
-			if(sortBy[0].field === 'NAME') {
+		if (sortBy.length === 1) {
+			if (sortBy[0].field === 'NAME') {
 				return 'NAME';
 			}
-			if(sortBy[0].field === 'COMPLETION_DATE') {
+			if (sortBy[0].field === 'COMPLETION_DATE') {
 				return 'COMPLETION_DATE';
 			}
 		}

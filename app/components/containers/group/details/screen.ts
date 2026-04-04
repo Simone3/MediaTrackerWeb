@@ -1,10 +1,10 @@
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { GroupDetailsScreenComponent, GroupDetailsScreenComponentInput, GroupDetailsScreenComponentOutput } from 'app/components/presentational/group/details/screen';
 import { DEFAULT_GROUP } from 'app/data/models/internal/group';
 import { saveGroup, setGroupFormStatus } from 'app/redux/actions/group/generators';
 import { State } from 'app/redux/state/state';
 import { navigationService } from 'app/utilities/navigation-service';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: State): GroupDetailsScreenComponentInput => {
 	return {

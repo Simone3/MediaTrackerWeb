@@ -1,4 +1,5 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { categoryController } from 'app/controllers/main/entities/category';
 import { AppError } from 'app/data/models/internal/error';
 import { DELETE_CATEGORY } from 'app/redux/actions/category/const';
@@ -6,7 +7,6 @@ import { completeDeletingCategory, failDeletingCategory, startDeletingCategory }
 import { DeleteCategoryAction } from 'app/redux/actions/category/types';
 import { setError } from 'app/redux/actions/error/generators';
 import { State } from 'app/redux/state/state';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Worker saga that deletes a category
@@ -19,7 +19,7 @@ const deleteCategorySaga = function * (action: DeleteCategoryAction): SagaIterat
 		// Get values from state
 		const state = (yield select()) as State;
 		const user = state.userGlobal.user;
-		if(!user) {
+		if (!user) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while deleting category');
 		}
 

@@ -12,7 +12,7 @@ export class MediaItemFilterModalComponent extends Component<MediaItemFilterModa
 	 * @override
 	 */
 	public render(): ReactNode {
-		if(!this.props.visible) {
+		if (!this.props.visible) {
 			return null;
 		}
 
@@ -70,7 +70,7 @@ export type MediaItemFilterModalComponentInput = {
 	 * If the component should be displayed at this moment
 	 */
 	visible: boolean;
-}
+};
 
 /**
  * MediaItemFilterModalComponent's output props
@@ -85,7 +85,7 @@ export type MediaItemFilterModalComponentOutput = {
 	 * Callback when the component requests to be closed
 	 */
 	close: () => void;
-}
+};
 
 /**
  * MediaItemFilterModalComponent's props

@@ -1,4 +1,5 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { ownPlatformController } from 'app/controllers/main/entities/own-platform';
 import { AppError } from 'app/data/models/internal/error';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
@@ -6,7 +7,6 @@ import { setError } from 'app/redux/actions/error/generators';
 import { FETCH_OWN_PLATFORMS } from 'app/redux/actions/own-platform/const';
 import { completeFetchingOwnPlatforms, failFetchingOwnPlatforms, startFetchingOwnPlatforms } from 'app/redux/actions/own-platform/generators';
 import { State } from 'app/redux/state/state';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Worker saga that fetches the own platforms
@@ -19,7 +19,7 @@ const fetchOwnPlatformsSaga = function * (): SagaIterator {
 		const state = (yield select()) as State;
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
-		if(!category || !user) {
+		if (!category || !user) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while fetching own platforms');
 		}
 

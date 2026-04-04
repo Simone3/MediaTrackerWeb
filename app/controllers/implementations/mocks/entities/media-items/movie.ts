@@ -7,7 +7,7 @@ import { CatalogMovieInternal, MovieFilterInternal, MovieInternal, MovieSortByIn
  * @see MovieController
  */
 export class MovieMockedController extends MediaItemMockedController<MovieInternal, MovieSortByInternal, MovieFilterInternal> implements MovieController {
-	protected readonly mediaItems: {[user: string]: {[category: string]: MovieInternal[]}} = {
+	protected readonly mediaItems: { [user: string]: { [category: string]: MovieInternal[] } } = {
 		test: {
 			2: [{
 				id: '1',
@@ -102,7 +102,7 @@ export class MovieMockedCatalogController extends MediaItemMockedCatalogControll
 		releaseDate: new Date(2012, 12, 12)
 	}];
 
-	protected readonly catalogDetails: {[catalogId: string]: CatalogMovieInternal} = {
+	protected readonly catalogDetails: { [catalogId: string]: CatalogMovieInternal } = {
 		1: {
 			catalogId: '1',
 			catalogLoadId: '',

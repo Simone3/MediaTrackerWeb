@@ -78,7 +78,7 @@ export abstract class ModelMapper<TInternal, TExternal, TParams> {
 	 * @param target the mapping target
 	 */
 	private logMapping(source: unknown, target: unknown): void {
-		if(config.logging.logMapping) {
+		if (config.logging.logMapping) {
 			console.log(`Mapping: ${JSON.stringify(source)} --------> ${JSON.stringify(target)}`);
 		}
 	}

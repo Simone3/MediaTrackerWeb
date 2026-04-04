@@ -81,7 +81,7 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 	 * Helper to invoke the fetch callback if the input fetch flag is true
 	 */
 	private requestFetchIfRequired(): void {
-		if(this.props.requiresFetch) {
+		if (this.props.requiresFetch) {
 			this.props.fetchCategories();
 		}
 	}
@@ -92,7 +92,7 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 	private handleResize = (): void => {
 		const isMobileLayout = this.isMobileLayout();
 
-		if(isMobileLayout !== this.state.isMobileLayout) {
+		if (isMobileLayout !== this.state.isMobileLayout) {
 			this.setState({
 				isMobileLayout
 			});
@@ -126,7 +126,7 @@ export type CategoriesListScreenComponentInput = {
 	 * Flag to tell if the categories list requires a fetch. If so, on startup or on update the component will invoke the fetch callback.
 	 */
 	requiresFetch: boolean;
-}
+};
 
 /**
  * CategoriesListScreenComponent's output props
@@ -141,8 +141,8 @@ export type CategoriesListScreenComponentOutput = {
 	 * Callback to load the details of a new category
 	 */
 	loadNewCategoryDetails: () => void;
-}
+};
 
 type CategoriesListScreenComponentState = {
 	isMobileLayout: boolean;
-}
+};

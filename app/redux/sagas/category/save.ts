@@ -1,4 +1,5 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { categoryController } from 'app/controllers/main/entities/category';
 import { CategoryFilterInternal, CategoryInternal } from 'app/data/models/internal/category';
 import { AppError } from 'app/data/models/internal/error';
@@ -7,7 +8,6 @@ import { askConfirmationBeforeSavingCategory, completeSavingCategory, failSaving
 import { SaveCategoryAction } from 'app/redux/actions/category/types';
 import { setError } from 'app/redux/actions/error/generators';
 import { State } from 'app/redux/state/state';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Worker saga that saves a category
@@ -22,12 +22,12 @@ const saveCategorySaga = function * (action: SaveCategoryAction): SagaIterator {
 		// Get values from state
 		const state = (yield select()) as State;
 		const user = state.userGlobal.user;
-		if(!user) {
+		if (!user) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while saving category');
 		}
 
 		// If we are adding a new category and the user has not confirmed a same-name creation...
-		if(!category.id && !action.confirmSameName) {
+		if (!category.id && !action.confirmSameName) {
 			// Check if there are other categories with the same name
 			const filter: CategoryFilterInternal = {
 				name: category.name
@@ -35,7 +35,7 @@ const saveCategorySaga = function * (action: SaveCategoryAction): SagaIterator {
 			const mediaItemsWithSameName = (yield call(categoryController.filter.bind(categoryController), user.id, filter)) as CategoryInternal[];
 			
 			// If so, dispatch confirmation request action and exit
-			if(mediaItemsWithSameName.length > 0) {
+			if (mediaItemsWithSameName.length > 0) {
 				yield put(askConfirmationBeforeSavingCategory());
 				return;
 			}

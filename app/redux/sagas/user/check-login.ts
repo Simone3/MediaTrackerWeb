@@ -1,11 +1,11 @@
 import { call, put, takeLatest } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { userController } from 'app/controllers/main/entities/user';
 import { AppError } from 'app/data/models/internal/error';
 import { UserInternal } from 'app/data/models/internal/user';
 import { setError } from 'app/redux/actions/error/generators';
 import { CHECK_USER_LOGIN_STATUS } from 'app/redux/actions/user/const';
 import { completeCheckingUserLoginStatus, failCheckingUserLoginStatus, startCheckingUserLoginStatus } from 'app/redux/actions/user/generators';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Worker saga that checks the user login status

@@ -1,4 +1,5 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { groupController } from 'app/controllers/main/entities/group';
 import { AppError } from 'app/data/models/internal/error';
 import { GroupInternal } from 'app/data/models/internal/group';
@@ -6,7 +7,6 @@ import { setError } from 'app/redux/actions/error/generators';
 import { FETCH_GROUPS } from 'app/redux/actions/group/const';
 import { completeFetchingGroups, failFetchingGroups, startFetchingGroups } from 'app/redux/actions/group/generators';
 import { State } from 'app/redux/state/state';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Worker saga that fetches the groups
@@ -19,7 +19,7 @@ const fetchGroupsSaga = function * (): SagaIterator {
 		const state = (yield select()) as State;
 		const category = state.categoryGlobal.selectedCategory;
 		const user = state.userGlobal.user;
-		if(!category || !user) {
+		if (!category || !user) {
 			throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while fetching groups');
 		}
 

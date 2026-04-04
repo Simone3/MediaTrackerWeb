@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { Store } from 'redux';
+import createSagaMiddleware from 'redux-saga';
 import { loadPersistedReduxState, persistReduxState } from 'app/redux/persistence';
 import { rootReducer } from 'app/redux/reducers/root';
 import { rootSaga } from 'app/redux/sagas/root';
-import { Store } from 'redux';
-import createSagaMiddleware from 'redux-saga';
 
 /**
  * Initializer for Redux and its middlewares

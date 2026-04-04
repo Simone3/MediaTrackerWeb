@@ -1,9 +1,9 @@
 import { ReactElement } from 'react';
 import { Formik, FormikProps } from 'formik';
+import { MediaItemFilterFormComponentInput, MediaItemFilterFormComponentOutput } from './media-item';
 import { BookSortByInternal } from 'app/data/models/internal/media-items/book';
 import { BookFilterFormValues, bookFilterFormMapper, bookFilterFormValidationSchema } from 'app/components/presentational/media-item/list/filter-form/data/book';
 import { BookFilterFormViewComponent } from 'app/components/presentational/media-item/list/filter-form/view/book';
-import { MediaItemFilterFormComponentInput, MediaItemFilterFormComponentOutput } from './media-item';
 
 /**
  * Presentational component that handles the Formik wrapper component for the book filter form

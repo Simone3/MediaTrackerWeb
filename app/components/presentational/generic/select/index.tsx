@@ -25,10 +25,10 @@ const SelectComponentImplementation = (
 			ref={ref}
 			className={resolvedClassName}
 			onChange={(event: ChangeEvent<HTMLSelectElement>) => {
-				if(otherProps.onChange) {
+				if (otherProps.onChange) {
 					otherProps.onChange(event);
 				}
-				if(onChangeValue) {
+				if (onChangeValue) {
 					onChangeValue(event.target.value);
 				}
 			}}

@@ -1,9 +1,9 @@
 import { ReactElement } from 'react';
 import { Formik, FormikProps } from 'formik';
+import { MediaItemFilterFormComponentInput, MediaItemFilterFormComponentOutput } from './media-item';
 import { TvShowSortByInternal } from 'app/data/models/internal/media-items/tv-show';
 import { TvShowFilterFormValues, tvShowFilterFormMapper, tvShowFilterFormValidationSchema } from 'app/components/presentational/media-item/list/filter-form/data/tv-show';
 import { TvShowFilterFormViewComponent } from 'app/components/presentational/media-item/list/filter-form/view/tv-show';
-import { MediaItemFilterFormComponentInput, MediaItemFilterFormComponentOutput } from './media-item';
 
 /**
  * Presentational component that handles the Formik wrapper component for the TV show filter form

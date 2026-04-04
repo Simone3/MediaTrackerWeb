@@ -7,7 +7,7 @@ import { PillButtonComponent } from 'app/components/presentational/generic/pill-
  * @returns the component
  */
 export const ConfirmDialogComponent = (props: ConfirmDialogComponentProps): ReactElement | null => {
-	if(!props.visible) {
+	if (!props.visible) {
 		return null;
 	}
 

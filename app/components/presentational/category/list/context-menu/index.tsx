@@ -16,7 +16,7 @@ export class CategoryContextMenuComponent extends Component<CategoryContextMenuC
 	 * @override
 	 */
 	public componentDidUpdate(prevProps: Readonly<CategoryContextMenuComponentInput & CategoryContextMenuComponentOutput>): void {
-		if(prevProps.category?.id !== this.props.category?.id && this.state.deleteConfirmationVisible) {
+		if (prevProps.category?.id !== this.props.category?.id && this.state.deleteConfirmationVisible) {
 			this.setState({
 				deleteConfirmationVisible: false
 			});
@@ -32,7 +32,7 @@ export class CategoryContextMenuComponent extends Component<CategoryContextMenuC
 			close
 		} = this.props;
 
-		if(!category) {
+		if (!category) {
 			return null;
 		}
 

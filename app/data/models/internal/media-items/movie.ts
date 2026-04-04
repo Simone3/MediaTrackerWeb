@@ -15,14 +15,14 @@ type CoreMovieDataInternal = {
  */
 export type MovieInternal = MediaItemInternal & CoreMovieDataInternal & {
 
-}
+};
 
 /**
  * A filter for movies, internal type just for display purposes
  */
 export type MovieFilterInternal = MediaItemFilterInternal & {
 
-}
+};
 
 /**
  * Sort fields for movies, internal type just for display purposes
@@ -35,7 +35,7 @@ export type MovieSortFieldInternal = MediaItemSortFieldInternal | 'DIRECTOR';
 export type MovieSortByInternal = MediaItemSortByInternal & {
 
 	field: MovieSortFieldInternal;
-}
+};
 
 /**
  * Model for a catalog movie, internal type just for display purposes

@@ -1,6 +1,6 @@
-import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { ObjectSchema, array, boolean, date, number, object, string } from 'yup';
 import { applyNormalizedTextArrayField, mediaItemFormValidationShape, normalizeMediaItemFormValues } from './media-item';
+import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 
 /**
  * The TV show season form validation schema
@@ -50,7 +50,7 @@ export const preserveTvShowSeasonProgress = (currentValues: TvShowInternal, merg
 	const currentSeasons = currentValues.seasons;
 	const newSeasons = mergedValues.seasons;
 
-	if(!newSeasons || newSeasons.length === 0 || !currentSeasons || currentSeasons.length === 0) {
+	if (!newSeasons || newSeasons.length === 0 || !currentSeasons || currentSeasons.length === 0) {
 		return mergedValues;
 	}
 
@@ -61,7 +61,7 @@ export const preserveTvShowSeasonProgress = (currentValues: TvShowInternal, merg
 				return season.number === newSeason.number;
 			});
 
-			if(!currentSeason) {
+			if (!currentSeason) {
 				return newSeason;
 			}
 

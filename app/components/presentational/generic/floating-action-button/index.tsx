@@ -28,7 +28,7 @@ export type FABComponentInput = {
 	 * The text to display on the FAB, it should usually be a 1-character string
 	 */
 	text: string;
-}
+};
 
 /**
  * FABComponent's output props
@@ -38,4 +38,4 @@ export type FABComponentOutput = {
 	 * The FAB press callback
 	 */
 	onPress: () => void;
-}
+};

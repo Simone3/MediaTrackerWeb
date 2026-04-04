@@ -23,7 +23,7 @@ const getPopoverStyle = (
 		'--responsive-action-menu-sheet-width': `${DEFAULT_SHEET_MAX_WIDTH}px`
 	} as CSSProperties;
 
-	if(!anchorRect) {
+	if (!anchorRect) {
 		return {
 			...sharedStyle,
 			top: VIEWPORT_PADDING,
@@ -70,12 +70,12 @@ export const ResponsiveActionMenuComponent = (props: ResponsiveActionMenuCompone
 	const popoverHeight = MENU_HEADER_HEIGHT + (actions.length * MENU_ACTION_HEIGHT);
 
 	useEffect(() => {
-		if(!visible) {
+		if (!visible) {
 			return;
 		}
 
 		const handleKeyDown = (event: KeyboardEvent): void => {
-			if(event.key === 'Escape' && !escapeDisabled) {
+			if (event.key === 'Escape' && !escapeDisabled) {
 				onClose();
 			}
 		};
@@ -95,7 +95,7 @@ export const ResponsiveActionMenuComponent = (props: ResponsiveActionMenuCompone
 		};
 	}, [ escapeDisabled, onClose, visible ]);
 
-	if(!visible) {
+	if (!visible) {
 		return null;
 	}
 
@@ -124,7 +124,7 @@ export const ResponsiveActionMenuComponent = (props: ResponsiveActionMenuCompone
 		</>
 	);
 
-	if(isMobileLayout) {
+	if (isMobileLayout) {
 		return (
 			<div className='responsive-action-menu-overlay' role='presentation' onClick={onClose}>
 				<div

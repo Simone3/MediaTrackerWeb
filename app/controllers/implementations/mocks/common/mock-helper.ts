@@ -21,14 +21,14 @@ export abstract class MockControllerHelper {
 	 */
 	protected resolveResult<T>(successResultCallback: () => T): Promise<T> {
 		const prob = this.errorProbability;
-		if(prob < 0 || prob > 1) {
+		if (prob < 0 || prob > 1) {
 			throw AppError.GENERIC.withDetails('Mocked controller error probability must be [0, 1]');
 		}
 		const isError = Math.random() < prob;
 		
 		return new Promise((resolve, reject) => {
 			setTimeout(() => {
-				if(isError) {
+				if (isError) {
 					reject(new Error('Mocked error'));
 				}
 				else {

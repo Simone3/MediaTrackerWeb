@@ -1,4 +1,5 @@
 import { put, select, takeLatest } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { AppError } from 'app/data/models/internal/error';
 import { compareTvShowSeasons } from 'app/data/models/internal/media-items/tv-show';
 import { setError } from 'app/redux/actions/error/generators';
@@ -6,7 +7,6 @@ import { DELETE_TV_SHOW_SEASON } from 'app/redux/actions/tv-show-season/const';
 import { completeDeletingTvShowSeason } from 'app/redux/actions/tv-show-season/generators';
 import { DeleteTvShowSeasonAction } from 'app/redux/actions/tv-show-season/types';
 import { State } from 'app/redux/state/state';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Worker saga that deletes a TV show season
@@ -18,7 +18,7 @@ const deleteTvShowSeasonSaga = function * (action: DeleteTvShowSeasonAction): Sa
 	// Get values from state
 	const state = (yield select()) as State;
 	let seasons = state.tvShowSeasonsList.tvShowSeasons;
-	if(!seasons) {
+	if (!seasons) {
 		throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while deleting TV show season');
 	}
 	seasons = [ ...seasons ];
@@ -29,7 +29,7 @@ const deleteTvShowSeasonSaga = function * (action: DeleteTvShowSeasonAction): Sa
 	});
 
 	// Season must exist
-	if(index < 0) {
+	if (index < 0) {
 		yield put(setError(AppError.GENERIC.withDetails('Season not found')));
 		return;
 	}

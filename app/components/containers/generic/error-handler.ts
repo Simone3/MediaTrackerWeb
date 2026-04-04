@@ -1,8 +1,8 @@
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { ErrorHandlerComponent, ErrorHandlerComponentInput, ErrorHandlerComponentOutput, ErrorHandlerComponentProps } from 'app/components/presentational/generic/error-handler';
 import { clearError } from 'app/redux/actions/error/generators';
 import { State } from 'app/redux/state/state';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: State, ownProps: ErrorHandlerContainerProps): ErrorHandlerComponentInput => {
 	return {

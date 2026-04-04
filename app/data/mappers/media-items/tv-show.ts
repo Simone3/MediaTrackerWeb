@@ -44,7 +44,7 @@ class TvShowMapper extends MediaItemMapper<TvShowInternal, IdentifiedTvShow> {
 	 * @returns target seasons
 	 */
 	private convertToExternalSeasons(source?: TvShowSeasonInternal[]): TvShowSeason[] | undefined {
-		if(source) {
+		if (source) {
 			return source.map((sourceItem) => {
 				return {
 					number: sourceItem.number,
@@ -64,7 +64,7 @@ class TvShowMapper extends MediaItemMapper<TvShowInternal, IdentifiedTvShow> {
 	 * @returns target seasons
 	 */
 	private convertToInternalSeasons(source?: TvShowSeason[]): TvShowSeasonInternal[] | undefined {
-		if(source) {
+		if (source) {
 			return source.map((sourceItem) => {
 				return {
 					number: sourceItem.number,
@@ -128,7 +128,7 @@ class TvShowSortMapper extends MediaItemSortMapper<TvShowSortByInternal, TvShowS
 	 * @returns the mapping target
 	 */
 	protected toExternalField(source: TvShowSortFieldInternal): string {
-		switch(source) {
+		switch (source) {
 			case 'CREATOR': return TvShowSortField.CREATOR;
 			default: return this.commonToExternalField(source);
 		}
@@ -140,7 +140,7 @@ class TvShowSortMapper extends MediaItemSortMapper<TvShowSortByInternal, TvShowS
 	 * @returns the mapping target
 	 */
 	protected toInternalField(source: string): TvShowSortFieldInternal {
-		switch(source) {
+		switch (source) {
 			case TvShowSortField.CREATOR: return 'CREATOR';
 			default: return this.commonToInternalField(source);
 		}
@@ -204,7 +204,7 @@ class TvShowCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogTv
 	 * @returns target seasons
 	 */
 	private convertToExternalSeasons(source?: CatalogTvShowSeasonInternal[]): CatalogTvShowSeason[] | undefined {
-		if(source) {
+		if (source) {
 			return source.map((sourceItem) => {
 				return {
 					number: sourceItem.number,
@@ -223,7 +223,7 @@ class TvShowCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogTv
 	 * @returns target seasons
 	 */
 	private convertToInternalSeasons(source?: CatalogTvShowSeason[]): CatalogTvShowSeasonInternal[] | undefined {
-		if(source) {
+		if (source) {
 			return source.map((sourceItem) => {
 				return {
 					number: sourceItem.number,

@@ -1,7 +1,7 @@
-import { CommonAddResponse, CommonRequest, CommonResponse, CommonSaveRequest } from 'app/data/models/api/common';
-import { ValuesOf } from 'app/utilities/helper-types';
 import { Type } from 'class-transformer';
 import { IsDefined, IsHexColor, IsIn, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { CommonAddResponse, CommonRequest, CommonResponse, CommonSaveRequest } from 'app/data/models/api/common';
+import { ValuesOf } from 'app/utilities/helper-types';
 
 /**
  * Array of all media types, publicly exposed via API

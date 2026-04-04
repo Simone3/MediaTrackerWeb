@@ -1,7 +1,7 @@
+import { mixed } from 'yup';
 import { AppError } from 'app/data/models/internal/error';
 import { MediaItemFilterInternal, MediaItemGroupFilterInternal, MediaItemImportanceInternal, MediaItemOwnPlatformFilterInternal, MediaItemSortByInternal, MediaItemStatusFilterInternal, MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES } from 'app/data/models/internal/media-items/media-item';
 import { ValuesOf } from 'app/utilities/helper-types';
-import { mixed } from 'yup';
 
 /**
  * The generic media item filter form model
@@ -12,7 +12,7 @@ export type MediaItemFilterFormValues = {
 	group: MediaItemFilterFormGroup;
 	ownPlatform: MediaItemFilterFormOwnPlatform;
 	sortBy: MediaItemFilterFormSortBy;
-}
+};
 
 /**
  * Array of all generic media item status filter options
@@ -145,11 +145,11 @@ export abstract class MediaItemFilterFormMapper<TMediaItemFilterInternal extends
 	 * @returns the target
 	 */
 	protected toGroupFormValue(source: MediaItemGroupFilterInternal | undefined): MediaItemFilterFormGroup {
-		if(source) {
-			if(source.anyGroup) {
+		if (source) {
+			if (source.anyGroup) {
 				return 'ANY';
 			}
-			if(source.noGroup) {
+			if (source.noGroup) {
 				return 'NONE';
 			}
 		}
@@ -163,11 +163,11 @@ export abstract class MediaItemFilterFormMapper<TMediaItemFilterInternal extends
 	 * @returns the target
 	 */
 	protected toOwnPlatformFormValue(source: MediaItemOwnPlatformFilterInternal | undefined): MediaItemFilterFormOwnPlatform {
-		if(source) {
-			if(source.anyOwnPlatform) {
+		if (source) {
+			if (source.anyOwnPlatform) {
 				return 'ANY';
 			}
-			if(source.noOwnPlatform) {
+			if (source.noOwnPlatform) {
 				return 'NONE';
 			}
 		}
@@ -181,10 +181,10 @@ export abstract class MediaItemFilterFormMapper<TMediaItemFilterInternal extends
 	 * @returns the target
 	 */
 	protected toStatusFormValue(source: MediaItemStatusFilterInternal | undefined): MediaItemFilterFormStatus {
-		if(source === 'COMPLETE') {
+		if (source === 'COMPLETE') {
 			return 'COMPLETE';
 		}
-		if(source === 'CURRENT') {
+		if (source === 'CURRENT') {
 			return 'CURRENT';
 		}
 
@@ -206,7 +206,7 @@ export abstract class MediaItemFilterFormMapper<TMediaItemFilterInternal extends
 	 * @returns the target
 	 */
 	protected toGroupModel(source: MediaItemFilterFormGroup): MediaItemGroupFilterInternal | undefined {
-		switch(source) {
+		switch (source) {
 			case 'ALL':
 				return undefined;
 
@@ -231,7 +231,7 @@ export abstract class MediaItemFilterFormMapper<TMediaItemFilterInternal extends
 	 * @returns the target
 	 */
 	protected toOwnPlatformModel(source: MediaItemFilterFormOwnPlatform): MediaItemOwnPlatformFilterInternal | undefined {
-		switch(source) {
+		switch (source) {
 			case 'ALL':
 				return undefined;
 
@@ -256,7 +256,7 @@ export abstract class MediaItemFilterFormMapper<TMediaItemFilterInternal extends
 	 * @returns the target
 	 */
 	protected toStatusModel(source: MediaItemFilterFormStatus): MediaItemStatusFilterInternal | undefined {
-		switch(source) {
+		switch (source) {
 			case 'ALL':
 				return undefined;
 

@@ -1,6 +1,6 @@
-import { VideogameInternal } from 'app/data/models/internal/media-items/videogame';
 import { ObjectSchema, array, number, object, string } from 'yup';
 import { applyNormalizedTextArrayField, mediaItemFormValidationShape, normalizeMediaItemFormValues } from './media-item';
+import { VideogameInternal } from 'app/data/models/internal/media-items/videogame';
 
 /**
  * The videogame form validation schema shape

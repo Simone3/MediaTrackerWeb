@@ -1,6 +1,6 @@
-import { CreditsScreenContainer } from 'app/components/containers/credits/screen';
 import { Component, ReactNode } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { CreditsScreenContainer } from 'app/components/containers/credits/screen';
 
 /**
  * The navigator for the credits section of the app

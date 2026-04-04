@@ -13,7 +13,7 @@ export class LoadingIndicatorComponent extends Component<ModalComponentInput> {
 			fullScreen
 		} = this.props;
 
-		if(!visible) {
+		if (!visible) {
 			return null;
 		}
 
@@ -42,4 +42,4 @@ export type ModalComponentInput = {
 	 * Whether the modal is full screen or relative to its parent (its full width and height)
 	 */
 	fullScreen: boolean;
-}
+};

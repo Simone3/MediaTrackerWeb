@@ -24,7 +24,7 @@ export class UserMockedController extends MockControllerHelper implements UserCo
 	 */
 	public async getCurrentUser(): Promise<UserInternal | undefined> {
 		const value = await localStorage.getValue(UserMockedController.LOCAL_STORAGE_KEY);
-		if(!value) {
+		if (!value) {
 			return undefined;
 		}
 
@@ -42,7 +42,7 @@ export class UserMockedController extends MockControllerHelper implements UserCo
 	 */
 	public async getCurrentUserAccessToken(): Promise<string> {
 		const user = await this.getCurrentUser();
-		if(!user) {
+		if (!user) {
 			throw AppError.GENERIC.withDetails('Cannot get the access token if no user is logged in');
 		}
 		return '-fake-access-token-';
@@ -56,7 +56,7 @@ export class UserMockedController extends MockControllerHelper implements UserCo
 			const sameNameUser = this.users.find((existingUser) => {
 				return existingUser.email === user.email;
 			});
-			if(sameNameUser) {
+			if (sameNameUser) {
 				throw AppError.BACKEND_USER_SIGNUP.withDetails('Mocked user with same name already exists');
 			}
 			
@@ -82,7 +82,7 @@ export class UserMockedController extends MockControllerHelper implements UserCo
 				return existingUser.email === user.email;
 			});
 
-			if(!matchingUser) {
+			if (!matchingUser) {
 				throw AppError.BACKEND_USER_LOGIN.withDetails('No matching mocked user');
 			}
 

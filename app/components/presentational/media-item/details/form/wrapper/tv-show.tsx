@@ -1,9 +1,9 @@
 import { Component, ReactNode } from 'react';
 import { FormikProps } from 'formik';
+import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from './media-item';
 import { tvShowFormValidationSchema, normalizeTvShowFormValues, preserveTvShowSeasonProgress } from 'app/components/presentational/media-item/details/form/data/tv-show';
 import { TvShowFormViewComponent } from 'app/components/presentational/media-item/details/form/view/tv-show';
 import { DEFAULT_CATALOG_TV_SHOW, TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
-import { CommonMediaItemFormComponent, CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from './media-item';
 
 /**
  * Presentational component that handles the Formik wrapper component for the TV show form
@@ -70,7 +70,7 @@ export class TvShowFormComponent extends Component<TvShowFormComponentProps> {
 			loadSeasonsTimestamp
 		} = this.props;
 
-		if(!this.formikProps || !loadSeasonsTimestamp || loadSeasonsTimestamp === this.loadedSeasonsTimestamp) {
+		if (!this.formikProps || !loadSeasonsTimestamp || loadSeasonsTimestamp === this.loadedSeasonsTimestamp) {
 			return;
 		}
 

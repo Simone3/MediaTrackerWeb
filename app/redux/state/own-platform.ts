@@ -10,7 +10,7 @@ export type OwnPlatformGlobalState = {
 	 * Undefined means no own platform has been selected yet
 	 */
 	selectedOwnPlatform: OwnPlatformInternal | undefined;
-}
+};
 
 /**
  * The initial value for the global own platform state
@@ -49,7 +49,7 @@ export type OwnPlatformsListState = {
 	 * The currently highlighted (e.g. context menu is open) own platform, or undefined if none is highlighted
 	 */
 	readonly highlightedOwnPlatform: OwnPlatformInternal | undefined;
-}
+};
 
 /**
  * The initial value for the own platforms list state
@@ -97,7 +97,7 @@ export type OwnPlatformDetailsState = {
 	 * The current status of the own platform saving process
 	 */
 	readonly saveStatus: OwnPlatformSaveStatus;
-}
+};
 
 /**
  * The initial value for the own platform details state

@@ -25,7 +25,7 @@ export class CategoryFormViewComponent extends Component<CategoryFormViewCompone
 		const validChanged = prevProps.isValid !== this.props.isValid;
 		const dirtyChanged = prevProps.dirty !== this.props.dirty;
 
-		if(validChanged || dirtyChanged) {
+		if (validChanged || dirtyChanged) {
 			this.notifyFormStatus();
 		}
 	}
@@ -123,7 +123,7 @@ type CategoryFormViewComponentOutput = {
 	 * @param dirty true if the form is dirty, i.e. one or more fields are different from initial values
 	 */
 	notifyFormStatus: (valid: boolean, dirty: boolean) => void;
-}
+};
 
 /**
  * All props of CategoryFormViewComponent

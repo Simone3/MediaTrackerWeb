@@ -1,9 +1,9 @@
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { TvShowSeasonsListScreenComponent, TvShowSeasonsListScreenComponentInput, TvShowSeasonsListScreenComponentOutput } from 'app/components/presentational/tv-show-season/list/screen';
 import { completeTvShowSeasonsHandling, deleteTvShowSeason, inlineUpdateTvShowSeason, loadNewTvShowSeasonDetails, loadTvShowSeasonDetails } from 'app/redux/actions/tv-show-season/generators';
 import { State } from 'app/redux/state/state';
 import { navigationService } from 'app/utilities/navigation-service';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: State): TvShowSeasonsListScreenComponentInput => {
 	return {

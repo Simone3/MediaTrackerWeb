@@ -1,4 +1,5 @@
 import { put, select, takeLatest } from '@redux-saga/core/effects';
+import { SagaIterator } from 'redux-saga';
 import { AppError } from 'app/data/models/internal/error';
 import { compareTvShowSeasons } from 'app/data/models/internal/media-items/tv-show';
 import { setError } from 'app/redux/actions/error/generators';
@@ -6,7 +7,6 @@ import { SAVE_TV_SHOW_SEASON } from 'app/redux/actions/tv-show-season/const';
 import { completeSavingTvShowSeason, failSavingTvShowSeason } from 'app/redux/actions/tv-show-season/generators';
 import { SaveTvShowSeasonAction } from 'app/redux/actions/tv-show-season/types';
 import { State } from 'app/redux/state/state';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Worker saga that saves a TV show season
@@ -19,7 +19,7 @@ const saveTvShowSeasonSaga = function * (action: SaveTvShowSeasonAction): SagaIt
 	const state = (yield select()) as State;
 	const saveMode = state.tvShowSeasonDetails.formMode;
 	let seasons = state.tvShowSeasonsList.tvShowSeasons;
-	if(!saveMode || !seasons) {
+	if (!saveMode || !seasons) {
 		throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find values while saving TV show season');
 	}
 	seasons = [ ...seasons ];
@@ -29,9 +29,9 @@ const saveTvShowSeasonSaga = function * (action: SaveTvShowSeasonAction): SagaIt
 		return existingSeason.number === season.number;
 	});
 
-	if(saveMode === 'NEW') {
+	if (saveMode === 'NEW') {
 		// If we are adding a new season, make sure there are no other seasons with the same number
-		if(index >= 0) {
+		if (index >= 0) {
 			yield put(setError(AppError.TV_SHOW_SEASON_SAME_NUMBER));
 			yield put(failSavingTvShowSeason());
 			return;
@@ -40,9 +40,9 @@ const saveTvShowSeasonSaga = function * (action: SaveTvShowSeasonAction): SagaIt
 		// Add the new season
 		seasons.push(season);
 	}
-	else if(saveMode === 'EXISTING') {
+	else if (saveMode === 'EXISTING') {
 		// If we are updating an existing season, the season must exist
-		if(index < 0) {
+		if (index < 0) {
 			yield put(setError(AppError.GENERIC.withDetails('Season not found')));
 			yield put(failSavingTvShowSeason());
 			return;

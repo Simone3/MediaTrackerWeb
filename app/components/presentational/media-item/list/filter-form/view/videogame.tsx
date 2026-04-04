@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { FormikProps } from 'formik';
-import { VideogameFilterFormValues } from 'app/components/presentational/media-item/list/filter-form/data/videogame';
 import { MediaItemFilterFormViewComponent, MediaItemFilterFormViewComponentInput, MediaItemFilterFormViewComponentOutput } from './media-item';
+import { VideogameFilterFormValues } from 'app/components/presentational/media-item/list/filter-form/data/videogame';
 
 /**
  * Presentational component that contains all videogame filter form input fields, all handled by the Formik container component

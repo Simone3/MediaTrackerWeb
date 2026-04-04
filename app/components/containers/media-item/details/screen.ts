@@ -1,11 +1,11 @@
+import React, { ReactElement } from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { BrowserBackNavigationGuardComponent } from 'app/components/presentational/generic/browser-back-navigation-guard';
 import { MediaItemDetailsScreenComponent } from 'app/components/presentational/media-item/details/screen';
 import { setMediaItemFormDraft } from 'app/redux/actions/media-item/generators';
 import { State } from 'app/redux/state/state';
 import { i18n } from 'app/utilities/i18n';
-import React, { ReactElement } from 'react';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
 type MediaItemDetailsScreenContainerStateProps = {
 	blockBrowserBack: boolean;

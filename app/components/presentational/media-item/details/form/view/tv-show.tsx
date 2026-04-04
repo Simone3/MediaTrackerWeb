@@ -1,10 +1,10 @@
 import { ReactElement } from 'react';
+import { FormikProps } from 'formik';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { dateToInputValue, inlineTextToInputValue, inputValueToDate, inputValueToInlineText, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
 import { config } from 'app/config/config';
 import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
-import { FormikProps } from 'formik';
 import justWatchIcon from 'app/resources/images/ic_justwatch.png';
 import { i18n } from 'app/utilities/i18n';
 import { mediaItemUtils } from 'app/utilities/media-item-utils';
@@ -15,7 +15,7 @@ import { mediaItemUtils } from 'app/utilities/media-item-utils';
  * @returns summary label
  */
 const getTvShowSeasonsSummaryLabel = (seasons?: TvShowSeasonInternal[]): string => {
-	if(!seasons || seasons.length === 0) {
+	if (!seasons || seasons.length === 0) {
 		return i18n.t('tvShowSeason.list.empty');
 	}
 
