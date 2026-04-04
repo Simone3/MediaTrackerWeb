@@ -52,8 +52,8 @@ describe('MediaItemContextMenuComponent', () => {
 			/>
 		);
 
-		expect(container.querySelector('.media-item-context-menu-popover')).not.toBeNull();
-		expect(container.querySelector('.media-item-context-menu-sheet')).toBeNull();
+		expect(container.querySelector('.responsive-action-menu-popover')).not.toBeNull();
+		expect(container.querySelector('.responsive-action-menu-sheet')).toBeNull();
 		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.edit.BOOK') })).toBeInTheDocument();
 		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.delete.BOOK') })).toBeInTheDocument();
 		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.markActive.BOOK') })).toBeInTheDocument();
@@ -100,8 +100,8 @@ describe('MediaItemContextMenuComponent', () => {
 				/>
 			);
 
-			expect(container.querySelector('.media-item-context-menu-sheet')).not.toBeNull();
-			expect(container.querySelector('.media-item-context-menu-popover')).toBeNull();
+			expect(container.querySelector('.responsive-action-menu-sheet')).not.toBeNull();
+			expect(container.querySelector('.responsive-action-menu-popover')).toBeNull();
 
 			const user = userEvent.setup();
 			await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.delete.BOOK') }));

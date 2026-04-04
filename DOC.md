@@ -130,7 +130,7 @@
 - Linting currently runs on ESLint `9` in legacy `.eslintrc.js` mode via `ESLINT_USE_FLAT_CONFIG=false`; the repo no longer keeps the old `.eslintignore` file because the npm lint script already scopes the checked files directly.
 - VS Code now has matching workspace ESLint settings in `.vscode/settings.json`, forcing the ESLint extension to keep `eslint.useFlatConfig=false` and explicitly validating TS/TSX files so warnings like the two `index.tsx` findings appear in the editor again.
 - A shared-UI refactor also moved several repeated web-only patterns into reusable presentational primitives instead of keeping parallel copies in each screen.
-  - `responsive-action-menu` now drives both the category and media-item desktop popover/mobile bottom-sheet action menus.
+  - `responsive-action-menu` now fully owns the shared category/media-item action menu shell, header, and action-list rendering, with each caller only supplying the title plus action labels/callbacks.
   - `entity-management-screen` and `entity-management-list` now cover the shared dark management-shell/list behavior used by group and own-platform screens, while TV-show seasons reuse the shared shell.
   - `entity-details-frame` now owns the dark details-page shell for group, own-platform, and TV-show-season forms.
   - `same-name-confirmation` now centralizes the duplicate-name confirmation dialog behavior used across category/group/platform/media-item details.

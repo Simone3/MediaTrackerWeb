@@ -1,24 +1,26 @@
-import { CSSProperties, ReactElement, ReactNode, useEffect, useState } from 'react';
+import { CSSProperties, ReactElement, useEffect, useId, useState } from 'react';
 import { CATEGORIES_MOBILE_BREAKPOINT } from 'app/components/presentational/category/list/constants';
 
 const VIEWPORT_PADDING = 16;
 const DESKTOP_OFFSET = 12;
+const DEFAULT_POPOVER_WIDTH = 304;
+const DEFAULT_SHEET_MAX_WIDTH = 420;
+const MENU_HEADER_HEIGHT = 52;
+const MENU_ACTION_HEIGHT = 58;
 
-const getSheetStyle = (sheetMaxWidth?: number): CSSProperties => {
+const getSheetStyle = (): CSSProperties => {
 	return {
-		'--responsive-action-menu-sheet-width': `${sheetMaxWidth || 420}px`
+		'--responsive-action-menu-sheet-width': `${DEFAULT_SHEET_MAX_WIDTH}px`
 	} as CSSProperties;
 };
 
 const getPopoverStyle = (
 	anchorRect: ResponsiveActionMenuAnchorRect | undefined,
-	popoverWidth: number,
-	popoverHeight: number,
-	sheetMaxWidth: number | undefined
+	popoverHeight: number
 ): CSSProperties => {
 	const sharedStyle = {
-		'--responsive-action-menu-width': `${popoverWidth}px`,
-		'--responsive-action-menu-sheet-width': `${sheetMaxWidth || 420}px`
+		'--responsive-action-menu-width': `${DEFAULT_POPOVER_WIDTH}px`,
+		'--responsive-action-menu-sheet-width': `${DEFAULT_SHEET_MAX_WIDTH}px`
 	} as CSSProperties;
 
 	if(!anchorRect) {
@@ -30,8 +32,8 @@ const getPopoverStyle = (
 	}
 
 	const left = Math.min(
-		Math.max(VIEWPORT_PADDING, anchorRect.right - popoverWidth),
-		window.innerWidth - popoverWidth - VIEWPORT_PADDING
+		Math.max(VIEWPORT_PADDING, anchorRect.right - DEFAULT_POPOVER_WIDTH),
+		window.innerWidth - DEFAULT_POPOVER_WIDTH - VIEWPORT_PADDING
 	);
 	const openAbove = anchorRect.bottom + DESKTOP_OFFSET + popoverHeight > window.innerHeight - VIEWPORT_PADDING;
 	const top = openAbove ?
@@ -54,24 +56,18 @@ const getPopoverStyle = (
 export const ResponsiveActionMenuComponent = (props: ResponsiveActionMenuComponentProps): ReactElement | null => {
 	const {
 		visible,
+		title,
+		actions,
 		anchorRect,
-		labelledBy,
 		closeAriaLabel,
 		onClose,
-		popoverWidth,
-		popoverHeight,
-		popoverClassName,
-		sheetClassName,
-		layerClassName,
-		dismissClassName,
-		overlayClassName,
-		handleClassName,
-		escapeDisabled,
-		children
+		escapeDisabled
 	} = props;
+	const titleId = useId();
 	const [ isMobileLayout, setIsMobileLayout ] = useState<boolean>(() => {
 		return window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
 	});
+	const popoverHeight = MENU_HEADER_HEIGHT + (actions.length * MENU_ACTION_HEIGHT);
 
 	useEffect(() => {
 		if(!visible) {
@@ -103,40 +99,65 @@ export const ResponsiveActionMenuComponent = (props: ResponsiveActionMenuCompone
 		return null;
 	}
 
+	const content = (
+		<>
+			<header className='responsive-action-menu-header'>
+				<h2 id={titleId} className='responsive-action-menu-title'>{title}</h2>
+			</header>
+			<div className='responsive-action-menu-actions'>
+				{actions.map((action: ResponsiveActionMenuAction, index: number) => {
+					const actionClassName = action.tone === 'danger' ?
+						'responsive-action-menu-button responsive-action-menu-button-danger' :
+						'responsive-action-menu-button';
+
+					return (
+						<button
+							key={`${index}-${action.label}`}
+							type='button'
+							className={actionClassName}
+							onClick={action.onClick}>
+							{action.label}
+						</button>
+					);
+				})}
+			</div>
+		</>
+	);
+
 	if(isMobileLayout) {
 		return (
-			<div className={overlayClassName} role='presentation' onClick={onClose}>
+			<div className='responsive-action-menu-overlay' role='presentation' onClick={onClose}>
 				<div
-					className={sheetClassName}
+					className='responsive-action-menu responsive-action-menu-sheet'
 					role='dialog'
 					aria-modal={true}
-					aria-labelledby={labelledBy}
-					style={getSheetStyle(props.sheetMaxWidth)}
+					aria-labelledby={titleId}
+					style={getSheetStyle()}
 					onClick={(event) => {
 						event.stopPropagation();
 					}}>
-					<div className={handleClassName} />
-					{children}
+					<div className='responsive-action-menu-handle' />
+					{content}
 				</div>
 			</div>
 		);
 	}
 
 	return (
-		<div className={layerClassName} role='presentation'>
+		<div className='responsive-action-menu-layer' role='presentation'>
 			<button
 				type='button'
-				className={dismissClassName}
+				className='responsive-action-menu-dismiss'
 				onClick={onClose}
 				aria-label={closeAriaLabel}
 			/>
 			<div
-				className={popoverClassName}
+				className='responsive-action-menu responsive-action-menu-popover'
 				role='dialog'
 				aria-modal={false}
-				aria-labelledby={labelledBy}
-				style={getPopoverStyle(anchorRect, popoverWidth, popoverHeight, props.sheetMaxWidth)}>
-				{children}
+				aria-labelledby={titleId}
+				style={getPopoverStyle(anchorRect, popoverHeight)}>
+				{content}
 			</div>
 		</div>
 	);
@@ -153,19 +174,16 @@ export type ResponsiveActionMenuAnchorRect = {
 
 export type ResponsiveActionMenuComponentProps = {
 	visible: boolean;
-	labelledBy: string;
+	title: string;
 	closeAriaLabel: string;
 	onClose: () => void;
-	popoverWidth: number;
-	popoverHeight: number;
-	layerClassName: string;
-	dismissClassName: string;
-	overlayClassName: string;
-	popoverClassName: string;
-	sheetClassName: string;
-	handleClassName: string;
-	children: ReactNode;
+	actions: ResponsiveActionMenuAction[];
 	anchorRect?: ResponsiveActionMenuAnchorRect;
 	escapeDisabled?: boolean;
-	sheetMaxWidth?: number;
+};
+
+export type ResponsiveActionMenuAction = {
+	label: string;
+	onClick: () => void;
+	tone?: 'default' | 'danger';
 };

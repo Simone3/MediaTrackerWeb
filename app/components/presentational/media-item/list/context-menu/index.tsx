@@ -1,6 +1,6 @@
-import React, { Component, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
-import { ResponsiveActionMenuAnchorRect, ResponsiveActionMenuComponent } from 'app/components/presentational/generic/responsive-action-menu';
+import { ResponsiveActionMenuAction, ResponsiveActionMenuAnchorRect, ResponsiveActionMenuComponent } from 'app/components/presentational/generic/responsive-action-menu';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { i18n } from 'app/utilities/i18n';
@@ -38,26 +38,19 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 		}
 
 		const visibility = this.getVisibility(mediaItem);
+		const actions = this.getActions(mediaItem, close, visibility);
 
 		return (
 			<>
 				<ResponsiveActionMenuComponent
 					visible={true}
 					anchorRect={this.props.anchorRect}
-					labelledBy='media-item-context-menu-title'
+					title={mediaItem.name}
 					closeAriaLabel={i18n.t('common.a11y.closeMediaItemActions')}
 					onClose={close}
-					popoverWidth={304}
-					popoverHeight={52 + (this.getActionsCount(visibility) * 58)}
 					escapeDisabled={this.state.deleteConfirmationVisible}
-					layerClassName='responsive-action-menu-layer media-item-context-menu-layer'
-					dismissClassName='responsive-action-menu-dismiss media-item-context-menu-dismiss'
-					overlayClassName='responsive-action-menu-overlay media-item-context-menu-overlay'
-					popoverClassName='responsive-action-menu responsive-action-menu-popover media-item-context-menu media-item-context-menu-popover'
-					sheetClassName='responsive-action-menu responsive-action-menu-sheet media-item-context-menu media-item-context-menu-sheet'
-					handleClassName='responsive-action-menu-handle media-item-context-menu-handle'>
-					{this.renderMenuContent(mediaItem, close, visibility)}
-				</ResponsiveActionMenuComponent>
+					actions={actions}
+				/>
 				<ConfirmDialogComponent
 					visible={this.state.deleteConfirmationVisible}
 					title={i18n.t(`mediaItem.common.alert.delete.title.${mediaItem.mediaType}`)}
@@ -83,85 +76,73 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 	}
 
 	/**
-	 * Renders the shared menu header and actions
+	 * Builds the menu actions for the current media item
 	 * @param mediaItem active media item
 	 * @param close callback to close the menu
 	 * @param visibility action visibility flags
-	 * @returns the shared menu content
+	 * @returns the shared menu actions
 	 */
-	private renderMenuContent(mediaItem: MediaItemInternal, close: () => void, visibility: MediaItemContextMenuVisibility): ReactNode {
-		return (
-			<>
-				<header className='responsive-action-menu-header media-item-context-menu-header'>
-					<h2 id='media-item-context-menu-title' className='responsive-action-menu-title media-item-context-menu-title'>{mediaItem.name}</h2>
-				</header>
-				<div className='responsive-action-menu-actions media-item-context-menu-actions'>
-					<button
-						type='button'
-						className='responsive-action-menu-button media-item-context-menu-button'
-						onClick={() => {
-							this.props.edit(mediaItem);
-							close();
-						}}>
-						{i18n.t(`mediaItem.list.edit.${mediaItem.mediaType}`)}
-					</button>
-					<button
-						type='button'
-						className='responsive-action-menu-button responsive-action-menu-button-danger media-item-context-menu-button media-item-context-menu-button-danger'
-						onClick={() => {
-							this.setState({
-								deleteConfirmationVisible: true
-							});
-						}}>
-						{i18n.t(`mediaItem.list.delete.${mediaItem.mediaType}`)}
-					</button>
-					{visibility.canMarkAsRedo && (
-						<button
-							type='button'
-							className='responsive-action-menu-button media-item-context-menu-button'
-							onClick={() => {
-								this.props.markAsRedo(mediaItem);
-								close();
-							}}>
-							{i18n.t(`mediaItem.list.markRedo.${mediaItem.mediaType}`)}
-						</button>
-					)}
-					{visibility.canMarkAsActive && (
-						<button
-							type='button'
-							className='responsive-action-menu-button media-item-context-menu-button'
-							onClick={() => {
-								this.props.markAsActive(mediaItem);
-								close();
-							}}>
-							{i18n.t(`mediaItem.list.markActive.${mediaItem.mediaType}`)}
-						</button>
-					)}
-					{visibility.canMarkAsComplete && (
-						<button
-							type='button'
-							className='responsive-action-menu-button media-item-context-menu-button'
-							onClick={() => {
-								this.props.markAsComplete(mediaItem);
-								close();
-							}}>
-							{i18n.t(`mediaItem.list.markComplete.${mediaItem.mediaType}`)}
-						</button>
-					)}
-					{visibility.canViewGroup && mediaItem.group && (
-						<button
-							type='button'
-							className='responsive-action-menu-button media-item-context-menu-button'
-							onClick={() => {
-								this.props.viewGroup(mediaItem.group);
-								close();
-							}}>
-							{i18n.t('mediaItem.list.viewGroup')}
-						</button>
-					)}
-				</div>
-			</>
-		);
+	private getActions(mediaItem: MediaItemInternal, close: () => void, visibility: MediaItemContextMenuVisibility): ResponsiveActionMenuAction[] {
+		const actions: ResponsiveActionMenuAction[] = [
+			{
+				label: i18n.t(`mediaItem.list.edit.${mediaItem.mediaType}`),
+				onClick: () => {
+					this.props.edit(mediaItem);
+					close();
+				}
+			},
+			{
+				label: i18n.t(`mediaItem.list.delete.${mediaItem.mediaType}`),
+				onClick: () => {
+					this.setState({
+						deleteConfirmationVisible: true
+					});
+				},
+				tone: 'danger'
+			}
+		];
+
+		if(visibility.canMarkAsRedo) {
+			actions.push({
+				label: i18n.t(`mediaItem.list.markRedo.${mediaItem.mediaType}`),
+				onClick: () => {
+					this.props.markAsRedo(mediaItem);
+					close();
+				}
+			});
+		}
+
+		if(visibility.canMarkAsActive) {
+			actions.push({
+				label: i18n.t(`mediaItem.list.markActive.${mediaItem.mediaType}`),
+				onClick: () => {
+					this.props.markAsActive(mediaItem);
+					close();
+				}
+			});
+		}
+
+		if(visibility.canMarkAsComplete) {
+			actions.push({
+				label: i18n.t(`mediaItem.list.markComplete.${mediaItem.mediaType}`),
+				onClick: () => {
+					this.props.markAsComplete(mediaItem);
+					close();
+				}
+			});
+		}
+
+		if(visibility.canViewGroup && mediaItem.group) {
+			actions.push({
+				label: i18n.t('mediaItem.list.viewGroup'),
+				onClick: () => {
+					this.props.viewGroup(mediaItem.group);
+					close();
+				}
+			});
+		}
+
+		return actions;
 	}
 
 	/**
@@ -178,18 +159,6 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 		};
 	}
 
-	/**
-	 * Counts the number of visible menu actions
-	 * @param visibility action visibility flags
-	 * @returns action count
-	 */
-	private getActionsCount(visibility: MediaItemContextMenuVisibility): number {
-		return 2 +
-			Number(visibility.canMarkAsRedo) +
-			Number(visibility.canMarkAsActive) +
-			Number(visibility.canMarkAsComplete) +
-			Number(visibility.canViewGroup);
-	}
 }
 
 /**

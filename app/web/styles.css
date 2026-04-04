@@ -3266,13 +3266,8 @@ body.app-dark-screen-active .loading-indicator-spinner {
 		font-size: 1.08rem;
 	}
 
-	.category-context-menu-overlay,
-	.media-item-context-menu-overlay {
+	.responsive-action-menu-overlay {
 		padding: 16px 16px calc(120px + env(safe-area-inset-bottom));
-	}
-
-	.category-context-menu {
-		padding: 16px;
 	}
 
 	.floating-action-button {
