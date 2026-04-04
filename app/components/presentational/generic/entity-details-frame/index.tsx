@@ -1,4 +1,4 @@
-import { CSSProperties, SubmitEventHandler, ReactElement, ReactNode, useEffect } from 'react';
+import { CSSProperties, SubmitEventHandler, ReactElement, ReactNode } from 'react';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 
@@ -8,14 +8,6 @@ import { PillButtonComponent } from 'app/components/presentational/generic/pill-
  * @returns the component
  */
 export const EntityDetailsFrameComponent = (props: EntityDetailsFrameComponentProps): ReactElement => {
-	useEffect(() => {
-		document.body.classList.add(props.bodyClassName);
-
-		return () => {
-			document.body.classList.remove(props.bodyClassName);
-		};
-	}, [ props.bodyClassName ]);
-
 	return (
 		<section
 			className={`entity-details-screen ${props.screenClassName}`}
@@ -62,7 +54,6 @@ export const EntityDetailsFrameComponent = (props: EntityDetailsFrameComponentPr
 
 export type EntityDetailsFrameComponentProps = {
 	screenClassName: string;
-	bodyClassName: string;
 	accentColor: string;
 	icon: ReactNode;
 	title: string;

@@ -36,7 +36,6 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 			<>
 				<EntityManagementScreenComponent
 					screenClassName='tv-show-seasons-screen'
-					bodyClassName='app-dark-screen-active'
 					accentColor={TV_SHOW_SEASONS_SCREEN_ACCENT}
 					icon={<img src={seasonIcon} alt='' className='entity-management-screen-icon' />}
 					title={i18n.t('tvShowSeason.list.title')}

@@ -9,20 +9,6 @@ export class MediaItemDetailsScreenComponent extends Component {
 	/**
 	 * @override
 	 */
-	public componentDidMount(): void {
-		document.body.classList.add('app-dark-screen-active');
-	}
-
-	/**
-	 * @override
-	 */
-	public componentWillUnmount(): void {
-		document.body.classList.remove('app-dark-screen-active');
-	}
-
-	/**
-	 * @override
-	 */
 	public render(): ReactNode {
 		return (
 			<MediaItemFormSwitcherContainer/>

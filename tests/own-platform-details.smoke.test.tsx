@@ -10,7 +10,7 @@ describe('OwnPlatformDetailsScreenComponent', () => {
 		const saveOwnPlatform = jest.fn();
 		const notifyFormStatus = jest.fn();
 		const selectedColor = config.ui.colors.availableOwnPlatformColors[1];
-		const { unmount } = render(
+		render(
 			<OwnPlatformDetailsScreenComponent
 				isLoading={false}
 				ownPlatform={{
@@ -26,7 +26,6 @@ describe('OwnPlatformDetailsScreenComponent', () => {
 			/>
 		);
 
-		expect(document.body).toHaveClass('app-dark-screen-active');
 		expect(screen.getByRole('heading', { level: 1, name: i18n.t('ownPlatform.details.title.new') })).toBeInTheDocument();
 		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.basics') })).not.toBeInTheDocument();
 		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.appearance') })).not.toBeInTheDocument();
@@ -60,10 +59,6 @@ describe('OwnPlatformDetailsScreenComponent', () => {
 			icon: 'kindle'
 		} as OwnPlatformInternal, false);
 		expect(notifyFormStatus).toHaveBeenCalled();
-
-		unmount();
-
-		expect(document.body).not.toHaveClass('app-dark-screen-active');
 	});
 
 	test('asks confirmation and retries save when same-name warning is requested', async() => {

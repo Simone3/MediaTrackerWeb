@@ -15,8 +15,6 @@ export const EntityManagementScreenComponent = (props: EntityManagementScreenCom
 	});
 
 	useEffect(() => {
-		document.body.classList.add(props.bodyClassName);
-
 		const handleResize = (): void => {
 			const nextIsMobileLayout = window.innerWidth <= CATEGORIES_MOBILE_BREAKPOINT;
 			setIsMobileLayout((currentIsMobileLayout) => {
@@ -27,10 +25,9 @@ export const EntityManagementScreenComponent = (props: EntityManagementScreenCom
 		window.addEventListener('resize', handleResize);
 
 		return () => {
-			document.body.classList.remove(props.bodyClassName);
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [ props.bodyClassName ]);
+	}, []);
 
 	const defaultAddAction = !isMobileLayout && props.onAdd && props.addButtonLabel ?
 		(
@@ -83,7 +80,6 @@ export const EntityManagementScreenComponent = (props: EntityManagementScreenCom
 
 export type EntityManagementScreenComponentProps = {
 	screenClassName: string;
-	bodyClassName: string;
 	accentColor: string;
 	icon: ReactNode;
 	title: string;

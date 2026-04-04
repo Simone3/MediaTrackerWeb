@@ -60,7 +60,6 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 					return (
 						<EntityDetailsFrameComponent
 							screenClassName='group-details-screen'
-							bodyClassName='app-dark-screen-active'
 							accentColor={GROUP_DETAILS_ACCENT}
 							icon={<img src={groupIcon} alt='' className='entity-details-icon' />}
 							title={title}

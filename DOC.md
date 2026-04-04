@@ -61,6 +61,7 @@
   - `app/components/presentational/own-platform/common/icon-registry.ts`
 - Most components are still class components.
 - Global styling is still centralized in `app/web/styles.css`.
+- The authenticated shell is now always full-bleed dark on web; the old per-screen body-class toggles were removed, and shared confirm dialogs/loaders use the dark treatment by default.
 
 ### State management
 - Redux store setup: `app/redux/initializer.ts`
@@ -275,7 +276,7 @@
     - the platform icon selector now shows the currently selected icon beside the dropdown tinted with the chosen platform color, and the color swatches now reuse the same compact size/treatment as the category form
     - TV-show-season details now use the same dark shell but keep only the main form card, with the season summary living in the page hero instead of a separate progress panel
     - on larger screens, the season number field now sits on its own row, while total and watched episodes share the row below
-    - all three screens now add and remove the shared `app-dark-screen-active` body class so their background and loading treatment match the newer detail flows
+    - the shared web shell, loading overlays, and confirm dialogs now use the dark treatment by default, so these forms no longer need per-screen body class toggles
   - Relevant files:
     - `app/components/presentational/group/details/screen/index.tsx`
     - `app/components/presentational/own-platform/details/screen/index.tsx`

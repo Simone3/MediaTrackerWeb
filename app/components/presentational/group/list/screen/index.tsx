@@ -53,7 +53,6 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 			<>
 				<EntityManagementScreenComponent
 					screenClassName='groups-screen'
-					bodyClassName='app-dark-screen-active'
 					accentColor={GROUPS_SCREEN_ACCENT}
 					icon={<img src={groupIcon} alt='' className='entity-management-screen-icon' />}
 					title={i18n.t('group.list.title')}

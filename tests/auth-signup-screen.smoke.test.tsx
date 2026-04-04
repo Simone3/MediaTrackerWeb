@@ -6,14 +6,13 @@ import { i18n } from 'app/utilities/i18n';
 describe('UserSignupScreenComponent', () => {
 	test('submits credentials after user input', async() => {
 		const signup = jest.fn();
-		const { unmount } = render(
+		render(
 			<UserSignupScreenComponent
 				isLoading={false}
 				signup={signup}
 			/>
 		);
 
-		expect(document.body).toHaveClass('app-dark-screen-active');
 		const user = userEvent.setup();
 		const emailInput = screen.getByPlaceholderText(i18n.t('auth.signup.placeholders.email'));
 		const passwordInput = screen.getByPlaceholderText(i18n.t('auth.signup.placeholders.password'));
@@ -30,8 +29,5 @@ describe('UserSignupScreenComponent', () => {
 			email: 'test@test.test',
 			password: '123456'
 		});
-
-		unmount();
-		expect(document.body).not.toHaveClass('app-dark-screen-active');
 	});
 });

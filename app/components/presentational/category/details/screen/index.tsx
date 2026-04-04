@@ -22,26 +22,12 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 	/**
 	 * @override
 	 */
-	public componentDidMount(): void {
-		document.body.classList.add('categories-screen-active');
-	}
-
-	/**
-	 * @override
-	 */
 	public componentDidUpdate(prevProps: Readonly<CategoryDetailsScreenComponentInput & CategoryDetailsScreenComponentOutput>): void {
 		if(shouldOpenSameNameConfirmation(prevProps.sameNameConfirmationRequested, this.props.sameNameConfirmationRequested)) {
 			this.setState({
 				confirmSameNameVisible: true
 			});
 		}
-	}
-
-	/**
-	 * @override
-	 */
-	public componentWillUnmount(): void {
-		document.body.classList.remove('categories-screen-active');
 	}
 
 	/**

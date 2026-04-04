@@ -8,7 +8,7 @@ describe('GroupDetailsScreenComponent', () => {
 	test('renders the shared dark-shell layout and submits a valid group', async() => {
 		const saveGroup = jest.fn();
 		const notifyFormStatus = jest.fn();
-		const { unmount } = render(
+		render(
 			<GroupDetailsScreenComponent
 				isLoading={false}
 				group={{
@@ -22,7 +22,6 @@ describe('GroupDetailsScreenComponent', () => {
 			/>
 		);
 
-		expect(document.body).toHaveClass('app-dark-screen-active');
 		expect(screen.getByRole('heading', { level: 1, name: i18n.t('group.details.title.new') })).toBeInTheDocument();
 		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.basics') })).not.toBeInTheDocument();
 		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.preview') })).not.toBeInTheDocument();
@@ -48,10 +47,6 @@ describe('GroupDetailsScreenComponent', () => {
 			name: 'Saga Shelf'
 		} as GroupInternal, false);
 		expect(notifyFormStatus).toHaveBeenCalled();
-
-		unmount();
-
-		expect(document.body).not.toHaveClass('app-dark-screen-active');
 	});
 
 	test('asks confirmation and retries save when same-name warning is requested', async() => {

@@ -8,7 +8,7 @@ describe('TvShowSeasonDetailsScreenComponent', () => {
 	test('renders the shared dark-shell layout and submits a valid season', async() => {
 		const saveTvShowSeason = jest.fn();
 		const notifyFormStatus = jest.fn();
-		const { unmount } = render(
+		render(
 			<TvShowSeasonDetailsScreenComponent
 				tvShowSeason={{
 					number: undefined as unknown as number,
@@ -22,7 +22,6 @@ describe('TvShowSeasonDetailsScreenComponent', () => {
 			/>
 		);
 
-		expect(document.body).toHaveClass('app-dark-screen-active');
 		expect(screen.getByRole('heading', { level: 1, name: i18n.t('tvShowSeason.details.title.new') })).toBeInTheDocument();
 		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.basics') })).not.toBeInTheDocument();
 		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.progress') })).not.toBeInTheDocument();
@@ -58,10 +57,6 @@ describe('TvShowSeasonDetailsScreenComponent', () => {
 			watchedEpisodesNumber: 7
 		} as TvShowSeasonInternal);
 		expect(notifyFormStatus).toHaveBeenCalled();
-
-		unmount();
-
-		expect(document.body).not.toHaveClass('app-dark-screen-active');
 	});
 
 	test('keeps season number locked when editing an existing season', async() => {

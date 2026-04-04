@@ -32,18 +32,13 @@ const setViewportWidth = (width: number): void => {
 };
 
 describe('MediaItemsListScreenComponent', () => {
-	afterEach(() => {
-		document.body.className = '';
-	});
-
 	test('uses the dark shell, fetches when required and shows the desktop add action', async() => {
 		const fetchMediaItems = jest.fn();
 		const loadNewMediaItemDetails = jest.fn();
 		setViewportWidth(1280);
 
 		const {
-			container,
-			unmount
+			container
 		} = render(
 			<MediaItemsListScreenComponent
 				category={category}
@@ -56,7 +51,6 @@ describe('MediaItemsListScreenComponent', () => {
 		);
 
 		expect(fetchMediaItems).toHaveBeenCalledTimes(1);
-		expect(document.body).toHaveClass('app-dark-screen-active');
 		expect(screen.getAllByText(i18n.t('mediaItem.list.count.multiple', { count: 2 }))).toHaveLength(1);
 		expect(screen.queryByText(i18n.t('category.mediaTypes.MOVIE'))).not.toBeInTheDocument();
 		expect(screen.getByTestId('media-items-list-container')).toBeInTheDocument();
@@ -67,10 +61,6 @@ describe('MediaItemsListScreenComponent', () => {
 		await user.click(screen.getByRole('button', { name: `+ ${i18n.t('mediaItem.list.add.MOVIE')}` }));
 
 		expect(loadNewMediaItemDetails).toHaveBeenCalledWith(category);
-
-		unmount();
-
-		expect(document.body).not.toHaveClass('app-dark-screen-active');
 	});
 
 	test('shows the shared mobile FAB instead of the desktop add button on small screens', async() => {

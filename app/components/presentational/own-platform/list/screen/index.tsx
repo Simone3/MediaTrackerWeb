@@ -54,7 +54,6 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 			<>
 				<EntityManagementScreenComponent
 					screenClassName='own-platforms-screen'
-					bodyClassName='app-dark-screen-active'
 					accentColor={OWN_PLATFORMS_SCREEN_ACCENT}
 					icon={<img src={ownPlatformIcon} alt='' className='entity-management-screen-icon' />}
 					title={i18n.t('ownPlatform.list.title')}

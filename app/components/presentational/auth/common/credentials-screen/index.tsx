@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { AppTitleComponent } from 'app/components/presentational/auth/common/app-title';
 import { AuthLinkComponent } from 'app/components/presentational/auth/common/auth-link';
 import { AuthSubmitComponent } from 'app/components/presentational/auth/common/auth-submit';
@@ -25,14 +25,6 @@ export const AuthCredentialsScreenComponent = (props: AuthCredentialsScreenCompo
 		email: '',
 		password: ''
 	});
-
-	useEffect(() => {
-		document.body.classList.add('app-dark-screen-active');
-
-		return () => {
-			document.body.classList.remove('app-dark-screen-active');
-		};
-	}, []);
 
 	return (
 		<section className='auth-screen'>

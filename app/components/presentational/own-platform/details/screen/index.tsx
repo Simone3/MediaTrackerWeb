@@ -60,7 +60,6 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 					return (
 						<EntityDetailsFrameComponent
 							screenClassName='own-platform-details-screen'
-							bodyClassName='app-dark-screen-active'
 							accentColor={formikProps.values.color || OWN_PLATFORM_DETAILS_ACCENT}
 							icon={<img src={ownPlatformIcon} alt='' className='entity-details-icon' />}
 							title={title}

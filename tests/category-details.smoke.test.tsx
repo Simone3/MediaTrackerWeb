@@ -10,7 +10,7 @@ describe('CategoryDetailsScreenComponent', () => {
 		const saveCategory = jest.fn();
 		const notifyFormStatus = jest.fn();
 		const selectedColor = config.ui.colors.availableCategoryColors[1];
-		const { unmount } = render(
+		render(
 			<CategoryDetailsScreenComponent
 				isLoading={false}
 				category={DEFAULT_CATEGORY}
@@ -20,7 +20,6 @@ describe('CategoryDetailsScreenComponent', () => {
 			/>
 		);
 
-		expect(document.body).toHaveClass('categories-screen-active');
 		expect(document.querySelector('input[type="color"]')).not.toBeInTheDocument();
 		const user = userEvent.setup();
 		const nameInput = screen.getByLabelText(i18n.t('category.details.placeholders.name'));
@@ -45,9 +44,6 @@ describe('CategoryDetailsScreenComponent', () => {
 			color: selectedColor
 		}, false);
 		expect(notifyFormStatus).toHaveBeenCalled();
-
-		unmount();
-		expect(document.body).not.toHaveClass('categories-screen-active');
 	});
 
 	test('asks confirmation and retries save when same-name warning is requested', async() => {

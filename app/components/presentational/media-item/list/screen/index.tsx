@@ -21,7 +21,6 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 	 * @override
 	 */
 	public componentDidMount(): void {
-		document.body.classList.add('app-dark-screen-active');
 		window.addEventListener('resize', this.handleResize);
 		this.requestFetchIfRequired();
 	}
@@ -37,7 +36,6 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 	 * @override
 	 */
 	public componentWillUnmount(): void {
-		document.body.classList.remove('app-dark-screen-active');
 		window.removeEventListener('resize', this.handleResize);
 	}
 

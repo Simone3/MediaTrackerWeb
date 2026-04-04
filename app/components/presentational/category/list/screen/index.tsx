@@ -18,7 +18,6 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 	 * @override
 	 */
 	public componentDidMount(): void {
-		document.body.classList.add('categories-screen-active');
 		window.addEventListener('resize', this.handleResize);
 		this.requestFetchIfRequired();
 	}
@@ -34,7 +33,6 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 	 * @override
 	 */
 	public componentWillUnmount(): void {
-		document.body.classList.remove('categories-screen-active');
 		window.removeEventListener('resize', this.handleResize);
 	}
 

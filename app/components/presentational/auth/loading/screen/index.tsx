@@ -5,20 +5,11 @@ import { LoadingIndicatorComponent } from 'app/components/presentational/generic
  * Presentational component that contains the app landing page that checks for user authentication and then redirects to the correct flow
  */
 export class AuthLoadingScreenComponent extends Component<AuthLoadingScreenComponentProps> {
-	
 	/**
 	 * @override
 	 */
 	public componentDidMount(): void {
-		document.body.classList.add('app-dark-screen-active');
 		this.props.fetchLoginStatus();
-	}
-
-	/**
-	 * @override
-	 */
-	public componentWillUnmount(): void {
-		document.body.classList.remove('app-dark-screen-active');
 	}
 
 	/**

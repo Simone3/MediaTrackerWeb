@@ -405,8 +405,8 @@ describe('MediaItemDetailsScreenContainer', () => {
 		expect(screen.queryByAltText('Books cover')).not.toBeInTheDocument();
 	});
 
-	test('renders the dark media-style shell sections and cleans up the body class', () => {
-		const { unmount } = renderScreen({
+	test('renders the dark media-style shell sections', () => {
+		renderScreen({
 			mediaItemDetails: {
 				mediaItem: {
 					...DEFAULT_BOOK,
@@ -415,7 +415,6 @@ describe('MediaItemDetailsScreenContainer', () => {
 			}
 		});
 
-		expect(document.body).toHaveClass('app-dark-screen-active');
 		expect(screen.queryByRole('heading', { name: 'Quick actions' })).not.toBeInTheDocument();
 		expect(screen.queryByText(i18n.t('category.mediaTypes.BOOK'))).not.toBeInTheDocument();
 		expect(screen.getByRole('heading', { name: i18n.t('mediaItem.details.sections.basics.title') })).toBeInTheDocument();
@@ -423,10 +422,6 @@ describe('MediaItemDetailsScreenContainer', () => {
 		expect(screen.getByRole('heading', { name: i18n.t('mediaItem.details.sections.collection.title') })).toBeInTheDocument();
 		expect(screen.getByRole('heading', { name: i18n.t('mediaItem.details.sections.progress.title') })).toBeInTheDocument();
 		expect(screen.queryByText('Importance: Very important')).not.toBeInTheDocument();
-
-		unmount();
-
-		expect(document.body).not.toHaveClass('app-dark-screen-active');
 	});
 
 	test('hydrates selected own platform on mount and saves it', async() => {

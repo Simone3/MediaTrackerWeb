@@ -61,7 +61,6 @@ describe('CategoriesListScreenComponent', () => {
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: `+ ${i18n.t('category.list.add')}` }));
 
-		expect(document.body).toHaveClass('categories-screen-active');
 		expect(screen.getByText(i18n.t('category.list.count.multiple', { count: 0 }))).toBeInTheDocument();
 		expect(loadNewCategoryDetails).toHaveBeenCalledTimes(1);
 		expect(fetchCategories).not.toHaveBeenCalled();
@@ -99,7 +98,6 @@ describe('CategoriesListScreenComponent', () => {
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: '+' }));
 
-		expect(document.body).toHaveClass('categories-screen-active');
 		expect(loadNewCategoryDetails).toHaveBeenCalledTimes(1);
 		expect(screen.queryByRole('button', { name: `+ ${i18n.t('category.list.add')}` })).not.toBeInTheDocument();
 	});

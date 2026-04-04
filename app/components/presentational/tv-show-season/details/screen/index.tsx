@@ -43,7 +43,6 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 					return (
 						<EntityDetailsFrameComponent
 							screenClassName='tv-show-season-details-screen'
-							bodyClassName='app-dark-screen-active'
 							accentColor={this.getSeasonAccent(formikProps.values)}
 							icon={<img src={seasonIcon} alt='' className='entity-details-icon' />}
 							title={title}
