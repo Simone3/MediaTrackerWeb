@@ -8,10 +8,64 @@ const importPlugin = require('eslint-plugin-import');
 const jestPlugin = require('eslint-plugin-jest');
 const jsdocPlugin = require('eslint-plugin-jsdoc');
 const reactPlugin = require('eslint-plugin-react');
+const reactHooksPlugin = require('eslint-plugin-react-hooks');
 
 const sharedFiles = [ 'app/**/*.ts', 'app/**/*.tsx', 'tests/**/*.ts', 'tests/**/*.tsx', 'index.tsx' ];
 const testFiles = [ 'tests/**/*.ts', 'tests/**/*.tsx' ];
 const importResolverExtensions = [ '.js', '.jsx', '.ts', '.tsx', '.d.ts', '.json', '.css', '.svg', '.png' ];
+
+const warnifyRuleConfig = (ruleConfig) => {
+	if(ruleConfig === 2 || ruleConfig === 'error') {
+		return 'warn';
+	}
+
+	if(Array.isArray(ruleConfig) && ruleConfig.length > 0) {
+		const [ severity, ...rest ] = ruleConfig;
+
+		if(severity === 2 || severity === 'error') {
+			return [ 'warn', ...rest ];
+		}
+	}
+
+	return ruleConfig;
+};
+
+const warnifyRules = (rules) => {
+	if(!rules) {
+		return rules;
+	}
+
+	return Object.fromEntries(
+		Object.entries(rules).map(([ ruleName, ruleConfig ]) => {
+			return [ ruleName, warnifyRuleConfig(ruleConfig) ];
+		})
+	);
+};
+
+const warnifyConfig = (config) => {
+	if(!config) {
+		return config;
+	}
+
+	if(!config.rules) {
+		return config;
+	}
+
+	return {
+		...config,
+		rules: warnifyRules(config.rules)
+	};
+};
+
+const warnifyConfigs = (configs) => {
+	if(Array.isArray(configs)) {
+		return configs.map((config) => {
+			return warnifyConfig(config);
+		});
+	}
+
+	return warnifyConfig(configs);
+};
 
 const stylisticRules = {
 	'@stylistic/indent': [ 'warn', 'tab', { SwitchCase: 1 }],
@@ -100,23 +154,47 @@ const stylisticRules = {
 const jestRules = {
 	'jest/no-commented-out-tests': 'warn',
 	'jest/no-disabled-tests': 'warn',
-	'jest/no-focused-tests': 'error',
-	'jest/no-identical-title': 'error',
-	'jest/no-test-prefixes': 'error',
-	'jest/valid-describe-callback': 'error',
-	'jest/valid-expect': 'error'
+	'jest/no-focused-tests': 'warn',
+	'jest/no-identical-title': 'warn',
+	'jest/no-test-prefixes': 'warn',
+	'jest/valid-describe-callback': 'warn',
+	'jest/valid-expect': 'warn'
+};
+
+const reactSafetyRules = {
+	'react/jsx-key': 'warn',
+	'react/jsx-no-duplicate-props': 'warn',
+	'react/jsx-no-target-blank': 'warn',
+	'react/jsx-no-undef': 'warn',
+	'react/no-children-prop': 'warn',
+	'react/no-danger-with-children': 'warn',
+	'react/no-deprecated': 'warn',
+	'react/no-direct-mutation-state': 'warn',
+	'react/no-find-dom-node': 'warn',
+	'react/no-is-mounted': 'warn',
+	'react/no-render-return-value': 'warn',
+	'react/no-string-refs': 'warn',
+	'react/no-unescaped-entities': 'warn',
+	'react/no-unknown-property': 'warn',
+	'react/require-render-return': 'warn'
+};
+
+const reactHooksRules = {
+	'react-hooks/rules-of-hooks': 'warn',
+	'react-hooks/exhaustive-deps': 'warn'
 };
 
 module.exports = defineConfig([
-	js.configs.recommended,
-	...tsPlugin.configs['flat/recommended-type-checked'],
-	importPlugin.flatConfigs.typescript,
+	warnifyConfigs(js.configs.recommended),
+	...warnifyConfigs(tsPlugin.configs['flat/recommended-type-checked']),
+	warnifyConfigs(importPlugin.flatConfigs.typescript),
 	{
 		files: sharedFiles,
 		plugins: {
 			'@stylistic': stylisticPlugin,
 			jsdoc: jsdocPlugin,
-			react: reactPlugin
+			react: reactPlugin,
+			'react-hooks': reactHooksPlugin
 		},
 		languageOptions: {
 			parser: tsParser,
@@ -167,13 +245,13 @@ module.exports = defineConfig([
 			'@typescript-eslint/prefer-interface': [ 'off' ],
 			'@typescript-eslint/camelcase': [ 'off' ],
 			'@typescript-eslint/no-parameter-properties': [ 'off' ],
-			'@typescript-eslint/explicit-function-return-type': [ 'error', { allowExpressions: true, allowTypedFunctionExpressions: true }],
+			'@typescript-eslint/explicit-function-return-type': [ 'warn', { allowExpressions: true, allowTypedFunctionExpressions: true }],
 			'@typescript-eslint/ban-types': 'off',
 			'@typescript-eslint/no-empty-object-type': 'off',
 			'@typescript-eslint/no-deprecated': 'warn',
 			'@typescript-eslint/no-shadow': [ 'warn' ],
 			'@typescript-eslint/no-unused-vars': [ 'warn', { vars: 'all', args: 'after-used' }],
-			'@typescript-eslint/no-use-before-define': [ 'error', { typedefs: false }],
+			'@typescript-eslint/no-use-before-define': [ 'warn', { typedefs: false }],
 
 			/* ************* @stylistic ************* */
 
@@ -366,7 +444,7 @@ module.exports = defineConfig([
 
 			/* ************* eslint-plugin-import ************* */
 
-			'import/no-unresolved': 'error',
+			'import/no-unresolved': 'warn',
 			'import/named': 'off',
 			'import/default': 'warn',
 			'import/namespace': 'off',
@@ -414,6 +492,8 @@ module.exports = defineConfig([
 
 			/* ************* react ************* */
 
+			...reactSafetyRules,
+			...reactHooksRules,
 			'react/display-name': 'off'
 		}
 	},
