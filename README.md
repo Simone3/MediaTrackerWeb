@@ -3,33 +3,35 @@ Just a Codex experiment for now.
 
 TODO:
 
-- check dev vs. prod configs
-  - how to inject them in a webapp?
-  - do we need .env file?
-  - edit package.json commands to set environment
-  - is it useless to gitignore the configs?
-
-- make it add more tests
-
 - re-review logic code starting from screens and moving down (especially for media item parts)
 
-- fully test on chrome (production build)
-- fully test on firefox (production build)
-- fully test on mobile (production build) (emulator or fake)
+- fully test on chrome
+- fully test on firefox
+- fully test on mobile (emulator or fake)
+- minimal tests with a production build
 
-- "merge" web and be to deploy them as a single app? first, upgrade back-end dependencies
+- "merge" web and be to deploy them as a single app?
+- then upgrade back-end dependencies
 
-- rewrite agents
+- rewrite agents.md
   - tell it to keep generic media item files clean from media-specific stuff
   - formatting advice
   - do not commit
   - make it generate agents instructions based on the current doc file!
   - make it summarize my code style
   - no carets etc. in package.json
-- rewrite doc -> make it rewrite a true documentation
-- rewrite readme
+- rewrite doc.md
+  - make it rewrite a true documentation
+  - rename the file
+- rewrite readme.md
 
+-------------
 
+Locally, the rule is now:
+- npm start => uses dev
+- npm run build => uses prod
+- MEDIA_TRACKER_APP_ENV=prod npm start => runs the local dev server but with production app config
+- MEDIA_TRACKER_APP_ENV=dev npm run build => builds a production bundle with dev app config, if you ever want that explicitly
 
 
 
