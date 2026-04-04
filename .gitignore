@@ -60,23 +60,4 @@ buck-out/
 # Bundle artifact
 *.jsbundle
 
-# CocoaPods
-/ios/Pods/
 
-
-############### PROJECT-SPECIFIC
-
-# Configuration properties
-app/config/properties/config-*.ts
-!app/config/properties/config-test.ts
-!app/config/properties/config-sample.ts
-
-# Configuration files
-.env
-app/config/files/config-*
-!app/config/files/config-test
-!app/config/files/config-sample
-
-# Firebase config (loaded dynamically from app/config/files/)
-android/app/google-services.json
-ios/GoogleService-Info.plist

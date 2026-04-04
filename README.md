@@ -7,19 +7,17 @@ TODO:
   - how to inject them in a webapp?
   - do we need .env file?
   - edit package.json commands to set environment
-  - restore config-sample.ts
-  - Firebase API key is public?
   - is it useless to gitignore the configs?
 
 - make it add more tests
 
 - re-review logic code starting from screens and moving down (especially for media item parts)
 
-- fully test on chrome/firefox (production build)
-- fully test on mobile (need to deploy first?)
+- fully test on chrome (production build)
+- fully test on firefox (production build)
+- fully test on mobile (production build) (emulator or fake)
 
 - "merge" web and be to deploy them as a single app? first, upgrade back-end dependencies
-- limit signups in prod firebase? are there login attempts limits?
 
 - rewrite agents
   - tell it to keep generic media item files clean from media-specific stuff

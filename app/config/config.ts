@@ -4,14 +4,6 @@ import { Config } from 'app/config/type-config';
 import { AppError } from 'app/data/models/internal/error';
 import { getEnvValue } from 'app/utilities/env';
 
-/**
- * The application expects to find several configuration files:
- * - config-dev.ts for development environment
- * - config-prod.ts for production environment
- *
- * In general, config-{ENV}.ts where {ENV} is defined by the MEDIA_TRACKER_APP_ENV variable (defined in the ".env" files)
- */
-
 const environment = getEnvValue('MEDIA_TRACKER_APP_ENV') || 'dev';
 
 // Get config based on environment
