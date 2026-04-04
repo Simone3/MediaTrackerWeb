@@ -770,6 +770,9 @@
 - Useful pattern:
   - render presentational component directly for UI behavior
   - use a tiny local Redux store for container wiring tests
+- Shared infrastructure now has direct guardrails too:
+  - `tests/navigation-service.test.ts` covers the web navigation bridge, including route-to-path delegation, back navigation, and the explicit uninitialized-service failure
+  - `tests/rest-json-invoker.test.ts` now covers parsed-response validation plus timeout/parse error mapping, which protects the main backend HTTP entry point beyond the existing header smoke test
 - Important gotcha:
   - importing very broad app modules in tests can pull in decorator-heavy API model files
   - this can trip Jest/Babel parsing in places unrelated to the feature under test

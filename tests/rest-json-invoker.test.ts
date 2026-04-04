@@ -1,4 +1,14 @@
+import { IsString } from 'class-validator';
 import { RestJsonInvokerAxios } from 'app/controllers/implementations/real/common/rest-json-invoker';
+
+const reflectMetadata = require('reflect-metadata');
+
+void reflectMetadata;
+
+class TestValidatedResponse {
+	@IsString()
+	public ok: string = '';
+}
 
 jest.mock('app/config/config', () => {
 	return {
@@ -71,5 +81,58 @@ describe('RestJsonInvokerAxios', () => {
 			Accept: 'application/json'
 		}));
 		expect(requestOptions.headers).not.toHaveProperty('Accept-Charset');
+	});
+
+	test('parses and validates the response body when the backend response is not assumed to be well formed', async() => {
+		axiosMock.default.request.mockResolvedValue({
+			data: {
+				ok: 'validated'
+			}
+		});
+
+		const invoker = new RestJsonInvokerAxios();
+
+		const response = await invoker.invoke({
+			method: 'GET',
+			url: 'http://localhost:3000/test',
+			responseBodyClass: TestValidatedResponse
+		});
+
+		expect(response).toBeInstanceOf(TestValidatedResponse);
+		expect(response.ok).toBe('validated');
+	});
+
+	test('maps response parsing failures to the backend parse app error', async() => {
+		axiosMock.default.request.mockResolvedValue({
+			data: {
+				ok: 123
+			}
+		});
+
+		const invoker = new RestJsonInvokerAxios();
+
+		await expect(invoker.invoke({
+			method: 'GET',
+			url: 'http://localhost:3000/test',
+			responseBodyClass: TestValidatedResponse
+		})).rejects.toMatchObject({
+			errorCode: 'backend.parse'
+		});
+	});
+
+	test('maps timeout cancellation errors to the backend timeout app error', async() => {
+		axiosMock.default.request.mockRejectedValue({
+			message: 'custom-timeout'
+		});
+
+		const invoker = new RestJsonInvokerAxios();
+
+		await expect(invoker.invoke({
+			method: 'GET',
+			url: 'http://localhost:3000/test',
+			responseBodyClass: class TestResponse {}
+		})).rejects.toMatchObject({
+			errorCode: 'backend.timeout'
+		});
 	});
 });
