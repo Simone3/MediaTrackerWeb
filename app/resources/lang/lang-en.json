@@ -483,8 +483,7 @@
 		"drawer": {
 			"navigation": "App navigation",
 			"home": "Media",
-			"settings": "Settings",
-			"credits": "Credits"
+			"settings": "Settings"
 		}
 	},
 	"auth": {
@@ -520,12 +519,17 @@
 		"screen": {
 			"title": "Settings",
 			"sections": {
-				"user": "User"
+				"user": "User",
+				"about": "About"
 			},
 			"rows": {
 				"logout": {
 					"title": "Logout",
 					"subtitle": "Logged in as {{username}}"
+				},
+				"credits": {
+					"title": "Credits",
+					"subtitle": "View data sources and acknowledgements"
 				}
 			},
 			"alert": {

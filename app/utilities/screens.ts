@@ -26,6 +26,5 @@ export const AppSections = {
 	Unauthenticated: 'UnauthenticatedSection',
 	Authenticated: 'AuthenticatedSection',
 	Media: 'MediaSection',
-	Settings: 'SettingsSection',
-	Credits: 'CreditsSection'
+	Settings: 'SettingsSection'
 };

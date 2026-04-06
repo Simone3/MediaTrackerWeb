@@ -6,6 +6,7 @@ describe('navigation routes', () => {
 		expect(screenToPath(AppScreens.UserLogin)).toBe('/auth/login');
 		expect(screenToPath(AppScreens.CategoriesList)).toBe('/media/categories');
 		expect(screenToPath(AppScreens.Settings)).toBe('/settings');
+		expect(screenToPath(AppScreens.Credits)).toBe('/settings/credits');
 	});
 
 	test('throws for unknown screens', () => {

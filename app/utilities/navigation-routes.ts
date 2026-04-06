@@ -9,7 +9,6 @@ export const navigationRoutes: { [screen: string]: string } = {
 	[AppSections.Authenticated]: '/app',
 	[AppSections.Media]: '/media',
 	[AppSections.Settings]: '/settings',
-	[AppSections.Credits]: '/credits',
 	[AppScreens.AuthLoading]: '/auth/loading',
 	[AppScreens.UserLogin]: '/auth/login',
 	[AppScreens.UserSignup]: '/auth/signup',
@@ -24,7 +23,7 @@ export const navigationRoutes: { [screen: string]: string } = {
 	[AppScreens.OwnPlatformsList]: '/media/platforms',
 	[AppScreens.OwnPlatformDetails]: '/media/platforms/details',
 	[AppScreens.Settings]: '/settings',
-	[AppScreens.Credits]: '/credits'
+	[AppScreens.Credits]: '/settings/credits'
 };
 
 /**

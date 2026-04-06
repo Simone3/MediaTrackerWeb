@@ -3,6 +3,8 @@ import { Dispatch } from 'redux';
 import { SettingsScreenComponent, SettingsScreenComponentInput, SettingsScreenComponentOutput } from 'app/components/presentational/settings/screen';
 import { logUserOut } from 'app/redux/actions/user/generators';
 import { State } from 'app/redux/state/state';
+import { navigationService } from 'app/utilities/navigation-service';
+import { AppScreens } from 'app/utilities/screens';
 
 const mapStateToProps = (state: State): SettingsScreenComponentInput => {
 	return {
@@ -15,6 +17,9 @@ const mapDispatchToProps = (dispatch: Dispatch): SettingsScreenComponentOutput =
 	return {
 		logout: () => {
 			dispatch(logUserOut());
+		},
+		openCredits: () => {
+			navigationService.navigate(AppScreens.Credits);
 		}
 	};
 };

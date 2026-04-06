@@ -21,16 +21,8 @@ jest.mock('app/components/containers/navigation/settings-navigator', () => {
 	};
 });
 
-jest.mock('app/components/containers/navigation/credits-navigator', () => {
-	return {
-		CreditsNavigator: () => {
-			return <div>Credits section</div>;
-		}
-	};
-});
-
 describe('AuthenticatedNavigator', () => {
-	test('keeps the media icon active for nested media routes', () => {
+	test('shows home and settings utility controls for nested media routes', () => {
 		render(
 			<MemoryRouter initialEntries={[ screenToPath(AppScreens.MediaItemsList) ]}>
 				<AuthenticatedNavigator />
@@ -38,21 +30,31 @@ describe('AuthenticatedNavigator', () => {
 		);
 
 		expect(screen.getByRole('navigation', { name: i18n.t('common.drawer.navigation') })).toBeInTheDocument();
-		expect(screen.queryByRole('img', { name: i18n.t('common.app.name') })).not.toBeInTheDocument();
-		expect(screen.getByRole('link', { name: i18n.t('common.drawer.home') })).toHaveClass('app-shell-link-active');
+		expect(screen.getByRole('link', { name: i18n.t('common.drawer.home') })).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: i18n.t('common.drawer.settings') })).toBeInTheDocument();
-		expect(screen.getByRole('link', { name: i18n.t('common.drawer.credits') })).toBeInTheDocument();
 		expect(screen.getByText('Media section')).toBeInTheDocument();
 	});
 
-	test('marks the settings icon active on the settings route', () => {
+	test('hides the home shortcut on the categories home screen', () => {
+		render(
+			<MemoryRouter initialEntries={[ screenToPath(AppScreens.CategoriesList) ]}>
+				<AuthenticatedNavigator />
+			</MemoryRouter>
+		);
+
+		expect(screen.queryByRole('link', { name: i18n.t('common.drawer.home') })).not.toBeInTheDocument();
+		expect(screen.getByRole('link', { name: i18n.t('common.drawer.settings') })).toBeInTheDocument();
+	});
+
+	test('marks the settings shortcut active on settings routes', () => {
 		render(
 			<MemoryRouter initialEntries={[ screenToPath(AppScreens.Settings) ]}>
 				<AuthenticatedNavigator />
 			</MemoryRouter>
 		);
 
-		expect(screen.getByRole('link', { name: i18n.t('common.drawer.settings') })).toHaveClass('app-shell-link-active');
+		expect(screen.getByRole('link', { name: i18n.t('common.drawer.home') })).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: i18n.t('common.drawer.settings') })).toHaveClass('app-shell-utility-link-active');
 		expect(screen.getByText('Settings section')).toBeInTheDocument();
 	});
 });

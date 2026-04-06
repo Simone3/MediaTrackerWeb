@@ -85,6 +85,14 @@
 - Imperative navigation helper: `app/utilities/navigation-service.ts`
 - Navigation is action-driven through saga:
   - `app/redux/sagas/navigation/navigation.ts`
+- The authenticated web shell no longer uses the old left rail / mobile bottom navigation.
+  - it now exposes a compact persistent utility nav in the shared authenticated wrapper
+  - the `Settings` shortcut is always present
+  - the `Media`/home shortcut appears everywhere except the categories home screen, and it jumps directly to `/media/categories`
+- Credits are no longer a top-level authenticated section.
+  - `AppScreens.Credits` now resolves to `/settings/credits`
+  - the Settings screen owns the entry point to Credits through a dedicated settings row
+  - `SettingsNavigator` now nests the credits route under the settings section
 - Important consequence:
   - dispatching actions like `LOAD_CATEGORY_DETAILS` or `SELECT_CATEGORY` can change route indirectly through saga
   - when debugging "why did this screen open?", always check navigation saga

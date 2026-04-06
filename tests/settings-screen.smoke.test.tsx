@@ -15,6 +15,7 @@ describe('SettingsScreenComponent', () => {
 				}}
 				isLoading={false}
 				logout={logout}
+				openCredits={jest.fn()}
 			/>
 		);
 
@@ -24,5 +25,27 @@ describe('SettingsScreenComponent', () => {
 		}));
 		await user.click(screen.getByRole('button', { name: i18n.t('common.alert.default.okButton') }));
 		expect(logout).toHaveBeenCalledTimes(1);
+	});
+
+	test('opens the credits row from settings', async() => {
+		const openCredits = jest.fn();
+
+		render(
+			<SettingsScreenComponent
+				user={{
+					id: 'user-id',
+					email: 'test@example.com'
+				}}
+				isLoading={false}
+				logout={jest.fn()}
+				openCredits={openCredits}
+			/>
+		);
+
+		const user = userEvent.setup();
+		await user.click(screen.getByRole('button', {
+			name: `${i18n.t('settings.screen.rows.credits.title')} ${i18n.t('settings.screen.rows.credits.subtitle')}`
+		}));
+		expect(openCredits).toHaveBeenCalledTimes(1);
 	});
 });

@@ -18,7 +18,8 @@ export class SettingsScreenComponent extends Component<SettingsScreenComponentPr
 	public render(): ReactNode {
 		const {
 			user,
-			isLoading
+			isLoading,
+			openCredits
 		} = this.props;
 		const {
 			confirmDialog
@@ -43,6 +44,19 @@ export class SettingsScreenComponent extends Component<SettingsScreenComponentPr
 								<span className='settings-row-copy'>
 									<span className='settings-row-title'>{i18n.t('settings.screen.rows.logout.title')}</span>
 									<span className='settings-row-subtitle'>{i18n.t('settings.screen.rows.logout.subtitle', { username: user ? user.email : '' })}</span>
+								</span>
+							</button>
+						</div>
+						<div className='settings-section'>
+							<h2 className='settings-section-title'>{i18n.t('settings.screen.sections.about')}</h2>
+							<button
+								type='button'
+								className='settings-row'
+								disabled={isLoading}
+								onClick={openCredits}>
+								<span className='settings-row-copy'>
+									<span className='settings-row-title'>{i18n.t('settings.screen.rows.credits.title')}</span>
+									<span className='settings-row-subtitle'>{i18n.t('settings.screen.rows.credits.subtitle')}</span>
 								</span>
 							</button>
 						</div>
@@ -132,6 +146,11 @@ export type SettingsScreenComponentOutput = {
 	 * Callback to log the user out
 	 */
 	logout: () => void;
+
+	/**
+	 * Callback to open the credits screen
+	 */
+	openCredits: () => void;
 };
 
 /**
