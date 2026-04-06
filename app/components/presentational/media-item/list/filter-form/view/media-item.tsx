@@ -112,10 +112,10 @@ export const MediaItemFilterFormViewComponent = <TFormValues extends MediaItemFi
 				</SelectComponent>
 			</div>
 			<div className='media-item-filter-actions'>
-				<PillButtonComponent tone='secondary' onClick={props.close}>
+				<PillButtonComponent tone='secondary' size='compact' onClick={props.close}>
 					{i18n.t('common.alert.default.cancelButton')}
 				</PillButtonComponent>
-				<PillButtonComponent type='submit' tone='primary'>
+				<PillButtonComponent type='submit' tone='primary' size='compact'>
 					{i18n.t('common.alert.default.applyButton')}
 				</PillButtonComponent>
 			</div>

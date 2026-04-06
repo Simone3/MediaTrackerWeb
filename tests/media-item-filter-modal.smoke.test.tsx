@@ -93,6 +93,9 @@ describe('MediaItemFilterModalComponent', () => {
 			/>
 		);
 
+		expect(screen.getByRole('button', { name: i18n.t('common.alert.default.cancelButton') })).toHaveClass('pill-button-compact');
+		expect(screen.getByRole('button', { name: i18n.t('common.alert.default.applyButton') })).toHaveClass('pill-button-compact');
+
 		const user = userEvent.setup();
 		await user.selectOptions(screen.getByLabelText(i18n.t('mediaItem.list.filter.prompts.status')), 'CURRENT');
 		await user.selectOptions(screen.getByLabelText(i18n.t('mediaItem.list.filter.prompts.importance')), '300');

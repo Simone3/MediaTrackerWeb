@@ -803,6 +803,13 @@
     - Chrome gets `overscroll-behavior-y: none` at the page level to reduce the visible elastic-scroll artifact that Firefox was not showing
   - Relevant files:
     - `app/web/styles.css`
+- The media-items filter modal actions now use the same compact pill-button height as the rest of the list toolbar and dialogs.
+  - Correct behavior on web now:
+    - the `Cancel` and `Apply` actions at the bottom of the filter modal render with the shared compact button sizing instead of the taller default pill-button height
+    - the modal smoke test now guards that both actions keep the compact button class while the existing submit flow still works
+  - Relevant files:
+    - `app/components/presentational/media-item/list/filter-form/view/media-item.tsx`
+    - `tests/media-item-filter-modal.smoke.test.tsx`
 
 ## Testing notes
 - Jest setup is lightweight and mostly smoke-test oriented.
