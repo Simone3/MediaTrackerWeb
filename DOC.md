@@ -88,6 +88,7 @@
 - Authenticated pages now render a shared sticky top header instead of a shell-owned rail/top-nav split.
   - the shared header lives in `app/components/presentational/generic/authenticated-page-header`
   - it now spans edge-to-edge across the top of the viewport with no gap from the top edge, while remaining sticky
+  - the header chrome is now fully square with no rounded corners, and it keeps a shared minimum height even on pages without a subtitle
   - it always shows the app-logo `Home` shortcut on the left and the `Settings` shortcut on the right
   - each screen now supplies its own page title, optional subtitle, and optional header actions to that shared component
   - the `Home` shortcut still targets the `/media` section route so it resolves back to `/media/categories`, but the home/settings shortcuts no longer use a distinct active-state tint

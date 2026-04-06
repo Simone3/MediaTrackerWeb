@@ -31,8 +31,13 @@ export const AuthenticatedPageHeaderComponent = (props: AuthenticatedPageHeaderC
 					</NavLink>
 					<div className='authenticated-page-header-copy'>
 						<h1 className='authenticated-page-header-title'>{props.title}</h1>
-						{props.subtitle &&
-							<p className='authenticated-page-header-subtitle'>{props.subtitle}</p>}
+						<p
+							className={props.subtitle ?
+								'authenticated-page-header-subtitle' :
+								'authenticated-page-header-subtitle authenticated-page-header-subtitle-empty'}
+							aria-hidden={props.subtitle ? undefined : true}>
+							{props.subtitle ? props.subtitle : '\u00A0'}
+						</p>
 					</div>
 				</div>
 				<div className='authenticated-page-header-actions'>
