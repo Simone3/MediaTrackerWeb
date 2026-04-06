@@ -85,9 +85,10 @@
 - Imperative navigation helper: `app/utilities/navigation-service.ts`
 - Navigation is action-driven through saga:
   - `app/redux/sagas/navigation/navigation.ts`
-- The authenticated web shell uses a compact responsive icon nav in the shared authenticated wrapper.
-  - desktop uses a narrow sticky left rail with `Home` pinned to the top and `Settings` pinned to the bottom
-  - mobile collapses the same controls into a narrow sticky top header with `Home` on the left and `Settings` on the right
+- Authenticated pages now render a shared sticky top header instead of a shell-owned rail/top-nav split.
+  - the shared header lives in `app/components/presentational/generic/authenticated-page-header`
+  - it always shows the app-logo `Home` shortcut on the left and the `Settings` shortcut on the right
+  - each screen now supplies its own page title, optional subtitle, and optional header actions to that shared component
   - the `Home` shortcut targets the `/media` section route so it stays active across all media screens and still resolves back to `/media/categories`
 - Credits are no longer a top-level authenticated section.
   - `AppScreens.Credits` now resolves to `/settings/credits`
@@ -317,7 +318,8 @@
 - Group, own-platform, and TV-show-season list pages had still been using the older lighter list treatment on web.
   - Correct behavior/style on web now:
     - all three screens now use the same full-bleed dark shell language as the media items list instead of the older boxed light layout
-    - desktop now shows a header action button for creating a new group / platform / season, while mobile keeps the shared FAB pattern
+    - all three screens now use the shared authenticated page header, including the primary add action on both desktop and mobile
+    - the TV-show seasons screen renders both its `New Season` and `Done` actions inside that shared header
     - the group and own-platform selectors still keep their `None` option, selected-row behavior, edit flow, delete confirmation, and fetch logic
     - own-platform rows now show the actual platform icon tinted with the platform color in the leading badge, instead of repeating the icon name and color dot as a subtitle
     - selected group and own-platform rows now keep their accent outline/shadow while hovered, instead of briefly falling back to the generic hover border
@@ -336,8 +338,7 @@
 - Media item list screen on web still looked like an older placeholder instead of matching the newer categories experience.
   - Correct behavior/style on web now:
     - the screen uses the same full-bleed dark shell language as the categories list
-    - desktop shows a top-right add button while mobile keeps the shared FAB pattern
-    - the top header now uses the media-type icon next to the category name instead of a repeated media-type pill
+    - it now uses the shared authenticated page header on both desktop and mobile, with the category name/title on the left and the `Add ...` action in the header action slot
     - the list toolbar, view-group banner, empty state, row cards, media-item context menu, and filter modal now belong to that same visual family without repeating the page title/count inside the list
     - the rows sit directly on the screen background instead of inside an extra boxed panel, which keeps the layout closer to the categories list
     - media-item rows now fill the same shared content width as the categories list, and their left accent follows the status color while staying transparent for `NEW` items
@@ -551,12 +552,14 @@
   - confirmed exit from the media-item form now discards the temporary Redux draft instead of carrying it past navigation
   - the details page now uses the same full-bleed dark shell language as the media items list instead of the older light card
   - the form is grouped into responsive section cards, while the artwork and external shortcut buttons now sit together in a top strip again instead of a left sidebar
-- Mobile category and media-item bottom sheets were appearing underneath the shared FAB because the sheets lived inside the `*-screen-content` stacking context while the FAB was rendered outside it.
+- Category and media-item list pages now share the same authenticated page-header pattern across breakpoints instead of splitting between a desktop header action and a mobile FAB.
   - Correct behavior on web now:
-    - the mobile FAB for categories and media items now renders inside the matching `*-screen-content` wrapper, so mobile context-menu sheets and filter overlays stack above it correctly
+    - the primary `Add ...` action for categories and media items lives in the shared top header on both desktop and mobile
+    - removing the mobile FAB also removes the old stacking/padding workarounds around list overlays and bottom sheets
   - Relevant files:
     - `app/components/presentational/category/list/screen/index.tsx`
     - `app/components/presentational/media-item/list/screen/index.tsx`
+    - `app/components/presentational/generic/authenticated-page-header/index.tsx`
     - `tests/categories-screen.smoke.test.tsx`
     - `tests/media-items-screen.smoke.test.tsx`
   - the media block now uses a vertical shortcut list beside the poster, with the poster/shortcut group centered in the strip and the panel gap preserved across breakpoints
@@ -678,7 +681,7 @@
   - Correct behavior on web now:
     - category, media item, group, own platform, and TV show season screens no longer render explicit `Back` buttons
     - the media-item list still keeps its in-list `Back` control for exiting "view group" mode, because that is not browser navigation
-    - dirty category/media-item forms now intercept the browser back button and same-origin in-app link clicks, so the shared unsaved-changes confirmation also appears when leaving through the main shell icons
+    - dirty category/media-item forms now intercept the browser back button and same-origin in-app link clicks, so the shared unsaved-changes confirmation also appears when leaving through the shared page-header shortcuts
     - confirming browser-back from the media-item details screen still discards the temporary Redux draft before leaving
   - Relevant files:
     - `app/components/presentational/generic/browser-back-navigation-guard/index.tsx`
@@ -695,24 +698,25 @@
     - `tests/browser-back-navigation-guard.test.tsx`
     - `tests/category-details.smoke.test.tsx`
     - `tests/media-item-details.smoke.test.tsx`
-- Authenticated app navigation now uses a compact icon rail on desktop and a compact icon header on mobile.
+- Authenticated app navigation now comes from a shared page-header component rendered by each authenticated screen.
   - Correct behavior on web now:
-    - the authenticated shell shows only the `Home` and `Settings` section icons in a narrow left rail on desktop
-    - the `Home` icon stays pinned to the top of the rail while `Settings` stays pinned to the bottom
-    - smaller screens switch to a sticky top header with `Home` on the left and `Settings` on the right
-    - the nav stays icon-only across breakpoints, with accessibility labels/title tooltips supplying the text
-    - the `Media` nav item now stays active anywhere inside the `/media/*` section instead of only on the categories route
+    - every authenticated screen now shows the same sticky top header with the app-logo `Home` shortcut, page title/subtitle, optional page actions, and the `Settings` shortcut
+    - the `Home` shortcut stays visible even on the categories list screen
+    - the `Media` shortcut stays active anywhere inside the `/media/*` section, while `Settings` stays active for `/settings/*`
+    - page-level actions such as `Add category`, `Save`, and the seasons screen `Done` action now live in that shared header instead of per-screen hero blocks or mobile FABs
   - Relevant files:
     - `app/components/containers/navigation/authenticated-navigator.tsx`
+    - `app/components/presentational/generic/authenticated-page-header/index.tsx`
     - `app/web/styles.css`
+    - `tests/authenticated-page-header.smoke.test.tsx`
     - `tests/authenticated-navigation.smoke.test.tsx`
-- The categories page now has a dark elevated main panel with white accent cards, a desktop header CTA, and a responsive overflow menu.
+- The categories page now has a dark elevated main panel with white accent cards, a shared header CTA, and a responsive overflow menu.
   - Correct behavior on web now:
     - the categories route now drives the authenticated content area into a full-screen dark treatment instead of sitting inside a smaller dark card with light margins around it
     - category rows render as mostly dark-neutral cards with a thin color rail, the restored media-type icon, and a quieter ghost-style options trigger
-    - desktop shows an outlined `Add category` header button, while mobile keeps the floating `+` action
+    - the page now uses the shared authenticated page header on both desktop and mobile, keeping `Add category` in the same place across breakpoints
     - the category overflow actions open as an anchored popover on desktop and a bottom sheet on mobile, while keeping the same edit/delete behavior and a darker confirmation dialog for destructive actions on the categories route
-    - mobile floating actions and bottom sheets now sit clear of the screen edges without getting clipped by the shell navigation
+    - mobile bottom sheets now sit clear of the screen edges without needing the old FAB/nav spacing workarounds
   - Relevant files:
     - `app/components/presentational/category/common/media-icon/index.tsx`
     - `app/components/presentational/category/list/constants.ts`

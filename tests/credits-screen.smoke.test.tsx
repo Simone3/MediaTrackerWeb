@@ -1,11 +1,14 @@
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { CreditsScreenComponent } from 'app/components/presentational/credits/screen';
 import { i18n } from 'app/utilities/i18n';
 
 describe('CreditsScreenComponent', () => {
 	test('renders source cards with external links', () => {
 		render(
-			<CreditsScreenComponent />
+			<MemoryRouter>
+				<CreditsScreenComponent />
+			</MemoryRouter>
 		);
 
 		expect(screen.getByRole('heading', { name: i18n.t('credits.screen.title') })).toBeInTheDocument();

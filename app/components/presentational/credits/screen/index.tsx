@@ -1,4 +1,5 @@
 import { Component, ReactNode } from 'react';
+import { AuthenticatedPageHeaderComponent } from 'app/components/presentational/generic/authenticated-page-header';
 import { i18n } from 'app/utilities/i18n';
 
 /**
@@ -12,9 +13,7 @@ export class CreditsScreenComponent extends Component<CreditsScreenComponentProp
 		return (
 			<section className='credits-screen'>
 				<div className='credits-shell'>
-					<div className='credits-header'>
-						<h1 className='credits-title'>{i18n.t('credits.screen.title')}</h1>
-					</div>
+					<AuthenticatedPageHeaderComponent title={i18n.t('credits.screen.title')} />
 					<div className='credits-grid'>
 						<article className='credits-card'>
 							<h2 className='credits-card-title'>{i18n.t('credits.screen.cards.tmdb.title')}</h2>

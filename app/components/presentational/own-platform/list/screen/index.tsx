@@ -4,7 +4,6 @@ import { EntityManagementListComponent } from 'app/components/presentational/gen
 import { EntityManagementScreenComponent } from 'app/components/presentational/generic/entity-management-screen';
 import { buildOwnPlatformMaskStyle } from 'app/components/presentational/own-platform/common/icon-registry';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
-import ownPlatformIcon from 'app/resources/images/ic_input_own_platform.svg';
 import { i18n } from 'app/utilities/i18n';
 
 const OWN_PLATFORMS_SCREEN_ACCENT = 'var(--color-management-accent-default)';
@@ -55,7 +54,6 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 				<EntityManagementScreenComponent
 					screenClassName='own-platforms-screen'
 					accentColor={OWN_PLATFORMS_SCREEN_ACCENT}
-					icon={<img src={ownPlatformIcon} alt='' className='entity-management-screen-icon' />}
 					title={i18n.t('ownPlatform.list.title')}
 					countLabel={countLabel}
 					addButtonLabel={i18n.t('ownPlatform.details.title.new')}

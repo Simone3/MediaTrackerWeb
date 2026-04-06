@@ -3,7 +3,6 @@ import { ConfirmDialogComponent } from 'app/components/presentational/generic/co
 import { EntityManagementListComponent } from 'app/components/presentational/generic/entity-management-list';
 import { EntityManagementScreenComponent } from 'app/components/presentational/generic/entity-management-screen';
 import { GroupInternal } from 'app/data/models/internal/group';
-import groupIcon from 'app/resources/images/ic_input_group.svg';
 import { i18n } from 'app/utilities/i18n';
 
 const GROUPS_SCREEN_ACCENT = 'var(--color-management-accent-default)';
@@ -54,7 +53,6 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 				<EntityManagementScreenComponent
 					screenClassName='groups-screen'
 					accentColor={GROUPS_SCREEN_ACCENT}
-					icon={<img src={groupIcon} alt='' className='entity-management-screen-icon' />}
 					title={i18n.t('group.list.title')}
 					countLabel={countLabel}
 					addButtonLabel={i18n.t('group.details.title.new')}

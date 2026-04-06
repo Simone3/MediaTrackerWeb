@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import { TvShowSeasonDetailsScreenComponent } from 'app/components/presentational/tv-show-season/details/screen';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { i18n } from 'app/utilities/i18n';
@@ -9,17 +10,19 @@ describe('TvShowSeasonDetailsScreenComponent', () => {
 		const saveTvShowSeason = jest.fn();
 		const notifyFormStatus = jest.fn();
 		render(
-			<TvShowSeasonDetailsScreenComponent
-				tvShowSeason={{
-					number: undefined as unknown as number,
-					episodesNumber: undefined,
-					watchedEpisodesNumber: undefined
-				}}
-				addingNewSeason={true}
-				saveTvShowSeason={saveTvShowSeason}
-				notifyFormStatus={notifyFormStatus}
-				goBack={jest.fn()}
-			/>
+			<MemoryRouter>
+				<TvShowSeasonDetailsScreenComponent
+					tvShowSeason={{
+						number: undefined as unknown as number,
+						episodesNumber: undefined,
+						watchedEpisodesNumber: undefined
+					}}
+					addingNewSeason={true}
+					saveTvShowSeason={saveTvShowSeason}
+					notifyFormStatus={notifyFormStatus}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		expect(screen.getByRole('heading', { level: 1, name: i18n.t('tvShowSeason.details.title.new') })).toBeInTheDocument();
@@ -67,13 +70,15 @@ describe('TvShowSeasonDetailsScreenComponent', () => {
 		};
 
 		render(
-			<TvShowSeasonDetailsScreenComponent
-				tvShowSeason={season}
-				addingNewSeason={false}
-				saveTvShowSeason={saveTvShowSeason}
-				notifyFormStatus={jest.fn()}
-				goBack={jest.fn()}
-			/>
+			<MemoryRouter>
+				<TvShowSeasonDetailsScreenComponent
+					tvShowSeason={season}
+					addingNewSeason={false}
+					saveTvShowSeason={saveTvShowSeason}
+					notifyFormStatus={jest.fn()}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		const user = userEvent.setup();

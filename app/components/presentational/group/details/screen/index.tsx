@@ -5,7 +5,6 @@ import { GroupFormViewComponent } from 'app/components/presentational/group/deta
 import { groupFormValidationSchema } from 'app/components/presentational/group/details/form/data';
 import { SameNameConfirmationDialogComponent, shouldOpenSameNameConfirmation } from 'app/components/presentational/generic/same-name-confirmation';
 import { GroupInternal } from 'app/data/models/internal/group';
-import groupIcon from 'app/resources/images/ic_input_group.svg';
 import { i18n } from 'app/utilities/i18n';
 
 const GROUP_DETAILS_ACCENT = 'var(--color-management-accent-default)';
@@ -61,7 +60,6 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 						<EntityDetailsFrameComponent
 							screenClassName='group-details-screen'
 							accentColor={GROUP_DETAILS_ACCENT}
-							icon={<img src={groupIcon} alt='' className='entity-details-icon' />}
 							title={title}
 							subtitle={i18n.t('group.list.emptyHint')}
 							saveLabel={i18n.t('common.buttons.save')}

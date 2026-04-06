@@ -4,7 +4,6 @@ import { EntityDetailsFrameComponent } from 'app/components/presentational/gener
 import { tvShowSeasonValidationSchema } from 'app/components/presentational/tv-show-season/details/form/data';
 import { TvShowSeasonFormViewComponent } from 'app/components/presentational/tv-show-season/details/form/view';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
-import seasonIcon from 'app/resources/images/ic_input_season_number.svg';
 import { i18n } from 'app/utilities/i18n';
 
 const TV_SHOW_SEASON_DETAILS_ACCENT = 'var(--color-tv-show-season-accent-default)';
@@ -44,7 +43,6 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 						<EntityDetailsFrameComponent
 							screenClassName='tv-show-season-details-screen'
 							accentColor={this.getSeasonAccent(formikProps.values)}
-							icon={<img src={seasonIcon} alt='' className='entity-details-icon' />}
 							title={title}
 							subtitle={seasonSummary}
 							saveLabel={i18n.t('common.buttons.save')}

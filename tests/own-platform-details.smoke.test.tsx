@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import { config } from 'app/config/config';
 import { OwnPlatformDetailsScreenComponent } from 'app/components/presentational/own-platform/details/screen';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
@@ -11,19 +12,21 @@ describe('OwnPlatformDetailsScreenComponent', () => {
 		const notifyFormStatus = jest.fn();
 		const selectedColor = config.ui.colors.availableOwnPlatformColors[1];
 		render(
-			<OwnPlatformDetailsScreenComponent
-				isLoading={false}
-				ownPlatform={{
-					id: '',
-					name: '',
-					color: config.ui.colors.availableOwnPlatformColors[0],
-					icon: 'default'
-				}}
-				sameNameConfirmationRequested={false}
-				saveOwnPlatform={saveOwnPlatform}
-				notifyFormStatus={notifyFormStatus}
-				goBack={jest.fn()}
-			/>
+			<MemoryRouter>
+				<OwnPlatformDetailsScreenComponent
+					isLoading={false}
+					ownPlatform={{
+						id: '',
+						name: '',
+						color: config.ui.colors.availableOwnPlatformColors[0],
+						icon: 'default'
+					}}
+					sameNameConfirmationRequested={false}
+					saveOwnPlatform={saveOwnPlatform}
+					notifyFormStatus={notifyFormStatus}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		expect(screen.getByRole('heading', { level: 1, name: i18n.t('ownPlatform.details.title.new') })).toBeInTheDocument();
@@ -69,25 +72,29 @@ describe('OwnPlatformDetailsScreenComponent', () => {
 		};
 
 		const { rerender } = render(
-			<OwnPlatformDetailsScreenComponent
-				isLoading={false}
-				ownPlatform={ownPlatform}
-				sameNameConfirmationRequested={false}
-				saveOwnPlatform={saveOwnPlatform}
-				notifyFormStatus={jest.fn()}
-				goBack={jest.fn()}
-			/>
+			<MemoryRouter>
+				<OwnPlatformDetailsScreenComponent
+					isLoading={false}
+					ownPlatform={ownPlatform}
+					sameNameConfirmationRequested={false}
+					saveOwnPlatform={saveOwnPlatform}
+					notifyFormStatus={jest.fn()}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		rerender(
-			<OwnPlatformDetailsScreenComponent
-				isLoading={false}
-				ownPlatform={ownPlatform}
-				sameNameConfirmationRequested={true}
-				saveOwnPlatform={saveOwnPlatform}
-				notifyFormStatus={jest.fn()}
-				goBack={jest.fn()}
-			/>
+			<MemoryRouter>
+				<OwnPlatformDetailsScreenComponent
+					isLoading={false}
+					ownPlatform={ownPlatform}
+					sameNameConfirmationRequested={true}
+					saveOwnPlatform={saveOwnPlatform}
+					notifyFormStatus={jest.fn()}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		const user = userEvent.setup();

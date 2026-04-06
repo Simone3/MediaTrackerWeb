@@ -3,7 +3,6 @@ import { ConfirmDialogComponent } from 'app/components/presentational/generic/co
 import { EntityManagementScreenComponent } from 'app/components/presentational/generic/entity-management-screen';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
-import seasonIcon from 'app/resources/images/ic_input_season_number.svg';
 import { i18n } from 'app/utilities/i18n';
 
 const TV_SHOW_SEASONS_SCREEN_ACCENT = 'var(--color-tv-show-season-accent-default)';
@@ -37,19 +36,18 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 				<EntityManagementScreenComponent
 					screenClassName='tv-show-seasons-screen'
 					accentColor={TV_SHOW_SEASONS_SCREEN_ACCENT}
-					icon={<img src={seasonIcon} alt='' className='entity-management-screen-icon' />}
 					title={i18n.t('tvShowSeason.list.title')}
 					countLabel={countLabel}
 					addButtonLabel={i18n.t('tvShowSeason.details.title.new')}
 					onAdd={this.props.loadNewTvShowSeasonDetails}
 					renderHeaderActions={({ defaultAddAction }) => {
 						return (
-							<div className='entity-management-screen-actions'>
+							<>
 								{defaultAddAction}
-								<PillButtonComponent tone='primary' onClick={this.props.completeHandling}>
+								<PillButtonComponent tone='primary' size='compact' onClick={this.props.completeHandling}>
 									{i18n.t('common.buttons.done')}
 								</PillButtonComponent>
-							</div>
+							</>
 						);
 					}}>
 					<div className='entity-management-list'>

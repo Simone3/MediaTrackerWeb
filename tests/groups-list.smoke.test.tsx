@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import { GroupsListScreenComponent } from 'app/components/presentational/group/list/screen';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { i18n } from 'app/utilities/i18n';
@@ -21,20 +22,22 @@ describe('GroupsListScreenComponent', () => {
 		const deleteGroup = jest.fn();
 
 		render(
-			<GroupsListScreenComponent
-				isLoading={false}
-				requiresFetch={false}
-				groups={groups}
-				selectedGroupId={undefined}
-				showEmptyState={false}
-				showSkeletons={false}
-				fetchGroups={jest.fn()}
-				selectGroup={selectGroup}
-				editGroup={editGroup}
-				deleteGroup={deleteGroup}
-				loadNewGroupDetails={jest.fn()}
-				goBack={jest.fn()}
-			/>
+			<MemoryRouter>
+				<GroupsListScreenComponent
+					isLoading={false}
+					requiresFetch={false}
+					groups={groups}
+					selectedGroupId={undefined}
+					showEmptyState={false}
+					showSkeletons={false}
+					fetchGroups={jest.fn()}
+					selectGroup={selectGroup}
+					editGroup={editGroup}
+					deleteGroup={deleteGroup}
+					loadNewGroupDetails={jest.fn()}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		const user = userEvent.setup();
@@ -53,20 +56,22 @@ describe('GroupsListScreenComponent', () => {
 		const {
 			container
 		} = render(
-			<GroupsListScreenComponent
-				isLoading={false}
-				requiresFetch={true}
-				groups={[]}
-				selectedGroupId={undefined}
-				showEmptyState={false}
-				showSkeletons={true}
-				fetchGroups={jest.fn()}
-				selectGroup={jest.fn()}
-				editGroup={jest.fn()}
-				deleteGroup={jest.fn()}
-				loadNewGroupDetails={jest.fn()}
-				goBack={jest.fn()}
-			/>
+			<MemoryRouter>
+				<GroupsListScreenComponent
+					isLoading={false}
+					requiresFetch={true}
+					groups={[]}
+					selectedGroupId={undefined}
+					showEmptyState={false}
+					showSkeletons={true}
+					fetchGroups={jest.fn()}
+					selectGroup={jest.fn()}
+					editGroup={jest.fn()}
+					deleteGroup={jest.fn()}
+					loadNewGroupDetails={jest.fn()}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		expect(screen.queryByText(i18n.t('group.list.empty'))).not.toBeInTheDocument();

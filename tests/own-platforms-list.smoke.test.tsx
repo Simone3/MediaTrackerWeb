@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import { config } from 'app/config/config';
 import { OwnPlatformsListScreenComponent } from 'app/components/presentational/own-platform/list/screen';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
@@ -26,20 +27,22 @@ describe('OwnPlatformsListScreenComponent', () => {
 		const deleteOwnPlatform = jest.fn();
 
 		render(
-			<OwnPlatformsListScreenComponent
-				isLoading={false}
-				requiresFetch={false}
-				ownPlatforms={ownPlatforms}
-				selectedOwnPlatformId={undefined}
-				showEmptyState={false}
-				showSkeletons={false}
-				fetchOwnPlatforms={jest.fn()}
-				selectOwnPlatform={selectOwnPlatform}
-				editOwnPlatform={editOwnPlatform}
-				deleteOwnPlatform={deleteOwnPlatform}
-				loadNewOwnPlatformDetails={jest.fn()}
-				goBack={jest.fn()}
-			/>
+			<MemoryRouter>
+				<OwnPlatformsListScreenComponent
+					isLoading={false}
+					requiresFetch={false}
+					ownPlatforms={ownPlatforms}
+					selectedOwnPlatformId={undefined}
+					showEmptyState={false}
+					showSkeletons={false}
+					fetchOwnPlatforms={jest.fn()}
+					selectOwnPlatform={selectOwnPlatform}
+					editOwnPlatform={editOwnPlatform}
+					deleteOwnPlatform={deleteOwnPlatform}
+					loadNewOwnPlatformDetails={jest.fn()}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		expect(screen.queryByText('Nintendo Switch')).toBeNull();
@@ -60,20 +63,22 @@ describe('OwnPlatformsListScreenComponent', () => {
 		const {
 			container
 		} = render(
-			<OwnPlatformsListScreenComponent
-				isLoading={false}
-				requiresFetch={true}
-				ownPlatforms={[]}
-				selectedOwnPlatformId={undefined}
-				showEmptyState={false}
-				showSkeletons={true}
-				fetchOwnPlatforms={jest.fn()}
-				selectOwnPlatform={jest.fn()}
-				editOwnPlatform={jest.fn()}
-				deleteOwnPlatform={jest.fn()}
-				loadNewOwnPlatformDetails={jest.fn()}
-				goBack={jest.fn()}
-			/>
+			<MemoryRouter>
+				<OwnPlatformsListScreenComponent
+					isLoading={false}
+					requiresFetch={true}
+					ownPlatforms={[]}
+					selectedOwnPlatformId={undefined}
+					showEmptyState={false}
+					showSkeletons={true}
+					fetchOwnPlatforms={jest.fn()}
+					selectOwnPlatform={jest.fn()}
+					editOwnPlatform={jest.fn()}
+					deleteOwnPlatform={jest.fn()}
+					loadNewOwnPlatformDetails={jest.fn()}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		expect(screen.queryByText(i18n.t('ownPlatform.list.empty'))).not.toBeInTheDocument();

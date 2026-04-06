@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import { config } from 'app/config/config';
 import { MediaItemsListScreenComponent } from 'app/components/presentational/media-item/list/screen';
 import { CategoryInternal } from 'app/data/models/internal/category';
@@ -42,17 +43,17 @@ describe('MediaItemsListScreenComponent', () => {
 		const loadNewMediaItemDetails = jest.fn();
 		setViewportWidth(1280);
 
-		const {
-			container
-		} = render(
-			<MediaItemsListScreenComponent
-				category={category}
-				mediaItemsCount={2}
-				isLoading={false}
-				requiresFetch={true}
-				fetchMediaItems={fetchMediaItems}
-				loadNewMediaItemDetails={loadNewMediaItemDetails}
-			/>
+		render(
+			<MemoryRouter>
+				<MediaItemsListScreenComponent
+					category={category}
+					mediaItemsCount={2}
+					isLoading={false}
+					requiresFetch={true}
+					fetchMediaItems={fetchMediaItems}
+					loadNewMediaItemDetails={loadNewMediaItemDetails}
+				/>
+			</MemoryRouter>
 		);
 
 		expect(fetchMediaItems).toHaveBeenCalledTimes(1);
@@ -60,36 +61,39 @@ describe('MediaItemsListScreenComponent', () => {
 		expect(screen.queryByText(i18n.t('category.mediaTypes.MOVIE'))).not.toBeInTheDocument();
 		expect(screen.getByTestId('media-items-list-container')).toBeInTheDocument();
 		expect(screen.getByTestId('media-item-filter-modal-container')).toBeInTheDocument();
-		expect(container.querySelector('.media-items-screen-icon')).not.toBeNull();
+		expect(screen.getByRole('link', { name: i18n.t('common.drawer.home') })).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: i18n.t('common.drawer.settings') })).toBeInTheDocument();
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: `+ ${i18n.t('mediaItem.list.add.MOVIE')}` }));
+		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.add.MOVIE') }));
 
 		expect(loadNewMediaItemDetails).toHaveBeenCalledWith(category);
 	});
 
-	test('shows the shared mobile FAB instead of the desktop add button on small screens', async() => {
+	test('keeps the shared header add button on small screens', async() => {
 		const loadNewMediaItemDetails = jest.fn();
 		setViewportWidth(640);
 
 		render(
-			<MediaItemsListScreenComponent
-				category={category}
-				mediaItemsCount={1}
-				isLoading={false}
-				requiresFetch={false}
-				fetchMediaItems={jest.fn()}
-				loadNewMediaItemDetails={loadNewMediaItemDetails}
-			/>
+			<MemoryRouter>
+				<MediaItemsListScreenComponent
+					category={category}
+					mediaItemsCount={1}
+					isLoading={false}
+					requiresFetch={false}
+					fetchMediaItems={jest.fn()}
+					loadNewMediaItemDetails={loadNewMediaItemDetails}
+				/>
+			</MemoryRouter>
 		);
 
-		expect(document.querySelector('.media-items-screen-content .floating-action-button')).not.toBeNull();
-		expect(screen.queryByRole('button', { name: `+ ${i18n.t('mediaItem.list.add.MOVIE')}` })).not.toBeInTheDocument();
+		expect(document.querySelector('.media-items-screen-content .floating-action-button')).toBeNull();
+		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.add.MOVIE') })).toBeInTheDocument();
 		expect(screen.getByText(i18n.t('mediaItem.list.count.single'))).toBeInTheDocument();
 		expect(screen.queryByText(i18n.t('category.mediaTypes.MOVIE'))).not.toBeInTheDocument();
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: '+' }));
+		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.add.MOVIE') }));
 
 		expect(loadNewMediaItemDetails).toHaveBeenCalledWith(category);
 	});

@@ -1,24 +1,18 @@
 import { Component, ReactNode } from 'react';
 import { CategoriesListContainer } from 'app/components/containers/category/list/list';
-import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
+import { AuthenticatedPageHeaderComponent } from 'app/components/presentational/generic/authenticated-page-header';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
-import { MOBILE_LAYOUT_BREAKPOINT } from 'app/utilities/layout';
 import { i18n } from 'app/utilities/i18n';
 
 /**
  * Presentational component that contains the whole "categories list" screen, that lists all user categories
  */
-export class CategoriesListScreenComponent extends Component<CategoriesListScreenComponentInput & CategoriesListScreenComponentOutput, CategoriesListScreenComponentState> {
-	public state: CategoriesListScreenComponentState = {
-		isMobileLayout: this.isMobileLayout()
-	};
-
+export class CategoriesListScreenComponent extends Component<CategoriesListScreenComponentInput & CategoriesListScreenComponentOutput> {
 	/**
 	 * @override
 	 */
 	public componentDidMount(): void {
-		window.addEventListener('resize', this.handleResize);
 		this.requestFetchIfRequired();
 	}
 
@@ -27,13 +21,6 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 	 */
 	public componentDidUpdate(): void {
 		this.requestFetchIfRequired();
-	}
-
-	/**
-	 * @override
-	 */
-	public componentWillUnmount(): void {
-		window.removeEventListener('resize', this.handleResize);
 	}
 
 	/**
@@ -52,22 +39,19 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 		return (
 			<section className='categories-screen'>
 				<div className='categories-screen-content'>
-					<header className='categories-screen-header'>
-						<div className='categories-screen-heading'>
-							<h1 className='categories-screen-title'>{i18n.t('category.list.title')}</h1>
-							<p className='categories-screen-count'>{countLabel}</p>
-						</div>
-						{!this.state.isMobileLayout &&
-							<PillButtonComponent tone='secondary' onClick={loadNewCategoryDetails}>
-								+ {i18n.t('category.list.add')}
-							</PillButtonComponent>}
-					</header>
+					<AuthenticatedPageHeaderComponent
+						title={i18n.t('category.list.title')}
+						subtitle={countLabel}
+						actions={
+							<PillButtonComponent
+								tone='secondary'
+								size='compact'
+								onClick={loadNewCategoryDetails}>
+								{i18n.t('category.list.add')}
+							</PillButtonComponent>
+						}
+					/>
 					<CategoriesListContainer />
-					{this.state.isMobileLayout &&
-						<FABComponent
-							text='+'
-							onPress={loadNewCategoryDetails}
-						/>}
 				</div>
 				<LoadingIndicatorComponent
 					visible={this.props.isLoading}
@@ -84,27 +68,6 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 		if(this.props.requiresFetch) {
 			this.props.fetchCategories();
 		}
-	}
-
-	/**
-	 * Updates the responsive layout flag when the viewport changes
-	 */
-	private handleResize = (): void => {
-		const isMobileLayout = this.isMobileLayout();
-
-		if(isMobileLayout !== this.state.isMobileLayout) {
-			this.setState({
-				isMobileLayout
-			});
-		}
-	};
-
-	/**
-	 * Checks whether the current viewport matches the mobile layout
-	 * @returns true if mobile layout should be used
-	 */
-	private isMobileLayout(): boolean {
-		return window.innerWidth <= MOBILE_LAYOUT_BREAKPOINT;
 	}
 }
 
@@ -141,8 +104,4 @@ export type CategoriesListScreenComponentOutput = {
 	 * Callback to load the details of a new category
 	 */
 	loadNewCategoryDetails: () => void;
-};
-
-type CategoriesListScreenComponentState = {
-	isMobileLayout: boolean;
 };

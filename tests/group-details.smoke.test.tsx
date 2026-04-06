@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import { GroupDetailsScreenComponent } from 'app/components/presentational/group/details/screen';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { i18n } from 'app/utilities/i18n';
@@ -9,17 +10,19 @@ describe('GroupDetailsScreenComponent', () => {
 		const saveGroup = jest.fn();
 		const notifyFormStatus = jest.fn();
 		render(
-			<GroupDetailsScreenComponent
-				isLoading={false}
-				group={{
-					id: '',
-					name: ''
-				}}
-				sameNameConfirmationRequested={false}
-				saveGroup={saveGroup}
-				notifyFormStatus={notifyFormStatus}
-				goBack={jest.fn()}
-			/>
+			<MemoryRouter>
+				<GroupDetailsScreenComponent
+					isLoading={false}
+					group={{
+						id: '',
+						name: ''
+					}}
+					sameNameConfirmationRequested={false}
+					saveGroup={saveGroup}
+					notifyFormStatus={notifyFormStatus}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		expect(screen.getByRole('heading', { level: 1, name: i18n.t('group.details.title.new') })).toBeInTheDocument();
@@ -56,25 +59,29 @@ describe('GroupDetailsScreenComponent', () => {
 		};
 
 		const { rerender } = render(
-			<GroupDetailsScreenComponent
-				isLoading={false}
-				group={group}
-				sameNameConfirmationRequested={false}
-				saveGroup={saveGroup}
-				notifyFormStatus={jest.fn()}
-				goBack={jest.fn()}
-			/>
+			<MemoryRouter>
+				<GroupDetailsScreenComponent
+					isLoading={false}
+					group={group}
+					sameNameConfirmationRequested={false}
+					saveGroup={saveGroup}
+					notifyFormStatus={jest.fn()}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		rerender(
-			<GroupDetailsScreenComponent
-				isLoading={false}
-				group={group}
-				sameNameConfirmationRequested={true}
-				saveGroup={saveGroup}
-				notifyFormStatus={jest.fn()}
-				goBack={jest.fn()}
-			/>
+			<MemoryRouter>
+				<GroupDetailsScreenComponent
+					isLoading={false}
+					group={group}
+					sameNameConfirmationRequested={true}
+					saveGroup={saveGroup}
+					notifyFormStatus={jest.fn()}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		const user = userEvent.setup();

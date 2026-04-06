@@ -5,7 +5,6 @@ import { SameNameConfirmationDialogComponent, shouldOpenSameNameConfirmation } f
 import { ownPlatformFormValidationSchema } from 'app/components/presentational/own-platform/details/form/data';
 import { OwnPlatformFormViewComponent } from 'app/components/presentational/own-platform/details/form/view';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
-import ownPlatformIcon from 'app/resources/images/ic_input_own_platform.svg';
 import { i18n } from 'app/utilities/i18n';
 
 const OWN_PLATFORM_DETAILS_ACCENT = 'var(--color-management-accent-default)';
@@ -61,7 +60,6 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 						<EntityDetailsFrameComponent
 							screenClassName='own-platform-details-screen'
 							accentColor={formikProps.values.color || OWN_PLATFORM_DETAILS_ACCENT}
-							icon={<img src={ownPlatformIcon} alt='' className='entity-details-icon' />}
 							title={title}
 							subtitle={i18n.t('ownPlatform.list.emptyHint')}
 							saveLabel={i18n.t('common.buttons.save')}

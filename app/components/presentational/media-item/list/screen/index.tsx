@@ -1,27 +1,20 @@
 import { Component, CSSProperties, ReactNode } from 'react';
 import { MediaItemsListContainer } from 'app/components/containers/media-item/list/list';
-import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
+import { AuthenticatedPageHeaderComponent } from 'app/components/presentational/generic/authenticated-page-header';
 import { MediaItemFilterModalContainer } from 'app/components/containers/media-item/list/filter-modal';
-import { FABComponent } from 'app/components/presentational/generic/floating-action-button';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { i18n } from 'app/utilities/i18n';
-import { MOBILE_LAYOUT_BREAKPOINT } from 'app/utilities/layout';
 
 /**
  * Presentational component that contains the whole "media items list" screen, that lists all media items of the current category
  */
-export class MediaItemsListScreenComponent extends Component<MediaItemsListScreenComponentInput & MediaItemsListScreenComponentOutput, MediaItemsListScreenComponentState> {
-	public state: MediaItemsListScreenComponentState = {
-		isMobileLayout: this.isMobileLayout()
-	};
-
+export class MediaItemsListScreenComponent extends Component<MediaItemsListScreenComponentInput & MediaItemsListScreenComponentOutput> {
 	/**
 	 * @override
 	 */
 	public componentDidMount(): void {
-		window.addEventListener('resize', this.handleResize);
 		this.requestFetchIfRequired();
 	}
 
@@ -30,13 +23,6 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 	 */
 	public componentDidUpdate(): void {
 		this.requestFetchIfRequired();
-	}
-
-	/**
-	 * @override
-	 */
-	public componentWillUnmount(): void {
-		window.removeEventListener('resize', this.handleResize);
 	}
 
 	/**
@@ -58,33 +44,21 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 				className='media-items-screen'
 				style={{ '--media-items-category-color': category.color } as CSSProperties}>
 				<div className='media-items-screen-content'>
-					<header className='media-items-screen-header'>
-						<div className='media-items-screen-heading'>
-							<div className='media-items-screen-title-row'>
-								<span className='media-items-screen-icon-shell' aria-hidden={true}>
-									<MediaIconComponent mediaType={category.mediaType} className='media-items-screen-icon' />
-								</span>
-								<h1 className='media-items-screen-title'>{category.name}</h1>
-							</div>
-							<p className='media-items-screen-count'>{countLabel}</p>
-						</div>
-						{!this.state.isMobileLayout &&
+					<AuthenticatedPageHeaderComponent
+						title={category.name}
+						subtitle={countLabel}
+						actions={
 							<PillButtonComponent
 								tone='secondary'
+								size='compact'
 								onClick={() => {
 									loadNewMediaItemDetails(category);
 								}}>
-								+ {i18n.t(`mediaItem.list.add.${category.mediaType}`)}
-							</PillButtonComponent>}
-					</header>
+								{i18n.t(`mediaItem.list.add.${category.mediaType}`)}
+							</PillButtonComponent>
+						}
+					/>
 					<MediaItemsListContainer/>
-					{this.state.isMobileLayout &&
-						<FABComponent
-							text='+'
-							onPress={() => {
-								loadNewMediaItemDetails(category);
-							}}
-						/>}
 				</div>
 				<MediaItemFilterModalContainer/>
 				<LoadingIndicatorComponent
@@ -102,27 +76,6 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 		if(this.props.requiresFetch) {
 			this.props.fetchMediaItems();
 		}
-	}
-
-	/**
-	 * Updates the responsive layout flag when the viewport changes
-	 */
-	private handleResize = (): void => {
-		const isMobileLayout = this.isMobileLayout();
-
-		if(isMobileLayout !== this.state.isMobileLayout) {
-			this.setState({
-				isMobileLayout
-			});
-		}
-	};
-
-	/**
-	 * Checks whether the current viewport matches the mobile layout
-	 * @returns true if mobile layout should be used
-	 */
-	private isMobileLayout(): boolean {
-		return window.innerWidth <= MOBILE_LAYOUT_BREAKPOINT;
 	}
 }
 
@@ -164,8 +117,4 @@ export type MediaItemsListScreenComponentOutput = {
 	 * Callback to load the details of a new media item for the given category
 	 */
 	loadNewMediaItemDetails: (category: CategoryInternal) => void;
-};
-
-type MediaItemsListScreenComponentState = {
-	isMobileLayout: boolean;
 };

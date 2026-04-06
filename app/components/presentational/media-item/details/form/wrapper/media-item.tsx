@@ -1,7 +1,7 @@
 import { Component, ReactNode } from 'react';
 import { Formik, FormikProps } from 'formik';
 import { ObjectSchema } from 'yup';
-import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
+import { AuthenticatedPageHeaderComponent } from 'app/components/presentational/generic/authenticated-page-header';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
@@ -95,28 +95,20 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 					return (
 						<section className='media-item-details-screen'>
 							<div className='media-item-details-screen-content'>
-								<header className='media-item-details-hero'>
-									<div className='media-item-details-heading'>
-										<div className='media-item-details-title-row'>
-											<span className='media-item-details-icon-shell' aria-hidden={true}>
-												<MediaIconComponent mediaType={formikProps.values.mediaType} className='media-item-details-icon' />
-											</span>
-											<div className='media-item-details-title-copy'>
-												<h1 className='media-item-details-title'>{title}</h1>
-											</div>
-										</div>
-									</div>
-									<div className='media-item-details-actions'>
+								<AuthenticatedPageHeaderComponent
+									title={title}
+									actions={
 										<PillButtonComponent
 											tone='primary'
+											size='compact'
 											disabled={!formikProps.isValid || !formikProps.values.name.trim() || isLoading}
 											onClick={() => {
 												void formikProps.submitForm();
 											}}>
 											{i18n.t('common.buttons.save')}
 										</PillButtonComponent>
-									</div>
-								</header>
+									}
+								/>
 								<form className='media-item-details-form' onSubmit={formikProps.handleSubmit}>
 									{children(formikProps, this.requestCatalogReload)}
 								</form>

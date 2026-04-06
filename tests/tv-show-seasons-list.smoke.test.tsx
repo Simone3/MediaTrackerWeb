@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import { TvShowSeasonsListScreenComponent } from 'app/components/presentational/tv-show-season/list/screen';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { i18n } from 'app/utilities/i18n';
@@ -24,15 +25,17 @@ describe('TvShowSeasonsListScreenComponent', () => {
 		const completeHandling = jest.fn();
 
 		render(
-			<TvShowSeasonsListScreenComponent
-				tvShowSeasons={tvShowSeasons}
-				loadNewTvShowSeasonDetails={jest.fn()}
-				editTvShowSeason={editTvShowSeason}
-				deleteTvShowSeason={deleteTvShowSeason}
-				completeTvShowSeason={completeTvShowSeason}
-				completeHandling={completeHandling}
-				goBack={jest.fn()}
-			/>
+			<MemoryRouter>
+				<TvShowSeasonsListScreenComponent
+					tvShowSeasons={tvShowSeasons}
+					loadNewTvShowSeasonDetails={jest.fn()}
+					editTvShowSeason={editTvShowSeason}
+					deleteTvShowSeason={deleteTvShowSeason}
+					completeTvShowSeason={completeTvShowSeason}
+					completeHandling={completeHandling}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		const user = userEvent.setup();

@@ -1,4 +1,5 @@
 import { CSSProperties, SubmitEventHandler, ReactElement, ReactNode } from 'react';
+import { AuthenticatedPageHeaderComponent } from 'app/components/presentational/generic/authenticated-page-header';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 
@@ -13,27 +14,19 @@ export const EntityDetailsFrameComponent = (props: EntityDetailsFrameComponentPr
 			className={`entity-details-screen ${props.screenClassName}`}
 			style={{ '--entity-details-accent': props.accentColor } as CSSProperties}>
 			<div className='entity-details-screen-content'>
-				<header className='entity-details-hero'>
-					<div className='entity-details-heading'>
-						<div className='entity-details-title-row'>
-							<span className='entity-details-icon-shell' aria-hidden={true}>
-								{props.icon}
-							</span>
-							<div className='entity-details-title-copy'>
-								<h1 className='entity-details-title'>{props.title}</h1>
-								{props.subtitle && <p className='entity-details-subtitle'>{props.subtitle}</p>}
-							</div>
-						</div>
-					</div>
-					<div className='entity-details-actions'>
+				<AuthenticatedPageHeaderComponent
+					title={props.title}
+					subtitle={props.subtitle}
+					actions={
 						<PillButtonComponent
 							tone='primary'
+							size='compact'
 							disabled={props.saveDisabled}
 							onClick={props.onSave}>
 							{props.saveLabel}
 						</PillButtonComponent>
-					</div>
-				</header>
+					}
+				/>
 				<form
 					className='entity-details-form'
 					onSubmit={props.onSubmit}>
@@ -55,7 +48,6 @@ export const EntityDetailsFrameComponent = (props: EntityDetailsFrameComponentPr
 export type EntityDetailsFrameComponentProps = {
 	screenClassName: string;
 	accentColor: string;
-	icon: ReactNode;
 	title: string;
 	saveLabel: string;
 	saveDisabled: boolean;

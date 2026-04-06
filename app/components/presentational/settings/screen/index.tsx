@@ -1,4 +1,5 @@
 import { Component, ReactNode } from 'react';
+import { AuthenticatedPageHeaderComponent } from 'app/components/presentational/generic/authenticated-page-header';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { UserInternal } from 'app/data/models/internal/user';
@@ -28,9 +29,7 @@ export class SettingsScreenComponent extends Component<SettingsScreenComponentPr
 		return (
 			<section className='settings-screen'>
 				<div className='settings-shell'>
-					<div className='settings-header'>
-						<h1 className='settings-title'>{i18n.t('settings.screen.title')}</h1>
-					</div>
+					<AuthenticatedPageHeaderComponent title={i18n.t('settings.screen.title')} />
 					<div className='settings-panel'>
 						<div className='settings-section'>
 							<h2 className='settings-section-title'>{i18n.t('settings.screen.sections.user')}</h2>

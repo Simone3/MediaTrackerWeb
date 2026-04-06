@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import { SettingsScreenComponent } from 'app/components/presentational/settings/screen';
 import { i18n } from 'app/utilities/i18n';
 
@@ -8,15 +9,17 @@ describe('SettingsScreenComponent', () => {
 		const logout = jest.fn();
 
 		render(
-			<SettingsScreenComponent
-				user={{
-					id: 'user-id',
-					email: 'test@example.com'
-				}}
-				isLoading={false}
-				logout={logout}
-				openCredits={jest.fn()}
-			/>
+			<MemoryRouter>
+				<SettingsScreenComponent
+					user={{
+						id: 'user-id',
+						email: 'test@example.com'
+					}}
+					isLoading={false}
+					logout={logout}
+					openCredits={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		const user = userEvent.setup();
@@ -31,15 +34,17 @@ describe('SettingsScreenComponent', () => {
 		const openCredits = jest.fn();
 
 		render(
-			<SettingsScreenComponent
-				user={{
-					id: 'user-id',
-					email: 'test@example.com'
-				}}
-				isLoading={false}
-				logout={jest.fn()}
-				openCredits={openCredits}
-			/>
+			<MemoryRouter>
+				<SettingsScreenComponent
+					user={{
+						id: 'user-id',
+						email: 'test@example.com'
+					}}
+					isLoading={false}
+					logout={jest.fn()}
+					openCredits={openCredits}
+				/>
+			</MemoryRouter>
 		);
 
 		const user = userEvent.setup();

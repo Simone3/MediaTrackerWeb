@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import { CategoryDetailsScreenComponent } from 'app/components/presentational/category/details/screen';
 import { config } from 'app/config/config';
 import { CategoryInternal, DEFAULT_CATEGORY } from 'app/data/models/internal/category';
@@ -11,13 +12,15 @@ describe('CategoryDetailsScreenComponent', () => {
 		const notifyFormStatus = jest.fn();
 		const selectedColor = config.ui.colors.availableCategoryColors[1];
 		render(
-			<CategoryDetailsScreenComponent
-				isLoading={false}
-				category={DEFAULT_CATEGORY}
-				sameNameConfirmationRequested={false}
-				saveCategory={saveCategory}
-				notifyFormStatus={notifyFormStatus}
-			/>
+			<MemoryRouter>
+				<CategoryDetailsScreenComponent
+					isLoading={false}
+					category={DEFAULT_CATEGORY}
+					sameNameConfirmationRequested={false}
+					saveCategory={saveCategory}
+					notifyFormStatus={notifyFormStatus}
+				/>
+			</MemoryRouter>
 		);
 
 		expect(document.querySelector('input[type="color"]')).not.toBeInTheDocument();
@@ -56,23 +59,27 @@ describe('CategoryDetailsScreenComponent', () => {
 		};
 
 		const { rerender } = render(
-			<CategoryDetailsScreenComponent
-				isLoading={false}
-				category={category}
-				sameNameConfirmationRequested={false}
-				saveCategory={saveCategory}
-				notifyFormStatus={jest.fn()}
-			/>
+			<MemoryRouter>
+				<CategoryDetailsScreenComponent
+					isLoading={false}
+					category={category}
+					sameNameConfirmationRequested={false}
+					saveCategory={saveCategory}
+					notifyFormStatus={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		rerender(
-			<CategoryDetailsScreenComponent
-				isLoading={false}
-				category={category}
-				sameNameConfirmationRequested={true}
-				saveCategory={saveCategory}
-				notifyFormStatus={jest.fn()}
-			/>
+			<MemoryRouter>
+				<CategoryDetailsScreenComponent
+					isLoading={false}
+					category={category}
+					sameNameConfirmationRequested={true}
+					saveCategory={saveCategory}
+					notifyFormStatus={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		const user = userEvent.setup();
@@ -96,13 +103,15 @@ describe('CategoryDetailsScreenComponent', () => {
 		};
 
 		render(
-			<CategoryDetailsScreenComponent
-				isLoading={false}
-				category={category}
-				sameNameConfirmationRequested={false}
-				saveCategory={saveCategory}
-				notifyFormStatus={jest.fn()}
-			/>
+			<MemoryRouter>
+				<CategoryDetailsScreenComponent
+					isLoading={false}
+					category={category}
+					sameNameConfirmationRequested={false}
+					saveCategory={saveCategory}
+					notifyFormStatus={jest.fn()}
+				/>
+			</MemoryRouter>
 		);
 
 		const user = userEvent.setup();
