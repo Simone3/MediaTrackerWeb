@@ -31,8 +31,7 @@ export class TvShowFormComponent extends Component<TvShowFormComponentProps> {
 	 */
 	public render(): ReactNode {
 		return (
-			<CommonMediaItemFormComponent
-				<TvShowInternal>
+			<CommonMediaItemFormComponent<TvShowInternal>
 				{...this.props}
 				defaultCatalogItem={DEFAULT_CATALOG_TV_SHOW}
 				normalizeFormValues={normalizeTvShowFormValues}

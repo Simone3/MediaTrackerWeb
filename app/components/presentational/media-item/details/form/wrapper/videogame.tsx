@@ -11,8 +11,7 @@ import { VideogameFormViewComponent } from 'app/components/presentational/media-
  */
 export const VideogameFormComponent = (props: VideogameFormComponentProps): ReactElement => {
 	return (
-		<CommonMediaItemFormComponent
-			<VideogameInternal>
+		<CommonMediaItemFormComponent<VideogameInternal>
 			{...props}
 			defaultCatalogItem={DEFAULT_CATALOG_VIDEOGAME}
 			normalizeFormValues={normalizeVideogameFormValues}

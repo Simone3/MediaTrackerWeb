@@ -11,8 +11,7 @@ import { MovieFormViewComponent } from 'app/components/presentational/media-item
  */
 export const MovieFormComponent = (props: MovieFormComponentProps): ReactElement => {
 	return (
-		<CommonMediaItemFormComponent
-			<MovieInternal>
+		<CommonMediaItemFormComponent<MovieInternal>
 			{...props}
 			defaultCatalogItem={DEFAULT_CATALOG_MOVIE}
 			normalizeFormValues={normalizeMovieFormValues}

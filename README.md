@@ -3,7 +3,9 @@ Just a Codex experiment for now.
 
 TODO:
 
-- re-review logic code starting from screens and moving down (especially for media item parts)
+- remove menu and just leave a settings icon with embedded credits?
+- unused lang-en properties
+- colors are spread around the app, both with # and rgb()
 
 - fully test on chrome
 - fully test on firefox
@@ -20,6 +22,7 @@ TODO:
   - make it generate agents instructions based on the current doc file!
   - make it summarize my code style
   - no carets etc. in package.json
+  - important to centralize when possible
 - rewrite doc.md
   - make it rewrite a true documentation
   - rename the file

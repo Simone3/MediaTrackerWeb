@@ -11,8 +11,7 @@ import { BookInternal, DEFAULT_CATALOG_BOOK } from 'app/data/models/internal/med
  */
 export const BookFormComponent = (props: BookFormComponentProps): ReactElement => {
 	return (
-		<CommonMediaItemFormComponent
-			<BookInternal>
+		<CommonMediaItemFormComponent<BookInternal>
 			{...props}
 			defaultCatalogItem={DEFAULT_CATALOG_BOOK}
 			normalizeFormValues={normalizeBookFormValues}
