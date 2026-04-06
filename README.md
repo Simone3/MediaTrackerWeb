@@ -3,10 +3,6 @@ Just a Codex experiment for now.
 
 TODO:
 
-- remove menu and just leave a settings icon with embedded credits?
-- unused lang-en properties
-- colors are spread around the app, both with # and rgb()
-
 - fully test on chrome
 - fully test on firefox
 - fully test on mobile (emulator or fake)
