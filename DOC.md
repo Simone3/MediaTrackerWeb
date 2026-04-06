@@ -85,10 +85,10 @@
 - Imperative navigation helper: `app/utilities/navigation-service.ts`
 - Navigation is action-driven through saga:
   - `app/redux/sagas/navigation/navigation.ts`
-- The authenticated web shell no longer uses the old left rail / mobile bottom navigation.
-  - it now exposes a compact persistent utility nav in the shared authenticated wrapper
-  - the `Settings` shortcut is always present
-  - the `Media`/home shortcut appears everywhere except the categories home screen, and it jumps directly to `/media/categories`
+- The authenticated web shell uses a compact responsive icon nav in the shared authenticated wrapper.
+  - desktop uses a narrow sticky left rail with `Home` pinned to the top and `Settings` pinned to the bottom
+  - mobile collapses the same controls into a narrow sticky top header with `Home` on the left and `Settings` on the right
+  - the `Home` shortcut targets the `/media` section route so it stays active across all media screens and still resolves back to `/media/categories`
 - Credits are no longer a top-level authenticated section.
   - `AppScreens.Credits` now resolves to `/settings/credits`
   - the Settings screen owns the entry point to Credits through a dedicated settings row
@@ -572,7 +572,7 @@
   - `tests/media-item-details.smoke.test.tsx`
 - Media item details TV show layout now adapts better across breakpoints.
   - Correct behavior on web now:
-    - on mobile, the form keeps enough bottom padding for the completion `Add date` button to stay above the fixed bottom navigation
+    - on mobile, the form keeps enough bottom padding for the completion `Add date` button to stay comfortably above the viewport edge
     - on larger screens, the TV show seasons summary sits beside the `Seasons` button instead of under it
     - the TV show `Production` and `Next episode air date` fields now render as aligned peer fields on larger screens, with both labels and controls starting at the same height
     - the `In production` checkbox shell now uses the same control height rhythm as the surrounding text/date fields
@@ -678,7 +678,7 @@
   - Correct behavior on web now:
     - category, media item, group, own platform, and TV show season screens no longer render explicit `Back` buttons
     - the media-item list still keeps its in-list `Back` control for exiting "view group" mode, because that is not browser navigation
-    - dirty category/media-item forms now intercept the browser back button and same-origin in-app link clicks, so the shared unsaved-changes confirmation also appears when leaving through the main sidebar icons
+    - dirty category/media-item forms now intercept the browser back button and same-origin in-app link clicks, so the shared unsaved-changes confirmation also appears when leaving through the main shell icons
     - confirming browser-back from the media-item details screen still discards the temporary Redux draft before leaving
   - Relevant files:
     - `app/components/presentational/generic/browser-back-navigation-guard/index.tsx`
@@ -695,12 +695,12 @@
     - `tests/browser-back-navigation-guard.test.tsx`
     - `tests/category-details.smoke.test.tsx`
     - `tests/media-item-details.smoke.test.tsx`
-- Authenticated app navigation now uses a VS Code-style icon rail on desktop and a touch-friendly bottom bar on mobile.
+- Authenticated app navigation now uses a compact icon rail on desktop and a compact icon header on mobile.
   - Correct behavior on web now:
-    - the authenticated shell shows only the section icons in a narrow left rail on desktop
-    - hovering or keyboard-focusing a nav icon reveals its label next to the rail
-    - the hover label now stacks above the main content instead of getting hidden under it
-    - smaller screens switch to a fixed bottom navigation with visible labels because hover is not available on touch
+    - the authenticated shell shows only the `Home` and `Settings` section icons in a narrow left rail on desktop
+    - the `Home` icon stays pinned to the top of the rail while `Settings` stays pinned to the bottom
+    - smaller screens switch to a sticky top header with `Home` on the left and `Settings` on the right
+    - the nav stays icon-only across breakpoints, with accessibility labels/title tooltips supplying the text
     - the `Media` nav item now stays active anywhere inside the `/media/*` section instead of only on the categories route
   - Relevant files:
     - `app/components/containers/navigation/authenticated-navigator.tsx`
@@ -710,9 +710,9 @@
   - Correct behavior on web now:
     - the categories route now drives the authenticated content area into a full-screen dark treatment instead of sitting inside a smaller dark card with light margins around it
     - category rows render as mostly dark-neutral cards with a thin color rail, the restored media-type icon, and a quieter ghost-style options trigger
-    - desktop shows an outlined `Add category` header button, while mobile keeps the floating `+` action above the bottom nav
+    - desktop shows an outlined `Add category` header button, while mobile keeps the floating `+` action
     - the category overflow actions open as an anchored popover on desktop and a bottom sheet on mobile, while keeping the same edit/delete behavior and a darker confirmation dialog for destructive actions on the categories route
-    - mobile floating actions and bottom sheets now sit above the fixed bottom navigation instead of getting partially hidden by it
+    - mobile floating actions and bottom sheets now sit clear of the screen edges without getting clipped by the shell navigation
   - Relevant files:
     - `app/components/presentational/category/common/media-icon/index.tsx`
     - `app/components/presentational/category/list/constants.ts`
@@ -797,7 +797,7 @@
 - Global CSS file is large and mixed across features.
 - Some original RN patterns were ported literally, so behavior may be correct even if the structure feels awkward for web.
 - Missing or partial web parity is often easiest to confirm by comparing with the old RN commit.
-- Mobile error toasts are intentionally lifted above the fixed bottom nav and floating action button so they do not get obscured by either control.
+- Mobile error toasts now sit near the lower viewport edge because the authenticated shell no longer uses a fixed bottom nav.
 
 ## Good recovery workflow for future work
 1. Read `app/AGENTS.md`.

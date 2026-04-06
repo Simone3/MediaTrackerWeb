@@ -259,66 +259,89 @@ input {
 }
 
 .app-shell {
-	position: relative;
+	display: grid;
+	grid-template-columns: 72px minmax(0, 1fr);
 	min-height: 100vh;
 	background: var(--color-background-app);
 }
 
-.app-shell-utility-bar {
+.app-shell-sidebar {
 	position: sticky;
 	top: 0;
 	z-index: 24;
 	display: flex;
-	justify-content: flex-end;
-	padding: max(16px, calc(env(safe-area-inset-top) + 16px)) max(16px, calc(env(safe-area-inset-right) + 16px)) 0 16px;
-	margin-bottom: -32px;
-	pointer-events: none;
+	align-self: start;
+	min-height: 100vh;
+	padding: max(14px, calc(env(safe-area-inset-top) + 14px)) 10px max(14px, calc(env(safe-area-inset-bottom) + 14px));
+	border-right: 1px solid var(--color-divider-strong);
+	background: linear-gradient(180deg, var(--color-background-screen-start) 0%, var(--color-background-app) 100%);
+	box-shadow: 10px 0 30px var(--color-shadow-panel);
+	backdrop-filter: blur(18px);
 }
 
-.app-shell-utility-nav {
+.app-shell-nav {
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
-	pointer-events: auto;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
 }
 
-.app-shell-utility-link {
+.app-shell-nav-link {
+	position: relative;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 56px;
-	height: 56px;
+	width: 48px;
+	height: 48px;
 	text-decoration: none;
 	color: var(--color-text-on-dark-muted);
-	border: 1px solid var(--color-surface-overlay-hover);
-	border-radius: 18px;
-	background: var(--color-background-bottom-nav);
-	box-shadow: 0 18px 40px var(--color-shadow-bottom-nav);
-	backdrop-filter: blur(18px);
+	border: 1px solid transparent;
+	border-radius: 16px;
+	background: transparent;
 	transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.app-shell-utility-link:hover {
-	transform: translateY(-1px);
-	border-color: var(--color-border-control-active);
+.app-shell-nav-link:hover {
+	transform: translateX(1px);
+	border-color: var(--color-border-control-medium);
 	background: var(--color-surface-overlay-hover);
 }
 
-.app-shell-utility-link:focus-visible {
+.app-shell-nav-link:focus-visible {
 	outline: none;
 	background: var(--color-surface-overlay-active);
 	border-color: var(--color-accent-bright);
 	box-shadow: 0 0 0 3px var(--color-accent-surface-strong);
 }
 
-.app-shell-utility-link-active {
+.app-shell-nav-link::before {
+	content: '';
+	position: absolute;
+	left: -10px;
+	top: 50%;
+	width: 3px;
+	height: 18px;
+	border-radius: 999px;
+	background: transparent;
+	transform: translateY(-50%) scaleY(0.4);
+	transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.app-shell-nav-link-active {
 	background: linear-gradient(180deg, var(--color-accent-glow) 0%, var(--color-accent-tint-indigo) 100%);
 	box-shadow: inset 0 0 0 1px var(--color-accent-highlight);
 	border-color: transparent;
 	color: var(--color-text-inverse);
 }
 
-.app-shell-utility-link-icon {
+.app-shell-nav-link-active::before {
+	background: var(--color-accent-bright);
+	transform: translateY(-50%) scaleY(1);
+}
+
+.app-shell-nav-link-icon {
 	width: 24px;
 	height: 24px;
 	object-fit: contain;
@@ -327,9 +350,9 @@ input {
 	transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.app-shell-utility-link:hover .app-shell-utility-link-icon,
-.app-shell-utility-link:focus-visible .app-shell-utility-link-icon,
-.app-shell-utility-link-active .app-shell-utility-link-icon {
+.app-shell-nav-link:hover .app-shell-nav-link-icon,
+.app-shell-nav-link:focus-visible .app-shell-nav-link-icon,
+.app-shell-nav-link-active .app-shell-nav-link-icon {
 	opacity: 1;
 	transform: scale(1.04);
 }
@@ -3102,19 +3125,35 @@ input {
 		max-width: none;
 	}
 
-	.app-shell-utility-nav {
-		gap: 10px;
+	.app-shell {
+		display: block;
 	}
 
-	.app-shell-utility-bar {
-		padding: max(12px, calc(env(safe-area-inset-top) + 12px)) max(12px, calc(env(safe-area-inset-right) + 12px)) 0 12px;
-		margin-bottom: -24px;
+	.app-shell-sidebar {
+		min-height: 0;
+		padding: max(12px, calc(env(safe-area-inset-top) + 12px)) max(12px, calc(env(safe-area-inset-right) + 12px)) 12px max(12px, calc(env(safe-area-inset-left) + 12px));
+		border-right: 0;
+		border-bottom: 1px solid var(--color-divider-strong);
+		box-shadow: 0 12px 28px var(--color-shadow-panel);
 	}
 
-	.app-shell-utility-link {
-		width: 52px;
-		height: 52px;
+	.app-shell-nav {
+		flex-direction: row;
+		justify-content: space-between;
+	}
+
+	.app-shell-nav-link {
+		width: 46px;
+		height: 46px;
 		border-radius: 16px;
+	}
+
+	.app-shell-nav-link:hover {
+		transform: translateY(-1px);
+	}
+
+	.app-shell-nav-link::before {
+		display: none;
 	}
 
 	.app-shell-content {
