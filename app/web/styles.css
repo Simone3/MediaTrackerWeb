@@ -360,6 +360,7 @@ input {
 
 .authenticated-page-header-link {
 	display: inline-flex;
+	flex: 0 0 auto;
 	align-items: center;
 	justify-content: center;
 	width: 48px;

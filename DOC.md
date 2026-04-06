@@ -90,6 +90,7 @@
   - it now spans edge-to-edge across the top of the viewport with no gap from the top edge, while remaining sticky
   - the header chrome is now fully square with no rounded corners, and it keeps a shared minimum height across authenticated pages
   - it always shows the app-logo `Home` shortcut on the left, while the `Settings` shortcut is now shown only on the categories-list homepage
+  - the header icon-link controls keep a fixed square width even when page titles get very long
   - each screen now supplies its own page title, subtitle, and optional header actions to that shared component
   - title and subtitle are intentionally clipped to a single line if the available space gets tight, with slightly roomier title line-height so descenders do not get shaved by the ellipsis layout
   - the `Home` shortcut still targets the `/media` section route so it resolves back to `/media/categories`, but the home/settings shortcuts no longer use a distinct active-state tint
