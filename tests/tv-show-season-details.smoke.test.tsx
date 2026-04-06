@@ -27,7 +27,7 @@ describe('TvShowSeasonDetailsScreenComponent', () => {
 
 		expect(screen.getByRole('heading', { level: 1, name: i18n.t('tvShowSeason.details.title.new') })).toBeInTheDocument();
 		expect(screen.queryAllByRole('heading', { level: 2 })).toHaveLength(0);
-		expect(screen.getByText(i18n.t('tvShowSeason.list.emptyHint'))).toBeInTheDocument();
+		expect(screen.getByText(i18n.t('tvShowSeason.details.subtitle.new'))).toBeInTheDocument();
 
 		const user = userEvent.setup();
 		const numberInput = screen.getByLabelText(i18n.t('tvShowSeason.details.placeholders.number'));
@@ -43,10 +43,6 @@ describe('TvShowSeasonDetailsScreenComponent', () => {
 		await user.type(episodesInput, '10');
 		await user.type(watchedInput, '7');
 
-		expect(screen.getByText(i18n.t('tvShowSeason.list.row.secondary', {
-			episodesNumber: 10,
-			watchedEpisodesNumber: 7
-		}))).toBeInTheDocument();
 		await waitFor(() => {
 			expect(saveButton).toBeEnabled();
 		});

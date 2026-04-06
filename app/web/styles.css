@@ -329,7 +329,7 @@ input {
 .authenticated-page-header-title {
 	margin: 0;
 	font-size: clamp(1.5rem, 3vw, 2.2rem);
-	line-height: 1.04;
+	line-height: 1.12;
 	color: var(--color-text-on-dark-primary);
 	overflow: hidden;
 	text-overflow: ellipsis;
