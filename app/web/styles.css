@@ -1084,21 +1084,27 @@ input {
 .responsive-action-menu-header {
 	display: grid;
 	gap: 0;
+	min-width: 0;
 }
 
 .responsive-action-menu-title {
 	margin: 0;
 	font-size: 1.15rem;
 	color: var(--color-text-on-dark-primary);
+	min-width: 0;
+	overflow-wrap: anywhere;
+	word-break: break-word;
 }
 
 .responsive-action-menu-actions {
 	display: grid;
 	gap: 8px;
+	min-width: 0;
 }
 
 .responsive-action-menu-button {
 	width: 100%;
+	min-width: 0;
 	border: 0;
 	border-radius: 14px;
 	padding: 14px 16px;
@@ -1106,6 +1112,8 @@ input {
 	color: var(--color-text-on-dark-secondary);
 	font-weight: 700;
 	text-align: left;
+	overflow-wrap: anywhere;
+	word-break: break-word;
 	cursor: pointer;
 	transition: background-color 0.2s ease, transform 0.2s ease;
 }

@@ -201,6 +201,12 @@
   - good reference implementations when category behavior looks wrong
 
 ## Recent fix worth remembering
+- The shared responsive action menu on web could already wrap menu titles, but long unbroken words still overflowed past the right edge of the popover/sheet.
+  - Correct behavior/structure on web now:
+    - the shared menu title and action buttons explicitly allow long uninterrupted strings to wrap within the menu width instead of spilling outside the panel
+    - the fix lives entirely in the shared responsive-action-menu CSS, so both desktop popovers and mobile bottom sheets inherit it together
+  - Relevant files:
+    - `app/web/styles.css`
 - The media-item details form on web had replaced Formik's `dirty` tracking with a manual deep-compare helper because Redux draft persistence was being fed back into `initialValues`.
   - Correct behavior/structure on web now:
     - the saved media item is once again the sole source of Formik `initialValues`, closer to the old RN flow
