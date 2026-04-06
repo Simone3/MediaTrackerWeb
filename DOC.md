@@ -88,9 +88,10 @@
 - Authenticated pages now render a shared sticky top header instead of a shell-owned rail/top-nav split.
   - the shared header lives in `app/components/presentational/generic/authenticated-page-header`
   - it now spans edge-to-edge across the top of the viewport with no gap from the top edge, while remaining sticky
-  - the header chrome is now fully square with no rounded corners, and it keeps a shared minimum height even on pages without a subtitle
-  - it always shows the app-logo `Home` shortcut on the left and the `Settings` shortcut on the right
-  - each screen now supplies its own page title, optional subtitle, and optional header actions to that shared component
+  - the header chrome is now fully square with no rounded corners, and it keeps a shared minimum height across authenticated pages
+  - it always shows the app-logo `Home` shortcut on the left, while the `Settings` shortcut is now shown only on the categories-list homepage
+  - each screen now supplies its own page title, subtitle, and optional header actions to that shared component
+  - title and subtitle are intentionally clipped to a single line if the available space gets tight
   - the `Home` shortcut still targets the `/media` section route so it resolves back to `/media/categories`, but the home/settings shortcuts no longer use a distinct active-state tint
 - Credits are no longer a top-level authenticated section.
   - `AppScreens.Credits` now resolves to `/settings/credits`
@@ -702,9 +703,8 @@
     - `tests/media-item-details.smoke.test.tsx`
 - Authenticated app navigation now comes from a shared page-header component rendered by each authenticated screen.
   - Correct behavior on web now:
-    - every authenticated screen now shows the same sticky top header with the app-logo `Home` shortcut, page title/subtitle, optional page actions, and the `Settings` shortcut
-    - the `Home` shortcut stays visible even on the categories list screen
-    - the `Media` shortcut stays active anywhere inside the `/media/*` section, while `Settings` stays active for `/settings/*`
+    - every authenticated screen now shows the same sticky top header with the app-logo `Home` shortcut, page title/subtitle, and optional page actions
+    - the `Settings` shortcut is shown only on the categories list screen, while the `Home` shortcut stays visible on every authenticated page
     - page-level actions such as `Add category`, `Save`, and the seasons screen `Done` action now live in that shared header instead of per-screen hero blocks or mobile FABs
   - Relevant files:
     - `app/components/containers/navigation/authenticated-navigator.tsx`

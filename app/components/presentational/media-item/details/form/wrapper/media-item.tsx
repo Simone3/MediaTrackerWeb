@@ -91,12 +91,14 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 				}}>
 				{(formikProps: FormikProps<TMediaItem>) => {
 					const title = formikProps.values.id ? formikProps.values.name : i18n.t(`mediaItem.details.title.new.${formikProps.values.mediaType}`);
+					const subtitle = formikProps.values.id ? i18n.t('mediaItem.details.subtitle.existing') : i18n.t('mediaItem.details.subtitle.new');
 
 					return (
 						<section className='media-item-details-screen'>
 							<div className='media-item-details-screen-content'>
 								<AuthenticatedPageHeaderComponent
 									title={title}
+									subtitle={subtitle}
 									actions={
 										<PillButtonComponent
 											tone='primary'

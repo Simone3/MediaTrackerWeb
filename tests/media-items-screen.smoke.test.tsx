@@ -57,12 +57,12 @@ describe('MediaItemsListScreenComponent', () => {
 		);
 
 		expect(fetchMediaItems).toHaveBeenCalledTimes(1);
-		expect(screen.getAllByText(i18n.t('mediaItem.list.count.multiple', { count: 2 }))).toHaveLength(1);
+		expect(screen.getAllByText(i18n.t('mediaItem.list.countByType.multiple.MOVIE', { count: 2 }))).toHaveLength(1);
 		expect(screen.queryByText(i18n.t('category.mediaTypes.MOVIE'))).not.toBeInTheDocument();
 		expect(screen.getByTestId('media-items-list-container')).toBeInTheDocument();
 		expect(screen.getByTestId('media-item-filter-modal-container')).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: i18n.t('common.drawer.home') })).toBeInTheDocument();
-		expect(screen.getByRole('link', { name: i18n.t('common.drawer.settings') })).toBeInTheDocument();
+		expect(screen.queryByRole('link', { name: i18n.t('common.drawer.settings') })).not.toBeInTheDocument();
 
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.add.MOVIE') }));
@@ -89,7 +89,7 @@ describe('MediaItemsListScreenComponent', () => {
 
 		expect(document.querySelector('.media-items-screen-content .floating-action-button')).toBeNull();
 		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.add.MOVIE') })).toBeInTheDocument();
-		expect(screen.getByText(i18n.t('mediaItem.list.count.single'))).toBeInTheDocument();
+		expect(screen.getByText(i18n.t('mediaItem.list.countByType.single.MOVIE'))).toBeInTheDocument();
 		expect(screen.queryByText(i18n.t('category.mediaTypes.MOVIE'))).not.toBeInTheDocument();
 
 		const user = userEvent.setup();

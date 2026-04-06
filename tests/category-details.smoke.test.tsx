@@ -24,6 +24,7 @@ describe('CategoryDetailsScreenComponent', () => {
 		);
 
 		expect(document.querySelector('input[type="color"]')).not.toBeInTheDocument();
+		expect(screen.getByText(i18n.t('category.details.subtitle.new'))).toBeInTheDocument();
 		const user = userEvent.setup();
 		const nameInput = screen.getByLabelText(i18n.t('category.details.placeholders.name'));
 		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
@@ -114,6 +115,7 @@ describe('CategoryDetailsScreenComponent', () => {
 			</MemoryRouter>
 		);
 
+		expect(screen.getByText(i18n.t('category.details.subtitle.existing'))).toBeInTheDocument();
 		const user = userEvent.setup();
 		const movieButton = screen.getByRole('button', { name: i18n.t('category.mediaTypes.MOVIE') });
 		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });

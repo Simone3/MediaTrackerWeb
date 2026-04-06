@@ -323,6 +323,7 @@ input {
 	display: grid;
 	gap: 6px;
 	min-width: 0;
+	overflow: hidden;
 }
 
 .authenticated-page-header-title {
@@ -330,7 +331,9 @@ input {
 	font-size: clamp(1.5rem, 3vw, 2.2rem);
 	line-height: 1.04;
 	color: var(--color-text-on-dark-primary);
-	word-break: break-word;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .authenticated-page-header-subtitle {
@@ -338,7 +341,9 @@ input {
 	font-size: 0.98rem;
 	line-height: 1.5;
 	color: var(--color-text-on-dark-muted);
-	word-break: break-word;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .authenticated-page-header-subtitle-empty {

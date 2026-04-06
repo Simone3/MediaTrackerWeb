@@ -22,6 +22,8 @@ describe('SettingsScreenComponent', () => {
 			</MemoryRouter>
 		);
 
+		expect(screen.getByText(i18n.t('settings.screen.subtitle'))).toBeInTheDocument();
+
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', {
 			name: `${i18n.t('settings.screen.rows.logout.title')} ${i18n.t('settings.screen.rows.logout.subtitle', { username: 'test@example.com' })}`
@@ -46,6 +48,8 @@ describe('SettingsScreenComponent', () => {
 				/>
 			</MemoryRouter>
 		);
+
+		expect(screen.getByText(i18n.t('settings.screen.subtitle'))).toBeInTheDocument();
 
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', {

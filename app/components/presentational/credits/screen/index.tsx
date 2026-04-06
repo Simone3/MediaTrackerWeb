@@ -13,7 +13,10 @@ export class CreditsScreenComponent extends Component<CreditsScreenComponentProp
 		return (
 			<section className='credits-screen'>
 				<div className='credits-shell'>
-					<AuthenticatedPageHeaderComponent title={i18n.t('credits.screen.title')} />
+					<AuthenticatedPageHeaderComponent
+						title={i18n.t('credits.screen.title')}
+						subtitle={i18n.t('credits.screen.subtitle')}
+					/>
 					<div className='credits-grid'>
 						<article className='credits-card'>
 							<h2 className='credits-card-title'>{i18n.t('credits.screen.cards.tmdb.title')}</h2>

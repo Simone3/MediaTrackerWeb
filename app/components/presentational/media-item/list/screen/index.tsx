@@ -36,8 +36,8 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 			mediaItemsCount
 		} = this.props;
 		const countLabel = mediaItemsCount === 1 ?
-			i18n.t('mediaItem.list.count.single') :
-			i18n.t('mediaItem.list.count.multiple', { count: mediaItemsCount });
+			i18n.t(`mediaItem.list.countByType.single.${category.mediaType}`) :
+			i18n.t(`mediaItem.list.countByType.multiple.${category.mediaType}`, { count: mediaItemsCount });
 
 		return (
 			<section

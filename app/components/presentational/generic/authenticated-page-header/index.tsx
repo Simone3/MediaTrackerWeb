@@ -42,13 +42,14 @@ export const AuthenticatedPageHeaderComponent = (props: AuthenticatedPageHeaderC
 				</div>
 				<div className='authenticated-page-header-actions'>
 					{props.actions}
-					<NavLink
-						to={settingsPath}
-						title={settingsLabel}
-						aria-label={settingsLabel}
-						className='authenticated-page-header-link authenticated-page-header-settings-link'>
-						<img src={settingsIcon} alt='' aria-hidden='true' className='authenticated-page-header-link-icon' />
-					</NavLink>
+					{props.showSettingsShortcut &&
+						<NavLink
+							to={settingsPath}
+							title={settingsLabel}
+							aria-label={settingsLabel}
+							className='authenticated-page-header-link authenticated-page-header-settings-link'>
+							<img src={settingsIcon} alt='' aria-hidden='true' className='authenticated-page-header-link-icon' />
+						</NavLink>}
 				</div>
 			</div>
 		</header>
@@ -58,5 +59,6 @@ export const AuthenticatedPageHeaderComponent = (props: AuthenticatedPageHeaderC
 export type AuthenticatedPageHeaderComponentProps = {
 	title: string;
 	actions?: ReactNode;
+	showSettingsShortcut?: boolean;
 	subtitle?: string;
 };

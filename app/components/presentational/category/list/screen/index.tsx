@@ -42,6 +42,7 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 					<AuthenticatedPageHeaderComponent
 						title={i18n.t('category.list.title')}
 						subtitle={countLabel}
+						showSettingsShortcut={true}
 						actions={
 							<PillButtonComponent
 								tone='secondary'

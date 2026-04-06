@@ -163,6 +163,8 @@ describe('MediaItemDetailsScreenContainer', () => {
 			expect(saveButton).toBeDisabled();
 		});
 
+		expect(screen.getByText(i18n.t('mediaItem.details.subtitle.new'))).toBeInTheDocument();
+
 		await user.type(nameInput, 'Dune');
 		await user.type(pagesInput, '412');
 		await user.type(authorsInput, 'Frank Herbert');
@@ -200,6 +202,8 @@ describe('MediaItemDetailsScreenContainer', () => {
 				mediaItem
 			}
 		});
+
+		expect(screen.getByText(i18n.t('mediaItem.details.subtitle.existing'))).toBeInTheDocument();
 		const confirmedRender = createDetailsStore({
 			mediaItemDetails: {
 				...mediaItemDetailsStateInitialValue,

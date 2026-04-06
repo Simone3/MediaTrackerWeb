@@ -58,6 +58,10 @@
 			"title": {
 				"new": "New Category"
 			},
+			"subtitle": {
+				"new": "Choose the name, color, and media type for this category.",
+				"existing": "Update the category name, color, and media type."
+			},
 			"placeholders": {
 				"name": "Name"
 			},
@@ -109,6 +113,20 @@
 			"count": {
 				"single": "1 item",
 				"multiple": "{{count}} items"
+			},
+			"countByType": {
+				"single": {
+					"BOOK": "1 book",
+					"MOVIE": "1 movie",
+					"TV_SHOW": "1 show",
+					"VIDEOGAME": "1 game"
+				},
+				"multiple": {
+					"BOOK": "{{count}} books",
+					"MOVIE": "{{count}} movies",
+					"TV_SHOW": "{{count}} shows",
+					"VIDEOGAME": "{{count}} games"
+				}
 			},
 			"add": {
 				"BOOK": "Add book",
@@ -293,6 +311,10 @@
 				"progress": {
 					"title": "Progress"
 				}
+			},
+			"subtitle": {
+				"new": "Add the main details, progress, and notes for this entry.",
+				"existing": "Update the main details, progress, and notes for this entry."
 			}
 		}
 	},
@@ -498,6 +520,7 @@
 	"settings": {
 		"screen": {
 			"title": "Settings",
+			"subtitle": "Manage your account, credits, and app information.",
 			"sections": {
 				"user": "User",
 				"about": "About"
@@ -523,6 +546,7 @@
 	"credits": {
 		"screen": {
 			"title": "Credits",
+			"subtitle": "View the data sources and acknowledgements behind the app.",
 			"cards": {
 				"tmdb": {
 					"title": "The Movie Database (TMDb)",

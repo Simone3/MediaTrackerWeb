@@ -57,12 +57,14 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 					}}>
 					{(formikProps: FormikProps<CategoryInternal>) => {
 						const detailsTitle = formikProps.values.id ? formikProps.values.name : i18n.t('category.details.title.new');
+						const detailsSubtitle = formikProps.values.id ? i18n.t('category.details.subtitle.existing') : i18n.t('category.details.subtitle.new');
 
 						return (
 							<>
 								<div className='category-details-shell'>
 									<AuthenticatedPageHeaderComponent
 										title={detailsTitle}
+										subtitle={detailsSubtitle}
 										actions={
 											<PillButtonComponent
 												type='submit'

@@ -29,7 +29,10 @@ export class SettingsScreenComponent extends Component<SettingsScreenComponentPr
 		return (
 			<section className='settings-screen'>
 				<div className='settings-shell'>
-					<AuthenticatedPageHeaderComponent title={i18n.t('settings.screen.title')} />
+					<AuthenticatedPageHeaderComponent
+						title={i18n.t('settings.screen.title')}
+						subtitle={i18n.t('settings.screen.subtitle')}
+					/>
 					<div className='settings-panel'>
 						<div className='settings-section'>
 							<h2 className='settings-section-title'>{i18n.t('settings.screen.sections.user')}</h2>
