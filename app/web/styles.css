@@ -1074,6 +1074,7 @@ input {
 
 .responsive-action-menu-popover-above::before {
 	bottom: -7px;
+	background: var(--color-background-panel-end);
 	border-right: 1px solid var(--color-border-panel);
 	border-bottom: 1px solid var(--color-border-panel);
 }

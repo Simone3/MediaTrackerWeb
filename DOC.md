@@ -201,6 +201,12 @@
   - good reference implementations when category behavior looks wrong
 
 ## Recent fix worth remembering
+- The shared responsive action menu on web correctly moved the desktop popover arrow to the bottom edge for above-trigger placement, but it still used the top gradient color and looked like a separate dark square.
+  - Correct behavior/structure on web now:
+    - the bottom-edge arrow for above-trigger desktop popovers now uses the panel end color so it visually matches the lower edge of the gradient background
+    - the normal below-trigger arrow keeps using the top gradient color, matching the upper edge of the popover
+  - Relevant files:
+    - `app/web/styles.css`
 - The shared responsive action menu on web already flipped the desktop popover above the trigger when there was no room below, but the arrow stayed pinned to the top edge.
   - Correct behavior/structure on web now:
     - the shared desktop popover now tracks whether it is placed above or below the trigger and applies a matching placement class
