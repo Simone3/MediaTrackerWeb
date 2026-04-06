@@ -1770,6 +1770,8 @@ input {
 
 .media-item-filter-actions {
 	display: flex;
+	align-self: end;
+	align-items: flex-end;
 	justify-content: flex-end;
 	gap: 10px;
 }

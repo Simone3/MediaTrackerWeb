@@ -806,9 +806,11 @@
 - The media-items filter modal actions now use the same compact pill-button height as the rest of the list toolbar and dialogs.
   - Correct behavior on web now:
     - the `Cancel` and `Apply` actions at the bottom of the filter modal render with the shared compact button sizing instead of the taller default pill-button height
+    - the filter action row no longer stretches to the full height of the neighboring select field, so those buttons keep their natural compact height on desktop
     - the modal smoke test now guards that both actions keep the compact button class while the existing submit flow still works
   - Relevant files:
     - `app/components/presentational/media-item/list/filter-form/view/media-item.tsx`
+    - `app/web/styles.css`
     - `tests/media-item-filter-modal.smoke.test.tsx`
 
 ## Testing notes
