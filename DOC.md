@@ -62,6 +62,7 @@
 - Most components are still class components.
 - Global styling is still centralized in `app/web/styles.css`.
 - Styling colors now live exclusively in `app/web/styles.css` `:root` custom properties; component-level accent/status strings that are purely visual pass `var(--...)` tokens instead of hardcoded hex values.
+- The CSS theme tokens are now semantic and role-based rather than generated from raw values; cards, detail panels, and confirm dialogs intentionally share the same dark-surface palette, while accent text/glows/dividers reuse the shared accent/overlay scales where the visual role matches.
 - The authenticated shell is now always full-bleed dark on web; the old per-screen body-class toggles were removed, and shared confirm dialogs/loaders use the dark treatment by default.
 
 ### State management
@@ -122,6 +123,7 @@
 - `app/config/type-config.ts` now only keeps the config fields still read by the web app.
 - `config.firebase` is intentionally narrowed to the Firebase Web Auth fields the app actually uses: `apiKey`, `authDomain`, `projectId`, and `appId`.
 - Logical entity colors are now centralized under `config.ui.colors.availableCategoryColors` and `config.ui.colors.availableOwnPlatformColors` only; the shared array values themselves live in `app/config/properties/shared-ui-colors.ts`, while theme/styling colors no longer live in app config.
+- If a new color is added, it should either be a logic-owned preset in config or a semantic `:root` styling token in `app/web/styles.css`; avoid introducing raw hex/rgba values directly in components or generated token names based on the literal value.
 - Current dev config uses mocks for:
   - user
   - categories
