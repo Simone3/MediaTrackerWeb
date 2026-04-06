@@ -7,7 +7,7 @@ import { screenToPath } from 'app/utilities/navigation-routes';
 import { AppScreens } from 'app/utilities/screens';
 
 describe('AuthenticatedPageHeaderComponent', () => {
-	test('renders home, title/subtitle, action, and active settings shortcut', () => {
+	test('renders home, title/subtitle, action, and neutral navigation shortcuts', () => {
 		render(
 			<MemoryRouter initialEntries={[ screenToPath(AppScreens.Settings) ]}>
 				<AuthenticatedPageHeaderComponent
@@ -26,6 +26,7 @@ describe('AuthenticatedPageHeaderComponent', () => {
 		expect(screen.getByText('Manage your account')).toBeInTheDocument();
 		expect(screen.getByRole('button', { name: 'Do thing' })).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: i18n.t('common.drawer.home') })).toBeInTheDocument();
-		expect(screen.getByRole('link', { name: i18n.t('common.drawer.settings') })).toHaveClass('authenticated-page-header-link-active');
+		expect(screen.getByRole('link', { name: i18n.t('common.drawer.settings') })).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: i18n.t('common.drawer.settings') })).not.toHaveClass('authenticated-page-header-link-active');
 	});
 });

@@ -26,11 +26,7 @@ export const AuthenticatedPageHeaderComponent = (props: AuthenticatedPageHeaderC
 						to={homePath}
 						title={homeLabel}
 						aria-label={homeLabel}
-						className={({ isActive }) => {
-							return isActive ?
-								'authenticated-page-header-link authenticated-page-header-home-link authenticated-page-header-link-active' :
-								'authenticated-page-header-link authenticated-page-header-home-link';
-						}}>
+						className='authenticated-page-header-link authenticated-page-header-home-link'>
 						<img src={appLogo} alt='' aria-hidden='true' className='authenticated-page-header-home-logo' />
 					</NavLink>
 					<div className='authenticated-page-header-copy'>
@@ -45,11 +41,7 @@ export const AuthenticatedPageHeaderComponent = (props: AuthenticatedPageHeaderC
 						to={settingsPath}
 						title={settingsLabel}
 						aria-label={settingsLabel}
-						className={({ isActive }) => {
-							return isActive ?
-								'authenticated-page-header-link authenticated-page-header-settings-link authenticated-page-header-link-active' :
-								'authenticated-page-header-link authenticated-page-header-settings-link';
-						}}>
+						className='authenticated-page-header-link authenticated-page-header-settings-link'>
 						<img src={settingsIcon} alt='' aria-hidden='true' className='authenticated-page-header-link-icon' />
 					</NavLink>
 				</div>
