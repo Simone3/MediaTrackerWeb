@@ -37,7 +37,9 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 					const title = addingNewSeason ?
 						i18n.t('tvShowSeason.details.title.new') :
 						i18n.t('tvShowSeason.details.title.existing', { seasonNumber: formikProps.values.number });
-					const seasonSummary = this.getSeasonSummary(formikProps.values);
+					const seasonSummary = addingNewSeason ?
+						i18n.t('tvShowSeason.details.subtitle.new') :
+						i18n.t('tvShowSeason.details.subtitle.existing');
 
 					return (
 						<EntityDetailsFrameComponent
@@ -61,22 +63,6 @@ export class TvShowSeasonDetailsScreenComponent extends Component<TvShowSeasonDe
 				}}
 			</Formik>
 		);
-	}
-
-	/**
-	 * Formats the current season summary copy
-	 * @param tvShowSeason current season values
-	 * @returns summary label
-	 */
-	private getSeasonSummary(tvShowSeason: TvShowSeasonInternal): string {
-		if(tvShowSeason.number === undefined && tvShowSeason.episodesNumber === undefined && tvShowSeason.watchedEpisodesNumber === undefined) {
-			return i18n.t('tvShowSeason.list.emptyHint');
-		}
-
-		return i18n.t('tvShowSeason.list.row.secondary', {
-			episodesNumber: tvShowSeason.episodesNumber ? tvShowSeason.episodesNumber : 0,
-			watchedEpisodesNumber: tvShowSeason.watchedEpisodesNumber ? tvShowSeason.watchedEpisodesNumber : 0
-		});
 	}
 
 	/**

@@ -55,13 +55,14 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 				}}>
 				{(formikProps: FormikProps<OwnPlatformInternal>) => {
 					const title = formikProps.values.id ? formikProps.values.name : i18n.t('ownPlatform.details.title.new');
+					const subtitle = formikProps.values.id ? i18n.t('ownPlatform.details.subtitle.existing') : i18n.t('ownPlatform.details.subtitle.new');
 
 					return (
 						<EntityDetailsFrameComponent
 							screenClassName='own-platform-details-screen'
 							accentColor={formikProps.values.color || OWN_PLATFORM_DETAILS_ACCENT}
 							title={title}
-							subtitle={i18n.t('ownPlatform.list.emptyHint')}
+							subtitle={subtitle}
 							saveLabel={i18n.t('common.buttons.save')}
 							saveDisabled={!formikProps.isValid || isLoading}
 							loadingVisible={isLoading}

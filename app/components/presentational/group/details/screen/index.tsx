@@ -55,13 +55,14 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 				}}>
 				{(formikProps: FormikProps<GroupInternal>) => {
 					const title = formikProps.values.id ? formikProps.values.name : i18n.t('group.details.title.new');
+					const subtitle = formikProps.values.id ? i18n.t('group.details.subtitle.existing') : i18n.t('group.details.subtitle.new');
 
 					return (
 						<EntityDetailsFrameComponent
 							screenClassName='group-details-screen'
 							accentColor={GROUP_DETAILS_ACCENT}
 							title={title}
-							subtitle={i18n.t('group.list.emptyHint')}
+							subtitle={subtitle}
 							saveLabel={i18n.t('common.buttons.save')}
 							saveDisabled={!formikProps.isValid || isLoading}
 							loadingVisible={isLoading}

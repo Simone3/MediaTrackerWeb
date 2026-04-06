@@ -59,8 +59,8 @@
 				"new": "New Category"
 			},
 			"subtitle": {
-				"new": "Choose the name, color, and media type for this category.",
-				"existing": "Update the category name, color, and media type."
+				"new": "Create new category",
+				"existing": "Edit this category"
 			},
 			"placeholders": {
 				"name": "Name"
@@ -140,7 +140,7 @@
 				"TV_SHOW": "No shows",
 				"VIDEOGAME": "No games"
 			},
-			"emptyHint": "Add your first entry to start tracking this category.",
+			"emptyHint": "Add your first media item to start tracking this category.",
 			"duration": {
 				"BOOK": "{{duration}}pp.",
 				"MOVIE": "{{duration}}'",
@@ -313,8 +313,8 @@
 				}
 			},
 			"subtitle": {
-				"new": "Add the main details, progress, and notes for this entry.",
-				"existing": "Update the main details, progress, and notes for this entry."
+				"new": "Create a new media item",
+				"existing": "Edit this media item"
 			}
 		}
 	},
@@ -346,6 +346,10 @@
 			"title": {
 				"new": "New Season",
 				"existing": "Season {{seasonNumber}}"
+			},
+			"subtitle": {
+				"new": "Create new season",
+				"existing": "Edit this season"
 			},
 			"placeholders": {
 				"number": "Season number",
@@ -383,6 +387,10 @@
 			"title": {
 				"new": "New Group"
 			},
+			"subtitle": {
+				"new": "Create new group",
+				"existing": "Edit this group"
+			},
 			"placeholders": {
 				"name": "Name"
 			}
@@ -402,7 +410,7 @@
 			}
 		},
 		"list": {
-			"title": "Select Own Platform",
+			"title": "Select Platform",
 			"count": {
 				"single": "1 platform available",
 				"multiple": "{{count}} platforms available"
@@ -416,6 +424,10 @@
 		"details": {
 			"title": {
 				"new": "New Platform"
+			},
+			"subtitle": {
+				"new": "Create new platform",
+				"existing": "Edit this platform"
 			},
 			"placeholders": {
 				"name": "Name"
@@ -520,7 +532,7 @@
 	"settings": {
 		"screen": {
 			"title": "Settings",
-			"subtitle": "Manage your account, credits, and app information.",
+			"subtitle": "Manage your account",
 			"sections": {
 				"user": "User",
 				"about": "About"
@@ -546,7 +558,7 @@
 	"credits": {
 		"screen": {
 			"title": "Credits",
-			"subtitle": "View the data sources and acknowledgements behind the app.",
+			"subtitle": "Data source acknowledgements",
 			"cards": {
 				"tmdb": {
 					"title": "The Movie Database (TMDb)",
