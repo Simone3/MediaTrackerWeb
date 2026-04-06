@@ -14,9 +14,23 @@ const getSheetStyle = (): CSSProperties => {
 	} as CSSProperties;
 };
 
-const getPopoverStyle = (
+const getPopoverPlacement = (
 	anchorRect: ResponsiveActionMenuAnchorRect | undefined,
 	popoverHeight: number
+): ResponsiveActionMenuPopoverPlacement => {
+	if(!anchorRect) {
+		return 'below';
+	}
+
+	return anchorRect.bottom + DESKTOP_OFFSET + popoverHeight > window.innerHeight - VIEWPORT_PADDING ?
+		'above' :
+		'below';
+};
+
+const getPopoverStyle = (
+	anchorRect: ResponsiveActionMenuAnchorRect | undefined,
+	popoverHeight: number,
+	placement: ResponsiveActionMenuPopoverPlacement
 ): CSSProperties => {
 	const sharedStyle = {
 		'--responsive-action-menu-width': `${DEFAULT_POPOVER_WIDTH}px`,
@@ -35,8 +49,7 @@ const getPopoverStyle = (
 		Math.max(VIEWPORT_PADDING, anchorRect.right - DEFAULT_POPOVER_WIDTH),
 		window.innerWidth - DEFAULT_POPOVER_WIDTH - VIEWPORT_PADDING
 	);
-	const openAbove = anchorRect.bottom + DESKTOP_OFFSET + popoverHeight > window.innerHeight - VIEWPORT_PADDING;
-	const top = openAbove ?
+	const top = placement === 'above' ?
 		Math.max(VIEWPORT_PADDING, anchorRect.top - popoverHeight - DESKTOP_OFFSET) :
 		Math.min(anchorRect.bottom + DESKTOP_OFFSET, window.innerHeight - popoverHeight - VIEWPORT_PADDING);
 
@@ -68,6 +81,7 @@ export const ResponsiveActionMenuComponent = (props: ResponsiveActionMenuCompone
 		return window.innerWidth <= MOBILE_LAYOUT_BREAKPOINT;
 	});
 	const popoverHeight = MENU_HEADER_HEIGHT + (actions.length * MENU_ACTION_HEIGHT);
+	const popoverPlacement = getPopoverPlacement(anchorRect, popoverHeight);
 
 	useEffect(() => {
 		if(!visible) {
@@ -152,11 +166,11 @@ export const ResponsiveActionMenuComponent = (props: ResponsiveActionMenuCompone
 				aria-label={closeAriaLabel}
 			/>
 			<div
-				className='responsive-action-menu responsive-action-menu-popover'
+				className={`responsive-action-menu responsive-action-menu-popover responsive-action-menu-popover-${popoverPlacement}`}
 				role='dialog'
 				aria-modal={false}
 				aria-labelledby={titleId}
-				style={getPopoverStyle(anchorRect, popoverHeight)}>
+				style={getPopoverStyle(anchorRect, popoverHeight, popoverPlacement)}>
 				{content}
 			</div>
 		</div>
@@ -187,3 +201,5 @@ export type ResponsiveActionMenuAction = {
 	onClick: () => void;
 	tone?: 'default' | 'danger';
 };
+
+type ResponsiveActionMenuPopoverPlacement = 'above' | 'below';

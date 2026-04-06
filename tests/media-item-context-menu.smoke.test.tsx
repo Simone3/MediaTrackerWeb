@@ -53,6 +53,7 @@ describe('MediaItemContextMenuComponent', () => {
 		);
 
 		expect(container.querySelector('.responsive-action-menu-popover')).not.toBeNull();
+		expect(container.querySelector('.responsive-action-menu-popover-below')).not.toBeNull();
 		expect(container.querySelector('.responsive-action-menu-sheet')).toBeNull();
 		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.edit.BOOK') })).toBeInTheDocument();
 		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.delete.BOOK') })).toBeInTheDocument();
@@ -115,6 +116,62 @@ describe('MediaItemContextMenuComponent', () => {
 			expect(close).toHaveBeenCalledTimes(1);
 		}
 		finally {
+			Object.defineProperty(window, 'innerWidth', {
+				configurable: true,
+				writable: true,
+				value: previousInnerWidth
+			});
+		}
+	});
+
+	test('uses the bottom-edge arrow when the desktop popover opens above the trigger', () => {
+		const previousInnerHeight = window.innerHeight;
+		const previousInnerWidth = window.innerWidth;
+		const bottomAnchorRect = {
+			top: 560,
+			bottom: 592,
+			left: 120,
+			right: 152,
+			width: 32,
+			height: 32
+		};
+
+		try {
+			Object.defineProperty(window, 'innerHeight', {
+				configurable: true,
+				writable: true,
+				value: 640
+			});
+			Object.defineProperty(window, 'innerWidth', {
+				configurable: true,
+				writable: true,
+				value: MOBILE_LAYOUT_BREAKPOINT + 1
+			});
+
+			const { container } = render(
+				<MediaItemContextMenuComponent
+					mediaItem={mediaItem}
+					anchorRect={bottomAnchorRect}
+					currentViewGroupId={undefined}
+					edit={jest.fn()}
+					delete={jest.fn()}
+					markAsActive={jest.fn()}
+					markAsComplete={jest.fn()}
+					markAsRedo={jest.fn()}
+					viewGroup={jest.fn()}
+					close={jest.fn()}
+				/>
+			);
+
+			expect(container.querySelector('.responsive-action-menu-popover-above')).not.toBeNull();
+			expect(container.querySelector('.responsive-action-menu-popover-below')).toBeNull();
+		}
+		finally {
+			Object.defineProperty(window, 'innerHeight', {
+				configurable: true,
+				writable: true,
+				value: previousInnerHeight
+			});
 			Object.defineProperty(window, 'innerWidth', {
 				configurable: true,
 				writable: true,

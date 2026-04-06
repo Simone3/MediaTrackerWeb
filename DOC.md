@@ -201,6 +201,15 @@
   - good reference implementations when category behavior looks wrong
 
 ## Recent fix worth remembering
+- The shared responsive action menu on web already flipped the desktop popover above the trigger when there was no room below, but the arrow stayed pinned to the top edge.
+  - Correct behavior/structure on web now:
+    - the shared desktop popover now tracks whether it is placed above or below the trigger and applies a matching placement class
+    - the popover arrow now moves to the bottom edge when the menu opens above the trigger, while the existing top-edge arrow stays in place for the normal below-trigger layout
+    - focused smoke coverage now checks both the normal desktop placement class and the flipped-above desktop placement class through the media-item context menu
+  - Relevant files:
+    - `app/components/presentational/generic/responsive-action-menu/index.tsx`
+    - `app/web/styles.css`
+    - `tests/media-item-context-menu.smoke.test.tsx`
 - The shared responsive action menu on web could already wrap menu titles, but long unbroken words still overflowed past the right edge of the popover/sheet.
   - Correct behavior/structure on web now:
     - the shared menu title and action buttons explicitly allow long uninterrupted strings to wrap within the menu width instead of spilling outside the panel

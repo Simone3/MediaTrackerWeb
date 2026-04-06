@@ -1059,14 +1059,23 @@ input {
 .responsive-action-menu-popover::before {
 	content: '';
 	position: absolute;
-	top: -7px;
 	right: 18px;
 	width: 14px;
 	height: 14px;
 	background: var(--color-background-panel-start);
+	transform: rotate(45deg);
+}
+
+.responsive-action-menu-popover-below::before {
+	top: -7px;
 	border-top: 1px solid var(--color-border-panel);
 	border-left: 1px solid var(--color-border-panel);
-	transform: rotate(45deg);
+}
+
+.responsive-action-menu-popover-above::before {
+	bottom: -7px;
+	border-right: 1px solid var(--color-border-panel);
+	border-bottom: 1px solid var(--color-border-panel);
 }
 
 .responsive-action-menu-sheet {
