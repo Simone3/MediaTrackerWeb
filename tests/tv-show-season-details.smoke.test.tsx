@@ -23,8 +23,7 @@ describe('TvShowSeasonDetailsScreenComponent', () => {
 		);
 
 		expect(screen.getByRole('heading', { level: 1, name: i18n.t('tvShowSeason.details.title.new') })).toBeInTheDocument();
-		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.basics') })).not.toBeInTheDocument();
-		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.progress') })).not.toBeInTheDocument();
+		expect(screen.queryAllByRole('heading', { level: 2 })).toHaveLength(0);
 		expect(screen.getByText(i18n.t('tvShowSeason.list.emptyHint'))).toBeInTheDocument();
 
 		const user = userEvent.setup();

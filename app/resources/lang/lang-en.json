@@ -212,7 +212,6 @@
 					"sort": {
 						"DEFAULT": "Default order",
 						"NAME": "Order by name",
-						"RELEASE_DATE" : "Order by release date",
 						"COMPLETION_DATE": "Order by completion date"
 					},
 					"importance": {
@@ -268,7 +267,6 @@
 				}
 			},
 			"buttons": {
-				"modalTitle": "Actions",
 				"google": "Google Search",
 				"wikipedia": "Wikipedia Search",
 				"justWatch": "Just Watch Search",
@@ -319,8 +317,6 @@
 				"main": "Season {{seasonNumber}}",
 				"secondary": "Watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes"
 			},
-			"contextMenuTitle": "Season {{seasonNumber}}",
-			"edit": "Edit season",
 			"delete": "Delete season",
 			"complete": "Complete season"
 		},
@@ -449,16 +445,6 @@
 				}
 			}
 		},
-		"form": {
-			"input": {
-				"multiText": {
-					"placeholder": "Insert text"
-				},
-				"multiDate": {
-					"placeholder": "Insert date"
-				}
-			}
-		},
 		"state": {
 			"selected": "Selected"
 		},
@@ -473,12 +459,6 @@
 		},
 		"fields": {
 			"color": "Color"
-		},
-		"sections": {
-			"appearance": "Appearance",
-			"basics": "Basics",
-			"preview": "Preview",
-			"progress": "Progress"
 		},
 		"drawer": {
 			"navigation": "App navigation",

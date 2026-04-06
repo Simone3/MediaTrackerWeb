@@ -27,9 +27,7 @@ describe('OwnPlatformDetailsScreenComponent', () => {
 		);
 
 		expect(screen.getByRole('heading', { level: 1, name: i18n.t('ownPlatform.details.title.new') })).toBeInTheDocument();
-		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.basics') })).not.toBeInTheDocument();
-		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.appearance') })).not.toBeInTheDocument();
-		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.preview') })).not.toBeInTheDocument();
+		expect(screen.queryAllByRole('heading', { level: 2 })).toHaveLength(0);
 		expect(document.querySelector('input[type="color"]')).not.toBeInTheDocument();
 		expect(screen.getByRole('img', { name: i18n.t('common.a11y.icon', { name: i18n.t('ownPlatform.icons.default') }) })).toBeInTheDocument();
 

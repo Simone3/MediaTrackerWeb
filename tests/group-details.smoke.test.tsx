@@ -23,8 +23,7 @@ describe('GroupDetailsScreenComponent', () => {
 		);
 
 		expect(screen.getByRole('heading', { level: 1, name: i18n.t('group.details.title.new') })).toBeInTheDocument();
-		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.basics') })).not.toBeInTheDocument();
-		expect(screen.queryByRole('heading', { level: 2, name: i18n.t('common.sections.preview') })).not.toBeInTheDocument();
+		expect(screen.queryAllByRole('heading', { level: 2 })).toHaveLength(0);
 
 		const user = userEvent.setup();
 		const nameInput = screen.getByLabelText(i18n.t('group.details.placeholders.name'));
