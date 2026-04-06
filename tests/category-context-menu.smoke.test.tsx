@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { config } from 'app/config/config';
 import { CategoryContextMenuComponent } from 'app/components/presentational/category/list/context-menu';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { i18n } from 'app/utilities/i18n';
@@ -9,7 +10,7 @@ describe('CategoryContextMenuComponent', () => {
 		id: 'category-id',
 		name: 'My Books',
 		mediaType: 'BOOK',
-		color: '#3f51b5'
+		color: config.ui.colors.availableCategoryColors[0]
 	};
 	const anchorRect = {
 		top: 24,

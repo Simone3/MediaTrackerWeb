@@ -1,4 +1,5 @@
 import { Config } from 'app/config/type-config';
+import { availableEntityColors } from 'app/config/properties/shared-ui-colors';
 
 const config: Config = {
 	backEnd: {
@@ -14,18 +15,8 @@ const config: Config = {
 	},
 	ui: {
 		colors: {
-			blue: '#3c82eb',
-			red: '#f25a5a',
-			green: '#74eb74',
-			orange: '#ee9b52',
-			yellow: '#f5e064',
-			purple: '#e75fe7',
-			cyan: '#4bead7',
-			grey: '#6e6d66',
-			lightGrey: '#cccccc',
-			white: 'white',
-			availableCategoryColors: [],
-			availableOwnPlatformColors: []
+			availableCategoryColors: availableEntityColors.slice(),
+			availableOwnPlatformColors: availableEntityColors.slice()
 		},
 		dateFormat: 'dd/MM/yyyy'
 	},
@@ -55,17 +46,6 @@ const config: Config = {
 		logMapping: false
 	}
 };
-
-config.ui.colors.availableCategoryColors = config.ui.colors.availableOwnPlatformColors = [
-	config.ui.colors.blue,
-	config.ui.colors.red,
-	config.ui.colors.green,
-	config.ui.colors.orange,
-	config.ui.colors.yellow,
-	config.ui.colors.purple,
-	config.ui.colors.cyan,
-	config.ui.colors.grey
-];
 
 /**
  * Configuration for production environment

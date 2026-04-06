@@ -1,3 +1,4 @@
+import { config } from 'app/config/config';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
@@ -10,7 +11,7 @@ const buildState = (): State => {
 		id: 'category-id',
 		name: 'My Books',
 		mediaType: 'BOOK',
-		color: '#3f51b5'
+		color: config.ui.colors.availableCategoryColors[0]
 	};
 	const selectedGroup: GroupInternal = {
 		id: 'group-id',
@@ -19,7 +20,7 @@ const buildState = (): State => {
 	const selectedOwnPlatform: OwnPlatformInternal = {
 		id: 'platform-id',
 		name: 'Kindle',
-		color: '#f5a623',
+		color: config.ui.colors.availableOwnPlatformColors[3],
 		icon: 'kindle'
 	};
 	const mediaItem: MediaItemInternal = {

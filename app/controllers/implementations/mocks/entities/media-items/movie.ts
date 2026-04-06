@@ -1,6 +1,9 @@
+import { config } from 'app/config/config';
 import { MediaItemMockedCatalogController, MediaItemMockedController } from 'app/controllers/implementations/mocks/entities/media-items/media-item';
 import { MovieCatalogController, MovieController } from 'app/controllers/interfaces/entities/media-items/movie';
 import { CatalogMovieInternal, MovieFilterInternal, MovieInternal, MovieSortByInternal, SearchMovieCatalogResultInternal } from 'app/data/models/internal/media-items/movie';
+
+const ownPlatformColors = config.ui.colors.availableOwnPlatformColors;
 
 /**
  * Mocked implementation of the MovieController that contains an in-memory list of movies
@@ -35,7 +38,7 @@ export class MovieMockedController extends MediaItemMockedController<MovieIntern
 				ownPlatform: {
 					id: '1',
 					name: 'Netflix',
-					color: '#f25a5a',
+					color: ownPlatformColors[1],
 					icon: 'netflix'
 				},
 				active: true
@@ -56,7 +59,7 @@ export class MovieMockedController extends MediaItemMockedController<MovieIntern
 				ownPlatform: {
 					id: '2',
 					name: 'Hulu',
-					color: '#74eb74',
+					color: ownPlatformColors[2],
 					icon: 'hulu'
 				}
 			}, {

@@ -15,6 +15,15 @@ import statusRedoingIcon from 'app/resources/images/ic_status_redoing.svg';
 import statusUpcomingIcon from 'app/resources/images/ic_status_upcoming.svg';
 import { i18n } from 'app/utilities/i18n';
 
+const MEDIA_ITEM_PLATFORM_UNOWNED_COLOR = 'var(--color-media-item-platform-unowned)';
+const MEDIA_ITEM_STATUS_ICON_COLOR = 'var(--color-media-item-status-icon)';
+const MEDIA_ITEM_STATUS_ACTIVE_COLOR = 'var(--color-media-item-status-active)';
+const MEDIA_ITEM_STATUS_ACTIVE_COMPLETE_COLOR = 'var(--color-media-item-status-active-complete)';
+const MEDIA_ITEM_STATUS_UPCOMING_COLOR = 'var(--color-media-item-status-upcoming)';
+const MEDIA_ITEM_STATUS_REDO_COLOR = 'var(--color-media-item-status-redo)';
+const MEDIA_ITEM_STATUS_COMPLETE_COLOR = 'var(--color-media-item-status-complete)';
+const MEDIA_ITEM_STATUS_NEW_COLOR = 'var(--color-media-item-status-new)';
+
 const importanceIcons: Record<MediaItemImportanceInternal, string> = {
 	400: importanceOneIcon,
 	300: importanceTwoIcon,
@@ -177,10 +186,10 @@ const getStatusIcon = (mediaItem: MediaItemInternal, rowData: MediaItemRowData):
 const getStatusColors = (mediaItem: MediaItemInternal, rowData: MediaItemRowData): IconColors => {
 	switch(mediaItem.status) {
 		case 'ACTIVE': {
-			const activeColor = rowData.hasRemainingActiveProgress ? config.ui.colors.green : config.ui.colors.lightGrey;
+			const activeColor = rowData.hasRemainingActiveProgress ? MEDIA_ITEM_STATUS_ACTIVE_COLOR : MEDIA_ITEM_STATUS_ACTIVE_COMPLETE_COLOR;
 
 			return {
-				icon: config.ui.colors.white,
+				icon: MEDIA_ITEM_STATUS_ICON_COLOR,
 				background: activeColor,
 				border: activeColor
 			};
@@ -188,30 +197,30 @@ const getStatusColors = (mediaItem: MediaItemInternal, rowData: MediaItemRowData
 
 		case 'UPCOMING':
 			return {
-				icon: config.ui.colors.white,
-				background: config.ui.colors.orange,
-				border: config.ui.colors.orange
+				icon: MEDIA_ITEM_STATUS_ICON_COLOR,
+				background: MEDIA_ITEM_STATUS_UPCOMING_COLOR,
+				border: MEDIA_ITEM_STATUS_UPCOMING_COLOR
 			};
 
 		case 'REDO':
 			return {
-				icon: config.ui.colors.white,
-				background: config.ui.colors.cyan,
-				border: config.ui.colors.cyan
+				icon: MEDIA_ITEM_STATUS_ICON_COLOR,
+				background: MEDIA_ITEM_STATUS_REDO_COLOR,
+				border: MEDIA_ITEM_STATUS_REDO_COLOR
 			};
 
 		case 'COMPLETE':
 			return {
-				icon: config.ui.colors.white,
-				background: config.ui.colors.purple,
-				border: config.ui.colors.purple
+				icon: MEDIA_ITEM_STATUS_ICON_COLOR,
+				background: MEDIA_ITEM_STATUS_COMPLETE_COLOR,
+				border: MEDIA_ITEM_STATUS_COMPLETE_COLOR
 			};
 
 		case 'NEW':
 			return {
-				icon: config.ui.colors.white,
-				background: 'rgba(255, 255, 255, 0.06)',
-				border: 'rgba(255, 255, 255, 0.06)'
+				icon: MEDIA_ITEM_STATUS_ICON_COLOR,
+				background: MEDIA_ITEM_STATUS_NEW_COLOR,
+				border: MEDIA_ITEM_STATUS_NEW_COLOR
 			};
 
 		default:
@@ -237,7 +246,7 @@ const getRowAccentColor = (mediaItem: MediaItemInternal, statusColors: IconColor
 export const MediaItemRowViewComponent = (props: MediaItemRowViewComponentProps): ReactElement => {
 	const detailRows = getDetailRows(props.mediaItem, props.rowData);
 	const ownPlatform = props.mediaItem.ownPlatform;
-	const ownPlatformColor = ownPlatform ? ownPlatform.color : config.ui.colors.grey;
+	const ownPlatformColor = ownPlatform ? ownPlatform.color : MEDIA_ITEM_PLATFORM_UNOWNED_COLOR;
 	const statusColors = getStatusColors(props.mediaItem, props.rowData);
 	const statusIcon = getStatusIcon(props.mediaItem, props.rowData);
 	const cardClassName = props.highlighted ? 'media-item-row media-item-row-highlighted' : 'media-item-row';
@@ -308,7 +317,7 @@ export const MediaItemRowViewComponent = (props: MediaItemRowViewComponentProps)
 					aria-label={i18n.t('common.a11y.optionsFor', { name: props.mediaItem.name })}>
 					<span
 						className='media-item-row-icon media-item-row-options-icon'
-						style={getMaskedIconStyle(actionMoreIcon, config.ui.colors.white)}
+						style={getMaskedIconStyle(actionMoreIcon, MEDIA_ITEM_STATUS_ICON_COLOR)}
 						aria-hidden={true}
 					/>
 				</button>

@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { config } from 'app/config/config';
 import { MediaItemsListScreenComponent } from 'app/components/presentational/media-item/list/screen';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { i18n } from 'app/utilities/i18n';
@@ -24,7 +25,7 @@ const category: CategoryInternal = {
 	id: 'category-id',
 	name: 'Weekend Queue',
 	mediaType: 'MOVIE',
-	color: '#3f51b5'
+	color: config.ui.colors.availableCategoryColors[0]
 };
 
 const setViewportWidth = (width: number): void => {

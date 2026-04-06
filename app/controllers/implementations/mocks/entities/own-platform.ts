@@ -1,6 +1,9 @@
+import { config } from 'app/config/config';
 import { MockControllerHelper } from 'app/controllers/implementations/mocks/common/mock-helper';
 import { OwnPlatformController } from 'app/controllers/interfaces/entities/own-platform';
 import { OwnPlatformFilterInternal, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
+
+const ownPlatformColors = config.ui.colors.availableOwnPlatformColors;
 
 /**
  * Mocked implementation of the OwnPlatformController that contains an in-memory list of own platforms
@@ -15,17 +18,17 @@ export class OwnPlatformMockedController extends MockControllerHelper implements
 			2: [{
 				id: '1',
 				name: 'Netflix',
-				color: '#f25a5a',
+				color: ownPlatformColors[1],
 				icon: 'netflix'
 			}, {
 				id: '2',
 				name: 'Hulu',
-				color: '#74eb74',
+				color: ownPlatformColors[2],
 				icon: 'hulu'
 			}, {
 				id: '3',
 				name: 'Disc',
-				color: '#4bead7',
+				color: ownPlatformColors[6],
 				icon: 'disc'
 			}]
 		}

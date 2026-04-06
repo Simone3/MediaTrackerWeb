@@ -6,7 +6,7 @@ import { GroupInternal } from 'app/data/models/internal/group';
 import groupIcon from 'app/resources/images/ic_input_group.svg';
 import { i18n } from 'app/utilities/i18n';
 
-const GROUPS_SCREEN_ACCENT = '#7db4ff';
+const GROUPS_SCREEN_ACCENT = 'var(--color-management-accent-default)';
 
 /**
  * Presentational component that contains the whole "groups list" screen, that lists all user groups

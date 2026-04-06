@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { Action, createStore } from 'redux';
+import { config } from 'app/config/config';
 import { CategoriesListContainer } from 'app/components/containers/category/list/list';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { HIGHLIGHT_CATEGORY, REMOVE_CATEGORY_HIGHLIGHT } from 'app/redux/actions/category/const';
@@ -21,7 +22,7 @@ describe('CategoriesListContainer', () => {
 			id: 'category-id',
 			name: 'My Books',
 			mediaType: 'BOOK',
-			color: '#3f51b5'
+			color: config.ui.colors.availableCategoryColors[0]
 		};
 
 		const initialState: CategoriesListContainerTestState = {

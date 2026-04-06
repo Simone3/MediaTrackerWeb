@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { Action, createStore } from 'redux';
+import { config } from 'app/config/config';
 import { MediaItemsListContainer } from 'app/components/containers/media-item/list/list';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
@@ -28,7 +29,7 @@ describe('MediaItemsListContainer', () => {
 			id: 'category-id',
 			name: 'My Books',
 			mediaType: 'BOOK',
-			color: '#3f51b5'
+			color: config.ui.colors.availableCategoryColors[0]
 		};
 		const mediaItem: MediaItemInternal = {
 			id: 'media-id',
@@ -99,7 +100,7 @@ describe('MediaItemsListContainer', () => {
 			id: 'category-id',
 			name: 'My Books',
 			mediaType: 'BOOK',
-			color: '#3f51b5'
+			color: config.ui.colors.availableCategoryColors[0]
 		};
 
 		const initialState: MediaItemsListContainerTestState = {

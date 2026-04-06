@@ -7,9 +7,9 @@ import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-sh
 import seasonIcon from 'app/resources/images/ic_input_season_number.svg';
 import { i18n } from 'app/utilities/i18n';
 
-const TV_SHOW_SEASON_DETAILS_ACCENT = '#ffb067';
-const TV_SHOW_SEASON_DETAILS_ACTIVE_ACCENT = '#7db4ff';
-const TV_SHOW_SEASON_DETAILS_COMPLETE_ACCENT = '#7ad18f';
+const TV_SHOW_SEASON_DETAILS_ACCENT = 'var(--color-tv-show-season-accent-default)';
+const TV_SHOW_SEASON_DETAILS_ACTIVE_ACCENT = 'var(--color-tv-show-season-accent-active)';
+const TV_SHOW_SEASON_DETAILS_COMPLETE_ACCENT = 'var(--color-tv-show-season-accent-complete)';
 
 /**
  * Presentational component that contains the whole "TV show season details" screen, that works as the "add new TV show season", "update TV show season" and

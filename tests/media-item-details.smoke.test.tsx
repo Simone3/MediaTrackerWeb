@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { Action, Store, createStore } from 'redux';
+import { config } from 'app/config/config';
 import { MediaItemDetailsScreenContainer } from 'app/components/containers/media-item/details/screen';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
@@ -305,7 +306,7 @@ describe('MediaItemDetailsScreenContainer', () => {
 		const selectedOwnPlatform: OwnPlatformInternal = {
 			id: 'platform-id',
 			name: 'Kindle',
-			color: '#f5a623',
+			color: config.ui.colors.availableOwnPlatformColors[3],
 			icon: 'kindle'
 		};
 		const initialRender = renderScreen({
@@ -428,7 +429,7 @@ describe('MediaItemDetailsScreenContainer', () => {
 		const selectedOwnPlatform: OwnPlatformInternal = {
 			id: 'platform-id',
 			name: 'Kindle',
-			color: '#f5a623',
+			color: config.ui.colors.availableOwnPlatformColors[3],
 			icon: 'kindle'
 		};
 		const {

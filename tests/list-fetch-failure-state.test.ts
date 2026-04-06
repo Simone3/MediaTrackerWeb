@@ -1,3 +1,4 @@
+import { config } from 'app/config/config';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
@@ -29,7 +30,7 @@ describe('list fetch failure reducers', () => {
 			id: 'category-id',
 			name: 'Books',
 			mediaType: 'BOOK',
-			color: '#3f51b5'
+			color: config.ui.colors.availableCategoryColors[0]
 		};
 		const previousState: CategoriesListState = {
 			categories: [ category ],
@@ -95,7 +96,7 @@ describe('list fetch failure reducers', () => {
 		const ownPlatform: OwnPlatformInternal = {
 			id: 'own-platform-id',
 			name: 'Switch',
-			color: '#ef5350',
+			color: config.ui.colors.availableOwnPlatformColors[1],
 			icon: 'switch'
 		};
 		const previousState: OwnPlatformsListState = {

@@ -10,13 +10,19 @@ import { TvShowInternal } from 'app/data/models/internal/media-items/tv-show';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { i18n } from 'app/utilities/i18n';
 
+const defaultCategoryColor = config.ui.colors.availableCategoryColors[0];
+const neutralOwnPlatformColor = config.ui.colors.availableOwnPlatformColors[7];
+const activeStatusColor = 'var(--color-media-item-status-active)';
+const activeCompleteStatusColor = 'var(--color-media-item-status-active-complete)';
+const newStatusColor = 'var(--color-media-item-status-new)';
+
 describe('MediaItemsListComponent', () => {
 	test('handles search open, item open and options action', async() => {
 		const category: CategoryInternal = {
 			id: 'category-id',
 			name: 'My Books',
 			mediaType: 'BOOK',
-			color: '#3f51b5'
+			color: defaultCategoryColor
 		};
 		const mediaItem: MediaItemInternal = {
 			id: 'media-id',
@@ -80,7 +86,7 @@ describe('MediaItemsListComponent', () => {
 			id: 'category-id',
 			name: 'My Books',
 			mediaType: 'BOOK',
-			color: '#3f51b5'
+			color: defaultCategoryColor
 		};
 		const mediaItem: MediaItemInternal = {
 			id: 'media-id',
@@ -128,7 +134,7 @@ describe('MediaItemsListComponent', () => {
 			id: 'category-id',
 			name: 'My Books',
 			mediaType: 'BOOK',
-			color: '#3f51b5'
+			color: defaultCategoryColor
 		};
 		const submitSearch = jest.fn();
 		const closeSearch = jest.fn();
@@ -178,7 +184,7 @@ describe('MediaItemsListComponent', () => {
 			id: 'category-id',
 			name: 'My Books',
 			mediaType: 'BOOK',
-			color: '#3f51b5'
+			color: defaultCategoryColor
 		};
 		const {
 			container,
@@ -249,7 +255,7 @@ describe('MediaItemsListComponent', () => {
 			id: 'category-id',
 			name: 'My Books',
 			mediaType: 'BOOK',
-			color: '#3f51b5'
+			color: defaultCategoryColor
 		};
 		const group: GroupInternal = {
 			id: 'group-id',
@@ -258,7 +264,7 @@ describe('MediaItemsListComponent', () => {
 		const ownPlatform: OwnPlatformInternal = {
 			id: 'platform-id',
 			name: 'Kindle',
-			color: '#5f6368',
+			color: neutralOwnPlatformColor,
 			icon: 'kindle'
 		};
 		const mediaItem: BookInternal = {
@@ -309,7 +315,7 @@ describe('MediaItemsListComponent', () => {
 		expect(screen.getByText(i18n.t('mediaItem.list.group', { groupName: group.name, order: 1 }))).toBeInTheDocument();
 		expect(screen.getByLabelText(i18n.t('mediaItem.list.accessibility.ownPlatform.owned', { name: ownPlatform.name }))).toBeInTheDocument();
 		expect(screen.getByLabelText(i18n.t('mediaItem.list.markActive.BOOK'))).toBeInTheDocument();
-		expect(screen.getByText('Dune').closest('li')?.style.getPropertyValue('--media-item-row-accent')).toBe(config.ui.colors.green);
+		expect(screen.getByText('Dune').closest('li')?.style.getPropertyValue('--media-item-row-accent')).toBe(activeStatusColor);
 	});
 
 	test('renders tv show specific row metadata', () => {
@@ -317,7 +323,7 @@ describe('MediaItemsListComponent', () => {
 			id: 'category-id',
 			name: 'My Shows',
 			mediaType: 'TV_SHOW',
-			color: '#3f51b5'
+			color: defaultCategoryColor
 		};
 		const mediaItem: TvShowInternal = {
 			id: 'media-id',
@@ -367,7 +373,7 @@ describe('MediaItemsListComponent', () => {
 			id: 'category-id',
 			name: 'My Shows',
 			mediaType: 'TV_SHOW',
-			color: '#3f51b5'
+			color: defaultCategoryColor
 		};
 		const mediaItem: TvShowInternal = {
 			id: 'media-id',
@@ -409,10 +415,10 @@ describe('MediaItemsListComponent', () => {
 			/>
 		);
 
-		expect(screen.getByText('Dark').closest('li')?.style.getPropertyValue('--media-item-row-accent')).toBe(config.ui.colors.lightGrey);
+		expect(screen.getByText('Dark').closest('li')?.style.getPropertyValue('--media-item-row-accent')).toBe(activeCompleteStatusColor);
 		expect(screen.getByLabelText(i18n.t('mediaItem.list.markActive.TV_SHOW'))).toHaveStyle({
-			backgroundColor: config.ui.colors.lightGrey,
-			borderColor: config.ui.colors.lightGrey
+			backgroundColor: activeCompleteStatusColor,
+			borderColor: activeCompleteStatusColor
 		});
 	});
 
@@ -421,7 +427,7 @@ describe('MediaItemsListComponent', () => {
 			id: 'category-id',
 			name: 'My Games',
 			mediaType: 'VIDEOGAME',
-			color: '#3f51b5'
+			color: defaultCategoryColor
 		};
 		const mediaItem: MediaItemInternal = {
 			id: 'media-id',
@@ -461,8 +467,8 @@ describe('MediaItemsListComponent', () => {
 		expect(screen.getByText('Hades').closest('li')?.style.getPropertyValue('--media-item-row-accent')).toBe('transparent');
 		expect(screen.getByText('Hades').closest('li')).not.toHaveClass('media-item-row-highlighted');
 		expect(screen.getByLabelText(i18n.t('mediaItem.common.importance.300'))).toHaveStyle({
-			backgroundColor: 'rgba(255, 255, 255, 0.06)',
-			borderColor: 'rgba(255, 255, 255, 0.06)'
+			backgroundColor: newStatusColor,
+			borderColor: newStatusColor
 		});
 	});
 
@@ -471,7 +477,7 @@ describe('MediaItemsListComponent', () => {
 			id: 'category-id',
 			name: 'My Movies',
 			mediaType: 'MOVIE',
-			color: '#3f51b5'
+			color: defaultCategoryColor
 		};
 		const mediaItem: MediaItemInternal = {
 			id: 'media-id',
@@ -516,7 +522,7 @@ describe('MediaItemsListComponent', () => {
 			id: 'category-id',
 			name: 'My Movies',
 			mediaType: 'MOVIE',
-			color: '#3f51b5'
+			color: defaultCategoryColor
 		};
 		const mediaItem: MediaItemInternal = {
 			id: 'media-id',

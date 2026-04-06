@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { config } from 'app/config/config';
 import { OwnPlatformsListScreenComponent } from 'app/components/presentational/own-platform/list/screen';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { i18n } from 'app/utilities/i18n';
@@ -10,13 +11,13 @@ describe('OwnPlatformsListScreenComponent', () => {
 			{
 				id: 'own-platform-1',
 				name: 'Switch',
-				color: '#ef5350',
+				color: config.ui.colors.availableOwnPlatformColors[1],
 				icon: 'switch'
 			},
 			{
 				id: 'own-platform-2',
 				name: 'Kindle',
-				color: '#5c6bc0',
+				color: config.ui.colors.availableOwnPlatformColors[0],
 				icon: 'kindle'
 			}
 		];

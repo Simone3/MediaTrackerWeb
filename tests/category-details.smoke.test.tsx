@@ -51,7 +51,7 @@ describe('CategoryDetailsScreenComponent', () => {
 		const category: CategoryInternal = {
 			id: 'category-id',
 			name: 'Books',
-			color: '#3f51b5',
+			color: config.ui.colors.availableCategoryColors[0],
 			mediaType: 'BOOK'
 		};
 

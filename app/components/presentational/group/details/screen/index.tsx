@@ -8,7 +8,7 @@ import { GroupInternal } from 'app/data/models/internal/group';
 import groupIcon from 'app/resources/images/ic_input_group.svg';
 import { i18n } from 'app/utilities/i18n';
 
-const GROUP_DETAILS_ACCENT = '#7db4ff';
+const GROUP_DETAILS_ACCENT = 'var(--color-management-accent-default)';
 
 /**
  * Presentational component that contains the whole "group details" screen, that works as the "add new group", "update group" and

@@ -1,6 +1,9 @@
+import { config } from 'app/config/config';
 import { MockControllerHelper } from 'app/controllers/implementations/mocks/common/mock-helper';
 import { CategoryController } from 'app/controllers/interfaces/entities/category';
 import { CategoryFilterInternal, CategoryInternal } from 'app/data/models/internal/category';
+
+const categoryColors = config.ui.colors.availableCategoryColors;
 
 /**
  * Mocked implementation of the CategoryController that contains an in-memory list of categories
@@ -13,22 +16,22 @@ export class CategoryMockedController extends MockControllerHelper implements Ca
 	private categories: { [user: string]: CategoryInternal[] } = {
 		test: [{
 			id: '1',
-			color: '#FF0000',
+			color: categoryColors[1],
 			mediaType: 'BOOK',
 			name: 'My Books'
 		}, {
 			id: '2',
-			color: '#008000',
+			color: categoryColors[2],
 			mediaType: 'MOVIE',
 			name: 'My Movies'
 		}, {
 			id: '3',
-			color: '#1E90FF',
+			color: categoryColors[0],
 			mediaType: 'TV_SHOW',
 			name: 'My TV Shows'
 		}, {
 			id: '4',
-			color: '#FFA500',
+			color: categoryColors[3],
 			mediaType: 'VIDEOGAME',
 			name: 'My Videogames'
 		}]

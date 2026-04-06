@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { config } from 'app/config/config';
 import { MediaItemFilterModalComponent } from 'app/components/presentational/media-item/list/filter-modal';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { i18n } from 'app/utilities/i18n';
@@ -77,7 +78,7 @@ describe('MediaItemFilterModalComponent', () => {
 			id: 'category-id',
 			name: 'Books',
 			mediaType: 'BOOK',
-			color: '#3f51b5'
+			color: config.ui.colors.availableCategoryColors[0]
 		};
 		const submitFilter = jest.fn();
 
@@ -122,7 +123,7 @@ describe('MediaItemFilterModalComponent', () => {
 			id: 'category-id',
 			name: 'Movies',
 			mediaType: 'MOVIE',
-			color: '#ef6c00'
+			color: config.ui.colors.availableCategoryColors[3]
 		};
 		const submitFilter = jest.fn();
 

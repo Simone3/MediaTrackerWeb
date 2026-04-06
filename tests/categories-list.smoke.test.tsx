@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { config } from 'app/config/config';
 import { CategoriesListComponent } from 'app/components/presentational/category/list/list';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { i18n } from 'app/utilities/i18n';
@@ -11,7 +12,7 @@ describe('CategoriesListComponent', () => {
 				id: '1',
 				name: 'My Books',
 				mediaType: 'BOOK',
-				color: '#3f51b5'
+				color: config.ui.colors.availableCategoryColors[0]
 			}
 		];
 

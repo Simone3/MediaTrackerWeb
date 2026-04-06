@@ -8,7 +8,7 @@ import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import ownPlatformIcon from 'app/resources/images/ic_input_own_platform.svg';
 import { i18n } from 'app/utilities/i18n';
 
-const OWN_PLATFORM_DETAILS_ACCENT = '#7db4ff';
+const OWN_PLATFORM_DETAILS_ACCENT = 'var(--color-management-accent-default)';
 
 /**
  * Presentational component that contains the whole "own platform details" screen, that works as the "add new own platform", "update own platform" and

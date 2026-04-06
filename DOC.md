@@ -61,6 +61,7 @@
   - `app/components/presentational/own-platform/common/icon-registry.ts`
 - Most components are still class components.
 - Global styling is still centralized in `app/web/styles.css`.
+- Styling colors now live exclusively in `app/web/styles.css` `:root` custom properties; component-level accent/status strings that are purely visual pass `var(--...)` tokens instead of hardcoded hex values.
 - The authenticated shell is now always full-bleed dark on web; the old per-screen body-class toggles were removed, and shared confirm dialogs/loaders use the dark treatment by default.
 
 ### State management
@@ -120,7 +121,7 @@
 - The old unused `app/config/properties/config-sample.ts` helper has been removed; the repo now only keeps the actual dev/prod config files that are already versioned.
 - `app/config/type-config.ts` now only keeps the config fields still read by the web app.
 - `config.firebase` is intentionally narrowed to the Firebase Web Auth fields the app actually uses: `apiKey`, `authDomain`, `projectId`, and `appId`.
-- The old unused theme-only color entries were removed from config; `blue`, `red`, and `yellow` are still kept as named palette entries for consistency because they feed the shared available-color arrays for categories and own platforms.
+- Logical entity colors are now centralized under `config.ui.colors.availableCategoryColors` and `config.ui.colors.availableOwnPlatformColors` only; the shared array values themselves live in `app/config/properties/shared-ui-colors.ts`, while theme/styling colors no longer live in app config.
 - Current dev config uses mocks for:
   - user
   - categories

@@ -7,7 +7,7 @@ import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import ownPlatformIcon from 'app/resources/images/ic_input_own_platform.svg';
 import { i18n } from 'app/utilities/i18n';
 
-const OWN_PLATFORMS_SCREEN_ACCENT = '#7db4ff';
+const OWN_PLATFORMS_SCREEN_ACCENT = 'var(--color-management-accent-default)';
 
 /**
  * Presentational component that contains the whole "own platforms list" screen, that lists all user own platforms
