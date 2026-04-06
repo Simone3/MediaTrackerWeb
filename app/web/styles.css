@@ -1,9 +1,6 @@
 :root {
 	/* Backgrounds */
 	--color-background-app: #0f151d;
-	--color-background-app-elevated: #11151a;
-	--color-background-sidebar-start: #20242b;
-	--color-background-sidebar-end: #15181d;
 	--color-background-screen-start: #131a23;
 	--color-background-screen-end: #10161e;
 	--color-background-card-start: #1a222d;
@@ -96,7 +93,6 @@
 	--color-screen-glow-primary: rgba(90, 128, 190, 0.24);
 	--color-screen-glow-primary-soft: rgba(90, 128, 190, 0.2);
 	--color-screen-glow-primary-fade: rgba(90, 128, 190, 0);
-	--color-screen-glow-secondary: var(--color-accent-surface-strong);
 	--color-screen-glow-secondary-fade: rgba(64, 140, 255, 0);
 	--color-auth-glow-primary: rgba(125, 180, 255, 0.3);
 	--color-auth-glow-primary-fade: rgba(125, 180, 255, 0);
@@ -114,8 +110,6 @@
 	--color-scrim-dialog: rgba(8, 12, 18, 0.72);
 
 	/* Shadow colors */
-	--color-shadow-nav: rgba(10, 16, 30, 0.16);
-	--color-shadow-tooltip: rgba(4, 8, 18, 0.24);
 	--color-shadow-card: rgba(6, 12, 20, 0.22);
 	--color-shadow-card-hover: rgba(6, 12, 20, 0.24);
 	--color-shadow-card-selected: rgba(6, 12, 20, 0.3);
