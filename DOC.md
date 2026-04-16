@@ -258,6 +258,14 @@
     - `app/components/presentational/media-item/details/form/data/media-item.ts` is back to shared-only validation and normalization for generic media-item fields
     - `app/components/presentational/media-item/details/form/view/media-item.tsx` is back to rendering only shared media-item UI, with the TV-show seasons summary helper moved into the TV-show view
     - the shared form view now also receives media-specific sidebar actions from the movie, TV-show, and videogame view files instead of branching on `mediaType` itself
+- Returning from the TV-show seasons flow on web could clobber unrelated unsaved TV-show edits because the seasons remount merge raced against draft restoration.
+  - Correct behavior/structure on web now:
+    - the TV-show form wrapper now prefers the restored Redux draft as the base object when reloading handled seasons on remount, instead of blindly merging onto the stale saved media item snapshot
+    - this preserves edited TV-show fields like creators or user comment while still applying the updated handled seasons list from Redux
+    - focused smoke coverage now reproduces the round-trip by typing unsaved edits, remounting with a handled seasons timestamp, and asserting both the edited fields and the refreshed seasons summary survive together
+  - Relevant files:
+    - `app/components/presentational/media-item/details/form/wrapper/tv-show.tsx`
+    - `tests/media-item-details.smoke.test.tsx`
     - each specific form data module now owns its own save normalization, and the TV-show data module also owns the watched-season preservation logic for catalog reloads
     - the common Formik wrapper now accepts per-media-type catalog defaults plus optional normalize/catalog-load hooks, so the specific wrappers decide how their extra fields are reset and saved
     - focused unit coverage now guards the shared normalization, book-specific normalization, and TV-show season-preservation behavior

@@ -66,7 +66,8 @@ export class TvShowFormComponent extends Component<TvShowFormComponentProps> {
 	private checkLoadSeasons(): void {
 		const {
 			loadSeasons,
-			loadSeasonsTimestamp
+			loadSeasonsTimestamp,
+			restoredDraft
 		} = this.props;
 
 		if(!this.formikProps || !loadSeasonsTimestamp || loadSeasonsTimestamp === this.loadedSeasonsTimestamp) {
@@ -75,8 +76,11 @@ export class TvShowFormComponent extends Component<TvShowFormComponentProps> {
 
 		this.loadedSeasonsTimestamp = loadSeasonsTimestamp;
 
+		// On remount after the seasons flow, Formik may still expose the saved media item while the common wrapper is restoring the unsaved draft.
+		const currentValues = restoredDraft || this.formikProps.values;
+
 		void this.formikProps.setValues({
-			...this.formikProps.values,
+			...currentValues,
 			seasons: loadSeasons.length > 0 ? [ ...loadSeasons ] : undefined
 		});
 	}

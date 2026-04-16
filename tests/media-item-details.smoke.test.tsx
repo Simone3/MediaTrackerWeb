@@ -494,8 +494,8 @@ describe('MediaItemDetailsScreenContainer', () => {
 		});
 	});
 
-	test('restores handled tv show seasons after remounting from the seasons flow', async() => {
-		const draftMediaItem: TvShowInternal = {
+	test('keeps unsaved TV show edits when remounting from the seasons flow', async() => {
+		const savedMediaItem: TvShowInternal = {
 			id: 'tv-show-id',
 			name: 'Dark',
 			mediaType: 'TV_SHOW',
@@ -509,6 +509,11 @@ describe('MediaItemDetailsScreenContainer', () => {
 				}
 			]
 		};
+		const firstRender = renderScreen({
+			mediaItemDetails: {
+				mediaItem: savedMediaItem
+			}
+		});
 		const handledSeasons = [
 			{
 				number: 1,
@@ -521,11 +526,26 @@ describe('MediaItemDetailsScreenContainer', () => {
 				watchedEpisodesNumber: 4
 			}
 		];
+		const user = userEvent.setup();
+
+		await user.type(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.creators.TV_SHOW')), 'Baran bo Odar');
+		await user.type(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.userComment')), 'Keep this draft');
+
+		await waitFor(() => {
+			expect(firstRender.store.getState().mediaItemDetails.formDraft).toMatchObject({
+				creators: [ 'Baran bo Odar' ],
+				userComment: 'Keep this draft'
+			});
+		});
+
+		const savedDraft = firstRender.store.getState().mediaItemDetails.formDraft as TvShowInternal;
+
+		firstRender.unmount();
 
 		renderScreen({
 			mediaItemDetails: {
-				mediaItem: draftMediaItem,
-				formDraft: draftMediaItem
+				mediaItem: savedMediaItem,
+				formDraft: savedDraft
 			},
 			tvShowSeasonsList: {
 				tvShowSeasons: handledSeasons,
@@ -534,6 +554,8 @@ describe('MediaItemDetailsScreenContainer', () => {
 		});
 
 		await waitFor(() => {
+			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.creators.TV_SHOW'))).toHaveValue('Baran bo Odar');
+			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.userComment'))).toHaveValue('Keep this draft');
 			expect(screen.getByText(i18n.t('mediaItem.details.labels.seasons', {
 				seasonsNumber: 2,
 				watchedEpisodesNumber: 14,
