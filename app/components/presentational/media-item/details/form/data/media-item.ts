@@ -10,7 +10,7 @@ import { OWN_PLATFORM_ICON_INTERNAL_VALUES, OwnPlatformIconInternal, OwnPlatform
 export const mediaItemFormValidationShape = {
 	id: string(),
 	name: string().required(),
-	genres: array().of(string().required()).optional(),
+	genres: array().of(string()).optional(),
 	description: string(),
 	releaseDate: date(),
 	imageUrl: string(),

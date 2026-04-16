@@ -306,6 +306,23 @@
   - Relevant files:
     - `app/components/presentational/media-item/details/form/wrapper/media-item.tsx`
     - `tests/media-item-details.smoke.test.tsx`
+- Inline comma-separated text fields on web were normalizing on every keystroke, which made trailing separators impossible to type and kept snapping the caret to the end.
+  - Correct behavior/structure on web now:
+    - the shared inline-text form input keeps its own raw string while editing and only syncs the parsed array back into Formik, so authors/directors/creators/publishers/platforms/genres behave like normal text boxes while you type
+    - temporary form validation for those array fields now allows empty intermediate tokens, so values like a trailing comma or space no longer block Save during editing
+    - save-time normalization still trims and filters the final payload, and focused smoke coverage now types `Frank Herbert,Brian Herbert, ` verbatim before asserting the saved authors array is still cleaned up
+  - Relevant files:
+    - `app/components/presentational/media-item/details/form/view/media-item.tsx`
+    - `app/components/presentational/media-item/details/form/view/book.tsx`
+    - `app/components/presentational/media-item/details/form/view/movie.tsx`
+    - `app/components/presentational/media-item/details/form/view/tv-show.tsx`
+    - `app/components/presentational/media-item/details/form/view/videogame.tsx`
+    - `app/components/presentational/media-item/details/form/data/media-item.ts`
+    - `app/components/presentational/media-item/details/form/data/book.ts`
+    - `app/components/presentational/media-item/details/form/data/movie.ts`
+    - `app/components/presentational/media-item/details/form/data/tv-show.ts`
+    - `app/components/presentational/media-item/details/form/data/videogame.ts`
+    - `tests/media-item-details.smoke.test.tsx`
 - The production REST JSON invoker still carried the old React Native `Accept-Charset` request header into the browser build.
   - Correct behavior on web now:
     - Axios still sends the intended JSON request headers (`Content-Type` and `Accept`)

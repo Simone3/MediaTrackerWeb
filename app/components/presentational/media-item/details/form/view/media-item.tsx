@@ -1,4 +1,4 @@
-import { Component, KeyboardEvent, ReactNode } from 'react';
+import { Component, KeyboardEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import { FormikProps } from 'formik';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
@@ -94,9 +94,7 @@ export const inlineTextToInputValue = (values?: string[]): string => {
  * @returns array or undefined
  */
 export const inputValueToInlineText = (value: string): string[] | undefined => {
-	const trimmedValue = value.trim();
-
-	if(!trimmedValue) {
+	if(value === '') {
 		return undefined;
 	}
 
@@ -104,16 +102,79 @@ export const inputValueToInlineText = (value: string): string[] | undefined => {
 		return [ value ];
 	}
 
-	const tokens = value
-		.split(',')
-		.map((token) => {
-			return token.trim();
-		})
-		.filter((token) => {
-			return token.length > 0;
-		});
+	return value.split(',');
+};
 
-	return tokens.length > 0 ? tokens : undefined;
+/**
+ * Checks whether two optional inline-text arrays match exactly
+ * @param first first array
+ * @param second second array
+ * @returns whether both arrays match
+ */
+const areInlineTextArraysEqual = (first?: string[], second?: string[]): boolean => {
+	const firstValues = first || [];
+	const secondValues = second || [];
+
+	if(firstValues.length !== secondValues.length) {
+		return false;
+	}
+
+	return firstValues.every((value, index) => {
+		return value === secondValues[index];
+	});
+};
+
+type InlineTextInputComponentProps = {
+	id: string;
+	values?: string[];
+	onChange: (newValues: string[] | undefined) => void;
+};
+
+/**
+ * Preserves raw typing for inline text fields while still syncing array values to Formik
+ * @param props component props
+ * @returns the component
+ */
+export const InlineTextInputComponent = (props: InlineTextInputComponentProps): ReactNode => {
+	const {
+		id,
+		onChange,
+		values
+	} = props;
+	const [ inputValue, setInputValue ] = useState(() => {
+		return inlineTextToInputValue(values);
+	});
+	const inputValueRef = useRef(inputValue);
+
+	useEffect(() => {
+		inputValueRef.current = inputValue;
+	}, [ inputValue ]);
+
+	useEffect(() => {
+		if(areInlineTextArraysEqual(values, inputValueToInlineText(inputValueRef.current))) {
+			return;
+		}
+
+		const nextInputValue = inlineTextToInputValue(values);
+
+		inputValueRef.current = nextInputValue;
+		setInputValue(nextInputValue);
+	}, [ values ]);
+
+	return (
+		<InputComponent
+			id={id}
+			type='text'
+			value={inputValue}
+			onChange={(event) => {
+				const nextInputValue = event.target.value;
+
+				inputValueRef.current = nextInputValue;
+				setInputValue(nextInputValue);
+				onChange(inputValueToInlineText(nextInputValue));
+			}}
+		/>
+	);
 };
 
 /**
@@ -631,13 +692,10 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<label className='media-item-details-label' htmlFor={id}>
 					{label}
 				</label>
-				<InputComponent
+				<InlineTextInputComponent
 					id={id}
-					type='text'
-					value={this.inlineTextToInputValue(values)}
-					onChange={(event) => {
-						onChange(this.inputValueToInlineText(event.target.value));
-					}}
+					values={values}
+					onChange={onChange}
 				/>
 			</div>
 		);
@@ -808,23 +866,6 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 		return inputValueToNumber(value);
 	}
 
-	/**
-	 * Converts an optional string array to an inline input value
-	 * @param values array values
-	 * @returns comma-separated string
-	 */
-	protected inlineTextToInputValue(values?: string[]): string {
-		return inlineTextToInputValue(values);
-	}
-
-	/**
-	 * Converts an inline text value to an optional string array
-	 * @param value current input value
-	 * @returns array or undefined
-	 */
-	protected inputValueToInlineText(value: string): string[] | undefined {
-		return inputValueToInlineText(value);
-	}
 }
 
 /**

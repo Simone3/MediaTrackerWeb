@@ -7,9 +7,9 @@ import { VideogameInternal } from 'app/data/models/internal/media-items/videogam
  */
 const videogameFormValidationShape = {
 	...mediaItemFormValidationShape,
-	developers: array().of(string().required()).optional(),
-	publishers: array().of(string().required()).optional(),
-	platforms: array().of(string().required()).optional(),
+	developers: array().of(string()).optional(),
+	publishers: array().of(string()).optional(),
+	platforms: array().of(string()).optional(),
 	averageLengthHours: number()
 };
 

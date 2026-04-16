@@ -7,7 +7,7 @@ import { MovieInternal } from 'app/data/models/internal/media-items/movie';
  */
 const movieFormValidationShape = {
 	...mediaItemFormValidationShape,
-	directors: array().of(string().required()).optional(),
+	directors: array().of(string()).optional(),
 	durationMinutes: number()
 };
 

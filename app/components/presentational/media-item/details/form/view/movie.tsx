@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { FormikProps } from 'formik';
 import { InputComponent } from 'app/components/presentational/generic/input';
-import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { InlineTextInputComponent, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
 import { config } from 'app/config/config';
 import { MovieInternal } from 'app/data/models/internal/media-items/movie';
 import justWatchIcon from 'app/resources/images/ic_justwatch.png';
@@ -47,12 +47,11 @@ export const MovieFormViewComponent = (props: MovieFormViewComponentProps): Reac
 					<label className='media-item-details-label' htmlFor='media-item-movie-directors'>
 						{i18n.t('mediaItem.details.placeholders.creators.MOVIE')}
 					</label>
-					<InputComponent
+					<InlineTextInputComponent
 						id='media-item-movie-directors'
-						type='text'
-						value={inlineTextToInputValue(props.values.directors)}
-						onChange={(event) => {
-							void props.setFieldValue('directors', inputValueToInlineText(event.target.value));
+						values={props.values.directors}
+						onChange={(values) => {
+							void props.setFieldValue('directors', values);
 						}}
 					/>
 				</div>

@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import { FormikProps } from 'formik';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
-import { dateToInputValue, inlineTextToInputValue, inputValueToDate, inputValueToInlineText, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { dateToInputValue, InlineTextInputComponent, inputValueToDate, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
 import { config } from 'app/config/config';
 import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import justWatchIcon from 'app/resources/images/ic_justwatch.png';
@@ -68,12 +68,11 @@ export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): Re
 					<label className='media-item-details-label' htmlFor='media-item-tv-show-creators'>
 						{i18n.t('mediaItem.details.placeholders.creators.TV_SHOW')}
 					</label>
-					<InputComponent
+					<InlineTextInputComponent
 						id='media-item-tv-show-creators'
-						type='text'
-						value={inlineTextToInputValue(props.values.creators)}
-						onChange={(event) => {
-							void props.setFieldValue('creators', inputValueToInlineText(event.target.value));
+						values={props.values.creators}
+						onChange={(values) => {
+							void props.setFieldValue('creators', values);
 						}}
 					/>
 				</div>,

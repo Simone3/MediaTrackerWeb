@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { FormikProps } from 'formik';
 import { InputComponent } from 'app/components/presentational/generic/input';
-import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { InlineTextInputComponent, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
 import { config } from 'app/config/config';
 import { VideogameInternal } from 'app/data/models/internal/media-items/videogame';
 import howLongToBeatIcon from 'app/resources/images/ic_howlongtobeat.png';
@@ -47,12 +47,11 @@ export const VideogameFormViewComponent = (props: VideogameFormViewComponentProp
 					<label className='media-item-details-label' htmlFor='media-item-videogame-developers'>
 						{i18n.t('mediaItem.details.placeholders.creators.VIDEOGAME')}
 					</label>
-					<InputComponent
+					<InlineTextInputComponent
 						id='media-item-videogame-developers'
-						type='text'
-						value={inlineTextToInputValue(props.values.developers)}
-						onChange={(event) => {
-							void props.setFieldValue('developers', inputValueToInlineText(event.target.value));
+						values={props.values.developers}
+						onChange={(values) => {
+							void props.setFieldValue('developers', values);
 						}}
 					/>
 				</div>,
@@ -60,12 +59,11 @@ export const VideogameFormViewComponent = (props: VideogameFormViewComponentProp
 					<label className='media-item-details-label' htmlFor='media-item-videogame-publishers'>
 						{i18n.t('mediaItem.details.placeholders.publishers')}
 					</label>
-					<InputComponent
+					<InlineTextInputComponent
 						id='media-item-videogame-publishers'
-						type='text'
-						value={inlineTextToInputValue(props.values.publishers)}
-						onChange={(event) => {
-							void props.setFieldValue('publishers', inputValueToInlineText(event.target.value));
+						values={props.values.publishers}
+						onChange={(values) => {
+							void props.setFieldValue('publishers', values);
 						}}
 					/>
 				</div>,
@@ -73,12 +71,11 @@ export const VideogameFormViewComponent = (props: VideogameFormViewComponentProp
 					<label className='media-item-details-label' htmlFor='media-item-videogame-platforms'>
 						{i18n.t('mediaItem.details.placeholders.platforms')}
 					</label>
-					<InputComponent
+					<InlineTextInputComponent
 						id='media-item-videogame-platforms'
-						type='text'
-						value={inlineTextToInputValue(props.values.platforms)}
-						onChange={(event) => {
-							void props.setFieldValue('platforms', inputValueToInlineText(event.target.value));
+						values={props.values.platforms}
+						onChange={(values) => {
+							void props.setFieldValue('platforms', values);
 						}}
 					/>
 				</div>

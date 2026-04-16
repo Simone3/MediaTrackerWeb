@@ -189,6 +189,35 @@ describe('MediaItemDetailsScreenContainer', () => {
 		});
 	});
 
+	test('keeps inline text input raw while typing but still normalizes it on save', async() => {
+		const {
+			dispatchedActions
+		} = renderScreen();
+
+		const user = userEvent.setup();
+		const nameInput = screen.getByLabelText(i18n.t('mediaItem.details.placeholders.name'));
+		const authorsInput = screen.getByLabelText(i18n.t('mediaItem.details.placeholders.creators.BOOK'));
+		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
+
+		await user.type(nameInput, 'Dune');
+		await user.type(authorsInput, 'Frank Herbert,Brian Herbert, ');
+
+		expect(authorsInput).toHaveValue('Frank Herbert,Brian Herbert, ');
+		expect(saveButton).toBeEnabled();
+
+		await user.click(saveButton);
+
+		expect(dispatchedActions).toContainEqual(expect.objectContaining({
+			type: SAVE_MEDIA_ITEM,
+			mediaItem: expect.objectContaining({
+				...DEFAULT_BOOK,
+				name: 'Dune',
+				authors: [ 'Frank Herbert', 'Brian Herbert' ]
+			}),
+			confirmSameName: false
+		}));
+	});
+
 	test('asks confirmation and retries save when same-name warning is requested', async() => {
 		const mediaItem: MediaItemInternal = {
 			id: 'media-id',

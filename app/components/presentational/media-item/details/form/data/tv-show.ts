@@ -16,7 +16,7 @@ const tvShowSeasonFormValidationSchema: ObjectSchema<TvShowSeasonInternal> = obj
  */
 const tvShowFormValidationShape = {
 	...mediaItemFormValidationShape,
-	creators: array().of(string().required()).optional(),
+	creators: array().of(string()).optional(),
 	averageEpisodeRuntimeMinutes: number(),
 	seasons: array().of(tvShowSeasonFormValidationSchema).optional(),
 	inProduction: boolean(),

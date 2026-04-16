@@ -7,7 +7,7 @@ import { BookInternal } from 'app/data/models/internal/media-items/book';
  */
 const bookFormValidationShape = {
 	...mediaItemFormValidationShape,
-	authors: array().of(string().required()).optional(),
+	authors: array().of(string()).optional(),
 	pagesNumber: number()
 };
 

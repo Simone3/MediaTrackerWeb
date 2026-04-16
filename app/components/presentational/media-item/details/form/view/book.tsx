@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { FormikProps } from 'formik';
 import { InputComponent } from 'app/components/presentational/generic/input';
-import { inlineTextToInputValue, inputValueToInlineText, inputValueToNumber, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { InlineTextInputComponent, inputValueToNumber, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
 import { i18n } from 'app/utilities/i18n';
 import { BookInternal } from 'app/data/models/internal/media-items/book';
 
@@ -32,12 +32,11 @@ export const BookFormViewComponent = (props: BookFormViewComponentProps): ReactE
 					<label className='media-item-details-label' htmlFor='media-item-book-authors'>
 						{i18n.t('mediaItem.details.placeholders.creators.BOOK')}
 					</label>
-					<InputComponent
+					<InlineTextInputComponent
 						id='media-item-book-authors'
-						type='text'
-						value={inlineTextToInputValue(props.values.authors)}
-						onChange={(event) => {
-							void props.setFieldValue('authors', inputValueToInlineText(event.target.value));
+						values={props.values.authors}
+						onChange={(values) => {
+							void props.setFieldValue('authors', values);
 						}}
 					/>
 				</div>
