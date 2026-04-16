@@ -258,14 +258,15 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 
 	/**
 	 * Loads the selected group from Redux into the form
+	 * @param orderInGroup the current order-in-group value to preserve while applying the selected group
 	 */
-	private loadSelectedGroup(): void {
+	private loadSelectedGroup(orderInGroup: number | undefined = this.formikProps?.values.orderInGroup): void {
 		if(!this.formikProps) {
 			return;
 		}
 
 		void this.formikProps.setFieldValue('group', this.props.selectedGroup);
-		void this.formikProps.setFieldValue('orderInGroup', this.props.selectedGroup ? this.formikProps.values.orderInGroup : undefined);
+		void this.formikProps.setFieldValue('orderInGroup', this.props.selectedGroup ? orderInGroup : undefined);
 	}
 
 	/**
@@ -277,7 +278,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 
 		if(this.props.selectedGroup?.id !== currentGroupId ||
 			(!this.props.selectedGroup && currentOrderInGroup !== undefined)) {
-			this.loadSelectedGroup();
+			this.loadSelectedGroup(currentOrderInGroup);
 		}
 	}
 
@@ -289,7 +290,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 			return;
 		}
 
-		this.loadSelectedGroup();
+		this.loadSelectedGroup(this.formikProps.values.orderInGroup);
 	}
 
 	/**

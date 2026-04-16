@@ -494,6 +494,90 @@ describe('MediaItemDetailsScreenContainer', () => {
 		});
 	});
 
+	test('keeps unsaved draft values when remounting from group and own-platform picker navigation', async() => {
+		const initialGroup: GroupInternal = {
+			id: 'group-id-1',
+			name: 'Original group'
+		};
+		const selectedGroup: GroupInternal = {
+			id: 'group-id-2',
+			name: 'Updated group'
+		};
+		const initialOwnPlatform: OwnPlatformInternal = {
+			id: 'platform-id-1',
+			name: 'Shelf',
+			color: config.ui.colors.availableOwnPlatformColors[0],
+			icon: 'book'
+		};
+		const selectedOwnPlatform: OwnPlatformInternal = {
+			id: 'platform-id-2',
+			name: 'Kindle',
+			color: config.ui.colors.availableOwnPlatformColors[3],
+			icon: 'kindle'
+		};
+		const firstRender = renderScreen({
+			mediaItemDetails: {
+				mediaItem: {
+					...DEFAULT_BOOK,
+					id: 'book-id',
+					name: 'Dune',
+					group: initialGroup,
+					orderInGroup: 1,
+					ownPlatform: initialOwnPlatform
+				}
+			},
+			groupGlobal: {
+				selectedGroup: initialGroup
+			},
+			ownPlatformGlobal: {
+				selectedOwnPlatform: initialOwnPlatform
+			}
+		});
+		const user = userEvent.setup();
+
+		await user.clear(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.orderInGroup')));
+		await user.type(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.orderInGroup')), '7');
+		await user.type(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.userComment')), 'Keep this draft');
+
+		await waitFor(() => {
+			expect(firstRender.store.getState().mediaItemDetails.formDraft).toMatchObject({
+				orderInGroup: 7,
+				userComment: 'Keep this draft'
+			});
+		});
+
+		const savedDraft = firstRender.store.getState().mediaItemDetails.formDraft;
+
+		firstRender.unmount();
+
+		renderScreen({
+			mediaItemDetails: {
+				mediaItem: {
+					...DEFAULT_BOOK,
+					id: 'book-id',
+					name: 'Dune',
+					group: initialGroup,
+					orderInGroup: 1,
+					ownPlatform: initialOwnPlatform
+				},
+				formDraft: savedDraft
+			},
+			groupGlobal: {
+				selectedGroup
+			},
+			ownPlatformGlobal: {
+				selectedOwnPlatform
+			}
+		});
+
+		await waitFor(() => {
+			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.group'))).toHaveTextContent('Updated group');
+			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.ownPlatform'))).toHaveTextContent('Kindle');
+			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.orderInGroup'))).toHaveValue(7);
+			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.userComment'))).toHaveValue('Keep this draft');
+		});
+	});
+
 	test('keeps unsaved TV show edits when remounting from the seasons flow', async() => {
 		const savedMediaItem: TvShowInternal = {
 			id: 'tv-show-id',

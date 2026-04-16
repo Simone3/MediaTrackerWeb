@@ -291,6 +291,13 @@
   - Relevant files:
     - `app/components/presentational/media-item/details/form/wrapper/tv-show.tsx`
     - `tests/media-item-details.smoke.test.tsx`
+- Returning from picker navigation on web already kept general draft fields intact, but the group remount path could still reapply a newly selected group with the stale saved `orderInGroup` instead of the restored draft value.
+  - Correct behavior/structure on web now:
+    - the shared media-item form wrapper now passes the restored draft `orderInGroup` explicitly when it reapplies a selected group during the initial remount path
+    - the own-platform remount path does not need a logic change, but the picker smoke coverage now exercises both group and own-platform remounting together so future regressions are caught in one place
+  - Relevant files:
+    - `app/components/presentational/media-item/details/form/wrapper/media-item.tsx`
+    - `tests/media-item-details.smoke.test.tsx`
 - The production REST JSON invoker still carried the old React Native `Accept-Charset` request header into the browser build.
   - Correct behavior on web now:
     - Axios still sends the intended JSON request headers (`Content-Type` and `Accept`)
