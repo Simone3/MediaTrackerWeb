@@ -29,13 +29,19 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 	 * @override
 	 */
 	public componentDidMount(): void {
+		const hasRestoredDraft = Boolean(this.props.restoredDraft);
+
 		this.checkRestoreDraft();
 
 		if(this.props.restoredDraft && this.props.catalogDetails?.catalogLoadId) {
 			this.loadedCatalogId = this.props.catalogDetails.catalogLoadId;
 		}
-		else {
+		else if(!hasRestoredDraft) {
 			this.checkLoadCatalogDetails();
+		}
+
+		if(hasRestoredDraft) {
+			return;
 		}
 
 		this.checkLoadSelectedGroupOnMount();
@@ -259,26 +265,34 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 	/**
 	 * Loads the selected group from Redux into the form
 	 * @param orderInGroup the current order-in-group value to preserve while applying the selected group
+	 * @param baseValues the form values that should be used as the merge base for the group selection update
 	 */
-	private loadSelectedGroup(orderInGroup: number | undefined = this.formikProps?.values.orderInGroup): void {
-		if(!this.formikProps) {
+	private loadSelectedGroup(
+		orderInGroup: number | undefined = this.formikProps?.values.orderInGroup,
+		baseValues: TMediaItem | undefined = this.formikProps?.values
+	): void {
+		if(!this.formikProps || !baseValues) {
 			return;
 		}
 
-		void this.formikProps.setFieldValue('group', this.props.selectedGroup);
-		void this.formikProps.setFieldValue('orderInGroup', this.props.selectedGroup ? orderInGroup : undefined);
+		void this.formikProps.setValues({
+			...baseValues,
+			group: this.props.selectedGroup,
+			orderInGroup: this.props.selectedGroup ? orderInGroup : undefined
+		});
 	}
 
 	/**
 	 * Checks if the selected group must be loaded during the initial mount
 	 */
 	private checkLoadSelectedGroupOnMount(): void {
-		const currentGroupId = this.props.restoredDraft?.group?.id || this.props.initialValues.group?.id;
-		const currentOrderInGroup = this.props.restoredDraft?.orderInGroup ?? this.props.initialValues.orderInGroup;
+		const hasRestoredDraft = this.props.restoredDraft !== undefined;
+		const currentGroupId = hasRestoredDraft ? this.props.restoredDraft?.group?.id : this.props.initialValues.group?.id;
+		const currentOrderInGroup = hasRestoredDraft ? this.props.restoredDraft?.orderInGroup : this.props.initialValues.orderInGroup;
 
 		if(this.props.selectedGroup?.id !== currentGroupId ||
 			(!this.props.selectedGroup && currentOrderInGroup !== undefined)) {
-			this.loadSelectedGroup(currentOrderInGroup);
+			this.loadSelectedGroup(currentOrderInGroup, this.props.restoredDraft || this.formikProps?.values);
 		}
 	}
 
@@ -290,7 +304,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 			return;
 		}
 
-		this.loadSelectedGroup(this.formikProps.values.orderInGroup);
+		this.loadSelectedGroup(this.formikProps.values.orderInGroup, this.formikProps.values);
 	}
 
 	/**

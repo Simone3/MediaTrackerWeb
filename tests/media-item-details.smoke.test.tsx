@@ -578,6 +578,67 @@ describe('MediaItemDetailsScreenContainer', () => {
 		});
 	});
 
+	test('disables save when a group is re-selected without restoring order in group', async() => {
+		const initialGroup: GroupInternal = {
+			id: 'group-id-1',
+			name: 'Original group'
+		};
+		const selectedGroup: GroupInternal = {
+			id: 'group-id-2',
+			name: 'Updated group'
+		};
+		const savedMediaItem: MediaItemInternal = {
+			...DEFAULT_BOOK,
+			id: 'book-id',
+			name: 'Dune',
+			group: initialGroup,
+			orderInGroup: 1
+		};
+		const firstPickerReturn = renderScreen({
+			mediaItemDetails: {
+				mediaItem: savedMediaItem,
+				formDraft: savedMediaItem
+			},
+			groupGlobal: {
+				selectedGroup: undefined
+			}
+		});
+
+		await waitFor(() => {
+			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.group'))).toHaveTextContent(i18n.t('group.list.none'));
+		});
+
+		await waitFor(() => {
+			const currentDraft = firstPickerReturn.store.getState().mediaItemDetails.formDraft;
+
+			expect(currentDraft?.group).toBeUndefined();
+			expect(currentDraft?.orderInGroup).toBeUndefined();
+		});
+
+		const draftWithoutGroup = firstPickerReturn.store.getState().mediaItemDetails.formDraft;
+
+		firstPickerReturn.unmount();
+
+		renderScreen({
+			mediaItemDetails: {
+				mediaItem: savedMediaItem,
+				formDraft: draftWithoutGroup
+			},
+			groupGlobal: {
+				selectedGroup
+			}
+		});
+
+		await waitFor(() => {
+			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.group'))).toHaveTextContent('Updated group');
+			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.orderInGroup'))).toHaveValue(null);
+		});
+
+		await waitFor(() => {
+			expect(screen.getByRole('button', { name: i18n.t('common.buttons.save') })).toBeDisabled();
+		});
+	});
+
 	test('keeps unsaved TV show edits when remounting from the seasons flow', async() => {
 		const savedMediaItem: TvShowInternal = {
 			id: 'tv-show-id',

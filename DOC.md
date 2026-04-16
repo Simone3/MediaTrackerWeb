@@ -298,6 +298,14 @@
   - Relevant files:
     - `app/components/presentational/media-item/details/form/wrapper/media-item.tsx`
     - `tests/media-item-details.smoke.test.tsx`
+- When a restored media-item draft exists on web, the shared form wrapper can no longer run the mount-time picker/catalog sync before that draft finishes landing in Formik.
+  - Correct behavior/structure on web now:
+    - `componentDidMount()` now skips the group/platform/catalog mount sync path whenever a restored draft exists, leaving those merges for the subsequent update cycle after the draft has been applied
+    - the shared group-selection helper now updates `group` and `orderInGroup` together from one chosen base object, so restoring a draft and reapplying picker state no longer resurrects stale saved values or drops unrelated edits
+    - focused smoke coverage now reproduces the `group -> none -> group again` flow and asserts the blank `orderInGroup` state keeps Save disabled
+  - Relevant files:
+    - `app/components/presentational/media-item/details/form/wrapper/media-item.tsx`
+    - `tests/media-item-details.smoke.test.tsx`
 - The production REST JSON invoker still carried the old React Native `Accept-Charset` request header into the browser build.
   - Correct behavior on web now:
     - Axios still sends the intended JSON request headers (`Content-Type` and `Accept`)
