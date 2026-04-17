@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
@@ -429,6 +429,34 @@ describe('MediaItemDetailsScreenContainer', () => {
 
 		expect(screen.queryByText(i18n.t('mediaItem.details.completion.empty'))).not.toBeInTheDocument();
 		expect(screen.getByRole('button', { name: i18n.t('common.buttons.remove') })).toBeInTheDocument();
+	});
+
+	test('does not remove a completion date row while the native date input is mid-edit', () => {
+		const completionDate = new Date('2024-03-04T00:00:00.000Z');
+		const {
+			store
+		} = renderScreen({
+			mediaItemDetails: {
+				mediaItem: {
+					...DEFAULT_BOOK,
+					id: 'book-id',
+					name: 'Dune',
+					completedOn: [ completionDate ]
+				}
+			}
+		});
+		const completionDateInput = document.getElementById('media-item-completed-on-0') as HTMLInputElement;
+
+		expect(completionDateInput).toHaveValue('2024-03-04');
+
+		fireEvent.change(completionDateInput, {
+			target: {
+				value: ''
+			}
+		});
+
+		expect(document.getElementById('media-item-completed-on-0')).toBeInTheDocument();
+		expect(store.getState().mediaItemDetails.formDraft?.completedOn).toEqual([ completionDate ]);
 	});
 
 	test('hides the media image/actions block for a brand new item without catalog data', () => {

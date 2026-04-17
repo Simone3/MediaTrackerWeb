@@ -797,15 +797,18 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 	 * @param value date input value
 	 */
 	private updateCompletionDate(index: number, value: string): void {
+		if(value === '') {
+			return;
+		}
+
 		const completionDates = this.props.values.completedOn ? [ ...this.props.values.completedOn ] : [];
 		const parsedDate = this.inputValueToDate(value);
 
 		if(!parsedDate) {
-			completionDates.splice(index, 1);
+			return;
 		}
-		else {
-			completionDates[index] = parsedDate;
-		}
+
+		completionDates[index] = parsedDate;
 
 		this.setFormField('completedOn', completionDates.length > 0 ? completionDates : undefined);
 	}

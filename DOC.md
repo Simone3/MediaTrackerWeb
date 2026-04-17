@@ -323,6 +323,14 @@
     - `app/components/presentational/media-item/details/form/data/tv-show.ts`
     - `app/components/presentational/media-item/details/form/data/videogame.ts`
     - `tests/media-item-details.smoke.test.tsx`
+- Completion-date rows on web were treating the browser's temporary empty value for a partially typed native `date` input as a delete request.
+  - Correct behavior/structure on web now:
+    - `updateCompletionDate()` no longer removes a completion-date row when the native date input reports `''` or another invalid intermediate value during manual typing
+    - completion dates are now only removed through the explicit `Remove` button, so a row stays mounted while the browser is still parsing typed digits
+    - focused smoke coverage now simulates the native `date` input emitting an empty string mid-edit and asserts the completion row plus saved draft remain intact
+  - Relevant files:
+    - `app/components/presentational/media-item/details/form/view/media-item.tsx`
+    - `tests/media-item-details.smoke.test.tsx`
 - The production REST JSON invoker still carried the old React Native `Accept-Charset` request header into the browser build.
   - Correct behavior on web now:
     - Axios still sends the intended JSON request headers (`Content-Type` and `Accept`)
