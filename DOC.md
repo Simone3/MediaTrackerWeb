@@ -382,8 +382,8 @@
 - Shared select controls no longer render with smaller typography than text fields, and Firefox no longer makes them slightly shorter.
   - Correct behavior on web now:
     - the shared `.text-input`, `.select-input`, and `.textarea-input` block explicitly inherits the app font instead of leaving `<select>` to browser defaults
-    - the same shared block now sets a stable minimum height and line height so selects line up with text inputs and picker-style buttons across browsers, including Firefox
-    - `.select-input` now also uses a custom chevron with `appearance: none`, which lets Chrome and Firefox share the same height metrics and keeps the arrow slightly farther from the right border
+    - `.text-input` and `.select-input` now share an explicit `48px` height instead of relying on browser-specific auto sizing, which keeps Chrome and Firefox aligned with the other controls
+    - `.select-input` now also uses a custom chevron with `appearance: none`, centered vertically and slightly farther from the right border
     - a focused stylesheet regression test guards the shared control block against losing those font/height and select-chevron rules
   - Relevant files:
     - `app/web/styles.css`

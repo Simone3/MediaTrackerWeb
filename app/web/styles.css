@@ -1954,13 +1954,11 @@ input {
 	width: 100%;
 	border: 1px solid var(--color-border-control);
 	border-radius: 16px;
-	min-height: 48px;
 	padding: 13px 14px;
 	box-sizing: border-box;
 	background: var(--color-surface-overlay-soft);
 	color: var(--color-text-on-dark-primary);
 	font: inherit;
-	line-height: 1.4;
 	box-shadow: inset 0 1px 0 var(--color-divider-strong);
 	color-scheme: dark;
 }
@@ -1968,6 +1966,11 @@ input {
 .text-input::placeholder,
 .textarea-input::placeholder {
 	color: var(--color-text-on-dark-disabled);
+}
+
+.text-input,
+.select-input {
+	height: 48px;
 }
 
 .select-input {
@@ -1979,8 +1982,8 @@ input {
 		linear-gradient(45deg, transparent 50%, var(--color-text-on-dark-subtle) 50%),
 		linear-gradient(135deg, var(--color-text-on-dark-subtle) 50%, transparent 50%);
 	background-position:
-		calc(100% - 22px) calc(50% - 2px),
-		calc(100% - 16px) calc(50% - 2px);
+		calc(100% - 22px) 50%,
+		calc(100% - 16px) 50%;
 	background-size: 6px 6px;
 	background-repeat: no-repeat;
 }

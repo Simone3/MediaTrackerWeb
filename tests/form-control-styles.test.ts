@@ -6,11 +6,10 @@ describe('shared form control styles', () => {
 		const stylesPath = path.join(process.cwd(), 'app/web/styles.css');
 		const styles = readFileSync(stylesPath, 'utf8');
 
-		expect(styles).toMatch(/\.text-input,\s*\.select-input,\s*\.textarea-input\s*\{[\s\S]*min-height:\s*48px;/);
 		expect(styles).toMatch(/\.text-input,\s*\.select-input,\s*\.textarea-input\s*\{[\s\S]*font:\s*inherit;/);
-		expect(styles).toMatch(/\.text-input,\s*\.select-input,\s*\.textarea-input\s*\{[\s\S]*line-height:\s*1\.4;/);
+		expect(styles).toMatch(/\.text-input,\s*\.select-input\s*\{[\s\S]*height:\s*48px;/);
 		expect(styles).toMatch(/\.select-input\s*\{[\s\S]*appearance:\s*none;/);
 		expect(styles).toMatch(/\.select-input\s*\{[\s\S]*padding-right:\s*44px;/);
-		expect(styles).toMatch(/\.select-input\s*\{[\s\S]*calc\(100% - 22px\) calc\(50% - 2px\)/);
+		expect(styles).toMatch(/\.select-input\s*\{[\s\S]*calc\(100% - 22px\) 50%/);
 	});
 });
