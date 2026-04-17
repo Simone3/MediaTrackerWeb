@@ -379,6 +379,14 @@
     - `app/web/styles.css`
     - `tests/group-details.smoke.test.tsx`
     - `tests/media-item-details.smoke.test.tsx`
+- Shared select controls no longer render with smaller typography than text fields, and Firefox no longer makes them slightly shorter.
+  - Correct behavior on web now:
+    - the shared `.text-input`, `.select-input`, and `.textarea-input` block explicitly inherits the app font instead of leaving `<select>` to browser defaults
+    - the same shared block now sets a stable minimum height and line height so selects line up with text inputs and picker-style buttons across browsers, including Firefox
+    - a focused stylesheet regression test guards the shared control block against losing those font/height rules
+  - Relevant files:
+    - `app/web/styles.css`
+    - `tests/form-control-styles.test.ts`
 - The production REST JSON invoker still carried the old React Native `Accept-Charset` request header into the browser build.
   - Correct behavior on web now:
     - Axios still sends the intended JSON request headers (`Content-Type` and `Accept`)
