@@ -331,6 +331,17 @@
   - Relevant files:
     - `app/components/presentational/media-item/details/form/view/media-item.tsx`
     - `tests/media-item-details.smoke.test.tsx`
+- Detail-form save failures on web can no longer silently reset Formik's dirty baseline by copying the submitted values into Redux at save start.
+  - Correct behavior/structure on web now:
+    - the category/group/own-platform/media-item detail reducers now leave the currently loaded saved entity untouched while `saveStatus` moves to `SAVING`
+    - if the API save fails, the form drops back to `IDLE` with the same pre-save dirty state, so unsaved-changes guards are immediately active again without requiring another edit
+    - focused reducer coverage now reproduces `dirty -> start save -> fail save` for those four detail slices and asserts the original baseline entity plus dirty flag survive the failure
+  - Relevant files:
+    - `app/redux/reducers/media-item/details.ts`
+    - `app/redux/reducers/category/details.ts`
+    - `app/redux/reducers/group/details.ts`
+    - `app/redux/reducers/own-platform/details.ts`
+    - `tests/details-save-failure-state.test.ts`
 - The production REST JSON invoker still carried the old React Native `Accept-Charset` request header into the browser build.
   - Correct behavior on web now:
     - Axios still sends the intended JSON request headers (`Content-Type` and `Accept`)

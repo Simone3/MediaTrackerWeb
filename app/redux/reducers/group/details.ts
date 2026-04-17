@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 import { DEFAULT_GROUP } from 'app/data/models/internal/group';
 import { ASK_CONFIRMATION_BEFORE_SAVING_GROUP, COMPLETE_SAVING_GROUP, FAIL_SAVING_GROUP, LOAD_GROUP_DETAILS, LOAD_NEW_GROUP_DETAILS, REQUEST_GROUP_SAVE, SET_GROUP_FORM_STATUS, START_SAVING_GROUP } from 'app/redux/actions/group/const';
-import { LoadGroupDetailsAction, SetGroupFormStatusAction, StartSavingGroupAction } from 'app/redux/actions/group/types';
+import { LoadGroupDetailsAction, SetGroupFormStatusAction } from 'app/redux/actions/group/types';
 import { GroupDetailsState, groupDetailsStateInitialValue } from 'app/redux/state/group';
 
 /**
@@ -53,11 +53,8 @@ export const groupDetails = (state: GroupDetailsState = groupDetailsStateInitial
 	
 		// When the app starts saving a group, the status changes to show the loading indicator
 		case START_SAVING_GROUP: {
-			const startSavingGroupAction = action as StartSavingGroupAction;
-
 			return {
 				...state,
-				group: startSavingGroupAction.group,
 				saveStatus: 'SAVING'
 			};
 		}

@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 import { DEFAULT_CATEGORY } from 'app/data/models/internal/category';
 import { ASK_CONFIRMATION_BEFORE_SAVING_CATEGORY, COMPLETE_SAVING_CATEGORY, FAIL_SAVING_CATEGORY, LOAD_CATEGORY_DETAILS, LOAD_NEW_CATEGORY_DETAILS, REQUEST_CATEGORY_SAVE, SET_CATEGORY_FORM_STATUS, START_SAVING_CATEGORY } from 'app/redux/actions/category/const';
-import { LoadCategoryDetailsAction, SetCategoryFormStatusAction, StartSavingCategoryAction } from 'app/redux/actions/category/types';
+import { LoadCategoryDetailsAction, SetCategoryFormStatusAction } from 'app/redux/actions/category/types';
 import { CategoryDetailsState, categoryDetailsStateInitialValue } from 'app/redux/state/category';
 
 /**
@@ -53,11 +53,8 @@ export const categoryDetails = (state: CategoryDetailsState = categoryDetailsSta
 	
 		// When the app starts saving a category, the status changes to show the loading indicator
 		case START_SAVING_CATEGORY: {
-			const startSavingCategoryAction = action as StartSavingCategoryAction;
-
 			return {
 				...state,
-				category: startSavingCategoryAction.category,
 				saveStatus: 'SAVING'
 			};
 		}

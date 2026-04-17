@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 import { mediaItemDefinitionsControllerFactory } from 'app/controllers/main/entities/media-items/factories';
 import { ASK_CONFIRMATION_BEFORE_SAVING_MEDIA_ITEM, COMPLETE_GETTING_MEDIA_ITEM_CATALOG_DETAILS, COMPLETE_SAVING_MEDIA_ITEM, COMPLETE_SEARCHING_MEDIA_ITEMS_CATALOG, FAIL_GETTING_MEDIA_ITEM_CATALOG_DETAILS, FAIL_SAVING_MEDIA_ITEM, FAIL_SEARCHING_MEDIA_ITEMS_CATALOG, LOAD_MEDIA_ITEM_DETAILS, LOAD_NEW_MEDIA_ITEM_DETAILS, REQUEST_MEDIA_ITEM_SAVE, RESET_MEDIA_ITEMS_CATALOG_SEARCH, RESET_MEDIA_ITEM_CATALOG_DETAILS, SET_MEDIA_ITEM_FORM_DRAFT, SET_MEDIA_ITEM_FORM_STATUS, START_GETTING_MEDIA_ITEM_CATALOG_DETAILS, START_SAVING_MEDIA_ITEM, START_SEARCHING_MEDIA_ITEMS_CATALOG } from 'app/redux/actions/media-item/const';
-import { CompleteGettingMediaItemCatalogDetailsAction, CompleteSearchingMediaItemsCatalogAction, LoadMediaItemDetailsAction, LoadNewMediaItemDetailsAction, SetMediaItemFormDraftAction, SetMediaItemFormStatusAction, StartSavingMediaItemAction } from 'app/redux/actions/media-item/types';
+import { CompleteGettingMediaItemCatalogDetailsAction, CompleteSearchingMediaItemsCatalogAction, LoadMediaItemDetailsAction, LoadNewMediaItemDetailsAction, SetMediaItemFormDraftAction, SetMediaItemFormStatusAction } from 'app/redux/actions/media-item/types';
 import { MediaItemDetailsState, mediaItemDetailsStateInitialValue } from 'app/redux/state/media-item';
 
 /**
@@ -74,12 +74,8 @@ export const mediaItemDetails = (state: MediaItemDetailsState = mediaItemDetails
 	
 		// When the app starts saving a media item, the status changes to show the loading indicator
 		case START_SAVING_MEDIA_ITEM: {
-			const startSavingMediaItemAction = action as StartSavingMediaItemAction;
-
 			return {
 				...state,
-				mediaItem: startSavingMediaItemAction.mediaItem,
-				formDraft: startSavingMediaItemAction.mediaItem,
 				saveStatus: 'SAVING'
 			};
 		}

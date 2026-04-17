@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 import { DEFAULT_OWN_PLATFORM } from 'app/data/models/internal/own-platform';
 import { ASK_CONFIRMATION_BEFORE_SAVING_OWN_PLATFORM, COMPLETE_SAVING_OWN_PLATFORM, FAIL_SAVING_OWN_PLATFORM, LOAD_NEW_OWN_PLATFORM_DETAILS, LOAD_OWN_PLATFORM_DETAILS, REQUEST_OWN_PLATFORM_SAVE, SET_OWN_PLATFORM_FORM_STATUS, START_SAVING_OWN_PLATFORM } from 'app/redux/actions/own-platform/const';
-import { LoadOwnPlatformDetailsAction, SetOwnPlatformFormStatusAction, StartSavingOwnPlatformAction } from 'app/redux/actions/own-platform/types';
+import { LoadOwnPlatformDetailsAction, SetOwnPlatformFormStatusAction } from 'app/redux/actions/own-platform/types';
 import { OwnPlatformDetailsState, ownPlatformDetailsStateInitialValue } from 'app/redux/state/own-platform';
 
 /**
@@ -53,11 +53,8 @@ export const ownPlatformDetails = (state: OwnPlatformDetailsState = ownPlatformD
 	
 		// When the app starts saving a own platform, the status changes to show the loading indicator
 		case START_SAVING_OWN_PLATFORM: {
-			const startSavingOwnPlatformAction = action as StartSavingOwnPlatformAction;
-
 			return {
 				...state,
-				ownPlatform: startSavingOwnPlatformAction.ownPlatform,
 				saveStatus: 'SAVING'
 			};
 		}
