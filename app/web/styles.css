@@ -174,6 +174,29 @@ input {
 	transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+.pill-button-content {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+}
+
+.pill-button-label {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pill-button-spinner {
+	width: 15px;
+	height: 15px;
+	flex: 0 0 auto;
+	border-radius: 50%;
+	border: 2px solid currentColor;
+	border-top-color: transparent;
+	animation: loading-spin 0.8s linear infinite;
+}
+
 .pill-button-secondary {
 	background: var(--color-surface-overlay-default);
 	color: var(--color-text-on-dark-secondary);

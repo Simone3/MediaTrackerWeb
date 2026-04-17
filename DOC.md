@@ -362,6 +362,24 @@
     - `app/resources/lang/lang-en.json`
     - `app/components/presentational/media-item/details/form/view/tv-show.tsx`
     - `tests/media-item-details.smoke.test.tsx`
+- Save feedback on details forms no longer appears as a centered full-form spinner during normal saves.
+  - Correct behavior on web now:
+    - the shared pill button supports an inline loading spinner and keeps the Save label/accessibility name intact
+    - category, group, own-platform, and media-item details now show save progress directly inside the sticky header Save button, so the feedback stays visible even on long forms
+    - media-item details still keep the old full-form overlay for non-save async work such as catalog fetches or picker-related list refreshes
+    - focused smoke coverage asserts the inline save spinner for both the shared entity-details frame and the media-item details screen, plus a pill-button unit test for the loading state
+  - Relevant files:
+    - `app/components/presentational/generic/pill-button/index.tsx`
+    - `app/components/presentational/generic/entity-details-frame/index.tsx`
+    - `app/components/presentational/category/details/screen/index.tsx`
+    - `app/components/presentational/group/details/screen/index.tsx`
+    - `app/components/presentational/own-platform/details/screen/index.tsx`
+    - `app/components/presentational/media-item/details/form/wrapper/media-item.tsx`
+    - `app/components/containers/media-item/details/form/media-item.ts`
+    - `app/web/styles.css`
+    - `tests/pill-button.test.tsx`
+    - `tests/group-details.smoke.test.tsx`
+    - `tests/media-item-details.smoke.test.tsx`
 - The production REST JSON invoker still carried the old React Native `Accept-Charset` request header into the browser build.
   - Correct behavior on web now:
     - Axios still sends the intended JSON request headers (`Content-Type` and `Accept`)

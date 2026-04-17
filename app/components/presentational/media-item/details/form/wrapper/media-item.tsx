@@ -77,7 +77,8 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 		const {
 			children,
 			initialValues,
-			isLoading,
+			overlayLoading,
+			saveLoading,
 			validationSchema
 		} = this.props;
 		const {
@@ -109,7 +110,8 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 										<PillButtonComponent
 											tone='primary'
 											size='compact'
-											disabled={!formikProps.isValid || !formikProps.values.name.trim() || isLoading}
+											loadingVisible={saveLoading}
+											disabled={!formikProps.isValid || !formikProps.values.name.trim() || saveLoading || overlayLoading}
 											onClick={() => {
 												void formikProps.submitForm();
 											}}>
@@ -165,7 +167,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 									});
 								}}
 							/>
-							<LoadingIndicatorComponent visible={isLoading} fullScreen={false} />
+							<LoadingIndicatorComponent visible={overlayLoading} fullScreen={false} />
 						</section>
 					);
 				}}
@@ -366,9 +368,14 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
  */
 export type CommonMediaItemFormComponentInputMain<TMediaItem extends MediaItemInternal = MediaItemInternal> = {
 	/**
-	 * Flag to tell if the component is currently waiting on an async operation. If true, shows the loading screen.
+	 * Flag to tell if the component is currently saving. If true, the header Save button shows a loading spinner.
 	 */
-	isLoading: boolean;
+	saveLoading: boolean;
+
+	/**
+	 * Flag to tell if the component is waiting on a non-save async operation such as catalog fetches. If true, shows the loading screen.
+	 */
+	overlayLoading: boolean;
 
 	/**
 	 * The saved media item used as Formik initial values

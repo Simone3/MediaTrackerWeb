@@ -91,4 +91,31 @@ describe('GroupDetailsScreenComponent', () => {
 			expect(saveGroup).toHaveBeenCalledWith(group, true);
 		});
 	});
+
+	test('shows save loading in the header button instead of a form overlay', () => {
+		const {
+			container
+		} = render(
+			<MemoryRouter>
+				<GroupDetailsScreenComponent
+					isLoading={true}
+					group={{
+						id: 'group-id',
+						name: 'Saga Shelf'
+					}}
+					sameNameConfirmationRequested={false}
+					saveGroup={jest.fn()}
+					notifyFormStatus={jest.fn()}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
+		);
+
+		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
+
+		expect(saveButton).toBeDisabled();
+		expect(saveButton).toHaveAttribute('aria-busy', 'true');
+		expect(saveButton.querySelector('.pill-button-spinner')).toBeInTheDocument();
+		expect(container.querySelector('.loading-indicator-container-parent-size')).not.toBeInTheDocument();
+	});
 });

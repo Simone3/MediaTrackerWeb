@@ -65,7 +65,7 @@ export class GroupDetailsScreenComponent extends Component<GroupDetailsScreenCom
 							subtitle={subtitle}
 							saveLabel={i18n.t('common.buttons.save')}
 							saveDisabled={!formikProps.isValid || isLoading}
-							loadingVisible={isLoading}
+							saveLoadingVisible={isLoading}
 							onSave={() => {
 								void formikProps.submitForm();
 							}}

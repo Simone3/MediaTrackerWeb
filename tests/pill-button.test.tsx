@@ -42,4 +42,19 @@ describe('PillButtonComponent', () => {
 		expect(button).toHaveClass('pill-button-subtle');
 		expect(button).toHaveClass('test-extra-class');
 	});
+
+	test('renders a loading spinner without losing the button label', () => {
+		render(
+			<PillButtonComponent loadingVisible={true}>
+				Save
+			</PillButtonComponent>
+		);
+
+		const button = screen.getByRole('button', {
+			name: 'Save'
+		});
+
+		expect(button).toHaveAttribute('aria-busy', 'true');
+		expect(button.querySelector('.pill-button-spinner')).toBeInTheDocument();
+	});
 });

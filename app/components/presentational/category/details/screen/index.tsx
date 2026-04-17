@@ -6,7 +6,6 @@ import { PillButtonComponent } from 'app/components/presentational/generic/pill-
 import { SameNameConfirmationDialogComponent, shouldOpenSameNameConfirmation } from 'app/components/presentational/generic/same-name-confirmation';
 import { categoryFormValidationSchema } from 'app/components/presentational/category/details/form/data';
 import { CategoryInternal } from 'app/data/models/internal/category';
-import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { i18n } from 'app/utilities/i18n';
 
 /**
@@ -71,6 +70,7 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 												form='category-details-form'
 												tone='primary'
 												size='compact'
+												loadingVisible={isLoading}
 												disabled={!formikProps.isValid || isLoading}>
 												{i18n.t('common.buttons.save')}
 											</PillButtonComponent>
@@ -107,7 +107,6 @@ export class CategoryDetailsScreenComponent extends Component<CategoryDetailsScr
 						);
 					}}
 				</Formik>
-				<LoadingIndicatorComponent visible={isLoading} fullScreen={false} />
 			</section>
 		);
 	}

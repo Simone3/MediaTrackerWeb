@@ -255,6 +255,28 @@ describe('MediaItemDetailsScreenContainer', () => {
 		});
 	});
 
+	test('shows save loading in the header button without the full-form overlay', () => {
+		const {
+			container
+		} = renderScreen({
+			mediaItemDetails: {
+				mediaItem: {
+					...DEFAULT_BOOK,
+					id: 'book-id',
+					name: 'Dune'
+				},
+				saveStatus: 'SAVING'
+			}
+		});
+
+		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
+
+		expect(saveButton).toBeDisabled();
+		expect(saveButton).toHaveAttribute('aria-busy', 'true');
+		expect(saveButton.querySelector('.pill-button-spinner')).toBeInTheDocument();
+		expect(container.querySelector('.loading-indicator-container-parent-size')).not.toBeInTheDocument();
+	});
+
 	test('dispatches the TV show seasons flow from the details form', async() => {
 		const tvShow: TvShowInternal = {
 			id: 'tv-show-id',
