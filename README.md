@@ -3,21 +3,6 @@ Just a Codex experiment for now.
 
 TODO:
 
-- fully test on chrome
-
-  - bugs
-    - edit media item field, then open open group or platform or show, then return -> media item data loss!
-    - when editing a tv show group order missing does not disable save
-    - genres field cannot write commas/spaces at end
-    - manually editing completion date makes it disappear
-    - save error disables browser back guard in forms
-    - you can save seasons with watched > total
-
-  - cosmetics
-    - save loading gets displayed below the view (probably at the center of the page)
-    - "1 seasons" in the field summary
-    - font size in selects is smaller
-
 - minimal tests on firefox
 - minimal tests on mobile (emulator or fake)
 - minimal tests with a React production build
@@ -38,6 +23,8 @@ TODO:
   - make it summarize my code style
   - no carets etc. in package.json
   - important to centralize when possible
+  - all displayed text must be in lang-en
+  - all colors should be in css variables and prefer reuse for consistency
 - rewrite doc.md
   - make it rewrite a true documentation
   - rename the file
