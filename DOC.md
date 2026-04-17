@@ -356,6 +356,7 @@
   - Correct behavior/structure on web now:
     - the TV-show details seasons-summary helper now switches between dedicated `single` and `multiple` translation keys under `mediaItem.details.labels.seasons`
     - all visible summary text stays in `lang-en.json`, so future locale files can translate both the singular and plural variants without any English noun logic in code
+    - the localized strings keep the original lowercase `watched` wording; only the `season`/`seasons` part varies
     - focused smoke coverage now asserts the exact single-season summary text next to the Seasons button
   - Relevant files:
     - `app/resources/lang/lang-en.json`

@@ -294,8 +294,8 @@
 			},
 			"labels": {
 				"seasons": {
-					"single": "1 season, Watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes",
-					"multiple": "{{seasonsNumber}} seasons, Watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes"
+					"single": "1 season, watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes",
+					"multiple": "{{seasonsNumber}} seasons, watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes"
 				}
 			},
 			"completion": {
