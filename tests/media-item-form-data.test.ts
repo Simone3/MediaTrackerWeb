@@ -1,6 +1,6 @@
 import { normalizeBookFormValues } from 'app/components/presentational/media-item/details/form/data/book';
 import { normalizeMediaItemFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
-import { preserveTvShowSeasonProgress } from 'app/components/presentational/media-item/details/form/data/tv-show';
+import { preserveTvShowSeasonProgress, tvShowFormValidationSchema } from 'app/components/presentational/media-item/details/form/data/tv-show';
 import { BookInternal } from 'app/data/models/internal/media-items/book';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { TvShowInternal } from 'app/data/models/internal/media-items/tv-show';
@@ -106,5 +106,24 @@ describe('media-item form data helpers', () => {
 		});
 		expect(mergedValues.seasons?.[0].watchedEpisodesNumber).toBeUndefined();
 		expect(mergedValues.seasons?.[1].watchedEpisodesNumber).toBeUndefined();
+	});
+
+	test('rejects TV-show seasons with watched episodes above the total episodes', async() => {
+		const mediaItem: TvShowInternal = {
+			id: 'tv-show-2',
+			name: 'Dark',
+			mediaType: 'TV_SHOW',
+			status: 'ACTIVE',
+			importance: '300',
+			seasons: [
+				{
+					number: 1,
+					episodesNumber: 8,
+					watchedEpisodesNumber: 9
+				}
+			]
+		};
+
+		await expect(tvShowFormValidationSchema.isValid(mediaItem)).resolves.toBe(false);
 	});
 });

@@ -342,6 +342,16 @@
     - `app/redux/reducers/group/details.ts`
     - `app/redux/reducers/own-platform/details.ts`
     - `tests/details-save-failure-state.test.ts`
+- TV-show seasons on web can no longer be saved with `watchedEpisodesNumber` greater than `episodesNumber`.
+  - Correct behavior/structure on web now:
+    - both the standalone TV-show season form schema and the embedded TV-show media-item season schema now cap watched episodes at the currently entered total episodes
+    - the TV-show season save button stays disabled for invalid `watched > total` input, and the shared TV-show schema also rejects invalid restored/persisted season payloads
+    - focused coverage now exercises the blocked season-form save and the shared TV-show schema rejection path
+  - Relevant files:
+    - `app/components/presentational/tv-show-season/details/form/data/index.ts`
+    - `app/components/presentational/media-item/details/form/data/tv-show.ts`
+    - `tests/tv-show-season-details.smoke.test.tsx`
+    - `tests/media-item-form-data.test.ts`
 - The production REST JSON invoker still carried the old React Native `Accept-Charset` request header into the browser build.
   - Correct behavior on web now:
     - Axios still sends the intended JSON request headers (`Content-Type` and `Accept`)

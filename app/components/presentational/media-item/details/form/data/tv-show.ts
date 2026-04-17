@@ -1,4 +1,4 @@
-import { ObjectSchema, array, boolean, date, number, object, string } from 'yup';
+import { NumberSchema, ObjectSchema, array, boolean, date, number, object, string } from 'yup';
 import { applyNormalizedTextArrayField, mediaItemFormValidationShape, normalizeMediaItemFormValues } from './media-item';
 import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 
@@ -8,7 +8,13 @@ import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/m
 const tvShowSeasonFormValidationSchema: ObjectSchema<TvShowSeasonInternal> = object().shape({
 	number: number().optional(),
 	episodesNumber: number().optional(),
-	watchedEpisodesNumber: number().optional()
+	watchedEpisodesNumber: number().when('episodesNumber', ([ episodesNumber ]: (number | undefined)[], schema: NumberSchema<number | undefined>) => {
+		if(episodesNumber === undefined) {
+			return schema;
+		}
+
+		return schema.max(episodesNumber);
+	})
 });
 
 /**

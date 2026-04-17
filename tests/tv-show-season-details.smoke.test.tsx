@@ -90,4 +90,41 @@ describe('TvShowSeasonDetailsScreenComponent', () => {
 
 		expect(saveTvShowSeason).toHaveBeenCalledWith(season);
 	});
+
+	test('keeps Save disabled when watched episodes exceed total episodes', async() => {
+		const saveTvShowSeason = jest.fn();
+		render(
+			<MemoryRouter>
+				<TvShowSeasonDetailsScreenComponent
+					tvShowSeason={{
+						number: undefined as unknown as number,
+						episodesNumber: undefined,
+						watchedEpisodesNumber: undefined
+					}}
+					addingNewSeason={true}
+					saveTvShowSeason={saveTvShowSeason}
+					notifyFormStatus={jest.fn()}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
+		);
+
+		const user = userEvent.setup();
+		const numberInput = screen.getByLabelText(i18n.t('tvShowSeason.details.placeholders.number'));
+		const episodesInput = screen.getByLabelText(i18n.t('tvShowSeason.details.placeholders.episodesNumber'));
+		const watchedInput = screen.getByLabelText(i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber'));
+		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
+
+		await user.type(numberInput, '2');
+		await user.type(episodesInput, '10');
+		await user.type(watchedInput, '12');
+
+		await waitFor(() => {
+			expect(saveButton).toBeDisabled();
+		});
+
+		await user.click(saveButton);
+
+		expect(saveTvShowSeason).not.toHaveBeenCalled();
+	});
 });
