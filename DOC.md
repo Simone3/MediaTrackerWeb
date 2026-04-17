@@ -344,9 +344,9 @@
     - `tests/details-save-failure-state.test.ts`
 - TV-show seasons on web can no longer be saved with `watchedEpisodesNumber` greater than `episodesNumber`.
   - Correct behavior/structure on web now:
-    - both the standalone TV-show season form schema and the embedded TV-show media-item season schema now cap watched episodes at the currently entered total episodes
+    - the TV-show media-item form now reuses the standalone `tvShowSeasonValidationSchema`, so season-number requirements and `watched <= total` validation live in one shared place
     - the TV-show season save button stays disabled for invalid `watched > total` input, and the shared TV-show schema also rejects invalid restored/persisted season payloads
-    - focused coverage now exercises the blocked season-form save and the shared TV-show schema rejection path
+    - focused coverage now exercises the blocked season-form save plus shared TV-show schema rejection for both `watched > total` and missing season-number payloads
   - Relevant files:
     - `app/components/presentational/tv-show-season/details/form/data/index.ts`
     - `app/components/presentational/media-item/details/form/data/tv-show.ts`

@@ -1,21 +1,7 @@
-import { NumberSchema, ObjectSchema, array, boolean, date, number, object, string } from 'yup';
+import { ObjectSchema, array, boolean, date, number, object, string } from 'yup';
 import { applyNormalizedTextArrayField, mediaItemFormValidationShape, normalizeMediaItemFormValues } from './media-item';
-import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
-
-/**
- * The TV show season form validation schema
- */
-const tvShowSeasonFormValidationSchema: ObjectSchema<TvShowSeasonInternal> = object().shape({
-	number: number().optional(),
-	episodesNumber: number().optional(),
-	watchedEpisodesNumber: number().when('episodesNumber', ([ episodesNumber ]: (number | undefined)[], schema: NumberSchema<number | undefined>) => {
-		if(episodesNumber === undefined) {
-			return schema;
-		}
-
-		return schema.max(episodesNumber);
-	})
-});
+import { tvShowSeasonValidationSchema } from 'app/components/presentational/tv-show-season/details/form/data';
+import { TvShowInternal } from 'app/data/models/internal/media-items/tv-show';
 
 /**
  * The TV show form validation schema shape
@@ -24,7 +10,7 @@ const tvShowFormValidationShape = {
 	...mediaItemFormValidationShape,
 	creators: array().of(string()).optional(),
 	averageEpisodeRuntimeMinutes: number(),
-	seasons: array().of(tvShowSeasonFormValidationSchema).optional(),
+	seasons: array().of(tvShowSeasonValidationSchema).optional(),
 	inProduction: boolean(),
 	nextEpisodeAirDate: date()
 };

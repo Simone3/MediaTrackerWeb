@@ -126,4 +126,23 @@ describe('media-item form data helpers', () => {
 
 		await expect(tvShowFormValidationSchema.isValid(mediaItem)).resolves.toBe(false);
 	});
+
+	test('rejects TV-show seasons without a season number', async() => {
+		const mediaItem: TvShowInternal = {
+			id: 'tv-show-3',
+			name: 'Dark',
+			mediaType: 'TV_SHOW',
+			status: 'ACTIVE',
+			importance: '300',
+			seasons: [
+				{
+					number: undefined as unknown as number,
+					episodesNumber: 8,
+					watchedEpisodesNumber: 7
+				}
+			]
+		};
+
+		await expect(tvShowFormValidationSchema.isValid(mediaItem)).resolves.toBe(false);
+	});
 });
