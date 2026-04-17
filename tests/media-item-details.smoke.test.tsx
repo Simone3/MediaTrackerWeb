@@ -255,7 +255,7 @@ describe('MediaItemDetailsScreenContainer', () => {
 		});
 	});
 
-	test('shows save loading in the header button without the full-form overlay', () => {
+	test('shows the save loading overlay while keeping the Save button disabled', () => {
 		const {
 			container
 		} = renderScreen({
@@ -272,9 +272,7 @@ describe('MediaItemDetailsScreenContainer', () => {
 		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
 
 		expect(saveButton).toBeDisabled();
-		expect(saveButton).toHaveAttribute('aria-busy', 'true');
-		expect(saveButton.querySelector('.pill-button-spinner')).toBeInTheDocument();
-		expect(container.querySelector('.loading-indicator-container-parent-size')).not.toBeInTheDocument();
+		expect(container.querySelector('.loading-indicator-container-parent-size')).toBeInTheDocument();
 	});
 
 	test('dispatches the TV show seasons flow from the details form', async() => {

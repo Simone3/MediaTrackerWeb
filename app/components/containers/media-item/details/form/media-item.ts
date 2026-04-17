@@ -62,8 +62,7 @@ export const commonMediaItemFormMapStateToProps = (state: State): CommonMediaIte
 	}
 
 	return {
-		saveLoading: mediaItemLoading,
-		overlayLoading: catalogLoading || groupsLoading || platformsLoading,
+		isLoading: mediaItemLoading || catalogLoading || groupsLoading || platformsLoading,
 		initialValues: buildInitialMediaItemFormValues(state),
 		restoredDraft: buildRestoredMediaItemFormDraft(state),
 		sameNameConfirmationRequested: details.saveStatus === 'REQUIRES_CONFIRMATION',

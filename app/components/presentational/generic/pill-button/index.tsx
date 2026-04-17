@@ -11,7 +11,6 @@ export type PillButtonComponentProps = React.ButtonHTMLAttributes<HTMLButtonElem
 	tone?: PillButtonTone;
 	size?: PillButtonSize;
 	appearance?: PillButtonAppearance;
-	loadingVisible?: boolean;
 };
 
 const PillButtonComponentImplementation = (
@@ -22,16 +21,13 @@ const PillButtonComponentImplementation = (
 		tone = 'primary',
 		size = 'default',
 		appearance = 'default',
-		loadingVisible = false,
 		className,
-		children,
 		type = 'button',
 		...otherProps
 	} = props;
 	const sizeClassName = size === 'compact' ? ' pill-button-compact' : '';
 	const appearanceClassName = appearance === 'subtle' ? ' pill-button-subtle' : '';
-	const loadingClassName = loadingVisible ? ' pill-button-loading' : '';
-	const baseClassName = `pill-button pill-button-${tone}${sizeClassName}${appearanceClassName}${loadingClassName}`;
+	const baseClassName = `pill-button pill-button-${tone}${sizeClassName}${appearanceClassName}`;
 	const resolvedClassName = className ? `${baseClassName} ${className}` : baseClassName;
 
 	return (
@@ -40,15 +36,7 @@ const PillButtonComponentImplementation = (
 			ref={ref}
 			type={type}
 			className={resolvedClassName}
-			aria-busy={loadingVisible}>
-			<span className='pill-button-content'>
-				<span className='pill-button-label'>
-					{children}
-				</span>
-				{loadingVisible &&
-					<span className='pill-button-spinner' aria-hidden='true' />}
-			</span>
-		</button>
+		/>
 	);
 };
 

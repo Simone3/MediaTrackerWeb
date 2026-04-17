@@ -92,7 +92,7 @@ describe('GroupDetailsScreenComponent', () => {
 		});
 	});
 
-	test('shows save loading in the header button instead of a form overlay', () => {
+	test('shows the save loading overlay while keeping the Save button disabled', () => {
 		const {
 			container
 		} = render(
@@ -114,8 +114,6 @@ describe('GroupDetailsScreenComponent', () => {
 		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
 
 		expect(saveButton).toBeDisabled();
-		expect(saveButton).toHaveAttribute('aria-busy', 'true');
-		expect(saveButton.querySelector('.pill-button-spinner')).toBeInTheDocument();
-		expect(container.querySelector('.loading-indicator-container-parent-size')).not.toBeInTheDocument();
+		expect(container.querySelector('.loading-indicator-container-parent-size')).toBeInTheDocument();
 	});
 });

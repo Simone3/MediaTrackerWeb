@@ -39,7 +39,7 @@ export type ModalComponentInput = {
 	visible: boolean;
 
 	/**
-	 * Whether the modal is full screen or relative to its parent (its full width and height)
+	 * Whether the modal uses the stronger full-screen overlay or the standard viewport-centered in-page overlay
 	 */
 	fullScreen: boolean;
 };

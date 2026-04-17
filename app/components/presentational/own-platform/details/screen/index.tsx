@@ -65,7 +65,7 @@ export class OwnPlatformDetailsScreenComponent extends Component<OwnPlatformDeta
 							subtitle={subtitle}
 							saveLabel={i18n.t('common.buttons.save')}
 							saveDisabled={!formikProps.isValid || isLoading}
-							saveLoadingVisible={isLoading}
+							loadingVisible={isLoading}
 							onSave={() => {
 								void formikProps.submitForm();
 							}}

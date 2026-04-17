@@ -21,7 +21,6 @@ export const EntityDetailsFrameComponent = (props: EntityDetailsFrameComponentPr
 						<PillButtonComponent
 							tone='primary'
 							size='compact'
-							loadingVisible={props.saveLoadingVisible}
 							disabled={props.saveDisabled}
 							onClick={props.onSave}>
 							{props.saveLabel}
@@ -57,6 +56,5 @@ export type EntityDetailsFrameComponentProps = {
 	onSubmit: SubmitEventHandler<HTMLFormElement>;
 	dialogs?: ReactNode;
 	loadingVisible?: boolean;
-	saveLoadingVisible?: boolean;
 	subtitle?: string;
 };
