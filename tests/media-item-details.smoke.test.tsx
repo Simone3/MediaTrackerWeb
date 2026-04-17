@@ -287,11 +287,7 @@ describe('MediaItemDetailsScreenContainer', () => {
 			tvShowSeasons: tvShow.seasons
 		}));
 		expect(store.getState().tvShowSeasonsList.tvShowSeasons).toEqual(tvShow.seasons);
-		expect(screen.getByText(i18n.t('mediaItem.details.labels.seasons', {
-			seasonsNumber: 1,
-			watchedEpisodesNumber: 8,
-			episodesNumber: 10
-		}))).toBeInTheDocument();
+		expect(screen.getByText('1 season, Watched 8 out of 10 episodes')).toBeInTheDocument();
 	});
 
 	test('shows and hides the next episode air date field with the in-production toggle', async() => {
@@ -758,11 +754,7 @@ describe('MediaItemDetailsScreenContainer', () => {
 		await waitFor(() => {
 			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.creators.TV_SHOW'))).toHaveValue('Baran bo Odar');
 			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.userComment'))).toHaveValue('Keep this draft');
-			expect(screen.getByText(i18n.t('mediaItem.details.labels.seasons', {
-				seasonsNumber: 2,
-				watchedEpisodesNumber: 14,
-				episodesNumber: 18
-			}))).toBeInTheDocument();
+			expect(screen.getByText('2 seasons, Watched 14 out of 18 episodes')).toBeInTheDocument();
 		});
 	});
 });

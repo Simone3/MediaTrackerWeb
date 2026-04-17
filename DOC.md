@@ -352,6 +352,14 @@
     - `app/components/presentational/media-item/details/form/data/tv-show.ts`
     - `tests/tv-show-season-details.smoke.test.tsx`
     - `tests/media-item-form-data.test.ts`
+- The TV-show details summary line on web no longer says `1 seasons` for a single season.
+  - Correct behavior/structure on web now:
+    - the TV-show details seasons-summary helper now formats the season-count noun directly, choosing `season` for `1` and `seasons` otherwise
+    - the rest of the summary still reuses the existing season-list secondary text for the watched/total episodes portion
+    - focused smoke coverage now asserts the exact single-season summary text next to the Seasons button
+  - Relevant files:
+    - `app/components/presentational/media-item/details/form/view/tv-show.tsx`
+    - `tests/media-item-details.smoke.test.tsx`
 - The production REST JSON invoker still carried the old React Native `Accept-Charset` request header into the browser build.
   - Correct behavior on web now:
     - Axios still sends the intended JSON request headers (`Content-Type` and `Accept`)
