@@ -20,13 +20,15 @@ const getTvShowSeasonsSummaryLabel = (seasons?: TvShowSeasonInternal[]): string 
 	}
 
 	const counters = mediaItemUtils.getTvShowCounters(seasons);
-	const seasonLabel = counters.seasonsNumber === 1 ? 'season' : 'seasons';
+	const summaryKey = counters.seasonsNumber === 1 ?
+		'mediaItem.details.labels.seasons.single' :
+		'mediaItem.details.labels.seasons.multiple';
 
-	return `${counters.seasonsNumber} ${seasonLabel}, ${i18n.t('tvShowSeason.list.row.secondary', {
+	return i18n.t(summaryKey, {
 		seasonsNumber: counters.seasonsNumber,
 		episodesNumber: counters.episodesNumber,
 		watchedEpisodesNumber: counters.watchedEpisodesNumber
-	})}`;
+	});
 };
 
 /**

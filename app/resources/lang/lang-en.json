@@ -293,7 +293,10 @@
 				"addDate": "Add date"
 			},
 			"labels": {
-				"seasons": "{{seasonsNumber}} seasons, watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes"
+				"seasons": {
+					"single": "1 season, Watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes",
+					"multiple": "{{seasonsNumber}} seasons, Watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes"
+				}
 			},
 			"completion": {
 				"empty": "No dates added yet"

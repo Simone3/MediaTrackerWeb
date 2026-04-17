@@ -354,10 +354,11 @@
     - `tests/media-item-form-data.test.ts`
 - The TV-show details summary line on web no longer says `1 seasons` for a single season.
   - Correct behavior/structure on web now:
-    - the TV-show details seasons-summary helper now formats the season-count noun directly, choosing `season` for `1` and `seasons` otherwise
-    - the rest of the summary still reuses the existing season-list secondary text for the watched/total episodes portion
+    - the TV-show details seasons-summary helper now switches between dedicated `single` and `multiple` translation keys under `mediaItem.details.labels.seasons`
+    - all visible summary text stays in `lang-en.json`, so future locale files can translate both the singular and plural variants without any English noun logic in code
     - focused smoke coverage now asserts the exact single-season summary text next to the Seasons button
   - Relevant files:
+    - `app/resources/lang/lang-en.json`
     - `app/components/presentational/media-item/details/form/view/tv-show.tsx`
     - `tests/media-item-details.smoke.test.tsx`
 - The production REST JSON invoker still carried the old React Native `Accept-Charset` request header into the browser build.
