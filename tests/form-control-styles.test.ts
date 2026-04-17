@@ -9,5 +9,8 @@ describe('shared form control styles', () => {
 		expect(styles).toMatch(/\.text-input,\s*\.select-input,\s*\.textarea-input\s*\{[\s\S]*min-height:\s*48px;/);
 		expect(styles).toMatch(/\.text-input,\s*\.select-input,\s*\.textarea-input\s*\{[\s\S]*font:\s*inherit;/);
 		expect(styles).toMatch(/\.text-input,\s*\.select-input,\s*\.textarea-input\s*\{[\s\S]*line-height:\s*1\.4;/);
+		expect(styles).toMatch(/\.select-input\s*\{[\s\S]*appearance:\s*none;/);
+		expect(styles).toMatch(/\.select-input\s*\{[\s\S]*padding-right:\s*44px;/);
+		expect(styles).toMatch(/\.select-input\s*\{[\s\S]*calc\(100% - 22px\) calc\(50% - 2px\)/);
 	});
 });
