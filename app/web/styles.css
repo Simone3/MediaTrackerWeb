@@ -3267,9 +3267,7 @@ input {
 		grid-column: auto;
 	}
 
-	.media-item-details-search-row,
-	.clearable-input,
-	.media-item-details-completion-row {
+	.media-item-details-search-row {
 		display: grid;
 		grid-template-columns: 1fr;
 	}
@@ -3287,7 +3285,6 @@ input {
 	}
 
 	.media-item-details-search-button,
-	.clearable-input-clear-button,
 	.media-item-details-inline-button {
 		width: 100%;
 	}
