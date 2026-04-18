@@ -205,14 +205,16 @@
   - Correct behavior/structure on web now:
     - shared `InputComponent` now tags date inputs with `text-input-date`, and it adds `text-input-date-ios` only for iOS/iPadOS WebKit so the workaround stays off desktop browsers
     - the iOS-specific CSS removes padding from the outer native date control, switches it to `-webkit-appearance: listbox`, reapplies spacing/alignment through the WebKit datetime pseudo-elements, and adds a touch more leading inset so the rendered date text no longer sits too close to the left border
-    - optional single-date fields now use a shared `OptionalDateInputComponent` with an explicit `Clear` action, because relying on Safari's native picker clear/reset behavior is not robust for the controlled form state used by the app
+    - optional single-date fields now use the shared generic `ClearableInputComponent`, while the media-item forms still own the date-string parsing and `undefined` semantics above that reusable clearable wrapper
   - Relevant files:
+    - `app/components/presentational/generic/clearable-input/index.tsx`
     - `app/components/presentational/generic/input/index.tsx`
     - `app/utilities/browser.ts`
     - `app/components/presentational/media-item/details/form/view/media-item.tsx`
     - `app/components/presentational/media-item/details/form/view/tv-show.tsx`
     - `app/resources/lang/lang-en.json`
     - `app/web/styles.css`
+    - `tests/clearable-input.test.tsx`
     - `tests/input.test.tsx`
     - `tests/media-item-details.smoke.test.tsx`
     - `tests/form-control-styles.test.ts`

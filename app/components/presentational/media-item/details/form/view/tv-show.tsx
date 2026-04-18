@@ -1,8 +1,9 @@
 import { ReactElement } from 'react';
 import { FormikProps } from 'formik';
+import { ClearableInputComponent } from 'app/components/presentational/generic/clearable-input';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
-import { InlineTextInputComponent, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue, OptionalDateInputComponent } from 'app/components/presentational/media-item/details/form/view/media-item';
+import { dateToInputValue, InlineTextInputComponent, inputValueToDate, inputValueToNumber, MediaItemActionButton, MediaItemFormViewComponent, MediaItemFormViewComponentCommonInput, MediaItemFormViewComponentCommonOutput, numberToInputValue } from 'app/components/presentational/media-item/details/form/view/media-item';
 import { config } from 'app/config/config';
 import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import justWatchIcon from 'app/resources/images/ic_justwatch.png';
@@ -127,11 +128,16 @@ export const TvShowFormViewComponent = (props: TvShowFormViewComponentProps): Re
 								<label className='media-item-details-label' htmlFor='media-item-next-episode-air-date'>
 									{i18n.t('mediaItem.details.placeholders.nextEpisodeAirDate')}
 								</label>
-								<OptionalDateInputComponent
+								<ClearableInputComponent
 									id='media-item-next-episode-air-date'
-									value={props.values.nextEpisodeAirDate}
-									onChange={(value) => {
-										void props.setFieldValue('nextEpisodeAirDate', value);
+									type='date'
+									value={dateToInputValue(props.values.nextEpisodeAirDate)}
+									showClearButton={Boolean(props.values.nextEpisodeAirDate)}
+									onChange={(event) => {
+										void props.setFieldValue('nextEpisodeAirDate', inputValueToDate(event.target.value));
+									}}
+									onClear={() => {
+										void props.setFieldValue('nextEpisodeAirDate', undefined);
 									}}
 								/>
 							</div>

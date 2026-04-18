@@ -2006,7 +2006,7 @@ input {
 	align-items: stretch;
 }
 
-.media-item-details-date-row {
+.clearable-input {
 	display: flex;
 	gap: 10px;
 	align-items: stretch;
@@ -2017,7 +2017,7 @@ input {
 	min-width: 0;
 }
 
-.media-item-details-date-row .text-input {
+.clearable-input .text-input {
 	flex: 1 1 auto;
 	min-width: 0;
 }
@@ -2110,7 +2110,7 @@ input {
 	padding: 10px 16px;
 }
 
-.media-item-details-date-clear-button {
+.clearable-input-clear-button {
 	min-width: 92px;
 }
 
@@ -3268,7 +3268,7 @@ input {
 	}
 
 	.media-item-details-search-row,
-	.media-item-details-date-row,
+	.clearable-input,
 	.media-item-details-completion-row {
 		display: grid;
 		grid-template-columns: 1fr;
@@ -3287,7 +3287,7 @@ input {
 	}
 
 	.media-item-details-search-button,
-	.media-item-details-date-clear-button,
+	.clearable-input-clear-button,
 	.media-item-details-inline-button {
 		width: 100%;
 	}

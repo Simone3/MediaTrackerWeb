@@ -1,5 +1,6 @@
 import { Component, KeyboardEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import { FormikProps } from 'formik';
+import { ClearableInputComponent } from 'app/components/presentational/generic/clearable-input';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { SelectComponent } from 'app/components/presentational/generic/select';
@@ -174,51 +175,6 @@ export const InlineTextInputComponent = (props: InlineTextInputComponentProps): 
 				onChange(inputValueToInlineText(nextInputValue));
 			}}
 		/>
-	);
-};
-
-type OptionalDateInputComponentProps = {
-	id: string;
-	value?: Date;
-	onChange: (newValue: Date | undefined) => void;
-};
-
-/**
- * Shared optional date input with an explicit clear action for browsers whose native picker cannot reliably clear values.
- * @param props component props
- * @returns the component
- */
-export const OptionalDateInputComponent = (props: OptionalDateInputComponentProps): ReactNode => {
-	const {
-		id,
-		onChange,
-		value
-	} = props;
-	const inputValue = dateToInputValue(value);
-
-	return (
-		<div className='media-item-details-date-row'>
-			<InputComponent
-				id={id}
-				type='date'
-				value={inputValue}
-				onChange={(event) => {
-					onChange(inputValueToDate(event.target.value));
-				}}
-			/>
-			{value && (
-				<PillButtonComponent
-					tone='secondary'
-					size='compact'
-					appearance='subtle'
-					className='media-item-details-date-clear-button'
-					onClick={() => {
-						onChange(undefined);
-					}}>
-					{i18n.t('common.buttons.clear')}
-				</PillButtonComponent>
-			)}
-		</div>
 	);
 };
 
@@ -446,11 +402,16 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<label className='media-item-details-label' htmlFor='media-item-release-date'>
 					{i18n.t('mediaItem.details.placeholders.releaseDate')}
 				</label>
-				<OptionalDateInputComponent
+				<ClearableInputComponent
 					id='media-item-release-date'
-					value={mediaItem.releaseDate}
-					onChange={(value) => {
-						this.setFormField('releaseDate', value as TMediaItem['releaseDate']);
+					type='date'
+					value={this.dateToInputValue(mediaItem.releaseDate)}
+					showClearButton={Boolean(mediaItem.releaseDate)}
+					onChange={(event) => {
+						this.setFormField('releaseDate', this.inputValueToDate(event.target.value));
+					}}
+					onClear={() => {
+						this.setFormField('releaseDate', undefined as TMediaItem['releaseDate']);
 					}}
 				/>
 			</div>
