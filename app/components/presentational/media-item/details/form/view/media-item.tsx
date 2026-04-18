@@ -177,6 +177,51 @@ export const InlineTextInputComponent = (props: InlineTextInputComponentProps): 
 	);
 };
 
+type OptionalDateInputComponentProps = {
+	id: string;
+	value?: Date;
+	onChange: (newValue: Date | undefined) => void;
+};
+
+/**
+ * Shared optional date input with an explicit clear action for browsers whose native picker cannot reliably clear values.
+ * @param props component props
+ * @returns the component
+ */
+export const OptionalDateInputComponent = (props: OptionalDateInputComponentProps): ReactNode => {
+	const {
+		id,
+		onChange,
+		value
+	} = props;
+	const inputValue = dateToInputValue(value);
+
+	return (
+		<div className='media-item-details-date-row'>
+			<InputComponent
+				id={id}
+				type='date'
+				value={inputValue}
+				onChange={(event) => {
+					onChange(inputValueToDate(event.target.value));
+				}}
+			/>
+			{value && (
+				<PillButtonComponent
+					tone='secondary'
+					size='compact'
+					appearance='subtle'
+					className='media-item-details-date-clear-button'
+					onClick={() => {
+						onChange(undefined);
+					}}>
+					{i18n.t('common.buttons.clear')}
+				</PillButtonComponent>
+			)}
+		</div>
+	);
+};
+
 /**
  * Presentational component that contains all generic media item form input fields, all handled by the Formik container component
  */
@@ -401,12 +446,11 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<label className='media-item-details-label' htmlFor='media-item-release-date'>
 					{i18n.t('mediaItem.details.placeholders.releaseDate')}
 				</label>
-				<InputComponent
+				<OptionalDateInputComponent
 					id='media-item-release-date'
-					type='date'
-					value={this.dateToInputValue(mediaItem.releaseDate)}
-					onChange={(event) => {
-						this.setFormField('releaseDate', this.inputValueToDate(event.target.value));
+					value={mediaItem.releaseDate}
+					onChange={(value) => {
+						this.setFormField('releaseDate', value as TMediaItem['releaseDate']);
 					}}
 				/>
 			</div>

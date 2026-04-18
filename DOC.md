@@ -204,12 +204,17 @@
 - Native date inputs on iOS Safari could render wider than their grid cell, making media-item detail date fields look oversized and overflow to the right on mobile.
   - Correct behavior/structure on web now:
     - shared `InputComponent` now tags date inputs with `text-input-date`, and it adds `text-input-date-ios` only for iOS/iPadOS WebKit so the workaround stays off desktop browsers
-    - the iOS-specific CSS removes padding from the outer native date control, switches it to `-webkit-appearance: listbox`, and reapplies spacing/alignment through the WebKit datetime pseudo-elements so the control keeps the normal 48px form height without the Safari width overflow bug
+    - the iOS-specific CSS removes padding from the outer native date control, switches it to `-webkit-appearance: listbox`, reapplies spacing/alignment through the WebKit datetime pseudo-elements, and adds a touch more leading inset so the rendered date text no longer sits too close to the left border
+    - optional single-date fields now use a shared `OptionalDateInputComponent` with an explicit `Clear` action, because relying on Safari's native picker clear/reset behavior is not robust for the controlled form state used by the app
   - Relevant files:
     - `app/components/presentational/generic/input/index.tsx`
     - `app/utilities/browser.ts`
+    - `app/components/presentational/media-item/details/form/view/media-item.tsx`
+    - `app/components/presentational/media-item/details/form/view/tv-show.tsx`
+    - `app/resources/lang/lang-en.json`
     - `app/web/styles.css`
     - `tests/input.test.tsx`
+    - `tests/media-item-details.smoke.test.tsx`
     - `tests/form-control-styles.test.ts`
 - The shared responsive action menu on web correctly moved the desktop popover arrow to the bottom edge for above-trigger placement, but it still used the top gradient color and looked like a separate dark square.
   - Correct behavior/structure on web now:

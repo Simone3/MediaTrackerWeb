@@ -2006,7 +2006,18 @@ input {
 	align-items: stretch;
 }
 
+.media-item-details-date-row {
+	display: flex;
+	gap: 10px;
+	align-items: stretch;
+}
+
 .media-item-details-search-row .text-input {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.media-item-details-date-row .text-input {
 	flex: 1 1 auto;
 	min-width: 0;
 }
@@ -2099,6 +2110,10 @@ input {
 	padding: 10px 16px;
 }
 
+.media-item-details-date-clear-button {
+	min-width: 92px;
+}
+
 .media-item-details-inline-button {
 	width: fit-content;
 }
@@ -2185,7 +2200,7 @@ input {
 .text-input.text-input-date.text-input-date-ios::-webkit-datetime-edit {
 	display: inline-flex;
 	align-items: center;
-	padding: 13px 14px;
+	padding: 13px 14px 13px 18px;
 }
 
 .text-input.text-input-date.text-input-date-ios::-webkit-datetime-edit-fields-wrapper {
@@ -3252,6 +3267,7 @@ input {
 	}
 
 	.media-item-details-search-row,
+	.media-item-details-date-row,
 	.media-item-details-completion-row {
 		display: grid;
 		grid-template-columns: 1fr;
@@ -3270,6 +3286,7 @@ input {
 	}
 
 	.media-item-details-search-button,
+	.media-item-details-date-clear-button,
 	.media-item-details-inline-button {
 		width: 100%;
 	}

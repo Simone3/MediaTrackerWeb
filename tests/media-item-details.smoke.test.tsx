@@ -12,7 +12,7 @@ import { DEFAULT_BOOK } from 'app/data/models/internal/media-items/book';
 import { DEFAULT_MOVIE } from 'app/data/models/internal/media-items/movie';
 import { DEFAULT_VIDEOGAME } from 'app/data/models/internal/media-items/videogame';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
-import { TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
+import { DEFAULT_TV_SHOW, TvShowInternal, TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { SAVE_MEDIA_ITEM, SET_MEDIA_ITEM_FORM_DRAFT, SET_MEDIA_ITEM_FORM_STATUS } from 'app/redux/actions/media-item/const';
 import { START_TV_SHOW_SEASONS_HANDLING } from 'app/redux/actions/tv-show-season/const';
 import { GroupGlobalState, GroupsListState, groupGlobalStateInitialValue, groupsListStateInitialValue } from 'app/redux/state/group';
@@ -340,6 +340,60 @@ describe('MediaItemDetailsScreenContainer', () => {
 		await user.click(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.inProduction')));
 
 		expect(screen.queryByLabelText(i18n.t('mediaItem.details.placeholders.nextEpisodeAirDate'))).not.toBeInTheDocument();
+	});
+
+	test('clears the release date via the explicit date action', async() => {
+		const releaseDate = new Date('2026-04-18T00:00:00.000Z');
+		const {
+			store
+		} = renderScreen({
+			mediaItemDetails: {
+				mediaItem: {
+					...DEFAULT_BOOK,
+					id: 'book-id',
+					name: 'Dune',
+					releaseDate
+				}
+			}
+		});
+
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.releaseDate'))).toHaveValue('2026-04-18');
+
+		const user = userEvent.setup();
+		await user.click(screen.getByRole('button', { name: i18n.t('common.buttons.clear') }));
+
+		await waitFor(() => {
+			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.releaseDate'))).toHaveValue('');
+			expect(store.getState().mediaItemDetails.formDraft?.releaseDate).toBeUndefined();
+		});
+	});
+
+	test('clears the next episode air date via the explicit date action', async() => {
+		const nextEpisodeAirDate = new Date('2026-05-01T00:00:00.000Z');
+		const tvShow: TvShowInternal = {
+			...DEFAULT_TV_SHOW,
+			id: 'tv-show-id',
+			name: 'Dark',
+			inProduction: true,
+			nextEpisodeAirDate
+		};
+		const {
+			store
+		} = renderScreen({
+			mediaItemDetails: {
+				mediaItem: tvShow
+			}
+		});
+
+		expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.nextEpisodeAirDate'))).toHaveValue('2026-05-01');
+
+		const user = userEvent.setup();
+		await user.click(screen.getByRole('button', { name: i18n.t('common.buttons.clear') }));
+
+		await waitFor(() => {
+			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.nextEpisodeAirDate'))).toHaveValue('');
+			expect((store.getState().mediaItemDetails.formDraft as TvShowInternal | undefined)?.nextEpisodeAirDate).toBeUndefined();
+		});
 	});
 
 	test('renders the old shared book form controls and syncs selected entities', async() => {
