@@ -1973,7 +1973,7 @@ input {
 	height: 48px;
 }
 
-.text-input[type='date'] {
+.text-input.text-input-date {
 	min-width: 0;
 	max-width: 100%;
 	-webkit-min-logical-width: 0;
@@ -2171,6 +2171,35 @@ input {
 	color: var(--color-text-on-dark-primary);
 }
 
+.text-input.text-input-date.text-input-date-ios {
+	padding: 0;
+	text-align: left;
+	-webkit-appearance: listbox;
+}
+
+.text-input.text-input-date.text-input-date-ios::-webkit-date-and-time-value {
+	min-height: 1.5em;
+	text-align: inherit;
+}
+
+.text-input.text-input-date.text-input-date-ios::-webkit-datetime-edit {
+	display: inline-flex;
+	align-items: center;
+	padding: 13px 14px;
+}
+
+.text-input.text-input-date.text-input-date-ios::-webkit-datetime-edit-fields-wrapper {
+	padding: 0;
+}
+
+.text-input.text-input-date.text-input-date-ios::-webkit-datetime-edit-text,
+.text-input.text-input-date.text-input-date-ios::-webkit-datetime-edit-day-field,
+.text-input.text-input-date.text-input-date-ios::-webkit-datetime-edit-month-field,
+.text-input.text-input-date.text-input-date-ios::-webkit-datetime-edit-year-field {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
 .text-input:focus,
 .select-input:focus,
 .textarea-input:focus,
@@ -2180,12 +2209,6 @@ input {
 	outline: none;
 	border-color: var(--color-accent-bright);
 	box-shadow: 0 0 0 3px var(--color-accent-focus-ring);
-}
-
-@supports (-webkit-touch-callout: none) {
-	.text-input[type='date'] {
-		font-size: 16px;
-	}
 }
 
 .media-item-details-screen .loading-indicator-container-parent-size {

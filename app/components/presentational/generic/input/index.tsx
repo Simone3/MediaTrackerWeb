@@ -1,4 +1,5 @@
 import React, { ChangeEvent, ForwardedRef, ReactElement, forwardRef } from 'react';
+import { isIosWebKitBrowser } from 'app/utilities/browser';
 
 /**
  * All props of InputComponent
@@ -24,7 +25,14 @@ const InputComponentImplementation = (
 	} = props;
 	const resolvedType = secureTextEntry ? 'password' : type || 'text';
 	const variantClassName = variant === 'auth' ? 'text-input text-input-auth' : 'text-input';
-	const resolvedClassName = className ? `${variantClassName} ${className}` : variantClassName;
+	const dateTypeClassName = resolvedType === 'date' ? 'text-input-date' : undefined;
+	const iosDateTypeClassName = resolvedType === 'date' && isIosWebKitBrowser() ? 'text-input-date-ios' : undefined;
+	const resolvedClassName = [
+		variantClassName,
+		dateTypeClassName,
+		iosDateTypeClassName,
+		className
+	].filter(Boolean).join(' ');
 
 	return (
 		<input
