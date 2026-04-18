@@ -2194,13 +2194,14 @@ input {
 
 .text-input.text-input-date.text-input-date-ios::-webkit-date-and-time-value {
 	min-height: 1.5em;
+	padding-left: 18px;
 	text-align: inherit;
 }
 
 .text-input.text-input-date.text-input-date-ios::-webkit-datetime-edit {
 	display: inline-flex;
 	align-items: center;
-	padding: 13px 14px 13px 18px;
+	padding: 13px 14px;
 }
 
 .text-input.text-input-date.text-input-date-ios::-webkit-datetime-edit-fields-wrapper {
