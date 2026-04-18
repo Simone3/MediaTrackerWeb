@@ -493,6 +493,7 @@
     - the `None` own-platform row now reuses the same accent tint on its leading badge shell when selected
     - the seasons screen keeps the old edit / complete / delete / done flows, but now presents them as responsive card rows with progress pills and clearer action grouping
     - all three screens now share the same responsive card row styling, empty-state treatment, and loading overlay treatment as the newer media list pages
+    - the shared row layout now keeps the desktop action rail horizontally centered, and on mobile it vertically centers both the action buttons and the main row content so group/platform/season cards line up cleanly
   - Relevant files:
     - `app/components/presentational/group/list/screen/index.tsx`
     - `app/components/presentational/own-platform/list/screen/index.tsx`

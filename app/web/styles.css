@@ -2490,8 +2490,9 @@ input {
 	flex: 0 0 auto;
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	gap: 10px;
-	padding: 14px 16px 14px 4px;
+	padding: 14px 16px;
 	border-left: 1px solid var(--color-border-card-muted);
 	background: var(--color-surface-overlay-subtle);
 }
@@ -3211,7 +3212,7 @@ input {
 		width: 100%;
 		padding: 16px 16px 16px 20px;
 		gap: 14px;
-		align-items: flex-start;
+		align-items: center;
 	}
 
 	.entity-management-list-badge-shell {
@@ -3235,7 +3236,8 @@ input {
 
 	.entity-management-list-actions {
 		width: 100%;
-		padding: 0 16px 16px 20px;
+		min-height: 72px;
+		padding: 0 16px 0 20px;
 		border-left: 0;
 	}
 
