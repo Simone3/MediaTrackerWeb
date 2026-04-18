@@ -1973,6 +1973,12 @@ input {
 	height: 48px;
 }
 
+.text-input[type='date'] {
+	min-width: 0;
+	max-width: 100%;
+	-webkit-min-logical-width: 0;
+}
+
 .select-input {
 	appearance: none;
 	-webkit-appearance: none;
@@ -2174,6 +2180,12 @@ input {
 	outline: none;
 	border-color: var(--color-accent-bright);
 	box-shadow: 0 0 0 3px var(--color-accent-focus-ring);
+}
+
+@supports (-webkit-touch-callout: none) {
+	.text-input[type='date'] {
+		font-size: 16px;
+	}
 }
 
 .media-item-details-screen .loading-indicator-container-parent-size {

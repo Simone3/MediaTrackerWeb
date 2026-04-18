@@ -8,6 +8,9 @@ describe('shared form control styles', () => {
 
 		expect(styles).toMatch(/\.text-input,\s*\.select-input,\s*\.textarea-input\s*\{[\s\S]*font:\s*inherit;/);
 		expect(styles).toMatch(/\.text-input,\s*\.select-input\s*\{[\s\S]*height:\s*48px;/);
+		expect(styles).toMatch(/\.text-input\[type='date'\]\s*\{[\s\S]*min-width:\s*0;/);
+		expect(styles).toMatch(/\.text-input\[type='date'\]\s*\{[\s\S]*-webkit-min-logical-width:\s*0;/);
+		expect(styles).toMatch(/@supports\s*\(-webkit-touch-callout:\s*none\)\s*\{[\s\S]*\.text-input\[type='date'\]\s*\{[\s\S]*font-size:\s*16px;/);
 		expect(styles).toMatch(/\.select-input\s*\{[\s\S]*appearance:\s*none;/);
 		expect(styles).toMatch(/\.select-input\s*\{[\s\S]*padding-right:\s*44px;/);
 		expect(styles).toMatch(/\.select-input\s*\{[\s\S]*calc\(100% - 22px\) 50%/);

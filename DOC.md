@@ -201,6 +201,13 @@
   - good reference implementations when category behavior looks wrong
 
 ## Recent fix worth remembering
+- Native date inputs on iOS Safari could render wider than their grid cell, making media-item detail date fields look oversized and overflow to the right on mobile.
+  - Correct behavior/structure on web now:
+    - shared `.text-input[type='date']` controls explicitly allow shrinking to the container width with `min-width: 0`, `max-width: 100%`, and Safari's `-webkit-min-logical-width: 0`
+    - Safari touch devices also force those date inputs to keep a stable `16px` font size so the browser does not visually inflate them on mobile while desktop styling stays unchanged
+  - Relevant files:
+    - `app/web/styles.css`
+    - `tests/form-control-styles.test.ts`
 - The shared responsive action menu on web correctly moved the desktop popover arrow to the bottom edge for above-trigger placement, but it still used the top gradient color and looked like a separate dark square.
   - Correct behavior/structure on web now:
     - the bottom-edge arrow for above-trigger desktop popovers now uses the panel end color so it visually matches the lower edge of the gradient background
