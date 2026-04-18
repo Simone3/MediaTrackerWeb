@@ -16,6 +16,7 @@ describe('shared form control styles', () => {
 		expect(styles).toMatch(/\.text-input\.text-input-date\.text-input-date-ios::-webkit-datetime-edit\s*\{[\s\S]*padding:\s*13px 14px;/);
 		expect(styles).toMatch(/\.clearable-input\s*\{[\s\S]*display:\s*flex;/);
 		expect(styles).toMatch(/\.clearable-input-clear-button\s*\{[\s\S]*min-width:\s*92px;/);
+		expect(styles).toMatch(/\.category-details-media-option-label\s*\{[\s\S]*overflow-wrap:\s*anywhere;/);
 		expect(styles).toMatch(/\.media-item-details-completion-row\s*\{[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*auto;/);
 		expect(styles).not.toMatch(/\.media-item-details-search-row,\s*\.clearable-input,\s*\.media-item-details-completion-row\s*\{/);
 		expect(styles).not.toMatch(/\.media-item-details-search-button,\s*\.clearable-input-clear-button,\s*\.media-item-details-inline-button\s*\{/);

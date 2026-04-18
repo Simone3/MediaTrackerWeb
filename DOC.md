@@ -201,6 +201,12 @@
   - good reference implementations when category behavior looks wrong
 
 ## Recent fix worth remembering
+- Category media-type picker buttons on mobile could let long labels like `Videogames` overflow their card instead of wrapping within the available width.
+  - Correct behavior/structure on web now:
+    - the shared `.category-details-media-option-label` explicitly allows shrinking and wraps long words with `overflow-wrap: anywhere`, so narrow mobile buttons can break the label onto a new line instead of overflowing
+  - Relevant files:
+    - `app/web/styles.css`
+    - `tests/form-control-styles.test.ts`
 - Header add buttons on web could become too wide on mobile because they kept the full desktop labels such as "Add category" or "Add movie".
   - Correct behavior/structure on web now:
     - the shared header add action uses a generic `ResponsiveHeaderAddButtonComponent` that keeps the existing descriptive label on desktop and switches to the compact shared `Add` label on mobile widths

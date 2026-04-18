@@ -1298,6 +1298,10 @@ input {
 
 .category-details-media-option-label {
 	font-weight: 700;
+	min-width: 0;
+	line-height: 1.25;
+	overflow-wrap: anywhere;
+	word-break: break-word;
 }
 
 .color-picker {
