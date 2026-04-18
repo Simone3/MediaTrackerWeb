@@ -107,7 +107,9 @@ describe('CategoriesListScreenComponent', () => {
 
 		expect(document.querySelector('.categories-screen-content .floating-action-button')).toBeNull();
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: i18n.t('category.list.add') }));
+		expect(screen.getByRole('button', { name: i18n.t('common.buttons.add') })).toBeInTheDocument();
+		expect(screen.queryByRole('button', { name: i18n.t('category.list.add') })).not.toBeInTheDocument();
+		await user.click(screen.getByRole('button', { name: i18n.t('common.buttons.add') }));
 
 		expect(loadNewCategoryDetails).toHaveBeenCalledTimes(1);
 	});

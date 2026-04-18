@@ -1,7 +1,8 @@
 import { CSSProperties, ReactElement, ReactNode } from 'react';
 import { AuthenticatedPageHeaderComponent } from 'app/components/presentational/generic/authenticated-page-header';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
-import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
+import { ResponsiveHeaderAddButtonComponent } from 'app/components/presentational/generic/responsive-header-add-button';
+import { i18n } from 'app/utilities/i18n';
 
 /**
  * Shared screen shell for the dark entity-management pages.
@@ -11,9 +12,11 @@ import { PillButtonComponent } from 'app/components/presentational/generic/pill-
 export const EntityManagementScreenComponent = (props: EntityManagementScreenComponentProps): ReactElement => {
 	const defaultAddAction = props.onAdd && props.addButtonLabel ?
 		(
-			<PillButtonComponent tone='secondary' size='compact' onClick={props.onAdd}>
-				{props.addButtonLabel}
-			</PillButtonComponent>
+			<ResponsiveHeaderAddButtonComponent
+				label={props.addButtonLabel}
+				mobileLabel={i18n.t('common.buttons.add')}
+				onClick={props.onAdd}
+			/>
 		) :
 		null;
 	const headerActions = props.renderHeaderActions ?

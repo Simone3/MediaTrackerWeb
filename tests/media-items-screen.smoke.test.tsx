@@ -88,12 +88,13 @@ describe('MediaItemsListScreenComponent', () => {
 		);
 
 		expect(document.querySelector('.media-items-screen-content .floating-action-button')).toBeNull();
-		expect(screen.getByRole('button', { name: i18n.t('mediaItem.list.add.MOVIE') })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: i18n.t('common.buttons.add') })).toBeInTheDocument();
+		expect(screen.queryByRole('button', { name: i18n.t('mediaItem.list.add.MOVIE') })).not.toBeInTheDocument();
 		expect(screen.getByText(i18n.t('mediaItem.list.countByType.single.MOVIE'))).toBeInTheDocument();
 		expect(screen.queryByText(i18n.t('category.mediaTypes.MOVIE'))).not.toBeInTheDocument();
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.add.MOVIE') }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.buttons.add') }));
 
 		expect(loadNewMediaItemDetails).toHaveBeenCalledWith(category);
 	});

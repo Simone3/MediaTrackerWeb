@@ -3,7 +3,7 @@ import { MediaItemsListContainer } from 'app/components/containers/media-item/li
 import { AuthenticatedPageHeaderComponent } from 'app/components/presentational/generic/authenticated-page-header';
 import { MediaItemFilterModalContainer } from 'app/components/containers/media-item/list/filter-modal';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
-import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
+import { ResponsiveHeaderAddButtonComponent } from 'app/components/presentational/generic/responsive-header-add-button';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { i18n } from 'app/utilities/i18n';
 
@@ -48,14 +48,13 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 						title={category.name}
 						subtitle={countLabel}
 						actions={
-							<PillButtonComponent
-								tone='secondary'
-								size='compact'
+							<ResponsiveHeaderAddButtonComponent
+								label={i18n.t(`mediaItem.list.add.${category.mediaType}`)}
+								mobileLabel={i18n.t('common.buttons.add')}
 								onClick={() => {
 									loadNewMediaItemDetails(category);
-								}}>
-								{i18n.t(`mediaItem.list.add.${category.mediaType}`)}
-							</PillButtonComponent>
+								}}
+							/>
 						}
 					/>
 					<MediaItemsListContainer/>

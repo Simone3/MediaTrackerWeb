@@ -464,6 +464,7 @@
 			"name": "Media Tracker"
 		},
 		"buttons": {
+			"add": "Add",
 			"clear": "Clear",
 			"done": "Done",
 			"save": "Save",

@@ -2,7 +2,7 @@ import { Component, ReactNode } from 'react';
 import { CategoriesListContainer } from 'app/components/containers/category/list/list';
 import { AuthenticatedPageHeaderComponent } from 'app/components/presentational/generic/authenticated-page-header';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
-import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
+import { ResponsiveHeaderAddButtonComponent } from 'app/components/presentational/generic/responsive-header-add-button';
 import { i18n } from 'app/utilities/i18n';
 
 /**
@@ -44,12 +44,11 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 						subtitle={countLabel}
 						showSettingsShortcut={true}
 						actions={
-							<PillButtonComponent
-								tone='secondary'
-								size='compact'
-								onClick={loadNewCategoryDetails}>
-								{i18n.t('category.list.add')}
-							</PillButtonComponent>
+							<ResponsiveHeaderAddButtonComponent
+								label={i18n.t('category.list.add')}
+								mobileLabel={i18n.t('common.buttons.add')}
+								onClick={loadNewCategoryDetails}
+							/>
 						}
 					/>
 					<CategoriesListContainer />

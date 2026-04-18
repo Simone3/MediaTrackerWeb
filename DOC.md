@@ -201,6 +201,19 @@
   - good reference implementations when category behavior looks wrong
 
 ## Recent fix worth remembering
+- Header add buttons on web could become too wide on mobile because they kept the full desktop labels such as "Add category" or "Add movie".
+  - Correct behavior/structure on web now:
+    - the shared header add action uses a generic `ResponsiveHeaderAddButtonComponent` that keeps the existing descriptive label on desktop and switches to the compact shared `Add` label on mobile widths
+    - category/media-item screens and the shared entity-management shell all use that same responsive add-button component, so groups, own platforms, and TV-show seasons inherit the same mobile behavior without extra per-screen logic
+  - Relevant files:
+    - `app/components/presentational/generic/responsive-header-add-button/index.tsx`
+    - `app/components/presentational/generic/entity-management-screen/index.tsx`
+    - `app/components/presentational/category/list/screen/index.tsx`
+    - `app/components/presentational/media-item/list/screen/index.tsx`
+    - `app/resources/lang/lang-en.json`
+    - `tests/responsive-header-add-button.test.tsx`
+    - `tests/categories-screen.smoke.test.tsx`
+    - `tests/media-items-screen.smoke.test.tsx`
 - Native date inputs on iOS Safari could render wider than their grid cell, making media-item detail date fields look oversized and overflow to the right on mobile.
   - Correct behavior/structure on web now:
     - shared `InputComponent` now tags date inputs with `text-input-date`, and it adds `text-input-date-ios` only for iOS/iPadOS WebKit so the workaround stays off desktop browsers
