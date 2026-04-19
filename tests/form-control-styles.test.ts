@@ -18,8 +18,12 @@ describe('shared form control styles', () => {
 		expect(styles).toMatch(/\.clearable-input-clear-button\s*\{[\s\S]*min-width:\s*92px;/);
 		expect(styles).toMatch(/\.category-details-media-option-label\s*\{[\s\S]*overflow-wrap:\s*anywhere;/);
 		expect(styles).toMatch(/\.media-item-details-completion-row\s*\{[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*auto;/);
+		expect(styles).toMatch(/\.media-item-row-main\s*\{[\s\S]*align-items:\s*center;/);
+		expect(styles).toMatch(/\.media-item-row-detail\s*\{[\s\S]*white-space:\s*nowrap;[\s\S]*overflow:\s*hidden;[\s\S]*text-overflow:\s*ellipsis;/);
 		expect(styles).not.toMatch(/\.media-item-details-search-row,\s*\.clearable-input,\s*\.media-item-details-completion-row\s*\{/);
 		expect(styles).not.toMatch(/\.media-item-details-search-button,\s*\.clearable-input-clear-button,\s*\.media-item-details-inline-button\s*\{/);
+		expect(styles).not.toMatch(/@media\s*\(max-width:\s*960px\)\s*\{[\s\S]*?\.media-item-row-main\s*\{[\s\S]*?align-items:\s*flex-start;/);
+		expect(styles).not.toMatch(/@media\s*\(max-width:\s*960px\)\s*\{[\s\S]*?\.media-item-row-detail\s*\{[\s\S]*?white-space:\s*normal;/);
 		expect(styles).toMatch(/\.select-input\s*\{[\s\S]*appearance:\s*none;/);
 		expect(styles).toMatch(/\.select-input\s*\{[\s\S]*padding-right:\s*44px;/);
 		expect(styles).toMatch(/\.select-input\s*\{[\s\S]*calc\(100% - 22px\) 50%/);

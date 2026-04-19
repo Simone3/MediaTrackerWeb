@@ -3164,7 +3164,6 @@ input {
 	}
 
 	.media-item-row-main {
-		align-items: flex-start;
 		padding: 16px 16px 16px 20px;
 		gap: 14px;
 	}
@@ -3181,12 +3180,6 @@ input {
 
 	.media-item-row-name {
 		font-size: 1rem;
-	}
-
-	.media-item-row-detail {
-		white-space: normal;
-		overflow: visible;
-		text-overflow: clip;
 	}
 
 	.media-item-row-secondary {

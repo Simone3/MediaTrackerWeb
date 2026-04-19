@@ -955,6 +955,14 @@
     - `app/components/presentational/media-item/list/filter-form/view/media-item.tsx`
     - `app/web/styles.css`
     - `tests/media-item-filter-modal.smoke.test.tsx`
+- Media-item list rows on mobile no longer drift from desktop web or the original React Native row behavior.
+  - Correct behavior on web now:
+    - desktop and mobile still render the same media-item row JSX; the difference was only a mobile CSS override inside `app/web/styles.css`
+    - the mobile override no longer changes `.media-item-row-main` to `align-items: flex-start`, so the left platform icon stays vertically centered like desktop and the old RN row container
+    - the mobile override also no longer removes the single-line clipping from `.media-item-row-detail`, so long metadata, genre, and group rows keep the same ellipsis behavior as desktop and the old RN `numberOfLines={1}` text rows
+  - Relevant files:
+    - `app/web/styles.css`
+    - `tests/form-control-styles.test.ts`
 
 ## Testing notes
 - Jest setup is lightweight and mostly smoke-test oriented.
