@@ -3,17 +3,9 @@ Just a Codex experiment for now.
 
 TODO:
 
-- minimal tests on firefox
-- minimal tests on mobile (emulator or fake)
-- minimal tests with a React production build
-
-- test locally with production config
-- create a bundle to use locally on the Mac for now
-
 - "merge" web and be to deploy them as a single app
 - then upgrade back-end dependencies
-
-- mock user/pwd creates a mock state for local tests even in prod - create catalog mocks for all 4 media types with lord of the rings
+- also fix CORS configuration on BE!
 
 - rewrite agents.md
   - tell it to keep generic media item files clean from media-specific stuff
@@ -29,6 +21,11 @@ TODO:
   - make it rewrite a true documentation
   - rename the file
 - rewrite readme.md
+
+future:
+- platform/group/seasons pages disable media item form guard when clicking on the header icon (home link)
+- mock user/pwd creates a mock state for local tests even in prod - create catalog mocks for all 4 media types with lord of the rings
+
 
 
 -------------
