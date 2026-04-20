@@ -178,7 +178,7 @@
 - The shared responsive mobile cutoff now lives in `app/utilities/layout.ts` as `MOBILE_LAYOUT_BREAKPOINT` instead of the old category-list-specific constant, because the same `960px` threshold is reused across category, media-item, and generic management/menu screens.
 
 ## High-signal files to open first
-- `app/AGENTS.md`
+- `AGENTS.md`
 - `index.tsx`
 - `app/app.tsx`
 - `app/redux/initializer.ts`
@@ -988,7 +988,7 @@
 - Mobile error toasts now sit near the lower viewport edge because the authenticated shell no longer uses a fixed bottom nav.
 
 ## Good recovery workflow for future work
-1. Read `app/AGENTS.md`.
+1. Read `AGENTS.md`.
 2. Run:
    - `npm test -- --runInBand`
    - `npm run typecheck`
