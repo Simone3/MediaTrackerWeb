@@ -8,15 +8,7 @@ TODO:
 - also fix CORS configuration on BE!
 
 - rewrite agents.md
-  - tell it to keep generic media item files clean from media-specific stuff
-  - formatting advice
-  - do not commit
-  - make it generate agents instructions based on the current doc file!
-  - make it summarize my code style
-  - no carets etc. in package.json
-  - important to centralize when possible
-  - all displayed text must be in lang-en
-  - all colors should be in css variables and prefer reuse for consistency
+
 - rewrite doc.md
   - make it rewrite a true documentation
   - rename the file

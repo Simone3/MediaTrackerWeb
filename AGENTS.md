@@ -1,27 +1,27 @@
+
 ## Recap
-- This repo is the React + TypeScript web port of the old React Native mobile app.
-- The goal is to preserve the old RN behavior and logic as closely as possible, except for the removed "Import from old app" feature.
-- The complete original RN code is available in git history at commit `d06c1ed109c400087b408e28816a603adfb4d2f8`.
-- When behavior is unclear, compare with that RN commit before inventing a web-specific rewrite.
+- This repo is the React + TypeScript web port of an old React Native mobile app. In the unlikely chance we still need to reference old behavior, the original RN code is available in git history at commit `d06c1ed109c400087b408e28816a603adfb4d2f8`.
 - The app is still architecturally closer to the original mobile app than to a typical modern React web app, so prefer parity over unnecessary modernization.
 
 ## Core Constraints
 - `README.md` is just for the repo owner for now. Do NOT read it and do NOT change it.
-- `DOC.md` is the fast recovery/context file. Always keep it up to date when durable project knowledge, workflow guidance, or architectural notes change.
-- Keep `AGENTS.md` and `DOC.md` aligned. If one of them becomes stale or contradicts the repo state, fix it as part of the task.
+- `DOCUMENTATION.md` contains the detailed documentation of the application.
+- Keep `AGENTS.md` and `DOCUMENTATION.md` aligned and current. If one of them becomes stale or contradicts the repo state, fix it as part of the task.
 - Work only in this repository and only on the current branch.
 - Do NOT introduce extra libraries unless you justify them briefly and they clearly reduce work or risk.
+- `package.json` dependencies must always have exact versions, do not use any modifiers like `^` or `~`.
+- Prefer existing project patterns over fresh abstractions if available. However, do centralize behavior into shared components/utilities whenever convenient.
+- The "media item" components must always be generic and must not contain book or movie or TV show or videogame specific logic or references. These must be delegated to specific components that use or extend the generic "media item" components.
 - Use plain React with TypeScript and CSS only. Do not add frameworks such as Vite or Next.js.
 - Keep the code style consistent with the existing repo, including spacing and new-line conventions.
-- Prefer existing project patterns over fresh abstractions unless the current code clearly needs a shared solution.
-- User-facing strings should come from `app/resources/lang/lang-en.json` rather than being hardcoded in components.
+- User-facing strings must come from `app/resources/lang/lang-en.json` rather than being hardcoded in components.
 - Styling should reuse semantic tokens from `app/web/styles.css` and logic-owned color presets from config. Avoid raw hex/rgba values in components unless there is a very good reason.
 - For responsive JS behavior, reuse `app/utilities/layout.ts` `MOBILE_LAYOUT_BREAKPOINT` instead of introducing new hardcoded breakpoints.
 
 ## Architecture Guardrails
 - Start with these high-signal files when you need context:
   - `AGENTS.md`
-  - `DOC.md`
+  - `DOCUMENTATION.md`
   - `index.tsx`
   - `app/app.tsx`
   - `app/redux/initializer.ts`
