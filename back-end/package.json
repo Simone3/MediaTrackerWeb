@@ -1,0 +1,89 @@
+{
+  "name": "media-tracker-back-end",
+  "version": "1.0.0",
+  "description": "Back-End for the Media Tracker app",
+  "main": "index.ts",
+  "engines": {
+    "node": "19.x"
+  },
+  "scripts": {
+    "test": "nyc ts-mocha --paths --file test/global/global-init-tests.ts -p test/tsconfig.json 'test/**/*.ts'",
+    "start": "node build/index.js",
+    "debug": "ts-node-dev -r tsconfig-paths/register --inspect --respawn index.ts",
+    "lint": "eslint 'app/**/*.ts' 'test/**/*.ts'",
+    "build": "tsc && tsc-alias -p tsconfig.json && copyfiles -u 2 \"./app/config/MEDIA_TRACKER_BE_CONFIG.json\" \"./build/app/config\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Simone3/MediaTrackerBackEnd.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Simone3/MediaTrackerBackEnd/issues"
+  },
+  "homepage": "https://github.com/Simone3/MediaTrackerBackEnd#readme",
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "**/*.js",
+      "**/*.js.map"
+    ],
+    "reporter": [
+      "html"
+    ],
+    "all": true
+  },
+  "mocha": {
+    "timeout": 10000
+  },
+  "devDependencies": {
+    "@types/chai": "4.3.5",
+    "@types/cls-hooked": "4.3.4",
+    "@types/cors": "2.8.19",
+    "@types/express": "4.17.17",
+    "@types/express-mung": "0.5.2",
+    "@types/mocha": "10.0.1",
+    "@types/node": "20.4.8",
+    "@types/sinon": "10.0.16",
+    "@types/uuid": "9.0.2",
+    "@types/validator": "13.9.0",
+    "@typescript-eslint/eslint-plugin": "6.2.1",
+    "@typescript-eslint/parser": "6.2.1",
+    "chai": "4.3.7",
+    "chai-http": "4.4.0",
+    "copyfiles": "2.4.1",
+    "eslint": "8.46.0",
+    "eslint-plugin-jsdoc": "46.4.6",
+    "mocha": "10.2.0",
+    "nock": "13.3.2",
+    "nyc": "15.1.0",
+    "sinon": "15.2.0",
+    "ts-mocha": "10.0.0",
+    "ts-node": "10.9.1",
+    "ts-node-dev": "2.0.0",
+    "tsc-alias": "1.8.7",
+    "tsconfig-paths": "4.2.0",
+    "typescript": "5.1.6"
+  },
+  "dependencies": {
+    "axios": "1.4.0",
+    "class-transformer": "0.5.1",
+    "class-transformer-validator": "0.9.1",
+    "class-validator": "0.14.0",
+    "cors": "2.8.6",
+    "exit-hook": "5.1.0",
+    "express": "4.18.2",
+    "express-http-context": "1.2.4",
+    "express-mung": "0.5.1",
+    "firebase-admin": "11.10.1",
+    "log4js": "6.9.1",
+    "mongoose": "7.4.2",
+    "reflect-metadata": "0.1.13",
+    "uuid": "9.0.0"
+  }
+}
