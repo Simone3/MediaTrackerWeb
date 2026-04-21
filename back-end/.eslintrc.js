@@ -315,7 +315,6 @@ module.exports = {
 		'jsdoc/check-syntax': 2,
 		'jsdoc/check-tag-names': 2,
 		'jsdoc/check-types': 2,
-		'jsdoc/newline-after-description': [ 2, 'never' ],
 		'jsdoc/no-undefined-types': 2,
 		'jsdoc/require-hyphen-before-param-description': [ 2, 'never' ],
 		'jsdoc/require-param': 2,

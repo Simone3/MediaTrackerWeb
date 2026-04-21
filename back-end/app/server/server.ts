@@ -25,7 +25,7 @@ app.use(requestScopeContextMiddleware);
 // CORS
 app.use(cors({
 	credentials: true,
-	origin: 'http://localhost:5173', //'*',
+	origin: '*',
 	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
 	preflightContinue: true
 }));
