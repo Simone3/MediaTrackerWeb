@@ -1,19 +1,21 @@
 
 ## Recap
-- This repo is the React + TypeScript web port of an old React Native mobile app. If old behavior needs to be checked, use the original RN code in git history at commit `d06c1ed109c400087b408e28816a603adfb4d2f8`.
+- This is the front-end part of the Media Tracker application. In `../back-end` we have the back-end APIs. Both front-end and back-end are in the same Git repository, but each has its own self-consistent project.
+- This project is the React + TypeScript web port of an old React Native mobile app. If old behavior needs to be checked, use the original RN code in git history at commit `d06c1ed109c400087b408e28816a603adfb4d2f8`.
 - The app is still architecturally closer to the original mobile app than to a typical modern React web app, so prefer parity over unnecessary modernization.
 
 ## Core Constraints
-- `README.md` is just for the repo owner for now. Do NOT read it and do NOT change it.
-- `DOCUMENTATION.md` contains the detailed application documentation.
-- Keep `AGENTS.md` and `DOCUMENTATION.md` aligned and up to date. If either becomes stale or contradicts the repo state, fix it as part of the task.
 - Work only in this repository and only on the current branch.
+- Unless specifically asked to, you should only work on the front-end application when prompted in this root directory.
+- `README.md` just contains minimal information about the application and how to run it.
+- `DOCUMENTATION.md` contains the detailed application documentation.
+- Keep `AGENTS.md` and `DOCUMENTATION.md` aligned and up to date. If either becomes stale or contradicts the project state, fix it as part of the task.
 - Do NOT introduce extra libraries unless you justify them briefly and they clearly reduce work or risk.
 - `package.json` dependencies must always use exact versions; do not use modifiers such as `^` or `~`.
 - Prefer existing project patterns over new abstractions when they are available. However, do centralize behavior into shared components/utilities whenever convenient.
 - "Media item" components must always stay generic and must not contain book-, movie-, TV show-, or videogame-specific logic or references. Delegate those to specific components that use or extend the generic "media item" components.
 - Use plain React with TypeScript and CSS only. Do not add frameworks such as Vite or Next.js.
-- Keep the code style consistent with the existing repo, including spacing and newline conventions.
+- Keep the code style consistent with the existing codebase, including spacing and newline conventions.
 - User-facing strings must come from `app/resources/lang/lang-en.json`, not be hardcoded in components.
 - Styling should reuse semantic tokens from `app/web/styles.css` and logic-owned color presets from config. Avoid raw hex/rgba values in components unless there is a very good reason.
 - For responsive JS behavior, reuse `app/utilities/layout.ts` `MOBILE_LAYOUT_BREAKPOINT` rather than introducing new hardcoded breakpoints.
