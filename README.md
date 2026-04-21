@@ -7,14 +7,9 @@ TODO:
 - then upgrade back-end dependencies
 - also fix CORS configuration on BE!
 
-- rewrite agents.md
+------
 
-- rewrite doc.md
-  - make it rewrite a true documentation
-  - rename the file
-- rewrite readme.md
-
-future:
+in the future:
 - platform/group/seasons pages disable media item form guard when clicking on the header icon (home link)
 - mock user/pwd creates a mock state for local tests even in prod - create catalog mocks for all 4 media types with lord of the rings
 
