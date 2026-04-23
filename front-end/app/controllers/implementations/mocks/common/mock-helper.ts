@@ -34,7 +34,6 @@ export abstract class MockControllerHelper {
 				else {
 					resolve(successResultCallback());
 				}
-				
 			}, this.delay);
 		});
 	}

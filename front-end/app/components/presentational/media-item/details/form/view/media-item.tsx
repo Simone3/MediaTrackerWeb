@@ -873,7 +873,6 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 	protected inputValueToNumber(value: string): number | undefined {
 		return inputValueToNumber(value);
 	}
-
 }
 
 /**

@@ -6,7 +6,6 @@ import { GroupFilterInternal, GroupInternal } from 'app/data/models/internal/gro
  * Mapper for groups
  */
 class GroupMapper extends ModelMapper<GroupInternal, IdentifiedGroup, {}> {
-		
 	/**
 	 * @override
 	 */
@@ -32,7 +31,6 @@ class GroupMapper extends ModelMapper<GroupInternal, IdentifiedGroup, {}> {
  * Mapper for group filters
  */
 class GroupFilterMapper extends ModelMapper<GroupFilterInternal, GroupFilter, {}> {
-		
 	/**
 	 * @override
 	 */

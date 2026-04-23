@@ -6,7 +6,6 @@ import { OwnPlatformFilterInternal, OwnPlatformInternal, OWN_PLATFORM_ICON_INTER
  * Mapper for own platforms
  */
 class OwnPlatformMapper extends ModelMapper<OwnPlatformInternal, IdentifiedOwnPlatform, {}> {
-		
 	/**
 	 * @override
 	 */
@@ -40,7 +39,6 @@ class OwnPlatformMapper extends ModelMapper<OwnPlatformInternal, IdentifiedOwnPl
  * Mapper for own platform filters
  */
 class OwnPlatformFilterMapper extends ModelMapper<OwnPlatformFilterInternal, OwnPlatformFilter, {}> {
-		
 	/**
 	 * @override
 	 */

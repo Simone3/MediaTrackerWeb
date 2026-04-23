@@ -420,6 +420,7 @@ module.exports = defineConfig([
 			'prefer-template': 'warn',
 			'require-yield': 'warn',
 			'symbol-description': 'warn',
+			'padded-blocks': [ 'warn', { blocks: 'never', switches: 'never', classes: 'never' } ],
 
 			/* ************* eslint-plugin-jsdoc ************* */
 

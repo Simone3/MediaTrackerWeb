@@ -89,7 +89,6 @@ export class State {
 	 * Portion of the state with the own platform details information
 	 */
 	public readonly ownPlatformDetails!: OwnPlatformDetailsState;
-
 }
 
 /**

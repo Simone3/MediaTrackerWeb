@@ -158,7 +158,6 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 			canViewGroup: Boolean(mediaItem.group?.id) && mediaItem.group?.id !== this.props.currentViewGroupId
 		};
 	}
-
 }
 
 /**

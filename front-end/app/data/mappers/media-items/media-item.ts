@@ -13,7 +13,6 @@ import { dateUtils } from 'app/utilities/date-utils';
  * @template TMediaItem the class of the API media item entity
  */
 export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemInternal, TMediaItem extends MediaItem> extends ModelMapper<TMediaItemInternal, TMediaItem, {}> {
-	
 	/**
 	 * Common mapping helper for implementations
 	 * @param source the mapping source

@@ -6,7 +6,6 @@ import { CategoryFilterInternal, CategoryInternal } from 'app/data/models/intern
  * Mapper for categories
  */
 class CategoryMapper extends ModelMapper<CategoryInternal, IdentifiedCategory, {}> {
-		
 	/**
 	 * @override
 	 */
@@ -36,7 +35,6 @@ class CategoryMapper extends ModelMapper<CategoryInternal, IdentifiedCategory, {
  * Mapper for category filters
  */
 class CategoryFilterMapper extends ModelMapper<CategoryFilterInternal, CategoryFilter, {}> {
-		
 	/**
 	 * @override
 	 */

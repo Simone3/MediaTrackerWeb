@@ -1,10 +1,4 @@
 
-
-
-- make codex write DOC for BE
-- make codex edit AGENTS for BE
-- pass to remove all blank lines at start of blocks
-
 - upgrade back-end dependencies
 - fix eslint config
 
