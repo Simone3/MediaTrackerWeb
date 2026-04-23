@@ -438,6 +438,6 @@ app/config/MEDIA_TRACKER_BE_CONFIG.json
 build
 test/build-test
 
-# Firebase tester config
-dev/FirebaseTester/firebaseConfig.js
+
+
 
