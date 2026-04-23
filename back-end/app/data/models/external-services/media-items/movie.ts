@@ -5,7 +5,6 @@ import { IsDefined, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } fr
  * Result of the external movie search service
  */
 export class TmdbMovieSearchResult {
-
 	@IsNotEmpty()
 	@IsInt()
 	public id!: number;
@@ -23,7 +22,6 @@ export class TmdbMovieSearchResult {
  * Response of the external movie search service
  */
 export class TmdbMovieSearchResponse {
-
 	@IsOptional()
 	@IsDefined({ each: true })
 	@Type(() => {
@@ -37,7 +35,6 @@ export class TmdbMovieSearchResponse {
  * Crew model for the external movie details service
  */
 export class TmdbMovieCrewPerson {
-
 	@IsNotEmpty()
 	@IsString()
 	public name!: string;
@@ -51,7 +48,6 @@ export class TmdbMovieCrewPerson {
  * Credits model for the external movie details service
  */
 export class TmdbMovieCredits {
-
 	@IsOptional()
 	@IsDefined({ each: true })
 	@Type(() => {
@@ -65,7 +61,6 @@ export class TmdbMovieCredits {
  * Genre model for the external movie details service
  */
 export class TmdbMovieGenre {
-
 	@IsNotEmpty()
 	@IsString()
 	public name!: string;
@@ -75,7 +70,6 @@ export class TmdbMovieGenre {
  * Response of the external movie details service
  */
 export class TmdbMovieDetailsResponse {
-
 	@IsNotEmpty()
 	@IsInt()
 	public id!: number;

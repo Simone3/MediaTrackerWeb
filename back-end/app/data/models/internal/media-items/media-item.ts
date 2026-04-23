@@ -7,7 +7,6 @@ import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
  * Util type to extract common fields to both media item entities and catalog entries
  */
 type CoreMediaItemDataInternal = {
-
 	name: string;
 	genres?: string[];
 	description?: string;
@@ -25,7 +24,6 @@ export type MediaItemImportanceInternal = '100' | '200' | '300' | '400';
  * Model for a media item with all properties, internal type NOT to be exposed via API
  */
 export type MediaItemInternal = PersistedEntityInternal & CoreMediaItemDataInternal & {
-
 	category: CategoryInternal | string;
 	group?: GroupInternal | string;
 	orderInGroup?: number;
@@ -43,7 +41,6 @@ export type MediaItemInternal = PersistedEntityInternal & CoreMediaItemDataInter
  * Media items groups filtering options, internal type NOT to be exposed via API
  */
 export type MediaItemGroupFilterInternal = {
-	
 	anyGroup?: boolean;
 	noGroup?: boolean;
 	groupIds?: string[];
@@ -53,7 +50,6 @@ export type MediaItemGroupFilterInternal = {
  * Media items own platforms filtering options, internal type NOT to be exposed via API
  */
 export type MediaItemOwnPlatformFilterInternal = {
-	
 	anyOwnPlatform?: boolean;
 	noOwnPlatform?: boolean;
 	ownPlatformIds?: string[];
@@ -63,7 +59,6 @@ export type MediaItemOwnPlatformFilterInternal = {
  * Model for a media item filtering options, internal type NOT to be exposed via API
  */
 export type MediaItemFilterInternal = {
-	
 	importanceLevels?: MediaItemImportanceInternal[];
 	groups?: MediaItemGroupFilterInternal;
 	ownPlatforms?: MediaItemOwnPlatformFilterInternal;
@@ -80,7 +75,6 @@ export type MediaItemSortFieldInternal = 'IMPORTANCE' | 'NAME' | 'GROUP' | 'OWN_
  * Media items sort by options, internal type NOT to be exposed via API
  */
 export type MediaItemSortByInternal = {
-
 	ascending: boolean;
 }
 
@@ -88,14 +82,12 @@ export type MediaItemSortByInternal = {
  * Model for a media item with base properties, internal type NOT to be exposed via API
  */
 export type CatalogMediaItemInternal = CoreMediaItemDataInternal & {
-
 };
 
 /**
  * Media item catalog search result, internal type NOT to be exposed via API
  */
 export type SearchMediaItemCatalogResultInternal = {
-
 	catalogId: string;
 	name: string;
 	releaseDate?: Date;

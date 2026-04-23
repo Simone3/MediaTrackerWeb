@@ -12,11 +12,9 @@ const layout: PatternLayout = {
 	pattern: '[%d] [%x{currentUserId}] [%x{correlationId}] %p %c - %m',
 	tokens: {
 		correlationId: () => {
-
 			return requestScopeContext.correlationId || 'NONE';
 		},
 		currentUserId: () => {
-
 			return requestScopeContext.currentUserId || 'NONE';
 		}
 	}
@@ -24,7 +22,6 @@ const layout: PatternLayout = {
 
 // Global log4js configuration
 if(config.log.file) {
-
 	configure({
 		appenders: {
 			file: {
@@ -46,7 +43,6 @@ if(config.log.file) {
 	});
 }
 else {
-
 	configure({
 		appenders: {
 			console: {
@@ -67,11 +63,9 @@ else {
  * Application logger
  */
 class MediaTrackerLogger {
-
 	private log4js: Logger;
 
 	public constructor(logCategory: string) {
-
 		this.log4js = getLogger(logCategory);
 		this.log4js.level = config.log.level;
 	}
@@ -82,9 +76,7 @@ class MediaTrackerLogger {
 	 * @param args the optional arguments for the placeholders
 	 */
 	public debug(message: string, ...args: unknown[]): void {
-		
 		if(this.log4js.isDebugEnabled()) {
-
 			this.log4js.debug(message, ...this.stringify(args));
 		}
 	}
@@ -95,9 +87,7 @@ class MediaTrackerLogger {
 	 * @param args the optional arguments for the placeholders
 	 */
 	public info(message: string, ...args: unknown[]): void {
-
 		if(this.log4js.isInfoEnabled()) {
-
 			this.log4js.info(message, ...this.stringify(args));
 		}
 	}
@@ -108,19 +98,14 @@ class MediaTrackerLogger {
 	 * @param args the optional arguments for the placeholders
 	 */
 	public error(message: string, ...args: unknown[]): void {
-		
 		if(this.log4js.isErrorEnabled()) {
-
 			this.log4js.error(message, ...this.stringify(args));
 
 			for(const arg of args) {
-
 				if(arg instanceof AppError) {
-
 					let currentArg: string | AppError | undefined = arg;
 
 					while(currentArg && currentArg instanceof AppError) {
-
 						this.log4js.error('Caused by AppError:');
 						this.log4js.error(currentArg);
 
@@ -128,7 +113,6 @@ class MediaTrackerLogger {
 					}
 				}
 				else if(arg instanceof Error) {
-
 					this.log4js.error('Caused by raw Error:');
 					this.log4js.error(arg);
 				}
@@ -142,16 +126,12 @@ class MediaTrackerLogger {
 	 * @returns the resulting array of string values
 	 */
 	private stringify(args: unknown[]): string[] {
-
 		if(args && args.length > 0) {
-
 			return args.map((arg) => {
-
 				return logRedactor.processAndStringify(arg).replace(/\r?\n|\r|\t/g, ' ');
 			});
 		}
 		else {
-
 			return [];
 		}
 	}
@@ -186,6 +166,5 @@ export const performanceLogger = new MediaTrackerLogger('Performance');
  * Callback to gracefully close all loggers
  */
 export const finalizeAndCloseAllLoggers = (): void => {
-
 	shutdown();
 };

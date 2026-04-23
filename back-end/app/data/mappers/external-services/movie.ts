@@ -10,12 +10,10 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * Mapper for the movies search external service
  */
 class MovieExternalSearchServiceMapper extends ModelMapper<SearchMovieCatalogResultInternal, TmdbMovieSearchResult, never> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(): TmdbMovieSearchResult {
-
 		throw AppError.GENERIC.withDetails('convertToExternal unimplemented');
 	}
 	
@@ -23,7 +21,6 @@ class MovieExternalSearchServiceMapper extends ModelMapper<SearchMovieCatalogRes
 	 * @override
 	 */
 	protected convertToInternal(source: TmdbMovieSearchResult): SearchMovieCatalogResultInternal {
-		
 		return {
 			catalogId: String(source.id),
 			name: source.title,
@@ -36,12 +33,10 @@ class MovieExternalSearchServiceMapper extends ModelMapper<SearchMovieCatalogRes
  * Mapper for the movies details external service
  */
 class MovieExternalDetailsServiceMapper extends ModelMapper<CatalogMovieInternal, TmdbMovieDetailsResponse, never> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(): TmdbMovieDetailsResponse {
-
 		throw AppError.GENERIC.withDetails('convertToExternal unimplemented');
 	}
 	
@@ -49,7 +44,6 @@ class MovieExternalDetailsServiceMapper extends ModelMapper<CatalogMovieInternal
 	 * @override
 	 */
 	protected convertToInternal(source: TmdbMovieDetailsResponse): CatalogMovieInternal {
-		
 		return {
 			catalogId: String(source.id),
 			name: source.title,
@@ -68,9 +62,7 @@ class MovieExternalDetailsServiceMapper extends ModelMapper<CatalogMovieInternal
 	 * @returns the image URL
 	 */
 	private getFullImagePath(backdropPath: string | undefined): string | undefined {
-
 		if(backdropPath) {
-
 			return config.externalApis.theMovieDb.movies.imageBasePath + backdropPath;
 		}
 
@@ -83,18 +75,13 @@ class MovieExternalDetailsServiceMapper extends ModelMapper<CatalogMovieInternal
 	 * @returns the list of directors or undefined if none
 	 */
 	private getDirectors(credits: TmdbMovieCredits | undefined): string[] | undefined {
-
 		if(credits) {
-
 			const { crew } = credits;
 			
 			if(crew) {
-
 				const directors = [];
 				for(const person of crew) {
-
 					if(person && config.externalApis.theMovieDb.movies.directorJobName === person.job) {
-
 						directors.push(person.name);
 					}
 				}

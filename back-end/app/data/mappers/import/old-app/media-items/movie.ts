@@ -8,12 +8,10 @@ import { MovieInternal } from 'app/data/models/internal/media-items/movie';
  * Mapper from the old Media Tracker app export movie to the new internal model
  */
 class OldAppMovieMapper extends OldAppMediaItemMapper<MovieInternal> {
-
 	/**
 	 * @override
 	 */
 	protected convertToInternal(source: OldAppMediaItem): OldAppMediaItemInternal<MovieInternal> {
-		
 		const common = this.commonToInternal(source);
 		return {
 			...common,

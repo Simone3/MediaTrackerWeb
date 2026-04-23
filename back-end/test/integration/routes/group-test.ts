@@ -14,24 +14,20 @@ const expect = chai.expect;
  * Tests for the group API
  */
 describe('Group API Tests', () => {
-
 	setupTestDatabaseConnection();
 	setupTestServer();
 
 	describe('Group API Tests', () => {
-
 		const firstUC: TestUC = { user: '', category: '' };
 		const secondUC: TestUC = { user: '', category: '' };
 
 		// Create new users/categories for each test
 		beforeEach(async() => {
-
 			await initTestUCHelper('MOVIE', firstUC, 'First');
 			await initTestUCHelper('MOVIE', secondUC, 'Second');
 		});
 
 		it('Should create a new group', async() => {
-
 			const name = randomName();
 			const response = await callHelper<AddGroupRequest, AddGroupResponse>('POST', `/users/${firstUC.user}/categories/${firstUC.category}/groups`, firstUC.user, {
 				newGroup: {
@@ -49,7 +45,6 @@ describe('Group API Tests', () => {
 		});
 
 		it('Should update an existing group', async() => {
-
 			const group = await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			const groupId = String(group._id);
 			const newName = randomName('Changed');
@@ -67,7 +62,6 @@ describe('Group API Tests', () => {
 		});
 
 		it('Should return all user groups', async() => {
-
 			await groupController.saveGroup(getTestGroup(undefined, firstUC, 'Rrr'));
 			await groupController.saveGroup(getTestGroup(undefined, firstUC, 'Bbb'));
 			await groupController.saveGroup(getTestGroup(undefined, firstUC, 'Zzz'));
@@ -78,7 +72,6 @@ describe('Group API Tests', () => {
 		});
 
 		it('Should return all user groups that match the filter', async() => {
-
 			await groupController.saveGroup(getTestGroup(undefined, firstUC, 'Rrr'));
 			await groupController.saveGroup(getTestGroup(undefined, firstUC, 'Bbb'));
 			await groupController.saveGroup(getTestGroup(undefined, firstUC, 'Zzz'));
@@ -93,7 +86,6 @@ describe('Group API Tests', () => {
 		});
 
 		it('Should delete an existing group', async() => {
-
 			const group = await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			const groupId = String(group._id);
 
@@ -104,7 +96,6 @@ describe('Group API Tests', () => {
 		});
 
 		it('Should check for name validity', async() => {
-
 			await callHelper<{}, AddGroupResponse>('POST', `/users/${firstUC.user}/categories/${firstUC.category}/groups`, firstUC.user, {
 				newGroup: {}
 			}, {
@@ -113,7 +104,6 @@ describe('Group API Tests', () => {
 		});
 
 		it('Should save and then retrieve ALL fields', async() => {
-
 			const sourceGroup: Required<IdentifiedGroup> = {
 				uid: '',
 				name: randomName()
@@ -130,35 +120,30 @@ describe('Group API Tests', () => {
 		});
 
 		it('Should not allow to add to another user\'s groups', async() => {
-
 			await callHelper('POST', `/users/${firstUC.user}/categories/${firstUC.category}/groups`, secondUC.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to update another user\'s group', async() => {
-
 			await callHelper('PUT', `/users/${firstUC.user}/categories/${firstUC.category}/groups/someobjectid`, secondUC.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to delete another user\'s group', async() => {
-
 			await callHelper('DELETE', `/users/${firstUC.user}/categories/${firstUC.category}/groups/someobjectid`, secondUC.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to get another user\'s groups', async() => {
-
 			await callHelper('GET', `/users/${firstUC.user}/categories/${firstUC.category}/groups`, secondUC.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to filter another user\'s groups', async() => {
-
 			await callHelper('POST', `/users/${firstUC.user}/categories/${firstUC.category}/groups/filter`, secondUC.user, undefined, {
 				expectedStatus: 403
 			});

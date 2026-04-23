@@ -33,14 +33,12 @@ type OrderBy = Sortable<OwnPlatformInternal>;
  * Controller for own platform entities
  */
 class OwnPlatformController extends AbstractEntityController {
-
 	private readonly queryHelper: QueryHelper<OwnPlatformInternal, OwnPlatformDocument, Model<OwnPlatformDocument>>;
 
 	/**
 	 * Constructor
 	 */
 	public constructor() {
-
 		super();
 		this.queryHelper = new QueryHelper(OwnPlatformModel);
 	}
@@ -53,7 +51,6 @@ class OwnPlatformController extends AbstractEntityController {
 	 * @returns the own platform or undefined if not found, as a promise
 	 */
 	public getOwnPlatform(userId: string, categoryId: string, ownPlatformId: string): Promise<OwnPlatformInternal | undefined> {
-
 		const conditions: QueryConditions = {
 			_id: ownPlatformId,
 			owner: userId,
@@ -70,7 +67,6 @@ class OwnPlatformController extends AbstractEntityController {
 	 * @returns the own platforms, as a promise
 	 */
 	public getAllOwnPlatforms(userId: string, categoryId: string): Promise<OwnPlatformInternal[]> {
-
 		return this.filterOwnPlatforms(userId, categoryId);
 	}
 
@@ -82,14 +78,12 @@ class OwnPlatformController extends AbstractEntityController {
 	 * @returns the own platforms, as a promise
 	 */
 	public filterOwnPlatforms(userId: string, categoryId: string, filter?: OwnPlatformFilterInternal): Promise<OwnPlatformInternal[]> {
-
 		const conditions: QueryConditions = {
 			owner: userId,
 			category: categoryId
 		};
 
 		if(filter && filter.name) {
-			
 			// Case insensitive exact match
 			conditions.name = new RegExp(`^${filter.name}$`, 'i');
 		}
@@ -108,9 +102,7 @@ class OwnPlatformController extends AbstractEntityController {
 	 * @returns the saved own platform, as a promise
 	 */
 	public async saveOwnPlatform(ownPlatform: OwnPlatformInternal, skipCheckPreconditions?: boolean): Promise<OwnPlatformInternal> {
-
 		if(!skipCheckPreconditions) {
-			
 			await this.checkWritePreconditions(
 				AppError.DATABASE_SAVE.withDetails(ownPlatform._id ? 'Own platform does not exists for given user/category' : 'User or category does not exist'),
 				ownPlatform.owner,
@@ -129,9 +121,7 @@ class OwnPlatformController extends AbstractEntityController {
 	 * @returns the number of merged platforms, as a promise
 	 */
 	public async mergeOwnPlatforms(ownPlatformIds: string[], mergedData: OwnPlatformInternal): Promise<number> {
-
 		if(ownPlatformIds.length < 2) {
-
 			throw AppError.GENERIC.withDetails('Invalid mergeOwnPlatforms input');
 		}
 
@@ -144,7 +134,6 @@ class OwnPlatformController extends AbstractEntityController {
 			_id: { $in: ownPlatformIds }
 		});
 		if(checkPlatforms.length !== ownPlatformIds.length) {
-
 			throw AppError.DATABASE_SAVE.withDetails('One or more platforms not found for given user/category');
 		}
 
@@ -164,7 +153,6 @@ class OwnPlatformController extends AbstractEntityController {
 
 		// Delete all other platforms
 		return miscUtils.mergeAndSumPromiseResults(platformsToDelete.map((id) => {
-
 			return this.queryHelper.deleteById(id);
 		}));
 	}
@@ -177,7 +165,6 @@ class OwnPlatformController extends AbstractEntityController {
 	 * @returns a promise with the number of deleted elements
 	 */
 	public async deleteOwnPlatform(userId: string, categoryId: string, ownPlatformId: string): Promise<number> {
-		
 		await this.checkWritePreconditions(AppError.DATABASE_DELETE.withDetails('OwnPlatform does not exist for given user/category'), userId, categoryId, ownPlatformId);
 		
 		const mediaItemController = await mediaItemFactory.getEntityControllerFromCategoryId(userId, categoryId);
@@ -195,7 +182,6 @@ class OwnPlatformController extends AbstractEntityController {
 	 * @returns the number of deleted elements as a promise
 	 */
 	public deleteAllOwnPlatformsInCategory(categoryId: string): Promise<number> {
-
 		const conditions: QueryConditions = {
 			category: categoryId
 		};
@@ -210,7 +196,6 @@ class OwnPlatformController extends AbstractEntityController {
 	 * @returns the number of deleted elements as a promise
 	 */
 	public deleteAllOwnPlatformsForUser(userId: string): Promise<number> {
-
 		const conditions: QueryConditions = {
 			owner: userId
 		};
@@ -227,18 +212,14 @@ class OwnPlatformController extends AbstractEntityController {
 	 * @returns a promise that resolves if all preconditions are OK
 	 */
 	private checkWritePreconditions(errorToThow: AppError, userId: string, category: string | CategoryInternal, ownPlatformId?: string): Promise<void> {
-
 		return this.checkExistencePreconditionsHelper(errorToThow, () => {
-
 			const categoryId = typeof category === 'string' ? category : category._id;
 
 			if(ownPlatformId) {
-
 				// Make sure the platform exists
 				return this.getOwnPlatform(userId, categoryId, ownPlatformId);
 			}
 			else {
-
 				// Make sure the category exists
 				return categoryController.getCategory(userId, categoryId);
 			}

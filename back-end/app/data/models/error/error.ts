@@ -2,7 +2,6 @@
  * An application error that can be thrown or promise-rejected in the code and then handled in a response with negative outcome
  */
 export class AppError extends Error {
-
 	public static GENERIC = new AppError('generic.application', 'Generic application error');
 	public static AUTHENTICATION = new AppError('generic.authentication', 'Authentication error');
 	public static AUTHORIZATION = new AppError('generic.authorization', 'Authorization error');
@@ -24,7 +23,6 @@ export class AppError extends Error {
 	private _errorDetails?: string | AppError;
 
 	private constructor(errorCode: string, errorDescription: string, errorDetails?: string | AppError) {
-		
 		super(`${errorCode} - ${errorDescription} - ${errorDetails}`);
 
 		this._errorCode = errorCode;
@@ -37,7 +35,6 @@ export class AppError extends Error {
 	 * @returns the error code
 	 */
 	public get errorCode(): string {
-
 		return this._errorCode;
 	}
 
@@ -46,7 +43,6 @@ export class AppError extends Error {
 	 * @returns the error description
 	 */
 	public get errorDescription(): string {
-
 		return this._errorDescription;
 	}
 
@@ -55,7 +51,6 @@ export class AppError extends Error {
 	 * @returns the optional error details
 	 */
 	public get errorDetails(): string | AppError | undefined {
-
 		return this._errorDetails;
 	}
 
@@ -65,21 +60,16 @@ export class AppError extends Error {
 	 * @returns a new AppError with the given details
 	 */
 	public withDetails(errorDetails: unknown): AppError {
-
 		let convertedErrorDetails: string | AppError;
 		if(errorDetails) {
-
 			if(errorDetails instanceof AppError) {
-
 				convertedErrorDetails = errorDetails;
 			}
 			else {
-
 				convertedErrorDetails = String(errorDetails);
 			}
 		}
 		else {
-
 			convertedErrorDetails = '';
 		}
 

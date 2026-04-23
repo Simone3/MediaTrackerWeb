@@ -15,12 +15,10 @@ type GroupMapperParams = {
  * Mapper for groups
  */
 class GroupMapper extends ModelMapper<GroupInternal, IdentifiedGroup, GroupMapperParams> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: GroupInternal): IdentifiedGroup {
-		
 		return {
 			uid: source._id,
 			name: source.name
@@ -31,7 +29,6 @@ class GroupMapper extends ModelMapper<GroupInternal, IdentifiedGroup, GroupMappe
 	 * @override
 	 */
 	protected convertToInternal(source: IdentifiedGroup, extraParams?: GroupMapperParams): GroupInternal {
-		
 		if(!extraParams) {
 			throw AppError.GENERIC.withDetails('convertToInternal.extraParams cannot be undefined');
 		}
@@ -49,12 +46,10 @@ class GroupMapper extends ModelMapper<GroupInternal, IdentifiedGroup, GroupMappe
  * Mapper for group filters
  */
 class GroupFilterMapper extends ModelMapper<GroupFilterInternal, GroupFilter, never> {
-		
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: GroupFilterInternal): GroupFilter {
-		
 		return {
 			name: source.name
 		};
@@ -64,7 +59,6 @@ class GroupFilterMapper extends ModelMapper<GroupFilterInternal, GroupFilter, ne
 	 * @override
 	 */
 	protected convertToInternal(source: GroupFilter): GroupFilterInternal {
-		
 		return {
 			name: source.name
 		};

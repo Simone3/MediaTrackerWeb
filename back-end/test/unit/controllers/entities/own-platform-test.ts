@@ -12,23 +12,19 @@ const expect = chai.expect;
  * Tests for the own platform controller
  */
 describe('OwnPlatformController Tests', () => {
-	
 	setupTestDatabaseConnection();
 	
 	describe('OwnPlatformController Tests', () => {
-
 		const firstUC: TestUC = { user: '', category: '' };
 		const secondUC: TestUC = { user: '', category: '' };
 
 		// Create new users/categories for each test
 		beforeEach(async() => {
-
 			await initTestUCHelper('MOVIE', firstUC, 'First');
 			await initTestUCHelper('MOVIE', secondUC, 'Second');
 		});
 		
 		it('GetOwnPlatform should return the correct own platform after SaveOwnPlatform', async() => {
-
 			const insertedOwnPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			const insertedId = insertedOwnPlatform._id;
 			expect(insertedOwnPlatform._id, 'SaveOwnPlatform (insert) returned empty ID').to.exist;
@@ -40,7 +36,6 @@ describe('OwnPlatformController Tests', () => {
 		});
 
 		it('GetOwnPlatform should only get a own platform for the current user', async() => {
-
 			let insertedOwnPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			const firstId = insertedOwnPlatform._id;
 			insertedOwnPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, secondUC));
@@ -53,7 +48,6 @@ describe('OwnPlatformController Tests', () => {
 		});
 
 		it('GetOwnPlatform should only get a own platform for the current category', async() => {
-
 			let insertedOwnPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			const firstId = insertedOwnPlatform._id;
 			insertedOwnPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, secondUC));
@@ -66,7 +60,6 @@ describe('OwnPlatformController Tests', () => {
 		});
 
 		it('GetOwnPlatform should return the correct own platform after two SaveOwnPlatform (insert and update)', async() => {
-
 			const insertedOwnPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			const insertedId = insertedOwnPlatform._id;
 
@@ -81,7 +74,6 @@ describe('OwnPlatformController Tests', () => {
 		});
 
 		it('GetAllOwnPlatforms should return all own platforms for the given user', async() => {
-
 			const firstUCOwnPlatforms: OwnPlatformInternal[] = [];
 			const secondUCOwnPlatforms: OwnPlatformInternal[] = [];
 
@@ -104,7 +96,6 @@ describe('OwnPlatformController Tests', () => {
 		});
 
 		it('FilterOwnPlatforms should return all matching own platforms for the given user', async() => {
-
 			const firstUCOwnPlatforms: OwnPlatformInternal[] = [];
 			const secondUCOwnPlatforms: OwnPlatformInternal[] = [];
 
@@ -125,7 +116,6 @@ describe('OwnPlatformController Tests', () => {
 		});
 
 		it('MergeOwnPlatforms should merge own platforms', async() => {
-
 			const mergedName = randomName('TheMergedName');
 			const nonMergedName = randomName('TheNonMergedName');
 			
@@ -143,13 +133,10 @@ describe('OwnPlatformController Tests', () => {
 		});
 
 		it('SaveOwnPlatform (insert) should not accept an invalid user', async() => {
-
 			try {
-
 				await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, { user: '5cbf26ea895c281b54b6737f', category: firstUC.category }));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -157,16 +144,13 @@ describe('OwnPlatformController Tests', () => {
 		});
 
 		it('SaveOwnPlatform (update) should not accept an invalid user', async() => {
-
 			const insertedOwnPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			const insertedId = insertedOwnPlatform._id;
 
 			try {
-
 				await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(insertedId, { user: '5cbf26ea895c281b54b6737f', category: firstUC.category }));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -174,13 +158,10 @@ describe('OwnPlatformController Tests', () => {
 		});
 
 		it('SaveOwnPlatform (insert) should not accept an invalid category', async() => {
-
 			try {
-
 				await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, { user: firstUC.user, category: '5cbf26ea895c281b54b6737f' }));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -188,16 +169,13 @@ describe('OwnPlatformController Tests', () => {
 		});
 
 		it('SaveOwnPlatform (update) should not accept an invalid category', async() => {
-
 			const insertedOwnPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			const insertedId = insertedOwnPlatform._id;
 
 			try {
-
 				await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(insertedId, { user: firstUC.user, category: '5cbf26ea895c281b54b6737f' }));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -205,7 +183,6 @@ describe('OwnPlatformController Tests', () => {
 		});
 		
 		it('GetOwnPlatform after DeleteOwnPlatform should return undefined', async() => {
-			
 			const ownPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			const ownPlatformId = ownPlatform._id;
 
@@ -216,7 +193,6 @@ describe('OwnPlatformController Tests', () => {
 		});
 
 		it('Deleting a category should also delete all its own platforms', async function() {
-			
 			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));

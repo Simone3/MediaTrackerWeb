@@ -18,25 +18,21 @@ const expect = chai.expect;
  * Tests for the videogame API
  */
 describe('Videogame API Tests', () => {
-
 	setupTestDatabaseConnection();
 	setupTestServer();
 	setupVideogameExternalServicesMocks();
 
 	describe('Videogame API Tests', () => {
-
 		const firstUCG: TestUCG = { user: '', category: '' };
 		const secondUCG: TestUCG = { user: '', category: '' };
 
 		// Create new users/categories/groups for each test
 		beforeEach(async() => {
-
 			await initTestUCGHelper('VIDEOGAME', firstUCG, 'First');
 			await initTestUCGHelper('VIDEOGAME', secondUCG, 'Second');
 		});
 
 		it('Should create a new videogame', async() => {
-
 			const name = randomName();
 			const response = await callHelper<AddVideogameRequest, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames`, firstUCG.user, {
 				newVideogame: {
@@ -55,7 +51,6 @@ describe('Videogame API Tests', () => {
 		});
 
 		it('Should update an existing videogame', async() => {
-
 			const videogame = await videogameEntityController.saveMediaItem(getTestVideogame(undefined, firstUCG));
 			const videogameId = String(videogame._id);
 			const newName = randomName('Changed');
@@ -74,7 +69,6 @@ describe('Videogame API Tests', () => {
 		});
 
 		it('Should filter and sort videogames', async() => {
-
 			await videogameEntityController.saveMediaItem(getTestVideogame(undefined, firstUCG, { name: 'Rrr', importance: '100' }));
 			await videogameEntityController.saveMediaItem(getTestVideogame(undefined, firstUCG, { name: 'Bbb', importance: '200' }));
 			await videogameEntityController.saveMediaItem(getTestVideogame(undefined, firstUCG, { name: 'Zzz', importance: '200' }));
@@ -95,7 +89,6 @@ describe('Videogame API Tests', () => {
 		});
 
 		it('Should search videogames by term', async() => {
-
 			await videogameEntityController.saveMediaItem(getTestVideogame(undefined, firstUCG, { name: 'Rtestrr', importance: '100' }));
 			await videogameEntityController.saveMediaItem(getTestVideogame(undefined, firstUCG, { name: 'Bbb', importance: '200' }));
 			await videogameEntityController.saveMediaItem(getTestVideogame(undefined, firstUCG, { name: 'ZzTESTz', importance: '200' }));
@@ -113,7 +106,6 @@ describe('Videogame API Tests', () => {
 		});
 
 		it('Should delete an existing videogame', async() => {
-
 			const videogame = await videogameEntityController.saveMediaItem(getTestVideogame(undefined, firstUCG));
 			const videogameId = String(videogame._id);
 
@@ -124,7 +116,6 @@ describe('Videogame API Tests', () => {
 		});
 
 		it('Should check for name validity', async() => {
-
 			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames`, firstUCG.user, {
 				newVideogame: {
 					importance: '100'
@@ -135,7 +126,6 @@ describe('Videogame API Tests', () => {
 		});
 
 		it('Should check for importance validity', async() => {
-
 			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames`, firstUCG.user, {
 				newVideogame: {
 					name: randomName()
@@ -146,7 +136,6 @@ describe('Videogame API Tests', () => {
 		});
 
 		it('Should search the videogames catalog', async() => {
-
 			const response = await callHelper<{}, SearchVideogameCatalogResponse>('GET', `/catalog/videogames/search/Mock Videogame`, firstUCG.user);
 			
 			expect(response.searchResults, 'API did not return the correct number of catalog videogames').to.have.lengthOf(2);
@@ -155,7 +144,6 @@ describe('Videogame API Tests', () => {
 		});
 
 		it('Should get videogame details from the catalog', async() => {
-
 			const expectedResult: Required<CatalogVideogame> = {
 				name: 'Mock Videogame 1',
 				description: 'The game description',
@@ -174,7 +162,6 @@ describe('Videogame API Tests', () => {
 		});
 
 		it('Should save and then retrieve ALL fields', async() => {
-
 			// Add group
 			const sourceGroup: Required<IdentifiedGroup> = {
 				uid: '',
@@ -240,42 +227,36 @@ describe('Videogame API Tests', () => {
 		});
 
 		it('Should not allow to add to another user\'s videogames', async() => {
-
 			await callHelper('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to update another user\'s videogame', async() => {
-
 			await callHelper('PUT', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames/someobjectid`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to delete another user\'s videogame', async() => {
-
 			await callHelper('DELETE', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames/someobjectid`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to get another user\'s videogames', async() => {
-
 			await callHelper('GET', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to filter another user\'s videogames', async() => {
-
 			await callHelper('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames/filter`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to search another user\'s videogames', async() => {
-
 			await callHelper('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames/search`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});

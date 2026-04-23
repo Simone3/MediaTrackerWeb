@@ -35,7 +35,6 @@ export type TestP = {
  * @returns a test category entity
  */
 export const getTestCategory = (_id: unknown, mediaType: MediaTypeInternal, data: TestU, name?: string): CategoryInternal => {
-			
 	return {
 		_id: _id,
 		mediaType: mediaType,
@@ -53,7 +52,6 @@ export const getTestCategory = (_id: unknown, mediaType: MediaTypeInternal, data
  * @returns a test group entity
  */
 export const getTestGroup = (_id: unknown, data: TestUC, name?: string): GroupInternal => {
-	
 	if(!data.user || !data.category) {
 		throw 'Invalid test entity builder input';
 	}
@@ -74,7 +72,6 @@ export const getTestGroup = (_id: unknown, data: TestUC, name?: string): GroupIn
  * @returns a test own platform entity
  */
 export const getTestOwnPlatform = (_id: unknown, data: TestUC, name?: string): OwnPlatformInternal => {
-	
 	if(!data.user || !data.category) {
 		throw 'Invalid test entity builder input';
 	}
@@ -111,7 +108,6 @@ type OptionalMediaItemTestData = {
  * @returns a generic media item test entity
  */
 const getTestMediaItem = (_id: unknown, data: TestUCG, orderInGroup: number, optionalData?: OptionalMediaItemTestData): MediaItemInternal => {
-		
 	if(!data.user || !data.category) {
 		throw 'Invalid test entity builder input';
 	}
@@ -131,7 +127,6 @@ const getTestMediaItem = (_id: unknown, data: TestUCG, orderInGroup: number, opt
 	};
 
 	if(data.group) {
-
 		result.group = data.group;
 		result.orderInGroup = orderInGroup;
 	}
@@ -148,7 +143,6 @@ const getTestMediaItem = (_id: unknown, data: TestUCG, orderInGroup: number, opt
  * @returns a test movie entity
  */
 export const getTestMovieInGroup = (_id: unknown, data: TestUCG, orderInGroup: number, optionalData?: OptionalMediaItemTestData): MovieInternal => {
-		
 	return getTestMediaItem(_id, data, orderInGroup, optionalData);
 };
 
@@ -160,7 +154,6 @@ export const getTestMovieInGroup = (_id: unknown, data: TestUCG, orderInGroup: n
  * @returns a test movie entity
  */
 export const getTestMovie = (_id: unknown, data: TestUC, optionalData?: OptionalMediaItemTestData): MovieInternal => {
-		
 	return getTestMovieInGroup(_id, {
 		user: data.user,
 		category: data.category
@@ -176,7 +169,6 @@ export const getTestMovie = (_id: unknown, data: TestUC, optionalData?: Optional
  * @returns a test videogame entity
  */
 export const getTestVideogameInGroup = (_id: unknown, data: TestUCG, orderInGroup: number, optionalData?: OptionalMediaItemTestData): VideogameInternal => {
-		
 	return getTestMediaItem(_id, data, orderInGroup, optionalData);
 };
 
@@ -188,7 +180,6 @@ export const getTestVideogameInGroup = (_id: unknown, data: TestUCG, orderInGrou
  * @returns a test videogame entity
  */
 export const getTestVideogame = (_id: unknown, data: TestUC, optionalData?: OptionalMediaItemTestData): VideogameInternal => {
-		
 	return getTestVideogameInGroup(_id, {
 		user: data.user,
 		category: data.category
@@ -204,7 +195,6 @@ export const getTestVideogame = (_id: unknown, data: TestUC, optionalData?: Opti
  * @returns a test TV show entity
  */
 export const getTestTvShowInGroup = (_id: unknown, data: TestUCG, orderInGroup: number, optionalData?: OptionalMediaItemTestData): TvShowInternal => {
-		
 	return getTestMediaItem(_id, data, orderInGroup, optionalData);
 };
 
@@ -216,7 +206,6 @@ export const getTestTvShowInGroup = (_id: unknown, data: TestUCG, orderInGroup: 
  * @returns a test TV show entity
  */
 export const getTestTvShow = (_id: unknown, data: TestUC, optionalData?: OptionalMediaItemTestData): TvShowInternal => {
-		
 	return getTestTvShowInGroup(_id, {
 		user: data.user,
 		category: data.category
@@ -232,7 +221,6 @@ export const getTestTvShow = (_id: unknown, data: TestUC, optionalData?: Optiona
  * @returns a test book entity
  */
 export const getTestBookInGroup = (_id: unknown, data: TestUCG, orderInGroup: number, optionalData?: OptionalMediaItemTestData): BookInternal => {
-		
 	return getTestMediaItem(_id, data, orderInGroup, optionalData);
 };
 
@@ -244,7 +232,6 @@ export const getTestBookInGroup = (_id: unknown, data: TestUCG, orderInGroup: nu
  * @returns a test book entity
  */
 export const getTestBook = (_id: unknown, data: TestUC, optionalData?: OptionalMediaItemTestData): BookInternal => {
-		
 	return getTestBookInGroup(_id, {
 		user: data.user,
 		category: data.category
@@ -258,7 +245,6 @@ export const getTestBook = (_id: unknown, data: TestUC, optionalData?: OptionalM
  * @returns a void promise that resolves when the entity is created
  */
 export const initTestUHelper = async(target: TestU, namePrefix: string): Promise<void> => {
-
 	target.user = randomName(`${namePrefix}User`);
 };
 
@@ -270,7 +256,6 @@ export const initTestUHelper = async(target: TestU, namePrefix: string): Promise
  * @returns a void promise that resolves when the entity is created
  */
 export const initTestUCHelper = async(categoryMediaType: MediaTypeInternal, target: TestUC, namePrefix: string): Promise<void> => {
-
 	target.user = randomName(`${namePrefix}User`);
 	const insertedCategory = await categoryController.saveCategory(getTestCategory(undefined, categoryMediaType, target, randomName(`${namePrefix}Category`)));
 	// eslint-disable-next-line require-atomic-updates
@@ -286,13 +271,10 @@ export const initTestUCHelper = async(categoryMediaType: MediaTypeInternal, targ
  * @returns a void promise that resolves when the entity is created
  */
 export const initTestUCGHelper = async(categoryMediaType: MediaTypeInternal, target: TestUCG, namePrefix: string, user?: string): Promise<void> => {
-
 	if(user) {
-
 		target.user = user;
 	}
 	else {
-		
 		target.user = randomName(`${namePrefix}User`);
 	}
 

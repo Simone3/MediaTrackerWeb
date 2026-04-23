@@ -11,17 +11,13 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * @returns the release date as a string or undefined
  */
 const getReleaseDate = (gameData: GiantBombSearchResult | GiantBombDetailsResult): Date | undefined => {
-
 	if(gameData.expected_release_year) {
-
 		return dateUtils.dateFromYearMonthDay(gameData.expected_release_year, gameData.expected_release_month, gameData.expected_release_day);
 	}
 	else if(gameData.original_release_date) {
-
 		return dateUtils.toDate(gameData.original_release_date);
 	}
 	else {
-
 		return undefined;
 	}
 };
@@ -30,12 +26,10 @@ const getReleaseDate = (gameData: GiantBombSearchResult | GiantBombDetailsResult
  * Mapper for the videogames search external service
  */
 class VideogameExternalSearchServiceMapper extends ModelMapper<SearchVideogameCatalogResultInternal, GiantBombSearchResult, never> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(): GiantBombSearchResult {
-
 		throw AppError.GENERIC.withDetails('convertToExternal unimplemented');
 	}
 	
@@ -43,7 +37,6 @@ class VideogameExternalSearchServiceMapper extends ModelMapper<SearchVideogameCa
 	 * @override
 	 */
 	protected convertToInternal(source: GiantBombSearchResult): SearchVideogameCatalogResultInternal {
-		
 		return {
 			catalogId: String(source.id),
 			name: source.name,
@@ -56,12 +49,10 @@ class VideogameExternalSearchServiceMapper extends ModelMapper<SearchVideogameCa
  * Mapper for the videogames details external service
  */
 class VideogameExternalDetailsServiceMapper extends ModelMapper<CatalogVideogameInternal, GiantBombDetailsResponse, never> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(): GiantBombDetailsResponse {
-
 		throw AppError.GENERIC.withDetails('convertToExternal unimplemented');
 	}
 	
@@ -69,7 +60,6 @@ class VideogameExternalDetailsServiceMapper extends ModelMapper<CatalogVideogame
 	 * @override
 	 */
 	protected convertToInternal(source: GiantBombDetailsResponse): CatalogVideogameInternal {
-		
 		return {
 			catalogId: String(source.results.id),
 			name: source.results.name,
@@ -89,15 +79,11 @@ class VideogameExternalDetailsServiceMapper extends ModelMapper<CatalogVideogame
 	 * @returns the possibly undefined extracted image URL
 	 */
 	private getImageUrl(result: GiantBombImage | undefined): string | undefined {
-		
 		if(result) {
-
 			if(result.screen_url) {
-
 				return result.screen_url;
 			}
 			else if(result.medium_url) {
-
 				return result.medium_url;
 			}
 		}

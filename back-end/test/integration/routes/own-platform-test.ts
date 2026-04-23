@@ -14,24 +14,20 @@ const expect = chai.expect;
  * Tests for the own platforms API
  */
 describe('OwnPlatform API Tests', () => {
-
 	setupTestDatabaseConnection();
 	setupTestServer();
 
 	describe('OwnPlatform API Tests', () => {
-
 		const firstUC: TestUC = { user: '', category: '' };
 		const secondUC: TestUC = { user: '', category: '' };
 
 		// Create new users/categories for each test
 		beforeEach(async() => {
-
 			await initTestUCHelper('MOVIE', firstUC, 'First');
 			await initTestUCHelper('MOVIE', secondUC, 'Second');
 		});
 
 		it('Should create a new own platform', async() => {
-
 			const name = randomName();
 			const color = '#0000FF';
 			const icon = 'theicon';
@@ -56,7 +52,6 @@ describe('OwnPlatform API Tests', () => {
 		});
 
 		it('Should update an existing own platform', async() => {
-
 			const ownPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			const ownPlatformId = String(ownPlatform._id);
 			const newName = randomName('Changed');
@@ -78,7 +73,6 @@ describe('OwnPlatform API Tests', () => {
 		});
 
 		it('Should merge two existing own platforms', async() => {
-
 			const { _id: ownPlatformId1 } = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			const { _id: ownPlatformId2 } = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 
@@ -101,7 +95,6 @@ describe('OwnPlatform API Tests', () => {
 		});
 
 		it('Should return all user own platforms', async() => {
-
 			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC, 'Rrr'));
 			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC, 'Bbb'));
 			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC, 'Zzz'));
@@ -112,7 +105,6 @@ describe('OwnPlatform API Tests', () => {
 		});
 
 		it('Should return all user own platforms that match the filter', async() => {
-
 			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC, 'Rrr'));
 			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC, 'Bbb'));
 			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC, 'Zzz'));
@@ -127,7 +119,6 @@ describe('OwnPlatform API Tests', () => {
 		});
 
 		it('Should delete an existing own platform', async() => {
-
 			const ownPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			const ownPlatformId = String(ownPlatform._id);
 
@@ -138,7 +129,6 @@ describe('OwnPlatform API Tests', () => {
 		});
 
 		it('Should check for name validity', async() => {
-
 			await callHelper<{}, AddOwnPlatformResponse>('POST', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms`, firstUC.user, {
 				newOwnPlatform: {
 					color: '#0000FF',
@@ -150,7 +140,6 @@ describe('OwnPlatform API Tests', () => {
 		});
 
 		it('Should check for color validity', async() => {
-
 			await callHelper<{}, AddOwnPlatformResponse>('POST', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms`, firstUC.user, {
 				newOwnPlatform: {
 					name: randomName(),
@@ -163,7 +152,6 @@ describe('OwnPlatform API Tests', () => {
 		});
 
 		it('Should save and then retrieve ALL fields', async() => {
-
 			const sourcePlatform: Required<IdentifiedOwnPlatform> = {
 				uid: '',
 				name: randomName(),
@@ -182,42 +170,36 @@ describe('OwnPlatform API Tests', () => {
 		});
 
 		it('Should not allow to add to another user\'s own platforms', async() => {
-
 			await callHelper('POST', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms`, secondUC.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to update another user\'s own platform', async() => {
-
 			await callHelper('PUT', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms/someobjectid`, secondUC.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to merge another user\'s own platforms', async() => {
-
 			await callHelper('PUT', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms/merge`, secondUC.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to delete another user\'s own platform', async() => {
-
 			await callHelper('DELETE', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms/someobjectid`, secondUC.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to get another user\'s own platforms', async() => {
-
 			await callHelper('GET', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms`, secondUC.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to filter another user\'s own platforms', async() => {
-
 			await callHelper('POST', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms/filter`, secondUC.user, undefined, {
 				expectedStatus: 403
 			});

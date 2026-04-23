@@ -15,18 +15,15 @@ const router: Router = express.Router();
  * Route to import the old Media Tracker app export
  */
 router.post('/users/:userId/import/old-app', userResourceAuthorizationMiddleware, (request, response) => {
-
 	const userId: string = request.params.userId;
 
 	parserValidator.parseAndValidate(ImportOldAppExportRequest, request.body)
 		.then((parsedRequest) => {
-
 			const oldAppExport = oldAppExportMapper.toInternal(parsedRequest.export);
 			const importOptions = oldAppExportImportOptionsMapper.toInternal(parsedRequest.options);
 
 			oldAppImportController.import(userId, oldAppExport, importOptions)
 				.then(() => {
-			
 					const responseBody: ImportOldAppExportResponse = {
 						message: 'Data successfully imported'
 					};
@@ -34,13 +31,11 @@ router.post('/users/:userId/import/old-app', userResourceAuthorizationMiddleware
 					response.json(responseBody);
 				})
 				.catch((error) => {
-
 					logger.error('Import old app export generic error: %s', error);
 					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 				});
 		})
 		.catch((error) => {
-
 			logger.error('Import old app export request error: %s', error);
 			response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
 		});

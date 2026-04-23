@@ -13,7 +13,6 @@ import { v4 as uuid4 } from 'uuid';
  * @param next the next callback
  */
 export const logCorrelationMiddleware: RequestHandler = (_, __, next): void => {
-	
 	requestScopeContext.correlationId = uuid4();
 	next();
 };
@@ -25,7 +24,6 @@ export const logCorrelationMiddleware: RequestHandler = (_, __, next): void => {
  * @param next the next callback
  */
 export const requestLoggerMiddleware: RequestHandler = (req, _, next): void => {
-	
 	const logUrl = req.originalUrl;
 	const skipBodyRegExp = config.log.apisInputOutput.excludeRequestBodyRegExp;
 	const logBody = skipBodyRegExp.length === 0 || !stringUtils.matches(logUrl, skipBodyRegExp) ? req.body : '{body-log-skipped}';
@@ -38,7 +36,6 @@ export const requestLoggerMiddleware: RequestHandler = (req, _, next): void => {
  * Express middleware to log API responses
  */
 export const responseLoggerMiddleware: RequestHandler = mung.json((body, req, res) => {
-   
 	const logUrl = req.originalUrl;
 	const skipBodyRegExp = config.log.apisInputOutput.excludeResponseBodyRegExp;
 	const logBody = skipBodyRegExp.length === 0 || !stringUtils.matches(logUrl, skipBodyRegExp) ? body : '{body-log-skipped}';
@@ -55,11 +52,9 @@ export const responseLoggerMiddleware: RequestHandler = mung.json((body, req, re
  * @param next the next callback
  */
 export const performanceLoggerMiddleware: RequestHandler = (req, res, next): void => {
-	
 	const startNs = process.hrtime.bigint();
 
 	res.on('finish', () => {
-
 		const endNs = process.hrtime.bigint();
 		const elapsedTimeNs = endNs - startNs;
 		const elapsedTimeMs = elapsedTimeNs / BigInt(1e6);

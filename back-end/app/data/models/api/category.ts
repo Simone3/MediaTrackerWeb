@@ -17,7 +17,6 @@ export type MediaType = ValuesOf<typeof MEDIA_TYPES>;
  * Model for a category, publicly exposed via API
  */
 export class Category {
-
 	/**
 	 * The category name
 	 */
@@ -45,7 +44,6 @@ export class Category {
  * Model for a category with an ID property, publicly exposed via API
  */
 export class IdentifiedCategory extends Category {
-
 	/**
 	 * The category unique ID
 	 */
@@ -58,7 +56,6 @@ export class IdentifiedCategory extends Category {
  * Request for the 'add category' API
  */
 export class AddCategoryRequest extends CommonSaveRequest {
-
 	/**
 	 * The category to add
 	 */
@@ -74,21 +71,18 @@ export class AddCategoryRequest extends CommonSaveRequest {
  * Response for the 'add category' API
  */
 export class AddCategoryResponse extends CommonAddResponse {
-
 }
 
 /**
  * Response for the 'delete category' API
  */
 export class DeleteCategoryResponse extends CommonResponse {
-
 }
 
 /**
  * Response for the 'get all categories' API
  */
 export class GetAllCategoriesResponse extends CommonResponse {
-	
 	@IsDefined()
 	@IsDefined({ each: true })
 	@Type(() => {
@@ -102,7 +96,6 @@ export class GetAllCategoriesResponse extends CommonResponse {
  * Category filtering options, publicly exposed via API
  */
 export class CategoryFilter {
-
 	/**
 	 * Filter for name (case-insensitive exact match)
 	 */
@@ -115,7 +108,6 @@ export class CategoryFilter {
  * Request for the 'filter categories' API
  */
 export class FilterCategoriesRequest extends CommonRequest {
-
 	/**
 	 * Filtering options
 	 */
@@ -131,7 +123,6 @@ export class FilterCategoriesRequest extends CommonRequest {
  * Response for the 'filter movies' API
  */
 export class FilterCategoriesResponse extends CommonResponse {
-
 	@IsDefined()
 	@IsDefined({ each: true })
 	@Type(() => {
@@ -145,7 +136,6 @@ export class FilterCategoriesResponse extends CommonResponse {
  * Request for the 'update category' API
  */
 export class UpdateCategoryRequest extends CommonSaveRequest {
-
 	/**
 	 * The category to update
 	 */
@@ -161,5 +151,4 @@ export class UpdateCategoryRequest extends CommonSaveRequest {
  * Response for the 'update category' API
  */
 export class UpdateCategoryResponse extends CommonResponse {
-
 }

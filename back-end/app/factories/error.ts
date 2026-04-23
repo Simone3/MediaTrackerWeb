@@ -6,14 +6,12 @@ import { AppError } from 'app/data/models/error/error';
  * unaware of the internal error source.
  */
 class ErrorResponseFactory {
-
 	/**
 	 * Builds an error response
 	 * @param error the source data
 	 * @returns the error response
 	 */
 	public from(error: AppError): ErrorResponse {
-
 		const sourceError = this.getSourceAppError(error);
 		
 		return {
@@ -29,11 +27,9 @@ class ErrorResponseFactory {
 	 * @returns the first error of the nested chain
 	 */
 	private getSourceAppError(error: AppError): AppError {
-
 		let currentError: AppError = error;
 
 		while(currentError.errorDetails && currentError.errorDetails instanceof AppError) {
-
 			currentError = currentError.errorDetails as AppError;
 		}
 

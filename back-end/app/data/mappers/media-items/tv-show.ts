@@ -8,12 +8,10 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * Mapper for TV shows
  */
 class TvShowMapper extends MediaItemMapper<TvShowInternal, IdentifiedTvShow> {
-		
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: TvShowInternal): IdentifiedTvShow {
-
 		return {
 			...this.commonToExternal(source),
 			uid: source._id,
@@ -29,7 +27,6 @@ class TvShowMapper extends MediaItemMapper<TvShowInternal, IdentifiedTvShow> {
 	 * @override
 	 */
 	protected convertToInternal(source: IdentifiedTvShow, extraParams?: MediaItemMapperParams): TvShowInternal {
-		
 		return {
 			...this.commonToInternal(source, extraParams),
 			_id: source.uid ? source.uid : null,
@@ -47,11 +44,8 @@ class TvShowMapper extends MediaItemMapper<TvShowInternal, IdentifiedTvShow> {
 	 * @returns target seasons
 	 */
 	private convertToExternalSeasons(source?: TvShowSeasonInternal[]): TvShowSeason[] | undefined {
-		
 		if(source) {
-
 			return source.map((sourceItem) => {
-
 				return {
 					number: sourceItem.number,
 					episodesNumber: sourceItem.episodesNumber,
@@ -60,7 +54,6 @@ class TvShowMapper extends MediaItemMapper<TvShowInternal, IdentifiedTvShow> {
 			});
 		}
 		else {
-
 			return undefined;
 		}
 	}
@@ -71,11 +64,8 @@ class TvShowMapper extends MediaItemMapper<TvShowInternal, IdentifiedTvShow> {
 	 * @returns target seasons
 	 */
 	private convertToInternalSeasons(source?: TvShowSeason[]): TvShowSeasonInternal[] | undefined {
-		
 		if(source) {
-
 			return source.map((sourceItem) => {
-
 				return {
 					number: sourceItem.number,
 					episodesNumber: sourceItem.episodesNumber,
@@ -84,7 +74,6 @@ class TvShowMapper extends MediaItemMapper<TvShowInternal, IdentifiedTvShow> {
 			});
 		}
 		else {
-
 			return undefined;
 		}
 	}
@@ -94,12 +83,10 @@ class TvShowMapper extends MediaItemMapper<TvShowInternal, IdentifiedTvShow> {
  * Mapper for TV show filters
  */
 class TvShowFilterMapper extends MediaItemFilterMapper<TvShowFilterInternal, TvShowFilter> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: TvShowFilterInternal): TvShowFilter {
-		
 		return this.commonToExternal(source);
 	}
 		
@@ -107,7 +94,6 @@ class TvShowFilterMapper extends MediaItemFilterMapper<TvShowFilterInternal, TvS
 	 * @override
 	 */
 	protected convertToInternal(source: TvShowFilter): TvShowFilterInternal {
-		
 		return this.commonToInternal(source);
 	}
 }
@@ -116,12 +102,10 @@ class TvShowFilterMapper extends MediaItemFilterMapper<TvShowFilterInternal, TvS
  * Mapper for TV show sort options
  */
 class TvShowSortMapper extends MediaItemSortMapper<TvShowSortByInternal, TvShowSortBy> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: TvShowSortByInternal): TvShowSortBy {
-		
 		return {
 			...this.commonToExternal(source),
 			field: this.toExternalField(source.field)
@@ -132,7 +116,6 @@ class TvShowSortMapper extends MediaItemSortMapper<TvShowSortByInternal, TvShowS
 	 * @override
 	 */
 	protected convertToInternal(source: TvShowSortBy): TvShowSortByInternal {
-		
 		return {
 			...this.commonToInternal(source),
 			field: this.toInternalField(source.field)
@@ -145,9 +128,7 @@ class TvShowSortMapper extends MediaItemSortMapper<TvShowSortByInternal, TvShowS
 	 * @returns the mapping target
 	 */
 	protected toExternalField(source: TvShowSortFieldInternal): string {
-
 		switch(source) {
-			
 			case 'CREATOR': return TvShowSortField.CREATOR;
 			default: return this.commonToExternalField(source);
 		}
@@ -159,9 +140,7 @@ class TvShowSortMapper extends MediaItemSortMapper<TvShowSortByInternal, TvShowS
 	 * @returns the mapping target
 	 */
 	protected toInternalField(source: string): TvShowSortFieldInternal {
-
 		switch(source) {
-			
 			case TvShowSortField.CREATOR: return 'CREATOR';
 			default: return this.commonToInternalField(source);
 		}
@@ -172,12 +151,10 @@ class TvShowSortMapper extends MediaItemSortMapper<TvShowSortByInternal, TvShowS
  * Mapper for TV show catalog search results
  */
 class TvShowCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchTvShowCatalogResultInternal, SearchTvShowCatalogResult> {
-		
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: SearchTvShowCatalogResultInternal): SearchTvShowCatalogResult {
-
 		return this.commonToExternal(source);
 	}
 	
@@ -185,7 +162,6 @@ class TvShowCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchTvSho
 	 * @override
 	 */
 	protected convertToInternal(source: SearchTvShowCatalogResult): SearchTvShowCatalogResultInternal {
-
 		return this.commonToInternal(source);
 	}
 }
@@ -194,12 +170,10 @@ class TvShowCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchTvSho
  * Mapper for TV show catalog details
  */
 class TvShowCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogTvShowInternal, CatalogTvShow> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: CatalogTvShowInternal): CatalogTvShow {
-
 		return {
 			...this.commonToExternal(source),
 			creators: source.creators,
@@ -214,7 +188,6 @@ class TvShowCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogTv
 	 * @override
 	 */
 	protected convertToInternal(source: CatalogTvShow): CatalogTvShowInternal {
-
 		return {
 			...this.commonToInternal(source),
 			creators: source.creators,
@@ -231,11 +204,8 @@ class TvShowCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogTv
 	 * @returns target seasons
 	 */
 	private convertToExternalSeasons(source?: CatalogTvShowSeasonInternal[]): CatalogTvShowSeason[] | undefined {
-		
 		if(source) {
-
 			return source.map((sourceItem) => {
-
 				return {
 					number: sourceItem.number,
 					episodesNumber: sourceItem.episodesNumber
@@ -243,7 +213,6 @@ class TvShowCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogTv
 			});
 		}
 		else {
-
 			return undefined;
 		}
 	}
@@ -254,11 +223,8 @@ class TvShowCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogTv
 	 * @returns target seasons
 	 */
 	private convertToInternalSeasons(source?: CatalogTvShowSeason[]): CatalogTvShowSeasonInternal[] | undefined {
-		
 		if(source) {
-
 			return source.map((sourceItem) => {
-
 				return {
 					number: sourceItem.number,
 					episodesNumber: sourceItem.episodesNumber
@@ -266,7 +232,6 @@ class TvShowCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogTv
 			});
 		}
 		else {
-
 			return undefined;
 		}
 	}

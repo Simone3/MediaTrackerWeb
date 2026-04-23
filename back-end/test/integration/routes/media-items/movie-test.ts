@@ -18,25 +18,21 @@ const expect = chai.expect;
  * Tests for the movie API
  */
 describe('Movie API Tests', () => {
-
 	setupTestDatabaseConnection();
 	setupTestServer();
 	setupMovieExternalServicesMocks();
 
 	describe('Movie API Tests', () => {
-
 		const firstUCG: TestUCG = { user: '', category: '' };
 		const secondUCG: TestUCG = { user: '', category: '' };
 
 		// Create new users/categories/groups for each test
 		beforeEach(async() => {
-
 			await initTestUCGHelper('MOVIE', firstUCG, 'First');
 			await initTestUCGHelper('MOVIE', secondUCG, 'Second');
 		});
 
 		it('Should create a new movie', async() => {
-
 			const name = randomName();
 			const response = await callHelper<AddMovieRequest, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, firstUCG.user, {
 				newMovie: {
@@ -55,7 +51,6 @@ describe('Movie API Tests', () => {
 		});
 
 		it('Should update an existing movie', async() => {
-
 			const movie = await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			const movieId = String(movie._id);
 			const newName = randomName('Changed');
@@ -74,7 +69,6 @@ describe('Movie API Tests', () => {
 		});
 
 		it('Should filter and sort movies', async() => {
-
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Rrr', importance: '100' }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Bbb', importance: '200' }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Zzz', importance: '200' }));
@@ -95,7 +89,6 @@ describe('Movie API Tests', () => {
 		});
 
 		it('Should search movies by term', async() => {
-
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Rtestrr', importance: '100' }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Bbb', importance: '200' }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'ZzTESTz', importance: '200' }));
@@ -113,7 +106,6 @@ describe('Movie API Tests', () => {
 		});
 
 		it('Should delete an existing movie', async() => {
-
 			const movie = await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			const movieId = String(movie._id);
 
@@ -124,7 +116,6 @@ describe('Movie API Tests', () => {
 		});
 
 		it('Should check for name validity', async() => {
-
 			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, firstUCG.user, {
 				newMovie: {
 					importance: '100'
@@ -135,7 +126,6 @@ describe('Movie API Tests', () => {
 		});
 
 		it('Should check for importance validity', async() => {
-
 			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, firstUCG.user, {
 				newMovie: {
 					name: randomName()
@@ -146,7 +136,6 @@ describe('Movie API Tests', () => {
 		});
 
 		it('Should search the movies catalog', async() => {
-
 			const response = await callHelper<{}, SearchMovieCatalogResponse>('GET', `/catalog/movies/search/Mock Movie`, firstUCG.user);
 			
 			expect(response.searchResults, 'API did not return the correct number of catalog movies').to.have.lengthOf(2);
@@ -155,7 +144,6 @@ describe('Movie API Tests', () => {
 		});
 
 		it('Should get movie details from the catalog', async() => {
-
 			const expectedResult: Required<CatalogMovie> = {
 				name: 'Mock Movie 1',
 				description: 'Some description',
@@ -173,7 +161,6 @@ describe('Movie API Tests', () => {
 		});
 
 		it('Should save and then retrieve ALL fields', async() => {
-
 			// Add group
 			const sourceGroup: Required<IdentifiedGroup> = {
 				uid: '',
@@ -237,42 +224,36 @@ describe('Movie API Tests', () => {
 		});
 
 		it('Should not allow to add to another user\'s movies', async() => {
-
 			await callHelper('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to update another user\'s movie', async() => {
-
 			await callHelper('PUT', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/someobjectid`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to delete another user\'s movie', async() => {
-
 			await callHelper('DELETE', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/someobjectid`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to get another user\'s movies', async() => {
-
 			await callHelper('GET', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to filter another user\'s movies', async() => {
-
 			await callHelper('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/filter`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to search another user\'s movies', async() => {
-
 			await callHelper('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/search`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});

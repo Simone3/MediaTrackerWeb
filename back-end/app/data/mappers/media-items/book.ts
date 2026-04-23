@@ -6,12 +6,10 @@ import { BookFilterInternal, BookInternal, BookSortByInternal, BookSortFieldInte
  * Mapper for books
  */
 class BookMapper extends MediaItemMapper<BookInternal, IdentifiedBook> {
-		
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: BookInternal): IdentifiedBook {
-
 		return {
 			...this.commonToExternal(source),
 			uid: source._id,
@@ -24,7 +22,6 @@ class BookMapper extends MediaItemMapper<BookInternal, IdentifiedBook> {
 	 * @override
 	 */
 	protected convertToInternal(source: IdentifiedBook, extraParams?: MediaItemMapperParams): BookInternal {
-		
 		return {
 			...this.commonToInternal(source, extraParams),
 			_id: source.uid ? source.uid : null,
@@ -38,12 +35,10 @@ class BookMapper extends MediaItemMapper<BookInternal, IdentifiedBook> {
  * Mapper for book filters
  */
 class BookFilterMapper extends MediaItemFilterMapper<BookFilterInternal, BookFilter> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: BookFilterInternal): BookFilter {
-		
 		return this.commonToExternal(source);
 	}
 		
@@ -51,7 +46,6 @@ class BookFilterMapper extends MediaItemFilterMapper<BookFilterInternal, BookFil
 	 * @override
 	 */
 	protected convertToInternal(source: BookFilter): BookFilterInternal {
-		
 		return this.commonToInternal(source);
 	}
 }
@@ -60,12 +54,10 @@ class BookFilterMapper extends MediaItemFilterMapper<BookFilterInternal, BookFil
  * Mapper for book sort options
  */
 class BookSortMapper extends MediaItemSortMapper<BookSortByInternal, BookSortBy> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: BookSortByInternal): BookSortBy {
-		
 		return {
 			...this.commonToExternal(source),
 			field: this.toExternalField(source.field)
@@ -76,7 +68,6 @@ class BookSortMapper extends MediaItemSortMapper<BookSortByInternal, BookSortBy>
 	 * @override
 	 */
 	protected convertToInternal(source: BookSortBy): BookSortByInternal {
-		
 		return {
 			...this.commonToInternal(source),
 			field: this.toInternalField(source.field)
@@ -89,9 +80,7 @@ class BookSortMapper extends MediaItemSortMapper<BookSortByInternal, BookSortBy>
 	 * @returns the mapping target
 	 */
 	protected toExternalField(source: BookSortFieldInternal): string {
-
 		switch(source) {
-			
 			case 'AUTHOR': return BookSortField.AUTHOR;
 			default: return this.commonToExternalField(source);
 		}
@@ -103,9 +92,7 @@ class BookSortMapper extends MediaItemSortMapper<BookSortByInternal, BookSortBy>
 	 * @returns the mapping target
 	 */
 	protected toInternalField(source: string): BookSortFieldInternal {
-
 		switch(source) {
-			
 			case BookSortField.AUTHOR: return 'AUTHOR';
 			default: return this.commonToInternalField(source);
 		}
@@ -116,12 +103,10 @@ class BookSortMapper extends MediaItemSortMapper<BookSortByInternal, BookSortBy>
  * Mapper for book catalog search results
  */
 class BookCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchBookCatalogResultInternal, SearchBookCatalogResult> {
-		
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: SearchBookCatalogResultInternal): SearchBookCatalogResult {
-
 		return this.commonToExternal(source);
 	}
 	
@@ -129,7 +114,6 @@ class BookCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchBookCat
 	 * @override
 	 */
 	protected convertToInternal(source: SearchBookCatalogResult): SearchBookCatalogResultInternal {
-
 		return this.commonToInternal(source);
 	}
 }
@@ -138,12 +122,10 @@ class BookCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchBookCat
  * Mapper for book catalog details
  */
 class BookCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogBookInternal, CatalogBook> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: CatalogBookInternal): CatalogBook {
-
 		return {
 			...this.commonToExternal(source),
 			authors: source.authors,
@@ -155,7 +137,6 @@ class BookCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogBook
 	 * @override
 	 */
 	protected convertToInternal(source: CatalogBook): CatalogBookInternal {
-
 		return {
 			...this.commonToInternal(source),
 			authors: source.authors,

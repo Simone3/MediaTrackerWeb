@@ -5,7 +5,6 @@ import { IsBoolean, IsDefined, IsInt, IsNotEmpty, IsOptional, IsString, Validate
  * Result of the external TV show search service
  */
 export class TmdbTvShowSearchResult {
-
 	@IsNotEmpty()
 	@IsInt()
 	public id!: number;
@@ -23,7 +22,6 @@ export class TmdbTvShowSearchResult {
  * Response of the external TV show search service
  */
 export class TmdbTvShowSearchResponse {
-
 	@IsOptional()
 	@IsDefined({ each: true })
 	@Type(() => {
@@ -37,7 +35,6 @@ export class TmdbTvShowSearchResponse {
  * Creator model for the external TV show details service
  */
 export class TmdbTvShowCreator {
-
 	@IsNotEmpty()
 	@IsString()
 	public name!: string;
@@ -47,7 +44,6 @@ export class TmdbTvShowCreator {
  * Genre model for the external TV show details service
  */
 export class TmdbTvShowGenre {
-
 	@IsNotEmpty()
 	@IsString()
 	public name!: string;
@@ -57,7 +53,6 @@ export class TmdbTvShowGenre {
  * Season model for the external TV show details service
  */
 export class TmdbTvShowSeason {
-
 	@IsOptional()
 	@IsInt()
 	public episode_count?: number;
@@ -71,7 +66,6 @@ export class TmdbTvShowSeason {
  * Response of the external TV show details service
  */
 export class TmdbTvShowDetailsResponse {
-	
 	@IsNotEmpty()
 	@IsInt()
 	public id!: number;
@@ -129,7 +123,6 @@ export class TmdbTvShowDetailsResponse {
  * Episode model for the external TV show season data service
  */
 export class TmdbTvShowEpisode {
-
 	@IsOptional()
 	@IsString()
 	public air_date?: string;
@@ -139,7 +132,6 @@ export class TmdbTvShowEpisode {
  * Response of the external TV show season data service
  */
 export class TmdbTvShowSeasonDataResponse {
-
 	@IsOptional()
 	@IsDefined({ each: true })
 	@Type(() => {

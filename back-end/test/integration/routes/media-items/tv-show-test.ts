@@ -18,25 +18,21 @@ const expect = chai.expect;
  * Tests for the TV show API
  */
 describe('TV show API Tests', () => {
-
 	setupTestDatabaseConnection();
 	setupTestServer();
 	setupTvShowExternalServicesMocks();
 
 	describe('TV show API Tests', () => {
-
 		const firstUCG: TestUCG = { user: '', category: '' };
 		const secondUCG: TestUCG = { user: '', category: '' };
 
 		// Create new users/categories/groups for each test
 		beforeEach(async() => {
-
 			await initTestUCGHelper('TV_SHOW', firstUCG, 'First');
 			await initTestUCGHelper('TV_SHOW', secondUCG, 'Second');
 		});
 
 		it('Should create a new TV show', async() => {
-
 			const name = randomName();
 			const response = await callHelper<AddTvShowRequest, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows`, firstUCG.user, {
 				newTvShow: {
@@ -55,7 +51,6 @@ describe('TV show API Tests', () => {
 		});
 
 		it('Should update an existing TV show', async() => {
-
 			const tvShow = await tvShowEntityController.saveMediaItem(getTestTvShow(undefined, firstUCG));
 			const tvShowId = String(tvShow._id);
 			const newName = randomName('Changed');
@@ -74,7 +69,6 @@ describe('TV show API Tests', () => {
 		});
 
 		it('Should filter and sort TV shows', async() => {
-
 			await tvShowEntityController.saveMediaItem(getTestTvShow(undefined, firstUCG, { name: 'Rrr', importance: '100' }));
 			await tvShowEntityController.saveMediaItem(getTestTvShow(undefined, firstUCG, { name: 'Bbb', importance: '200' }));
 			await tvShowEntityController.saveMediaItem(getTestTvShow(undefined, firstUCG, { name: 'Zzz', importance: '200' }));
@@ -95,7 +89,6 @@ describe('TV show API Tests', () => {
 		});
 
 		it('Should search TV shows by term', async() => {
-
 			await tvShowEntityController.saveMediaItem(getTestTvShow(undefined, firstUCG, { name: 'Rtestrr', importance: '100' }));
 			await tvShowEntityController.saveMediaItem(getTestTvShow(undefined, firstUCG, { name: 'Bbb', importance: '200' }));
 			await tvShowEntityController.saveMediaItem(getTestTvShow(undefined, firstUCG, { name: 'ZzTESTz', importance: '200' }));
@@ -113,7 +106,6 @@ describe('TV show API Tests', () => {
 		});
 
 		it('Should delete an existing TV show', async() => {
-
 			const tvShow = await tvShowEntityController.saveMediaItem(getTestTvShow(undefined, firstUCG));
 			const tvShowId = String(tvShow._id);
 
@@ -124,7 +116,6 @@ describe('TV show API Tests', () => {
 		});
 
 		it('Should check for name validity', async() => {
-
 			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows`, firstUCG.user, {
 				newTvShow: {
 					importance: '100'
@@ -135,7 +126,6 @@ describe('TV show API Tests', () => {
 		});
 
 		it('Should check for importance validity', async() => {
-
 			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows`, firstUCG.user, {
 				newTvShow: {
 					name: randomName()
@@ -146,7 +136,6 @@ describe('TV show API Tests', () => {
 		});
 
 		it('Should search the TV shows catalog', async() => {
-
 			const response = await callHelper<{}, SearchTvShowCatalogResponse>('GET', `/catalog/tv-shows/search/Mock TV Show`, firstUCG.user);
 			
 			expect(response.searchResults, 'API did not return the correct number of catalog TV shows').to.have.lengthOf(2);
@@ -155,7 +144,6 @@ describe('TV show API Tests', () => {
 		});
 
 		it('Should get TV show details from the catalog', async() => {
-			
 			const expectedResult: Required<CatalogTvShow> = {
 				name: 'Mock TV Show 1',
 				description: 'This is the description!',
@@ -200,7 +188,6 @@ describe('TV show API Tests', () => {
 		});
 
 		it('Should save and then retrieve ALL fields', async() => {
-
 			// Add group
 			const sourceGroup: Required<IdentifiedGroup> = {
 				uid: '',
@@ -276,42 +263,36 @@ describe('TV show API Tests', () => {
 		});
 
 		it('Should not allow to add to another user\'s TV shows', async() => {
-
 			await callHelper('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to update another user\'s TV show', async() => {
-
 			await callHelper('PUT', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows/someobjectid`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to delete another user\'s TV show', async() => {
-
 			await callHelper('DELETE', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows/someobjectid`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to get another user\'s TV shows', async() => {
-
 			await callHelper('GET', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to filter another user\'s TV shows', async() => {
-
 			await callHelper('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows/filter`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to search another user\'s TV shows', async() => {
-
 			await callHelper('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows/search`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});

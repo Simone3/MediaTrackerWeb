@@ -13,14 +13,11 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * Controller for movie catalog
  */
 class MovieCatalogController extends MediaItemCatalogController<SearchMovieCatalogResultInternal, CatalogMovieInternal> {
-	
 	/**
 	 * @override
 	 */
 	public searchMediaItemCatalogByTerm(searchTerm: string): Promise<SearchMovieCatalogResultInternal[]> {
-
 		return new Promise((resolve, reject): void => {
-		
 			const url = miscUtils.buildUrl([
 				config.externalApis.theMovieDb.basePath,
 				config.externalApis.theMovieDb.movies.search.relativePath
@@ -39,18 +36,14 @@ class MovieCatalogController extends MediaItemCatalogController<SearchMovieCatal
 
 			restJsonInvoker.invoke(invocationParams)
 				.then((response) => {
-
 					if(response.results) {
-
 						resolve(movieExternalSearchServiceMapper.toInternalList(response.results));
 					}
 					else {
-
 						resolve([]);
 					}
 				})
 				.catch((error) => {
-					
 					logger.error('Movie catalog invocation error: %s', error);
 					reject(AppError.GENERIC.withDetails(error));
 				});
@@ -61,9 +54,7 @@ class MovieCatalogController extends MediaItemCatalogController<SearchMovieCatal
 	 * @override
 	 */
 	public getMediaItemFromCatalog(catalogItemId: string): Promise<CatalogMovieInternal> {
-
 		return new Promise((resolve, reject): void => {
-		
 			const pathParams = {
 				movieId: catalogItemId
 			};
@@ -85,11 +76,9 @@ class MovieCatalogController extends MediaItemCatalogController<SearchMovieCatal
 
 			restJsonInvoker.invoke(invocationParams)
 				.then((response) => {
-
 					resolve(movieExternalDetailsServiceMapper.toInternal(response));
 				})
 				.catch((error) => {
-					
 					logger.error('Movie catalog invocation error: %s', error);
 					reject(AppError.GENERIC.withDetails(error));
 				});

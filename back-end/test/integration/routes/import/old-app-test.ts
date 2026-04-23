@@ -20,24 +20,20 @@ const expect = chai.expect;
  * Tests for the old app import API
  */
 describe('Old App Import API Tests', () => {
-
 	setupTestDatabaseConnection();
 	setupTestServer();
 
 	describe('Old App Import Tests', () => {
-
 		const firstU: TestU = { user: '' };
 		const secondU: TestU = { user: '' };
 
 		// Create new users for each test
 		beforeEach(async() => {
-
 			await initTestUHelper(firstU, 'First');
 			await initTestUHelper(secondU, 'Second');
 		});
 
 		const helperCheckResults = async(categories: CategoryInternal[], mediaType: MediaTypeInternal, expectedCategory: ExpectedCategoryInternal, expectedMediaItem: ExpectedMediaItemInternal): Promise<void> => {
-			
 			const mediaTypeCategories = categories.filter((listCategory) => {
 				return listCategory.mediaType === mediaType;
 			});
@@ -51,7 +47,6 @@ describe('Old App Import API Tests', () => {
 		};
 
 		it('Should import ALL fields', async() => {
-
 			const todayMidnight = new Date();
 			todayMidnight.setHours(0, 0, 0, 0);
 
@@ -339,7 +334,6 @@ describe('Old App Import API Tests', () => {
 		});
 
 		it('Should not allow to import to another user\'s database', async() => {
-
 			await callHelper('POST', `/users/${firstU.user}/import/old-app`, secondU.user, undefined, {
 				expectedStatus: 403
 			});

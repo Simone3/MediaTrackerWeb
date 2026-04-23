@@ -15,12 +15,10 @@ import { oldAppVideogameMapper } from './media-items/videogame';
  * Mapper from the old Media Tracker app export category to the new internal model
  */
 class OldAppCategoryMapper extends ModelMapper<OldAppCategoryInternal, OldAppCategory, never> {
-		
 	/**
 	 * @override
 	 */
 	protected convertToExternal(): OldAppCategory {
-		
 		throw AppError.GENERIC.withDetails('Not required');
 	}
 	
@@ -28,7 +26,6 @@ class OldAppCategoryMapper extends ModelMapper<OldAppCategoryInternal, OldAppCat
 	 * @override
 	 */
 	protected convertToInternal(source: OldAppCategory): OldAppCategoryInternal {
-		
 		const mediaType = this.mapToInternalMediaType(source.MEDIA_TYPE_NAME);
 		
 		return {
@@ -49,9 +46,7 @@ class OldAppCategoryMapper extends ModelMapper<OldAppCategoryInternal, OldAppCat
 	 * @returns the target
 	 */
 	private mapToInternalColor(source: OldAppColor): string {
-
 		switch(source) {
-
 			case 'blue': return '#3c82eb';
 			case 'cyan': return '#4bead7';
 			case 'green': return '#74eb74';
@@ -70,9 +65,7 @@ class OldAppCategoryMapper extends ModelMapper<OldAppCategoryInternal, OldAppCat
 	 * @returns the target
 	 */
 	private mapToInternalMediaType(source: OldAppMediaType): MediaTypeInternal {
-
 		switch(source) {
-
 			case 'BOOKS': return 'BOOK';
 			case 'MOVIES': return 'MOVIE';
 			case 'TV_SHOWS': return 'TV_SHOW';
@@ -88,9 +81,7 @@ class OldAppCategoryMapper extends ModelMapper<OldAppCategoryInternal, OldAppCat
 	 * @returns the target
 	 */
 	private mapToInternalMediaItems(mediaType: MediaTypeInternal, mediaItems: OldAppMediaItem[]): OldAppMediaItemInternal<MediaItemInternal>[] {
-
 		switch(mediaType) {
-
 			case 'BOOK':
 				return oldAppBookMapper.toInternalList(mediaItems);
 

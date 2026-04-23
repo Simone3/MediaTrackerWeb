@@ -6,7 +6,6 @@ import { ArrayMinSize, IsDefined, IsHexColor, IsNotEmpty, IsOptional, IsString, 
  * Model for a platform where some user owns some media items, publicly exposed via API
  */
 export class OwnPlatform {
-
 	/**
 	 * The platform name
 	 */
@@ -33,7 +32,6 @@ export class OwnPlatform {
  * Model for a a platform where some user owns some media items with an ID property, publicly exposed via API
  */
 export class IdentifiedOwnPlatform extends OwnPlatform {
-
 	/**
 	 * The platform unique ID
 	 */
@@ -46,7 +44,6 @@ export class IdentifiedOwnPlatform extends OwnPlatform {
  * Request for the 'add own platform' API
  */
 export class AddOwnPlatformRequest extends CommonSaveRequest {
-
 	/**
 	 * The platform to add
 	 */
@@ -62,21 +59,18 @@ export class AddOwnPlatformRequest extends CommonSaveRequest {
  * Response for the 'add own platform' API
  */
 export class AddOwnPlatformResponse extends CommonAddResponse {
-
 }
 
 /**
  * Response for the 'delete own platform' API
  */
 export class DeleteOwnPlatformResponse extends CommonResponse {
-
 }
 
 /**
  * Response for the 'get all own platforms' API
  */
 export class GetAllOwnPlatformsResponse extends CommonResponse {
-
 	@IsDefined()
 	@IsDefined({ each: true })
 	@Type(() => {
@@ -90,7 +84,6 @@ export class GetAllOwnPlatformsResponse extends CommonResponse {
  * Own platform filtering options, publicly exposed via API
  */
 export class OwnPlatformFilter {
-
 	/**
 	 * Filter for name (case-insensitive exact match)
 	 */
@@ -103,7 +96,6 @@ export class OwnPlatformFilter {
  * Request for the 'filter own platforms' API
  */
 export class FilterOwnPlatformsRequest extends CommonRequest {
-
 	/**
 	 * Filtering options
 	 */
@@ -119,7 +111,6 @@ export class FilterOwnPlatformsRequest extends CommonRequest {
  * Response for the 'filter own platforms' API
  */
 export class FilterOwnPlatformsResponse extends CommonResponse {
-
 	@IsDefined()
 	@IsDefined({ each: true })
 	@Type(() => {
@@ -133,7 +124,6 @@ export class FilterOwnPlatformsResponse extends CommonResponse {
  * Request for the 'update own platform' API
  */
 export class UpdateOwnPlatformRequest extends CommonSaveRequest {
-
 	/**
 	 * The platform to update
 	 */
@@ -149,14 +139,12 @@ export class UpdateOwnPlatformRequest extends CommonSaveRequest {
  * Response for the 'update own platform' API
  */
 export class UpdateOwnPlatformResponse extends CommonResponse {
-
 }
 
 /**
  * Request for the 'merge own platforms' API
  */
 export class MergeOwnPlatformsRequest extends CommonRequest {
-
 	@IsDefined()
 	@ArrayMinSize(2)
 	@IsNotEmpty({ each: true })
@@ -177,6 +165,5 @@ export class MergeOwnPlatformsRequest extends CommonRequest {
  * Response for the 'merge own platforms' API
  */
 export class MergeOwnPlatformsResponse extends CommonResponse {
-
 }
 

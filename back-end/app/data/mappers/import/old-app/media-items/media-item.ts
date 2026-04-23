@@ -10,12 +10,10 @@ import { MediaItemImportanceInternal, MediaItemInternal } from 'app/data/models/
  * @template TMediaItemInternal the class of the internal media item entity
  */
 export abstract class OldAppMediaItemMapper<TMediaItemInternal extends MediaItemInternal> extends ModelMapper<OldAppMediaItemInternal<TMediaItemInternal>, OldAppMediaItem, never> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(): OldAppMediaItem {
-		
 		throw AppError.GENERIC.withDetails('Not required');
 	}
 	
@@ -25,37 +23,31 @@ export abstract class OldAppMediaItemMapper<TMediaItemInternal extends MediaItem
 	 * @returns the mapping target
 	 */
 	protected commonToInternal(source: OldAppMediaItem): OldAppMediaItemInternal<MediaItemInternal> {
-
 		// Compute completion fields
 		let completionDate: Date | undefined;
 		let completedOn: Date[] | undefined;
 		let markedAsRedo: boolean;
 		const timesCompleted = source.TIMES_COMPLETED ? Number(source.TIMES_COMPLETED) : 0;
 		if(source.COMPLETION_DATE) {
-
 			// If the old app completion date is defined, the media item is completed
 			completionDate = parseOldAppDate(source.COMPLETION_DATE);
 			markedAsRedo = false;
 		}
 		else if(timesCompleted > 0) {
-
 			// If the old app completion date is not defined but the times completed are, the media item is marked for redo (no way to kwow the original completion date, defaulting to today)
 			completionDate = new Date();
 			completionDate.setHours(0, 0, 0, 0);
 			markedAsRedo = true;
 		}
 		else {
-
 			// If the old app completion date and times completed are both undefined, the media item is active
 			completionDate = undefined;
 			markedAsRedo = false;
 		}
 		if(completionDate) {
-
 			// Old app did not have the list of all completion dates, default to the array of the only date we have here
 			completedOn = [];
 			for(let i = 0; i < timesCompleted; i++) {
-
 				completedOn.push(completionDate);
 			}
 		}
@@ -90,7 +82,6 @@ export abstract class OldAppMediaItemMapper<TMediaItemInternal extends MediaItem
 	 * @returns the target
 	 */
 	private toInternalImportance(source: OldAppImportanceLevel): MediaItemImportanceInternal {
-		
 		switch(source) {
 			case 'NONE': return '100';
 			case 'LOW': return '200';

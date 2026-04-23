@@ -5,7 +5,6 @@ import { IsDefined, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } fr
  * Volume model (light) for the external book details service
  */
 export class GoogleBooksVolumeLight {
-
 	@IsNotEmpty()
 	@IsString()
 	public title!: string;
@@ -24,7 +23,6 @@ export class GoogleBooksVolumeLight {
  * Result of the external book search service
  */
 export class GoogleBooksSearchResult {
-
 	@IsNotEmpty()
 	@IsString()
 	public id!: string;
@@ -41,7 +39,6 @@ export class GoogleBooksSearchResult {
  * Response of the external book search service
  */
 export class GoogleBooksSearchResponse {
-
 	@IsOptional()
 	@IsDefined({ each: true })
 	@Type(() => {
@@ -55,7 +52,6 @@ export class GoogleBooksSearchResponse {
  * Image model for the external book details service
  */
 export class GoogleBooksImageLinks {
-
 	@IsOptional()
 	@IsString()
 	public medium?: string;
@@ -69,7 +65,6 @@ export class GoogleBooksImageLinks {
  * Volume model (full) for the external book details service
  */
 export class GoogleBooksVolumeFull extends GoogleBooksVolumeLight {
-
 	@IsOptional()
 	@IsNotEmpty({ each: true })
 	@IsString({ each: true })
@@ -95,7 +90,6 @@ export class GoogleBooksVolumeFull extends GoogleBooksVolumeLight {
  * Response of the external book details service
  */
 export class GoogleBooksDetailsResponse {
-
 	@IsNotEmpty()
 	@IsString()
 	public id!: string;

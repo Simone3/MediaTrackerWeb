@@ -6,7 +6,6 @@ import { IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNeste
  * Model for a book, publicly exposed via API
  */
 export class Book extends MediaItem {
-
 	/**
 	 * The book author(s)
 	 */
@@ -27,7 +26,6 @@ export class Book extends MediaItem {
  * Model for a book with an ID property, publicly exposed via API
  */
 export class IdentifiedBook extends Book {
-
 	/**
 	 * The book unique ID
 	 */
@@ -40,18 +38,15 @@ export class IdentifiedBook extends Book {
  * Book filtering options, publicly exposed via API
  */
 export class BookFilter extends MediaItemFilter {
-
 }
 
 /**
  * Values for book ordering options, publicly exposed via API
  */
 export class BookSortField extends MediaItemSortField {
-
 	public static readonly AUTHOR: string = 'AUTHOR';
 	
 	public static values(): string[] {
-
 		return [ ...MediaItemSortField.commonValues(), this.AUTHOR ];
 	}
 }
@@ -60,7 +55,6 @@ export class BookSortField extends MediaItemSortField {
  * Books sort by options, publicly exposed via API
  */
 export class BookSortBy extends MediaItemSortBy {
-
 	/**
 	 * The sort by field
 	 */
@@ -74,7 +68,6 @@ export class BookSortBy extends MediaItemSortBy {
  * Request for the 'add book' API
  */
 export class AddBookRequest extends AddMediaItemRequest {
-
 	/**
 	 * The book to add
 	 */
@@ -90,7 +83,6 @@ export class AddBookRequest extends AddMediaItemRequest {
  * Response for the 'get all books' API
  */
 export class GetAllBooksResponse extends GetAllMediaItemsResponse {
-
 	/**
 	 * The retrieved books
 	 */
@@ -107,7 +99,6 @@ export class GetAllBooksResponse extends GetAllMediaItemsResponse {
  * Request for the 'update book' API
  */
 export class UpdateBookRequest extends UpdateMediaItemRequest {
-
 	/**
 	 * The new book data to save
 	 */
@@ -123,7 +114,6 @@ export class UpdateBookRequest extends UpdateMediaItemRequest {
  * Request for the 'filter books' API
  */
 export class FilterBooksRequest extends FilterMediaItemsRequest {
-
 	/**
 	 * Filtering options
 	 */
@@ -150,7 +140,6 @@ export class FilterBooksRequest extends FilterMediaItemsRequest {
  * Response for the 'filter books' API
  */
 export class FilterBooksResponse extends FilterMediaItemsResponse {
-
 	/**
 	 * The retrieved books
 	 */
@@ -167,7 +156,6 @@ export class FilterBooksResponse extends FilterMediaItemsResponse {
  * Request for the 'search books' API
  */
 export class SearchBooksRequest extends SearchMediaItemsRequest {
-
 	/**
 	 * Currently active filtering options
 	 */
@@ -183,7 +171,6 @@ export class SearchBooksRequest extends SearchMediaItemsRequest {
  * Response for the 'search books' API
  */
 export class SearchBooksResponse extends SearchMediaItemsResponse {
-
 	/**
 	 * The retrieved books
 	 */
@@ -200,7 +187,6 @@ export class SearchBooksResponse extends SearchMediaItemsResponse {
  * Model for a book from the catalog, publicly exposed via API
  */
 export class CatalogBook extends CatalogMediaItem {
-
 	/**
 	 * The book author(s)
 	 */
@@ -221,21 +207,18 @@ export class CatalogBook extends CatalogMediaItem {
  * Book catalog search result, publicly exposed via API
  */
 export class SearchBookCatalogResult extends SearchMediaItemCatalogResult {
-
 }
 
 /**
  * Response for the 'search catalog' API
  */
 export class SearchBookCatalogResponse extends SearchMediaItemCatalogResponse {
-
 }
 
 /**
  * Response for the 'get from catalog' API
  */
 export class GetBookFromCatalogResponse extends GetMediaItemFromCatalogResponse {
-
 	/**
 	 * The book details
 	 */

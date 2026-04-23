@@ -15,13 +15,11 @@ const router: Router = express.Router();
  * Route to get all saved groups
  */
 router.get('/users/:userId/categories/:categoryId/groups', userResourceAuthorizationMiddleware, (request, response) => {
-
 	const userId: string = request.params.userId;
 	const categoryId: string = request.params.categoryId;
 
 	groupController.getAllGroups(userId, categoryId)
 		.then((groups) => {
-
 			const responseBody: GetAllGroupsResponse = {
 				groups: groupMapper.toExternalList(groups)
 			};
@@ -29,7 +27,6 @@ router.get('/users/:userId/categories/:categoryId/groups', userResourceAuthoriza
 			response.json(responseBody);
 		})
 		.catch((error) => {
-
 			logger.error('Get groups generic error: %s', error);
 			response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 		});
@@ -39,17 +36,14 @@ router.get('/users/:userId/categories/:categoryId/groups', userResourceAuthoriza
  * Route to get all saved groups matching some filter
  */
 router.post('/users/:userId/categories/:categoryId/groups/filter', userResourceAuthorizationMiddleware, (request, response) => {
-
 	const userId: string = request.params.userId;
 	const categoryId: string = request.params.categoryId;
 
 	parserValidator.parseAndValidate(FilterGroupsRequest, request.body)
 		.then((parsedRequest) => {
-
 			const filterBy = parsedRequest.filter ? groupFilterMapper.toInternal(parsedRequest.filter) : undefined;
 			groupController.filterGroups(userId, categoryId, filterBy)
 				.then((groups) => {
-		
 					const responseBody: FilterGroupsResponse = {
 						groups: groupMapper.toExternalList(groups)
 					};
@@ -57,13 +51,11 @@ router.post('/users/:userId/categories/:categoryId/groups/filter', userResourceA
 					response.json(responseBody);
 				})
 				.catch((error) => {
-		
 					logger.error('Filter groups generic error: %s', error);
 					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 				});
 		})
 		.catch((error) => {
-
 			logger.error('Filter groups request error: %s', error);
 			response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
 		});
@@ -73,17 +65,14 @@ router.post('/users/:userId/categories/:categoryId/groups/filter', userResourceA
  * Route to add a new group
  */
 router.post('/users/:userId/categories/:categoryId/groups', userResourceAuthorizationMiddleware, (request, response) => {
-
 	const userId: string = request.params.userId;
 	const categoryId: string = request.params.categoryId;
 
 	parserValidator.parseAndValidate(AddGroupRequest, request.body)
 		.then((parsedRequest) => {
-
 			const newGroup = groupMapper.toInternal({ ...parsedRequest.newGroup, uid: '' }, { userId, categoryId });
 			groupController.saveGroup(newGroup)
 				.then((savedGroup) => {
-			
 					const responseBody: AddGroupResponse = {
 						message: 'Group successfully added',
 						uid: savedGroup._id
@@ -92,13 +81,11 @@ router.post('/users/:userId/categories/:categoryId/groups', userResourceAuthoriz
 					response.json(responseBody);
 				})
 				.catch((error) => {
-
 					logger.error('Add group generic error: %s', error);
 					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 				});
 		})
 		.catch((error) => {
-
 			logger.error('Add group request error: %s', error);
 			response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
 		});
@@ -108,18 +95,15 @@ router.post('/users/:userId/categories/:categoryId/groups', userResourceAuthoriz
  * Route to update an existing group
  */
 router.put('/users/:userId/categories/:categoryId/groups/:id', userResourceAuthorizationMiddleware, (request, response) => {
-
 	const userId: string = request.params.userId;
 	const categoryId: string = request.params.categoryId;
 	const id: string = request.params.id;
 
 	parserValidator.parseAndValidate(UpdateGroupRequest, request.body)
 		.then((parsedRequest) => {
-
 			const group = groupMapper.toInternal({ ...parsedRequest.group, uid: id }, { userId, categoryId });
 			groupController.saveGroup(group)
 				.then(() => {
-				
 					const responseBody: UpdateGroupResponse = {
 						message: 'Group successfully updated'
 					};
@@ -127,13 +111,11 @@ router.put('/users/:userId/categories/:categoryId/groups/:id', userResourceAutho
 					response.json(responseBody);
 				})
 				.catch((error) => {
-
 					logger.error('Update group generic error: %s', error);
 					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 				});
 		})
 		.catch((error) => {
-
 			logger.error('Update group request error: %s', error);
 			response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
 		});
@@ -143,14 +125,12 @@ router.put('/users/:userId/categories/:categoryId/groups/:id', userResourceAutho
  * Route to delete a group
  */
 router.delete('/users/:userId/categories/:categoryId/groups/:id', userResourceAuthorizationMiddleware, (request, response) => {
-
 	const userId: string = request.params.userId;
 	const categoryId: string = request.params.categoryId;
 	const id: string = request.params.id;
 	
 	groupController.deleteGroup(userId, categoryId, id)
 		.then(() => {
-			
 			const responseBody: DeleteGroupResponse = {
 				message: 'Group successfully deleted'
 			};
@@ -158,7 +138,6 @@ router.delete('/users/:userId/categories/:categoryId/groups/:id', userResourceAu
 			response.json(responseBody);
 		})
 		.catch((error) => {
-
 			logger.error('Delete group generic error: %s', error);
 			response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 		});

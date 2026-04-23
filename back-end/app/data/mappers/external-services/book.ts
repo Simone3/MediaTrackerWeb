@@ -9,12 +9,10 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * Mapper for the books search external service
  */
 class BookExternalSearchServiceMapper extends ModelMapper<SearchBookCatalogResultInternal, GoogleBooksSearchResult, never> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(): GoogleBooksSearchResult {
-
 		throw AppError.GENERIC.withDetails('convertToExternal unimplemented');
 	}
 	
@@ -22,7 +20,6 @@ class BookExternalSearchServiceMapper extends ModelMapper<SearchBookCatalogResul
 	 * @override
 	 */
 	protected convertToInternal(source: GoogleBooksSearchResult): SearchBookCatalogResultInternal {
-		
 		return {
 			catalogId: source.id,
 			name: source.volumeInfo.title,
@@ -35,12 +32,10 @@ class BookExternalSearchServiceMapper extends ModelMapper<SearchBookCatalogResul
  * Mapper for the books details external service
  */
 class BookExternalDetailsServiceMapper extends ModelMapper<CatalogBookInternal, GoogleBooksDetailsResponse, never> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(): GoogleBooksDetailsResponse {
-
 		throw AppError.GENERIC.withDetails('convertToExternal unimplemented');
 	}
 	
@@ -48,7 +43,6 @@ class BookExternalDetailsServiceMapper extends ModelMapper<CatalogBookInternal, 
 	 * @override
 	 */
 	protected convertToInternal(source: GoogleBooksDetailsResponse): CatalogBookInternal {
-		
 		return {
 			catalogId: source.id,
 			name: source.volumeInfo.title,
@@ -67,15 +61,11 @@ class BookExternalDetailsServiceMapper extends ModelMapper<CatalogBookInternal, 
 	 * @returns the possibly undefined extracted image URL
 	 */
 	private getImageUrl(volumeInfo: GoogleBooksVolumeFull): string | undefined {
-		
 		if(volumeInfo.imageLinks) {
-
 			if(volumeInfo.imageLinks.medium) {
-
 				return volumeInfo.imageLinks.medium;
 			}
 			else if(volumeInfo.imageLinks.thumbnail) {
-
 				return volumeInfo.imageLinks.thumbnail;
 			}
 		}

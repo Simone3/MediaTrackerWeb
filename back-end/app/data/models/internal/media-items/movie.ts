@@ -4,7 +4,6 @@ import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemInternal, M
  * Util type to extract common fields to both movie entities and catalog entries
  */
 type CoreMovieDataInternal = {
-
 	directors?: string[];
 	durationMinutes?: number;
 };
@@ -13,14 +12,12 @@ type CoreMovieDataInternal = {
  * Model for a media item with all properties, internal type NOT to be exposed via API
  */
 export type MovieInternal = MediaItemInternal & CoreMovieDataInternal & {
-
 };
 
 /**
  * Model for a media item filtering options, internal type NOT to be exposed via API
  */
 export type MovieFilterInternal = MediaItemFilterInternal & {
-	
 };
 
 /**
@@ -32,7 +29,6 @@ export type MovieSortFieldInternal = MediaItemSortFieldInternal | 'DIRECTOR';
  * Media items sort by options, internal type NOT to be exposed via API
  */
 export type MovieSortByInternal = MediaItemSortByInternal & {
-
 	field: MovieSortFieldInternal;
 };
 
@@ -40,13 +36,11 @@ export type MovieSortByInternal = MediaItemSortByInternal & {
  * Model for a media item with base properties, internal type NOT to be exposed via API
  */
 export type CatalogMovieInternal = CatalogMediaItemInternal & CoreMovieDataInternal & {
-
 };
 
 /**
  * Media item catalog search result, internal type NOT to be exposed via API
  */
 export type SearchMovieCatalogResultInternal = SearchMediaItemCatalogResultInternal & {
-
 };
 

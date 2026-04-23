@@ -4,7 +4,6 @@ import { ClassType, transformAndValidate, transformAndValidateSync, TransformVal
  * Common parser/validator that contains some util methods for extending classes
  */
 class ParserValidator {
-
 	/**
 	 * Helper to parse and validate the given object against the given class (async)
 	 * @param classType the class containing the object fields, with optional validation annotations
@@ -13,7 +12,6 @@ class ParserValidator {
 	 * @template T the class to parse
 	 */
 	public parseAndValidate<T extends object>(classType: ClassType<T>, source: object): Promise<T> {
-
 		return transformAndValidate(classType, source, this.getDefaultTransformValidationOptions());
 	}
 
@@ -25,7 +23,6 @@ class ParserValidator {
 	 * @template T the class to parse
 	 */
 	public parseAndValidateSync<T extends object>(classType: ClassType<T>, source: object): T {
-
 		return transformAndValidateSync(classType, source, this.getDefaultTransformValidationOptions());
 	}
 
@@ -34,7 +31,6 @@ class ParserValidator {
 	 * @returns the transform-validation options
 	 */
 	private getDefaultTransformValidationOptions(): TransformValidationOptions {
-
 		return {
 			transformer: {
 				strategy: 'exposeAll'

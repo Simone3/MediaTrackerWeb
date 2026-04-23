@@ -8,7 +8,6 @@ import { IsDefined, IsOptional, ValidateNested } from 'class-validator';
  * Model for the old Media Tracker app export, publicly exposed via API
  */
 export class OldAppExport {
-
 	/**
 	 * The list of categories
 	 */
@@ -25,7 +24,6 @@ export class OldAppExport {
  * Model for the old Media Tracker app export import options, publicly exposed via API
  */
 export class OldAppExportImportOptions {
-
 	/**
 	 * The default own platform values (replaces the "owned" boolean)
 	 */
@@ -41,7 +39,6 @@ export class OldAppExportImportOptions {
  * Request for the 'import old app export' API
  */
 export class ImportOldAppExportRequest extends CommonRequest {
-
 	/**
 	 * The old Media Tracker app export
 	 */
@@ -67,5 +64,4 @@ export class ImportOldAppExportRequest extends CommonRequest {
  * Response for the 'import old app export' API
  */
 export class ImportOldAppExportResponse extends CommonResponse {
-
 }

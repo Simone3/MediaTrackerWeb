@@ -14,7 +14,6 @@ import mockVideogameSearchResponse from 'resources/mocks/external-services/mock-
  * Helper to initilize the external movie APIs mocks
  */
 export const setupMovieExternalServicesMocks = (): void => {
-
 	nock('http://mock-movie-api')
 		.get('/search/movie')
 		.query({
@@ -35,7 +34,6 @@ export const setupMovieExternalServicesMocks = (): void => {
  * Helper to initilize the external book APIs mocks
  */
 export const setupBookExternalServicesMocks = (): void => {
-
 	nock('http://mock-book-api')
 		.get('/volumes')
 		.query({
@@ -56,7 +54,6 @@ export const setupBookExternalServicesMocks = (): void => {
  * Helper to initilize the external TV show APIs mocks
  */
 export const setupTvShowExternalServicesMocks = (): void => {
-	
 	nock('http://mock-movie-api')
 		.get('/search/tv')
 		.query({
@@ -84,7 +81,6 @@ export const setupTvShowExternalServicesMocks = (): void => {
  * Helper to initilize the external videogame APIs mocks
  */
 export const setupVideogameExternalServicesMocks = (): void => {
-		
 	nock('http://mock-videogame-api')
 		.get('/search')
 		.query({

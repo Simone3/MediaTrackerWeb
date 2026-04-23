@@ -17,12 +17,10 @@ import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemInternal, M
  * Helper class to avoid multiple switch statements
  */
 class ResolverHelper {
-
 	public readonly entityController: EntityController;
 	public readonly catalogController: CatalogController;
 
 	public constructor(entityController: EntityController, catalogController: CatalogController) {
-
 		this.entityController = entityController;
 		this.catalogController = catalogController;
 	}
@@ -32,7 +30,6 @@ class ResolverHelper {
  * Factory to get the correct media item controllers, e.g. starting from a category
  */
 class MediaItemFactory {
-
 	private listsInitialized = false;
 	private readonly ENTITY_CONTROLLERS: EntityController[] = [];
 	private readonly CATALOG_CONTROLLERS: CatalogController[] = [];
@@ -42,7 +39,6 @@ class MediaItemFactory {
 	 * @returns an array of controllers
 	 */
 	public getAllEntityControllers(): EntityController[] {
-
 		this.lazyLoadControllersLists();
 		return Object.assign([], this.ENTITY_CONTROLLERS);
 	}
@@ -52,7 +48,6 @@ class MediaItemFactory {
 	 * @returns an array of controllers
 	 */
 	public getAllCatalogControllers(): CatalogController[] {
-
 		this.lazyLoadControllersLists();
 		return Object.assign([], this.CATALOG_CONTROLLERS);
 	}
@@ -64,7 +59,6 @@ class MediaItemFactory {
 	 * @returns the corresponding media item controller
 	 */
 	public getEntityControllerFromCategoryId(userId: string, categoryId: string): Promise<EntityController> {
-
 		return this.internalFromCategoryId(userId, categoryId, this.getEntityControllerFromMediaType.bind(this));
 	}
 
@@ -75,7 +69,6 @@ class MediaItemFactory {
 	 * @returns the corresponding media item controller
 	 */
 	public getCatalogControllerFromCategoryId(userId: string, categoryId: string): Promise<CatalogController> {
-
 		return this.internalFromCategoryId(userId, categoryId, this.getCatalogControllerFromMediaType.bind(this));
 	}
 
@@ -85,7 +78,6 @@ class MediaItemFactory {
 	 * @returns the corresponding media item controller
 	 */
 	public getEntityControllerFromCategory(category: CategoryInternal): EntityController {
-
 		return this.getEntityControllerFromMediaType(category.mediaType);
 	}
 
@@ -95,7 +87,6 @@ class MediaItemFactory {
 	 * @returns the corresponding media item controller
 	 */
 	public getCatalogControllerFromCategory(category: CategoryInternal): CatalogController {
-
 		return this.getCatalogControllerFromMediaType(category.mediaType);
 	}
 
@@ -105,7 +96,6 @@ class MediaItemFactory {
 	 * @returns the corresponding media item controller
 	 */
 	public getEntityControllerFromMediaType(mediaType: MediaTypeInternal): EntityController {
-
 		return this.internalFromMediaType(mediaType).entityController;
 	}
 
@@ -115,7 +105,6 @@ class MediaItemFactory {
 	 * @returns the corresponding media item controller
 	 */
 	public getCatalogControllerFromMediaType(mediaType: MediaTypeInternal): CatalogController {
-
 		return this.internalFromMediaType(mediaType).catalogController;
 	}
 
@@ -128,14 +117,10 @@ class MediaItemFactory {
 	 * @template T the class of the result to be retrieved
 	 */
 	private internalFromCategoryId<T>(userId: string, categoryId: string, resolver: (mediaType: MediaTypeInternal) => T): Promise<T> {
-
 		return new Promise((resolve, reject): void => {
-
 			categoryController.getCategory(userId, categoryId)
 				.then((category) => {
-
 					if(!category) {
-
 						reject(AppError.DATABASE_FIND.withDetails('Cannot get media item controller for a non-existing category media type'));
 						return;
 					}
@@ -143,7 +128,6 @@ class MediaItemFactory {
 					resolve(resolver(category.mediaType));
 				})
 				.catch((error) => {
-
 					reject(error);
 				});
 		});
@@ -155,9 +139,7 @@ class MediaItemFactory {
 	 * @returns the container for the resolved controllers
 	 */
 	private internalFromMediaType(mediaType: MediaTypeInternal): ResolverHelper {
-
 		switch(mediaType) {
-
 			case 'BOOK':
 				return new ResolverHelper(bookEntityController, bookCatalogController);
 
@@ -179,14 +161,11 @@ class MediaItemFactory {
 	 * Helper to lazy load the controllers lists
 	 */
 	private lazyLoadControllersLists(): void {
-
 		if(!this.listsInitialized) {
-
 			this.ENTITY_CONTROLLERS.length = 0;
 			this.CATALOG_CONTROLLERS.length = 0;
 	
 			for(const mediaType of INTERNAL_MEDIA_TYPES) {
-	
 				const resolved = this.internalFromMediaType(mediaType);
 				this.ENTITY_CONTROLLERS.push(resolved.entityController);
 				this.CATALOG_CONTROLLERS.push(resolved.catalogController);

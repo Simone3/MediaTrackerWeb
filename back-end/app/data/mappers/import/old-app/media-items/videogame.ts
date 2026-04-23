@@ -8,12 +8,10 @@ import { VideogameInternal } from 'app/data/models/internal/media-items/videogam
  * Mapper from the old Media Tracker app export videogame to the new internal model
  */
 class OldAppVideogameMapper extends OldAppMediaItemMapper<VideogameInternal> {
-
 	/**
 	 * @override
 	 */
 	protected convertToInternal(source: OldAppMediaItem): OldAppMediaItemInternal<VideogameInternal> {
-		
 		const common = this.commonToInternal(source);
 		return {
 			...common,

@@ -7,18 +7,14 @@ const expect = chai.expect;
  * Tests for the misc utilities
  */
 describe('MiscUtils Tests', () => {
-	
 	describe('MiscUtils Tests', () => {
-
 		it('Should correctly merge URLs', (done) => {
-
 			expect(miscUtils.buildUrl([ 'http://something', '/other', 'a/', 'test', '/value/', '/end' ])).to.equal('http://something/other/a/test/value/end');
 			
 			done();
 		});
 
 		it('Should correctly merge URLs with path params', (done) => {
-
 			expect(miscUtils.buildUrl([ 'http://something/:myValue/myValue', '/:somethingElse' ], {
 				myValue: 'abcdefg',
 				somethingElse: '123'
@@ -28,7 +24,6 @@ describe('MiscUtils Tests', () => {
 		});
 
 		it('Should escape a RegExp', (done) => {
-
 			expect(miscUtils.escapeRegExp('a normal string')).to.equal('a normal string');
 
 			expect(miscUtils.escapeRegExp('a .* string')).to.equal('a \\.\\* string');
@@ -39,7 +34,6 @@ describe('MiscUtils Tests', () => {
 		});
 
 		it('Should parse a boolean', (done) => {
-
 			expect(miscUtils.parseBoolean('true')).to.equal(true);
 			
 			expect(miscUtils.parseBoolean('1')).to.equal(true);
@@ -56,19 +50,15 @@ describe('MiscUtils Tests', () => {
 		});
 
 		it('Should merge numeric promises', async() => {
-
 			const promise1: Promise<number> = new Promise((resolve) => {
-
 				resolve(3);
 			});
 
 			const promise2: Promise<number[]> = new Promise((resolve) => {
-
 				resolve([ 5, 1 ]);
 			});
 
 			const promise3: Promise<number> = new Promise((resolve) => {
-
 				resolve(9);
 			});
 
@@ -78,28 +68,22 @@ describe('MiscUtils Tests', () => {
 		});
 
 		it('Should merge numeric promises with errors', async() => {
-
 			const promise1: Promise<number> = new Promise((resolve) => {
-
 				resolve(3);
 			});
 
 			const promise2: Promise<number[]> = new Promise((resolve) => {
-
 				resolve([ 5, 1 ]);
 			});
 
 			const promise3: Promise<number> = new Promise((_, reject) => {
-
 				reject('Some error!');
 			});
 
 			try {
-
 				await miscUtils.mergeAndSumPromiseResults([ promise1, promise2, promise3 ]);
 			}
 			catch(error) {
-
 				expect(error).to.equal('Some error!');
 				return;
 			}

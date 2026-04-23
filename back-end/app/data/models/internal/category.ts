@@ -15,7 +15,6 @@ export type MediaTypeInternal = ValuesOf<typeof INTERNAL_MEDIA_TYPES>;
  * Model for a category, internal type NOT to be exposed via API
  */
 export type CategoryInternal = PersistedEntityInternal & {
-
 	name: string;
 	mediaType: MediaTypeInternal;
 	color: string;
@@ -26,6 +25,5 @@ export type CategoryInternal = PersistedEntityInternal & {
  * Category filtering options, internal type NOT to be exposed via API
  */
 export type CategoryFilterInternal = {
-
 	name?: string;
 }

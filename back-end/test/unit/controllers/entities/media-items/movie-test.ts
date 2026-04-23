@@ -15,33 +15,27 @@ const expect = chai.expect;
  * Tests for the movie controller
  */
 describe('MovieController Tests', () => {
-	
 	setupTestDatabaseConnection();
 	
 	describe('MovieController Tests', () => {
-
 		const firstUCG: TestUCG = { user: '', category: '' };
 		const secondUCG: TestUCG = { user: '', category: '' };
 		const thirdUCG: TestUCG = { user: '', category: '' };
 		const wrongMediaUCG: TestUCG = { user: '', category: '' };
 
 		const helperCompareResults = (expected: string[], result: MovieInternal[], matchInOrder?: boolean): void => {
-
 			expect(result, 'helperCompareResults - Number of results does not match').to.have.lengthOf(expected.length);
 			
 			if(matchInOrder) {
-
 				expect(extract(result, 'name'), 'helperCompareResults - Ordered results do not match').to.eql(expected);
 			}
 			else {
-
 				expect(extract(result, 'name'), 'helperCompareResults - Unordered results do not match').to.have.members(expected);
 			}
 		};
 
 		// Create new users/categories/groups for each test
 		beforeEach(async() => {
-
 			await initTestUCGHelper('MOVIE', firstUCG, 'First');
 			await initTestUCGHelper('MOVIE', secondUCG, 'Second');
 			await initTestUCGHelper('MOVIE', thirdUCG, 'Third', firstUCG.user);
@@ -49,7 +43,6 @@ describe('MovieController Tests', () => {
 		});
 
 		it('GetMediaItem should return the correct movie after SaveMediaItem', async() => {
-
 			const insertedMovie = await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			const insertedId = insertedMovie._id;
 			expect(insertedMovie._id, 'SaveMediaItem (insert) returned empty ID').to.exist;
@@ -61,7 +54,6 @@ describe('MovieController Tests', () => {
 		});
 
 		it('GetMediaItem should only get a movie for the current user', async() => {
-
 			let insertedMovie = await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			const firstId = insertedMovie._id;
 			insertedMovie = await movieEntityController.saveMediaItem(getTestMovie(undefined, secondUCG));
@@ -74,7 +66,6 @@ describe('MovieController Tests', () => {
 		});
 
 		it('GetMediaItem should only get a movie for the current category', async() => {
-
 			let insertedMovie = await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			const firstId = insertedMovie._id;
 			insertedMovie = await movieEntityController.saveMediaItem(getTestMovie(undefined, secondUCG));
@@ -87,7 +78,6 @@ describe('MovieController Tests', () => {
 		});
 
 		it('GetMediaItem should return the correct movie after two SaveMediaItem (insert and update)', async() => {
-
 			const insertedMovie = await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			const insertedId = insertedMovie._id;
 
@@ -102,7 +92,6 @@ describe('MovieController Tests', () => {
 		});
 
 		it('FilterAndOrder should filter by importance', async() => {
-
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Ttt' }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, secondUCG, { name: 'Aaa' }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Bbb', importance: '200' }));
@@ -122,7 +111,6 @@ describe('MovieController Tests', () => {
 		});
 
 		it('FilterAndOrder should filter by name', async() => {
-
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Ttt' }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, secondUCG, { name: 'Aaa' }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Bbb' }));
@@ -142,7 +130,6 @@ describe('MovieController Tests', () => {
 		});
 
 		it('FilterAndOrder should filter by completion', async() => {
-
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Ttt', active: true }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Bbb', completedOn: [ new Date() ] }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Zzz', completedOn: [ new Date() ], markedAsRedo: true }));
@@ -164,7 +151,6 @@ describe('MovieController Tests', () => {
 		});
 
 		it('FilterAndOrder should return the results in the correct order', async() => {
-
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Ttt', importance: '100', releaseDate: new Date('2004-01-01') }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, secondUCG, { name: 'Aaa', importance: '200', releaseDate: new Date('2003-01-01') }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Bbb', importance: '100', releaseDate: new Date('2005-01-01') }));
@@ -199,7 +185,6 @@ describe('MovieController Tests', () => {
 		});
 
 		it('FilterAndOrder should filter by group', async() => {
-
 			await movieEntityController.saveMediaItem(getTestMovieInGroup(undefined, firstUCG, 2, { name: 'Aaa' }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Bbb', importance: '300' }));
 			await movieEntityController.saveMediaItem(getTestMovieInGroup(undefined, firstUCG, 1, { name: 'Ccc' }));
@@ -225,7 +210,6 @@ describe('MovieController Tests', () => {
 		});
 
 		it('FilterAndOrder should filter by own platform', async() => {
-
 			const { _id: ownPlatformId1 } = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUCG));
 			const { _id: ownPlatformId2 } = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUCG));
 
@@ -254,7 +238,6 @@ describe('MovieController Tests', () => {
 		});
 		
 		it('FilterAndOrder result should contain group data', async() => {
-
 			await movieEntityController.saveMediaItem(getTestMovieInGroup(undefined, firstUCG, 2, { name: 'Aaa' }));
 
 			const foundMovies = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category);
@@ -266,7 +249,6 @@ describe('MovieController Tests', () => {
 		});
 		
 		it('FilterAndOrder result should contain platform data', async() => {
-
 			const ownPlatformName = randomName('SomeOwnPlatform');
 			const { _id: ownPlatformId } = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUCG, ownPlatformName));
 
@@ -281,7 +263,6 @@ describe('MovieController Tests', () => {
 		});
 
 		it('SearchMediaIterm should return the correct results', async() => {
-
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'SomeRandomString' }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'ThisIsTheMediaItemName' }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'SomeOtherRandomString' }));
@@ -302,16 +283,13 @@ describe('MovieController Tests', () => {
 		});
 
 		it('SaveMediaItem (insert) should not accept an invalid user', async() => {
-
 			try {
-
 				await movieEntityController.saveMediaItem(getTestMovie(undefined, {
 					user: '5cbf26ea895c281b54b6737f',
 					category: firstUCG.category
 				}));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -319,19 +297,16 @@ describe('MovieController Tests', () => {
 		});
 
 		it('SaveMediaItem (update) should not accept an invalid user', async() => {
-
 			const insertedMovie = await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			const insertedId = insertedMovie._id;
 
 			try {
-
 				await movieEntityController.saveMediaItem(getTestMovie(insertedId, {
 					user: '5cbf26ea895c281b54b6737f',
 					category: firstUCG.category
 				}));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -339,16 +314,13 @@ describe('MovieController Tests', () => {
 		});
 
 		it('SaveMediaItem (insert) should not accept an invalid category', async() => {
-
 			try {
-
 				await movieEntityController.saveMediaItem(getTestMovie(undefined, {
 					user: firstUCG.user,
 					category: '5cbf26ea895c281b54b6737f'
 				}));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -356,19 +328,16 @@ describe('MovieController Tests', () => {
 		});
 
 		it('SaveMediaItem (update) should not accept an invalid category', async() => {
-
 			const insertedMovie = await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			const insertedId = insertedMovie._id;
 
 			try {
-
 				await movieEntityController.saveMediaItem(getTestMovie(insertedId, {
 					user: firstUCG.user,
 					category: '5cbf26ea895c281b54b6737f'
 				}));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -376,9 +345,7 @@ describe('MovieController Tests', () => {
 		});
 		
 		it('SaveMediaItem (insert) should not accept an invalid group', async() => {
-
 			try {
-
 				await movieEntityController.saveMediaItem(getTestMovieInGroup(undefined, {
 					user: firstUCG.user,
 					category: firstUCG.category,
@@ -386,7 +353,6 @@ describe('MovieController Tests', () => {
 				}, 5));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -394,12 +360,10 @@ describe('MovieController Tests', () => {
 		});
 
 		it('SaveMediaItem (update) should not accept an invalid group', async() => {
-
 			const insertedMovie = await movieEntityController.saveMediaItem(getTestMovieInGroup(undefined, firstUCG, 5));
 			const insertedId = insertedMovie._id;
 
 			try {
-
 				await movieEntityController.saveMediaItem(getTestMovieInGroup(insertedId, {
 					user: firstUCG.user,
 					category: firstUCG.category,
@@ -407,7 +371,6 @@ describe('MovieController Tests', () => {
 				}, 5));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -415,13 +378,10 @@ describe('MovieController Tests', () => {
 		});
 		
 		it('SaveMediaItem (insert) should not accept an invalid own platform', async() => {
-
 			try {
-
 				await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { ownPlatform: '5cbf26ea895c281b54b6737f' }));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -429,16 +389,13 @@ describe('MovieController Tests', () => {
 		});
 
 		it('SaveMediaItem (update) should not accept an invalid own platform', async() => {
-
 			const insertedMovie = await movieEntityController.saveMediaItem(getTestMovieInGroup(undefined, firstUCG, 5));
 			const insertedId = insertedMovie._id;
 
 			try {
-
 				await movieEntityController.saveMediaItem(getTestMovie(insertedId, firstUCG, { ownPlatform: '5cbf26ea895c281b54b6737f' }));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -446,13 +403,10 @@ describe('MovieController Tests', () => {
 		});
 
 		it('SaveMediaItem (insert) should not allow a category with wrong media type', async() => {
-
 			try {
-				
 				await movieEntityController.saveMediaItem(getTestMovie(undefined, wrongMediaUCG));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -460,7 +414,6 @@ describe('MovieController Tests', () => {
 		});
 
 		it('GetMediaItem after DeleteMediaItem should return undefined', async() => {
-			
 			const movie = await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			const movieId = movie._id;
 
@@ -471,7 +424,6 @@ describe('MovieController Tests', () => {
 		});
 
 		it('Deleting a category should also delete all its media items', async function() {
-			
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
@@ -483,7 +435,6 @@ describe('MovieController Tests', () => {
 		});
 
 		it('Deleting an own platform should also remove it in all media items', async function() {
-			
 			const { _id: ownPlatformId1 } = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUCG));
 			const { _id: ownPlatformId2 } = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUCG));
 
@@ -503,7 +454,6 @@ describe('MovieController Tests', () => {
 		});
 
 		it('Merging an own platforms should also replace them in all media items', async function() {
-			
 			const { _id: ownPlatformId1 } = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUCG));
 			const { _id: ownPlatformId2 } = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUCG));
 

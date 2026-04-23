@@ -36,12 +36,10 @@ app.use(authenticationMiddleware);
 // Logging
 app.use(logCorrelationMiddleware);
 if(config.log.apisInputOutput.active) {
-
 	app.use(requestLoggerMiddleware);
 	app.use(responseLoggerMiddleware);
 }
 if(config.log.performance.active) {
-
 	app.use(performanceLoggerMiddleware);
 }
 

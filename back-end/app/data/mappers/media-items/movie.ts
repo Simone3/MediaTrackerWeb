@@ -6,12 +6,10 @@ import { CatalogMovieInternal, MovieFilterInternal, MovieInternal, MovieSortByIn
  * Mapper for movies
  */
 class MovieMapper extends MediaItemMapper<MovieInternal, IdentifiedMovie> {
-		
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: MovieInternal): IdentifiedMovie {
-
 		return {
 			...this.commonToExternal(source),
 			uid: source._id,
@@ -24,7 +22,6 @@ class MovieMapper extends MediaItemMapper<MovieInternal, IdentifiedMovie> {
 	 * @override
 	 */
 	protected convertToInternal(source: IdentifiedMovie, extraParams?: MediaItemMapperParams): MovieInternal {
-		
 		return {
 			...this.commonToInternal(source, extraParams),
 			_id: source.uid ? source.uid : null,
@@ -38,12 +35,10 @@ class MovieMapper extends MediaItemMapper<MovieInternal, IdentifiedMovie> {
  * Mapper for movie filters
  */
 class MovieFilterMapper extends MediaItemFilterMapper<MovieFilterInternal, MovieFilter> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: MovieFilterInternal): MovieFilter {
-		
 		return this.commonToExternal(source);
 	}
 		
@@ -51,7 +46,6 @@ class MovieFilterMapper extends MediaItemFilterMapper<MovieFilterInternal, Movie
 	 * @override
 	 */
 	protected convertToInternal(source: MovieFilter): MovieFilterInternal {
-		
 		return this.commonToInternal(source);
 	}
 }
@@ -60,12 +54,10 @@ class MovieFilterMapper extends MediaItemFilterMapper<MovieFilterInternal, Movie
  * Mapper for movie sort options
  */
 class MovieSortMapper extends MediaItemSortMapper<MovieSortByInternal, MovieSortBy> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: MovieSortByInternal): MovieSortBy {
-		
 		return {
 			...this.commonToExternal(source),
 			field: this.toExternalField(source.field)
@@ -76,7 +68,6 @@ class MovieSortMapper extends MediaItemSortMapper<MovieSortByInternal, MovieSort
 	 * @override
 	 */
 	protected convertToInternal(source: MovieSortBy): MovieSortByInternal {
-		
 		return {
 			...this.commonToInternal(source),
 			field: this.toInternalField(source.field)
@@ -89,9 +80,7 @@ class MovieSortMapper extends MediaItemSortMapper<MovieSortByInternal, MovieSort
 	 * @returns the mapping target
 	 */
 	protected toExternalField(source: MovieSortFieldInternal): string {
-
 		switch(source) {
-			
 			case 'DIRECTOR': return MovieSortField.DIRECTOR;
 			default: return this.commonToExternalField(source);
 		}
@@ -103,9 +92,7 @@ class MovieSortMapper extends MediaItemSortMapper<MovieSortByInternal, MovieSort
 	 * @returns the mapping target
 	 */
 	protected toInternalField(source: string): MovieSortFieldInternal {
-
 		switch(source) {
-			
 			case MovieSortField.DIRECTOR: return 'DIRECTOR';
 			default: return this.commonToInternalField(source);
 		}
@@ -116,12 +103,10 @@ class MovieSortMapper extends MediaItemSortMapper<MovieSortByInternal, MovieSort
  * Mapper for movie catalog search results
  */
 class MovieCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchMovieCatalogResultInternal, SearchMovieCatalogResult> {
-		
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: SearchMovieCatalogResultInternal): SearchMovieCatalogResult {
-
 		return this.commonToExternal(source);
 	}
 	
@@ -129,7 +114,6 @@ class MovieCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchMovieC
 	 * @override
 	 */
 	protected convertToInternal(source: SearchMovieCatalogResult): SearchMovieCatalogResultInternal {
-
 		return this.commonToInternal(source);
 	}
 }
@@ -138,12 +122,10 @@ class MovieCatalogSearchMapper extends MediaItemCatalogSearchMapper<SearchMovieC
  * Mapper for movie catalog details
  */
 class MovieCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogMovieInternal, CatalogMovie> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: CatalogMovieInternal): CatalogMovie {
-
 		return {
 			...this.commonToExternal(source),
 			directors: source.directors,
@@ -155,7 +137,6 @@ class MovieCatalogDetailsMapper extends MediaItemCatalogDetailsMapper<CatalogMov
 	 * @override
 	 */
 	protected convertToInternal(source: CatalogMovie): CatalogMovieInternal {
-
 		return {
 			...this.commonToInternal(source),
 			directors: source.directors,

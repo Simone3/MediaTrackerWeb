@@ -33,14 +33,12 @@ type OrderBy = Sortable<GroupInternal>;
  * Controller for group entities
  */
 class GroupController extends AbstractEntityController {
-
 	private readonly queryHelper: QueryHelper<GroupInternal, GroupDocument, Model<GroupDocument>>;
 
 	/**
 	 * Constructor
 	 */
 	public constructor() {
-
 		super();
 		this.queryHelper = new QueryHelper(GroupModel);
 	}
@@ -53,7 +51,6 @@ class GroupController extends AbstractEntityController {
 	 * @returns the group or undefined if not found, as a promise
 	 */
 	public getGroup(userId: string, categoryId: string, groupId: string): Promise<GroupInternal | undefined> {
-
 		const conditions: QueryConditions = {
 			_id: groupId,
 			owner: userId,
@@ -70,7 +67,6 @@ class GroupController extends AbstractEntityController {
 	 * @returns the groups, as a promise
 	 */
 	public getAllGroups(userId: string, categoryId: string): Promise<GroupInternal[]> {
-
 		return this.filterGroups(userId, categoryId);
 	}
 
@@ -82,14 +78,12 @@ class GroupController extends AbstractEntityController {
 	 * @returns the groups, as a promise
 	 */
 	public filterGroups(userId: string, categoryId: string, filter?: GroupFilterInternal): Promise<GroupInternal[]> {
-
 		const conditions: QueryConditions = {
 			owner: userId,
 			category: categoryId
 		};
 
 		if(filter && filter.name) {
-			
 			// Case insensitive exact match
 			conditions.name = new RegExp(`^${filter.name}$`, 'i');
 		}
@@ -108,9 +102,7 @@ class GroupController extends AbstractEntityController {
 	 * @returns the saved group, as a promise
 	 */
 	public async saveGroup(group: GroupInternal, skipCheckPreconditions?: boolean): Promise<GroupInternal> {
-
 		if(!skipCheckPreconditions) {
-			
 			await this.checkWritePreconditions(
 				AppError.DATABASE_SAVE.withDetails(group._id ? 'Group does not exists for given user/category' : 'User or category does not exist'),
 				group.owner,
@@ -130,7 +122,6 @@ class GroupController extends AbstractEntityController {
 	 * @returns a promise with the number of deleted elements
 	 */
 	public async deleteGroup(userId: string, categoryId: string, groupId: string): Promise<number> {
-		
 		await this.checkWritePreconditions(AppError.DATABASE_DELETE.withDetails('Group does not exist for given user/category'), userId, categoryId, groupId);
 
 		const mediaItemController = await mediaItemFactory.getEntityControllerFromCategoryId(userId, categoryId);
@@ -148,7 +139,6 @@ class GroupController extends AbstractEntityController {
 	 * @returns the number of deleted elements as a promise
 	 */
 	public deleteAllGroupsInCategory(categoryId: string): Promise<number> {
-
 		const conditions: QueryConditions = {
 			category: categoryId
 		};
@@ -163,7 +153,6 @@ class GroupController extends AbstractEntityController {
 	 * @returns the number of deleted elements as a promise
 	 */
 	public deleteAllGroupsForUser(userId: string): Promise<number> {
-
 		const conditions: QueryConditions = {
 			owner: userId
 		};
@@ -180,18 +169,14 @@ class GroupController extends AbstractEntityController {
 	 * @returns a promise that resolves if all preconditions are OK
 	 */
 	private checkWritePreconditions(errorToThow: AppError, userId: string, category: string | CategoryInternal, groupId?: string): Promise<void> {
-
 		return this.checkExistencePreconditionsHelper(errorToThow, () => {
-
 			const categoryId = this.getEntityStringId(category);
 
 			if(groupId) {
-
 				// Make sure the group exists
 				return this.getGroup(userId, categoryId, groupId);
 			}
 			else {
-
 				// Make sure the category exists
 				return categoryController.getCategory(userId, categoryId);
 			}

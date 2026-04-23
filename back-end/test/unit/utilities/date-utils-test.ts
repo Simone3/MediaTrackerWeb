@@ -8,18 +8,14 @@ const expect = chai.expect;
  * Tests for the date utilities
  */
 describe('DateUtils Tests', () => {
-		
 	const check = (value: string, expected: string): void => {
-
 		expect(value).to.satisfy((str: string) => {
 			return str.startsWith(expected);
 		});
 	};
 
 	describe('DateUtils Tests', () => {
-
 		it('Should correctly parse dates from numbers', (done) => {
-
 			check(dateUtils.dateStringFromYearMonthDay(2019, 4, 26), '2019-04-26');
 			check(dateUtils.dateStringFromYearMonthDay(2019, 1, 1), '2019-01-01');
 			check(dateUtils.dateStringFromYearMonthDay(2019, 12, 31), '2019-12-31');

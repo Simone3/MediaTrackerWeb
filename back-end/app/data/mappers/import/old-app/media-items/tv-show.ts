@@ -8,12 +8,10 @@ import { TvShowInternal } from 'app/data/models/internal/media-items/tv-show';
  * Mapper from the old Media Tracker app export TV show to the new internal model
  */
 class OldAppTvShowMapper extends OldAppMediaItemMapper<TvShowInternal> {
-
 	/**
 	 * @override
 	 */
 	protected convertToInternal(source: OldAppMediaItem): OldAppMediaItemInternal<TvShowInternal> {
-		
 		const common = this.commonToInternal(source);
 		return {
 			...common,

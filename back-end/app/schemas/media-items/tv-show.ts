@@ -6,22 +6,16 @@ import { Schema, ValidateOpts } from 'mongoose';
  * Validator for the array of TV show seasons
  */
 const tvShowSeasonsValidator: ValidateOpts<TvShowSeasonInternal[] | undefined> = {
-
 	validator: (seasons: TvShowSeasonInternal[] | undefined): boolean => {
-
 		if(seasons) {
-
 			for(let i = 0; i < seasons.length; i++) {
-
 				const season = seasons[i];
 
 				if(!season || !season.number || season.number <= 0) {
-
 					return false;
 				}
 
 				if(i > 0 && seasons[i - 1].number >= season.number) {
-
 					return false;
 				}
 			}
@@ -31,7 +25,6 @@ const tvShowSeasonsValidator: ValidateOpts<TvShowSeasonInternal[] | undefined> =
 	},
 
 	message: () => {
-		
 		return 'TV show season numbers must be positive integers, unique and ordered';
 	}
 };

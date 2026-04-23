@@ -6,7 +6,6 @@ import { IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNeste
  * Model for a videogame, publicly exposed via API
  */
 export class Videogame extends MediaItem {
-
 	/**
 	 * The videogame developer(s)
 	 */
@@ -43,7 +42,6 @@ export class Videogame extends MediaItem {
  * Model for a videogame with an ID property, publicly exposed via API
  */
 export class IdentifiedVideogame extends Videogame {
-
 	/**
 	 * The videogame unique ID
 	 */
@@ -56,18 +54,15 @@ export class IdentifiedVideogame extends Videogame {
  * Videogame filtering options, publicly exposed via API
  */
 export class VideogameFilter extends MediaItemFilter {
-
 }
 
 /**
  * Values for videogame ordering options, publicly exposed via API
  */
 export class VideogameSortField extends MediaItemSortField {
-
 	public static readonly DEVELOPER: string = 'DEVELOPER';
 	
 	public static values(): string[] {
-
 		return [ ...MediaItemSortField.commonValues(), this.DEVELOPER ];
 	}
 }
@@ -76,7 +71,6 @@ export class VideogameSortField extends MediaItemSortField {
  * Videogames sort by options, publicly exposed via API
  */
 export class VideogameSortBy extends MediaItemSortBy {
-
 	/**
 	 * The sort by field
 	 */
@@ -90,7 +84,6 @@ export class VideogameSortBy extends MediaItemSortBy {
  * Request for the 'add videogame' API
  */
 export class AddVideogameRequest extends AddMediaItemRequest {
-
 	/**
 	 * The videogame to add
 	 */
@@ -106,7 +99,6 @@ export class AddVideogameRequest extends AddMediaItemRequest {
  * Response for the 'get all videogames' API
  */
 export class GetAllVideogamesResponse extends GetAllMediaItemsResponse {
-
 	/**
 	 * The retrieved videogames
 	 */
@@ -123,7 +115,6 @@ export class GetAllVideogamesResponse extends GetAllMediaItemsResponse {
  * Request for the 'update videogame' API
  */
 export class UpdateVideogameRequest extends UpdateMediaItemRequest {
-
 	/**
 	 * The new videogame data to save
 	 */
@@ -139,7 +130,6 @@ export class UpdateVideogameRequest extends UpdateMediaItemRequest {
  * Request for the 'filter videogames' API
  */
 export class FilterVideogamesRequest extends FilterMediaItemsRequest {
-
 	/**
 	 * Filtering options
 	 */
@@ -166,7 +156,6 @@ export class FilterVideogamesRequest extends FilterMediaItemsRequest {
  * Response for the 'filter videogames' API
  */
 export class FilterVideogamesResponse extends FilterMediaItemsResponse {
-
 	/**
 	 * The retrieved videogames
 	 */
@@ -183,7 +172,6 @@ export class FilterVideogamesResponse extends FilterMediaItemsResponse {
  * Request for the 'search videogames' API
  */
 export class SearchVideogamesRequest extends SearchMediaItemsRequest {
-
 	/**
 	 * Currently active filtering options
 	 */
@@ -199,7 +187,6 @@ export class SearchVideogamesRequest extends SearchMediaItemsRequest {
  * Response for the 'search videogames' API
  */
 export class SearchVideogamesResponse extends SearchMediaItemsResponse {
-
 	/**
 	 * The retrieved videogames
 	 */
@@ -216,7 +203,6 @@ export class SearchVideogamesResponse extends SearchMediaItemsResponse {
  * Model for a videogame from the catalog, publicly exposed via API
  */
 export class CatalogVideogame extends CatalogMediaItem {
-
 	/**
 	 * The videogame developer(s)
 	 */
@@ -246,21 +232,18 @@ export class CatalogVideogame extends CatalogMediaItem {
  * Videogame catalog search result, publicly exposed via API
  */
 export class SearchVideogameCatalogResult extends SearchMediaItemCatalogResult {
-
 }
 
 /**
  * Response for the 'search catalog' API
  */
 export class SearchVideogameCatalogResponse extends SearchMediaItemCatalogResponse {
-
 }
 
 /**
  * Response for the 'get from catalog' API
  */
 export class GetVideogameFromCatalogResponse extends GetMediaItemFromCatalogResponse {
-
 	/**
 	 * The videogame details
 	 */

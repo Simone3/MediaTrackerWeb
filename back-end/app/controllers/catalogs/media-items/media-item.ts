@@ -6,7 +6,6 @@ import { CatalogMediaItemInternal, SearchMediaItemCatalogResultInternal } from '
  * @template TCatalogMediaItemInternal the media item catalog details
  */
 export abstract class MediaItemCatalogController<TSearchMediaItemCatalogResultInternal extends SearchMediaItemCatalogResultInternal, TCatalogMediaItemInternal extends CatalogMediaItemInternal> {
-
 	/**
 	 * Searches the media item catalog by term
 	 * @param searchTerm the search term

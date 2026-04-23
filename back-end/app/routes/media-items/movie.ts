@@ -21,7 +21,6 @@ const catalogRouterBuilder = new MediaItemCatalogRouterBuilder<SearchMovieCatalo
 
 // Setup 'get all' API
 entityRouterBuilder.getAll({
-
 	responseBuilder: (commonResponse, movies) => {
 		const response: GetAllMoviesResponse = {
 			...commonResponse,
@@ -33,7 +32,6 @@ entityRouterBuilder.getAll({
 
 // Setup 'filter and order' API
 entityRouterBuilder.filter({
-
 	requestClass: FilterMoviesRequest,
 
 	filterRequestReader: (request) => {
@@ -55,7 +53,6 @@ entityRouterBuilder.filter({
 
 // Setup 'search' API
 entityRouterBuilder.search({
-
 	requestClass: SearchMoviesRequest,
 
 	filterRequestReader: (request) => {
@@ -73,7 +70,6 @@ entityRouterBuilder.search({
 
 // Setup 'add new' API
 entityRouterBuilder.addNew({
-
 	requestClass: AddMovieRequest,
 
 	mediaItemRequestReader: (request, mediaItemId, userId, categoryId) => {
@@ -83,7 +79,6 @@ entityRouterBuilder.addNew({
 
 // Setup 'update' API
 entityRouterBuilder.updateExisting({
-
 	requestClass: UpdateMovieRequest,
 
 	mediaItemRequestReader: (request, mediaItemId, userId, categoryId) => {
@@ -96,7 +91,6 @@ entityRouterBuilder.delete();
 
 // Setup 'catalog search' API
 catalogRouterBuilder.search({
-
 	responseBuilder: (commonResponse, movies) => {
 		const response: SearchMovieCatalogResponse = {
 			...commonResponse,
@@ -108,7 +102,6 @@ catalogRouterBuilder.search({
 
 // Setup 'catalog details' API
 catalogRouterBuilder.details({
-
 	responseBuilder: (commonResponse, movie) => {
 		const response: GetMovieFromCatalogResponse = {
 			...commonResponse,

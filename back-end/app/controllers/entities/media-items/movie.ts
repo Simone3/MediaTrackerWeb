@@ -24,12 +24,10 @@ type QueryConditions = FilterQuery<MovieInternal>;
  * Controller for movie entities
  */
 class MovieEntityController extends MediaItemEntityController<MovieInternal, MovieSortByInternal, MovieFilterInternal> {
-		
 	/**
 	 * Constructor
 	 */
 	public constructor() {
-
 		super(MovieModel);
 	}
 	
@@ -37,7 +35,6 @@ class MovieEntityController extends MediaItemEntityController<MovieInternal, Mov
 	 * @override
 	 */
 	protected getNewEmptyDocument(): MovieInternal & Document {
-
 		return new MovieModel();
 	}
 		
@@ -45,7 +42,6 @@ class MovieEntityController extends MediaItemEntityController<MovieInternal, Mov
 	 * @override
 	 */
 	protected getDefaultSortBy(): MovieSortByInternal[] {
-		
 		return [{
 			field: 'NAME',
 			ascending: true
@@ -56,7 +52,6 @@ class MovieEntityController extends MediaItemEntityController<MovieInternal, Mov
 	 * @override
 	 */
 	protected addConditionsFromFilter(userId: string, categoryId: string, andConditions: QueryConditions[], filterBy?: MovieFilterInternal): void {
-		
 		this.addCommonConditionsFromFilter(userId, categoryId, andConditions, filterBy);
 	}
 	
@@ -64,9 +59,7 @@ class MovieEntityController extends MediaItemEntityController<MovieInternal, Mov
 	 * @override
 	 */
 	protected setSortConditions(sortBy: MovieSortByInternal, sortDirection: SortOrder, sortConditions: Sortable<MovieInternal>): void {
-		
 		switch(sortBy.field) {
-
 			case 'DIRECTOR':
 				sortConditions.directors = sortDirection;
 				break;
@@ -80,7 +73,6 @@ class MovieEntityController extends MediaItemEntityController<MovieInternal, Mov
 	 * @override
 	 */
 	protected setSearchByTermConditions(_: string, termRegExp: RegExp, searchConditions: QueryConditions[]): void {
-		
 		searchConditions.push({
 			directors: termRegExp
 		});
@@ -90,7 +82,6 @@ class MovieEntityController extends MediaItemEntityController<MovieInternal, Mov
 	 * @override
 	 */
 	protected getLinkedMediaType(): MediaTypeInternal {
-		
 		return 'MOVIE';
 	}
 }

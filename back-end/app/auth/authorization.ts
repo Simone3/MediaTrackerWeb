@@ -8,7 +8,6 @@ import { RequestHandler, Response } from 'express-serve-static-core';
  * @param error the error to log
  */
 const onAuthorizationError = (response: Response, error: unknown): void => {
-
 	logger.error('Authorization error: %s', error);
 
 	response
@@ -24,12 +23,10 @@ const onAuthorizationError = (response: Response, error: unknown): void => {
  * @param next the next callback
  */
 export const userResourceAuthorizationMiddleware: RequestHandler = (request, response, next): void => {
-	
 	const userIdParam: string | undefined = request.params.userId;
 	const currentUserId = requestScopeContext.currentUserId;
 
 	if(!userIdParam || !currentUserId) {
-
 		logger.error('userResourceAuthorizationMiddleware not configured correctly');
 		response.status(500);
 		return;
@@ -37,11 +34,9 @@ export const userResourceAuthorizationMiddleware: RequestHandler = (request, res
 
 	// At the moment, a user can only access his/her own resources only
 	if(userIdParam !== currentUserId) {
-
 		onAuthorizationError(response, `Trying to access other user resources: requested is ${userIdParam} but current is ${currentUserId}`);
 	}
 	else {
-
 		next();
 	}
 };

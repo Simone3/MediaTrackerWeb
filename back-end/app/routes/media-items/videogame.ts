@@ -21,7 +21,6 @@ const catalogRouterBuilder = new MediaItemCatalogRouterBuilder<SearchVideogameCa
 
 // Setup 'get all' API
 entityRouterBuilder.getAll({
-
 	responseBuilder: (commonResponse, videogames) => {
 		const response: GetAllVideogamesResponse = {
 			...commonResponse,
@@ -33,7 +32,6 @@ entityRouterBuilder.getAll({
 
 // Setup 'filter and order' API
 entityRouterBuilder.filter({
-
 	requestClass: FilterVideogamesRequest,
 
 	filterRequestReader: (request) => {
@@ -55,7 +53,6 @@ entityRouterBuilder.filter({
 
 // Setup 'search' API
 entityRouterBuilder.search({
-
 	requestClass: SearchVideogamesRequest,
 
 	filterRequestReader: (request) => {
@@ -73,7 +70,6 @@ entityRouterBuilder.search({
 
 // Setup 'add new' API
 entityRouterBuilder.addNew({
-
 	requestClass: AddVideogameRequest,
 
 	mediaItemRequestReader: (request, mediaItemId, userId, categoryId) => {
@@ -83,7 +79,6 @@ entityRouterBuilder.addNew({
 
 // Setup 'update' API
 entityRouterBuilder.updateExisting({
-
 	requestClass: UpdateVideogameRequest,
 
 	mediaItemRequestReader: (request, mediaItemId, userId, categoryId) => {
@@ -96,7 +91,6 @@ entityRouterBuilder.delete();
 
 // Setup 'catalog search' API
 catalogRouterBuilder.search({
-
 	responseBuilder: (commonResponse, videogames) => {
 		const response: SearchVideogameCatalogResponse = {
 			...commonResponse,
@@ -108,7 +102,6 @@ catalogRouterBuilder.search({
 
 // Setup 'catalog details' API
 catalogRouterBuilder.details({
-
 	responseBuilder: (commonResponse, videogame) => {
 		const response: GetVideogameFromCatalogResponse = {
 			...commonResponse,

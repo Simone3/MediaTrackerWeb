@@ -24,12 +24,10 @@ type QueryConditions = FilterQuery<TvShowInternal>;
  * Controller for TV show entities
  */
 class TvShowEntityController extends MediaItemEntityController<TvShowInternal, TvShowSortByInternal, TvShowFilterInternal> {
-	
 	/**
 	 * Constructor
 	 */
 	public constructor() {
-
 		super(TvShowModel);
 	}
 	
@@ -37,7 +35,6 @@ class TvShowEntityController extends MediaItemEntityController<TvShowInternal, T
 	 * @override
 	 */
 	protected getNewEmptyDocument(): TvShowInternal & Document {
-
 		return new TvShowModel();
 	}
 		
@@ -45,7 +42,6 @@ class TvShowEntityController extends MediaItemEntityController<TvShowInternal, T
 	 * @override
 	 */
 	protected getDefaultSortBy(): TvShowSortByInternal[] {
-		
 		return [{
 			field: 'NAME',
 			ascending: true
@@ -56,7 +52,6 @@ class TvShowEntityController extends MediaItemEntityController<TvShowInternal, T
 	 * @override
 	 */
 	protected addConditionsFromFilter(userId: string, categoryId: string, andConditions: QueryConditions[], filterBy?: TvShowFilterInternal): void {
-		
 		this.addCommonConditionsFromFilter(userId, categoryId, andConditions, filterBy);
 	}
 	
@@ -64,9 +59,7 @@ class TvShowEntityController extends MediaItemEntityController<TvShowInternal, T
 	 * @override
 	 */
 	protected setSortConditions(sortBy: TvShowSortByInternal, sortDirection: SortOrder, sortConditions: Sortable<TvShowInternal>): void {
-		
 		switch(sortBy.field) {
-
 			case 'CREATOR':
 				sortConditions.creators = sortDirection;
 				break;
@@ -80,7 +73,6 @@ class TvShowEntityController extends MediaItemEntityController<TvShowInternal, T
 	 * @override
 	 */
 	protected setSearchByTermConditions(_: string, termRegExp: RegExp, searchConditions: QueryConditions[]): void {
-		
 		searchConditions.push({
 			creators: termRegExp
 		});
@@ -90,7 +82,6 @@ class TvShowEntityController extends MediaItemEntityController<TvShowInternal, T
 	 * @override
 	 */
 	protected getLinkedMediaType(): MediaTypeInternal {
-		
 		return 'TV_SHOW';
 	}
 }

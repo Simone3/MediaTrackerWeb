@@ -14,12 +14,10 @@ type CategoryMapperParams = {
  * Mapper for categories
  */
 class CategoryMapper extends ModelMapper<CategoryInternal, IdentifiedCategory, CategoryMapperParams> {
-		
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: CategoryInternal): IdentifiedCategory {
-		
 		return {
 			uid: source._id,
 			name: source.name,
@@ -32,7 +30,6 @@ class CategoryMapper extends ModelMapper<CategoryInternal, IdentifiedCategory, C
 	 * @override
 	 */
 	protected convertToInternal(source: IdentifiedCategory, extraParams?: CategoryMapperParams): CategoryInternal {
-		
 		if(!extraParams) {
 			throw AppError.GENERIC.withDetails('convertToInternal.extraParams cannot be undefined');
 		}
@@ -52,9 +49,7 @@ class CategoryMapper extends ModelMapper<CategoryInternal, IdentifiedCategory, C
 	 * @returns the mapping target
 	 */
 	private toExternalMediaType(source: MediaTypeInternal): MediaType {
-
 		switch(source) {
-
 			case 'BOOK': return 'BOOK';
 			case 'MOVIE': return 'MOVIE';
 			case 'TV_SHOW': return 'TV_SHOW';
@@ -69,9 +64,7 @@ class CategoryMapper extends ModelMapper<CategoryInternal, IdentifiedCategory, C
 	 * @returns the mapping target
 	 */
 	private toInternalMediaType(source: MediaType): MediaTypeInternal {
-
 		switch(source) {
-
 			case 'BOOK': return 'BOOK';
 			case 'MOVIE': return 'MOVIE';
 			case 'TV_SHOW': return 'TV_SHOW';
@@ -85,12 +78,10 @@ class CategoryMapper extends ModelMapper<CategoryInternal, IdentifiedCategory, C
  * Mapper for category filters
  */
 class CategoryFilterMapper extends ModelMapper<CategoryFilterInternal, CategoryFilter, never> {
-		
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: CategoryFilterInternal): CategoryFilter {
-		
 		return {
 			name: source.name
 		};
@@ -100,7 +91,6 @@ class CategoryFilterMapper extends ModelMapper<CategoryFilterInternal, CategoryF
 	 * @override
 	 */
 	protected convertToInternal(source: CategoryFilter): CategoryFilterInternal {
-		
 		return {
 			name: source.name
 		};

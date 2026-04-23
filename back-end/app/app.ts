@@ -9,7 +9,6 @@ import { cert, initializeApp } from 'firebase-admin/app';
  * Initializes the application
  */
 export const init = (): void => {
-
 	logger.info('Starting application...');
 
 	// Start Firebase
@@ -20,15 +19,12 @@ export const init = (): void => {
 	
 	// Start Express
 	const serverInstance = server.listen(config.server.port, () => {
-	
 		// Start MongoDB
 		databaseManager.initConnection(config.db.url)
 			.then(() => {
-	
 				logger.info('Server running on port %s', config.server.port);
 			})
 			.catch((error) => {
-	
 				logger.error('Database connection error: %s', error);
 				throw AppError.DATABASE_INIT.withDetails(error);
 			});
@@ -36,7 +32,6 @@ export const init = (): void => {
 
 	// Graceful shutdown hook
 	exitHook(() => {
-
 		logger.info('Received shutdown signal');
 
 		// Shutdown log4js

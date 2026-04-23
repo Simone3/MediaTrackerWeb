@@ -14,7 +14,6 @@ import express, { Router } from 'express';
  * Helper class for common router builder
  */
 abstract class AbstractRouterBuilder {
-
 	/**
 	 * The Express router
 	 */
@@ -24,12 +23,10 @@ abstract class AbstractRouterBuilder {
 	 * Constructor
 	 */
 	protected constructor() {
-
 		this._router = express.Router();
 	}
 
 	public get router(): Router {
-
 		return this._router;
 	}
 }
@@ -41,7 +38,6 @@ abstract class AbstractRouterBuilder {
  * @template TMediaItemFilterInternal the media item filter conditions
  */
 export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemInternal, TMediaItemSortByInternal extends MediaItemSortByInternal, TMediaItemFilterInternal extends MediaItemFilterInternal> extends AbstractRouterBuilder {
-
 	private readonly mediaItemPathName: string;
 	private readonly mediaItemController: MediaItemEntityController<TMediaItemInternal, TMediaItemSortByInternal, TMediaItemFilterInternal>;
 	
@@ -51,7 +47,6 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 	 * @param mediaItemController the controller implementation
 	 */
 	public constructor(mediaItemPathName: string, mediaItemController: MediaItemEntityController<TMediaItemInternal, TMediaItemSortByInternal, TMediaItemFilterInternal>) {
-		
 		super();
 
 		this.mediaItemPathName = mediaItemPathName;
@@ -67,21 +62,17 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 	public getAll<TResponse extends GetAllMediaItemsResponse>(routeConfig: {
 		responseBuilder: TWriteResponse<GetAllMediaItemsResponse, TMediaItemInternal[], TResponse>;
 	}): void {
-
 		this.router.get(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}`, userResourceAuthorizationMiddleware, (request, response): void => {
-
 			const userId: string = request.params.userId;
 			const categoryId: string = request.params.categoryId;
 
 			this.mediaItemController.getAllMediaItems(userId, categoryId)
 				.then((mediaItems) => {
-
 					const responseBody: TResponse = routeConfig.responseBuilder({}, mediaItems);
 					
 					response.json(responseBody);
 				})
 				.catch((error) => {
-
 					logger.error('Get media items generic error: %s', error);
 					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 				});
@@ -104,33 +95,27 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 		sortRequestReader: TReadRequestOptional<TRequest, TMediaItemSortByInternal[]>;
 		responseBuilder: TWriteResponse<FilterMediaItemsResponse, TMediaItemInternal[], TResponse>;
 	}): void {
-
 		this.router.post(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/filter`, userResourceAuthorizationMiddleware, (request, response) => {
-
 			const userId: string = request.params.userId;
 			const categoryId: string = request.params.categoryId;
 
 			parserValidator.parseAndValidate(routeConfig.requestClass, request.body)
 				.then((parsedRequest) => {
-
 					const filterOptions = routeConfig.filterRequestReader(parsedRequest);
 					const orderOptions = routeConfig.sortRequestReader(parsedRequest);
 
 					this.mediaItemController.filterAndOrderMediaItems(userId, categoryId, filterOptions, orderOptions)
 						.then((mediaItems) => {
-						
 							const responseBody: TResponse = routeConfig.responseBuilder({}, mediaItems);
 							
 							response.json(responseBody);
 						})
 						.catch((error) => {
-
 							logger.error('Filter media items generic error: %s', error);
 							response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 						});
 				})
 				.catch((error) => {
-
 					logger.error('Filter media items request error: %s', error);
 					response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
 				});
@@ -151,33 +136,27 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 		filterRequestReader: TReadRequestOptional<TRequest, TMediaItemFilterInternal>;
 		responseBuilder: TWriteResponse<SearchMediaItemsResponse, TMediaItemInternal[], TResponse>;
 	}): void {
-
 		this.router.post(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/search`, userResourceAuthorizationMiddleware, (request, response) => {
-
 			const userId: string = request.params.userId;
 			const categoryId: string = request.params.categoryId;
 
 			parserValidator.parseAndValidate(routeConfig.requestClass, request.body)
 				.then((parsedRequest) => {
-
 					const filterBy = routeConfig.filterRequestReader(parsedRequest);
 					const searchTerm = parsedRequest.searchTerm;
 
 					this.mediaItemController.searchMediaItems(userId, categoryId, searchTerm, filterBy)
 						.then((mediaItems) => {
-
 							const responseBody: TResponse = routeConfig.responseBuilder({}, mediaItems);
 							
 							response.json(responseBody);
 						})
 						.catch((error) => {
-
 							logger.error('Search media items generic error: %s', error);
 							response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 						});
 				})
 				.catch((error) => {
-
 					logger.error('Search media items request error: %s', error);
 					response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
 				});
@@ -195,20 +174,16 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 		requestClass: ClassType<TRequest>;
 		mediaItemRequestReader: TReadRequestWithExtraData<TRequest, TMediaItemInternal>;
 	}): void {
-
 		this.router.post(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}`, userResourceAuthorizationMiddleware, (request, response) => {
-
 			const userId: string = request.params.userId;
 			const categoryId: string = request.params.categoryId;
 
 			parserValidator.parseAndValidate(routeConfig.requestClass, request.body)
 				.then((parsedRequest) => {
-
 					const newMediaItem = routeConfig.mediaItemRequestReader(parsedRequest, '', userId, categoryId);
 
 					this.mediaItemController.saveMediaItem(newMediaItem)
 						.then((savedMediaItem) => {
-						
 							const responseBody: AddMediaItemResponse = {
 								message: 'Media item successfully added',
 								uid: savedMediaItem._id
@@ -217,13 +192,11 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 							response.json(responseBody);
 						})
 						.catch((error) => {
-
 							logger.error('Add media item generic error: %s', error);
 							response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 						});
 				})
 				.catch((error) => {
-
 					logger.error('Add media item request error: %s', error);
 					response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
 				});
@@ -241,21 +214,17 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 		requestClass: ClassType<TRequest>;
 		mediaItemRequestReader: TReadRequestWithExtraData<TRequest, TMediaItemInternal>;
 	}): void {
-
 		this.router.put(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/:id`, userResourceAuthorizationMiddleware, (request, response) => {
-
 			const userId: string = request.params.userId;
 			const categoryId: string = request.params.categoryId;
 			const id: string = request.params.id;
 
 			parserValidator.parseAndValidate(routeConfig.requestClass, request.body)
 				.then((parsedRequest) => {
-
 					const mediaItem = routeConfig.mediaItemRequestReader(parsedRequest, id, userId, categoryId);
 
 					this.mediaItemController.saveMediaItem(mediaItem)
 						.then(() => {
-						
 							const responseBody: UpdateMediaItemResponse = {
 								message: 'Media item successfully updated'
 							};
@@ -263,13 +232,11 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 							response.json(responseBody);
 						})
 						.catch((error) => {
-							
 							logger.error('Update media item generic error: %s', error);
 							response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 						});
 				})
 				.catch((error) => {
-
 					logger.error('Update media item request error: %s', error);
 					response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
 				});
@@ -280,16 +247,13 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 	 * Route to delete a media item
 	 */
 	public delete(): void {
-
 		this.router.delete(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/:id`, userResourceAuthorizationMiddleware, (request, response) => {
-
 			const userId: string = request.params.userId;
 			const categoryId: string = request.params.categoryId;
 			const id: string = request.params.id;
 
 			this.mediaItemController.deleteMediaItem(userId, categoryId, id)
 				.then(() => {
-					
 					const responseBody: DeleteMediaItemResponse = {
 						message: 'Media item successfully deleted'
 					};
@@ -297,7 +261,6 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 					response.json(responseBody);
 				})
 				.catch((error) => {
-
 					logger.error('Delete media item generic error: %s', error);
 					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 				});
@@ -311,7 +274,6 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
  * @template TCatalogMediaItemInternal the media item catalog details
  */
 export class MediaItemCatalogRouterBuilder<TSearchMediaItemCatalogResultInternal extends SearchMediaItemCatalogResultInternal, TCatalogMediaItemInternal extends CatalogMediaItemInternal> extends AbstractRouterBuilder {
-
 	private readonly mediaItemPathName: string;
 	private readonly mediaItemCatalogController: MediaItemCatalogController<TSearchMediaItemCatalogResultInternal, TCatalogMediaItemInternal>;
 
@@ -321,7 +283,6 @@ export class MediaItemCatalogRouterBuilder<TSearchMediaItemCatalogResultInternal
 	 * @param mediaItemCatalogController the controller implementation
 	 */
 	public constructor(mediaItemPathName: string, mediaItemCatalogController: MediaItemCatalogController<TSearchMediaItemCatalogResultInternal, TCatalogMediaItemInternal>) {
-		
 		super();
 
 		this.mediaItemPathName = mediaItemPathName;
@@ -337,20 +298,16 @@ export class MediaItemCatalogRouterBuilder<TSearchMediaItemCatalogResultInternal
 	public search<TResponse extends SearchMediaItemCatalogResponse>(routeConfig: {
 		responseBuilder: TWriteResponse<SearchMediaItemCatalogResponse, TSearchMediaItemCatalogResultInternal[], TResponse>;
 	}): void {
-
 		this.router.get(`/catalog/${this.mediaItemPathName}/search/:searchTerm`, (request, response) => {
-
 			const searchTerm: string = request.params.searchTerm;
 
 			this.mediaItemCatalogController.searchMediaItemCatalogByTerm(searchTerm)
 				.then((searchResults) => {
-
 					const responseBody: TResponse = routeConfig.responseBuilder({ searchResults: [] }, searchResults);
 
 					response.json(responseBody);
 				})
 				.catch((error) => {
-
 					logger.error('Media item catalog search generic error: %s', error);
 					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 				});
@@ -366,20 +323,16 @@ export class MediaItemCatalogRouterBuilder<TSearchMediaItemCatalogResultInternal
 	public details<TResponse extends GetMediaItemFromCatalogResponse>(routeConfig: {
 		responseBuilder: TWriteResponse<GetMediaItemFromCatalogResponse, TCatalogMediaItemInternal, TResponse>;
 	}): void {
-
 		this.router.get(`/catalog/${this.mediaItemPathName}/:catalogId`, (request, response) => {
-
 			const catalogId: string = request.params.catalogId;
 
 			this.mediaItemCatalogController.getMediaItemFromCatalog(catalogId)
 				.then((catalogMediaItem) => {
-
 					const responseBody: TResponse = routeConfig.responseBuilder({}, catalogMediaItem);
 					
 					response.json(responseBody);
 				})
 				.catch((error) => {
-
 					logger.error('Media item catalog details generic error: %s', error);
 					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 				});

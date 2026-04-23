@@ -11,7 +11,6 @@ const expect = chai.expect;
  * Helper to define optional extra config for callHelper()
  */
 export type CallHelperExtraConfig = {
-
 	/**
 	 * The expected status (defaults to 200)
 	 */
@@ -33,12 +32,10 @@ export type CallHelperExtraConfig = {
  * @returns the response body, as a promise
  */
 export const callHelper = async<TReq extends object, TRes extends object>(method: HttpMethod, path: string, loggedUserId: string, request?: TReq, extraConfig?: CallHelperExtraConfig): Promise<TRes> => {
-
 	const agent = chai.request(getTestServer());
 	let superAgent;
 
 	switch(method) {
-		
 		case 'GET':
 			superAgent = agent.get(path);
 			break;

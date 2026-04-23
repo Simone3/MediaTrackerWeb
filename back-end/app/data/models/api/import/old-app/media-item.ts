@@ -16,7 +16,6 @@ export type OldAppImportanceLevel = ValuesOf<typeof OLD_APP_IMPORTANCE_LEVELS>;
  * Model for a media item in the old Media Tracker app export, publicly exposed via API
  */
 export class OldAppMediaItem {
-
 	@IsNotEmpty()
 	@IsString()
 	public NAME!: string;

@@ -12,23 +12,19 @@ const expect = chai.expect;
  * Tests for the group controller
  */
 describe('GroupController Tests', () => {
-	
 	setupTestDatabaseConnection();
 	
 	describe('GroupController Tests', () => {
-
 		const firstUC: TestUC = { user: '', category: '' };
 		const secondUC: TestUC = { user: '', category: '' };
 
 		// Create new users/categories for each test
 		beforeEach(async() => {
-
 			await initTestUCHelper('MOVIE', firstUC, 'First');
 			await initTestUCHelper('MOVIE', secondUC, 'Second');
 		});
 		
 		it('GetGroup should return the correct group after SaveGroup', async() => {
-
 			const insertedGroup = await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			const insertedId = insertedGroup._id;
 			expect(insertedGroup._id, 'SaveGroup (insert) returned empty ID').to.exist;
@@ -40,7 +36,6 @@ describe('GroupController Tests', () => {
 		});
 
 		it('GetGroup should only get a group for the current user', async() => {
-
 			let insertedGroup = await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			const firstId = insertedGroup._id;
 			insertedGroup = await groupController.saveGroup(getTestGroup(undefined, secondUC));
@@ -53,7 +48,6 @@ describe('GroupController Tests', () => {
 		});
 
 		it('GetGroup should only get a group for the current category', async() => {
-
 			let insertedGroup = await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			const firstId = insertedGroup._id;
 			insertedGroup = await groupController.saveGroup(getTestGroup(undefined, secondUC));
@@ -66,7 +60,6 @@ describe('GroupController Tests', () => {
 		});
 
 		it('GetGroup should return the correct group after two SaveGroup (insert and update)', async() => {
-
 			const insertedGroup = await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			const insertedId = insertedGroup._id;
 
@@ -81,7 +74,6 @@ describe('GroupController Tests', () => {
 		});
 
 		it('GetAllGroups should return all groups for the given user', async() => {
-
 			const firstUCGroups: GroupInternal[] = [];
 			const secondUCGroups: GroupInternal[] = [];
 
@@ -104,7 +96,6 @@ describe('GroupController Tests', () => {
 		});
 
 		it('FilterGroups should return all matching groups for the given user', async() => {
-
 			const firstUCGroups: GroupInternal[] = [];
 			const secondUCGroups: GroupInternal[] = [];
 
@@ -125,13 +116,10 @@ describe('GroupController Tests', () => {
 		});
 
 		it('SaveGroup (insert) should not accept an invalid user', async() => {
-
 			try {
-
 				await groupController.saveGroup(getTestGroup(undefined, { user: '5cbf26ea895c281b54b6737f', category: firstUC.category }));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -139,16 +127,13 @@ describe('GroupController Tests', () => {
 		});
 
 		it('SaveGroup (update) should not accept an invalid user', async() => {
-
 			const insertedGroup = await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			const insertedId = insertedGroup._id;
 
 			try {
-
 				await groupController.saveGroup(getTestGroup(insertedId, { user: '5cbf26ea895c281b54b6737f', category: firstUC.category }));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -156,13 +141,10 @@ describe('GroupController Tests', () => {
 		});
 
 		it('SaveGroup (insert) should not accept an invalid category', async() => {
-
 			try {
-
 				await groupController.saveGroup(getTestGroup(undefined, { user: firstUC.user, category: '5cbf26ea895c281b54b6737f' }));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -170,16 +152,13 @@ describe('GroupController Tests', () => {
 		});
 
 		it('SaveGroup (update) should not accept an invalid category', async() => {
-
 			const insertedGroup = await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			const insertedId = insertedGroup._id;
 
 			try {
-
 				await groupController.saveGroup(getTestGroup(insertedId, { user: firstUC.user, category: '5cbf26ea895c281b54b6737f' }));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -187,7 +166,6 @@ describe('GroupController Tests', () => {
 		});
 		
 		it('GetGroup after DeleteGroup should return undefined', async() => {
-			
 			const group = await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			const groupId = group._id;
 
@@ -198,7 +176,6 @@ describe('GroupController Tests', () => {
 		});
 
 		it('Deleting a category should also delete all its groups', async function() {
-			
 			await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			await groupController.saveGroup(getTestGroup(undefined, firstUC));

@@ -20,7 +20,6 @@ import { Document, FilterQuery, Model, SortOrder, UpdateQuery } from 'mongoose';
  * @template TMediaItemFilterInternal the media item filter conditions
  */
 export abstract class MediaItemEntityController<TMediaItemInternal extends MediaItemInternal, TMediaItemSortByInternal extends MediaItemSortByInternal, TMediaItemFilterInternal extends MediaItemFilterInternal> extends AbstractEntityController {
-
 	private readonly queryHelper: QueryHelper<TMediaItemInternal, Document & TMediaItemInternal, Model<Document & TMediaItemInternal>>;
 
 	/**
@@ -28,7 +27,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @param model the source DB model
 	 */
 	protected constructor(model: Model<Document & TMediaItemInternal>) {
-
 		super();
 		this.queryHelper = new QueryHelper(model);
 	}
@@ -41,7 +39,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns the media item or undefined if not found, as a promise
 	 */
 	public getMediaItem(userId: string, categoryId: string, mediaItemId: string): Promise<TMediaItemInternal | undefined> {
-
 		const conditions: FilterQuery<MediaItemInternal> = {
 			_id: mediaItemId,
 			category: categoryId,
@@ -58,7 +55,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns the retrieved media items, as a promise
 	 */
 	public getAllMediaItems(userId: string, categoryId: string): Promise<TMediaItemInternal[]> {
-
 		const sortBy: TMediaItemSortByInternal[] = this.getDefaultSortBy();
 
 		return this.filterAndOrderMediaItems(userId, categoryId, undefined, sortBy);
@@ -70,7 +66,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns the media items, as a promise
 	 */
 	public getAllMediaItemsInGroup(groupId: string): Promise<TMediaItemInternal[]> {
-
 		const conditions: FilterQuery<MediaItemInternal> = {
 			group: groupId
 		};
@@ -84,7 +79,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns the media items, as a promise
 	 */
 	public getAllMediaItemsInOwnPlatform(ownPlatformId: string): Promise<TMediaItemInternal[]> {
-
 		const conditions: FilterQuery<MediaItemInternal> = {
 			ownPlatform: ownPlatformId
 		};
@@ -98,7 +92,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns the media items, as a promise
 	 */
 	public getAllMediaItemsInCategory(categoryId: string): Promise<TMediaItemInternal[]> {
-
 		const conditions: FilterQuery<MediaItemInternal> = {
 			category: categoryId
 		};
@@ -115,7 +108,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns the media items, as a promise
 	 */
 	public filterAndOrderMediaItems(userId: string, categoryId: string, filterBy?: TMediaItemFilterInternal, sortBy?: TMediaItemSortByInternal[]): Promise<TMediaItemInternal[]> {
-
 		const andConditions: FilterQuery<MediaItemInternal>[] = [];
 		this.addConditionsFromFilter(userId, categoryId, this.castFilterQueryArray(andConditions), filterBy);
 		const conditions: FilterQuery<MediaItemInternal> = {
@@ -124,9 +116,7 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 
 		const sortConditions: Sortable<TMediaItemInternal> = {};
 		if(sortBy) {
-
 			for(const value of sortBy) {
-
 				const sortDirection: SortOrder = value.ascending ? 'asc' : 'desc';
 				this.setSortConditions(value, sortDirection, sortConditions);
 			}
@@ -144,7 +134,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns the media items, as a promise
 	 */
 	public searchMediaItems(userId: string, categoryId: string, term: string, filterBy?: TMediaItemFilterInternal): Promise<TMediaItemInternal[]> {
-
 		const termRegExp = new RegExp(miscUtils.escapeRegExp(term), 'i');
 		
 		// Common search conditions
@@ -181,9 +170,7 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns the saved media item, as a promise
 	 */
 	public async saveMediaItem(mediaItem: TMediaItemInternal, skipCheckPreconditions?: boolean): Promise<TMediaItemInternal> {
-
 		if(!skipCheckPreconditions) {
-			
 			await this.checkWritePreconditions(
 				AppError.DATABASE_SAVE.withDetails(mediaItem._id ? 'Media item or group or own platform does not exist for given user/category' : 'User or category or group or own platform does not exist'),
 				mediaItem.owner,
@@ -205,7 +192,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns the number of deleted media items, as a promise
 	 */
 	public async deleteMediaItem(userId: string, categoryId: string, mediaItemId: string): Promise<number> {
-
 		await this.checkWritePreconditions(
 			AppError.DATABASE_DELETE.withDetails('Media item does not exist for given user/category'),
 			userId,
@@ -224,7 +210,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns the number of deleted elements as a promise
 	 */
 	public deleteAllMediaItemsInGroup(groupId: string): Promise<number> {
-
 		const conditions: FilterQuery<MediaItemInternal> = {
 			group: groupId
 		};
@@ -238,7 +223,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns the number of deleted elements as a promise
 	 */
 	public deleteAllMediaItemsInCategory(categoryId: string): Promise<number> {
-
 		const conditions: FilterQuery<MediaItemInternal> = {
 			category: categoryId
 		};
@@ -252,7 +236,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns the number of deleted elements as a promise
 	 */
 	public deleteAllMediaItemsForUser(userId: string): Promise<number> {
-
 		const conditions: FilterQuery<MediaItemInternal> = {
 			owner: userId
 		};
@@ -269,7 +252,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns the number of updated media items, as a promise
 	 */
 	public replaceOwnPlatformInAllMediaItems(userId: string, categoryId: string, oldOwnPlatformId: string | string[], newOwnPlatformId: string | undefined): Promise<number> {
-
 		const set: UpdateQuery<MediaItemInternal> = {
 			ownPlatform: newOwnPlatformId
 		};
@@ -280,11 +262,9 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 		};
 
 		if(oldOwnPlatformId instanceof Array) {
-
 			conditions.ownPlatform = { $in: oldOwnPlatformId };
 		}
 		else {
-
 			conditions.ownPlatform = oldOwnPlatformId;
 		}
 		
@@ -344,16 +324,13 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @param filterBy the optional source filters
 	 */
 	protected addCommonConditionsFromFilter(userId: string, categoryId: string, andConditions: FilterQuery<MediaItemInternal>[], filterBy?: MediaItemFilterInternal): void {
-		
 		andConditions.push({
 			owner: userId,
 			category: categoryId
 		});
 
 		if(filterBy) {
-			
 			if(filterBy.importanceLevels && filterBy.importanceLevels.length > 0) {
-
 				andConditions.push({
 					importance: {
 						$in: filterBy.importanceLevels
@@ -362,9 +339,7 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 			}
 
 			if(filterBy.complete !== undefined && filterBy.complete !== null) {
-
 				if(filterBy.complete) {
-
 					andConditions.push({
 						completedLastOn: {
 							$ne: undefined
@@ -375,7 +350,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 					});
 				}
 				else {
-
 					andConditions.push({
 						$or: [{
 							completedLastOn: undefined
@@ -387,7 +361,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 			}
 
 			if(filterBy.name) {
-
 				// Case insensitive exact match
 				andConditions.push({
 					name: new RegExp(`^${filterBy.name}$`, 'i')
@@ -395,9 +368,7 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 			}
 
 			if(filterBy.groups) {
-
 				if(filterBy.groups.groupIds && filterBy.groups.groupIds.length > 0) {
-
 					andConditions.push({
 						group: {
 							$in: filterBy.groups.groupIds
@@ -405,11 +376,9 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 					});
 				}
 				else {
-
 					const any = filterBy.groups.anyGroup;
 					const no = filterBy.groups.noGroup;
 					if(any && !no) {
-						
 						andConditions.push({
 							group: {
 								$ne: undefined
@@ -417,7 +386,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 						});
 					}
 					else if(!any && no) {
-
 						andConditions.push({
 							group: undefined
 						});
@@ -426,9 +394,7 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 			}
 
 			if(filterBy.ownPlatforms) {
-
 				if(filterBy.ownPlatforms.ownPlatformIds && filterBy.ownPlatforms.ownPlatformIds.length > 0) {
-
 					andConditions.push({
 						ownPlatform: {
 							$in: filterBy.ownPlatforms.ownPlatformIds
@@ -436,11 +402,9 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 					});
 				}
 				else {
-
 					const any = filterBy.ownPlatforms.anyOwnPlatform;
 					const no = filterBy.ownPlatforms.noOwnPlatform;
 					if(any && !no) {
-						
 						andConditions.push({
 							ownPlatform: {
 								$ne: undefined
@@ -448,7 +412,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 						});
 					}
 					else if(!any && no) {
-
 						andConditions.push({
 							ownPlatform: undefined
 						});
@@ -465,9 +428,7 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @param sortConditions the sort conditions where the sortDirection should be set according to the sortBy value
 	 */
 	protected setCommonSortConditions(sortByField: MediaItemSortFieldInternal, sortDirection: SortOrder, sortConditions: Sortable<TMediaItemInternal>): void {
-
 		switch(sortByField) {
-
 			case 'IMPORTANCE':
 				sortConditions.importance = sortDirection;
 				break;
@@ -508,7 +469,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns the "populate" options
 	 */
 	protected getPopulateAll(): Populatable<TMediaItemInternal> {
-
 		const populate: Populatable<TMediaItemInternal> = {};
 		populate.group = true;
 		populate.ownPlatform = true;
@@ -526,11 +486,8 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns a void promise that resolves if all preconditions are OK
 	 */
 	private checkWritePreconditions(errorToThow: AppError, userId: string, category: string | CategoryInternal, group?: string | GroupInternal, ownPlatform?: string | OwnPlatformInternal, mediaItemId?: string): Promise<void> {
-
 		return new Promise((resolve, reject): void => {
-
 			this.checkExistencePreconditionsHelper(errorToThow, () => {
-
 				const categoryId = this.getEntityStringId(category);
 				const groupId = group ? this.getEntityStringId(group) : undefined;
 				const ownPlatformId = ownPlatform ? this.getEntityStringId(ownPlatform) : undefined;
@@ -539,20 +496,16 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 
 				// Preconditions are different when it's a new media item or an existing one
 				if(mediaItemId) {
-
 					// Make sure the media item exists
 					checkPromises.push(this.getMediaItem(userId, categoryId, mediaItemId));
 				}
 				else {
-
 					// Get the category
 					const categoryCheckPromise = categoryController.getCategory(userId, categoryId);
 
 					// Check that media item and category media types are compatible (first then())
 					categoryCheckPromise.then((retrievedCategory) => {
-
 						if(retrievedCategory && retrievedCategory.mediaType !== this.getLinkedMediaType()) {
-
 							reject(AppError.DATABASE_SAVE.withDetails('Media item and category have incompatible media types'));
 						}
 					});
@@ -563,24 +516,20 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 
 				// If a group was set, also make sure the group exists
 				if(groupId) {
-
 					checkPromises.push(groupController.getGroup(userId, categoryId, groupId));
 				}
 
 				// If an own platform was set, also make sure the platform exists
 				if(ownPlatformId) {
-
 					checkPromises.push(ownPlatformController.getOwnPlatform(userId, categoryId, ownPlatformId));
 				}
 
 				return Promise.all(checkPromises);
 			})
 				.then(() => {
-
 					resolve();
 				})
 				.catch((error) => {
-
 					reject(error);
 				});
 		});
@@ -593,17 +542,14 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @returns cast source
 	 */
 	private castFilterQuery(conditions: FilterQuery<MediaItemInternal>): FilterQuery<Document & TMediaItemInternal> {
-
 		return conditions as FilterQuery<Document & TMediaItemInternal>;
 	}
 	
 	private castFilterQueryArray(conditions: FilterQuery<MediaItemInternal>[]): FilterQuery<Document & TMediaItemInternal>[] {
-
 		return conditions as FilterQuery<Document & TMediaItemInternal>[];
 	}
 
 	private castUpdateQuery(set: UpdateQuery<MediaItemInternal>): UpdateQuery<Document & TMediaItemInternal> {
-
 		return set as UpdateQuery<Document & TMediaItemInternal>;
 	}
 }

@@ -5,7 +5,6 @@ import { IsDefined, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } fr
  * Result of the external videogame search service
  */
 export class GiantBombSearchResult {
-
 	@IsNotEmpty()
 	@IsInt()
 	public id!: number;
@@ -35,7 +34,6 @@ export class GiantBombSearchResult {
  * Response of the external videogame search service
  */
 export class GiantBombSearchResponse {
-
 	@IsOptional()
 	@IsDefined({ each: true })
 	@Type(() => {
@@ -49,7 +47,6 @@ export class GiantBombSearchResponse {
  * Genre model for the external videogame details service
  */
 export class GiantBombGenre {
-
 	@IsNotEmpty()
 	@IsString()
 	public name!: string;
@@ -59,7 +56,6 @@ export class GiantBombGenre {
  * Publisher model for the external videogame details service
  */
 export class GiantBombPublisher {
-
 	@IsNotEmpty()
 	@IsString()
 	public name!: string;
@@ -69,7 +65,6 @@ export class GiantBombPublisher {
  * Developer model for the external videogame details service
  */
 export class GiantBombDeveloper {
-
 	@IsNotEmpty()
 	@IsString()
 	public name!: string;
@@ -79,7 +74,6 @@ export class GiantBombDeveloper {
  * Platform model for the external videogame details service
  */
 export class GiantBombPlatform {
-
 	@IsNotEmpty()
 	@IsString()
 	public name!: string;
@@ -93,7 +87,6 @@ export class GiantBombPlatform {
  * Image model for the external videogame details service
  */
 export class GiantBombImage {
-
 	@IsOptional()
 	@IsString()
 	public screen_url?: string;
@@ -107,7 +100,6 @@ export class GiantBombImage {
  * Result model for the external videogame details service
  */
 export class GiantBombDetailsResult extends GiantBombSearchResult {
-	
 	@IsOptional()
 	@IsDefined({ each: true })
 	@Type(() => {
@@ -156,7 +148,6 @@ export class GiantBombDetailsResult extends GiantBombSearchResult {
  * Response of the external videogame details service
  */
 export class GiantBombDetailsResponse {
-
 	@IsDefined()
 	@Type(() => {
 		return GiantBombDetailsResult;

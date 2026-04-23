@@ -24,12 +24,10 @@ type QueryConditions = FilterQuery<BookInternal>;
  * Controller for book entities
  */
 class BookEntityController extends MediaItemEntityController<BookInternal, BookSortByInternal, BookFilterInternal> {
-	
 	/**
 	 * Constructor
 	 */
 	public constructor() {
-
 		super(BookModel);
 	}
 	
@@ -37,7 +35,6 @@ class BookEntityController extends MediaItemEntityController<BookInternal, BookS
 	 * @override
 	 */
 	protected getNewEmptyDocument(): BookInternal & Document {
-
 		return new BookModel();
 	}
 		
@@ -45,7 +42,6 @@ class BookEntityController extends MediaItemEntityController<BookInternal, BookS
 	 * @override
 	 */
 	protected getDefaultSortBy(): BookSortByInternal[] {
-		
 		return [{
 			field: 'NAME',
 			ascending: true
@@ -56,7 +52,6 @@ class BookEntityController extends MediaItemEntityController<BookInternal, BookS
 	 * @override
 	 */
 	protected addConditionsFromFilter(userId: string, categoryId: string, andConditions: QueryConditions[], filterBy?: BookFilterInternal): void {
-		
 		this.addCommonConditionsFromFilter(userId, categoryId, andConditions, filterBy);
 	}
 	
@@ -64,9 +59,7 @@ class BookEntityController extends MediaItemEntityController<BookInternal, BookS
 	 * @override
 	 */
 	protected setSortConditions(sortBy: BookSortByInternal, sortDirection: SortOrder, sortConditions: Sortable<BookInternal>): void {
-		
 		switch(sortBy.field) {
-
 			case 'AUTHOR':
 				sortConditions.authors = sortDirection;
 				break;
@@ -80,7 +73,6 @@ class BookEntityController extends MediaItemEntityController<BookInternal, BookS
 	 * @override
 	 */
 	protected setSearchByTermConditions(_: string, termRegExp: RegExp, searchConditions: QueryConditions[]): void {
-		
 		searchConditions.push({
 			authors: termRegExp
 		});
@@ -90,7 +82,6 @@ class BookEntityController extends MediaItemEntityController<BookInternal, BookS
 	 * @override
 	 */
 	protected getLinkedMediaType(): MediaTypeInternal {
-		
 		return 'BOOK';
 	}
 }

@@ -8,12 +8,10 @@ import { BookInternal } from 'app/data/models/internal/media-items/book';
  * Mapper from the old Media Tracker app export book to the new internal model
  */
 class OldAppBookMapper extends OldAppMediaItemMapper<BookInternal> {
-
 	/**
 	 * @override
 	 */
 	protected convertToInternal(source: OldAppMediaItem): OldAppMediaItemInternal<BookInternal> {
-		
 		const common = this.commonToInternal(source);
 		return {
 			...common,

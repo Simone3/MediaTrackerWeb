@@ -21,14 +21,12 @@ export type MediaItemMapperParams = {
  * @template TMediaItem the class of the API media item entity
  */
 export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemInternal, TMediaItem extends MediaItem> extends ModelMapper<TMediaItemInternal, TMediaItem, MediaItemMapperParams> {
-	
 	/**
 	 * Common mapping helper for implementations
 	 * @param source the mapping source
 	 * @returns the mapping target
 	 */
 	protected commonToExternal(source: MediaItemInternal): MediaItem {
-		
 		const target: MediaItem = {
 			name: source.name,
 			importance: source.importance,
@@ -44,7 +42,6 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 		};
 
 		if(source.group && source.orderInGroup && typeof source.group !== 'string') {
-
 			target.group = {
 				groupId: String(source.group._id),
 				groupData: groupMapper.toExternal(source.group),
@@ -53,7 +50,6 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 		}
 
 		if(source.ownPlatform && typeof source.ownPlatform !== 'string') {
-
 			target.ownPlatform = {
 				ownPlatformId: String(source.ownPlatform._id),
 				ownPlatformData: ownPlatformMapper.toExternal(source.ownPlatform)
@@ -70,7 +66,6 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 	 * @returns the mapping target
 	 */
 	protected commonToInternal(source: MediaItem, extraParams?: MediaItemMapperParams): MediaItemInternal {
-
 		if(!extraParams) {
 			throw AppError.GENERIC.withDetails('convertToInternal.extraParams cannot be undefined');
 		}
@@ -78,7 +73,6 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 		let targetCompletedOn = dateUtils.toDateList(source.completedOn);
 		let targetCompletedLastOn;
 		if(targetCompletedOn && targetCompletedOn.length > 0) {
-
 			targetCompletedOn = targetCompletedOn.sort((date1, date2) => {
 				return date1.getTime() - date2.getTime();
 			});
@@ -115,14 +109,12 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
  * @template TMediaItemFilter the class of the API media item entity
  */
 export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends MediaItemFilterInternal, TMediaItemFilter extends MediaItemFilter> extends ModelMapper<TMediaItemFilterInternal, TMediaItemFilter, never> {
-	
 	/**
 	 * Common mapping helper for implementations
 	 * @param source the mapping source
 	 * @returns the mapping target
 	 */
 	protected commonToExternal(source: MediaItemFilterInternal): MediaItemFilter {
-
 		const target: MediaItemFilter = {
 			importanceLevels: source.importanceLevels,
 			complete: source.complete,
@@ -130,7 +122,6 @@ export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends Med
 		};
 
 		if(source.groups) {
-
 			target.groups = {
 				anyGroup: source.groups.anyGroup,
 				noGroup: source.groups.noGroup,
@@ -139,7 +130,6 @@ export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends Med
 		}
 
 		if(source.ownPlatforms) {
-
 			target.ownPlatforms = {
 				anyOwnPlatform: source.ownPlatforms.anyOwnPlatform,
 				noOwnPlatform: source.ownPlatforms.noOwnPlatform,
@@ -156,7 +146,6 @@ export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends Med
 	 * @returns the mapping target
 	 */
 	protected commonToInternal(source: MediaItemFilter): MediaItemFilterInternal {
-
 		const target: MediaItemFilterInternal = {
 			importanceLevels: source.importanceLevels,
 			complete: source.complete,
@@ -164,7 +153,6 @@ export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends Med
 		};
 
 		if(source.groups) {
-
 			target.groups = {
 				anyGroup: source.groups.anyGroup,
 				noGroup: source.groups.noGroup,
@@ -173,7 +161,6 @@ export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends Med
 		}
 
 		if(source.ownPlatforms) {
-
 			target.ownPlatforms = {
 				anyOwnPlatform: source.ownPlatforms.anyOwnPlatform,
 				noOwnPlatform: source.ownPlatforms.noOwnPlatform,
@@ -191,14 +178,12 @@ export abstract class MediaItemFilterMapper<TMediaItemFilterInternal extends Med
  * @template TMediaItemSortBy the class of the API media item entity
  */
 export abstract class MediaItemSortMapper<TMediaItemSortByInternal extends MediaItemSortByInternal, TMediaItemSortBy extends MediaItemSortBy> extends ModelMapper<TMediaItemSortByInternal, TMediaItemSortBy, never> {
-	
 	/**
 	 * Common mapping helper for implementations
 	 * @param source the mapping source
 	 * @returns the mapping target
 	 */
 	protected commonToExternal(source: MediaItemSortByInternal): MediaItemSortBy {
-
 		return {
 			ascending: source.ascending
 		};
@@ -210,7 +195,6 @@ export abstract class MediaItemSortMapper<TMediaItemSortByInternal extends Media
 	 * @returns the mapping target
 	 */
 	protected commonToInternal(source: MediaItemSortBy): MediaItemSortByInternal {
-		
 		return {
 			ascending: source.ascending
 		};
@@ -222,9 +206,7 @@ export abstract class MediaItemSortMapper<TMediaItemSortByInternal extends Media
 	 * @returns the mapping target
 	 */
 	protected commonToExternalField(source: MediaItemSortFieldInternal): string {
-
 		switch(source) {
-
 			case 'IMPORTANCE': return MediaItemSortField.IMPORTANCE;
 			case 'NAME': return MediaItemSortField.NAME;
 			case 'GROUP': return MediaItemSortField.GROUP;
@@ -242,9 +224,7 @@ export abstract class MediaItemSortMapper<TMediaItemSortByInternal extends Media
 	 * @returns the mapping target
 	 */
 	protected commonToInternalField(source: MediaItemSortField): MediaItemSortFieldInternal {
-
 		switch(source) {
-
 			case MediaItemSortField.IMPORTANCE: return 'IMPORTANCE';
 			case MediaItemSortField.NAME: return 'NAME';
 			case MediaItemSortField.GROUP: return 'GROUP';
@@ -263,14 +243,12 @@ export abstract class MediaItemSortMapper<TMediaItemSortByInternal extends Media
  * @template TSearchMediaItemCatalogResult the class of the API media item entity
  */
 export abstract class MediaItemCatalogSearchMapper<TSearchMediaItemCatalogResultInternal extends SearchMediaItemCatalogResultInternal, TSearchMediaItemCatalogResult extends SearchMediaItemCatalogResult> extends ModelMapper<TSearchMediaItemCatalogResultInternal, TSearchMediaItemCatalogResult, never> {
-	
 	/**
 	 * Common mapping helper for implementations
 	 * @param source the mapping source
 	 * @returns the mapping target
 	 */
 	protected commonToExternal(source: SearchMediaItemCatalogResultInternal): SearchMediaItemCatalogResult {
-
 		return {
 			catalogId: source.catalogId,
 			name: source.name,
@@ -284,7 +262,6 @@ export abstract class MediaItemCatalogSearchMapper<TSearchMediaItemCatalogResult
 	 * @returns the mapping target
 	 */
 	protected commonToInternal(source: SearchMediaItemCatalogResult): SearchMediaItemCatalogResultInternal {
-		
 		return {
 			catalogId: source.catalogId,
 			name: source.name,
@@ -299,14 +276,12 @@ export abstract class MediaItemCatalogSearchMapper<TSearchMediaItemCatalogResult
  * @template TCatalogMediaItem the class of the API media item entity
  */
 export abstract class MediaItemCatalogDetailsMapper<TCatalogMediaItemInternal extends CatalogMediaItemInternal, TCatalogMediaItem extends CatalogMediaItem> extends ModelMapper<TCatalogMediaItemInternal, TCatalogMediaItem, never> {
-	
 	/**
 	 * Common mapping helper for implementations
 	 * @param source the mapping source
 	 * @returns the mapping target
 	 */
 	protected commonToExternal(source: CatalogMediaItemInternal): CatalogMediaItem {
-
 		return {
 			name: source.name,
 			genres: source.genres,
@@ -323,7 +298,6 @@ export abstract class MediaItemCatalogDetailsMapper<TCatalogMediaItemInternal ex
 	 * @returns the mapping target
 	 */
 	protected commonToInternal(source: CatalogMediaItem): CatalogMediaItemInternal {
-		
 		return {
 			name: source.name,
 			genres: source.genres,

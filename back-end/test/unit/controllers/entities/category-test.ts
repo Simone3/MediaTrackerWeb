@@ -12,23 +12,19 @@ const expect = chai.expect;
  * Tests for the category controller
  */
 describe('CategoryController Tests', () => {
-	
 	setupTestDatabaseConnection();
 	
 	describe('CategoryController Tests', () => {
-
 		const firstU: TestU = { user: '' };
 		const secondU: TestU = { user: '' };
 
 		// Create new users for each test
 		beforeEach(async() => {
-
 			await initTestUHelper(firstU, 'First');
 			await initTestUHelper(secondU, 'Second');
 		});
 
 		it('GetCategory should return the correct category after SaveCategory', async() => {
-
 			const insertedCategory = await categoryController.saveCategory(getTestCategory(undefined, 'MOVIE', firstU));
 			const insertedId = insertedCategory._id;
 			expect(insertedCategory._id, 'SaveCategory (insert) returned empty ID').to.exist;
@@ -41,7 +37,6 @@ describe('CategoryController Tests', () => {
 		});
 
 		it('GetCategory should only get a category for the current user', async() => {
-
 			let insertedCategory = await categoryController.saveCategory(getTestCategory(undefined, 'MOVIE', firstU));
 			const firstId = insertedCategory._id;
 			insertedCategory = await categoryController.saveCategory(getTestCategory(undefined, 'MOVIE', secondU));
@@ -54,7 +49,6 @@ describe('CategoryController Tests', () => {
 		});
 
 		it('GetCategory should return the correct category after two SaveCategory (insert and update)', async() => {
-
 			const insertedCategory = await categoryController.saveCategory(getTestCategory(undefined, 'MOVIE', firstU));
 			const insertedId = insertedCategory._id;
 
@@ -69,7 +63,6 @@ describe('CategoryController Tests', () => {
 		});
 
 		it('GetAllCategories should return all categories for the given user', async() => {
-
 			const firstUCategories: CategoryInternal[] = [];
 			const secondUCategories: CategoryInternal[] = [];
 
@@ -89,7 +82,6 @@ describe('CategoryController Tests', () => {
 		});
 
 		it('FilterCategories should return all matching categories for the given user', async() => {
-
 			const firstUCategories: CategoryInternal[] = [];
 			const secondUCategories: CategoryInternal[] = [];
 
@@ -110,18 +102,15 @@ describe('CategoryController Tests', () => {
 		});
 
 		it('SaveCategory (update) not allow to change media type if the category is not empty', async() => {
-
 			const category = await categoryController.saveCategory(getTestCategory(undefined, 'MOVIE', firstU));
 			const categoryId = String(category._id);
 
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, { user: firstU.user, category: categoryId }));
 			
 			try {
-
 				await categoryController.saveCategory(getTestCategory(categoryId, 'BOOK', firstU));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -129,16 +118,13 @@ describe('CategoryController Tests', () => {
 		});
 
 		it('SaveCategory (update) should not accept an invalid user', async() => {
-
 			const insertedCategory = await categoryController.saveCategory(getTestCategory(undefined, 'MOVIE', firstU));
 			const insertedId = insertedCategory._id;
 
 			try {
-
 				await categoryController.saveCategory(getTestCategory(insertedId, 'MOVIE', { user: '5cbf26ea895c281b54b6737f' }));
 			}
 			catch(error) {
-
 				return;
 			}
 
@@ -146,7 +132,6 @@ describe('CategoryController Tests', () => {
 		});
 		
 		it('GetCategory after DeleteCategory should return undefined', async function() {
-			
 			const category = await categoryController.saveCategory(getTestCategory(undefined, 'MOVIE', firstU));
 			const categoryId = category._id;
 

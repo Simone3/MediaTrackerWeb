@@ -9,7 +9,6 @@ import { IsBoolean, IsDateString, IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional
  * Util class to extract common fields to both media item entities and catalog entries
  */
 class CoreMediaItemData {
-
 	/**
 	 * The media item name
 	 */
@@ -58,7 +57,6 @@ class CoreMediaItemData {
  * Model for a media item group data, publicly exposed via API
  */
 export class MediaItemGroup {
-
 	/**
 	 * The group ID
 	 */
@@ -88,7 +86,6 @@ export class MediaItemGroup {
  * Model for a media item own platform, publicly exposed via API
  */
 export class MediaItemOwnPlatform {
-
 	/**
 	 * The own platform ID
 	 */
@@ -121,7 +118,6 @@ export type MediaItemImportance = ValuesOf<typeof MEDIA_ITEM_IMPORTANCE_VALUES>;
  * Abstract model for a media item, publicly exposed via API
  */
 export abstract class MediaItem extends CoreMediaItemData {
-
 	/**
 	 * The media item importance level
 	 */
@@ -184,7 +180,6 @@ export abstract class MediaItem extends CoreMediaItemData {
  * Media items groups filtering options, publicly exposed via API
  */
 export class MediaItemGroupFilter {
-	
 	/**
 	 * If true, the result will include all media items with a group (i.e. group is not null)
 	 */
@@ -212,7 +207,6 @@ export class MediaItemGroupFilter {
  * Media items own platforms filtering options, publicly exposed via API
  */
 export class MediaItemOwnPlatformFilter {
-	
 	/**
 	 * If true, the result will include all media items with an own platform (i.e. own platform is not null)
 	 */
@@ -240,7 +234,6 @@ export class MediaItemOwnPlatformFilter {
  * Abstract media items filtering options, publicly exposed via API
  */
 export abstract class MediaItemFilter {
-
 	/**
 	 * Importance level(s) to filter
 	 */
@@ -289,7 +282,6 @@ export abstract class MediaItemFilter {
  * Common values for ordering options, publicly exposed via API
  */
 export abstract class MediaItemSortField {
-
 	public static readonly IMPORTANCE: string = 'IMPORTANCE';
 	public static readonly NAME: string = 'NAME';
 	public static readonly GROUP: string = 'GROUP';
@@ -299,7 +291,6 @@ export abstract class MediaItemSortField {
 	public static readonly RELEASE_DATE: string = 'RELEASE_DATE';
 	
 	public static commonValues(): string[] {
-
 		return [ this.IMPORTANCE, this.NAME, this.GROUP, this.OWN_PLATFORM, this.COMPLETION_DATE, this.ACTIVE, this.RELEASE_DATE ];
 	}
 }
@@ -308,7 +299,6 @@ export abstract class MediaItemSortField {
  * Abstract media items sort by options, publicly exposed via API
  */
 export abstract class MediaItemSortBy {
-
 	/**
 	 * True if ASC, false if DESC
 	 */
@@ -321,63 +311,54 @@ export abstract class MediaItemSortBy {
  * Abstract request for the 'add media item' API
  */
 export abstract class AddMediaItemRequest extends CommonSaveRequest {
-
 }
 
 /**
  * Response for the 'add media item' API
  */
 export class AddMediaItemResponse extends CommonAddResponse {
-
 }
 
 /**
  * Response for the 'delete media item' API
  */
 export class DeleteMediaItemResponse extends CommonResponse {
-
 }
 
 /**
  * Abstract response for the 'get all media items' API
  */
 export abstract class GetAllMediaItemsResponse extends CommonResponse {
-
 }
 
 /**
  * Abstract request for the 'update media item' API
  */
 export abstract class UpdateMediaItemRequest extends CommonSaveRequest {
-
 }
 
 /**
  * Response for the 'update media item' API
  */
 export class UpdateMediaItemResponse extends CommonResponse {
-
 }
 
 /**
  * Abstract request for the 'filter media items' API
  */
 export abstract class FilterMediaItemsRequest extends CommonRequest {
-
 }
 
 /**
  * Abstract response for the 'filter media items' API
  */
 export abstract class FilterMediaItemsResponse extends CommonResponse {
-
 }
 
 /**
  * Abstract request for the 'search media items' API
  */
 export abstract class SearchMediaItemsRequest extends CommonRequest {
-
 	/**
 	 * The search term
 	 */
@@ -390,21 +371,18 @@ export abstract class SearchMediaItemsRequest extends CommonRequest {
  * Abstract response for the 'search media items' API
  */
 export abstract class SearchMediaItemsResponse extends CommonResponse {
-
 }
 
 /**
  * Abstract model for a media item from the catalog, publicly exposed via API
  */
 export abstract class CatalogMediaItem extends CoreMediaItemData {
-
 }
 
 /**
  * Abstract media item catalog search result, publicly exposed via API
  */
 export abstract class SearchMediaItemCatalogResult {
-
 	@IsNotEmpty()
 	@IsString()
 	public catalogId = '';
@@ -422,7 +400,6 @@ export abstract class SearchMediaItemCatalogResult {
  * Abstract response for the 'search catalog' API
  */
 export abstract class SearchMediaItemCatalogResponse extends CommonResponse {
-
 	/**
 	 * The search results
 	 */
@@ -439,6 +416,5 @@ export abstract class SearchMediaItemCatalogResponse extends CommonResponse {
  * Abstract response for the 'get from catalog' API
  */
 export abstract class GetMediaItemFromCatalogResponse extends CommonResponse {
-
 }
 

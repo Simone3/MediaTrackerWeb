@@ -264,6 +264,11 @@ module.exports = {
 		'one-var-declaration-per-line': [ 2, 'always' ],
 		'operator-assignment': [ 2, 'always' ],
 		'operator-linebreak': [ 2, 'after' ],
+		'padded-blocks': [ 2, {
+			blocks: 'never',
+			classes: 'never',
+			switches: 'never'
+		}],
 		'quote-props': [ 2, 'as-needed' ],
 		quotes: [ 2, 'single', { avoidEscape: false, allowTemplateLiterals: true }],
 		'require-jsdoc': 0,

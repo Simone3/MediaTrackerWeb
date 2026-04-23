@@ -2,7 +2,6 @@
  * Some utilities for strings
  */
 class StringUtils {
-
 	/**
 	 * Similar to the default array join but with truthy check (undefined elements will be skipped) and, optionally, sub-properties
 	 * @param array the possibly undefined source array
@@ -15,29 +14,21 @@ class StringUtils {
 	 * @template R the value to return if nothing to join
 	 */
 	public join<T, R>(array: T[] | undefined, separator: string, defaultIfEmpty: R, properties?: (keyof T)[]): string | R {
-		
 		// First check if we have an array at all
 		if(array) {
-
 			let result = '';
 
 			for(const value of array) {
-				
 				// Then check if the single element of the array is defined
 				if(value) {
-					
 					// Get the string to append (the whole value if no properties, the first defined property otherwise)
 					let toAppend: string | undefined;
 					if(!properties || properties.length === 0) {
-
 						toAppend = String(value);
 					}
 					else {
-
 						for(const property of properties) {
-
 							if(value[property]) {
-
 								toAppend = String(value[property]);
 								break;
 							}
@@ -46,7 +37,6 @@ class StringUtils {
 
 					// If we actually have something to append, do it
 					if(toAppend) {
-						
 						result += toAppend + separator;
 					}
 				}
@@ -56,7 +46,6 @@ class StringUtils {
 			return result.length > 0 ? result.slice(0, -separator.length) : defaultIfEmpty;
 		}
 		else {
-
 			return defaultIfEmpty;
 		}
 	}
@@ -68,12 +57,9 @@ class StringUtils {
 	 * @returns true if at least one of the regular expressions matches
 	 */
 	public matches(string: string, regularExpressions: (RegExp | string)[]): boolean {
-
 		for(const regExp of regularExpressions) {
-
 			const compiledRegExp = typeof regExp === 'string' ? new RegExp(regExp) : regExp;
 			if(compiledRegExp.test(string)) {
-
 				return true;
 			}
 		}

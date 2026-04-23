@@ -13,14 +13,11 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * Controller for book catalog
  */
 class BookCatalogController extends MediaItemCatalogController<SearchBookCatalogResultInternal, CatalogBookInternal> {
-	
 	/**
 	 * @override
 	 */
 	public searchMediaItemCatalogByTerm(searchTerm: string): Promise<SearchBookCatalogResultInternal[]> {
-
 		return new Promise((resolve, reject): void => {
-		
 			const url = miscUtils.buildUrl([
 				config.externalApis.googleBooks.basePath,
 				config.externalApis.googleBooks.search.relativePath
@@ -39,18 +36,14 @@ class BookCatalogController extends MediaItemCatalogController<SearchBookCatalog
 			
 			restJsonInvoker.invoke(invocationParams)
 				.then((response) => {
-
 					if(response.items) {
-
 						resolve(bookExternalSearchServiceMapper.toInternalList(response.items));
 					}
 					else {
-
 						resolve([]);
 					}
 				})
 				.catch((error) => {
-					
 					logger.error('Book catalog invocation error: %s', error);
 					reject(AppError.GENERIC.withDetails(error));
 				});
@@ -61,9 +54,7 @@ class BookCatalogController extends MediaItemCatalogController<SearchBookCatalog
 	 * @override
 	 */
 	public getMediaItemFromCatalog(catalogItemId: string): Promise<CatalogBookInternal> {
-
 		return new Promise((resolve, reject): void => {
-		
 			const pathParams = {
 				bookId: catalogItemId
 			};
@@ -85,11 +76,9 @@ class BookCatalogController extends MediaItemCatalogController<SearchBookCatalog
 
 			restJsonInvoker.invoke(invocationParams)
 				.then((response) => {
-
 					resolve(bookExternalDetailsServiceMapper.toInternal(response));
 				})
 				.catch((error) => {
-					
 					logger.error('Book catalog invocation error: %s', error);
 					reject(AppError.GENERIC.withDetails(error));
 				});

@@ -24,12 +24,10 @@ type QueryConditions = FilterQuery<VideogameInternal>;
  * Controller for videogame entities
  */
 class VideogameEntityController extends MediaItemEntityController<VideogameInternal, VideogameSortByInternal, VideogameFilterInternal> {
-	
 	/**
 	 * Constructor
 	 */
 	public constructor() {
-
 		super(VideogameModel);
 	}
 	
@@ -37,7 +35,6 @@ class VideogameEntityController extends MediaItemEntityController<VideogameInter
 	 * @override
 	 */
 	protected getNewEmptyDocument(): VideogameInternal & Document {
-
 		return new VideogameModel();
 	}
 		
@@ -45,7 +42,6 @@ class VideogameEntityController extends MediaItemEntityController<VideogameInter
 	 * @override
 	 */
 	protected getDefaultSortBy(): VideogameSortByInternal[] {
-		
 		return [{
 			field: 'NAME',
 			ascending: true
@@ -56,7 +52,6 @@ class VideogameEntityController extends MediaItemEntityController<VideogameInter
 	 * @override
 	 */
 	protected addConditionsFromFilter(userId: string, categoryId: string, andConditions: QueryConditions[], filterBy?: VideogameFilterInternal): void {
-		
 		this.addCommonConditionsFromFilter(userId, categoryId, andConditions, filterBy);
 	}
 	
@@ -64,9 +59,7 @@ class VideogameEntityController extends MediaItemEntityController<VideogameInter
 	 * @override
 	 */
 	protected setSortConditions(sortBy: VideogameSortByInternal, sortDirection: SortOrder, sortConditions: Sortable<VideogameInternal>): void {
-		
 		switch(sortBy.field) {
-
 			case 'DEVELOPER':
 				sortConditions.developers = sortDirection;
 				break;
@@ -80,7 +73,6 @@ class VideogameEntityController extends MediaItemEntityController<VideogameInter
 	 * @override
 	 */
 	protected setSearchByTermConditions(_: string, termRegExp: RegExp, searchConditions: QueryConditions[]): void {
-		
 		searchConditions.push({
 			developers: termRegExp
 		});
@@ -90,7 +82,6 @@ class VideogameEntityController extends MediaItemEntityController<VideogameInter
 	 * @override
 	 */
 	protected getLinkedMediaType(): MediaTypeInternal {
-		
 		return 'VIDEOGAME';
 	}
 }

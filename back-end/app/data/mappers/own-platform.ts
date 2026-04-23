@@ -15,12 +15,10 @@ type OwnPlatformMapperParams = {
  * Mapper for platforms where some user owns some media items
  */
 class OwnPlatformMapper extends ModelMapper<OwnPlatformInternal, IdentifiedOwnPlatform, OwnPlatformMapperParams> {
-	
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: OwnPlatformInternal): IdentifiedOwnPlatform {
-		
 		return {
 			uid: source._id,
 			name: source.name,
@@ -33,7 +31,6 @@ class OwnPlatformMapper extends ModelMapper<OwnPlatformInternal, IdentifiedOwnPl
 	 * @override
 	 */
 	protected convertToInternal(source: IdentifiedOwnPlatform, extraParams?: OwnPlatformMapperParams): OwnPlatformInternal {
-		
 		if(!extraParams) {
 			throw AppError.GENERIC.withDetails('convertToInternal.extraParams cannot be undefined');
 		}
@@ -53,12 +50,10 @@ class OwnPlatformMapper extends ModelMapper<OwnPlatformInternal, IdentifiedOwnPl
  * Mapper for own platform filters
  */
 class OwnPlatformFilterMapper extends ModelMapper<OwnPlatformFilterInternal, OwnPlatformFilter, never> {
-		
 	/**
 	 * @override
 	 */
 	protected convertToExternal(source: OwnPlatformFilterInternal): OwnPlatformFilter {
-		
 		return {
 			name: source.name
 		};
@@ -68,7 +63,6 @@ class OwnPlatformFilterMapper extends ModelMapper<OwnPlatformFilterInternal, Own
 	 * @override
 	 */
 	protected convertToInternal(source: OwnPlatformFilter): OwnPlatformFilterInternal {
-		
 		return {
 			name: source.name
 		};

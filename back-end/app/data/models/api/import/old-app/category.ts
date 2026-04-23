@@ -27,7 +27,6 @@ export type OldAppMediaType = ValuesOf<typeof OLD_APP_MEDIA_TYPES>;
  * Model for a category in the old Media Tracker app export, publicly exposed via API
  */
 export class OldAppCategory {
-
 	/**
 	 * The category name
 	 */

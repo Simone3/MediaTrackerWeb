@@ -6,7 +6,6 @@ import { OldAppBoolean } from 'app/data/models/api/import/old-app/common';
  * @returns the target
  */
 export const parseOldAppBoolean = (source: OldAppBoolean | undefined): boolean => {
-
 	return source === '1';
 };
 
@@ -16,7 +15,6 @@ export const parseOldAppBoolean = (source: OldAppBoolean | undefined): boolean =
  * @returns the target
  */
 export const parseOldAppDate = (source: string): Date => {
-
 	return new Date(Number(source));
 };
 
@@ -26,6 +24,5 @@ export const parseOldAppDate = (source: string): Date => {
  * @returns the target
  */
 export const parseOldAppMultiValueString = (source: string): string[] => {
-
 	return source.split(', ');
 };

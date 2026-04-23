@@ -7,19 +7,15 @@ let serverInstance: any;
  * Helper to start the Express server
  */
 export const setupTestServer = (): void => {
-
 	// Init server on startup
 	before((done) => {
-
 		serverInstance = server.listen(config.server.port, () => {
-		
 			done();
 		});
 	});
 
 	// Close server connection at the end
 	after((done) => {
-		
 		serverInstance.close();
 		done();
 	});
@@ -30,6 +26,5 @@ export const setupTestServer = (): void => {
  * @returns the test server instance
  */
 export const getTestServer = (): any => {
-
 	return serverInstance;
 };

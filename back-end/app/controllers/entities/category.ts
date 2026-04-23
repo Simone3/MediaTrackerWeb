@@ -34,14 +34,12 @@ type OrderBy = Sortable<CategoryInternal>;
  * Controller for category entities
  */
 class CategoryController extends AbstractEntityController {
-
 	private readonly queryHelper: QueryHelper<CategoryInternal, CategoryDocument, Model<CategoryDocument>>;
 
 	/**
 	 * Constructor
 	 */
 	public constructor() {
-
 		super();
 		this.queryHelper = new QueryHelper(CategoryModel);
 	}
@@ -53,7 +51,6 @@ class CategoryController extends AbstractEntityController {
 	 * @returns the category or undefined if not found, as a promise
 	 */
 	public getCategory(userId: string, categoryId: string): Promise<CategoryInternal | undefined> {
-
 		const conditions: QueryConditions = {
 			_id: categoryId,
 			owner: userId
@@ -68,7 +65,6 @@ class CategoryController extends AbstractEntityController {
 	 * @returns the categories, as a promise
 	 */
 	public getAllCategories(userId: string): Promise<CategoryInternal[]> {
-
 		return this.filterCategories(userId);
 	}
 
@@ -79,13 +75,11 @@ class CategoryController extends AbstractEntityController {
 	 * @returns the categories, as a promise
 	 */
 	public filterCategories(userId: string, filter?: CategoryFilterInternal): Promise<CategoryInternal[]> {
-
 		const conditions: QueryConditions = {
 			owner: userId
 		};
 
 		if(filter && filter.name) {
-			
 			// Case insensitive exact match
 			conditions.name = new RegExp(`^${filter.name}$`, 'i');
 		}
@@ -104,9 +98,7 @@ class CategoryController extends AbstractEntityController {
 	 * @returns the saved category, as a promise
 	 */
 	public async saveCategory(category: CategoryInternal, skipCheckPreconditions?: boolean): Promise<CategoryInternal> {
-		
 		if(!skipCheckPreconditions) {
-			
 			await this.checkWritePreconditions(
 				AppError.DATABASE_SAVE.withDetails(category._id ? 'Category does not exists for given user' : 'User does not exist'),
 				category.owner,
@@ -125,7 +117,6 @@ class CategoryController extends AbstractEntityController {
 	 * @returns the number of deleted categories, as a promise
 	 */
 	public async deleteCategory(userId: string, categoryId: string): Promise<number> {
-
 		await this.checkWritePreconditions(AppError.DATABASE_DELETE.withDetails('Category does not exist for given user'), userId, categoryId);
 
 		const mediaItemController = await mediaItemFactory.getEntityControllerFromCategoryId(userId, categoryId);
@@ -145,7 +136,6 @@ class CategoryController extends AbstractEntityController {
 	 * @returns the number of deleted elements, as a promise
 	 */
 	public deleteAllCategoriesForUser(userId: string): Promise<number> {
-
 		const conditions: QueryConditions = {
 			owner: userId
 		};
@@ -162,10 +152,8 @@ class CategoryController extends AbstractEntityController {
 	 * @returns a void promise that resolves if all preconditions are OK
 	 */
 	private async checkWritePreconditions(errorToThow: AppError, userId: string, categoryId?: string, newCategoryData?: CategoryInternal): Promise<void> {
-		
 		// Preconditions only if it's an existing category
 		if(categoryId) {
-
 			// First check that the category exists
 			const categoryCheckPromise = this.getCategory(userId, categoryId);
 			await this.checkExistencePreconditionsHelper(errorToThow, () => {
@@ -175,11 +163,9 @@ class CategoryController extends AbstractEntityController {
 			// Then, if the media type changes, check that the category is empty
 			const category = await categoryCheckPromise;
 			if(category && newCategoryData && category.mediaType !== newCategoryData.mediaType) {
-
 				const mediaItemController = await mediaItemFactory.getEntityControllerFromCategoryId(userId, categoryId);
 				const mediaItems: MediaItemInternal[] = await mediaItemController.getAllMediaItemsInCategory(categoryId);
 				if(mediaItems.length > 0) {
-
 					throw AppError.DATABASE_SAVE.withDetails('Cannot change category media type if it contains media items');
 				}
 			}

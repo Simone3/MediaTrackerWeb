@@ -18,25 +18,21 @@ const expect = chai.expect;
  * Tests for the book API
  */
 describe('Book API Tests', () => {
-
 	setupTestDatabaseConnection();
 	setupTestServer();
 	setupBookExternalServicesMocks();
 
 	describe('Book API Tests', () => {
-
 		const firstUCG: TestUCG = { user: '', category: '' };
 		const secondUCG: TestUCG = { user: '', category: '' };
 
 		// Create new users/categories/groups for each test
 		beforeEach(async() => {
-
 			await initTestUCGHelper('BOOK', firstUCG, 'First');
 			await initTestUCGHelper('BOOK', secondUCG, 'Second');
 		});
 
 		it('Should create a new book', async() => {
-
 			const name = randomName();
 			const response = await callHelper<AddBookRequest, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/books`, firstUCG.user, {
 				newBook: {
@@ -55,7 +51,6 @@ describe('Book API Tests', () => {
 		});
 
 		it('Should update an existing book', async() => {
-
 			const book = await bookEntityController.saveMediaItem(getTestBook(undefined, firstUCG));
 			const bookId = String(book._id);
 			const newName = randomName('Changed');
@@ -74,7 +69,6 @@ describe('Book API Tests', () => {
 		});
 
 		it('Should filter and sort books', async() => {
-
 			await bookEntityController.saveMediaItem(getTestBook(undefined, firstUCG, { name: 'Rrr', importance: '300' }));
 			await bookEntityController.saveMediaItem(getTestBook(undefined, firstUCG, { name: 'Bbb', importance: '200' }));
 			await bookEntityController.saveMediaItem(getTestBook(undefined, firstUCG, { name: 'Zzz', importance: '200' }));
@@ -95,7 +89,6 @@ describe('Book API Tests', () => {
 		});
 
 		it('Should search books by term', async() => {
-
 			await bookEntityController.saveMediaItem(getTestBook(undefined, firstUCG, { name: 'Rtestrr', importance: '300' }));
 			await bookEntityController.saveMediaItem(getTestBook(undefined, firstUCG, { name: 'Bbb', importance: '200' }));
 			await bookEntityController.saveMediaItem(getTestBook(undefined, firstUCG, { name: 'ZzTESTz', importance: '200' }));
@@ -113,7 +106,6 @@ describe('Book API Tests', () => {
 		});
 
 		it('Should delete an existing book', async() => {
-
 			const book = await bookEntityController.saveMediaItem(getTestBook(undefined, firstUCG));
 			const bookId = String(book._id);
 
@@ -124,7 +116,6 @@ describe('Book API Tests', () => {
 		});
 
 		it('Should check for name validity', async() => {
-
 			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/books`, firstUCG.user, {
 				newBook: {
 					importance: '100'
@@ -135,7 +126,6 @@ describe('Book API Tests', () => {
 		});
 
 		it('Should check for importance validity', async() => {
-
 			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/books`, firstUCG.user, {
 				newBook: {
 					name: randomName()
@@ -146,7 +136,6 @@ describe('Book API Tests', () => {
 		});
 
 		it('Should search the books catalog', async() => {
-
 			const response = await callHelper<{}, SearchBookCatalogResponse>('GET', `/catalog/books/search/Mock Book`, firstUCG.user);
 			
 			expect(response.searchResults, 'API did not return the correct number of catalog books').to.have.lengthOf(2);
@@ -155,7 +144,6 @@ describe('Book API Tests', () => {
 		});
 
 		it('Should get book details from the catalog', async() => {
-
 			const expectedResult: Required<CatalogBook> = {
 				name: 'Mock Book 1',
 				authors: [ 'Some Author' ],
@@ -173,7 +161,6 @@ describe('Book API Tests', () => {
 		});
 
 		it('Should save and then retrieve ALL fields', async() => {
-
 			// Add group
 			const sourceGroup: Required<IdentifiedGroup> = {
 				uid: '',
@@ -237,42 +224,36 @@ describe('Book API Tests', () => {
 		});
 
 		it('Should not allow to add to another user\'s books', async() => {
-
 			await callHelper('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/books`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to update another user\'s book', async() => {
-
 			await callHelper('PUT', `/users/${firstUCG.user}/categories/${firstUCG.category}/books/someobjectid`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to delete another user\'s book', async() => {
-
 			await callHelper('DELETE', `/users/${firstUCG.user}/categories/${firstUCG.category}/books/someobjectid`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to get another user\'s books', async() => {
-
 			await callHelper('GET', `/users/${firstUCG.user}/categories/${firstUCG.category}/books`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to filter another user\'s books', async() => {
-
 			await callHelper('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/books/filter`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});
 		});
 
 		it('Should not allow to search another user\'s books', async() => {
-
 			await callHelper('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/books/search`, secondUCG.user, undefined, {
 				expectedStatus: 403
 			});

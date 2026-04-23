@@ -13,14 +13,11 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * Controller for TV show catalog
  */
 class TvShowCatalogController extends MediaItemCatalogController<SearchTvShowCatalogResultInternal, CatalogTvShowInternal> {
-	
 	/**
 	 * @override
 	 */
 	public searchMediaItemCatalogByTerm(searchTerm: string): Promise<SearchTvShowCatalogResultInternal[]> {
-
 		return new Promise((resolve, reject): void => {
-		
 			const url = miscUtils.buildUrl([
 				config.externalApis.theMovieDb.basePath,
 				config.externalApis.theMovieDb.tvShows.search.relativePath
@@ -39,18 +36,14 @@ class TvShowCatalogController extends MediaItemCatalogController<SearchTvShowCat
 
 			restJsonInvoker.invoke(invocationParams)
 				.then((response) => {
-
 					if(response.results) {
-
 						resolve(tvShowExternalSearchServiceMapper.toInternalList(response.results));
 					}
 					else {
-
 						resolve([]);
 					}
 				})
 				.catch((error) => {
-					
 					logger.error('TV show catalog invocation error: %s', error);
 					reject(AppError.GENERIC.withDetails(error));
 				});
@@ -61,9 +54,7 @@ class TvShowCatalogController extends MediaItemCatalogController<SearchTvShowCat
 	 * @override
 	 */
 	public getMediaItemFromCatalog(catalogItemId: string): Promise<CatalogTvShowInternal> {
-
 		return new Promise((resolve, reject): void => {
-		
 			const pathParams = {
 				tvShowId: catalogItemId
 			};
@@ -86,32 +77,26 @@ class TvShowCatalogController extends MediaItemCatalogController<SearchTvShowCat
 			// First call the general details service
 			restJsonInvoker.invoke(invocationParams)
 				.then((detailsResponse) => {
-
 					// Then, if the show is in production, get last season data for next episode air date
 					if(detailsResponse.in_production && detailsResponse.seasons && detailsResponse.seasons.length > 0) {
-
 						const lastSeason = Math.max(...detailsResponse.seasons.map((season) => {
 							return season.season_number;
 						}), 1);
 
 						this.getSeasonData(catalogItemId, lastSeason)
 							.then((seasonResponse) => {
-
 								resolve(tvShowExternalDetailsServiceMapper.toInternal(detailsResponse, { currentSeasonData: seasonResponse }));
 							})
 							.catch((error) => {
-
 								logger.error('TV show catalog (season) invocation error: %s', error);
 								reject(AppError.GENERIC.withDetails(error));
 							});
 					}
 					else {
-
 						resolve(tvShowExternalDetailsServiceMapper.toInternal(detailsResponse));
 					}
 				})
 				.catch((error) => {
-					
 					logger.error('TV show catalog (details) invocation error: %s', error);
 					reject(AppError.GENERIC.withDetails(error));
 				});
@@ -125,7 +110,6 @@ class TvShowCatalogController extends MediaItemCatalogController<SearchTvShowCat
 	 * @returns the parsed API response
 	 */
 	private getSeasonData(catalogItemId: string, seasonNumber: number): Promise<TmdbTvShowSeasonDataResponse> {
-
 		const pathParams = {
 			tvShowId: catalogItemId,
 			seasonNumber: String(seasonNumber)

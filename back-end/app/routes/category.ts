@@ -15,12 +15,10 @@ const router: Router = express.Router();
  * Route to get all saved categories
  */
 router.get('/users/:userId/categories', userResourceAuthorizationMiddleware, (request, response) => {
-
 	const userId: string = request.params.userId;
 
 	categoryController.getAllCategories(userId)
 		.then((categories) => {
-
 			const responseBody: GetAllCategoriesResponse = {
 				categories: categoryMapper.toExternalList(categories)
 			};
@@ -28,7 +26,6 @@ router.get('/users/:userId/categories', userResourceAuthorizationMiddleware, (re
 			response.json(responseBody);
 		})
 		.catch((error) => {
-
 			logger.error('Get categories generic error: %s', error);
 			response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 		});
@@ -38,16 +35,13 @@ router.get('/users/:userId/categories', userResourceAuthorizationMiddleware, (re
  * Route to get all saved categories matching some filter
  */
 router.post('/users/:userId/categories/filter', userResourceAuthorizationMiddleware, (request, response) => {
-
 	const userId: string = request.params.userId;
 
 	parserValidator.parseAndValidate(FilterCategoriesRequest, request.body)
 		.then((parsedRequest) => {
-
 			const filterBy = parsedRequest.filter ? categoryFilterMapper.toInternal(parsedRequest.filter) : undefined;
 			categoryController.filterCategories(userId, filterBy)
 				.then((categories) => {
-		
 					const responseBody: FilterCategoriesResponse = {
 						categories: categoryMapper.toExternalList(categories)
 					};
@@ -55,13 +49,11 @@ router.post('/users/:userId/categories/filter', userResourceAuthorizationMiddlew
 					response.json(responseBody);
 				})
 				.catch((error) => {
-		
 					logger.error('Filter categories generic error: %s', error);
 					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 				});
 		})
 		.catch((error) => {
-
 			logger.error('Filter category request error: %s', error);
 			response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
 		});
@@ -71,16 +63,13 @@ router.post('/users/:userId/categories/filter', userResourceAuthorizationMiddlew
  * Route to add a new category
  */
 router.post('/users/:userId/categories', userResourceAuthorizationMiddleware, (request, response) => {
-
 	const userId: string = request.params.userId;
 
 	parserValidator.parseAndValidate(AddCategoryRequest, request.body)
 		.then((parsedRequest) => {
-
 			const newCategory = categoryMapper.toInternal({ ...parsedRequest.newCategory, uid: '' }, { userId });
 			categoryController.saveCategory(newCategory)
 				.then((savedCategory) => {
-			
 					const responseBody: AddCategoryResponse = {
 						message: 'Category successfully added',
 						uid: savedCategory._id
@@ -89,13 +78,11 @@ router.post('/users/:userId/categories', userResourceAuthorizationMiddleware, (r
 					response.json(responseBody);
 				})
 				.catch((error) => {
-
 					logger.error('Add category generic error: %s', error);
 					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 				});
 		})
 		.catch((error) => {
-
 			logger.error('Add category request error: %s', error);
 			response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
 		});
@@ -105,17 +92,14 @@ router.post('/users/:userId/categories', userResourceAuthorizationMiddleware, (r
  * Route to update an existing category
  */
 router.put('/users/:userId/categories/:id', userResourceAuthorizationMiddleware, (request, response) => {
-
 	const userId: string = request.params.userId;
 	const id: string = request.params.id;
 
 	parserValidator.parseAndValidate(UpdateCategoryRequest, request.body)
 		.then((parsedRequest) => {
-
 			const category = categoryMapper.toInternal({ ...parsedRequest.category, uid: id }, { userId });
 			categoryController.saveCategory(category)
 				.then(() => {
-				
 					const responseBody: UpdateCategoryResponse = {
 						message: 'Category successfully updated'
 					};
@@ -123,13 +107,11 @@ router.put('/users/:userId/categories/:id', userResourceAuthorizationMiddleware,
 					response.json(responseBody);
 				})
 				.catch((error) => {
-
 					logger.error('Update category generic error: %s', error);
 					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 				});
 		})
 		.catch((error) => {
-
 			logger.error('Update category request error: %s', error);
 			response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
 		});
@@ -139,13 +121,11 @@ router.put('/users/:userId/categories/:id', userResourceAuthorizationMiddleware,
  * Route to delete a category
  */
 router.delete('/users/:userId/categories/:id', userResourceAuthorizationMiddleware, (request, response) => {
-
 	const userId: string = request.params.userId;
 	const id: string = request.params.id;
 
 	categoryController.deleteCategory(userId, id)
 		.then(() => {
-			
 			const responseBody: DeleteCategoryResponse = {
 				message: 'Category successfully deleted'
 			};
@@ -153,7 +133,6 @@ router.delete('/users/:userId/categories/:id', userResourceAuthorizationMiddlewa
 			response.json(responseBody);
 		})
 		.catch((error) => {
-
 			logger.error('Delete category generic error: %s', error);
 			response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
 		});

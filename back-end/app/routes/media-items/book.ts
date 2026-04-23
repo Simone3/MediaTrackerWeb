@@ -21,7 +21,6 @@ const catalogRouterBuilder = new MediaItemCatalogRouterBuilder<SearchBookCatalog
 
 // Setup 'get all' API
 entityRouterBuilder.getAll({
-
 	responseBuilder: (commonResponse, books) => {
 		const response: GetAllBooksResponse = {
 			...commonResponse,
@@ -33,7 +32,6 @@ entityRouterBuilder.getAll({
 
 // Setup 'filter and order' API
 entityRouterBuilder.filter({
-
 	requestClass: FilterBooksRequest,
 
 	filterRequestReader: (request) => {
@@ -55,7 +53,6 @@ entityRouterBuilder.filter({
 
 // Setup 'search' API
 entityRouterBuilder.search({
-
 	requestClass: SearchBooksRequest,
 
 	filterRequestReader: (request) => {
@@ -73,7 +70,6 @@ entityRouterBuilder.search({
 
 // Setup 'add new' API
 entityRouterBuilder.addNew({
-
 	requestClass: AddBookRequest,
 
 	mediaItemRequestReader: (request, mediaItemId, userId, categoryId) => {
@@ -83,7 +79,6 @@ entityRouterBuilder.addNew({
 
 // Setup 'update' API
 entityRouterBuilder.updateExisting({
-
 	requestClass: UpdateBookRequest,
 
 	mediaItemRequestReader: (request, mediaItemId, userId, categoryId) => {
@@ -96,7 +91,6 @@ entityRouterBuilder.delete();
 
 // Setup 'catalog search' API
 catalogRouterBuilder.search({
-
 	responseBuilder: (commonResponse, books) => {
 		const response: SearchBookCatalogResponse = {
 			...commonResponse,
@@ -108,7 +102,6 @@ catalogRouterBuilder.search({
 
 // Setup 'catalog details' API
 catalogRouterBuilder.details({
-
 	responseBuilder: (commonResponse, book) => {
 		const response: GetBookFromCatalogResponse = {
 			...commonResponse,

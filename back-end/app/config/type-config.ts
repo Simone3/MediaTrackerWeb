@@ -3,21 +3,18 @@ import { Type } from 'class-transformer';
 import { IsBoolean, IsDefined, IsIn, IsNumber, IsString, ValidateNested } from 'class-validator';
 
 class ServerConfig {
-
 	@IsDefined()
 	@IsNumber()
 	public port!: number;
 }
 
 class DbConfig {
-
 	@IsDefined()
 	@IsString()
 	public url!: string;
 }
 
 class TheMovieDbMoviesSearchQueryParamsConfig {
-
 	@IsDefined()
 	@IsString()
 	public api_key!: string;
@@ -28,7 +25,6 @@ class TheMovieDbMoviesSearchQueryParamsConfig {
 }
 
 class TheMovieDbMoviesSearchConfig {
-
 	@IsDefined()
 	@IsString()
 	public relativePath!: string;
@@ -42,7 +38,6 @@ class TheMovieDbMoviesSearchConfig {
 }
 
 class TheMovieDbMoviesDetailsQueryParamsConfig {
-
 	@IsDefined()
 	@IsString()
 	public api_key!: string;
@@ -53,7 +48,6 @@ class TheMovieDbMoviesDetailsQueryParamsConfig {
 }
 
 class TheMovieDbMoviesDetailsConfig {
-
 	@IsDefined()
 	@IsString()
 	public relativePath!: string;
@@ -67,7 +61,6 @@ class TheMovieDbMoviesDetailsConfig {
 }
 
 class TheMovieDbMoviesConfig {
-
 	@IsDefined()
 	@IsString()
 	public imageBasePath!: string;
@@ -92,7 +85,6 @@ class TheMovieDbMoviesConfig {
 }
 
 class TheMovieDbTvShowsSearchQueryParamsConfig {
-
 	@IsDefined()
 	@IsString()
 	public api_key!: string;
@@ -103,7 +95,6 @@ class TheMovieDbTvShowsSearchQueryParamsConfig {
 }
 
 class TheMovieDbTvShowsSearchConfig {
-
 	@IsDefined()
 	@IsString()
 	public relativePath!: string;
@@ -117,14 +108,12 @@ class TheMovieDbTvShowsSearchConfig {
 }
 
 class TheMovieDbTvShowsDetailsQueryParamsConfig {
-
 	@IsDefined()
 	@IsString()
 	public api_key!: string;
 }
 
 class TheMovieDbTvShowsDetailsConfig {
-
 	@IsDefined()
 	@IsString()
 	public relativePath!: string;
@@ -138,14 +127,12 @@ class TheMovieDbTvShowsDetailsConfig {
 }
 
 class TheMovieDbTvShowsSeasonQueryParamsConfig {
-
 	@IsDefined()
 	@IsString()
 	public api_key!: string;
 }
 
 class TheMovieDbTvShowsSeasonsConfig {
-
 	@IsDefined()
 	@IsString()
 	public relativePath!: string;
@@ -159,7 +146,6 @@ class TheMovieDbTvShowsSeasonsConfig {
 }
 
 class TheMovieDbTvShowsConfig {
-
 	@IsDefined()
 	@IsString()
 	public imageBasePath!: string;
@@ -187,7 +173,6 @@ class TheMovieDbTvShowsConfig {
 }
 
 class TheMovieDbConfig {
-
 	@IsDefined()
 	@IsString()
 	public basePath!: string;
@@ -208,7 +193,6 @@ class TheMovieDbConfig {
 }
 
 class GoogleBooksSearchQueryParamsConfig {
-
 	@IsDefined()
 	@IsString()
 	public key!: string;
@@ -239,7 +223,6 @@ class GoogleBooksSearchQueryParamsConfig {
 }
 
 class GoogleBooksSearchConfig {
-
 	@IsDefined()
 	@IsString()
 	public relativePath!: string;
@@ -253,14 +236,12 @@ class GoogleBooksSearchConfig {
 }
 
 class GoogleBooksDetailsQueryParamsConfig {
-
 	@IsDefined()
 	@IsString()
 	public key!: string;
 }
 
 class GoogleBooksDetailsConfig {
-
 	@IsDefined()
 	@IsString()
 	public relativePath!: string;
@@ -274,7 +255,6 @@ class GoogleBooksDetailsConfig {
 }
 
 class GoogleBooksConfig {
-
 	@IsDefined()
 	@IsString()
 	public basePath!: string;
@@ -295,7 +275,6 @@ class GoogleBooksConfig {
 }
 
 class GiantBombSearchQueryParamsConfig {
-
 	@IsDefined()
 	@IsString()
 	public api_key!: string;
@@ -318,7 +297,6 @@ class GiantBombSearchQueryParamsConfig {
 }
 
 class GiantBombSearchConfig {
-
 	@IsDefined()
 	@IsString()
 	public relativePath!: string;
@@ -332,7 +310,6 @@ class GiantBombSearchConfig {
 }
 
 class GiantBombDetailsQueryParamsConfig {
-
 	@IsDefined()
 	@IsString()
 	public api_key!: string;
@@ -347,7 +324,6 @@ class GiantBombDetailsQueryParamsConfig {
 }
 
 class GiantBombDetailsConfig {
-
 	@IsDefined()
 	@IsString()
 	public relativePath!: string;
@@ -361,7 +337,6 @@ class GiantBombDetailsConfig {
 }
 
 class GiantBombConfig {
-
 	@IsDefined()
 	@IsString()
 	public basePath!: string;
@@ -382,7 +357,6 @@ class GiantBombConfig {
 }
 
 class ExternalApisConfig {
-
 	@IsDefined()
 	@IsNumber()
 	public timeoutMilliseconds!: number;
@@ -418,7 +392,6 @@ const LOG_LEVEL_CONFIG_VALUES: [ 'debug', 'info', 'error', 'off' ] = [ 'debug', 
 type LogLevelConfig = ValuesOf<typeof LOG_LEVEL_CONFIG_VALUES>;
 
 class LogApisInputOutputConfig {
-
 	@IsDefined()
 	@IsBoolean()
 	public active!: boolean;
@@ -435,28 +408,24 @@ class LogApisInputOutputConfig {
 }
 
 class LogExternalApisInputOutputConfig {
-
 	@IsDefined()
 	@IsBoolean()
 	public active!: boolean;
 }
 
 class LogDatabaseQueriesConfig {
-
 	@IsDefined()
 	@IsBoolean()
 	public active!: boolean;
 }
 
 class LogPerformanceConfig {
-
 	@IsDefined()
 	@IsBoolean()
 	public active!: boolean;
 }
 
 class LogConfig {
-
 	@IsDefined()
 	@IsString()
 	@IsIn(LOG_LEVEL_CONFIG_VALUES)
@@ -496,7 +465,6 @@ class LogConfig {
 }
 
 class FirebaseConfig {
-
 	@IsDefined()
 	@IsString()
 	public databaseUrl!: string;
@@ -509,7 +477,6 @@ class FirebaseConfig {
  * Type for configuration files
  */
 export class Config {
-
 	@IsDefined()
 	@Type(() => {
 		return ServerConfig;

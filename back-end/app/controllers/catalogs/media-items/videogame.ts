@@ -13,14 +13,11 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * Controller for videogame catalog
  */
 class VideogameCatalogController extends MediaItemCatalogController<SearchVideogameCatalogResultInternal, CatalogVideogameInternal> {
-	
 	/**
 	 * @override
 	 */
 	public searchMediaItemCatalogByTerm(searchTerm: string): Promise<SearchVideogameCatalogResultInternal[]> {
-
 		return new Promise((resolve, reject): void => {
-		
 			const url = miscUtils.buildUrl([
 				config.externalApis.giantBomb.basePath,
 				config.externalApis.giantBomb.search.relativePath
@@ -39,18 +36,14 @@ class VideogameCatalogController extends MediaItemCatalogController<SearchVideog
 
 			restJsonInvoker.invoke(invocationParams)
 				.then((response) => {
-
 					if(response.results) {
-
 						resolve(videogameExternalSearchServiceMapper.toInternalList(response.results));
 					}
 					else {
-
 						resolve([]);
 					}
 				})
 				.catch((error) => {
-					
 					logger.error('Videogame catalog invocation error: %s', error);
 					reject(AppError.GENERIC.withDetails(error));
 				});
@@ -61,9 +54,7 @@ class VideogameCatalogController extends MediaItemCatalogController<SearchVideog
 	 * @override
 	 */
 	public getMediaItemFromCatalog(catalogItemId: string): Promise<CatalogVideogameInternal> {
-
 		return new Promise((resolve, reject): void => {
-		
 			const pathParams = {
 				videogameId: catalogItemId
 			};
@@ -85,11 +76,9 @@ class VideogameCatalogController extends MediaItemCatalogController<SearchVideog
 
 			restJsonInvoker.invoke(invocationParams)
 				.then((response) => {
-
 					resolve(videogameExternalDetailsServiceMapper.toInternal(response));
 				})
 				.catch((error) => {
-					
 					logger.error('Videogame catalog invocation error: %s', error);
 					reject(AppError.GENERIC.withDetails(error));
 				});

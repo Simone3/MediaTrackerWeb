@@ -15,35 +15,27 @@ const expect = chai.expect;
  * Tests for the old app import controller
  */
 describe('OldAppImportController Tests', () => {
-	
 	setupTestDatabaseConnection();
 	
 	describe('OldAppImportController Tests', () => {
-
 		const firstU: TestU = { user: '' };
 
 		const helperCompareResults = (category: CategoryInternal, mediaItems: MediaItemInternal[], expectedCategoryName: string, expectedMediaItemNames: string[], expectedMediaItemPlatforms: (string | undefined)[]): void => {
-
 			expect(category.name, 'Wrong imported category name').to.eq(expectedCategoryName);
 
 			expect(extract(mediaItems, 'name'), 'Wrong imported media items').to.have.members(expectedMediaItemNames);
 
 			const platforms = [];
 			for(const mediaItem of mediaItems) {
-
 				if(mediaItem.ownPlatform) {
-
 					if(typeof mediaItem.ownPlatform === 'string') {
-
 						platforms.push(mediaItem.ownPlatform);
 					}
 					else {
-
 						platforms.push(mediaItem.ownPlatform.name);
 					}
 				}
 				else {
-
 					platforms.push(undefined);
 				}
 			}
@@ -52,12 +44,10 @@ describe('OldAppImportController Tests', () => {
 
 		// Create new users/categories/groups for each test
 		beforeEach(async() => {
-
 			await initTestUHelper(firstU, 'First');
 		});
 
 		it('Import should import all entities correctly', async() => {
-
 			const oldAppExport: OldAppExportInternal = {
 				categories: [{
 					categoryData: {
