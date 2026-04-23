@@ -3,22 +3,17 @@ import { MediaItemEntityController } from 'app/controllers/entities/media-items/
 import { MediaTypeInternal } from 'app/data/models/internal/category';
 import { BookFilterInternal, BookInternal, BookSortByInternal } from 'app/data/models/internal/media-items/book';
 import { BookSchema, BOOK_COLLECTION_NAME } from 'app/schemas/media-items/book';
-import { Document, FilterQuery, Model, model, SortOrder } from 'mongoose';
-
-/**
- * Book document for Mongoose
- */
-interface BookDocument extends BookInternal, Document {}
+import { HydratedDocument, QueryFilter, Model, model, SortOrder } from 'mongoose';
 
 /**
  * Mongoose model for books
  */
-const BookModel: Model<BookDocument> = model<BookDocument>(BOOK_COLLECTION_NAME, BookSchema);
+const BookModel: Model<BookInternal> = model<BookInternal>(BOOK_COLLECTION_NAME, BookSchema);
 
 /**
  * Helper type for book query conditions
  */
-type QueryConditions = FilterQuery<BookInternal>;
+type QueryConditions = QueryFilter<BookInternal>;
 
 /**
  * Controller for book entities
@@ -34,7 +29,7 @@ class BookEntityController extends MediaItemEntityController<BookInternal, BookS
 	/**
 	 * @override
 	 */
-	protected getNewEmptyDocument(): BookInternal & Document {
+	protected getNewEmptyDocument(): HydratedDocument<BookInternal> {
 		return new BookModel();
 	}
 		

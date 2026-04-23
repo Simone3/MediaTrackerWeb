@@ -14,6 +14,7 @@ It is meant to answer these questions quickly:
 - How tests are structured and what they already guarantee
 
 The codebase is a plain Express + TypeScript application backed by MongoDB/Mongoose and Firebase authentication.
+The current runtime target is Node.js 22.x, as declared in `package.json`.
 
 ## High-Level Architecture
 

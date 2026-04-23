@@ -8,22 +8,17 @@ import { MediaItemInternal } from 'app/data/models/internal/media-items/media-it
 import { mediaItemFactory } from 'app/factories/media-item';
 import { CategorySchema, CATEGORY_COLLECTION_NAME } from 'app/schemas/category';
 import { miscUtils } from 'app/utilities/misc-utils';
-import { Document, FilterQuery, Model, model } from 'mongoose';
-
-/**
- * Mongoose document for categories
- */
-interface CategoryDocument extends CategoryInternal, Document {}
+import { QueryFilter, Model, model } from 'mongoose';
 
 /**
  * Mongoose model for categories
  */
-const CategoryModel: Model<CategoryDocument> = model<CategoryDocument>(CATEGORY_COLLECTION_NAME, CategorySchema);
+const CategoryModel: Model<CategoryInternal> = model<CategoryInternal>(CATEGORY_COLLECTION_NAME, CategorySchema);
 
 /**
  * Helper type for category query conditions
  */
-type QueryConditions = FilterQuery<CategoryDocument>;
+type QueryConditions = QueryFilter<CategoryInternal>;
 
 /**
  * Helper type for category sorting conditions
@@ -34,7 +29,7 @@ type OrderBy = Sortable<CategoryInternal>;
  * Controller for category entities
  */
 class CategoryController extends AbstractEntityController {
-	private readonly queryHelper: QueryHelper<CategoryInternal, CategoryDocument, Model<CategoryDocument>>;
+	private readonly queryHelper: QueryHelper<CategoryInternal>;
 
 	/**
 	 * Constructor
@@ -177,4 +172,3 @@ class CategoryController extends AbstractEntityController {
  * Singleton implementation of the category controller
  */
 export const categoryController = new CategoryController();
-

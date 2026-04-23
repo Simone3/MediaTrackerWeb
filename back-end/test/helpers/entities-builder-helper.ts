@@ -258,7 +258,6 @@ export const initTestUHelper = async(target: TestU, namePrefix: string): Promise
 export const initTestUCHelper = async(categoryMediaType: MediaTypeInternal, target: TestUC, namePrefix: string): Promise<void> => {
 	target.user = randomName(`${namePrefix}User`);
 	const insertedCategory = await categoryController.saveCategory(getTestCategory(undefined, categoryMediaType, target, randomName(`${namePrefix}Category`)));
-	// eslint-disable-next-line require-atomic-updates
 	target.category = insertedCategory._id;
 };
 	
@@ -279,11 +278,8 @@ export const initTestUCGHelper = async(categoryMediaType: MediaTypeInternal, tar
 	}
 
 	const insertedCategory = await categoryController.saveCategory(getTestCategory(undefined, categoryMediaType, target, randomName(`${namePrefix}Category`)));
-	// eslint-disable-next-line require-atomic-updates
 	target.category = insertedCategory._id;
 	
 	const insertedGroup = await groupController.saveGroup(getTestGroup(undefined, target, randomName(`${namePrefix}Group`)));
-	// eslint-disable-next-line require-atomic-updates
 	target.group = insertedGroup._id;
 };
-

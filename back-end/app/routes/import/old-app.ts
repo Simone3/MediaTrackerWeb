@@ -7,6 +7,7 @@ import { AppError } from 'app/data/models/error/error';
 import { errorResponseFactory } from 'app/factories/error';
 import { logger } from 'app/loggers/logger';
 import { parserValidator } from 'app/utilities/parser-validator';
+import { requestParamUtils } from 'app/utilities/request-param-utils';
 import express, { Router } from 'express';
 
 const router: Router = express.Router();
@@ -15,7 +16,7 @@ const router: Router = express.Router();
  * Route to import the old Media Tracker app export
  */
 router.post('/users/:userId/import/old-app', userResourceAuthorizationMiddleware, (request, response) => {
-	const userId: string = request.params.userId;
+	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 
 	parserValidator.parseAndValidate(ImportOldAppExportRequest, request.body)
 		.then((parsedRequest) => {

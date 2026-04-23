@@ -5,7 +5,7 @@ import express, { Response, Router } from 'express';
 
 const router: Router = express.Router();
 
-router.all('*', (_, res: Response) => {
+router.all('/{*path}', (_, res: Response) => {
 	logger.error('Entered the catch all route, no API found');
 	res.status(404).json(errorResponseFactory.from(AppError.NOT_FOUND));
 });

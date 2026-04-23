@@ -3,22 +3,17 @@ import { MediaItemEntityController } from 'app/controllers/entities/media-items/
 import { MediaTypeInternal } from 'app/data/models/internal/category';
 import { TvShowFilterInternal, TvShowInternal, TvShowSortByInternal } from 'app/data/models/internal/media-items/tv-show';
 import { TvShowSchema, TV_SHOW_COLLECTION_NAME } from 'app/schemas/media-items/tv-show';
-import { Document, FilterQuery, Model, model, SortOrder } from 'mongoose';
-
-/**
- * TvShow document for Mongoose
- */
-interface TvShowDocument extends TvShowInternal, Document {}
+import { HydratedDocument, QueryFilter, Model, model, SortOrder } from 'mongoose';
 
 /**
  * Mongoose model for TV shows
  */
-const TvShowModel: Model<TvShowDocument> = model<TvShowDocument>(TV_SHOW_COLLECTION_NAME, TvShowSchema);
+const TvShowModel: Model<TvShowInternal> = model<TvShowInternal>(TV_SHOW_COLLECTION_NAME, TvShowSchema);
 
 /**
  * Helper type for TV show query conditions
  */
-type QueryConditions = FilterQuery<TvShowInternal>;
+type QueryConditions = QueryFilter<TvShowInternal>;
 
 /**
  * Controller for TV show entities
@@ -34,7 +29,7 @@ class TvShowEntityController extends MediaItemEntityController<TvShowInternal, T
 	/**
 	 * @override
 	 */
-	protected getNewEmptyDocument(): TvShowInternal & Document {
+	protected getNewEmptyDocument(): HydratedDocument<TvShowInternal> {
 		return new TvShowModel();
 	}
 		
@@ -90,4 +85,3 @@ class TvShowEntityController extends MediaItemEntityController<TvShowInternal, T
  * Singleton implementation of the TV show entity controller
  */
 export const tvShowEntityController = new TvShowEntityController();
-

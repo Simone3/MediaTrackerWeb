@@ -12,7 +12,7 @@ These are the back-end REST APIs for the Media Tracker app. See [this repository
 The project defines several REST APIs to read and write the app entities, such as categories, groups, media items, etc.
 
 Main components:
-- NodeJS
+- NodeJS 22.x
 - Express
 - MongoDB (Mongoose)
 - Firebase
@@ -21,7 +21,7 @@ Main components:
 
 ## Installation
 
-- Download and install NodeJS and NPM from [here](https://nodejs.org/en/download/).
+- Download and install NodeJS 22.x and NPM from [here](https://nodejs.org/en/download/).
 - Signup and request an API key from [Google Books](https://books.google.com).
 - Signup and request an API key from [The Movie Database (TMDb)](https://www.themoviedb.org).
 - Signup and request an API key from [Giant Bomb](http://www.giantbomb.com).
@@ -74,6 +74,5 @@ Render:
 - Connect the GitHub repository (master)
 - Define Build Command as *npm install && tsc && tsc-alias -p tsconfig.json*
 - Define Start Command as *npm run start*
-
 
 

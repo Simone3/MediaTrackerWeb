@@ -7,22 +7,17 @@ import { OwnPlatformFilterInternal, OwnPlatformInternal } from 'app/data/models/
 import { mediaItemFactory } from 'app/factories/media-item';
 import { OwnPlatformSchema, OWN_PLATFORM_COLLECTION_NAME } from 'app/schemas/own-platform';
 import { miscUtils } from 'app/utilities/misc-utils';
-import { Document, FilterQuery, Model, model } from 'mongoose';
-
-/**
- * Mongoose document for own platforms
- */
-interface OwnPlatformDocument extends OwnPlatformInternal, Document {}
+import { QueryFilter, Model, model } from 'mongoose';
 
 /**
  * Mongoose model for own platforms
  */
-const OwnPlatformModel: Model<OwnPlatformDocument> = model<OwnPlatformDocument>(OWN_PLATFORM_COLLECTION_NAME, OwnPlatformSchema);
+const OwnPlatformModel: Model<OwnPlatformInternal> = model<OwnPlatformInternal>(OWN_PLATFORM_COLLECTION_NAME, OwnPlatformSchema);
 
 /**
  * Helper type for own platform query conditions
  */
-type QueryConditions = FilterQuery<OwnPlatformDocument>;
+type QueryConditions = QueryFilter<OwnPlatformInternal>;
 
 /**
  * Helper type for own platform sorting conditions
@@ -33,7 +28,7 @@ type OrderBy = Sortable<OwnPlatformInternal>;
  * Controller for own platform entities
  */
 class OwnPlatformController extends AbstractEntityController {
-	private readonly queryHelper: QueryHelper<OwnPlatformInternal, OwnPlatformDocument, Model<OwnPlatformDocument>>;
+	private readonly queryHelper: QueryHelper<OwnPlatformInternal>;
 
 	/**
 	 * Constructor
@@ -231,4 +226,3 @@ class OwnPlatformController extends AbstractEntityController {
  * Singleton implementation of the own platform controller
  */
 export const ownPlatformController = new OwnPlatformController();
-

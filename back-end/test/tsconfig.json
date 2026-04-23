@@ -3,8 +3,11 @@
 	"compilerOptions": {
 		"outDir": "build-test",
 		"baseUrl": "./",
+		"rootDir": "../",
 		"paths" : {
 		  "app/*": ["../app/*"],
+		  "global/*": ["./global/*"],
+		  "helpers/*": ["./helpers/*"],
 		  "test/*": ["../test/*"]
 		},
 		"resolveJsonModule": true

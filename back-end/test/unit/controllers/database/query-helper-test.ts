@@ -2,7 +2,7 @@ import { QueryHelper } from 'app/controllers/database/query-helper';
 import { PersistedEntityInternal } from 'app/data/models/internal/common';
 import chai from 'chai';
 import { setupTestDatabaseConnection } from 'helpers/database-handler-helper';
-import { Document, model, Model, Schema } from 'mongoose';
+import { model, Model, Schema } from 'mongoose';
 import { randomName } from 'test/helpers/test-misc-helper';
 
 const expect = chai.expect;
@@ -17,9 +17,7 @@ const TestSchema = new Schema({
 	description: { type: String, required: false }
 });
 
-interface TestDocument extends TestInternalModel, Document {}
-
-const TestModel = model<TestDocument>('TestModel', TestSchema);
+const TestModel: Model<TestInternalModel> = model<TestInternalModel>('TestModel', TestSchema);
 
 const mapEntityToString = (entity: TestInternalModel): string => {
 	return `${String(entity._id)} - ${entity.name}`;
@@ -31,7 +29,7 @@ const mapEntityToString = (entity: TestInternalModel): string => {
 describe('QueryHelper Tests', () => {
 	setupTestDatabaseConnection();
 
-	const queryHelper = new QueryHelper<TestInternalModel, TestDocument, Model<TestDocument>>(TestModel);
+	const queryHelper = new QueryHelper<TestInternalModel>(TestModel);
 
 	describe('Database Write Queries', () => {
 		it('Save should insert a new entity', async() => {
@@ -205,4 +203,3 @@ describe('QueryHelper Tests', () => {
 		});
 	});
 });
-

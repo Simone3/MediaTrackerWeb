@@ -3,22 +3,17 @@ import { MediaItemEntityController } from 'app/controllers/entities/media-items/
 import { MediaTypeInternal } from 'app/data/models/internal/category';
 import { MovieFilterInternal, MovieInternal, MovieSortByInternal } from 'app/data/models/internal/media-items/movie';
 import { MovieSchema, MOVIE_COLLECTION_NAME } from 'app/schemas/media-items/movie';
-import { Document, FilterQuery, Model, model, SortOrder } from 'mongoose';
-
-/**
- * Movie document for Mongoose
- */
-interface MovieDocument extends MovieInternal, Document {}
+import { HydratedDocument, QueryFilter, Model, model, SortOrder } from 'mongoose';
 
 /**
  * Mongoose model for movies
  */
-const MovieModel: Model<MovieDocument> = model<MovieDocument>(MOVIE_COLLECTION_NAME, MovieSchema);
+const MovieModel: Model<MovieInternal> = model<MovieInternal>(MOVIE_COLLECTION_NAME, MovieSchema);
 
 /**
  * Helper type for movie query conditions
  */
-type QueryConditions = FilterQuery<MovieInternal>;
+type QueryConditions = QueryFilter<MovieInternal>;
 
 /**
  * Controller for movie entities
@@ -34,7 +29,7 @@ class MovieEntityController extends MediaItemEntityController<MovieInternal, Mov
 	/**
 	 * @override
 	 */
-	protected getNewEmptyDocument(): MovieInternal & Document {
+	protected getNewEmptyDocument(): HydratedDocument<MovieInternal> {
 		return new MovieModel();
 	}
 		
@@ -90,4 +85,3 @@ class MovieEntityController extends MediaItemEntityController<MovieInternal, Mov
  * Singleton implementation of the movie entity controller
  */
 export const movieEntityController = new MovieEntityController();
-

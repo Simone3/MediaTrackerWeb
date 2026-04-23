@@ -8,6 +8,7 @@ import { errorResponseFactory } from 'app/factories/error';
 import { logger } from 'app/loggers/logger';
 import { ClassType } from 'app/utilities/helper-types';
 import { parserValidator } from 'app/utilities/parser-validator';
+import { requestParamUtils } from 'app/utilities/request-param-utils';
 import express, { Router } from 'express';
 
 /**
@@ -63,8 +64,8 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 		responseBuilder: TWriteResponse<GetAllMediaItemsResponse, TMediaItemInternal[], TResponse>;
 	}): void {
 		this.router.get(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}`, userResourceAuthorizationMiddleware, (request, response): void => {
-			const userId: string = request.params.userId;
-			const categoryId: string = request.params.categoryId;
+			const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
+			const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
 			this.mediaItemController.getAllMediaItems(userId, categoryId)
 				.then((mediaItems) => {
@@ -96,8 +97,8 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 		responseBuilder: TWriteResponse<FilterMediaItemsResponse, TMediaItemInternal[], TResponse>;
 	}): void {
 		this.router.post(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/filter`, userResourceAuthorizationMiddleware, (request, response) => {
-			const userId: string = request.params.userId;
-			const categoryId: string = request.params.categoryId;
+			const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
+			const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
 			parserValidator.parseAndValidate(routeConfig.requestClass, request.body)
 				.then((parsedRequest) => {
@@ -137,8 +138,8 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 		responseBuilder: TWriteResponse<SearchMediaItemsResponse, TMediaItemInternal[], TResponse>;
 	}): void {
 		this.router.post(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/search`, userResourceAuthorizationMiddleware, (request, response) => {
-			const userId: string = request.params.userId;
-			const categoryId: string = request.params.categoryId;
+			const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
+			const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
 			parserValidator.parseAndValidate(routeConfig.requestClass, request.body)
 				.then((parsedRequest) => {
@@ -175,8 +176,8 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 		mediaItemRequestReader: TReadRequestWithExtraData<TRequest, TMediaItemInternal>;
 	}): void {
 		this.router.post(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}`, userResourceAuthorizationMiddleware, (request, response) => {
-			const userId: string = request.params.userId;
-			const categoryId: string = request.params.categoryId;
+			const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
+			const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
 			parserValidator.parseAndValidate(routeConfig.requestClass, request.body)
 				.then((parsedRequest) => {
@@ -215,9 +216,9 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 		mediaItemRequestReader: TReadRequestWithExtraData<TRequest, TMediaItemInternal>;
 	}): void {
 		this.router.put(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/:id`, userResourceAuthorizationMiddleware, (request, response) => {
-			const userId: string = request.params.userId;
-			const categoryId: string = request.params.categoryId;
-			const id: string = request.params.id;
+			const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
+			const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
+			const id = requestParamUtils.getRequiredString(request.params.id, 'id');
 
 			parserValidator.parseAndValidate(routeConfig.requestClass, request.body)
 				.then((parsedRequest) => {
@@ -248,9 +249,9 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 	 */
 	public delete(): void {
 		this.router.delete(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/:id`, userResourceAuthorizationMiddleware, (request, response) => {
-			const userId: string = request.params.userId;
-			const categoryId: string = request.params.categoryId;
-			const id: string = request.params.id;
+			const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
+			const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
+			const id = requestParamUtils.getRequiredString(request.params.id, 'id');
 
 			this.mediaItemController.deleteMediaItem(userId, categoryId, id)
 				.then(() => {
@@ -299,7 +300,7 @@ export class MediaItemCatalogRouterBuilder<TSearchMediaItemCatalogResultInternal
 		responseBuilder: TWriteResponse<SearchMediaItemCatalogResponse, TSearchMediaItemCatalogResultInternal[], TResponse>;
 	}): void {
 		this.router.get(`/catalog/${this.mediaItemPathName}/search/:searchTerm`, (request, response) => {
-			const searchTerm: string = request.params.searchTerm;
+			const searchTerm = requestParamUtils.getRequiredString(request.params.searchTerm, 'searchTerm');
 
 			this.mediaItemCatalogController.searchMediaItemCatalogByTerm(searchTerm)
 				.then((searchResults) => {
@@ -324,7 +325,7 @@ export class MediaItemCatalogRouterBuilder<TSearchMediaItemCatalogResultInternal
 		responseBuilder: TWriteResponse<GetMediaItemFromCatalogResponse, TCatalogMediaItemInternal, TResponse>;
 	}): void {
 		this.router.get(`/catalog/${this.mediaItemPathName}/:catalogId`, (request, response) => {
-			const catalogId: string = request.params.catalogId;
+			const catalogId = requestParamUtils.getRequiredString(request.params.catalogId, 'catalogId');
 
 			this.mediaItemCatalogController.getMediaItemFromCatalog(catalogId)
 				.then((catalogMediaItem) => {

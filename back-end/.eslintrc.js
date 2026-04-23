@@ -30,12 +30,7 @@ module.exports = {
 
 		/* ************* @typescript-eslint ************* */
 
-		'@typescript-eslint/indent': [ 'error', 'tab' ],
-		'@typescript-eslint/prefer-interface': [ 'off' ],
-		'@typescript-eslint/camelcase': [ 'off' ],
-		'@typescript-eslint/no-parameter-properties': [ 'off' ],
 		'@typescript-eslint/explicit-function-return-type': [ 'error', { allowExpressions: true }],
-		'@typescript-eslint/ban-types': 'off',
 		
 		/* ************* eslint ************* */
 
@@ -329,5 +324,30 @@ module.exports = {
 		'jsdoc/require-returns-check': 2,
 		'jsdoc/require-returns-description': 2,
 		'jsdoc/valid-types': 2
-	}
+	},
+	overrides: [
+		{
+			files: [ 'app/config/config.ts' ],
+			rules: {
+				'@typescript-eslint/no-require-imports': 'off'
+			}
+		},
+		{
+			files: [ 'test/**/*.ts' ],
+			env: {
+				mocha: true
+			},
+			rules: {
+				'@typescript-eslint/no-empty-object-type': 'off',
+				'@typescript-eslint/no-explicit-any': 'off',
+				'@typescript-eslint/no-unused-expressions': 'off',
+				'@typescript-eslint/no-unused-vars': 'off',
+				'arrow-body-style': 'off',
+				'no-throw-literal': 'off',
+				'no-unused-expressions': 'off',
+				'no-useless-assignment': 'off',
+				'prefer-arrow-callback': 'off'
+			}
+		}
+	]
 };

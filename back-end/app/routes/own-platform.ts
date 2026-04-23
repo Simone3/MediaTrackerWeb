@@ -7,6 +7,7 @@ import { AppError } from 'app/data/models/error/error';
 import { errorResponseFactory } from 'app/factories/error';
 import { logger } from 'app/loggers/logger';
 import { parserValidator } from 'app/utilities/parser-validator';
+import { requestParamUtils } from 'app/utilities/request-param-utils';
 import express, { Router } from 'express';
 
 const router: Router = express.Router();
@@ -15,8 +16,8 @@ const router: Router = express.Router();
  * Route to get all saved own platforms
  */
 router.get('/users/:userId/categories/:categoryId/own-platforms', userResourceAuthorizationMiddleware, (request, response) => {
-	const userId: string = request.params.userId;
-	const categoryId: string = request.params.categoryId;
+	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
+	const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
 	ownPlatformController.getAllOwnPlatforms(userId, categoryId)
 		.then((ownPlatforms) => {
@@ -36,8 +37,8 @@ router.get('/users/:userId/categories/:categoryId/own-platforms', userResourceAu
  * Route to get all saved own platforms matching some filter
  */
 router.post('/users/:userId/categories/:categoryId/own-platforms/filter', userResourceAuthorizationMiddleware, (request, response) => {
-	const userId: string = request.params.userId;
-	const categoryId: string = request.params.categoryId;
+	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
+	const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
 	parserValidator.parseAndValidate(FilterOwnPlatformsRequest, request.body)
 		.then((parsedRequest) => {
@@ -65,8 +66,8 @@ router.post('/users/:userId/categories/:categoryId/own-platforms/filter', userRe
  * Route to add a new own platform
  */
 router.post('/users/:userId/categories/:categoryId/own-platforms', userResourceAuthorizationMiddleware, (request, response) => {
-	const userId: string = request.params.userId;
-	const categoryId: string = request.params.categoryId;
+	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
+	const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
 	parserValidator.parseAndValidate(AddOwnPlatformRequest, request.body)
 		.then((parsedRequest) => {
@@ -95,8 +96,8 @@ router.post('/users/:userId/categories/:categoryId/own-platforms', userResourceA
  * Route to merge two or more existing own platforms
  */
 router.put('/users/:userId/categories/:categoryId/own-platforms/merge', userResourceAuthorizationMiddleware, (request, response) => {
-	const userId: string = request.params.userId;
-	const categoryId: string = request.params.categoryId;
+	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
+	const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
 	parserValidator.parseAndValidate(MergeOwnPlatformsRequest, request.body)
 		.then((parsedRequest) => {
@@ -124,9 +125,9 @@ router.put('/users/:userId/categories/:categoryId/own-platforms/merge', userReso
  * Route to update an existing own platform
  */
 router.put('/users/:userId/categories/:categoryId/own-platforms/:id', userResourceAuthorizationMiddleware, (request, response) => {
-	const userId: string = request.params.userId;
-	const categoryId: string = request.params.categoryId;
-	const id: string = request.params.id;
+	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
+	const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
+	const id = requestParamUtils.getRequiredString(request.params.id, 'id');
 
 	parserValidator.parseAndValidate(UpdateOwnPlatformRequest, request.body)
 		.then((parsedRequest) => {
@@ -154,9 +155,9 @@ router.put('/users/:userId/categories/:categoryId/own-platforms/:id', userResour
  * Route to delete a own platform
  */
 router.delete('/users/:userId/categories/:categoryId/own-platforms/:id', userResourceAuthorizationMiddleware, (request, response) => {
-	const userId: string = request.params.userId;
-	const categoryId: string = request.params.categoryId;
-	const id: string = request.params.id;
+	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
+	const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
+	const id = requestParamUtils.getRequiredString(request.params.id, 'id');
 	
 	ownPlatformController.deleteOwnPlatform(userId, categoryId, id)
 		.then(() => {

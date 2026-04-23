@@ -3,22 +3,17 @@ import { MediaItemEntityController } from 'app/controllers/entities/media-items/
 import { MediaTypeInternal } from 'app/data/models/internal/category';
 import { VideogameFilterInternal, VideogameInternal, VideogameSortByInternal } from 'app/data/models/internal/media-items/videogame';
 import { VideogameSchema, VIDEOGAME_COLLECTION_NAME } from 'app/schemas/media-items/videogame';
-import { Document, FilterQuery, Model, model, SortOrder } from 'mongoose';
-
-/**
- * Videogame document for Mongoose
- */
-interface VideogameDocument extends VideogameInternal, Document {}
+import { HydratedDocument, QueryFilter, Model, model, SortOrder } from 'mongoose';
 
 /**
  * Mongoose model for videogames
  */
-const VideogameModel: Model<VideogameDocument> = model<VideogameDocument>(VIDEOGAME_COLLECTION_NAME, VideogameSchema);
+const VideogameModel: Model<VideogameInternal> = model<VideogameInternal>(VIDEOGAME_COLLECTION_NAME, VideogameSchema);
 
 /**
  * Helper type for videogame query conditions
  */
-type QueryConditions = FilterQuery<VideogameInternal>;
+type QueryConditions = QueryFilter<VideogameInternal>;
 
 /**
  * Controller for videogame entities
@@ -34,7 +29,7 @@ class VideogameEntityController extends MediaItemEntityController<VideogameInter
 	/**
 	 * @override
 	 */
-	protected getNewEmptyDocument(): VideogameInternal & Document {
+	protected getNewEmptyDocument(): HydratedDocument<VideogameInternal> {
 		return new VideogameModel();
 	}
 		
@@ -90,4 +85,3 @@ class VideogameEntityController extends MediaItemEntityController<VideogameInter
  * Singleton implementation of the videogame entity controller
  */
 export const videogameEntityController = new VideogameEntityController();
-

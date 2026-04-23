@@ -7,22 +7,17 @@ import { GroupFilterInternal, GroupInternal } from 'app/data/models/internal/gro
 import { mediaItemFactory } from 'app/factories/media-item';
 import { GroupSchema, GROUP_COLLECTION_NAME } from 'app/schemas/group';
 import { miscUtils } from 'app/utilities/misc-utils';
-import { Document, FilterQuery, Model, model } from 'mongoose';
-
-/**
- * Mongoose document for groups
- */
-interface GroupDocument extends GroupInternal, Document {}
+import { QueryFilter, Model, model } from 'mongoose';
 
 /**
  * Mongoose model for groups
  */
-const GroupModel: Model<GroupDocument> = model<GroupDocument>(GROUP_COLLECTION_NAME, GroupSchema);
+const GroupModel: Model<GroupInternal> = model<GroupInternal>(GROUP_COLLECTION_NAME, GroupSchema);
 
 /**
  * Helper type for group query conditions
  */
-type QueryConditions = FilterQuery<GroupDocument>;
+type QueryConditions = QueryFilter<GroupInternal>;
 
 /**
  * Helper type for group sorting conditions
@@ -33,7 +28,7 @@ type OrderBy = Sortable<GroupInternal>;
  * Controller for group entities
  */
 class GroupController extends AbstractEntityController {
-	private readonly queryHelper: QueryHelper<GroupInternal, GroupDocument, Model<GroupDocument>>;
+	private readonly queryHelper: QueryHelper<GroupInternal>;
 
 	/**
 	 * Constructor
@@ -188,4 +183,3 @@ class GroupController extends AbstractEntityController {
  * Singleton implementation of the group controller
  */
 export const groupController = new GroupController();
-

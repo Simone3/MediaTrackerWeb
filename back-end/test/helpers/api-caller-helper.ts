@@ -1,6 +1,6 @@
 import { HttpMethod } from 'app/utilities/misc-utils';
 import chai from 'chai';
-import chaiHttp from 'chai-http';
+import chaiHttp, { request as chaiRequest } from 'chai-http';
 import { buildFakeAuthToken } from './auth-handler-helper';
 import { getTestServer } from './server-handler-helper';
 
@@ -32,7 +32,7 @@ export type CallHelperExtraConfig = {
  * @returns the response body, as a promise
  */
 export const callHelper = async<TReq extends object, TRes extends object>(method: HttpMethod, path: string, loggedUserId: string, request?: TReq, extraConfig?: CallHelperExtraConfig): Promise<TRes> => {
-	const agent = chai.request(getTestServer());
+	const agent = chaiRequest.execute(getTestServer());
 	let superAgent;
 
 	switch(method) {

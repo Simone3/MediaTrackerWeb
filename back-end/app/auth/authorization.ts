@@ -1,5 +1,6 @@
 import { logger } from 'app/loggers/logger';
 import { requestScopeContext } from 'app/utilities/request-scope-context';
+import { requestParamUtils } from 'app/utilities/request-param-utils';
 import { RequestHandler, Response } from 'express-serve-static-core';
 
 /**
@@ -23,7 +24,7 @@ const onAuthorizationError = (response: Response, error: unknown): void => {
  * @param next the next callback
  */
 export const userResourceAuthorizationMiddleware: RequestHandler = (request, response, next): void => {
-	const userIdParam: string | undefined = request.params.userId;
+	const userIdParam = requestParamUtils.getOptionalString(request.params.userId);
 	const currentUserId = requestScopeContext.currentUserId;
 
 	if(!userIdParam || !currentUserId) {

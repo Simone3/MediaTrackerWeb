@@ -5,7 +5,7 @@ import { Schema, ValidateOpts } from 'mongoose';
 /**
  * Validator for the array of TV show seasons
  */
-const tvShowSeasonsValidator: ValidateOpts<TvShowSeasonInternal[] | undefined> = {
+const tvShowSeasonsValidator: ValidateOpts<TvShowSeasonInternal[] | undefined, unknown> = {
 	validator: (seasons: TvShowSeasonInternal[] | undefined): boolean => {
 		if(seasons) {
 			for(let i = 0; i < seasons.length; i++) {
