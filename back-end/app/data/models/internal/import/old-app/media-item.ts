@@ -6,4 +6,4 @@ import { MediaItemInternal } from 'app/data/models/internal/media-items/media-it
 export type OldAppMediaItemInternal<T extends MediaItemInternal> = {
 	mediaItemData: T;
 	owned: boolean;
-}
+};

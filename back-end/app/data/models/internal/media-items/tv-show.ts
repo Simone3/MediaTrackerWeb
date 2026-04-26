@@ -17,7 +17,7 @@ export type TvShowSeasonInternal = {
 	number: number;
 	episodesNumber?: number;
 	watchedEpisodesNumber?: number;
-}
+};
 
 /**
  * Model for a media item with all properties, internal type NOT to be exposed via API
@@ -50,7 +50,7 @@ export type TvShowSortByInternal = MediaItemSortByInternal & {
 export type CatalogTvShowSeasonInternal = {
 	number: number;
 	episodesNumber?: number;
-}
+};
 
 /**
  * Model for a media item with base properties, internal type NOT to be exposed via API

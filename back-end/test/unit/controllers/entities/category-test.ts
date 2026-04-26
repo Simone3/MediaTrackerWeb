@@ -110,7 +110,7 @@ describe('CategoryController Tests', () => {
 			try {
 				await categoryController.saveCategory(getTestCategory(categoryId, 'BOOK', firstU));
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -124,7 +124,7 @@ describe('CategoryController Tests', () => {
 			try {
 				await categoryController.saveCategory(getTestCategory(insertedId, 'MOVIE', { user: '5cbf26ea895c281b54b6737f' }));
 			}
-			catch{
+			catch {
 				return;
 			}
 

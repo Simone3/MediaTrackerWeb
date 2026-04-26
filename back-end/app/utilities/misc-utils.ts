@@ -151,8 +151,8 @@ class MiscUtils {
 	 * @param source the source object
 	 * @returns the string -> string map
 	 */
-	public objectToStringKeyValue<T extends object>(source: T): {[key: string]: string} {
-		const result: {[key: string]: string} = {};
+	public objectToStringKeyValue<T extends object>(source: T): { [key: string]: string } {
+		const result: { [key: string]: string } = {};
 		const assigned = Object.assign({}, source);
 		for(const key in assigned) {
 			result[key] = String(assigned[key]);

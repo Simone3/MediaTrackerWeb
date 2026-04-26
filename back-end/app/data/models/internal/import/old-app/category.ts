@@ -8,4 +8,4 @@ import { MediaItemInternal } from '../../media-items/media-item';
 export type OldAppCategoryInternal = {
 	categoryData: CategoryInternal;
 	mediaItems?: OldAppMediaItemInternal<MediaItemInternal>[];
-}
+};

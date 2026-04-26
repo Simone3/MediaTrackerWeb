@@ -289,7 +289,7 @@ describe('MovieController Tests', () => {
 					category: firstUCG.category
 				}));
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -306,7 +306,7 @@ describe('MovieController Tests', () => {
 					category: firstUCG.category
 				}));
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -320,7 +320,7 @@ describe('MovieController Tests', () => {
 					category: '5cbf26ea895c281b54b6737f'
 				}));
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -337,7 +337,7 @@ describe('MovieController Tests', () => {
 					category: '5cbf26ea895c281b54b6737f'
 				}));
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -352,7 +352,7 @@ describe('MovieController Tests', () => {
 					group: '5cbf26ea895c281b54b6737f'
 				}, 5));
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -370,7 +370,7 @@ describe('MovieController Tests', () => {
 					group: '5cbf26ea895c281b54b6737f'
 				}, 5));
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -381,7 +381,7 @@ describe('MovieController Tests', () => {
 			try {
 				await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { ownPlatform: '5cbf26ea895c281b54b6737f' }));
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -395,7 +395,7 @@ describe('MovieController Tests', () => {
 			try {
 				await movieEntityController.saveMediaItem(getTestMovie(insertedId, firstUCG, { ownPlatform: '5cbf26ea895c281b54b6737f' }));
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -406,7 +406,7 @@ describe('MovieController Tests', () => {
 			try {
 				await movieEntityController.saveMediaItem(getTestMovie(undefined, wrongMediaUCG));
 			}
-			catch{
+			catch {
 				return;
 			}
 

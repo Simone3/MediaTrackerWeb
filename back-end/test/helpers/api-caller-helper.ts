@@ -20,7 +20,7 @@ export type CallHelperExtraConfig = {
 	 * A custom "Authorization" header (defaults to the base "loggedUserId" Bearer value)
 	 */
 	customAuthorizationHeader?: string;
-}
+};
 
 /**
  * Helper to call an API with basic response assertions

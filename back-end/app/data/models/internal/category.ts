@@ -19,11 +19,11 @@ export type CategoryInternal = PersistedEntityInternal & {
 	mediaType: MediaTypeInternal;
 	color: string;
 	owner: string;
-}
+};
 
 /**
  * Category filtering options, internal type NOT to be exposed via API
  */
 export type CategoryFilterInternal = {
 	name?: string;
-}
+};

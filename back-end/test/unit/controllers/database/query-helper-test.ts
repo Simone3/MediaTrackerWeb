@@ -10,7 +10,7 @@ const expect = chai.expect;
 type TestInternalModel = PersistedEntityInternal & {
 	name: string;
 	description?: string;
-}
+};
 
 const TestSchema = new Schema({
 	name: { type: String, required: true },
@@ -195,7 +195,7 @@ describe('QueryHelper Tests', () => {
 			try {
 				await queryHelper.findOne({});
 			}
-			catch{
+			catch {
 				return;
 			}
 

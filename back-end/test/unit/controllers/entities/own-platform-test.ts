@@ -136,7 +136,7 @@ describe('OwnPlatformController Tests', () => {
 			try {
 				await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, { user: '5cbf26ea895c281b54b6737f', category: firstUC.category }));
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -150,7 +150,7 @@ describe('OwnPlatformController Tests', () => {
 			try {
 				await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(insertedId, { user: '5cbf26ea895c281b54b6737f', category: firstUC.category }));
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -161,7 +161,7 @@ describe('OwnPlatformController Tests', () => {
 			try {
 				await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, { user: firstUC.user, category: '5cbf26ea895c281b54b6737f' }));
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -175,7 +175,7 @@ describe('OwnPlatformController Tests', () => {
 			try {
 				await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(insertedId, { user: firstUC.user, category: '5cbf26ea895c281b54b6737f' }));
 			}
-			catch{
+			catch {
 				return;
 			}
 

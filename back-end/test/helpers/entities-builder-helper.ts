@@ -12,7 +12,7 @@ import { randomName } from 'test/helpers/test-misc-helper';
 
 export type TestU = {
 	user: string;
-}
+};
 
 export type TestUC = TestU & {
 	category: string;
@@ -97,7 +97,7 @@ type OptionalMediaItemTestData = {
 	completedOn?: Date[];
 	active?: boolean;
 	markedAsRedo?: boolean;
-}
+};
 
 /**
  * Helper to build a generic media item

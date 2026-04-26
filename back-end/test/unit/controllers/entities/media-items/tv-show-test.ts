@@ -79,7 +79,7 @@ describe('TvShowController Tests', () => {
 
 				await tvShowEntityController.saveMediaItem(tvShow);
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -102,7 +102,7 @@ describe('TvShowController Tests', () => {
 
 				await tvShowEntityController.saveMediaItem(tvShow);
 			}
-			catch{
+			catch {
 				return;
 			}
 

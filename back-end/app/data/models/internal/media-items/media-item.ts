@@ -44,7 +44,7 @@ export type MediaItemGroupFilterInternal = {
 	anyGroup?: boolean;
 	noGroup?: boolean;
 	groupIds?: string[];
-}
+};
 
 /**
  * Media items own platforms filtering options, internal type NOT to be exposed via API
@@ -53,7 +53,7 @@ export type MediaItemOwnPlatformFilterInternal = {
 	anyOwnPlatform?: boolean;
 	noOwnPlatform?: boolean;
 	ownPlatformIds?: string[];
-}
+};
 
 /**
  * Model for a media item filtering options, internal type NOT to be exposed via API
@@ -76,7 +76,7 @@ export type MediaItemSortFieldInternal = 'IMPORTANCE' | 'NAME' | 'GROUP' | 'OWN_
  */
 export type MediaItemSortByInternal = {
 	ascending: boolean;
-}
+};
 
 /**
  * Model for a media item with base properties, internal type NOT to be exposed via API
@@ -91,5 +91,5 @@ export type SearchMediaItemCatalogResultInternal = {
 	catalogId: string;
 	name: string;
 	releaseDate?: Date;
-}
+};
 

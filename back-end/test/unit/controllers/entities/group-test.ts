@@ -119,7 +119,7 @@ describe('GroupController Tests', () => {
 			try {
 				await groupController.saveGroup(getTestGroup(undefined, { user: '5cbf26ea895c281b54b6737f', category: firstUC.category }));
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -133,7 +133,7 @@ describe('GroupController Tests', () => {
 			try {
 				await groupController.saveGroup(getTestGroup(insertedId, { user: '5cbf26ea895c281b54b6737f', category: firstUC.category }));
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -144,7 +144,7 @@ describe('GroupController Tests', () => {
 			try {
 				await groupController.saveGroup(getTestGroup(undefined, { user: firstUC.user, category: '5cbf26ea895c281b54b6737f' }));
 			}
-			catch{
+			catch {
 				return;
 			}
 
@@ -158,7 +158,7 @@ describe('GroupController Tests', () => {
 			try {
 				await groupController.saveGroup(getTestGroup(insertedId, { user: firstUC.user, category: '5cbf26ea895c281b54b6737f' }));
 			}
-			catch{
+			catch {
 				return;
 			}
 

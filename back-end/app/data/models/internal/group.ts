@@ -8,11 +8,11 @@ export type GroupInternal = PersistedEntityInternal & {
 	name: string;
 	owner: string;
 	category: CategoryInternal | string;
-}
+};
 
 /**
  * Group filtering options, internal type NOT to be exposed via API
  */
 export type GroupFilterInternal = {
 	name?: string;
-}
+};

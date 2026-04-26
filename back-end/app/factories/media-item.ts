@@ -184,7 +184,7 @@ type EntityController = MediaItemEntityController<MediaItemInternal, MediaItemSo
 /**
  * Helper type alias
  */
-type CatalogController = MediaItemCatalogController<SearchMediaItemCatalogResultInternal, CatalogMediaItemInternal>
+type CatalogController = MediaItemCatalogController<SearchMediaItemCatalogResultInternal, CatalogMediaItemInternal>;
 
 /**
  * The singleton instance of the media item factory

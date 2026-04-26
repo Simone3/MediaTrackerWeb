@@ -470,7 +470,7 @@ class FirebaseConfig {
 	public databaseUrl!: string;
 
 	@IsDefined()
-	public serviceAccountKey!: {[key: string]: string};
+	public serviceAccountKey!: { [key: string]: string };
 }
 
 /**
