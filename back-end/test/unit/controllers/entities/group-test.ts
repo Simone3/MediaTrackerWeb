@@ -36,9 +36,9 @@ describe('GroupController Tests', () => {
 		});
 
 		it('GetGroup should only get a group for the current user', async() => {
-			let insertedGroup = await groupController.saveGroup(getTestGroup(undefined, firstUC));
+			const insertedGroup = await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			const firstId = insertedGroup._id;
-			insertedGroup = await groupController.saveGroup(getTestGroup(undefined, secondUC));
+			await groupController.saveGroup(getTestGroup(undefined, secondUC));
 
 			let foundGroup = await groupController.getGroup(firstUC.user, firstUC.category, firstId);
 			expect(foundGroup, 'GetGroup returned an undefined result').not.to.be.undefined;
@@ -48,9 +48,9 @@ describe('GroupController Tests', () => {
 		});
 
 		it('GetGroup should only get a group for the current category', async() => {
-			let insertedGroup = await groupController.saveGroup(getTestGroup(undefined, firstUC));
+			const insertedGroup = await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			const firstId = insertedGroup._id;
-			insertedGroup = await groupController.saveGroup(getTestGroup(undefined, secondUC));
+			await groupController.saveGroup(getTestGroup(undefined, secondUC));
 
 			let foundGroup = await groupController.getGroup(firstUC.user, firstUC.category, firstId);
 			expect(foundGroup, 'GetGroup returned an undefined result').not.to.be.undefined;
@@ -119,11 +119,11 @@ describe('GroupController Tests', () => {
 			try {
 				await groupController.saveGroup(getTestGroup(undefined, { user: '5cbf26ea895c281b54b6737f', category: firstUC.category }));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveGroup should have returned an error';
+			throw new Error('SaveGroup should have returned an error');
 		});
 
 		it('SaveGroup (update) should not accept an invalid user', async() => {
@@ -133,22 +133,22 @@ describe('GroupController Tests', () => {
 			try {
 				await groupController.saveGroup(getTestGroup(insertedId, { user: '5cbf26ea895c281b54b6737f', category: firstUC.category }));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveGroup should have returned an error';
+			throw new Error('SaveGroup should have returned an error');
 		});
 
 		it('SaveGroup (insert) should not accept an invalid category', async() => {
 			try {
 				await groupController.saveGroup(getTestGroup(undefined, { user: firstUC.user, category: '5cbf26ea895c281b54b6737f' }));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveGroup should have returned an error';
+			throw new Error('SaveGroup should have returned an error');
 		});
 
 		it('SaveGroup (update) should not accept an invalid category', async() => {
@@ -158,11 +158,11 @@ describe('GroupController Tests', () => {
 			try {
 				await groupController.saveGroup(getTestGroup(insertedId, { user: firstUC.user, category: '5cbf26ea895c281b54b6737f' }));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveGroup should have returned an error';
+			throw new Error('SaveGroup should have returned an error');
 		});
 		
 		it('GetGroup after DeleteGroup should return undefined', async() => {
@@ -175,7 +175,7 @@ describe('GroupController Tests', () => {
 			expect(foundGroup, 'GetGroup returned a defined result').to.be.undefined;
 		});
 
-		it('Deleting a category should also delete all its groups', async function() {
+		it('Deleting a category should also delete all its groups', async() => {
 			await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			await groupController.saveGroup(getTestGroup(undefined, firstUC));
@@ -187,4 +187,3 @@ describe('GroupController Tests', () => {
 		});
 	});
 });
-

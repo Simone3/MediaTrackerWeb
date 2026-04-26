@@ -195,11 +195,11 @@ describe('QueryHelper Tests', () => {
 			try {
 				await queryHelper.findOne({});
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'FindOne should have returned an error';
+			throw new Error('FindOne should have returned an error');
 		});
 	});
 });

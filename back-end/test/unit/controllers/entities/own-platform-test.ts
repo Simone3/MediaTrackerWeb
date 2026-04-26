@@ -36,9 +36,9 @@ describe('OwnPlatformController Tests', () => {
 		});
 
 		it('GetOwnPlatform should only get a own platform for the current user', async() => {
-			let insertedOwnPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
+			const insertedOwnPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			const firstId = insertedOwnPlatform._id;
-			insertedOwnPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, secondUC));
+			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, secondUC));
 
 			let foundOwnPlatform = await ownPlatformController.getOwnPlatform(firstUC.user, firstUC.category, firstId);
 			expect(foundOwnPlatform, 'GetOwnPlatform returned an undefined result').not.to.be.undefined;
@@ -48,9 +48,9 @@ describe('OwnPlatformController Tests', () => {
 		});
 
 		it('GetOwnPlatform should only get a own platform for the current category', async() => {
-			let insertedOwnPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
+			const insertedOwnPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			const firstId = insertedOwnPlatform._id;
-			insertedOwnPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, secondUC));
+			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, secondUC));
 
 			let foundOwnPlatform = await ownPlatformController.getOwnPlatform(firstUC.user, firstUC.category, firstId);
 			expect(foundOwnPlatform, 'GetOwnPlatform returned an undefined result').not.to.be.undefined;
@@ -136,11 +136,11 @@ describe('OwnPlatformController Tests', () => {
 			try {
 				await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, { user: '5cbf26ea895c281b54b6737f', category: firstUC.category }));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveOwnPlatform should have returned an error';
+			throw new Error('SaveOwnPlatform should have returned an error');
 		});
 
 		it('SaveOwnPlatform (update) should not accept an invalid user', async() => {
@@ -150,22 +150,22 @@ describe('OwnPlatformController Tests', () => {
 			try {
 				await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(insertedId, { user: '5cbf26ea895c281b54b6737f', category: firstUC.category }));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveOwnPlatform should have returned an error';
+			throw new Error('SaveOwnPlatform should have returned an error');
 		});
 
 		it('SaveOwnPlatform (insert) should not accept an invalid category', async() => {
 			try {
 				await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, { user: firstUC.user, category: '5cbf26ea895c281b54b6737f' }));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveOwnPlatform should have returned an error';
+			throw new Error('SaveOwnPlatform should have returned an error');
 		});
 
 		it('SaveOwnPlatform (update) should not accept an invalid category', async() => {
@@ -175,11 +175,11 @@ describe('OwnPlatformController Tests', () => {
 			try {
 				await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(insertedId, { user: firstUC.user, category: '5cbf26ea895c281b54b6737f' }));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveOwnPlatform should have returned an error';
+			throw new Error('SaveOwnPlatform should have returned an error');
 		});
 		
 		it('GetOwnPlatform after DeleteOwnPlatform should return undefined', async() => {
@@ -192,7 +192,7 @@ describe('OwnPlatformController Tests', () => {
 			expect(foundOwnPlatform, 'GetOwnPlatform returned a defined result').to.be.undefined;
 		});
 
-		it('Deleting a category should also delete all its own platforms', async function() {
+		it('Deleting a category should also delete all its own platforms', async() => {
 			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
@@ -204,4 +204,3 @@ describe('OwnPlatformController Tests', () => {
 		});
 	});
 });
-

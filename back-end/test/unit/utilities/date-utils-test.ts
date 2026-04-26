@@ -28,8 +28,12 @@ describe('DateUtils Tests', () => {
 
 			check(dateUtils.dateStringFromYearMonthDay(2019), '2019-12-31');
 
-			expect(() => dateUtils.dateStringFromYearMonthDay(2019, 5, 32)).to.throw(AppError);
-			expect(() => dateUtils.dateStringFromYearMonthDay(2019, 50)).to.throw(AppError);
+			expect(() => {
+				return dateUtils.dateStringFromYearMonthDay(2019, 5, 32);
+			}).to.throw(AppError);
+			expect(() => {
+				return dateUtils.dateStringFromYearMonthDay(2019, 50);
+			}).to.throw(AppError);
 			
 			done();
 		});

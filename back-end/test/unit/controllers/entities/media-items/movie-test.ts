@@ -54,9 +54,9 @@ describe('MovieController Tests', () => {
 		});
 
 		it('GetMediaItem should only get a movie for the current user', async() => {
-			let insertedMovie = await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
+			const insertedMovie = await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			const firstId = insertedMovie._id;
-			insertedMovie = await movieEntityController.saveMediaItem(getTestMovie(undefined, secondUCG));
+			await movieEntityController.saveMediaItem(getTestMovie(undefined, secondUCG));
 
 			let foundMovie = await movieEntityController.getMediaItem(firstUCG.user, firstUCG.category, firstId);
 			expect(foundMovie, 'GetMediaItem returned an undefined result').not.to.be.undefined;
@@ -66,9 +66,9 @@ describe('MovieController Tests', () => {
 		});
 
 		it('GetMediaItem should only get a movie for the current category', async() => {
-			let insertedMovie = await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
+			const insertedMovie = await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			const firstId = insertedMovie._id;
-			insertedMovie = await movieEntityController.saveMediaItem(getTestMovie(undefined, secondUCG));
+			await movieEntityController.saveMediaItem(getTestMovie(undefined, secondUCG));
 
 			let foundMovie = await movieEntityController.getMediaItem(firstUCG.user, firstUCG.category, firstId);
 			expect(foundMovie, 'GetMediaItem returned an undefined result').not.to.be.undefined;
@@ -289,11 +289,11 @@ describe('MovieController Tests', () => {
 					category: firstUCG.category
 				}));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveMediaItem should have returned an error';
+			throw new Error('SaveMediaItem should have returned an error');
 		});
 
 		it('SaveMediaItem (update) should not accept an invalid user', async() => {
@@ -306,11 +306,11 @@ describe('MovieController Tests', () => {
 					category: firstUCG.category
 				}));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveMediaItem should have returned an error';
+			throw new Error('SaveMediaItem should have returned an error');
 		});
 
 		it('SaveMediaItem (insert) should not accept an invalid category', async() => {
@@ -320,11 +320,11 @@ describe('MovieController Tests', () => {
 					category: '5cbf26ea895c281b54b6737f'
 				}));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveMediaItem should have returned an error';
+			throw new Error('SaveMediaItem should have returned an error');
 		});
 
 		it('SaveMediaItem (update) should not accept an invalid category', async() => {
@@ -337,11 +337,11 @@ describe('MovieController Tests', () => {
 					category: '5cbf26ea895c281b54b6737f'
 				}));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveMediaItem should have returned an error';
+			throw new Error('SaveMediaItem should have returned an error');
 		});
 		
 		it('SaveMediaItem (insert) should not accept an invalid group', async() => {
@@ -352,11 +352,11 @@ describe('MovieController Tests', () => {
 					group: '5cbf26ea895c281b54b6737f'
 				}, 5));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveMediaItem should have returned an error';
+			throw new Error('SaveMediaItem should have returned an error');
 		});
 
 		it('SaveMediaItem (update) should not accept an invalid group', async() => {
@@ -370,22 +370,22 @@ describe('MovieController Tests', () => {
 					group: '5cbf26ea895c281b54b6737f'
 				}, 5));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveMediaItem should have returned an error';
+			throw new Error('SaveMediaItem should have returned an error');
 		});
 		
 		it('SaveMediaItem (insert) should not accept an invalid own platform', async() => {
 			try {
 				await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { ownPlatform: '5cbf26ea895c281b54b6737f' }));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveMediaItem should have returned an error';
+			throw new Error('SaveMediaItem should have returned an error');
 		});
 
 		it('SaveMediaItem (update) should not accept an invalid own platform', async() => {
@@ -395,22 +395,22 @@ describe('MovieController Tests', () => {
 			try {
 				await movieEntityController.saveMediaItem(getTestMovie(insertedId, firstUCG, { ownPlatform: '5cbf26ea895c281b54b6737f' }));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveMediaItem should have returned an error';
+			throw new Error('SaveMediaItem should have returned an error');
 		});
 
 		it('SaveMediaItem (insert) should not allow a category with wrong media type', async() => {
 			try {
 				await movieEntityController.saveMediaItem(getTestMovie(undefined, wrongMediaUCG));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveMediaItem should have returned an error';
+			throw new Error('SaveMediaItem should have returned an error');
 		});
 
 		it('GetMediaItem after DeleteMediaItem should return undefined', async() => {
@@ -423,7 +423,7 @@ describe('MovieController Tests', () => {
 			expect(foundMovie, 'GetMediaItem returned a defined result').to.be.undefined;
 		});
 
-		it('Deleting a category should also delete all its media items', async function() {
+		it('Deleting a category should also delete all its media items', async() => {
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
@@ -434,7 +434,7 @@ describe('MovieController Tests', () => {
 			expect(foundMovies, 'FilterAndOrder did not return the correct number of results').to.have.lengthOf(0);
 		});
 
-		it('Deleting an own platform should also remove it in all media items', async function() {
+		it('Deleting an own platform should also remove it in all media items', async() => {
 			const { _id: ownPlatformId1 } = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUCG));
 			const { _id: ownPlatformId2 } = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUCG));
 
@@ -447,13 +447,19 @@ describe('MovieController Tests', () => {
 			const foundMovies = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category);
 			expect(foundMovies, 'FilterAndOrder did not return the correct number of results').to.have.lengthOf(3);
 			const ownPlatforms: (OwnPlatformInternal | undefined)[] = extract(foundMovies, 'ownPlatform');
-			expect(ownPlatforms.filter((value) => !value)).to.have.lengthOf(2);
-			expect(ownPlatforms.filter((value) => value)).to.have.lengthOf(1);
-			const otherPlatform = ownPlatforms.filter((value) => value)[0] as OwnPlatformInternal;
+			expect(ownPlatforms.filter((value) => {
+				return !value;
+			})).to.have.lengthOf(2);
+			expect(ownPlatforms.filter((value) => {
+				return Boolean(value);
+			})).to.have.lengthOf(1);
+			const otherPlatform = ownPlatforms.filter((value) => {
+				return Boolean(value);
+			})[0] as OwnPlatformInternal;
 			expect(String(otherPlatform._id)).to.equal(String(ownPlatformId2));
 		});
 
-		it('Merging an own platforms should also replace them in all media items', async function() {
+		it('Merging an own platforms should also replace them in all media items', async() => {
 			const { _id: ownPlatformId1 } = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUCG));
 			const { _id: ownPlatformId2 } = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUCG));
 
@@ -468,11 +474,14 @@ describe('MovieController Tests', () => {
 			const foundMovies = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category);
 			expect(foundMovies, 'FilterAndOrder did not return the correct number of results').to.have.lengthOf(4);
 			const ownPlatforms: (OwnPlatformInternal | undefined)[] = extract(foundMovies, 'ownPlatform');
-			expect(ownPlatforms.filter((value) => !value)).to.have.lengthOf(1);
-			const definedPlatforms = ownPlatforms.filter((value) => value);
+			expect(ownPlatforms.filter((value) => {
+				return !value;
+			})).to.have.lengthOf(1);
+			const definedPlatforms = ownPlatforms.filter((value) => {
+				return Boolean(value);
+			});
 			expect(definedPlatforms).to.have.lengthOf(3);
 			expect(extract(definedPlatforms as OwnPlatformInternal[], 'name')).to.eql([ mergedName, mergedName, mergedName ]);
 		});
 	});
 });
-

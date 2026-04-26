@@ -109,14 +109,14 @@ describe('Videogame API Tests', () => {
 			const videogame = await videogameEntityController.saveMediaItem(getTestVideogame(undefined, firstUCG));
 			const videogameId = String(videogame._id);
 
-			await callHelper<{}, DeleteMediaItemResponse>('DELETE', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames/${videogameId}`, firstUCG.user);
+			await callHelper<undefined, DeleteMediaItemResponse>('DELETE', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames/${videogameId}`, firstUCG.user);
 			
 			const foundVideogame = await videogameEntityController.getMediaItem(firstUCG.user, firstUCG.category, videogameId);
 			expect(foundVideogame, 'GetVideogame returned a defined result').to.be.undefined;
 		});
 
 		it('Should check for name validity', async() => {
-			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames`, firstUCG.user, {
+			await callHelper<Record<string, unknown>, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames`, firstUCG.user, {
 				newVideogame: {
 					importance: '100'
 				}
@@ -126,7 +126,7 @@ describe('Videogame API Tests', () => {
 		});
 
 		it('Should check for importance validity', async() => {
-			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames`, firstUCG.user, {
+			await callHelper<Record<string, unknown>, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames`, firstUCG.user, {
 				newVideogame: {
 					name: randomName()
 				}
@@ -136,7 +136,7 @@ describe('Videogame API Tests', () => {
 		});
 
 		it('Should search the videogames catalog', async() => {
-			const response = await callHelper<{}, SearchVideogameCatalogResponse>('GET', `/catalog/videogames/search/Mock Videogame`, firstUCG.user);
+			const response = await callHelper<undefined, SearchVideogameCatalogResponse>('GET', `/catalog/videogames/search/Mock Videogame`, firstUCG.user);
 			
 			expect(response.searchResults, 'API did not return the correct number of catalog videogames').to.have.lengthOf(2);
 			expect(extract(response.searchResults, 'name'), 'API did not return the correct catalog videogames').to.have.members([ 'Mock Videogame 1', 'Mock Videogame 2' ]);
@@ -156,7 +156,7 @@ describe('Videogame API Tests', () => {
 				catalogId: '123'
 			};
 
-			const response = await callHelper<{}, GetVideogameFromCatalogResponse>('GET', `/catalog/videogames/123`, firstUCG.user);
+			const response = await callHelper<undefined, GetVideogameFromCatalogResponse>('GET', `/catalog/videogames/123`, firstUCG.user);
 			
 			expect(response.catalogVideogame, 'API did not return the correct catalog details').to.be.eql(expectedResult);
 		});
@@ -213,7 +213,7 @@ describe('Videogame API Tests', () => {
 			});
 
 			// Get media item
-			const response = await callHelper<{}, GetAllVideogamesResponse>('GET', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames`, firstUCG.user);
+			const response = await callHelper<undefined, GetAllVideogamesResponse>('GET', `/users/${firstUCG.user}/categories/${firstUCG.category}/videogames`, firstUCG.user);
 
 			// "Fix" source entities
 			sourceVideogame.uid = response.videogames[0].uid;

@@ -66,7 +66,7 @@ describe('Group API Tests', () => {
 			await groupController.saveGroup(getTestGroup(undefined, firstUC, 'Bbb'));
 			await groupController.saveGroup(getTestGroup(undefined, firstUC, 'Zzz'));
 			
-			const response = await callHelper<{}, GetAllGroupsResponse>('GET', `/users/${firstUC.user}/categories/${firstUC.category}/groups`, firstUC.user);
+			const response = await callHelper<undefined, GetAllGroupsResponse>('GET', `/users/${firstUC.user}/categories/${firstUC.category}/groups`, firstUC.user);
 			expect(response.groups, 'API did not return the correct number of groups').to.have.lengthOf(3);
 			expect(extract(response.groups, 'name'), 'API did not return the correct groups').to.eql([ 'Bbb', 'Rrr', 'Zzz' ]);
 		});
@@ -89,14 +89,14 @@ describe('Group API Tests', () => {
 			const group = await groupController.saveGroup(getTestGroup(undefined, firstUC));
 			const groupId = String(group._id);
 
-			await callHelper<{}, DeleteGroupResponse>('DELETE', `/users/${firstUC.user}/categories/${firstUC.category}/groups/${groupId}`, firstUC.user);
+			await callHelper<undefined, DeleteGroupResponse>('DELETE', `/users/${firstUC.user}/categories/${firstUC.category}/groups/${groupId}`, firstUC.user);
 			
 			const foundGroup = await groupController.getGroup(firstUC.user, firstUC.category, groupId);
 			expect(foundGroup, 'GetGroup returned a defined result').to.be.undefined;
 		});
 
 		it('Should check for name validity', async() => {
-			await callHelper<{}, AddGroupResponse>('POST', `/users/${firstUC.user}/categories/${firstUC.category}/groups`, firstUC.user, {
+			await callHelper<Record<string, unknown>, AddGroupResponse>('POST', `/users/${firstUC.user}/categories/${firstUC.category}/groups`, firstUC.user, {
 				newGroup: {}
 			}, {
 				expectedStatus: 500
@@ -113,7 +113,7 @@ describe('Group API Tests', () => {
 				newGroup: sourceGroup
 			});
 
-			const response = await callHelper<{}, GetAllGroupsResponse>('GET', `/users/${firstUC.user}/categories/${firstUC.category}/groups`, firstUC.user);
+			const response = await callHelper<undefined, GetAllGroupsResponse>('GET', `/users/${firstUC.user}/categories/${firstUC.category}/groups`, firstUC.user);
 
 			sourceGroup.uid = response.groups[0].uid;
 			expect(response.groups[0], 'API either did not save or did not retrieve ALL fields').to.eql(sourceGroup);

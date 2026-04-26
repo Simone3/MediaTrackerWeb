@@ -53,7 +53,7 @@ export const getTestCategory = (_id: unknown, mediaType: MediaTypeInternal, data
  */
 export const getTestGroup = (_id: unknown, data: TestUC, name?: string): GroupInternal => {
 	if(!data.user || !data.category) {
-		throw 'Invalid test entity builder input';
+		throw new Error('Invalid test entity builder input');
 	}
 
 	return {
@@ -73,7 +73,7 @@ export const getTestGroup = (_id: unknown, data: TestUC, name?: string): GroupIn
  */
 export const getTestOwnPlatform = (_id: unknown, data: TestUC, name?: string): OwnPlatformInternal => {
 	if(!data.user || !data.category) {
-		throw 'Invalid test entity builder input';
+		throw new Error('Invalid test entity builder input');
 	}
 
 	return {
@@ -109,7 +109,7 @@ type OptionalMediaItemTestData = {
  */
 const getTestMediaItem = (_id: unknown, data: TestUCG, orderInGroup: number, optionalData?: OptionalMediaItemTestData): MediaItemInternal => {
 	if(!data.user || !data.category) {
-		throw 'Invalid test entity builder input';
+		throw new Error('Invalid test entity builder input');
 	}
 
 	const result: MediaItemInternal = {

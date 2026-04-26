@@ -1,7 +1,7 @@
 import { config } from 'app/config/config';
 import { server } from 'app/server/server';
 
-let serverInstance: any;
+let serverInstance: ReturnType<typeof server.listen>;
 
 /**
  * Helper to start the Express server
@@ -25,6 +25,6 @@ export const setupTestServer = (): void => {
  * Getter for the current test server
  * @returns the test server instance
  */
-export const getTestServer = (): any => {
+export const getTestServer = (): ReturnType<typeof server.listen> => {
 	return serverInstance;
 };

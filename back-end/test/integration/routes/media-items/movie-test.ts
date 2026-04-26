@@ -109,14 +109,14 @@ describe('Movie API Tests', () => {
 			const movie = await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG));
 			const movieId = String(movie._id);
 
-			await callHelper<{}, DeleteMediaItemResponse>('DELETE', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/${movieId}`, firstUCG.user);
+			await callHelper<undefined, DeleteMediaItemResponse>('DELETE', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/${movieId}`, firstUCG.user);
 			
 			const foundMovie = await movieEntityController.getMediaItem(firstUCG.user, firstUCG.category, movieId);
 			expect(foundMovie, 'GetMovie returned a defined result').to.be.undefined;
 		});
 
 		it('Should check for name validity', async() => {
-			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, firstUCG.user, {
+			await callHelper<Record<string, unknown>, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, firstUCG.user, {
 				newMovie: {
 					importance: '100'
 				}
@@ -126,7 +126,7 @@ describe('Movie API Tests', () => {
 		});
 
 		it('Should check for importance validity', async() => {
-			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, firstUCG.user, {
+			await callHelper<Record<string, unknown>, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, firstUCG.user, {
 				newMovie: {
 					name: randomName()
 				}
@@ -136,7 +136,7 @@ describe('Movie API Tests', () => {
 		});
 
 		it('Should search the movies catalog', async() => {
-			const response = await callHelper<{}, SearchMovieCatalogResponse>('GET', `/catalog/movies/search/Mock Movie`, firstUCG.user);
+			const response = await callHelper<undefined, SearchMovieCatalogResponse>('GET', `/catalog/movies/search/Mock Movie`, firstUCG.user);
 			
 			expect(response.searchResults, 'API did not return the correct number of catalog movies').to.have.lengthOf(2);
 			expect(extract(response.searchResults, 'name'), 'API did not return the correct catalog movies').to.have.members([ 'Mock Movie 1', 'Mock Movie 2' ]);
@@ -155,7 +155,7 @@ describe('Movie API Tests', () => {
 				catalogId: '123'
 			};
 
-			const response = await callHelper<{}, GetMovieFromCatalogResponse>('GET', `/catalog/movies/123`, firstUCG.user);
+			const response = await callHelper<undefined, GetMovieFromCatalogResponse>('GET', `/catalog/movies/123`, firstUCG.user);
 			
 			expect(response.catalogMovie, 'API did not return the correct catalog details').to.be.eql(expectedResult);
 		});
@@ -210,7 +210,7 @@ describe('Movie API Tests', () => {
 			});
 
 			// Get media item
-			const response = await callHelper<{}, GetAllMoviesResponse>('GET', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, firstUCG.user);
+			const response = await callHelper<undefined, GetAllMoviesResponse>('GET', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, firstUCG.user);
 
 			// "Fix" source entities
 			sourceMovie.uid = response.movies[0].uid;

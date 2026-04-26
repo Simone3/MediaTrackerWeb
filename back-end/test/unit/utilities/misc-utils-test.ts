@@ -88,7 +88,7 @@ describe('MiscUtils Tests', () => {
 				return;
 			}
 			
-			throw 'mergeAndSumPromiseResults should have returned an error';
+			throw new Error('mergeAndSumPromiseResults should have returned an error');
 		});
 	});
 });

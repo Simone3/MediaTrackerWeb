@@ -79,11 +79,11 @@ describe('TvShowController Tests', () => {
 
 				await tvShowEntityController.saveMediaItem(tvShow);
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveMediaItem should have returned an error';
+			throw new Error('SaveMediaItem should have returned an error');
 		});
 
 		it('SaveMediaItem (insert) should not accept unordered season numbers', async() => {
@@ -102,11 +102,11 @@ describe('TvShowController Tests', () => {
 
 				await tvShowEntityController.saveMediaItem(tvShow);
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveMediaItem should have returned an error';
+			throw new Error('SaveMediaItem should have returned an error');
 		});
 	});
 });

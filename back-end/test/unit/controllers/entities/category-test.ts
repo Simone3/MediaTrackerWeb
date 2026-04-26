@@ -37,9 +37,9 @@ describe('CategoryController Tests', () => {
 		});
 
 		it('GetCategory should only get a category for the current user', async() => {
-			let insertedCategory = await categoryController.saveCategory(getTestCategory(undefined, 'MOVIE', firstU));
+			const insertedCategory = await categoryController.saveCategory(getTestCategory(undefined, 'MOVIE', firstU));
 			const firstId = insertedCategory._id;
-			insertedCategory = await categoryController.saveCategory(getTestCategory(undefined, 'MOVIE', secondU));
+			await categoryController.saveCategory(getTestCategory(undefined, 'MOVIE', secondU));
 
 			let foundCategory = await categoryController.getCategory(firstU.user, firstId);
 			expect(foundCategory, 'GetCategory returned an undefined result').not.to.be.undefined;
@@ -110,11 +110,11 @@ describe('CategoryController Tests', () => {
 			try {
 				await categoryController.saveCategory(getTestCategory(categoryId, 'BOOK', firstU));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveCategory should have returned an error';
+			throw new Error('SaveCategory should have returned an error');
 		});
 
 		it('SaveCategory (update) should not accept an invalid user', async() => {
@@ -124,14 +124,14 @@ describe('CategoryController Tests', () => {
 			try {
 				await categoryController.saveCategory(getTestCategory(insertedId, 'MOVIE', { user: '5cbf26ea895c281b54b6737f' }));
 			}
-			catch(error) {
+			catch{
 				return;
 			}
 
-			throw 'SaveCategory should have returned an error';
+			throw new Error('SaveCategory should have returned an error');
 		});
 		
-		it('GetCategory after DeleteCategory should return undefined', async function() {
+		it('GetCategory after DeleteCategory should return undefined', async() => {
 			const category = await categoryController.saveCategory(getTestCategory(undefined, 'MOVIE', firstU));
 			const categoryId = category._id;
 
@@ -142,4 +142,3 @@ describe('CategoryController Tests', () => {
 		});
 	});
 });
-

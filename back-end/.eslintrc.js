@@ -338,15 +338,8 @@ module.exports = {
 				mocha: true
 			},
 			rules: {
-				'@typescript-eslint/no-empty-object-type': 'off',
-				'@typescript-eslint/no-explicit-any': 'off',
 				'@typescript-eslint/no-unused-expressions': 'off',
-				'@typescript-eslint/no-unused-vars': 'off',
-				'arrow-body-style': 'off',
-				'no-throw-literal': 'off',
 				'no-unused-expressions': 'off',
-				'no-useless-assignment': 'off',
-				'prefer-arrow-callback': 'off'
 			}
 		}
 	]

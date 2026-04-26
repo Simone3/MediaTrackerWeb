@@ -70,7 +70,7 @@ describe('Category API Tests', () => {
 			await categoryController.saveCategory(getTestCategory(undefined, 'MOVIE', firstU, 'Bbb'));
 			await categoryController.saveCategory(getTestCategory(undefined, 'MOVIE', firstU, 'Zzz'));
 			
-			const response = await callHelper<{}, GetAllCategoriesResponse>('GET', `/users/${firstU.user}/categories`, firstU.user);
+			const response = await callHelper<undefined, GetAllCategoriesResponse>('GET', `/users/${firstU.user}/categories`, firstU.user);
 			expect(response.categories, 'API did not return the correct number of categories').to.have.lengthOf(3);
 			expect(extract(response.categories, 'name'), 'API did not return the correct categories').to.eql([ 'Bbb', 'Rrr', 'Zzz' ]);
 		});
@@ -89,18 +89,18 @@ describe('Category API Tests', () => {
 			expect(extract(response.categories, 'name'), 'API did not return the correct categories').to.eql([ 'Bbb' ]);
 		});
 
-		it('Should delete an existing category', async function() {
+		it('Should delete an existing category', async() => {
 			const category = await categoryController.saveCategory(getTestCategory(undefined, 'MOVIE', firstU));
 			const categoryId = String(category._id);
 
-			await callHelper<{}, DeleteCategoryResponse>('DELETE', `/users/${firstU.user}/categories/${categoryId}`, firstU.user);
+			await callHelper<undefined, DeleteCategoryResponse>('DELETE', `/users/${firstU.user}/categories/${categoryId}`, firstU.user);
 			
 			const foundCategory = await categoryController.getCategory(firstU.user, categoryId);
 			expect(foundCategory, 'GetCategory returned a defined result').to.be.undefined;
 		});
 
 		it('Should check for name validity', async() => {
-			await callHelper<{}, AddCategoryResponse>('POST', `/users/${firstU.user}/categories`, firstU.user, {
+			await callHelper<Record<string, unknown>, AddCategoryResponse>('POST', `/users/${firstU.user}/categories`, firstU.user, {
 				newCategory: {
 					mediaType: 'MOVIE'
 				}
@@ -110,7 +110,7 @@ describe('Category API Tests', () => {
 		});
 
 		it('Should check for media type validity', async() => {
-			await callHelper<{}, AddCategoryResponse>('POST', `/users/${firstU.user}/categories`, firstU.user, {
+			await callHelper<Record<string, unknown>, AddCategoryResponse>('POST', `/users/${firstU.user}/categories`, firstU.user, {
 				newCategory: {
 					name: randomName(),
 					mediaType: 'MOVE'
@@ -132,7 +132,7 @@ describe('Category API Tests', () => {
 				newCategory: sourceCategory
 			});
 
-			const response = await callHelper<{}, GetAllCategoriesResponse>('GET', `/users/${firstU.user}/categories`, firstU.user);
+			const response = await callHelper<undefined, GetAllCategoriesResponse>('GET', `/users/${firstU.user}/categories`, firstU.user);
 
 			sourceCategory.uid = response.categories[0].uid;
 			expect(response.categories[0], 'API either did not save or did not retrieve ALL fields').to.eql(sourceCategory);

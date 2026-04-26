@@ -109,14 +109,14 @@ describe('Book API Tests', () => {
 			const book = await bookEntityController.saveMediaItem(getTestBook(undefined, firstUCG));
 			const bookId = String(book._id);
 
-			await callHelper<{}, DeleteMediaItemResponse>('DELETE', `/users/${firstUCG.user}/categories/${firstUCG.category}/books/${bookId}`, firstUCG.user);
+			await callHelper<undefined, DeleteMediaItemResponse>('DELETE', `/users/${firstUCG.user}/categories/${firstUCG.category}/books/${bookId}`, firstUCG.user);
 			
 			const foundBook = await bookEntityController.getMediaItem(firstUCG.user, firstUCG.category, bookId);
 			expect(foundBook, 'GetBook returned a defined result').to.be.undefined;
 		});
 
 		it('Should check for name validity', async() => {
-			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/books`, firstUCG.user, {
+			await callHelper<Record<string, unknown>, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/books`, firstUCG.user, {
 				newBook: {
 					importance: '100'
 				}
@@ -126,7 +126,7 @@ describe('Book API Tests', () => {
 		});
 
 		it('Should check for importance validity', async() => {
-			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/books`, firstUCG.user, {
+			await callHelper<Record<string, unknown>, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/books`, firstUCG.user, {
 				newBook: {
 					name: randomName()
 				}
@@ -136,7 +136,7 @@ describe('Book API Tests', () => {
 		});
 
 		it('Should search the books catalog', async() => {
-			const response = await callHelper<{}, SearchBookCatalogResponse>('GET', `/catalog/books/search/Mock Book`, firstUCG.user);
+			const response = await callHelper<undefined, SearchBookCatalogResponse>('GET', `/catalog/books/search/Mock Book`, firstUCG.user);
 			
 			expect(response.searchResults, 'API did not return the correct number of catalog books').to.have.lengthOf(2);
 			expect(extract(response.searchResults, 'name'), 'API did not return the correct catalog books').to.have.members([ 'Mock Book 1', 'Mock Book 2' ]);
@@ -155,7 +155,7 @@ describe('Book API Tests', () => {
 				catalogId: '123'
 			};
 			
-			const response = await callHelper<{}, GetBookFromCatalogResponse>('GET', `/catalog/books/123`, firstUCG.user);
+			const response = await callHelper<undefined, GetBookFromCatalogResponse>('GET', `/catalog/books/123`, firstUCG.user);
 
 			expect(response.catalogBook, 'API did not return the correct catalog details').to.be.eql(expectedResult);
 		});
@@ -210,7 +210,7 @@ describe('Book API Tests', () => {
 			});
 
 			// Get media item
-			const response = await callHelper<{}, GetAllBooksResponse>('GET', `/users/${firstUCG.user}/categories/${firstUCG.category}/books`, firstUCG.user);
+			const response = await callHelper<undefined, GetAllBooksResponse>('GET', `/users/${firstUCG.user}/categories/${firstUCG.category}/books`, firstUCG.user);
 
 			// "Fix" source entities
 			sourceBook.uid = response.books[0].uid;

@@ -99,7 +99,7 @@ describe('OwnPlatform API Tests', () => {
 			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC, 'Bbb'));
 			await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC, 'Zzz'));
 			
-			const response = await callHelper<{}, GetAllOwnPlatformsResponse>('GET', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms`, firstUC.user);
+			const response = await callHelper<undefined, GetAllOwnPlatformsResponse>('GET', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms`, firstUC.user);
 			expect(response.ownPlatforms, 'API did not return the correct number of own platforms').to.have.lengthOf(3);
 			expect(extract(response.ownPlatforms, 'name'), 'API did not return the correct own platforms').to.eql([ 'Bbb', 'Rrr', 'Zzz' ]);
 		});
@@ -122,14 +122,14 @@ describe('OwnPlatform API Tests', () => {
 			const ownPlatform = await ownPlatformController.saveOwnPlatform(getTestOwnPlatform(undefined, firstUC));
 			const ownPlatformId = String(ownPlatform._id);
 
-			await callHelper<{}, DeleteOwnPlatformResponse>('DELETE', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms/${ownPlatformId}`, firstUC.user);
+			await callHelper<undefined, DeleteOwnPlatformResponse>('DELETE', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms/${ownPlatformId}`, firstUC.user);
 			
 			const foundOwnPlatform = await ownPlatformController.getOwnPlatform(firstUC.user, firstUC.category, ownPlatformId);
 			expect(foundOwnPlatform, 'GetOwnPlatform returned a defined result').to.be.undefined;
 		});
 
 		it('Should check for name validity', async() => {
-			await callHelper<{}, AddOwnPlatformResponse>('POST', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms`, firstUC.user, {
+			await callHelper<Record<string, unknown>, AddOwnPlatformResponse>('POST', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms`, firstUC.user, {
 				newOwnPlatform: {
 					color: '#0000FF',
 					icon: 'something'
@@ -140,7 +140,7 @@ describe('OwnPlatform API Tests', () => {
 		});
 
 		it('Should check for color validity', async() => {
-			await callHelper<{}, AddOwnPlatformResponse>('POST', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms`, firstUC.user, {
+			await callHelper<Record<string, unknown>, AddOwnPlatformResponse>('POST', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms`, firstUC.user, {
 				newOwnPlatform: {
 					name: randomName(),
 					color: 'sdfdcxcvxcvxcv',
@@ -163,7 +163,7 @@ describe('OwnPlatform API Tests', () => {
 				newOwnPlatform: sourcePlatform
 			});
 
-			const response = await callHelper<{}, GetAllOwnPlatformsResponse>('GET', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms`, firstUC.user);
+			const response = await callHelper<undefined, GetAllOwnPlatformsResponse>('GET', `/users/${firstUC.user}/categories/${firstUC.category}/own-platforms`, firstUC.user);
 			
 			sourcePlatform.uid = response.ownPlatforms[0].uid;
 			expect(response.ownPlatforms[0], 'API either did not save or did not retrieve ALL fields').to.eql(sourcePlatform);

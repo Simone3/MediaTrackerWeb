@@ -109,14 +109,14 @@ describe('TV show API Tests', () => {
 			const tvShow = await tvShowEntityController.saveMediaItem(getTestTvShow(undefined, firstUCG));
 			const tvShowId = String(tvShow._id);
 
-			await callHelper<{}, DeleteMediaItemResponse>('DELETE', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows/${tvShowId}`, firstUCG.user);
+			await callHelper<undefined, DeleteMediaItemResponse>('DELETE', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows/${tvShowId}`, firstUCG.user);
 			
 			const foundTvShow = await tvShowEntityController.getMediaItem(firstUCG.user, firstUCG.category, tvShowId);
 			expect(foundTvShow, 'GetTvShow returned a defined result').to.be.undefined;
 		});
 
 		it('Should check for name validity', async() => {
-			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows`, firstUCG.user, {
+			await callHelper<Record<string, unknown>, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows`, firstUCG.user, {
 				newTvShow: {
 					importance: '100'
 				}
@@ -126,7 +126,7 @@ describe('TV show API Tests', () => {
 		});
 
 		it('Should check for importance validity', async() => {
-			await callHelper<{}, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows`, firstUCG.user, {
+			await callHelper<Record<string, unknown>, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows`, firstUCG.user, {
 				newTvShow: {
 					name: randomName()
 				}
@@ -136,7 +136,7 @@ describe('TV show API Tests', () => {
 		});
 
 		it('Should search the TV shows catalog', async() => {
-			const response = await callHelper<{}, SearchTvShowCatalogResponse>('GET', `/catalog/tv-shows/search/Mock TV Show`, firstUCG.user);
+			const response = await callHelper<undefined, SearchTvShowCatalogResponse>('GET', `/catalog/tv-shows/search/Mock TV Show`, firstUCG.user);
 			
 			expect(response.searchResults, 'API did not return the correct number of catalog TV shows').to.have.lengthOf(2);
 			expect(extract(response.searchResults, 'name'), 'API did not return the correct catalog TV shows').to.have.members([ 'Mock TV Show 1', 'Mock TV Show 2' ]);
@@ -182,7 +182,7 @@ describe('TV show API Tests', () => {
 				catalogId: '123'
 			};
 
-			const response = await callHelper<{}, GetTvShowFromCatalogResponse>('GET', `/catalog/tv-shows/123`, firstUCG.user);
+			const response = await callHelper<undefined, GetTvShowFromCatalogResponse>('GET', `/catalog/tv-shows/123`, firstUCG.user);
 			
 			expect(response.catalogTvShow, 'API did not return the correct catalog details').to.be.eql(expectedResult);
 		});
@@ -249,7 +249,7 @@ describe('TV show API Tests', () => {
 			});
 
 			// Get media item
-			const response = await callHelper<{}, GetAllTvShowsResponse>('GET', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows`, firstUCG.user);
+			const response = await callHelper<undefined, GetAllTvShowsResponse>('GET', `/users/${firstUCG.user}/categories/${firstUCG.category}/tv-shows`, firstUCG.user);
 
 			// "Fix" source entities
 			sourceTvShow.uid = response.tvShows[0].uid;

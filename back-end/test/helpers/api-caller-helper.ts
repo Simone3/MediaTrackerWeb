@@ -31,7 +31,7 @@ export type CallHelperExtraConfig = {
  * @param extraConfig  optional extra config
  * @returns the response body, as a promise
  */
-export const callHelper = async<TReq extends object, TRes extends object>(method: HttpMethod, path: string, loggedUserId: string, request?: TReq, extraConfig?: CallHelperExtraConfig): Promise<TRes> => {
+export const callHelper = async<TReq, TRes extends object>(method: HttpMethod, path: string, loggedUserId: string, request?: TReq, extraConfig?: CallHelperExtraConfig): Promise<TRes> => {
 	const agent = chaiRequest.execute(getTestServer());
 	let superAgent;
 
@@ -53,7 +53,7 @@ export const callHelper = async<TReq extends object, TRes extends object>(method
 			break;
 
 		default:
-			throw 'Unsupported method in test call helper';
+			throw new Error('Unsupported method in test call helper');
 	}
 
 	const authorizationHeader = extraConfig && extraConfig.customAuthorizationHeader !== undefined ? extraConfig.customAuthorizationHeader : `Bearer ${buildFakeAuthToken(loggedUserId)}`;
