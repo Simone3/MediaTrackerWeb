@@ -1,18 +1,9 @@
 
-- check upgrade commit
-  - cant lint exclusions for 'test/**/*.ts' be fixed?
-  - catch all route
-
-- fix eslint config (same config/rules as FE + extend to tests too)
-  - what is the .cjs it created?
-
-- fix CORS configuration
-
 - complete "merging" web and be to deploy them as a single app
 
 - update 3 READMEs
 
-
+- rename and update readmes in all old repos
 
 
 
@@ -30,7 +21,6 @@
 - mock user/pwd creates a mock state for local tests even in prod - create catalog mocks for all 4 media types with lord of the rings
 
 - back-end pagination
-
 
 
 
