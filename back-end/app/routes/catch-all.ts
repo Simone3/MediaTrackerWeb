@@ -1,16 +1,14 @@
 import { AppError } from 'app/data/models/error/error';
 import { errorResponseFactory } from 'app/factories/error';
 import { logger } from 'app/loggers/logger';
-import express, { Response, Router } from 'express';
-
-const router: Router = express.Router();
-
-router.all('/{*path}', (_, res: Response) => {
-	logger.error('Entered the catch all route, no API found');
-	res.status(404).json(errorResponseFactory.from(AppError.NOT_FOUND));
-});
+import { RequestHandler } from 'express-serve-static-core';
 
 /**
- * Catch-All route to handle all undefined endpoints
+ * Catch-all middleware to handle all undefined endpoints after every route has been checked
+ * @param request the Express request
+ * @param response the Express response
  */
-export const catchAllRouter: Router = router;
+export const catchAllMiddleware: RequestHandler = (request, response): void => {
+	logger.info('Entered the final catch-all middleware for %s %s', request.method, request.originalUrl);
+	response.status(404).json(errorResponseFactory.from(AppError.NOT_FOUND));
+};

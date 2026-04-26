@@ -88,7 +88,7 @@ Shutdown closes:
 4. `authenticationMiddleware`
 5. logging middleware
 6. routers
-7. final catch-all 404 router
+7. final catch-all 404 middleware
 
 There is no central error-handling middleware. Each route handles its own failures inline.
 
@@ -727,8 +727,9 @@ Behavior:
 
 ### Catch-all
 
-- all unknown routes end in `catch-all.ts`
+- all unknown routes end in the final middleware from `catch-all.ts`
 - returns HTTP `404` with `AppError.NOT_FOUND`
+- because authentication runs earlier in the stack, unknown unauthenticated routes still return HTTP `401`
 
 ## API Models And Mapping
 

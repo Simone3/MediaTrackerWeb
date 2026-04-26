@@ -1,7 +1,7 @@
 import { authenticationMiddleware } from 'app/auth/authentication';
 import { config } from 'app/config/config';
 import { logCorrelationMiddleware, performanceLoggerMiddleware, requestLoggerMiddleware, responseLoggerMiddleware } from 'app/loggers/express-logger';
-import { catchAllRouter } from 'app/routes/catch-all';
+import { catchAllMiddleware } from 'app/routes/catch-all';
 import { categoryRouter } from 'app/routes/category';
 import { groupRouter } from 'app/routes/group';
 import { importRouter } from 'app/routes/import/old-app';
@@ -64,8 +64,8 @@ app.use('/', videogameCatalogRouter);
 // Bulk import routes
 app.use('/', importRouter);
 
-// Final catch-all route
-app.use(catchAllRouter);
+// Final catch-all middleware
+app.use(catchAllMiddleware);
 
 /**
  * Main Express server instance, just requires a .listen() call
