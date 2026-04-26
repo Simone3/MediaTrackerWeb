@@ -1,8 +1,4 @@
 
-- complete "merging" web and be to deploy them as a single app
-
-- update 3 READMEs
-
 - rename and update readmes in all old repos
 
 
@@ -22,7 +18,7 @@
 
 - back-end pagination
 
-
+- map firebase errors in message (now it just shows a generic error). Maybe also any other BE error?
 
 
 
