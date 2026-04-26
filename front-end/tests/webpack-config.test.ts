@@ -9,6 +9,7 @@ type WebpackConfig = {
 		};
 		definitions?: {
 			__MEDIA_TRACKER_APP_ENV__?: string;
+			__MEDIA_TRACKER_BACK_END_BASE_URL__?: string;
 		};
 	}>;
 };
@@ -37,6 +38,7 @@ const getWebpackConfig = (mode: 'development' | 'production') => {
 describe('webpack config', () => {
 	afterEach(() => {
 		delete getProcessEnv().MEDIA_TRACKER_APP_ENV;
+		delete getProcessEnv().MEDIA_TRACKER_BACK_END_BASE_URL;
 	});
 
 	it('injects the app favicon into the generated html', () => {
@@ -75,5 +77,25 @@ describe('webpack config', () => {
 		});
 
 		expect(definePlugin?.definitions?.__MEDIA_TRACKER_APP_ENV__).toBe('"prod"');
+	});
+
+	it('injects MEDIA_TRACKER_BACK_END_BASE_URL when provided', () => {
+		getProcessEnv().MEDIA_TRACKER_BACK_END_BASE_URL = 'https://api.example.com';
+
+		const webpackConfig = getWebpackConfig('production');
+		const definePlugin = webpackConfig.plugins.find((plugin: { definitions?: { __MEDIA_TRACKER_BACK_END_BASE_URL__?: string } }) => {
+			return plugin?.constructor?.name === 'DefinePlugin';
+		});
+
+		expect(definePlugin?.definitions?.__MEDIA_TRACKER_BACK_END_BASE_URL__).toBe('"https://api.example.com"');
+	});
+
+	it('leaves MEDIA_TRACKER_BACK_END_BASE_URL undefined when no override is provided', () => {
+		const webpackConfig = getWebpackConfig('production');
+		const definePlugin = webpackConfig.plugins.find((plugin: { definitions?: { __MEDIA_TRACKER_BACK_END_BASE_URL__?: string } }) => {
+			return plugin?.constructor?.name === 'DefinePlugin';
+		});
+
+		expect(definePlugin?.definitions?.__MEDIA_TRACKER_BACK_END_BASE_URL__).toBe('undefined');
 	});
 });

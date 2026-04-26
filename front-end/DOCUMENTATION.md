@@ -141,7 +141,7 @@ Resolution order in `app/utilities/env.ts`:
 
 1. `globalThis.__MEDIA_TRACKER_ENV__`
 2. `process.env`
-3. webpack-defined `__MEDIA_TRACKER_APP_ENV__`
+3. webpack-defined `__MEDIA_TRACKER_APP_ENV__` and `__MEDIA_TRACKER_BACK_END_BASE_URL__`
 
 Fallback:
 
@@ -159,7 +159,7 @@ Fallback:
 ### Prod Config
 `app/config/properties/config-prod.ts`
 
-- back-end base URL: `https://media-tracker-back-end.onrender.com`
+- back-end base URL: `MEDIA_TRACKER_BACK_END_BASE_URL`, falling back to `https://media-tracker-back-end.onrender.com`
 - timeout: `10000`
 - `assumeWellFormedResponse: true`
 - Firebase project: `media-tracker-da288`
@@ -184,6 +184,7 @@ Config also owns:
 - history API fallback enabled
 - aliases `app -> ./app`
 - injects `__MEDIA_TRACKER_APP_ENV__`
+- injects `__MEDIA_TRACKER_BACK_END_BASE_URL__` when provided
 - serves `public/index.html`
 
 ## Navigation Model

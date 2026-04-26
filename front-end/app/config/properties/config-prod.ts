@@ -1,10 +1,13 @@
 import { Config } from 'app/config/type-config';
 import { availableEntityColors } from 'app/config/properties/shared-ui-colors';
+import { getEnvValue } from 'app/utilities/env';
+
+const defaultBackEndBaseUrl = 'https://media-tracker-back-end.onrender.com';
 
 const config: Config = {
 	backEnd: {
 		defaultTimeoutMilliseconds: 10000,
-		baseUrl: 'https://media-tracker-back-end.onrender.com',
+		baseUrl: getEnvValue('MEDIA_TRACKER_BACK_END_BASE_URL') || defaultBackEndBaseUrl,
 		assumeWellFormedResponse: true
 	},
 	firebase: {

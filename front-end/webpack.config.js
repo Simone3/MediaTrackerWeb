@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = (_env, argv = {}) => {
 	const appEnvironment = process.env.MEDIA_TRACKER_APP_ENV || (argv.mode === 'production' ? 'prod' : 'dev');
+	const backEndBaseUrl = process.env.MEDIA_TRACKER_BACK_END_BASE_URL;
 
 	return {
 		entry: './index.tsx',
@@ -43,7 +44,8 @@ module.exports = (_env, argv = {}) => {
 		},
 		plugins: [
 			new webpack.DefinePlugin({
-				__MEDIA_TRACKER_APP_ENV__: JSON.stringify(appEnvironment)
+				__MEDIA_TRACKER_APP_ENV__: JSON.stringify(appEnvironment),
+				__MEDIA_TRACKER_BACK_END_BASE_URL__: typeof backEndBaseUrl === 'string' ? JSON.stringify(backEndBaseUrl) : 'undefined'
 			}),
 			new HtmlWebpackPlugin({
 				template: 'public/index.html',

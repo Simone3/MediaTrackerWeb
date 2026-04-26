@@ -11,6 +11,7 @@ describe('app config', () => {
 
 		if(runtime.process?.env) {
 			delete runtime.process.env.MEDIA_TRACKER_APP_ENV;
+			delete runtime.process.env.MEDIA_TRACKER_BACK_END_BASE_URL;
 		}
 
 		jest.resetModules();
@@ -32,5 +33,16 @@ describe('app config', () => {
 		const { prodConfig } = require('app/config/properties/config-prod');
 
 		expect(config).toEqual(prodConfig);
+	});
+
+	it('uses the runtime MEDIA_TRACKER_BACK_END_BASE_URL override in prod config', () => {
+		runtime.__MEDIA_TRACKER_ENV__ = {
+			MEDIA_TRACKER_APP_ENV: 'prod',
+			MEDIA_TRACKER_BACK_END_BASE_URL: 'https://api.example.com'
+		};
+
+		const { config } = require('app/config/config');
+
+		expect(config.backEnd.baseUrl).toBe('https://api.example.com');
 	});
 });

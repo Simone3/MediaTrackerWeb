@@ -1,4 +1,5 @@
 declare const __MEDIA_TRACKER_APP_ENV__: string | undefined;
+declare const __MEDIA_TRACKER_BACK_END_BASE_URL__: string | undefined;
 
 /**
  * Reads environment values in both browser and Node-like runtimes.
@@ -20,9 +21,10 @@ const getRuntimeEnv = (): { [key: string]: string | undefined } => {
 		return runtime.process.env;
 	}
 
-	if(typeof __MEDIA_TRACKER_APP_ENV__ !== 'undefined') {
+	if(typeof __MEDIA_TRACKER_APP_ENV__ !== 'undefined' || typeof __MEDIA_TRACKER_BACK_END_BASE_URL__ !== 'undefined') {
 		return {
-			MEDIA_TRACKER_APP_ENV: __MEDIA_TRACKER_APP_ENV__
+			MEDIA_TRACKER_APP_ENV: typeof __MEDIA_TRACKER_APP_ENV__ !== 'undefined' ? __MEDIA_TRACKER_APP_ENV__ : undefined,
+			MEDIA_TRACKER_BACK_END_BASE_URL: typeof __MEDIA_TRACKER_BACK_END_BASE_URL__ !== 'undefined' ? __MEDIA_TRACKER_BACK_END_BASE_URL__ : undefined
 		};
 	}
 

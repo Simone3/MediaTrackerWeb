@@ -103,6 +103,11 @@ Order of resolution:
 1. `MEDIA_TRACKER_BE_CONFIG` environment variable, parsed as JSON
 2. fallback file `app/config/MEDIA_TRACKER_BE_CONFIG.json`
 
+Production note:
+
+- `render.yaml` expects Render to provide `MEDIA_TRACKER_BE_CONFIG` as a secret environment variable during Blueprint setup
+- the checked-in `app/config/MEDIA_TRACKER_BE_CONFIG.json` remains a local fallback and should not be relied on for Render production deploys
+
 After loading:
 
 - it is validated synchronously against `Config` from `app/config/type-config.ts`
