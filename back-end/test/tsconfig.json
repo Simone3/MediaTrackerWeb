@@ -4,6 +4,7 @@
 		"outDir": "build-test",
 		"baseUrl": "./",
 		"rootDir": "../",
+		"types": ["node", "mocha"],
 		"paths" : {
 		  "app/*": ["../app/*"],
 		  "global/*": ["./global/*"],

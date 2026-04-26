@@ -18,7 +18,14 @@ export const setupTestDatabaseConnection = (): void => {
 
 	// Drop database after each test
 	afterEach((done) => {
-		mongoose.connection.db.dropDatabase()
+		const database = mongoose.connection.db;
+
+		if(!database) {
+			done('Failed to drop database: database connection is not initialized');
+			return;
+		}
+
+		database.dropDatabase()
 			.then(() => {
 				done();
 			})
