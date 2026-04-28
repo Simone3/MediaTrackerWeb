@@ -28,10 +28,7 @@ export const userResourceAuthorizationMiddleware: RequestHandler = (request, res
 	const currentUserId = requestScopeContext.currentUserId;
 
 	if(!userIdParam || !currentUserId) {
-		logger.error('userResourceAuthorizationMiddleware not configured correctly');
-		response
-			.status(500)
-			.send({ error: 'Authorization middleware configuration error' });
+		onAuthorizationError(response, 'userResourceAuthorizationMiddleware not configured correctly');
 		return;
 	}
 
