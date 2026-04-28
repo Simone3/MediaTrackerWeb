@@ -76,7 +76,7 @@ class CategoryController extends AbstractEntityController {
 
 		if(filter && filter.name) {
 			// Case insensitive exact match
-			conditions.name = new RegExp(`^${filter.name}$`, 'i');
+			conditions.name = new RegExp(`^${miscUtils.escapeRegExp(filter.name)}$`, 'i');
 		}
 
 		const sortBy: OrderBy = {
@@ -117,10 +117,13 @@ class CategoryController extends AbstractEntityController {
 		const mediaItemController = await mediaItemFactory.getEntityControllerFromCategoryId(userId, categoryId);
 
 		return miscUtils.mergeAndSumPromiseResults([
-			groupController.deleteAllGroupsInCategory(categoryId),
-			mediaItemController.deleteAllMediaItemsInCategory(categoryId),
-			ownPlatformController.deleteAllOwnPlatformsInCategory(categoryId),
-			this.queryHelper.deleteById(categoryId)
+			groupController.deleteAllGroupsInCategory(userId, categoryId),
+			mediaItemController.deleteAllMediaItemsInCategory(userId, categoryId),
+			ownPlatformController.deleteAllOwnPlatformsInCategory(userId, categoryId),
+			this.queryHelper.delete({
+				_id: categoryId,
+				owner: userId
+			})
 		]);
 	}
 
@@ -159,7 +162,7 @@ class CategoryController extends AbstractEntityController {
 			const category = await categoryCheckPromise;
 			if(category && newCategoryData && category.mediaType !== newCategoryData.mediaType) {
 				const mediaItemController = await mediaItemFactory.getEntityControllerFromCategoryId(userId, categoryId);
-				const mediaItems: MediaItemInternal[] = await mediaItemController.getAllMediaItemsInCategory(categoryId);
+				const mediaItems: MediaItemInternal[] = await mediaItemController.getAllMediaItemsInCategory(userId, categoryId);
 				if(mediaItems.length > 0) {
 					throw AppError.DATABASE_SAVE.withDetails('Cannot change category media type if it contains media items');
 				}

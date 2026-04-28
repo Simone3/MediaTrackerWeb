@@ -62,11 +62,15 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 
 	/**
 	 * Gets all saved media items for the given group
+	 * @param userId user ID
+	 * @param categoryId category ID
 	 * @param groupId the group ID
 	 * @returns the media items, as a promise
 	 */
-	public getAllMediaItemsInGroup(groupId: string): Promise<TMediaItemInternal[]> {
+	public getAllMediaItemsInGroup(userId: string, categoryId: string, groupId: string): Promise<TMediaItemInternal[]> {
 		const conditions: QueryFilter<MediaItemInternal> = {
+			owner: userId,
+			category: categoryId,
 			group: groupId
 		};
 
@@ -75,11 +79,15 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 
 	/**
 	 * Gets all saved media items linked to the given own platform
+	 * @param userId user ID
+	 * @param categoryId category ID
 	 * @param ownPlatformId the own platform ID
 	 * @returns the media items, as a promise
 	 */
-	public getAllMediaItemsInOwnPlatform(ownPlatformId: string): Promise<TMediaItemInternal[]> {
+	public getAllMediaItemsInOwnPlatform(userId: string, categoryId: string, ownPlatformId: string): Promise<TMediaItemInternal[]> {
 		const conditions: QueryFilter<MediaItemInternal> = {
+			owner: userId,
+			category: categoryId,
 			ownPlatform: ownPlatformId
 		};
 
@@ -88,11 +96,13 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 
 	/**
 	 * Gets all saved media items for the given category
+	 * @param userId user ID
 	 * @param categoryId the category ID
 	 * @returns the media items, as a promise
 	 */
-	public getAllMediaItemsInCategory(categoryId: string): Promise<TMediaItemInternal[]> {
+	public getAllMediaItemsInCategory(userId: string, categoryId: string): Promise<TMediaItemInternal[]> {
 		const conditions: QueryFilter<MediaItemInternal> = {
+			owner: userId,
 			category: categoryId
 		};
 		
@@ -201,16 +211,24 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 			mediaItemId
 		);
 
-		return this.queryHelper.deleteById(mediaItemId);
+		return this.queryHelper.delete(this.castFilterQuery({
+			_id: mediaItemId,
+			owner: userId,
+			category: categoryId
+		}));
 	}
 
 	/**
 	 * Delets all saved media items for the given group
+	 * @param userId user ID
+	 * @param categoryId category ID
 	 * @param groupId the group ID
 	 * @returns the number of deleted elements as a promise
 	 */
-	public deleteAllMediaItemsInGroup(groupId: string): Promise<number> {
+	public deleteAllMediaItemsInGroup(userId: string, categoryId: string, groupId: string): Promise<number> {
 		const conditions: QueryFilter<MediaItemInternal> = {
+			owner: userId,
+			category: categoryId,
 			group: groupId
 		};
 
@@ -219,11 +237,13 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 
 	/**
 	 * Deletes all media items for the given category
+	 * @param userId user ID
 	 * @param categoryId category ID
 	 * @returns the number of deleted elements as a promise
 	 */
-	public deleteAllMediaItemsInCategory(categoryId: string): Promise<number> {
+	public deleteAllMediaItemsInCategory(userId: string, categoryId: string): Promise<number> {
 		const conditions: QueryFilter<MediaItemInternal> = {
+			owner: userId,
 			category: categoryId
 		};
 
@@ -363,7 +383,7 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 			if(filterBy.name) {
 				// Case insensitive exact match
 				andConditions.push({
-					name: new RegExp(`^${filterBy.name}$`, 'i')
+					name: new RegExp(`^${miscUtils.escapeRegExp(filterBy.name)}$`, 'i')
 				});
 			}
 

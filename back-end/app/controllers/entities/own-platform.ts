@@ -80,7 +80,7 @@ class OwnPlatformController extends AbstractEntityController {
 
 		if(filter && filter.name) {
 			// Case insensitive exact match
-			conditions.name = new RegExp(`^${filter.name}$`, 'i');
+			conditions.name = new RegExp(`^${miscUtils.escapeRegExp(filter.name)}$`, 'i');
 		}
 
 		const sortBy: OrderBy = {
@@ -148,7 +148,11 @@ class OwnPlatformController extends AbstractEntityController {
 
 		// Delete all other platforms
 		return miscUtils.mergeAndSumPromiseResults(platformsToDelete.map((id) => {
-			return this.queryHelper.deleteById(id);
+			return this.queryHelper.delete({
+				_id: id,
+				owner: userId,
+				category: categoryId
+			});
 		}));
 	}
 
@@ -165,7 +169,11 @@ class OwnPlatformController extends AbstractEntityController {
 		const mediaItemController = await mediaItemFactory.getEntityControllerFromCategoryId(userId, categoryId);
 
 		return miscUtils.mergeAndSumPromiseResults([
-			this.queryHelper.deleteById(ownPlatformId),
+			this.queryHelper.delete({
+				_id: ownPlatformId,
+				owner: userId,
+				category: categoryId
+			}),
 			mediaItemController.replaceOwnPlatformInAllMediaItems(userId, categoryId, ownPlatformId, undefined)
 		]);
 	}
@@ -173,11 +181,13 @@ class OwnPlatformController extends AbstractEntityController {
 	/**
 	 * Deletes all own platforms for the given category
 	 * This method does NOT cascade delete all media items in the own platforms
+	 * @param userId user ID
 	 * @param categoryId category ID
 	 * @returns the number of deleted elements as a promise
 	 */
-	public deleteAllOwnPlatformsInCategory(categoryId: string): Promise<number> {
+	public deleteAllOwnPlatformsInCategory(userId: string, categoryId: string): Promise<number> {
 		const conditions: QueryConditions = {
+			owner: userId,
 			category: categoryId
 		};
 

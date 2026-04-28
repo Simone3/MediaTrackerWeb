@@ -474,7 +474,7 @@ File: `app/controllers/entities/category.ts`
 Responsibilities:
 
 - load categories for a user
-- filter by exact case-insensitive name
+- filter by exact case-insensitive literal name
 - save category
 - delete category
 - delete all categories for a user
@@ -485,9 +485,9 @@ Important rule:
 
 Delete behavior cascades to:
 
-- all groups in the category
-- all media items in the category, through the media-type-specific controller resolved by `mediaItemFactory`
-- all own platforms in the category
+- all groups in the user's category
+- all media items in the user's category, through the media-type-specific controller resolved by `mediaItemFactory`
+- all own platforms in the user's category
 - the category itself
 
 ### `GroupController`
@@ -497,7 +497,7 @@ File: `app/controllers/entities/group.ts`
 Responsibilities:
 
 - load/filter/save/delete groups
-- delete all groups for a category or user
+- delete all groups for a user's category or user
 
 Delete behavior:
 
@@ -511,7 +511,7 @@ Responsibilities:
 
 - load/filter/save/delete own platforms
 - merge multiple own platforms into one
-- delete all own platforms for a category or user
+- delete all own platforms for a user's category or user
 
 Delete behavior:
 
@@ -1124,6 +1124,7 @@ Before closing work on the backend, run:
 - Preserve ownership checks:
   - authentication by Firebase token
   - authorization by matching `:userId`
+  - database reads, writes, and cascade operations should include owner conditions whenever a user context is available
 - Keep delete side effects consistent:
   - deleting category removes nested data
   - deleting group removes media items in that group

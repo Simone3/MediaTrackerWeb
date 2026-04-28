@@ -80,7 +80,7 @@ class GroupController extends AbstractEntityController {
 
 		if(filter && filter.name) {
 			// Case insensitive exact match
-			conditions.name = new RegExp(`^${filter.name}$`, 'i');
+			conditions.name = new RegExp(`^${miscUtils.escapeRegExp(filter.name)}$`, 'i');
 		}
 
 		const sortBy: OrderBy = {
@@ -122,19 +122,25 @@ class GroupController extends AbstractEntityController {
 		const mediaItemController = await mediaItemFactory.getEntityControllerFromCategoryId(userId, categoryId);
 
 		return miscUtils.mergeAndSumPromiseResults([
-			mediaItemController.deleteAllMediaItemsInGroup(groupId),
-			this.queryHelper.deleteById(groupId)
+			mediaItemController.deleteAllMediaItemsInGroup(userId, categoryId, groupId),
+			this.queryHelper.delete({
+				_id: groupId,
+				owner: userId,
+				category: categoryId
+			})
 		]);
 	}
 
 	/**
 	 * Deletes all groups for the given category
 	 * This method does NOT cascade delete all media items in the groups
+	 * @param userId user ID
 	 * @param categoryId category ID
 	 * @returns the number of deleted elements as a promise
 	 */
-	public deleteAllGroupsInCategory(categoryId: string): Promise<number> {
+	public deleteAllGroupsInCategory(userId: string, categoryId: string): Promise<number> {
 		const conditions: QueryConditions = {
+			owner: userId,
 			category: categoryId
 		};
 

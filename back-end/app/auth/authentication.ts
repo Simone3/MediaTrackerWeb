@@ -47,7 +47,7 @@ export const authenticationMiddleware: RequestHandler = (request, response, next
 	}
 
 	// Exception for simple status endpoint
-	if(request.path === STATUS_ROUTE_PATH) {
+	if(request.method === 'GET' && request.path === STATUS_ROUTE_PATH) {
 		next();
 		return;
 	}
