@@ -81,18 +81,27 @@ export const setupTvShowExternalServicesMocks = (): void => {
  * Helper to initilize the external videogame APIs mocks
  */
 export const setupVideogameExternalServicesMocks = (): void => {
+	nock('http://mock-twitch-auth')
+		.post('/oauth2/token')
+		.reply(200, {
+			access_token: 'mock-token',
+			expires_in: 3600,
+			token_type: 'bearer'
+		});
+
 	nock('http://mock-videogame-api')
-		.get('/search')
-		.query({
-			...config.externalApis.giantBomb.search.queryParams,
-			query: 'Mock Videogame'
+		.post('/games', (body) => {
+			return String(body).includes('search "Mock Videogame";');
 		})
+		.matchHeader('Client-ID', config.externalApis.igdb.auth.clientId)
+		.matchHeader('Authorization', 'Bearer mock-token')
 		.reply(200, mockVideogameSearchResponse);
 			
 	nock('http://mock-videogame-api')
-		.get('/game/123')
-		.query({
-			...config.externalApis.giantBomb.details.queryParams
+		.post('/games', (body) => {
+			return String(body).includes('where id = 123;');
 		})
+		.matchHeader('Client-ID', config.externalApis.igdb.auth.clientId)
+		.matchHeader('Authorization', 'Bearer mock-token')
 		.reply(200, mockVideogameDetailsResponse);
 };

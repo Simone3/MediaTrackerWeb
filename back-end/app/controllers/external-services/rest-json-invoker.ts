@@ -18,7 +18,7 @@ export class RestJsonInvoker {
 	 * @template TRequest the request class
 	 * @template TResponse the response class
 	 */
-	public invoke<TRequest extends object | undefined, TResponse extends object>(parameters: InvocationParams<TRequest, TResponse>): Promise<TResponse> {
+	public invoke<TRequest extends object | string | undefined, TResponse extends object>(parameters: InvocationParams<TRequest, TResponse>): Promise<TResponse> {
 		const startNs = process.hrtime.bigint();
 
 		return new Promise((resolve, reject): void => {
@@ -28,17 +28,17 @@ export class RestJsonInvoker {
 				url: parameters.url,
 				method: parameters.method,
 				params: parameters.queryParams,
-				data: parameters.requestBody ? JSON.stringify(parameters.requestBody) : parameters.requestBody,
+				data: this.getRequestBody(parameters.requestBody),
 				cancelToken: cancelTokenSource.token,
 				headers: {
-					...parameters.headers,
-					'Content-Type': 'application/json',
+					'Content-Type': parameters.requestContentType ? parameters.requestContentType : 'application/json',
 					Accept: 'application/json',
 					'Accept-Charset': 'utf-8',
-					'User-Agent': config.externalApis.userAgent
+					'User-Agent': config.externalApis.userAgent,
+					...parameters.headers
 				}
 			};
-			this.logRequest(options);
+			this.logRequest(options, parameters.hideRequestBodyInLogs);
 
 			// Custom timeout handling (timeout field in options only handles connection timeout)
 			const timeout = parameters.timeoutMilliseconds ? parameters.timeoutMilliseconds : config.externalApis.timeoutMilliseconds;
@@ -50,7 +50,7 @@ export class RestJsonInvoker {
 			axios.request(options)
 				.then((axiosResponse) => {
 					const rawResponseBody = axiosResponse.data;
-					this.logSuccessfulResponse(options, rawResponseBody);
+					this.logSuccessfulResponse(options, rawResponseBody, parameters.hideResponseBodyInLogs);
 					this.logPerformance(options, startNs);
 
 					// Check if we "trust" the API response to be valid...
@@ -58,7 +58,7 @@ export class RestJsonInvoker {
 						// Skip validation and return the raw response
 						resolve(rawResponseBody);
 					}
-					else {
+					else if(parameters.responseBodyClass) {
 						// Parse and validate the raw response
 						parserValidator.parseAndValidate(parameters.responseBodyClass, rawResponseBody)
 							.then((parsedResponse) => {
@@ -68,6 +68,9 @@ export class RestJsonInvoker {
 								logger.error('External API response parse error: %s', error);
 								reject(AppError.EXTERNAL_API_PARSE.withDetails(error));
 							});
+					}
+					else {
+						reject(AppError.EXTERNAL_API_PARSE.withDetails('Missing response body class'));
 					}
 				})
 				.catch((error) => {
@@ -81,6 +84,23 @@ export class RestJsonInvoker {
 					}
 				});
 		});
+	}
+
+	/**
+	 * Helper to get the request body in the right format
+	 * @param requestBody the source request body
+	 * @returns the request body ready for axios
+	 */
+	private getRequestBody<TRequest extends object | string | undefined>(requestBody: TRequest): string | TRequest {
+		if(typeof requestBody === 'string') {
+			return requestBody;
+		}
+		else if(requestBody) {
+			return JSON.stringify(requestBody);
+		}
+		else {
+			return requestBody;
+		}
 	}
 
 	/**
@@ -128,10 +148,12 @@ export class RestJsonInvoker {
 	/**
 	 * Helper to log the request
 	 * @param options the request options
+	 * @param hideRequestBody whether the request body should be hidden
 	 */
-	private logRequest(options: AxiosRequestConfig): void {
+	private logRequest(options: AxiosRequestConfig, hideRequestBody?: boolean): void {
 		if(config.log.externalApisInputOutput.active) {
-			externalInvocationsInputOutputLogger.info('External Service %s %s %s - Sent Request: %s', options.method, options.url, options.params, options.data);
+			const requestBody = hideRequestBody ? '<hidden>' : options.data;
+			externalInvocationsInputOutputLogger.info('External Service %s %s %s - Sent Request: %s', options.method, options.url, options.params, requestBody);
 		}
 	}
 
@@ -139,10 +161,12 @@ export class RestJsonInvoker {
 	 * Helper to log the successful response
 	 * @param options the request options
 	 * @param rawResponseBody the response body
+	 * @param hideResponseBody whether the response body should be hidden
 	 */
-	private logSuccessfulResponse(options: AxiosRequestConfig, rawResponseBody: unknown): void {
+	private logSuccessfulResponse(options: AxiosRequestConfig, rawResponseBody: unknown, hideResponseBody?: boolean): void {
 		if(config.log.externalApisInputOutput.active) {
-			externalInvocationsInputOutputLogger.info('External Service %s %s - Received Response: %s', options.method, options.url, rawResponseBody);
+			const responseBody = hideResponseBody ? '<hidden>' : rawResponseBody;
+			externalInvocationsInputOutputLogger.info('External Service %s %s - Received Response: %s', options.method, options.url, responseBody);
 		}
 	}
 

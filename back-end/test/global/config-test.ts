@@ -77,25 +77,24 @@ export const testConfig: Config = {
 				}
 			}
 		},
-		giantBomb: {
+		igdb: {
 			basePath: 'http://mock-videogame-api',
+			auth: {
+				basePath: 'http://mock-twitch-auth',
+				relativePath: '/oauth2/token',
+				clientId: 'mock-client-id',
+				clientSecret: 'mock-client-secret',
+				grantType: 'client_credentials'
+			},
+			imageBasePath: 'http://videogame-images',
+			imageSize: 'cover_big_2x',
+			imageExtension: 'jpg',
 			search: {
-				relativePath: '/search',
-				queryParams: {
-					api_key: 'mock-api-key',
-					format: 'json',
-					resources: 'game',
-					limit: '10',
-					query: ''
-				}
+				relativePath: '/games',
+				limit: 10
 			},
 			details: {
-				relativePath: '/game/:videogameId',
-				queryParams: {
-					api_key: 'mock-api-key',
-					format: 'json',
-					field_list: 'id,original_release_date,expected_release_day,expected_release_month,expected_release_year,genres,name,deck,developers,publishers,platforms,image'
-				}
+				relativePath: '/games'
 			}
 		}
 	},

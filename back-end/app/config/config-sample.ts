@@ -78,25 +78,24 @@ export const sampleConfig: Config = {
 				}
 			}
 		},
-		giantBomb: {
-			basePath: 'http://www.giantbomb.com/api',
+		igdb: {
+			basePath: 'https://api.igdb.com/v4',
+			auth: {
+				basePath: 'https://id.twitch.tv',
+				relativePath: '/oauth2/token',
+				clientId: '<your_twitch_client_id_here>',
+				clientSecret: '<your_twitch_client_secret_here>',
+				grantType: 'client_credentials'
+			},
+			imageBasePath: 'https://images.igdb.com/igdb/image/upload',
+			imageSize: 'cover_big_2x',
+			imageExtension: 'jpg',
 			search: {
-				relativePath: '/search',
-				queryParams: {
-					api_key: '<your_api_key_here>',
-					format: 'json',
-					resources: 'game',
-					limit: '10',
-					query: ''
-				}
+				relativePath: '/games',
+				limit: 10
 			},
 			details: {
-				relativePath: '/game/:videogameId',
-				queryParams: {
-					api_key: '<your_api_key_here>',
-					format: 'json',
-					field_list: 'id,original_release_date,expected_release_day,expected_release_month,expected_release_year,genres,name,deck,developers,publishers,platforms,image'
-				}
+				relativePath: '/games'
 			}
 		}
 	},

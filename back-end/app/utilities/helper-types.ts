@@ -7,11 +7,14 @@ export type InvocationParams<TRequest, TResponse> = {
 	url: string;
 	method: Method;
 	requestBody?: TRequest;
-	responseBodyClass: ClassType<TResponse>;
+	requestContentType?: string;
+	responseBodyClass?: ClassType<TResponse>;
 	timeoutMilliseconds?: number;
 	queryParams?: QueryParams;
 	headers?: { [key: string]: string };
 	assumeWellFormedResponse?: boolean;
+	hideRequestBodyInLogs?: boolean;
+	hideResponseBodyInLogs?: boolean;
 };
 
 /**
@@ -39,4 +42,3 @@ export type ValuesOf<T extends unknown[]> = T[number];
 export declare type ClassType<T> = {
 	new (...args: unknown[]): T;
 };
-

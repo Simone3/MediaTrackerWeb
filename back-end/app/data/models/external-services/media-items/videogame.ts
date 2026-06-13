@@ -1,158 +1,108 @@
 import { Type } from 'class-transformer';
-import { IsDefined, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsBoolean, IsDefined, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 /**
- * Result of the external videogame search service
+ * Named reference model for the external videogame service
  */
-export class GiantBombSearchResult {
+export class IgdbNamedReference {
 	@IsNotEmpty()
 	@IsInt()
 	public id!: number;
-	
+
 	@IsNotEmpty()
 	@IsString()
 	public name!: string;
+}
+
+/**
+ * Image model for the external videogame service
+ */
+export class IgdbImage {
+	@IsNotEmpty()
+	@IsInt()
+	public id!: number;
+
+	@IsNotEmpty()
+	@IsString()
+	public image_id!: string;
+}
+
+/**
+ * Involved company model for the external videogame service
+ */
+export class IgdbInvolvedCompany {
+	@IsNotEmpty()
+	@IsInt()
+	public id!: number;
 
 	@IsOptional()
+	@IsBoolean()
+	public developer?: boolean;
+
+	@IsOptional()
+	@IsBoolean()
+	public publisher?: boolean;
+
+	@IsOptional()
+	@Type(() => {
+		return IgdbNamedReference;
+	})
+	@ValidateNested()
+	public company?: IgdbNamedReference;
+}
+
+/**
+ * Result of the external videogame service
+ */
+export class IgdbGame {
+	@IsNotEmpty()
+	@IsInt()
+	public id!: number;
+
+	@IsNotEmpty()
 	@IsString()
-	public original_release_date?: string;
+	public name!: string;
 
 	@IsOptional()
 	@IsInt()
-	public expected_release_day?: number;
-
-	@IsOptional()
-	@IsInt()
-	public expected_release_month?: number;
-
-	@IsOptional()
-	@IsInt()
-	public expected_release_year?: number;
-}
-
-/**
- * Response of the external videogame search service
- */
-export class GiantBombSearchResponse {
-	@IsOptional()
-	@IsDefined({ each: true })
-	@Type(() => {
-		return GiantBombSearchResult;
-	})
-	@ValidateNested()
-	public results?: GiantBombSearchResult[];
-}
-
-/**
- * Genre model for the external videogame details service
- */
-export class GiantBombGenre {
-	@IsNotEmpty()
-	@IsString()
-	public name!: string;
-}
-
-/**
- * Publisher model for the external videogame details service
- */
-export class GiantBombPublisher {
-	@IsNotEmpty()
-	@IsString()
-	public name!: string;
-}
-
-/**
- * Developer model for the external videogame details service
- */
-export class GiantBombDeveloper {
-	@IsNotEmpty()
-	@IsString()
-	public name!: string;
-}
-
-/**
- * Platform model for the external videogame details service
- */
-export class GiantBombPlatform {
-	@IsNotEmpty()
-	@IsString()
-	public name!: string;
-	
-	@IsOptional()
-	@IsString()
-	public abbreviation?: string;
-}
-
-/**
- * Image model for the external videogame details service
- */
-export class GiantBombImage {
-	@IsOptional()
-	@IsString()
-	public screen_url?: string;
+	public first_release_date?: number;
 
 	@IsOptional()
 	@IsString()
-	public medium_url?: string;
-}
-
-/**
- * Result model for the external videogame details service
- */
-export class GiantBombDetailsResult extends GiantBombSearchResult {
-	@IsOptional()
-	@IsDefined({ each: true })
-	@Type(() => {
-		return GiantBombGenre;
-	})
-	@ValidateNested()
-	public genres?: GiantBombGenre[];
+	public summary?: string;
 
 	@IsOptional()
 	@IsString()
-	public deck?: string;
+	public storyline?: string;
 
 	@IsOptional()
 	@IsDefined({ each: true })
 	@Type(() => {
-		return GiantBombDeveloper;
+		return IgdbNamedReference;
 	})
 	@ValidateNested()
-	public developers?: GiantBombDeveloper[];
+	public genres?: IgdbNamedReference[];
 
 	@IsOptional()
 	@IsDefined({ each: true })
 	@Type(() => {
-		return GiantBombPublisher;
+		return IgdbNamedReference;
 	})
 	@ValidateNested()
-	public publishers?: GiantBombPublisher[];
+	public platforms?: IgdbNamedReference[];
 
 	@IsOptional()
 	@IsDefined({ each: true })
 	@Type(() => {
-		return GiantBombPlatform;
+		return IgdbInvolvedCompany;
 	})
 	@ValidateNested()
-	public platforms?: GiantBombPlatform[];
+	public involved_companies?: IgdbInvolvedCompany[];
 
 	@IsOptional()
 	@Type(() => {
-		return GiantBombImage;
+		return IgdbImage;
 	})
 	@ValidateNested()
-	public image?: GiantBombImage;
+	public cover?: IgdbImage;
 }
-
-/**
- * Response of the external videogame details service
- */
-export class GiantBombDetailsResponse {
-	@IsDefined()
-	@Type(() => {
-		return GiantBombDetailsResult;
-	})
-	@ValidateNested()
-	public results!: GiantBombDetailsResult;
-}
-

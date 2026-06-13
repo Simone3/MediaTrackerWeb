@@ -140,7 +140,7 @@ describe('Videogame API Tests', () => {
 			
 			expect(response.searchResults, 'API did not return the correct number of catalog videogames').to.have.lengthOf(2);
 			expect(extract(response.searchResults, 'name'), 'API did not return the correct catalog videogames').to.have.members([ 'Mock Videogame 1', 'Mock Videogame 2' ]);
-			expect(extract(response.searchResults, 'catalogId'), 'API did not return the correct catalog videogames').to.have.members([ '123', '456' ]);
+			expect(extract(response.searchResults, 'catalogId'), 'API did not return the correct catalog videogames').to.have.members([ 'igdb:123', 'igdb:456' ]);
 		});
 
 		it('Should get videogame details from the catalog', async() => {
@@ -148,15 +148,15 @@ describe('Videogame API Tests', () => {
 				name: 'Mock Videogame 1',
 				description: 'The game description',
 				developers: [ 'First Dev', 'Second Dev' ],
-				genres: [ 'Action-Adventure', 'Role-Playing' ],
-				imageUrl: 'https://www.giantbomb.com/api/image/screen_medium/2558589-w1clean.jpg',
+				genres: [ 'Adventure', 'Role-playing (RPG)' ],
+				imageUrl: 'http://videogame-images/t_cover_big_2x/mock-cover.jpg',
 				platforms: [ 'Mac', 'PC' ],
 				publishers: [ 'Publisher1' ],
 				releaseDate: '2007-10-30T00:00:00.000Z',
-				catalogId: '123'
+				catalogId: 'igdb:123'
 			};
 
-			const response = await callHelper<undefined, GetVideogameFromCatalogResponse>('GET', `/catalog/videogames/123`, firstUCG.user);
+			const response = await callHelper<undefined, GetVideogameFromCatalogResponse>('GET', '/catalog/videogames/igdb:123', firstUCG.user);
 			
 			expect(response.catalogVideogame, 'API did not return the correct catalog details').to.be.eql(expectedResult);
 		});

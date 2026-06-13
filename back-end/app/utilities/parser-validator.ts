@@ -16,6 +16,19 @@ class ParserValidator {
 	}
 
 	/**
+	 * Helper to parse and validate the given object array against the given class (async)
+	 * @param classType the class containing the object fields, with optional validation annotations
+	 * @param source the source raw object array
+	 * @returns the parsed object array, as a promise
+	 * @template T the class to parse
+	 */
+	public parseAndValidateList<T extends object>(classType: ClassType<T>, source: object[]): Promise<T[]> {
+		return Promise.all(source.map((sourceItem) => {
+			return this.parseAndValidate(classType, sourceItem);
+		}));
+	}
+
+	/**
 	 * Helper to parse and validate the given object against the given class /sync)
 	 * @param classType the class containing the object fields, with optional validation annotations
 	 * @param source the source raw object

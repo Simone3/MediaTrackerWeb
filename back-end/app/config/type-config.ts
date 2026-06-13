@@ -274,86 +274,81 @@ class GoogleBooksConfig {
 	public details!: GoogleBooksDetailsConfig;
 }
 
-class GiantBombSearchQueryParamsConfig {
+class IgdbAuthConfig {
 	@IsDefined()
 	@IsString()
-	public api_key!: string;
+	public basePath!: string;
 
-	@IsDefined()
-	@IsString()
-	public format!: string;
-
-	@IsDefined()
-	@IsString()
-	public resources!: string;
-
-	@IsDefined()
-	@IsString()
-	public limit!: string;
-
-	@IsDefined()
-	@IsString()
-	public query!: string;
-}
-
-class GiantBombSearchConfig {
 	@IsDefined()
 	@IsString()
 	public relativePath!: string;
 
 	@IsDefined()
-	@Type(() => {
-		return GiantBombSearchQueryParamsConfig;
-	})
-	@ValidateNested()
-	public queryParams!: GiantBombSearchQueryParamsConfig;
+	@IsString()
+	public clientId!: string;
+
+	@IsDefined()
+	@IsString()
+	public clientSecret!: string;
+
+	@IsDefined()
+	@IsString()
+	public grantType!: string;
 }
 
-class GiantBombDetailsQueryParamsConfig {
-	@IsDefined()
-	@IsString()
-	public api_key!: string;
-
-	@IsDefined()
-	@IsString()
-	public format!: string;
-
-	@IsDefined()
-	@IsString()
-	public field_list!: string;
-}
-
-class GiantBombDetailsConfig {
+class IgdbSearchConfig {
 	@IsDefined()
 	@IsString()
 	public relativePath!: string;
 
 	@IsDefined()
-	@Type(() => {
-		return GiantBombDetailsQueryParamsConfig;
-	})
-	@ValidateNested()
-	public queryParams!: GiantBombDetailsQueryParamsConfig;
+	@IsNumber()
+	public limit!: number;
 }
 
-class GiantBombConfig {
+class IgdbDetailsConfig {
+	@IsDefined()
+	@IsString()
+	public relativePath!: string;
+}
+
+class IgdbConfig {
 	@IsDefined()
 	@IsString()
 	public basePath!: string;
 
 	@IsDefined()
 	@Type(() => {
-		return GiantBombSearchConfig;
+		return IgdbAuthConfig;
 	})
 	@ValidateNested()
-	public search!: GiantBombSearchConfig;
+	public auth!: IgdbAuthConfig;
+
+	@IsDefined()
+	@IsString()
+	public imageBasePath!: string;
+
+	@IsDefined()
+	@IsString()
+	public imageSize!: string;
+
+	@IsDefined()
+	@IsString()
+	public imageExtension!: string;
 
 	@IsDefined()
 	@Type(() => {
-		return GiantBombDetailsConfig;
+		return IgdbSearchConfig;
 	})
 	@ValidateNested()
-	public details!: GiantBombDetailsConfig;
+	public search!: IgdbSearchConfig;
+
+	@IsDefined()
+	@Type(() => {
+		return IgdbDetailsConfig;
+	})
+	@ValidateNested()
+	public details!: IgdbDetailsConfig;
 }
 
 class ExternalApisConfig {
@@ -381,10 +376,10 @@ class ExternalApisConfig {
 
 	@IsDefined()
 	@Type(() => {
-		return GiantBombConfig;
+		return IgdbConfig;
 	})
 	@ValidateNested()
-	public giantBomb!: GiantBombConfig;
+	public igdb!: IgdbConfig;
 }
 
 const LOG_LEVEL_CONFIG_VALUES: [ 'debug', 'info', 'error', 'off' ] = [ 'debug', 'info', 'error', 'off' ];

@@ -135,7 +135,7 @@ Configured external catalog providers:
 - TMDb for movies
 - TMDb for TV shows
 - Google Books for books
-- Giant Bomb for videogames
+- IGDB for videogames, authenticated through Twitch app credentials
 
 Shared external API settings:
 
@@ -877,26 +877,28 @@ Details mapping:
 
 Provider:
 
-- Giant Bomb
+- IGDB
 
 Search/details mapping:
 
 - name
 - genres
-- deck -> description
-- developers
-- publishers
+- summary -> description
+- involved companies flagged as developers
+- involved companies flagged as publishers
 - platforms
 
 Release date rule:
 
-- if Giant Bomb provides expected release year/month/day fields, they are combined into a UTC date
-- otherwise `original_release_date` is used
+- `first_release_date` is converted from IGDB's Unix timestamp to a UTC date
 
-Image URL preference:
+Catalog ID rule:
 
-- `screen_url`
-- fallback `medium_url`
+- IGDB IDs are exposed through the existing `catalogId` field with an `igdb:` prefix, for example `igdb:123`
+
+Image URL rule:
+
+- `cover.image_id` is combined with the configured IGDB image base path, image size, and extension
 
 ## Legacy Import Flow
 
@@ -1011,7 +1013,7 @@ Important behavior:
 - all helper-generated dates are UTC
 - string conversions use ISO format
 
-This matters especially for Google Books and Giant Bomb, where release dates may be partial.
+This matters especially for Google Books, where release dates may be partial.
 
 ### `miscUtils`
 
@@ -1086,7 +1088,7 @@ This means integration tests do not need real Firebase tokens.
 - TMDb movie routes
 - TMDb TV routes
 - Google Books routes
-- Giant Bomb routes
+- Twitch auth and IGDB videogame routes
 
 ### What tests already cover well
 
