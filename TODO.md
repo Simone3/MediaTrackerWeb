@@ -1,11 +1,22 @@
+- add amazon prime icon
 
-- cache/resize icons, they seem to take a bit to load
+- images and icons are slow sometimes - cache/resize them? - also svg file vs. embedded like spot?
 
 - media item form opens scrolled to the bottom when clicking from a scrolled list
 
-- add amazon prime icon
+- reduce right media item row icons on mobile so that more list row data is visible
 
-- videogame icons are loaded as relative and not absolute paths?
+- what image is used for mobile bookmarks (big icon like wikipedia, not small favicon)? can it be changed?
+
+- when opening /details route without context it just breaks - change routing so that multiple tabs could be opened?
+
+- letters like “g” are clipped in the media item header on desktop
+
+- weird on hover effect on list items on mobile
+
+- why cant i pull down to reload? is it something websites allow / disallow?
+
+- while waiting for main image, action icons like wikipedia etc. are centered
 
 - platform/group/seasons pages disable media item form guard when clicking on the header icon (home link)
 
