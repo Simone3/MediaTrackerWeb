@@ -26,10 +26,10 @@ export class CreditsScreenComponent extends Component<CreditsScreenComponentProp
 							</a>
 						</article>
 						<article className='credits-card'>
-							<h2 className='credits-card-title'>{i18n.t('credits.screen.cards.giantBomb.title')}</h2>
-							<p className='credits-card-copy'>{i18n.t('credits.screen.cards.giantBomb.copy')}</p>
-							<a href='http://www.giantbomb.com' target='_blank' rel='noreferrer' className='credits-link'>
-								{i18n.t('credits.screen.cards.giantBomb.link')}
+							<h2 className='credits-card-title'>{i18n.t('credits.screen.cards.igdb.title')}</h2>
+							<p className='credits-card-copy'>{i18n.t('credits.screen.cards.igdb.copy')}</p>
+							<a href='https://www.igdb.com/' target='_blank' rel='noreferrer' className='credits-link'>
+								{i18n.t('credits.screen.cards.igdb.link')}
 							</a>
 						</article>
 						<article className='credits-card'>

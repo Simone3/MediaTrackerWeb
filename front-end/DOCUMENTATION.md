@@ -856,7 +856,7 @@ Logout behavior:
 Credits screen is static and links to:
 
 - TMDb
-- Giant Bomb
+- IGDB
 - Google Books
 
 ## UI Architecture

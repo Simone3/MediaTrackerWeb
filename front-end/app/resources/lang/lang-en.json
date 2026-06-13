@@ -570,10 +570,10 @@
 					"copy": "Movies and TV Shows data provided by TMDb. This product uses the TMDb API but is not endorsed or certified by TMDb.",
 					"link": "Visit TMDb"
 				},
-				"giantBomb": {
-					"title": "Giant Bomb",
-					"copy": "Videogames data provided by Giant Bomb.",
-					"link": "Visit Giant Bomb"
+				"igdb": {
+					"title": "IGDB",
+					"copy": "Videogames data provided by IGDB.",
+					"link": "Visit IGDB"
 				},
 				"googleBooks": {
 					"title": "Google Books",
