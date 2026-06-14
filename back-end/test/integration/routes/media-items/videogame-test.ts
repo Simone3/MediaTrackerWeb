@@ -161,6 +161,12 @@ describe('Videogame API Tests', () => {
 			expect(response.catalogVideogame, 'API did not return the correct catalog details').to.be.eql(expectedResult);
 		});
 
+		it('Should reject unprefixed videogame catalog IDs', async() => {
+			await callHelper('GET', '/catalog/videogames/123', firstUCG.user, undefined, {
+				expectedStatus: 500
+			});
+		});
+
 		it('Should save and then retrieve ALL fields', async() => {
 			// Add group
 			const sourceGroup: Required<IdentifiedGroup> = {

@@ -18,7 +18,7 @@ export const toIgdbCatalogId = (sourceId: number): string => {
 
 /**
  * Helper to strip the IGDB catalog ID prefix
- * @param catalogId the possibly prefixed catalog ID
+ * @param catalogId the prefixed catalog ID
  * @returns the raw IGDB ID
  */
 export const fromIgdbCatalogId = (catalogId: string): string => {
@@ -26,7 +26,7 @@ export const fromIgdbCatalogId = (catalogId: string): string => {
 		return catalogId.substring(IGDB_CATALOG_ID_PREFIX.length);
 	}
 	else {
-		return catalogId;
+		throw AppError.INVALID_REQUEST.withDetails(`Catalog ID ${catalogId} does not have the required ${IGDB_CATALOG_ID_PREFIX} prefix`);
 	}
 };
 

@@ -895,6 +895,7 @@ Release date rule:
 Catalog ID rule:
 
 - IGDB IDs are exposed through the existing `catalogId` field with an `igdb:` prefix, for example `igdb:123`
+- details lookups require the `igdb:` prefix; unprefixed legacy GiantBomb IDs are rejected to avoid provider ID collisions
 
 Image URL rule:
 
