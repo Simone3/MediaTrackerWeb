@@ -149,7 +149,7 @@ describe('Videogame API Tests', () => {
 				description: 'The game description',
 				developers: [ 'First Dev', 'Second Dev' ],
 				genres: [ 'Adventure', 'Role-playing (RPG)' ],
-				imageUrl: 'http://videogame-images/t_cover_big_2x/mock-cover.jpg',
+				imageUrl: 'http://videogame-images/t_logo_med_2x/mock-cover.jpg',
 				platforms: [ 'Mac', 'PC' ],
 				publishers: [ 'Publisher1' ],
 				releaseDate: '2007-10-30T00:00:00.000Z',

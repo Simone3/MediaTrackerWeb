@@ -88,7 +88,7 @@ export const sampleConfig: Config = {
 				grantType: 'client_credentials'
 			},
 			imageBasePath: 'https://images.igdb.com/igdb/image/upload',
-			imageSize: 'cover_big_2x',
+			imageSize: 'logo_med_2x',
 			imageExtension: 'jpg',
 			search: {
 				relativePath: '/games',

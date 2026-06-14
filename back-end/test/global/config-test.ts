@@ -87,7 +87,7 @@ export const testConfig: Config = {
 				grantType: 'client_credentials'
 			},
 			imageBasePath: 'http://videogame-images',
-			imageSize: 'cover_big_2x',
+			imageSize: 'logo_med_2x',
 			imageExtension: 'jpg',
 			search: {
 				relativePath: '/games',
