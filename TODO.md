@@ -24,6 +24,8 @@
 
 - map firebase errors in display message (now it just shows a generic error) - maybe also any other BE error?
 
+- groups/platforms lists are difficult to read, especially on mobile - make them simpler by resizing the buttons? we can also move the delete button in the edit page
+
 - search in groups and platforms lists
 
 - add login with mock/mock user that creates a mock state for local tests even in prod (create catalog mocks for all 4 media types with lord of the rings)
