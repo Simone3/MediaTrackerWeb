@@ -1,3 +1,4 @@
+
 - add amazon prime icon
 
 - images and icons are slow sometimes - cache/resize them? - also svg file vs. embedded like spot?
@@ -19,6 +20,10 @@
 - while waiting for main image, action icons like wikipedia etc. are centered
 
 - platform/group/seasons pages disable media item form guard when clicking on the header icon (home link)
+
+- add option for decimal group numbers for spinoffs (e.g. #2.5 in group)
+
+- aggregations by media type like how many books read by year
 
 - back-end pagination
 
