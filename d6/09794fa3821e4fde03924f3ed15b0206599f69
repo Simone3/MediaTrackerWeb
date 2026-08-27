@@ -1,0 +1,105 @@
+.claude/commands/check.md
+  s_2b4da96ad5baa4::t_be35142c2f6108 1-28
+.claude/commands/sync-docs.md
+  s_2b4da96ad5baa4::t_dc9e888981a00d 1-34
+CLAUDE.md
+  s_2b4da96ad5baa4::t_23ac1f93ccf31a 1-43
+README.md
+  s_2b4da96ad5baa4::t_ca274ced98a70e 21-23,25
+back-end/CLAUDE.md
+  s_2b4da96ad5baa4::t_ce49f2ebf721b2 1,3-26,29-31,33-46,49-87
+back-end/README.md
+  s_2b4da96ad5baa4::t_b30f181cd27444 1-29
+back-end/docs/technical/01-architecture.md
+  s_2b4da96ad5baa4::t_9536788ed71993 1-76
+back-end/docs/technical/02-repository-map.md
+  s_2b4da96ad5baa4::t_550e1cdd01ff62 1-106
+back-end/docs/technical/03-build-and-run.md
+  s_2b4da96ad5baa4::t_c1587254e10a70 1-50
+back-end/docs/technical/04-configuration.md
+  s_2b4da96ad5baa4::t_de9930d4f5c811 1-66
+back-end/docs/technical/05-authentication.md
+  s_2b4da96ad5baa4::t_ff09cec46fba19 1-55
+back-end/docs/technical/06-validation-and-errors.md
+  s_2b4da96ad5baa4::t_a19c76073d4c15 1-48
+back-end/docs/technical/07-domain-model.md
+  s_2b4da96ad5baa4::t_46590ac27c528c 1-127
+back-end/docs/technical/08-persistence.md
+  s_2b4da96ad5baa4::t_fc44ae3aa8d25f 1-66
+back-end/docs/technical/09-controllers.md
+  s_2b4da96ad5baa4::t_11d36db58fc36a 1-134
+back-end/docs/technical/10-api-surface.md
+  s_2b4da96ad5baa4::t_fcfed7068b943e 1,3,5,7,9,11,13,21,23,31,33,38,42,44,46,48,50-53,55,64,66,68,70-73,75,77,81,83,85,87,89,91
+back-end/docs/technical/11-models-and-mapping.md
+  s_2b4da96ad5baa4::t_62e65b57ec4dd6 1-50
+back-end/docs/technical/12-catalog-integrations.md
+  s_2b4da96ad5baa4::t_7b0c222c8dc9b6 1-61
+back-end/docs/technical/13-legacy-import.md
+  s_2b4da96ad5baa4::t_1d10115e4b1e7a 1-65
+back-end/docs/technical/14-logging.md
+  s_2b4da96ad5baa4::t_83852102b3cec4 1-41
+back-end/docs/technical/15-utilities.md
+  s_2b4da96ad5baa4::t_1f549d7deb5a13 1-45
+back-end/docs/technical/16-testing.md
+  s_2b4da96ad5baa4::t_1e10b110fce1cc 1-78
+back-end/docs/technical/17-extension-playbooks.md
+  s_2b4da96ad5baa4::t_a6b65bb4c05888 1-81
+back-end/docs/technical/README.md
+  s_2b4da96ad5baa4::t_06b1e31178024d 1-56
+front-end/CLAUDE.md
+  s_2b4da96ad5baa4::t_61b52a98d209cd 1,3-31,34-36,38-39,41-81
+front-end/README.md
+  s_2b4da96ad5baa4::t_919b08d05ffcda 1-32
+front-end/docs/technical/01-architecture.md
+  s_2b4da96ad5baa4::t_ce28b5cb77a342 1-73
+front-end/docs/technical/02-repository-map.md
+  s_2b4da96ad5baa4::t_1055414b2f4bb9 1-104
+front-end/docs/technical/03-build-and-run.md
+  s_2b4da96ad5baa4::t_3a6112b9636e06 1-56
+front-end/docs/technical/04-configuration.md
+  s_2b4da96ad5baa4::t_87ce76afa150ef 1-57
+front-end/docs/technical/05-navigation.md
+  s_2b4da96ad5baa4::t_70bfd9df02e4cc 1-77
+front-end/docs/technical/06-redux.md
+  s_2b4da96ad5baa4::t_c1c093241895e7 1,3,5,7,9,14-16,39,41,43,45-49,51,57,59,61-63,65-66,69,71-76,78,80,82,84,86,88
+front-end/docs/technical/07-authentication.md
+  s_2b4da96ad5baa4::t_9cce6cc84f497c 1-47
+front-end/docs/technical/08-domain-model.md
+  s_2b4da96ad5baa4::t_d42bcef39337bb 1-106
+front-end/docs/technical/09-data-layer.md
+  s_2b4da96ad5baa4::t_411a83314df937 1-114
+front-end/docs/technical/10-features.md
+  s_2b4da96ad5baa4::t_5cc7093bfb47a0 1-137
+front-end/docs/technical/11-interface.md
+  s_2b4da96ad5baa4::t_45c5b32b41b185 1-64
+front-end/docs/technical/12-styling.md
+  s_2b4da96ad5baa4::t_101be1f6efffe3 1-32
+front-end/docs/technical/13-text-and-languages.md
+  s_2b4da96ad5baa4::t_9f1c743ced8c73 1-23
+front-end/docs/technical/14-testing.md
+  s_2b4da96ad5baa4::t_da32d0adaaf6f0 1-55
+front-end/docs/technical/15-invariants-and-pitfalls.md
+  s_2b4da96ad5baa4::t_5d461cd285cea3 1-71
+front-end/docs/technical/16-extension-playbooks.md
+  s_2b4da96ad5baa4::t_e971c0f41e6ff0 1-56
+front-end/docs/technical/README.md
+  s_2b4da96ad5baa4::t_65276bad8240bc 1-55
+.claude/settings.json
+  s_2b4da96ad5baa4::t_0bcb3e68f4416c 1-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "d609794fa3821e4fde03924f3ed15b0206599f69",
+  "prompts": {},
+  "sessions": {
+    "s_2b4da96ad5baa4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ecb16617-b962-4133-b24a-a7d3958d96c9",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
