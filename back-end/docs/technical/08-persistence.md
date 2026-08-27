@@ -1,0 +1,66 @@
+# §8 — Persistence
+
+*[Index](README.md) · [← §7 Domain model](07-domain-model.md)*
+
+MongoDB through Mongoose: the collections, how they reference each other, and the one helper every controller goes through.
+
+---
+
+## 8.1 Collections
+
+`Category` · `Group` · `OwnPlatform` · `Movie` · `TvShow` · `Book` · `Videogame`
+
+**Each media type has its own collection.** That is what makes a category's media type immutable once it holds items ([§7.2](07-domain-model.md#72-category)) and what makes `mediaItemFactory` necessary — a cross-type operation has to be told which collection to work in ([§9.8](09-controllers.md#98-mediaitemfactory)).
+
+## 8.2 References
+
+Stored as ObjectIds:
+
+- `category` → `Category`
+- `group` → `Group`
+- `ownPlatform` → `OwnPlatform`
+
+**`owner` is not a reference.** It is a raw Firebase UID string, because there is no user collection to point at ([§7.1](07-domain-model.md#71-the-ownership-model)).
+
+## 8.3 The shared media-item schema
+
+The common fields are defined once, in `app/schemas/media-items/media-item.ts`. Each media type's schema file adds only its own extra fields ([§7.6](07-domain-model.md#76-media-type-specific-fields)).
+
+Keeping the shared definition in one file is what stops four collections from slowly disagreeing about what a media item is.
+
+## 8.4 Populate
+
+Media-item read paths populate `group` and `ownPlatform`.
+
+That is why API responses carry nested `groupData` and `ownPlatformData` objects rather than bare IDs: a list row needs the group's name and the platform's color and icon to render, and a second round trip per row would be absurd ([§11.4](11-models-and-mapping.md#114-media-item-mapper-conventions)).
+
+## 8.5 `QueryHelper`
+
+`app/controllers/database/query-helper.ts` is the shared database helper every controller uses:
+
+- `find`
+- `findOne`
+- `save`
+- `updateSelectiveMany`
+- `deleteById`
+- `delete`
+- `checkUniquenessAndSave`
+
+Details worth knowing:
+
+- **`find` uses English collation**, so sorting is case-insensitive — otherwise `Zorro` would sort before `apple`
+- optional populate flags are supported ([§8.4](#84-populate))
+- query performance logging is emitted when enabled ([§14.1](14-logging.md#141-logger-categories))
+- **`checkUniquenessAndSave` exists but no current entity controller uses it.** Uniqueness is handled by the duplicate-name confirmation flow in the front end instead, so there are no database-level uniqueness constraints enforced today ([§17.5](17-extension-playbooks.md#175-known-implementation-characteristics))
+
+**Go through `QueryHelper` rather than reaching for Mongoose directly.** One-off access styles per controller lose the collation, the populate flags and the performance logging, all silently.
+
+## 8.6 No transactions
+
+There is no transaction handling around the multi-step deletes, the own-platform merge, or the legacy import ([§17.5](17-extension-playbooks.md#175-known-implementation-characteristics)). A cascade that fails partway leaves the partial result behind.
+
+Know this before adding another multi-step write: it is a property of the current codebase, not something a new operation gets for free.
+
+---
+
+[← §7 Domain model](07-domain-model.md) · [§9 Controllers →](09-controllers.md)
