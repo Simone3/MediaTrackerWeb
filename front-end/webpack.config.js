@@ -2,6 +2,23 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+/**
+ * Turns an SVG into an inline data URI, so that icons are part of the bundle instead of separate requests.
+ * The encoding is URI-escaped rather than base64: it stays text, which compresses far better, and it escapes
+ * everything that would terminate an unquoted CSS url(...), which is how the own-platform mask icons are used.
+ * @param {Buffer} content the raw file contents
+ * @returns {string} the data URI
+ */
+const svgToDataUri = (content) => {
+	const encoded = encodeURIComponent(content.toString())
+		.replace(/'/g, '%27')
+		.replace(/"/g, '%22')
+		.replace(/\(/g, '%28')
+		.replace(/\)/g, '%29');
+
+	return `data:image/svg+xml,${encoded}`;
+};
+
 module.exports = (_env, argv = {}) => {
 	const appEnvironment = process.env.MEDIA_TRACKER_APP_ENV || (argv.mode === 'production' ? 'prod' : 'dev');
 	const backEndBaseUrl = process.env.MEDIA_TRACKER_BACK_END_BASE_URL;
@@ -10,7 +27,8 @@ module.exports = (_env, argv = {}) => {
 		entry: './index.tsx',
 		output: {
 			path: path.resolve(__dirname, 'dist'),
-			filename: 'bundle.[contenthash].js',
+			filename: 'assets/bundle.[contenthash].js',
+			assetModuleFilename: 'assets/[contenthash][ext]',
 			publicPath: '/',
 			clean: true
 		},
@@ -37,7 +55,14 @@ module.exports = (_env, argv = {}) => {
 					use: [ 'style-loader', 'css-loader' ]
 				},
 				{
-					test: /\.(png|jpg|jpeg|gif|svg)$/i,
+					test: /\.svg$/i,
+					type: 'asset/inline',
+					generator: {
+						dataUrl: svgToDataUri
+					}
+				},
+				{
+					test: /\.(png|jpg|jpeg|gif)$/i,
 					type: 'asset/resource'
 				}
 			]
