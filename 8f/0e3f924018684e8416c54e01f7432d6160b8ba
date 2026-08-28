@@ -1,0 +1,70 @@
+back-end/app/controllers/catalogs/media-items/book.ts
+  s_a9208fd8cf2908::t_31426f91cf9c04 34-35,75-76
+back-end/app/controllers/catalogs/media-items/movie.ts
+  s_a9208fd8cf2908::t_72eb58d64cc150 34-35,75-76
+back-end/app/controllers/catalogs/media-items/tv-show.ts
+  s_a9208fd8cf2908::t_509d8ea2920107 34-35,75-76,93,95,133-134
+back-end/app/controllers/catalogs/media-items/videogame.ts
+  s_a9208fd8cf2908::t_ba55520496ed95 151-152,158-165
+back-end/app/controllers/external-services/rest-json-invoker.ts
+  s_a9208fd8cf2908::t_11cf8448094abf 4,63,89-121
+back-end/app/data/models/external-services/media-items/movie.ts
+  s_a9208fd8cf2908::t_be914e0a7c3a2f 2
+back-end/app/data/models/external-services/media-items/tv-show.ts
+  s_a9208fd8cf2908::t_788184ab5ad0aa 2
+back-end/app/data/models/external-services/media-items/videogame.ts
+  s_a9208fd8cf2908::t_de9f9b8acf1a64 2,8,10,21,23,34,36
+back-end/app/loggers/logger.ts
+  s_a9208fd8cf2908::t_7a88ce66463c90 95-105
+back-end/app/utilities/helper-types.ts
+  s_a9208fd8cf2908::t_ff1ace39e02b16 16,21-28
+back-end/app/utilities/misc-utils.ts
+  s_a9208fd8cf2908::t_16b128164b3128 125-127
+back-end/app/utilities/parser-validator.ts
+  s_a9208fd8cf2908::t_a7106d0018f448 1,3,33-109,121-238
+back-end/docs/technical/06-validation-and-errors.md
+  s_a9208fd8cf2908::t_6a824065043a46 46-59
+back-end/docs/technical/12-catalog-integrations.md
+  s_a9208fd8cf2908::t_a08111c5cd0d8e 18-20,42-43
+back-end/docs/technical/14-logging.md
+  s_a9208fd8cf2908::t_850ef0a8134b30 19-20
+back-end/docs/technical/15-utilities.md
+  s_a9208fd8cf2908::t_0bc7614d39af76 33-34
+back-end/docs/technical/16-testing.md
+  s_a9208fd8cf2908::t_25046adc997843 53,62
+back-end/test/integration/routes/media-items/book-test.ts
+  s_a9208fd8cf2908::t_09a4b7f7dacc41 146-152
+back-end/test/integration/routes/media-items/movie-test.ts
+  s_a9208fd8cf2908::t_83a7ca01962c65 163-179
+back-end/test/mocks/external-services-mocks.ts
+  s_a9208fd8cf2908::t_6e7136777f7833 5,7,33-39,54-61
+back-end/test/resources/mocks/external-services/mock-book-search-response-malformed-book.json
+  s_a9208fd8cf2908::t_727b6a56d270df 1-30
+back-end/test/resources/mocks/external-services/mock-movie-details-response-456.json
+  s_a9208fd8cf2908::t_e9dde67108565c 1-39
+back-end/test/unit/utilities/misc-utils-test.ts
+  s_a9208fd8cf2908::t_772f4b1e6db7a6 93-108
+back-end/test/unit/utilities/parser-validator-test.ts
+  s_a9208fd8cf2908::t_912e45f259862e 1-140
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "8f0e3f924018684e8416c54e01f7432d6160b8ba",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_a9208fd8cf2908": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5c7662f1-64f1-4ab3-9c59-3aec96917a31",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
