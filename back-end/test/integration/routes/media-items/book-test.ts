@@ -143,6 +143,13 @@ describe('Book API Tests', () => {
 			expect(extract(response.searchResults, 'catalogId'), 'API did not return the correct catalog books').to.have.members([ '123', '456' ]);
 		});
 
+		it('Should skip the invalid results when searching the books catalog', async() => {
+			const response = await callHelper<undefined, SearchBookCatalogResponse>('GET', `/catalog/books/search/Malformed Book`, firstUCG.user);
+
+			expect(response.searchResults, 'API did not skip the invalid catalog books').to.have.lengthOf(2);
+			expect(extract(response.searchResults, 'name'), 'API did not return the valid catalog books').to.have.members([ 'Malformed Book 1', 'Malformed Book 2' ]);
+		});
+
 		it('Should get book details from the catalog', async() => {
 			const expectedResult: Required<CatalogBook> = {
 				name: 'Mock Book 1',

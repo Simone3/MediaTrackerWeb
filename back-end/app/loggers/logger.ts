@@ -93,6 +93,17 @@ class MediaTrackerLogger {
 	}
 
 	/**
+	 * Writes a warning message if warning is enabled
+	 * @param message the log message, with optional %s placeholders
+	 * @param args the optional arguments for the placeholders
+	 */
+	public warn(message: string, ...args: unknown[]): void {
+		if(this.log4js.isWarnEnabled()) {
+			this.log4js.warn(message, ...this.stringify(args));
+		}
+	}
+
+	/**
 	 * Writes an error message if error is enabled
 	 * @param message the log message, with optional %s placeholders
 	 * @param args the optional arguments for the placeholders

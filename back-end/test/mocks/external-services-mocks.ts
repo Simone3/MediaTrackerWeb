@@ -2,7 +2,9 @@ import { config } from 'app/config/config';
 import nock from 'nock';
 import mockBookDetailsResponse from 'resources/mocks/external-services/mock-book-details-response-123.json';
 import mockBookSearchResponse from 'resources/mocks/external-services/mock-book-search-response-mock-book.json';
+import mockMalformedBookSearchResponse from 'resources/mocks/external-services/mock-book-search-response-malformed-book.json';
 import mockMovieDetailsResponse from 'resources/mocks/external-services/mock-movie-details-response-123.json';
+import mockMalformedMovieDetailsResponse from 'resources/mocks/external-services/mock-movie-details-response-456.json';
 import mockMovieSearchResponse from 'resources/mocks/external-services/mock-movie-search-response-mock-movie.json';
 import mockTvShowDetailsResponse from 'resources/mocks/external-services/mock-tv-show-details-response-123.json';
 import mockTvShowSearchResponse from 'resources/mocks/external-services/mock-tv-show-search-response-mock-tv-show.json';
@@ -28,6 +30,13 @@ export const setupMovieExternalServicesMocks = (): void => {
 			...config.externalApis.theMovieDb.movies.details.queryParams
 		})
 		.reply(200, mockMovieDetailsResponse);
+
+	nock('http://mock-movie-api')
+		.get('/movie/456')
+		.query({
+			...config.externalApis.theMovieDb.movies.details.queryParams
+		})
+		.reply(200, mockMalformedMovieDetailsResponse);
 };
 
 /**
@@ -42,6 +51,14 @@ export const setupBookExternalServicesMocks = (): void => {
 		})
 		.reply(200, mockBookSearchResponse);
 	
+	nock('http://mock-book-api')
+		.get('/volumes')
+		.query({
+			...config.externalApis.googleBooks.search.queryParams,
+			q: 'Malformed Book'
+		})
+		.reply(200, mockMalformedBookSearchResponse);
+
 	nock('http://mock-book-api')
 		.get('/volumes/123')
 		.query({

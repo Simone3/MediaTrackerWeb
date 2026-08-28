@@ -15,6 +15,9 @@ The four external providers behind `/catalog/*` ([§10.6](10-api-surface.md#106-
 - supports query params, headers, a request body and a timeout
 - logs request and response when enabled ([§14.1](14-logging.md#141-logger-categories))
 - **validates JSON responses against typed classes** unless `assumeWellFormedResponse` is set ([§6.1](06-validation-and-errors.md#61-one-validator-for-everything))
+- **discards the invalid list items instead of the whole response** when `discardInvalidResponseItems` is set ([§6.4](06-validation-and-errors.md#64-tolerating-bad-provider-data)), logging a warning with how many were dropped
+
+**Every catalog call sets `discardInvalidResponseItems`.** A catalog response is a best-effort view of somebody else's data: one search result with no title, one genre with no name, one null element in a list, and an all-or-nothing parse turns a usable answer into an error page. Provider payloads are not a contract this app can enforce, so the elements it cannot read are dropped and the rest is served.
 
 **Timeouts use an Axios cancel token plus a `setTimeout(...)`**, and a timeout failure maps to `AppError.EXTERNAL_API_TIMEOUT` rather than a generic failure — a provider being slow is a different operational problem from a provider being wrong, and the logs should say which one happened.
 
@@ -35,6 +38,8 @@ That job name is configuration rather than a literal ([§4.3](04-configuration.m
 **Details** — `name`, `genres[].name`, `overview`, `first_air_date`, a backdrop image URL from the configured TV image base path, creators from `created_by[].name`, average episode runtime from `episode_run_time[]`, `in_production`, and the season list **excluding season number `0`** — TMDb uses season 0 for specials, which are not seasons in this app's model ([§7.7](07-domain-model.md#77-tv-show-seasons)).
 
 **One extra request, conditionally.** If the show is still in production and TMDb returned at least one season, the controller fetches the latest season on its own and infers `nextEpisodeAirDate` from the future episodes in it. TMDb does not expose that date directly, and it is the single most useful field for a show someone is currently following — so it is worth the second call, and only made when it can produce something.
+
+**That second call cannot fail the first.** If the season request errors out, the show is returned without `nextEpisodeAirDate` rather than not at all: the field is a bonus on top of a details lookup that already succeeded.
 
 ## 12.4 Books (Google Books)
 

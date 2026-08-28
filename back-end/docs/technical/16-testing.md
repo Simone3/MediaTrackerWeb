@@ -50,7 +50,7 @@ Per-suite server, per-test database: the expensive thing happens once, and isola
 - Google Books routes
 - Twitch auth and IGDB videogame routes
 
-The static payloads live in `test/resources/mocks/`.
+The static payloads live in `test/resources/mocks/`. Some of them are **deliberately malformed** — a book search with a titleless volume and a null element, a movie details response with an unnamed genre and an unnamed crew member — so that the discard-and-serve behaviour is exercised through the real route stack and not only in the parser's unit tests ([§6.4](06-validation-and-errors.md#64-tolerating-bad-provider-data)).
 
 ## 16.6 What the suite already covers
 
@@ -59,7 +59,7 @@ The static payloads live in `test/resources/mocks/`.
 - CRUD for categories, groups, own platforms and every media type
 - filtering, sorting and searching
 - population of linked group and own-platform data
-- catalog mapping
+- catalog mapping, including the responses whose invalid list items are discarded
 - legacy import mapping
 - the own-platform merge
 - the category media-type-change restriction

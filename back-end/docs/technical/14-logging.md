@@ -16,6 +16,8 @@
 | `databaseLogger` | Mongoose debug logging |
 | `performanceLogger` | Request, query and external-call timings |
 
+Each category writes at `debug`, `info`, `warn` or `error`. **`warn` is for a degraded but served response** — the catalog dropping unreadable items from a provider payload ([§6.4](06-validation-and-errors.md#64-tolerating-bad-provider-data)) — as opposed to `error`, which means the caller got nothing.
+
 **They are separate because they are noisy in different amounts.** Turning on database query logging to diagnose a slow endpoint should not also flood the log with every request body.
 
 Every line carries the current user ID and the correlation ID through the layout ([§5.3](05-authentication.md#53-request-scope-and-correlation)).

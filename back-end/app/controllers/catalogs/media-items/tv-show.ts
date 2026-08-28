@@ -31,7 +31,8 @@ class TvShowCatalogController extends MediaItemCatalogController<SearchTvShowCat
 				url: url,
 				responseBodyClass: TmdbTvShowSearchResponse,
 				queryParams: queryParams,
-				timeoutMilliseconds: config.externalApis.timeoutMilliseconds
+				timeoutMilliseconds: config.externalApis.timeoutMilliseconds,
+				discardInvalidResponseItems: true
 			};
 
 			restJsonInvoker.invoke(invocationParams)
@@ -71,7 +72,8 @@ class TvShowCatalogController extends MediaItemCatalogController<SearchTvShowCat
 				url: url,
 				responseBodyClass: TmdbTvShowDetailsResponse,
 				queryParams: queryParams,
-				timeoutMilliseconds: config.externalApis.timeoutMilliseconds
+				timeoutMilliseconds: config.externalApis.timeoutMilliseconds,
+				discardInvalidResponseItems: true
 			};
 
 			// First call the general details service
@@ -88,8 +90,9 @@ class TvShowCatalogController extends MediaItemCatalogController<SearchTvShowCat
 								resolve(tvShowExternalDetailsServiceMapper.toInternal(detailsResponse, { currentSeasonData: seasonResponse }));
 							})
 							.catch((error) => {
+								// The season call only adds the next episode air date: the show itself is still worth returning without it
 								logger.error('TV show catalog (season) invocation error: %s', error);
-								reject(AppError.GENERIC.withDetails(error));
+								resolve(tvShowExternalDetailsServiceMapper.toInternal(detailsResponse));
 							});
 					}
 					else {
@@ -127,7 +130,8 @@ class TvShowCatalogController extends MediaItemCatalogController<SearchTvShowCat
 			url: url,
 			responseBodyClass: TmdbTvShowSeasonDataResponse,
 			queryParams: queryParams,
-			timeoutMilliseconds: config.externalApis.timeoutMilliseconds
+			timeoutMilliseconds: config.externalApis.timeoutMilliseconds,
+			discardInvalidResponseItems: true
 		};
 
 		return restJsonInvoker.invoke(invocationParams);

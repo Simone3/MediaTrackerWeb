@@ -1,0 +1,30 @@
+{
+    "kind": "books#volumes",
+    "totalItems": 4,
+    "items": [
+        {
+            "kind": "books#volume",
+            "id": "123",
+            "volumeInfo": {
+                "title": "Malformed Book 1",
+                "publishedDate": "2002"
+            }
+        },
+        {
+            "kind": "books#volume",
+            "id": "456",
+            "volumeInfo": {
+                "subtitle": "This volume has no title at all"
+            }
+        },
+        null,
+        {
+            "kind": "books#volume",
+            "id": "789",
+            "volumeInfo": {
+                "title": "Malformed Book 2",
+                "publishedDate": "2012-02-15"
+            }
+        }
+    ]
+}

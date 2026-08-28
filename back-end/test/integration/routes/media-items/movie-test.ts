@@ -160,6 +160,23 @@ describe('Movie API Tests', () => {
 			expect(response.catalogMovie, 'API did not return the correct catalog details').to.be.eql(expectedResult);
 		});
 
+		it('Should skip the invalid parts of the movie catalog details', async() => {
+			const expectedResult: Required<CatalogMovie> = {
+				name: 'Malformed Movie',
+				description: 'This is some description.',
+				directors: [ 'Some Director' ],
+				durationMinutes: 91,
+				genres: [ 'Genre1', 'Genre2' ],
+				imageUrl: 'http://movie-images/malformed.jpg',
+				releaseDate: '2004-08-06T00:00:00.000Z',
+				catalogId: '456'
+			};
+
+			const response = await callHelper<undefined, GetMovieFromCatalogResponse>('GET', `/catalog/movies/456`, firstUCG.user);
+
+			expect(response.catalogMovie, 'API did not skip the invalid genre and crew member').to.be.eql(expectedResult);
+		});
+
 		it('Should save and then retrieve ALL fields', async() => {
 			// Add group
 			const sourceGroup: Required<IdentifiedGroup> = {

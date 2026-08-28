@@ -43,6 +43,20 @@ Routes convert an `AppError` into an API payload with `errorResponseFactory`.
 
 There is no central error middleware ([§1.5](01-architecture.md#15-the-middleware-stack)) — each route handles its own failures inline — and most route failures, including validation and some precondition failures, currently return `500` ([§17.5](17-extension-playbooks.md#175-known-implementation-characteristics)).
 
+## 6.4 Tolerating bad provider data
+
+`parseAndValidateDiscardingInvalidItems` and `parseAndValidateListDiscardingInvalid` are the lenient counterparts of the two parse methods, used only for external catalog responses ([§12.1](12-catalog-integrations.md#121-the-shared-invoker)). They parse normally and, on failure, walk the `ValidationError` tree alongside the raw payload, drop the list elements the errors point at, and parse again — reporting how many were discarded.
+
+**Only list elements are droppable, and only the smallest one that fails.** An invalid genre inside a movie discards that genre, not the movie; a search result with no title discards that result, not the search. A failure that is not inside a list — a details response missing its own `title` — still rejects, because there is nothing usable left to return.
+
+**A property-level `each` constraint drops the whole list.** class-validator reports `@IsString({ each: true })` as one constraint on the property with no indication of which element failed, so the list cannot be repaired element by element and is removed instead. The re-parse then rejects if the model required it.
+
+**This is why the external-response models carry no `@IsDefined({ each: true })`.** It is redundant — `@ValidateNested()` already reports a null or non-object element as an indexed child — and it is harmful, because it turns a repairable per-element failure into exactly the property-level constraint above.
+
+**Required means the mapper needs it.** In `app/data/models/external-services/**`, a field stays required when a result without it cannot be mapped into something worth showing (an ID, a title, a name), and becomes optional when it is never read or the mapper already copes. Requiring a field the mapper ignores does not add safety; it only discards results that would have been fine.
+
+Request payloads and the config keep using the strict methods. A malformed request is the caller's bug and must be rejected, not quietly trimmed.
+
 ---
 
 [← §5 Authentication and authorization](05-authentication.md) · [§7 Domain model →](07-domain-model.md)

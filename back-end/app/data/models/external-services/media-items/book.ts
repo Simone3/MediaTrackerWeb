@@ -14,7 +14,6 @@ export class GoogleBooksVolumeLight {
 	public publishedDate?: string;
 
 	@IsOptional()
-	@IsNotEmpty({ each: true })
 	@IsString({ each: true })
 	public authors?: string[];
 }
@@ -40,7 +39,6 @@ export class GoogleBooksSearchResult {
  */
 export class GoogleBooksSearchResponse {
 	@IsOptional()
-	@IsDefined({ each: true })
 	@Type(() => {
 		return GoogleBooksSearchResult;
 	})
@@ -66,7 +64,6 @@ export class GoogleBooksImageLinks {
  */
 export class GoogleBooksVolumeFull extends GoogleBooksVolumeLight {
 	@IsOptional()
-	@IsNotEmpty({ each: true })
 	@IsString({ each: true })
 	public categories?: string[];
 

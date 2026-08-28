@@ -122,7 +122,9 @@ class MiscUtils {
 			return undefined;
 		}
 
-		return this.filterAndSortValues(array.map((value) => {
+		return this.filterAndSortValues(array.filter((value) => {
+			return value[field] !== undefined && value[field] !== null;
+		}).map((value) => {
 			return String(value[field]);
 		}));
 	}

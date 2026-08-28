@@ -13,8 +13,17 @@ export type InvocationParams<TRequest, TResponse> = {
 	queryParams?: QueryParams;
 	headers?: { [key: string]: string };
 	assumeWellFormedResponse?: boolean;
+	discardInvalidResponseItems?: boolean;
 	hideRequestBodyInLogs?: boolean;
 	hideResponseBodyInLogs?: boolean;
+};
+
+/**
+ * Helper type for the result of a parse that may have discarded invalid list items
+ */
+export type LenientParseResult<T> = {
+	value: T;
+	discardedItems: number;
 };
 
 /**

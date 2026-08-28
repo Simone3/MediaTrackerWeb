@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsDefined, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 /**
  * Result of the external movie search service
@@ -23,7 +23,6 @@ export class TmdbMovieSearchResult {
  */
 export class TmdbMovieSearchResponse {
 	@IsOptional()
-	@IsDefined({ each: true })
 	@Type(() => {
 		return TmdbMovieSearchResult;
 	})
@@ -49,7 +48,6 @@ export class TmdbMovieCrewPerson {
  */
 export class TmdbMovieCredits {
 	@IsOptional()
-	@IsDefined({ each: true })
 	@Type(() => {
 		return TmdbMovieCrewPerson;
 	})
@@ -79,7 +77,6 @@ export class TmdbMovieDetailsResponse {
 	public release_date?: string;
 	
 	@IsOptional()
-	@IsDefined({ each: true })
 	@Type(() => {
 		return TmdbMovieGenre;
 	})

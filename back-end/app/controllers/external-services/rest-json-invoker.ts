@@ -1,7 +1,7 @@
 import { config } from 'app/config/config';
 import { AppError } from 'app/data/models/error/error';
 import { externalInvocationsInputOutputLogger, logger, performanceLogger } from 'app/loggers/logger';
-import { InvocationParams } from 'app/utilities/helper-types';
+import { ClassType, InvocationParams } from 'app/utilities/helper-types';
 import { parserValidator } from 'app/utilities/parser-validator';
 import axios, { AxiosError, AxiosRequestConfig, Cancel } from 'axios';
 
@@ -60,7 +60,7 @@ export class RestJsonInvoker {
 					}
 					else if(parameters.responseBodyClass) {
 						// Parse and validate the raw response
-						parserValidator.parseAndValidate(parameters.responseBodyClass, rawResponseBody)
+						this.parseResponse(options, parameters.responseBodyClass, rawResponseBody, parameters.discardInvalidResponseItems)
 							.then((parsedResponse) => {
 								resolve(parsedResponse);
 							})
@@ -84,6 +84,39 @@ export class RestJsonInvoker {
 					}
 				});
 		});
+	}
+
+	/**
+	 * Helper to parse and validate the raw response body
+	 * @param options the request options
+	 * @param responseBodyClass the response class
+	 * @param rawResponseBody the raw response body
+	 * @param discardInvalidItems if true, the list items that fail validation are discarded instead of rejecting the whole response
+	 * @returns the parsed response, as a promise
+	 * @template TResponse the response class
+	 */
+	private parseResponse<TResponse extends object>(options: AxiosRequestConfig, responseBodyClass: ClassType<TResponse>, rawResponseBody: object, discardInvalidItems: boolean | undefined): Promise<TResponse> {
+		if(discardInvalidItems) {
+			return parserValidator.parseAndValidateDiscardingInvalidItems(responseBodyClass, rawResponseBody)
+				.then((parseResult) => {
+					this.logDiscardedItems(options, parseResult.discardedItems);
+					return parseResult.value;
+				});
+		}
+		else {
+			return parserValidator.parseAndValidate(responseBodyClass, rawResponseBody);
+		}
+	}
+
+	/**
+	 * Helper to log the response list items that were discarded because they failed validation
+	 * @param options the request options
+	 * @param discardedItems the number of discarded items
+	 */
+	private logDiscardedItems(options: AxiosRequestConfig, discardedItems: number): void {
+		if(discardedItems > 0) {
+			logger.warn('External Service %s %s - Discarded %s invalid response list item(s)', options.method, options.url, discardedItems);
+		}
 	}
 
 	/**

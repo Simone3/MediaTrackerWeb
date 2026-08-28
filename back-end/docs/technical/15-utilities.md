@@ -30,6 +30,8 @@ UTC everywhere is what keeps a release date from shifting a day depending on whe
 - `filterAndSortValues`
 - `objectToStringKeyValue`
 
+**`extractFilterAndSortFieldValues` skips nullish field values before stringifying them**, so an element whose field is absent contributes nothing instead of the literal string `undefined`. That matters wherever a provider model leaves a name optional ([§6.4](06-validation-and-errors.md#64-tolerating-bad-provider-data)).
+
 **`parseBoolean` treats exactly these as true**: `true`, `'true'`, `1`, `'1'`, `'on'`, `'yes'`. Everything else is false.
 
 The permissive list exists because boolean-ish values arrive from several sources with different conventions — JSON bodies, query strings, legacy import payloads — and normalizing them in one place beats each mapper guessing ([§11.4](11-models-and-mapping.md#114-media-item-mapper-conventions)).

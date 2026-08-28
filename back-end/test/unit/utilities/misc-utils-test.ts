@@ -90,5 +90,21 @@ describe('MiscUtils Tests', () => {
 			
 			throw new Error('mergeAndSumPromiseResults should have returned an error');
 		});
+
+		it('Should extract, filter and sort field values', (done) => {
+			expect(miscUtils.extractFilterAndSortFieldValues([{ name: 'Second' }, { name: 'First' }], 'name')).to.be.eql([ 'First', 'Second' ]);
+
+			expect(miscUtils.extractFilterAndSortFieldValues([{ name: 'First' }, { name: '  ' }], 'name')).to.be.eql([ 'First' ]);
+
+			expect(miscUtils.extractFilterAndSortFieldValues([{ name: 'First' }, { name: undefined }], 'name')).to.be.eql([ 'First' ]);
+
+			expect(miscUtils.extractFilterAndSortFieldValues([{ name: 'First' }, { name: null }], 'name')).to.be.eql([ 'First' ]);
+
+			expect(miscUtils.extractFilterAndSortFieldValues([{ name: undefined }], 'name')).to.be.equal(undefined);
+
+			expect(miscUtils.extractFilterAndSortFieldValues(undefined, 'name')).to.be.equal(undefined);
+
+			done();
+		});
 	});
 });

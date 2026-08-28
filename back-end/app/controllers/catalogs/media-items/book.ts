@@ -31,7 +31,8 @@ class BookCatalogController extends MediaItemCatalogController<SearchBookCatalog
 				url: url,
 				responseBodyClass: GoogleBooksSearchResponse,
 				queryParams: queryParams,
-				timeoutMilliseconds: config.externalApis.timeoutMilliseconds
+				timeoutMilliseconds: config.externalApis.timeoutMilliseconds,
+				discardInvalidResponseItems: true
 			};
 			
 			restJsonInvoker.invoke(invocationParams)
@@ -71,7 +72,8 @@ class BookCatalogController extends MediaItemCatalogController<SearchBookCatalog
 				url: url,
 				responseBodyClass: GoogleBooksDetailsResponse,
 				queryParams: queryParams,
-				timeoutMilliseconds: config.externalApis.timeoutMilliseconds
+				timeoutMilliseconds: config.externalApis.timeoutMilliseconds,
+				discardInvalidResponseItems: true
 			};
 
 			restJsonInvoker.invoke(invocationParams)
