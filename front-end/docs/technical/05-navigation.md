@@ -72,6 +72,16 @@ Navigation here is four things at once: React Router matching, Redux action disp
 
 **The pattern is the same throughout: a component dispatches an intent, a reducer records it, and the navigation saga moves the screen.** That is why adding a `navigate()` call to a click handler usually produces a double navigation rather than the intended one — the saga was already going to handle it.
 
+## 5.5 Scroll position
+
+Every screen change happens inside the same document, so the browser never resets the scroll offset on its own when a screen is *opened*: a details screen pushed from a scrolled-down list would render under the viewport offset the list was left at. `ScrollToTopOnNewScreen`, in `app/components/containers/navigation/app-navigator.tsx`, scrolls the window back to the top on every `PUSH` and `REPLACE` navigation to correct that.
+
+**It deliberately does nothing on `POP`.** `history.scrollRestoration` is left at its default `'auto'`, so going back — including the saga-driven `back()` calls in [§5.4](#54-saga-driven-navigation) — lets the browser put the previous screen back at the exact offset the user left it at. Scrolling to the top there too would break that.
+
+The effect keys off `location.key` rather than the path, because [no path carries an entity ID](#51-route-map): two different media items share `/media/items/details`, and a path-keyed effect would not fire if the same path were ever pushed twice in a row.
+
+There is no `<ScrollRestoration>` in the tree: that component requires a data router, and [§5.2](#52-router-composition) uses a plain `BrowserRouter`.
+
 ---
 
 [← §4 Configuration](04-configuration.md) · [§6 Redux state →](06-redux.md)
