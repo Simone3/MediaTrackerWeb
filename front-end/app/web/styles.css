@@ -329,7 +329,7 @@ input {
 .authenticated-page-header-title {
 	margin: 0;
 	font-size: clamp(1.5rem, 3vw, 2.2rem);
-	line-height: 1.12;
+	line-height: 1.3;
 	color: var(--color-text-on-dark-primary);
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -3082,7 +3082,7 @@ input {
 	}
 
 	.category-row {
-		grid-template-columns: 5px minmax(0, 1fr) 64px;
+		grid-template-columns: 5px minmax(0, 1fr) 45px;
 		min-height: 88px;
 	}
 
@@ -3107,6 +3107,15 @@ input {
 
 	.category-row-name {
 		font-size: 1.08rem;
+	}
+
+	.category-row-options-icon {
+		font-size: 0.85rem;
+	}
+
+	.categories-list-skeleton-options-icon {
+		width: 13px;
+		height: 13px;
 	}
 
 	.responsive-action-menu-overlay {
@@ -3183,8 +3192,29 @@ input {
 	}
 
 	.media-item-row-secondary {
-		flex: 0 0 64px;
-		padding: 12px 8px;
+		position: relative;
+		flex: 0 0 45px;
+		gap: 6px;
+		padding: 10px 8px;
+	}
+
+	.media-item-row-status,
+	.media-item-row-options {
+		width: 28px;
+		height: 28px;
+	}
+
+	.media-item-row-status-icon,
+	.media-item-row-options-icon {
+		width: 13px;
+		height: 13px;
+	}
+
+	/* The whole side column is the options hit area, not just the small button */
+	.media-item-row-options::after {
+		content: '';
+		position: absolute;
+		inset: 0;
 	}
 
 	.entity-management-screen {
