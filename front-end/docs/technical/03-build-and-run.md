@@ -68,9 +68,9 @@ dist/
 
 Without that header the static host defaults to `max-age=0`, which makes the browser revalidate every asset on every page load — the icons then visibly pop in a fraction of a second after the rest of the page.
 
-## 3.5 SVGs are inlined, raster images are not
+## 3.5 Images are inlined into the bundle
 
-`.svg` is an `asset/inline` module: an icon becomes a data URI inside the bundle, so it costs no request and paints with the first render. `.png`, `.jpg` and `.gif` stay `asset/resource` — they are big enough that inlining would cost more than the request saves.
+`.svg` is an `asset/inline` module: an icon becomes a data URI inside the bundle, so it costs no request and paints with the first render. `.png`, `.jpg` and `.gif` are `asset` modules with a 4 KB threshold — under it they inline too, over it they are emitted into `assets/` as their own file. Every image in the project is currently under the threshold, so **a production page loads `index.html`, the bundle and nothing else**; the threshold exists so that adding a real photograph does not silently bloat the bundle.
 
 The data URI is **URI-escaped, not base64**. Two reasons, and both are load-bearing:
 
@@ -80,6 +80,15 @@ The data URI is **URI-escaped, not base64**. Two reasons, and both are load-bear
 `svgToDataUri` in `webpack.config.js` owns that escaping and `tests/webpack-config.test.ts` covers it.
 
 Source SVGs in `app/resources/images` are kept optimized — they were exported from drawing tools and arrived carrying editor metadata, roughly two thirds of their bytes. Run a new icon through SVGO before committing it, and keep its `viewBox`: the icons are scaled by CSS, and several are painted through `mask-size: contain`.
+
+## 3.6 Which artwork is vector and which is not
+
+`ic_app_logo.svg` and `im_media_item_form_default.svg` are the app's own mark — a ring, a round-capped handle and three cube faces — redrawn as vector primitives from the PNGs they replaced, so they stay sharp on high-DPI screens where the 155 px original was visibly soft.
+
+Two deliberate exceptions:
+
+- **`ic_app_logo.png` stays**, and is referenced by nothing but the `HtmlWebpackPlugin` favicon option. SVG favicon support is still uneven, and the favicon is one uncached root-level request either way. Change both files when the mark changes.
+- **`ic_google.png`, `ic_wikipedia.png`, `ic_justwatch.png` and `ic_howlongtobeat.png` are third-party brand marks** and are left as raster on purpose. Tracing someone else's logo produces a poor imitation of it; the right fix is the official vector asset, not a redrawing. They are 30 px sources shown at 20 CSS px, so they are soft on high-DPI screens.
 
 ---
 

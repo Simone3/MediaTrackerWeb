@@ -1,6 +1,6 @@
 import { ReactElement, ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
-import appLogo from 'app/resources/images/ic_app_logo.png';
+import appLogo from 'app/resources/images/ic_app_logo.svg';
 import settingsIcon from 'app/resources/images/ic_settings.svg';
 import { i18n } from 'app/utilities/i18n';
 import { screenToPath } from 'app/utilities/navigation-routes';

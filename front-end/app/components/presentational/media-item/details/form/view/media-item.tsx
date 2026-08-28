@@ -9,7 +9,7 @@ import { config } from 'app/config/config';
 import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import downloadIcon from 'app/resources/images/ic_download.svg';
 import googleIcon from 'app/resources/images/ic_google.png';
-import defaultMediaItemImage from 'app/resources/images/im_media_item_form_default.png';
+import defaultMediaItemImage from 'app/resources/images/im_media_item_form_default.svg';
 import wikipediaIcon from 'app/resources/images/ic_wikipedia.png';
 import { i18n } from 'app/utilities/i18n';
 

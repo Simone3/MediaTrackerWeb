@@ -91,7 +91,7 @@ Where everything lives. Generated folders — `node_modules/`, `coverage/`, buil
 | `utilities/parser-validator.ts` | The `class-transformer-validator` wrapper used on API payloads |
 | `utilities/date-utils.ts`, `misc-utils.ts`, `media-item-utils.ts`, `browser.ts`, `helper-types.ts` | Shared helpers |
 | `resources/lang/lang-en.json` | Every user-facing string ([§13](13-text-and-languages.md)) |
-| `resources/images/*` | Raster and icon assets. SVGs are inlined into the bundle and kept SVGO-optimized ([§3.5](03-build-and-run.md#35-svgs-are-inlined-raster-images-are-not)) |
+| `resources/images/*` | Icon and image assets, all inlined into the bundle ([§3.5](03-build-and-run.md#35-images-are-inlined-into-the-bundle)). Vector except the favicon and the third-party brand marks ([§3.6](03-build-and-run.md#36-which-artwork-is-vector-and-which-is-not)) |
 | `web/styles.css` | The only global stylesheet ([§12](12-styling.md)) |
 | `types/assets.d.ts` | Module declarations for imported image assets |
 

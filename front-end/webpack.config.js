@@ -3,6 +3,13 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /**
+ * The size under which a raster image is inlined as a data URI instead of emitted as its own file.
+ * Every icon in the project is comfortably below it and every real photograph is comfortably above it,
+ * so an image that grows past this stops being inlined on its own.
+ */
+const RASTER_INLINE_MAX_BYTES = 4 * 1024;
+
+/**
  * Turns an SVG into an inline data URI, so that icons are part of the bundle instead of separate requests.
  * The encoding is URI-escaped rather than base64: it stays text, which compresses far better, and it escapes
  * everything that would terminate an unquoted CSS url(...), which is how the own-platform mask icons are used.
@@ -63,7 +70,12 @@ module.exports = (_env, argv = {}) => {
 				},
 				{
 					test: /\.(png|jpg|jpeg|gif)$/i,
-					type: 'asset/resource'
+					type: 'asset',
+					parser: {
+						dataUrlCondition: {
+							maxSize: RASTER_INLINE_MAX_BYTES
+						}
+					}
 				}
 			]
 		},

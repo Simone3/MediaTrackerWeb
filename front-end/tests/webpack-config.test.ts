@@ -10,6 +10,11 @@ type WebpackConfig = {
 			generator?: {
 				dataUrl?: (content: Buffer) => string;
 			};
+			parser?: {
+				dataUrlCondition?: {
+					maxSize?: number;
+				};
+			};
 		}>;
 	};
 	plugins: Array<{
@@ -71,6 +76,16 @@ describe('webpack config', () => {
 		const webpackConfig = getWebpackConfig('production');
 
 		expect(getSvgRule(webpackConfig)?.type).toBe('asset/inline');
+	});
+
+	it('inlines raster images only while they stay small', () => {
+		const webpackConfig = getWebpackConfig('production');
+		const rasterRule = webpackConfig.module.rules.find((rule) => {
+			return rule.test?.test('picture.png');
+		});
+
+		expect(rasterRule?.type).toBe('asset');
+		expect(rasterRule?.parser?.dataUrlCondition?.maxSize).toBe(4096);
 	});
 
 	it('escapes everything that would break an svg data uri inside an unquoted css url()', () => {
