@@ -36,7 +36,7 @@ Groups are category-scoped and optional on a media item. They exist to collect a
 - `color`
 - `icon`
 
-Supported icon IDs: `default`, `android`, `apple`, `book`, `disc`, `disney`, `download`, `epic`, `gog`, `hulu`, `kindle`, `netflix`, `origin`, `playstation`, `steam`, `switch`, `uplay`.
+Supported icon IDs: `default`, `android`, `apple`, `book`, `disc`, `disney`, `download`, `epic`, `gog`, `hulu`, `kindle`, `netflix`, `origin`, `playstation`, `primevideo`, `steam`, `switch`, `uplay`.
 
 The list is declared once, in `app/components/presentational/own-platform/common/icon-registry.ts` ([§10.6](10-features.md#106-own-platforms)).
 
