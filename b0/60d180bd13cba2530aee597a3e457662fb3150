@@ -1,0 +1,23 @@
+CLAUDE.md
+  s_2b4da96ad5baa4::t_b4d5cc28424f54 23,32
+back-end/docs/technical/README.md
+  s_2b4da96ad5baa4::t_39e45383224bc5 51
+front-end/docs/technical/README.md
+  s_2b4da96ad5baa4::t_ae3698490bfe9d 50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "b060d180bd13cba2530aee597a3e457662fb3150",
+  "prompts": {},
+  "sessions": {
+    "s_2b4da96ad5baa4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ecb16617-b962-4133-b24a-a7d3958d96c9",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
