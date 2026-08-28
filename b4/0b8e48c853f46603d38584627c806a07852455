@@ -1,0 +1,34 @@
+front-end/docs/technical/01-architecture.md
+  s_f0f711a243674c::t_94ed898ad8ae2a 58-61,68
+front-end/docs/technical/03-build-and-run.md
+  s_f0f711a243674c::t_59095bc57349b0 46
+front-end/docs/technical/12-styling.md
+  s_f0f711a243674c::t_a9b222a403f302 30-39
+front-end/docs/technical/14-testing.md
+  s_f0f711a243674c::t_a015c763176441 50
+front-end/public/index.html
+  s_f0f711a243674c::t_763ca7560d1086 7-63,66-70
+front-end/tests/boot-placeholder.test.ts
+  s_f0f711a243674c::t_828eee6bab42e8 1-71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "b40b8e48c853f46603d38584627c806a07852455",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_f0f711a243674c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7c5b0d89-3310-4362-94cc-f23b1d97f464",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
