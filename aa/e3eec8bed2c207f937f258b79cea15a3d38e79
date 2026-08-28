@@ -1,0 +1,112 @@
+front-end/app/resources/images/ic_action_more.svg
+  s_f382b06c5fdb38::t_7d48f36f82146c 1
+front-end/app/resources/images/ic_credits.svg
+  s_f382b06c5fdb38::t_0862807a1a3203 1
+front-end/app/resources/images/ic_download.svg
+  s_f382b06c5fdb38::t_d56581d29e709b 1
+front-end/app/resources/images/ic_home.svg
+  s_f382b06c5fdb38::t_e16d3607fbe3d5 1
+front-end/app/resources/images/ic_importance_1.svg
+  s_f382b06c5fdb38::t_9bf24ce7d67fc7 1
+front-end/app/resources/images/ic_importance_2.svg
+  s_f382b06c5fdb38::t_8daebd99d03246 1
+front-end/app/resources/images/ic_importance_3.svg
+  s_f382b06c5fdb38::t_f7e20d9ff18c21 1
+front-end/app/resources/images/ic_importance_4.svg
+  s_f382b06c5fdb38::t_42a51c0142afe8 1
+front-end/app/resources/images/ic_input_group.svg
+  s_f382b06c5fdb38::t_2d10f5f420ce20 1
+front-end/app/resources/images/ic_input_own_platform.svg
+  s_f382b06c5fdb38::t_0439c98ee2fed1 1
+front-end/app/resources/images/ic_input_season_number.svg
+  s_f382b06c5fdb38::t_34e9b8fe168190 1
+front-end/app/resources/images/ic_media_book.svg
+  s_f382b06c5fdb38::t_365a19ae1487e2 1
+front-end/app/resources/images/ic_media_movie.svg
+  s_f382b06c5fdb38::t_58ec65c10ad267 1
+front-end/app/resources/images/ic_media_tvshow.svg
+  s_f382b06c5fdb38::t_5a7d97504e1002 1
+front-end/app/resources/images/ic_media_videogame.svg
+  s_f382b06c5fdb38::t_e19e2f44cdf2c2 1
+front-end/app/resources/images/ic_platform_android.svg
+  s_f382b06c5fdb38::t_f9d83aa4142756 1
+front-end/app/resources/images/ic_platform_apple.svg
+  s_f382b06c5fdb38::t_423c139f09f1fe 1
+front-end/app/resources/images/ic_platform_book.svg
+  s_f382b06c5fdb38::t_c09b4d1be139db 1
+front-end/app/resources/images/ic_platform_disc.svg
+  s_f382b06c5fdb38::t_8470a431452782 1
+front-end/app/resources/images/ic_platform_disney.svg
+  s_f382b06c5fdb38::t_d4ee2a44a860d0 1
+front-end/app/resources/images/ic_platform_download.svg
+  s_f382b06c5fdb38::t_923818cdf319f7 1
+front-end/app/resources/images/ic_platform_epic.svg
+  s_f382b06c5fdb38::t_dc3bcafdee7ee0 1
+front-end/app/resources/images/ic_platform_gog.svg
+  s_f382b06c5fdb38::t_2dd42ca1f2be67 1
+front-end/app/resources/images/ic_platform_hulu.svg
+  s_f382b06c5fdb38::t_4201a18565cc0f 1
+front-end/app/resources/images/ic_platform_kindle.svg
+  s_f382b06c5fdb38::t_5f957ea0589c92 1
+front-end/app/resources/images/ic_platform_netflix.svg
+  s_f382b06c5fdb38::t_36888ea5ad3775 1
+front-end/app/resources/images/ic_platform_origin.svg
+  s_f382b06c5fdb38::t_3777bd793db33c 1
+front-end/app/resources/images/ic_platform_playstation.svg
+  s_f382b06c5fdb38::t_1f109c0c384f58 1
+front-end/app/resources/images/ic_platform_primevideo.svg
+  s_f382b06c5fdb38::t_88d4c09339e6af 1
+front-end/app/resources/images/ic_platform_steam.svg
+  s_f382b06c5fdb38::t_aa3f2eb2d0f79d 1
+front-end/app/resources/images/ic_platform_switch.svg
+  s_f382b06c5fdb38::t_31b637fada5d2d 1
+front-end/app/resources/images/ic_platform_uplay.svg
+  s_f382b06c5fdb38::t_98b83c50224236 1
+front-end/app/resources/images/ic_settings.svg
+  s_f382b06c5fdb38::t_62f9f1b4e4df0a 1
+front-end/app/resources/images/ic_status_complete.svg
+  s_f382b06c5fdb38::t_4b2cc341c01f5b 1
+front-end/app/resources/images/ic_status_playing.svg
+  s_f382b06c5fdb38::t_2ab7c4e753647f 1
+front-end/app/resources/images/ic_status_reading.svg
+  s_f382b06c5fdb38::t_e530f32d82cb56 1
+front-end/app/resources/images/ic_status_redoing.svg
+  s_f382b06c5fdb38::t_7a71721b4806a1 1
+front-end/app/resources/images/ic_status_upcoming.svg
+  s_f382b06c5fdb38::t_e2b91b3b6b2305 1
+front-end/app/resources/images/ic_status_watching.svg
+  s_f382b06c5fdb38::t_53786f00f04729 1
+front-end/docs/technical/02-repository-map.md
+  s_f382b06c5fdb38::t_c4b20b15281d0d 94
+front-end/docs/technical/03-build-and-run.md
+  s_f382b06c5fdb38::t_c0a1d52d777e7d 54-83
+front-end/docs/technical/12-styling.md
+  s_f382b06c5fdb38::t_5f6e51547f8d51 28
+front-end/tests/webpack-config.test.ts
+  s_f382b06c5fdb38::t_13844564ab21d4 2-14,57-85
+front-end/webpack.config.js
+  s_f382b06c5fdb38::t_eae8c2fec7be78 5-21,30-31,58-65
+render.yaml
+  s_f382b06c5fdb38::t_49a536e00316a9 12-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "aae3eec8bed2c207f937f258b79cea15a3d38e79",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_f382b06c5fdb38": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "122a6ed8-b1f5-42ec-9cdb-2b46ed0c0b81",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
