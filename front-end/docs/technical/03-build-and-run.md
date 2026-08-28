@@ -43,7 +43,7 @@ npm test -- tests/media-item-form-data.test.ts
 
 - the dev server on port **5173**, with the history API fallback on so deep links into `/media/...` resolve to the SPA
 - the `app` alias, which is what makes `app/...` imports resolve
-- `public/index.html` as the served and built template
+- `public/index.html` as the served and built template, which also carries the boot placeholder ([§12.4](12-styling.md#124-the-boot-placeholder))
 - the injected define `__MEDIA_TRACKER_APP_ENV__`
 - the injected define `__MEDIA_TRACKER_BACK_END_BASE_URL__`, only when the variable is provided
 

@@ -47,6 +47,7 @@ Tests live in one flat `tests/` folder: `*.test.ts(x)` for units, `*.smoke.test.
 - the REST invoker and the back-end invoker
 - the Firebase user controller
 - the webpack config
+- the boot placeholder, against the tokens it copies
 
 New logic in `app/utilities`, `app/redux` and the media-item form data helpers should come with a unit test; a new screen should come with a smoke test.
 

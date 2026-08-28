@@ -55,16 +55,17 @@ index.tsx                    browser entry point
 
 ## 1.4 Boot flow
 
-1. **`index.tsx`** imports `reflect-metadata` (the `class-validator` decorators on the API models need it), imports `app/web/styles.css`, and renders `<App />` inside React strict mode.
-2. **`app/app.tsx`** creates the Redux store once via `initializeRedux()`, wraps the tree in `Provider`, wraps everything in the global error handler, and renders the navigation container.
-3. **`app/redux/initializer.ts`**
+1. **`public/index.html`** paints the boot placeholder — the app background and a spinner, styled inline — before any script runs, and React clears it on its first commit ([§12.4](12-styling.md#124-the-boot-placeholder)).
+2. **`index.tsx`** imports `reflect-metadata` (the `class-validator` decorators on the API models need it), imports `app/web/styles.css`, and renders `<App />` inside React strict mode.
+3. **`app/app.tsx`** creates the Redux store once via `initializeRedux()`, wraps the tree in `Provider`, wraps everything in the global error handler, and renders the navigation container.
+4. **`app/redux/initializer.ts`**
    - loads persisted Redux state from `sessionStorage`
    - creates the store with `configureStore`
    - attaches the saga middleware
    - **disables the Redux Toolkit serializable checks for both actions and state**
    - runs `rootSaga`
    - subscribes persistence to every store update
-4. The navigator picks the auth-loading, unauthenticated or authenticated subtree from `userGlobal.status`, which starts as `REQUIRES_CHECK` ([§7](07-authentication.md)).
+5. The navigator picks the auth-loading, unauthenticated or authenticated subtree from `userGlobal.status`, which starts as `REQUIRES_CHECK` ([§7](07-authentication.md)).
 
 **The serializable checks are off on purpose.** Redux state holds `Date` objects and other non-plain values, and the repository chose to carry them rather than normalize them away. Persistence encodes and revives dates itself ([§6.3](06-redux.md#63-the-persistence-contract)). The consequence is that Redux Toolkit will not warn about a date or an object placed in state here, so nothing catches that mistake for you ([§15.6](15-invariants-and-pitfalls.md#156-redux-holds-dates-and-non-plain-values)).
 
