@@ -48,7 +48,7 @@ docs/technical/
 - **Each file is self-contained enough to act on.** Reading one section should be enough to change the area it covers, with cross-references for what it deliberately does not repeat.
 - **Rules do not live here.** What Claude Code must and must not do is in [`CLAUDE.md`](../../CLAUDE.md); these pages explain the code, and the two are kept non-overlapping.
 - **Reasoning is inline.** A decision is explained where the thing it decided is described, because the two are read together.
-- **The plan is not here.** `TODO.md` in the repository root holds the outstanding work. These pages describe the code as it is, never as it is planned to be.
+- **The plan is not here.** `TODO.md` in the repository root holds the outstanding work and the ideas that have not been committed to, and is not maintained from here. These pages describe the code as it is, never as it is planned to be; a statement about behaviour that is not implemented says so.
 
 ## Conventions
 

@@ -20,7 +20,7 @@ A change that spans both is two changes: make each one under its own rules, and 
 | File | Purpose |
 | --- | --- |
 | `README.md` | The landing page: what Media Tracker is, how to install it, how to run it locally and on Render. Every technical detail belongs in a sub-project's `docs/technical/` |
-| `TODO.md` | The outstanding work and the ideas not yet committed to |
+| `TODO.md` | The outstanding work and the ideas that have not been committed to. Not maintained from here |
 | `TESTBOOK.md` | The manual QA checklist for the whole app, feature by feature |
 | `render.yaml` | The Render Blueprint that deploys both sub-projects |
 | `development/` | Local development scratch material, not part of either build |
@@ -29,6 +29,7 @@ A change that spans both is two changes: make each one under its own rules, and 
 ## Hard Rules
 
 - Work only in this repository and only on the current branch.
+- Do NOT edit `TODO.md`.
 - **This file holds only what is true of the whole repository.** A rule that applies to one sub-project belongs in that sub-project's `CLAUDE.md`; the reasoning behind it belongs in its `docs/technical/`. Do not restate a sub-project's rules here.
 - Keep `README.md` a user-facing landing page. It links to the sub-projects; it does not explain them.
 - Leave ignored files and `.gitignore` patterns alone.
