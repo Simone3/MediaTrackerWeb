@@ -1,0 +1,32 @@
+front-end/app/components/presentational/own-platform/common/icon-registry.ts
+  s_1c5ce1e86e09d5::t_cfda0e6fb011c7 17,37
+front-end/app/data/models/internal/own-platform.ts
+  s_1c5ce1e86e09d5::t_e6f45edd2b56e1 18
+front-end/app/resources/images/ic_platform_primevideo.svg
+  s_1c5ce1e86e09d5::t_6db0c2bae3b45b 1-8
+front-end/app/resources/lang/lang-en.json
+  s_1c5ce1e86e09d5::t_4b344b38868267 457
+front-end/docs/technical/08-domain-model.md
+  s_1c5ce1e86e09d5::t_9ff934cd8ab88d 39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "e6c7b4eb8b387446242bd47441a28f08bda25491",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_1c5ce1e86e09d5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "57bfabe8-e5b9-4a06-b448-3eb3bf7b6828",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
