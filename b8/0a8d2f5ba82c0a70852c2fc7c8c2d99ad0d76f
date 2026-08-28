@@ -1,0 +1,26 @@
+front-end/app/components/containers/navigation/app-navigator.tsx
+  s_1ae84b322d8635::t_71f91669925905 2,23-40,52
+front-end/docs/technical/05-navigation.md
+  s_1ae84b322d8635::t_32bfdbcb106ca9 75-84
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "b80a8d2f5ba82c0a70852c2fc7c8c2d99ad0d76f",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_1ae84b322d8635": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8ba891ab-f409-4084-9f19-222b21f47f68",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
