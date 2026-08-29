@@ -24,11 +24,21 @@ Treating them as durable entity state, or trying to move them into the URL, brea
 
 `BrowserBackNavigationGuardComponent` intercepts:
 
-- browser back
+- browser back, unless `interceptBrowserBack` is false
 - same-origin anchor navigation
 - page unload
 
 **That is its whole scope.** It is not a general app-navigation rule engine, and it does not make `navigationService.setParam()` useful ([§5.3](05-navigation.md#53-navigationservice)). Saga-driven navigation goes around it, which is a known gap rather than a design.
+
+### The guard follows the media item draft, not the media item screen
+
+The media item form is not the only screen where its draft can be thrown away: the group, own platform and TV show season screens are opened *from* the form, and the header logo is right there on all of them. `MediaItemUnsavedChangesGuardContainer` is therefore mounted on every screen of that flow — the form itself in `containers/media-item/details/screen.ts`, the six screens it opens in `MediaNavigator` ([§5.2](05-navigation.md#52-router-composition)) — and reads `hasUnsavedMediaItemFormChanges()`, which is true while the form is dirty *and* the draft is still in `mediaItemDetails.formDraft`.
+
+**The draft matters as much as the dirty flag.** `dirty` is only ever written by the mounted form, so it stays true after the user confirms an exit; the draft is what actually gets cleared on exit, save and reload. A guard condition built on `dirty` alone would keep firing on unrelated screens.
+
+**The screens opened from the form pass `interceptBrowserBack={false}`.** Browser back from them returns to the form, which restores the draft — there is nothing to warn about, and pushing a duplicate history entry there would turn a safe back into a dialog.
+
+What is still not covered: TV show season edits made in the seasons screens and abandoned from there. They live in `tvShowSeasonsList` and only reach the form on `COMPLETE_TV_SHOW_SEASONS_HANDLING` ([§10.4](10-features.md#104-tv-show-seasons-the-nested-flow)), so a media item that is not dirty yet has nothing for the guard to protect.
 
 ## 15.4 TV show seasons are local until the parent is saved
 

@@ -41,7 +41,7 @@ Tests live in one flat `tests/` folder: `*.test.ts(x)` for units, `*.smoke.test.
 - auth screens and authenticated navigation
 - categories, media items, groups, platforms, settings and credits smoke tests
 - the shared form controls
-- the browser-back guard
+- the browser-back guard, and the media item flow guard on the screens the form opens
 - navigation routes and `navigationService`
 - Redux persistence
 - the REST invoker and the back-end invoker

@@ -44,6 +44,7 @@ type PendingNavigation = {
 export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigationGuardComponentProps): ReactElement => {
 	const {
 		when,
+		interceptBrowserBack = true,
 		title,
 		message,
 		confirmLabel,
@@ -64,6 +65,12 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 	whenRef.current = when;
 
 	useEffect(() => {
+		// Screens that only guard in-app navigation leave the history stack alone, so their browser back keeps working normally
+		if(!interceptBrowserBack) {
+			guardArmedRef.current = false;
+			return;
+		}
+
 		const currentHistoryPath = getGuardedPathFromHistoryState();
 		guardArmedRef.current = currentHistoryPath === currentPath;
 
@@ -71,7 +78,7 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 			pushGuardHistoryState(currentPath);
 			guardArmedRef.current = true;
 		}
-	}, [ currentPath, when ]);
+	}, [ currentPath, when, interceptBrowserBack ]);
 
 	useEffect(() => {
 		const handlePopState = (): void => {
@@ -207,6 +214,7 @@ export const BrowserBackNavigationGuardComponent = (props: BrowserBackNavigation
 
 export type BrowserBackNavigationGuardComponentProps = {
 	when: boolean;
+	interceptBrowserBack?: boolean;
 	title: string;
 	message: string;
 	confirmLabel: string;

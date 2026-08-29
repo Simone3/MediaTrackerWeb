@@ -149,6 +149,20 @@ export const mapMediaItemDetailsForPersistence = (state: MediaItemDetailsState):
 };
 
 /**
+ * Utility to tell if the media item form currently holds changes that would be lost by leaving it, i.e. the form is dirty and the
+ * unsaved draft is still around. The draft outlives the form component, so this also holds while the user is in the group, own
+ * platform or TV show seasons screens opened from the form itself.
+ * @param state the current media item details state
+ * @returns true if leaving the media item form flow would discard unsaved changes
+ */
+export const hasUnsavedMediaItemFormChanges = (state: MediaItemDetailsState): boolean => {
+	return state.dirty &&
+		state.formDraft !== undefined &&
+		state.saveStatus !== 'SAVING' &&
+		state.saveStatus !== 'SAVED';
+};
+
+/**
  * The current status (e.g. allows to invalidate, show the loading indicator, etc.)
  */
 export type MediaItemsListStatus = 'REQUIRES_FETCH' | 'FETCHING' | 'FETCHED' | 'FETCH_FAILED' | 'DELETING' | 'INLINE_UPDATING';

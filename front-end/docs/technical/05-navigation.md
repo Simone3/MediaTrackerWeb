@@ -41,7 +41,7 @@ Navigation here is four things at once: React Router matching, Redux action disp
 - **`AppNavigationContainer`** owns `BrowserRouter` and bridges React Router's `navigate()` into `navigationService`, so code outside the component tree can still navigate.
 - **`ConnectedAuthenticationNavigator`** chooses the auth-loading, unauthenticated, or authenticated subtree from Redux ([§7](07-authentication.md)).
 - **`AuthenticatedNavigator`** switches between `/media/*` and `/settings/*`.
-- **`MediaNavigator`** owns every media, category, group, platform and season route.
+- **`MediaNavigator`** owns every media, category, group, platform and season route, and wraps the six screens the media item form opens in `MediaItemUnsavedChangesGuardContainer` ([§15.3](15-invariants-and-pitfalls.md#153-dirty-form-protection-is-browser-oriented)).
 - **`SettingsNavigator`** owns settings and the nested credits screen.
 
 ## 5.3 `navigationService`

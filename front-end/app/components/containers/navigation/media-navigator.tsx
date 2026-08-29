@@ -1,9 +1,10 @@
-import { Component, ReactNode } from 'react';
+import { Component, ReactElement, ReactNode } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { CategoriesListScreenContainer } from 'app/components/containers/category/list/screen';
 import { CategoryDetailsScreenContainer } from 'app/components/containers/category/details/screen';
 import { MediaItemsListScreenContainer } from 'app/components/containers/media-item/list/screen';
 import { MediaItemDetailsScreenContainer } from 'app/components/containers/media-item/details/screen';
+import { MediaItemUnsavedChangesGuardContainer } from 'app/components/containers/media-item/details/unsaved-changes-guard';
 import { GroupsListScreenContainer } from 'app/components/containers/group/list/screen';
 import { GroupDetailsScreenContainer } from 'app/components/containers/group/details/screen';
 import { OwnPlatformsListScreenContainer } from 'app/components/containers/own-platform/list/screen';
@@ -25,6 +26,21 @@ const mediaRelativePath = (screen: string): string => {
 };
 
 /**
+ * Wraps a screen that the media item form opens (group, own platform and TV show season selection) with the unsaved changes guard, so
+ * that leaving the app shell from there cannot silently discard the media item draft. Browser back is left alone, since it simply
+ * returns to the form.
+ * @param screen the screen to wrap
+ * @returns the guarded screen
+ */
+const mediaItemFormSubScreen = (screen: ReactElement): ReactElement => {
+	return (
+		<MediaItemUnsavedChangesGuardContainer interceptBrowserBack={false}>
+			{screen}
+		</MediaItemUnsavedChangesGuardContainer>
+	);
+};
+
+/**
  * The navigator for the main section of the authenticated app, with the categories and media items lists
  */
 export class MediaNavigator extends Component {
@@ -38,12 +54,12 @@ export class MediaNavigator extends Component {
 				<Route path={mediaRelativePath(AppScreens.CategoryDetails)} element={<CategoryDetailsScreenContainer />} />
 				<Route path={mediaRelativePath(AppScreens.MediaItemsList)} element={<MediaItemsListScreenContainer />} />
 				<Route path={mediaRelativePath(AppScreens.MediaItemDetails)} element={<MediaItemDetailsScreenContainer />} />
-				<Route path={mediaRelativePath(AppScreens.GroupsList)} element={<GroupsListScreenContainer />} />
-				<Route path={mediaRelativePath(AppScreens.GroupDetails)} element={<GroupDetailsScreenContainer />} />
-				<Route path={mediaRelativePath(AppScreens.OwnPlatformsList)} element={<OwnPlatformsListScreenContainer />} />
-				<Route path={mediaRelativePath(AppScreens.OwnPlatformDetails)} element={<OwnPlatformDetailsScreenContainer />} />
-				<Route path={mediaRelativePath(AppScreens.TvShowSeasonsList)} element={<TvShowSeasonsListScreenContainer />} />
-				<Route path={mediaRelativePath(AppScreens.TvShowSeasonDetails)} element={<TvShowSeasonDetailsScreenContainer />} />
+				<Route path={mediaRelativePath(AppScreens.GroupsList)} element={mediaItemFormSubScreen(<GroupsListScreenContainer />)} />
+				<Route path={mediaRelativePath(AppScreens.GroupDetails)} element={mediaItemFormSubScreen(<GroupDetailsScreenContainer />)} />
+				<Route path={mediaRelativePath(AppScreens.OwnPlatformsList)} element={mediaItemFormSubScreen(<OwnPlatformsListScreenContainer />)} />
+				<Route path={mediaRelativePath(AppScreens.OwnPlatformDetails)} element={mediaItemFormSubScreen(<OwnPlatformDetailsScreenContainer />)} />
+				<Route path={mediaRelativePath(AppScreens.TvShowSeasonsList)} element={mediaItemFormSubScreen(<TvShowSeasonsListScreenContainer />)} />
+				<Route path={mediaRelativePath(AppScreens.TvShowSeasonDetails)} element={mediaItemFormSubScreen(<TvShowSeasonDetailsScreenContainer />)} />
 				<Route path='*' element={<Navigate to={mediaRelativePath(AppScreens.CategoriesList)} replace={true} />} />
 			</Routes>
 		);

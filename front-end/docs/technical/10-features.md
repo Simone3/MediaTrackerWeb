@@ -52,6 +52,7 @@ Completion appends rather than replaces: `completedOn` is the full history of co
 Entry files:
 
 - `app/components/containers/media-item/details/screen.ts`
+- `app/components/containers/media-item/details/unsaved-changes-guard.ts`
 - `app/components/presentational/media-item/details/form/wrapper/media-item.tsx`
 - subtype wrappers in `.../form/wrapper/*`
 - subtype views in `.../form/view/*`
@@ -69,7 +70,7 @@ Shared form behaviour:
 - group and platform selections merged back in from the global Redux slices
 - optional catalog details merged into the current Formik values
 
-**Drafts.** Unsaved values live in `mediaItemDetails.formDraft`. While the form is dirty, browser back and same-origin anchor navigation are blocked by `BrowserBackNavigationGuardComponent`; confirming the exit clears the draft ([§15.3](15-invariants-and-pitfalls.md#153-dirty-form-protection-is-browser-oriented)).
+**Drafts.** Unsaved values live in `mediaItemDetails.formDraft`. While the form is dirty, browser back and same-origin anchor navigation are blocked by `BrowserBackNavigationGuardComponent`; confirming the exit clears the draft. The same guard stays mounted on the group, own platform and TV show season screens the form opens, since the draft can be lost from there too ([§15.3](15-invariants-and-pitfalls.md#153-dirty-form-protection-is-browser-oriented)).
 
 **Catalog.** The name field can search the external catalog, and choosing a result loads full details. Catalog payloads carry a transport-only `catalogLoadId`; **the shared wrapper strips it before the values reach Formik**, so it never becomes a form field and never gets saved.
 
