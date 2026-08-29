@@ -91,6 +91,7 @@ Where everything lives. Generated folders — `node_modules/`, `coverage/`, buil
 | `utilities/layout.ts` | `MOBILE_LAYOUT_BREAKPOINT`, the one breakpoint JS-driven responsive behaviour may use ([§11.4](11-interface.md#114-responsive-behaviour)) |
 | `utilities/parser-validator.ts` | The `class-transformer-validator` wrapper used on API payloads |
 | `utilities/error-hint.ts` | Turns a raw Firebase or back-end error into the user-facing hint an `AppError` carries ([§6.4](06-redux.md#64-error-handling-and-the-async-pattern)) |
+| `utilities/text-search.ts` | The accent- and case-insensitive matching behind the client-side list search bars ([§11.3](11-interface.md#113-shared-building-blocks)) |
 | `utilities/date-utils.ts`, `misc-utils.ts`, `media-item-utils.ts`, `browser.ts`, `helper-types.ts` | Shared helpers |
 | `resources/lang/lang-en.json` | Every user-facing string ([§13](13-text-and-languages.md)) |
 | `resources/images/*` | Icon and image assets, all inlined into the bundle ([§3.5](03-build-and-run.md#35-images-are-inlined-into-the-bundle)). Vector except the favicon and the third-party brand marks ([§3.6](03-build-and-run.md#36-which-artwork-is-vector-and-which-is-not)) |

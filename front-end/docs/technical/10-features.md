@@ -107,6 +107,7 @@ Groups are category-scoped and serve two purposes: collecting a franchise, and b
 
 - built on `EntityManagementScreenComponent` and `EntityManagementListComponent`
 - a "None" option clears the current selection
+- a `EntitySearchBarComponent` above the list filters the loaded groups by name, client-side. It appears only once there is something to filter, the header count follows the filtered list, and while a search is running the "None" option and the empty-state copy give way to the no-results copy. **Seasons deliberately have no search bar**: a show's seasons are few and already ordered
 - selecting a group dispatches `SELECT_GROUP`, and the navigation saga goes back to the media-item form
 - add stays in the header, while edit and delete live in the row action menu ([§11.3](11-interface.md#113-shared-building-blocks))
 
@@ -116,6 +117,7 @@ Groups are category-scoped and serve two purposes: collecting a franchise, and b
 
 Own platforms mirror the group workflow and add a color and an icon.
 
+- the same client-side search bar as groups sits above the list
 - icons are centralized in `app/components/presentational/own-platform/common/icon-registry.ts`
 - badges are rendered with CSS mask styles built by `buildOwnPlatformMaskStyle(...)`, which is what lets one icon asset take the platform's color
 

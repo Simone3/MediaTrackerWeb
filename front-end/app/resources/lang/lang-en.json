@@ -417,6 +417,9 @@
 			},
 			"empty": "No groups",
 			"emptyHint": "Create a group to keep sagas, franchises, and collections together.",
+			"search": "Search groups...",
+			"noResults": "No matching groups",
+			"noResultsHint": "No group matches your search. Try a different term.",
 			"none": "None",
 			"edit": "Edit group",
 			"delete": "Delete group"
@@ -455,6 +458,9 @@
 			},
 			"empty": "No platforms",
 			"emptyHint": "Add a platform so each entry can show where you own it.",
+			"search": "Search platforms...",
+			"noResults": "No matching platforms",
+			"noResultsHint": "No platform matches your search. Try a different term.",
 			"none": "None",
 			"edit": "Edit platform",
 			"delete": "Delete platform"

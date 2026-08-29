@@ -2357,6 +2357,18 @@ input {
 	border-top-color: var(--entity-management-accent, var(--color-accent-bright));
 }
 
+.entity-search-bar {
+	display: flex;
+	width: 100%;
+	min-width: 0;
+	margin-bottom: 20px;
+}
+
+.entity-search-bar-input {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
 .entity-management-list {
 	position: relative;
 	display: grid;
