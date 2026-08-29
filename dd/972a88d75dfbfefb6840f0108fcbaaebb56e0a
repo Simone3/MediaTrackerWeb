@@ -1,0 +1,34 @@
+front-end/docs/technical/02-repository-map.md
+  s_0cfff5953a6935::t_e43bf5f71c5f10 24
+front-end/docs/technical/03-build-and-run.md
+  s_0cfff5953a6935::t_7a50c8dc58d0ec 47,63,69,93,96-109
+front-end/public/index.html
+  s_0cfff5953a6935::t_da1bd824624266 8-25
+front-end/tests/social-preview.test.ts
+  s_0cfff5953a6935::t_408eb862d77113 1-43
+front-end/tests/webpack-config.test.ts
+  s_0cfff5953a6935::t_64ed1a4cd4f0ff 32-33,112-121
+front-end/webpack.config.js
+  s_0cfff5953a6935::t_1bbe57751fff34 1,30-61,123-124
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "dd972a88d75dfbfefb6840f0108fcbaaebb56e0a",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_0cfff5953a6935": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "92c54504-5e29-4a2b-ba2a-0fd07b95d138",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
