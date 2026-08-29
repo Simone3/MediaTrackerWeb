@@ -48,6 +48,14 @@ So **every hover effect lives inside a `@media (hover: hover)` block**, kept nex
 
 The gate is the pointer capability, not the viewport width: a desktop window narrowed past the mobile breakpoint still has a mouse and keeps its hover effects. It resolves per *primary* pointer, so a laptop with both a trackpad and a touch screen reports `hover: hover` and can still tremble when scrolled by finger. Fixing that would take runtime `pointerType` detection driving a class on the root element, which the sheet deliberately does not do.
 
+## 12.6 The root scroller keeps its native overscroll
+
+`html` and `body` deliberately carry no `overscroll-behavior`, so the document scroller keeps every default the browser gives it — including **pull-to-refresh on mobile**, which users expect from any page that scrolls.
+
+They used to carry `overscroll-behavior-y: none`, added while fixing a desktop Chrome artifact: elastic overscroll dragged the app shell away from the viewport edge and revealed the old light page background as a white strip above and below it. That was a background bug, and it was fixed as one — `html`, `body` and `#root` are painted `--color-background-app`, and the light gradient of the classic authenticated pages sits on `.app-shell-content` instead of on the whole document ([§12.2](#122-semantic-custom-properties)). Overscroll now bounces against the shell color and there is nothing to see, so the property was removed and the mobile gesture came back.
+
+Which means: **do not reach for `overscroll-behavior` on the root to hide something showing through at the edges.** What shows through is a background that is wrong, and suppressing the scroll gesture to hide it costs pull-to-refresh on every phone. `contain` is no cheaper than `none` here — both disable the gesture on the root scroller; only `auto` keeps it. The property is still the right tool one level down, on a scrollable panel that should not chain its scroll to the page behind it.
+
 ---
 
 [← §11 Interface](11-interface.md) · [§13 Text and languages →](13-text-and-languages.md)
