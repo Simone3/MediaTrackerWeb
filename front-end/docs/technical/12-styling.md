@@ -37,6 +37,17 @@ It exists because the stylesheet travels *inside* the bundle — `index.tsx` imp
 
 Nothing tears the placeholder down: React clears `#root` on its first commit. The spinner fades in a beat late, so a warm cache goes straight from the background into the app without a spinner blinking on and off.
 
+## 12.5 Hover effects are gated on a hovering pointer
+
+Almost every interactive surface lifts by a pixel and brightens on `:hover`. On a touch screen that reads as a defect: the browser emulates hover under the finger, so scrolling a list drags the emulated hover from row to row and each row it passes animates its 0.2s lift. The list trembles under the finger, and a tapped control keeps its hover state afterwards.
+
+So **every hover effect lives inside a `@media (hover: hover)` block**, kept next to the component it belongs to rather than collected at the end of the sheet. Two consequences to keep in mind when adding one:
+
+- A rule that pairs `:hover` with `:focus-visible` has to be split. The `:focus-visible` half stays outside the query — keyboard focus is not a pointer and must keep working on a touch device — and only the `:hover` half moves in, which means repeating the declarations.
+- Keep the block where the ungated rule was. Several of these effects are deliberately overridden by a later rule of equal specificity (the selection styling on `.entity-management-list-row`, the `transform: none` reset for `.media-item-row-options` under `max-width: 960px`), and source order is what decides those.
+
+The gate is the pointer capability, not the viewport width: a desktop window narrowed past the mobile breakpoint still has a mouse and keeps its hover effects. It resolves per *primary* pointer, so a laptop with both a trackpad and a touch screen reports `hover: hover` and can still tremble when scrolled by finger. Fixing that would take runtime `pointerType` detection driving a class on the root element, which the sheet deliberately does not do.
+
 ---
 
 [← §11 Interface](11-interface.md) · [§13 Text and languages →](13-text-and-languages.md)

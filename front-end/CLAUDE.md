@@ -54,6 +54,7 @@ The environment comes from `MEDIA_TRACKER_APP_ENV` (`dev` by default): `MEDIA_TR
 - The authenticated experience is a shared sticky top header over a full-bleed dark shell. Preserve that structure instead of reintroducing per-screen navigation chrome or a light-shell variant.
 - **Every string the user can read belongs in `app/resources/lang/lang-en.json`**, never inline in a component. Developer-facing strings (log messages, console output, errors only a bug can raise) stay in the module that owns them and stay in English.
 - **Styling reuses the semantic tokens in `app/web/styles.css`** and the logic-owned color presets from config. Avoid raw hex or `rgba()` in components unless there is a very good reason.
+- **Every hover effect belongs inside a `@media (hover: hover)` block**, since a touch screen's emulated hover makes lists tremble while scrolling. A rule that pairs `:hover` with `:focus-visible` gets split, and the focus half stays outside ([§12.5](docs/technical/12-styling.md#125-hover-effects-are-gated-on-a-hovering-pointer)).
 - **For responsive JS behaviour, reuse `MOBILE_LAYOUT_BREAKPOINT` from `app/utilities/layout.ts`.** Do not introduce a new hardcoded breakpoint.
 - Tunable values (color presets, date formats, external search URLs, timeouts) belong in `app/config`, not inline in modules.
 - `strictNullChecks` is off. Be explicit about nullable cases rather than trusting the compiler ([§15.7](docs/technical/15-invariants-and-pitfalls.md#157-strictnullchecks-is-off)).
