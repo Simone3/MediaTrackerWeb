@@ -3109,6 +3109,10 @@ input {
 		font-size: 1.08rem;
 	}
 
+	.category-row-options {
+		width: auto;
+	}
+
 	.category-row-options-icon {
 		font-size: 0.85rem;
 	}
@@ -3195,13 +3199,18 @@ input {
 		position: relative;
 		flex: 0 0 45px;
 		gap: 6px;
-		padding: 10px 8px;
+		padding: 10px 6px;
 	}
 
 	.media-item-row-status,
 	.media-item-row-options {
 		width: 28px;
 		height: 28px;
+	}
+
+	.media-item-row-options:hover,
+	.media-item-row-options:focus-visible {
+		transform: none;
 	}
 
 	.media-item-row-status-icon,
