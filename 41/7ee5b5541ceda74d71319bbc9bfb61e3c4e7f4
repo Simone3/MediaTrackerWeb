@@ -1,0 +1,28 @@
+front-end/CLAUDE.md
+  s_e8a243c86433c0::t_c5ecb2a0bb468e 57
+front-end/app/web/styles.css
+  s_e8a243c86433c0::t_77611618522a99 213-229,393-398,434-444,651-655,685-690,729-735,906-911,996-999,1168-1172,1189-1194,1295-1300,1320-1326,1371-1374,1565-1570,1709-1716,1982-1989,2122-2129,2146-2151,2413-2418,2421,2600-2607,2913-2918,2983-2988
+front-end/docs/technical/12-styling.md
+  s_e8a243c86433c0::t_5a4e8d3cf5e400 40-50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "417ee5b5541ceda74d71319bbc9bfb61e3c4e7f4",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_e8a243c86433c0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7e01dd8b-bb27-4540-9e4e-be57f9ce179b",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
