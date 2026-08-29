@@ -1,0 +1,46 @@
+front-end/app/components/containers/media-item/details/screen.ts
+  s_ec75b9afd32983::t_22cddca7cd5c46 2,5-9,11-13
+front-end/app/components/containers/media-item/details/unsaved-changes-guard.ts
+  s_ec75b9afd32983::t_eb8b936d2a4353 1-77
+front-end/app/components/containers/navigation/media-navigator.tsx
+  s_ec75b9afd32983::t_ad3b8a50a2f037 1,7,28-42,57-62
+front-end/app/components/presentational/generic/browser-back-navigation-guard/index.tsx
+  s_ec75b9afd32983::t_0246f7bc9515fc 47,68-73,81,217
+front-end/app/redux/state/media-item.ts
+  s_ec75b9afd32983::t_c41b4654e508e6 151-164
+front-end/docs/technical/05-navigation.md
+  s_ec75b9afd32983::t_d5599a3afd0199 44
+front-end/docs/technical/10-features.md
+  s_ec75b9afd32983::t_10fb94f44282fb 55,73
+front-end/docs/technical/11-interface.md
+  s_ec75b9afd32983::t_3a798d07a7ab81 43
+front-end/docs/technical/14-testing.md
+  s_ec75b9afd32983::t_6828fbff964a8c 44
+front-end/docs/technical/15-invariants-and-pitfalls.md
+  s_ec75b9afd32983::t_7a3b17208d4a0c 27,33-42
+front-end/tests/browser-back-navigation-guard.test.tsx
+  s_ec75b9afd32983::t_dd08024837859e 143-168
+front-end/tests/media-item-unsaved-changes-guard.test.tsx
+  s_ec75b9afd32983::t_96b2fe37b076ce 1-158
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "0bdd80bc33eb4069e194074e1794b1f677cd88a6",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_ec75b9afd32983": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d464f981-524f-4727-80e9-4a8125f86903",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
