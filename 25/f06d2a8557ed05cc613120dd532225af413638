@@ -1,0 +1,42 @@
+front-end/app/components/presentational/generic/error-handler/index.tsx
+  s_0cdb28f1c0bfb8::t_ab91ab2d2a2ca3 3,28,78-79,81,83-88,90-116
+front-end/app/data/models/internal/error.ts
+  s_0cdb28f1c0bfb8::t_fef5e7ed67ac0d 1-2,8,10,39,42,47,67-74,84-85,103-105
+front-end/app/resources/lang/lang-en.json
+  s_0cdb28f1c0bfb8::t_dab9e059f086a6 5,9,30-62
+front-end/app/utilities/error-hint.ts
+  s_0cdb28f1c0bfb8::t_305fff6ea076d6 1-162
+front-end/docs/technical/02-repository-map.md
+  s_0cdb28f1c0bfb8::t_87af2843ea2d0d 93
+front-end/docs/technical/06-redux.md
+  s_0cdb28f1c0bfb8::t_c7ba2045173333 69-80
+front-end/docs/technical/07-authentication.md
+  s_0cdb28f1c0bfb8::t_f4daf1fa7f9730 28
+front-end/docs/technical/13-text-and-languages.md
+  s_0cdb28f1c0bfb8::t_d340e731b0bc73 21-22
+front-end/tests/error-handler.test.tsx
+  s_0cdb28f1c0bfb8::t_fee11a34d3ce81 1-73
+front-end/tests/error-hint.test.ts
+  s_0cdb28f1c0bfb8::t_1ad74a5153eac8 1-116
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "25f06d2a8557ed05cc613120dd532225af413638",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_0cdb28f1c0bfb8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5c1f2e93-c3fe-44d5-8011-56c5926f1ebc",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
