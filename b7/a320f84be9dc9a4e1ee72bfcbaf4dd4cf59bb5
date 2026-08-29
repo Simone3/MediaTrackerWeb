@@ -1,0 +1,46 @@
+front-end/app/components/presentational/generic/entity-search-bar/index.tsx
+  s_176b322d50f3f6::t_a154d018d4bc7b 1-34
+front-end/app/components/presentational/group/list/screen/index.tsx
+  s_176b322d50f3f6::t_d8bb508eb2706c 5,8,17-18,48-49,51-57,59,71-82,84,88-90,126-137,279
+front-end/app/components/presentational/own-platform/list/screen/index.tsx
+  s_176b322d50f3f6::t_66ec6010f40324 5,9,18-19,49-50,52-58,60,72-83,85,89-91,140-151,273
+front-end/app/resources/lang/lang-en.json
+  s_176b322d50f3f6::t_dda61b18fdec0a 420-422,461-463
+front-end/app/utilities/text-search.ts
+  s_176b322d50f3f6::t_c06f801329ae78 1-59
+front-end/app/web/styles.css
+  s_176b322d50f3f6::t_89e75f05dc1002 2360-2371
+front-end/docs/technical/02-repository-map.md
+  s_176b322d50f3f6::t_2f7e73c1b7fa5e 94
+front-end/docs/technical/10-features.md
+  s_176b322d50f3f6::t_2b7f4cf8a3d9cf 110,120
+front-end/docs/technical/11-interface.md
+  s_176b322d50f3f6::t_c4f8a043df82c3 41
+front-end/tests/groups-list.smoke.test.tsx
+  s_176b322d50f3f6::t_b9ee53538e5d71 57-130
+front-end/tests/own-platforms-list.smoke.test.tsx
+  s_176b322d50f3f6::t_59d102c7e52c3c 64-141
+front-end/tests/text-search.test.ts
+  s_176b322d50f3f6::t_82407ecad74ada 1-39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "b7a320f84be9dc9a4e1ee72bfcbaf4dd4cf59bb5",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_176b322d50f3f6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8368885c-4372-4a83-aeb5-7a8250b810c8",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
