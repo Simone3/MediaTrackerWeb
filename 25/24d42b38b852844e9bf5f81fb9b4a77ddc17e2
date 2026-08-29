@@ -1,0 +1,24 @@
+front-end/app/web/styles.css
+  s_b089ae69641c5d::t_19331e03c4c2e7 3112-3115,3202,3211-3215
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "2524d42b38b852844e9bf5f81fb9b4a77ddc17e2",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_b089ae69641c5d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "21679497-e486-4f49-8f29-1c13e49987f7",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
