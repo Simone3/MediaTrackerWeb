@@ -342,6 +342,7 @@
 				"main": "Season {{seasonNumber}}",
 				"secondary": "Watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes"
 			},
+			"edit": "Edit season",
 			"delete": "Delete season",
 			"complete": "Complete season"
 		},
@@ -495,7 +496,10 @@
 			"selectColor": "Select color {{color}}",
 			"icon": "{{name}} icon",
 			"closeCategoryActions": "Close category actions",
-			"closeMediaItemActions": "Close media item actions"
+			"closeMediaItemActions": "Close media item actions",
+			"closeGroupActions": "Close group actions",
+			"closeOwnPlatformActions": "Close platform actions",
+			"closeTvShowSeasonActions": "Close season actions"
 		},
 		"fields": {
 			"color": "Color"

@@ -37,7 +37,7 @@ Reach for these before writing a screen-specific variant:
 | --- | --- |
 | `generic/authenticated-page-header` | The sticky top header of the authenticated shell |
 | `generic/entity-management-screen` | The manage-and-pick screen used by groups and platforms |
-| `generic/entity-management-list` | The list inside it |
+| `generic/entity-management-list` | The list inside it, used by groups, platforms and TV show seasons. Rows carry no inline buttons: each one owns a `...` control that opens `generic/responsive-action-menu` with the actions the screen supplies, the way the category list does |
 | `generic/entity-details-frame` | The standard details shell |
 | `generic/responsive-action-menu` | Popover on desktop, bottom sheet on mobile |
 | `generic/browser-back-navigation-guard` | Dirty-form protection ([§15.3](15-invariants-and-pitfalls.md#153-dirty-form-protection-is-browser-oriented)) |

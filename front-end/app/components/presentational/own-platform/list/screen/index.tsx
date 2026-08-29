@@ -63,8 +63,7 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 						items={ownPlatforms}
 						selectedItemId={selectedOwnPlatformId}
 						selectedLabel={i18n.t('common.state.selected')}
-						editLabel={i18n.t('ownPlatform.list.edit')}
-						deleteLabel={i18n.t('ownPlatform.list.delete')}
+						menuCloseAriaLabel={i18n.t('common.a11y.closeOwnPlatformActions')}
 						emptyTitle={i18n.t('ownPlatform.list.empty')}
 						emptyCopy={i18n.t('ownPlatform.list.emptyHint')}
 						showEmptyState={showEmptyState}
@@ -97,11 +96,24 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 						onSelect={(ownPlatform) => {
 							this.props.selectOwnPlatform(ownPlatform);
 						}}
-						onEdit={(ownPlatform) => {
-							this.props.editOwnPlatform(ownPlatform);
-						}}
-						onDelete={(ownPlatform) => {
-							this.requestDeleteOwnPlatform(ownPlatform);
+						getItemActions={(ownPlatform, closeMenu) => {
+							return [
+								{
+									label: i18n.t('ownPlatform.list.edit'),
+									onClick: () => {
+										closeMenu();
+										this.props.editOwnPlatform(ownPlatform);
+									}
+								},
+								{
+									label: i18n.t('ownPlatform.list.delete'),
+									onClick: () => {
+										closeMenu();
+										this.requestDeleteOwnPlatform(ownPlatform);
+									},
+									tone: 'danger'
+								}
+							];
 						}}
 						noneOption={{
 							label: i18n.t('ownPlatform.list.none'),

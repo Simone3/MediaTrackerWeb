@@ -62,8 +62,7 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 						items={groups}
 						selectedItemId={selectedGroupId}
 						selectedLabel={i18n.t('common.state.selected')}
-						editLabel={i18n.t('group.list.edit')}
-						deleteLabel={i18n.t('group.list.delete')}
+						menuCloseAriaLabel={i18n.t('common.a11y.closeGroupActions')}
 						emptyTitle={i18n.t('group.list.empty')}
 						emptyCopy={i18n.t('group.list.emptyHint')}
 						showEmptyState={showEmptyState}
@@ -83,11 +82,24 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 						onSelect={(group) => {
 							this.props.selectGroup(group);
 						}}
-						onEdit={(group) => {
-							this.props.editGroup(group);
-						}}
-						onDelete={(group) => {
-							this.requestDeleteGroup(group);
+						getItemActions={(group, closeMenu) => {
+							return [
+								{
+									label: i18n.t('group.list.edit'),
+									onClick: () => {
+										closeMenu();
+										this.props.editGroup(group);
+									}
+								},
+								{
+									label: i18n.t('group.list.delete'),
+									onClick: () => {
+										closeMenu();
+										this.requestDeleteGroup(group);
+									},
+									tone: 'danger'
+								}
+							];
 						}}
 						noneOption={{
 							label: i18n.t('group.list.none'),

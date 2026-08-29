@@ -182,9 +182,13 @@ This is a concise manual QA checklist for the current web app. The goal is featu
   [  ] non-empty list with counters
   [  ] season-row accent for untouched / in-progress / completed seasons
   [  ] add season
-  [  ] edit season
-  [  ] complete season inline
-  [  ] complete button disabled when already fully watched
+  [  ] edit season by tapping the row
+[  ] season row actions
+  [  ] open context menu
+  [  ] close menu without action
+  [  ] edit
+  [  ] complete
+  [  ] complete action missing when already fully watched
   [  ] delete confirmation: cancel and confirm
   [  ] Done button returns to TV-show details
 [  ] season details
@@ -204,7 +208,10 @@ This is a concise manual QA checklist for the current web app. The goal is featu
   [  ] select a group
   [  ] select None
   [  ] selected label / badge
-  [  ] edit from list
+[  ] group row actions
+  [  ] open context menu
+  [  ] close menu without action
+  [  ] edit
   [  ] delete confirmation: cancel and confirm
 [  ] group details
   [  ] add group
@@ -229,7 +236,10 @@ This is a concise manual QA checklist for the current web app. The goal is featu
   [  ] select None
   [  ] selected label / badge
   [  ] icon and color rendering
-  [  ] edit from list
+[  ] platform row actions
+  [  ] open context menu
+  [  ] close menu without action
+  [  ] edit
   [  ] delete confirmation: cancel and confirm
 [  ] platform details
   [  ] add platform

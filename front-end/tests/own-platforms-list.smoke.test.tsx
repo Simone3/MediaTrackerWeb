@@ -49,8 +49,10 @@ describe('OwnPlatformsListScreenComponent', () => {
 
 		const user = userEvent.setup();
 		await user.click(screen.getByText('Switch'));
-		await user.click(screen.getByRole('button', { name: i18n.t('common.a11y.edit', { name: ownPlatforms[0].name }) }));
-		await user.click(screen.getByRole('button', { name: i18n.t('common.a11y.delete', { name: ownPlatforms[0].name }) }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.a11y.optionsFor', { name: ownPlatforms[0].name }) }));
+		await user.click(screen.getByRole('button', { name: i18n.t('ownPlatform.list.edit') }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.a11y.optionsFor', { name: ownPlatforms[0].name }) }));
+		await user.click(screen.getByRole('button', { name: i18n.t('ownPlatform.list.delete') }));
 		expect(deleteOwnPlatform).toHaveBeenCalledTimes(0);
 		await user.click(screen.getByRole('button', { name: i18n.t('common.alert.default.okButton') }));
 

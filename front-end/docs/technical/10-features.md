@@ -83,7 +83,7 @@ The TV show form dispatches `START_TV_SHOW_SEASONS_HANDLING(currentSeasons || []
 
 - `tvShowSeasonsList.tvShowSeasons` holds the working list
 - `tvShowSeasonDetails` holds the season being edited
-- add, edit, delete and inline-complete all operate on that local list
+- add, edit, delete and complete all operate on that local list, and the screen is built on `EntityManagementScreenComponent` and `EntityManagementListComponent` like groups and platforms
 
 **No back-end controller for seasons exists.** Nothing is persisted until the parent TV show is saved.
 
@@ -107,7 +107,7 @@ Groups are category-scoped and serve two purposes: collecting a franchise, and b
 - built on `EntityManagementScreenComponent` and `EntityManagementListComponent`
 - a "None" option clears the current selection
 - selecting a group dispatches `SELECT_GROUP`, and the navigation saga goes back to the media-item form
-- add, edit and delete stay available on the same screen
+- add stays in the header, while edit and delete live in the row action menu ([§11.3](11-interface.md#113-shared-building-blocks))
 
 **One screen is both the manager and the picker.** That is why arriving here from a form and arriving here from the menu look the same.
 

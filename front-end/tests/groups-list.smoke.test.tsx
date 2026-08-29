@@ -42,8 +42,10 @@ describe('GroupsListScreenComponent', () => {
 
 		const user = userEvent.setup();
 		await user.click(screen.getByRole('button', { name: 'Saga' }));
-		await user.click(screen.getByRole('button', { name: i18n.t('common.a11y.edit', { name: groups[0].name }) }));
-		await user.click(screen.getByRole('button', { name: i18n.t('common.a11y.delete', { name: groups[0].name }) }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.a11y.optionsFor', { name: groups[0].name }) }));
+		await user.click(screen.getByRole('button', { name: i18n.t('group.list.edit') }));
+		await user.click(screen.getByRole('button', { name: i18n.t('common.a11y.optionsFor', { name: groups[0].name }) }));
+		await user.click(screen.getByRole('button', { name: i18n.t('group.list.delete') }));
 		expect(deleteGroup).toHaveBeenCalledTimes(0);
 		await user.click(screen.getByRole('button', { name: i18n.t('common.alert.default.okButton') }));
 
