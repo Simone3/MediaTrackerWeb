@@ -66,6 +66,18 @@ Global errors take one path:
 4. a toast shows for 3 seconds
 5. the Redux error is cleared immediately after being surfaced
 
+**The toast message is the failed operation plus the cause.** The description of the outermost `AppError` names the operation ("Cannot save the category to the server"), and the *hint* of the innermost error of the `withDetails` chain that carries one explains why it failed ("another element with the same values already exists"). `error.flash.messageWithHint` joins the two; an error with no hint shows its description alone.
+
+The hint comes from `app/utilities/error-hint.ts`, which `AppError.withDetails()` runs over the raw error it is given:
+
+- a Firebase error is recognized by an `auth/*` `code` — the mapped codes get a written explanation, and an unmapped one still surfaces its own code, which is the difference between "an error occurred during signup" and "this email address is already registered"
+- a back-end error is recognized by `isAxiosError`, and its cause is the `errorCode` of the `ErrorResponse` payload ([back end §6.3](../../../back-end/docs/technical/06-validation-and-errors.md#63-the-error-model)). An unknown or missing code falls back to the HTTP status, and a request that never got a response reports an unreachable server
+- anything else — a developer message, a plain `Error` — has no hint
+
+**A constant that declares its own hint keeps it**, because it already knows the cause better than the raw error does: `BACKEND_TIMEOUT` and `BACKEND_PARSE` are the two, and their hints are what makes the outer operation message safe to show in place of theirs.
+
+The mapping tables are matched structurally, so neither the Firebase SDK nor Axios is imported here. Adding a case is a table entry plus a key under `error.flash.hints` ([§13](13-text-and-languages.md)).
+
 Most CRUD flows follow one shape:
 
 1. an action generator emits the intent action

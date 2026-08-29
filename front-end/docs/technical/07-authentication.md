@@ -25,6 +25,7 @@ This runs on every load, including a reload with persisted state, because persis
 - **waits for the first `onAuthStateChanged` event before reading `currentUser`** — Firebase reports `null` until it has restored the session, so reading eagerly would log every returning user out
 - login and signup are email + password
 - the access token comes from `firebaseUser.getIdToken()` and goes into the `Authorization` header of every back-end call
+- **the SDK error travels intact to the saga**, which wraps it with `withDetails()`: that is what lets the toast say *why* a login or a signup was rejected instead of only that it was ([§6.4](06-redux.md#64-error-handling-and-the-async-pattern))
 
 Which Firebase project is used is a config decision ([§4](04-configuration.md)).
 

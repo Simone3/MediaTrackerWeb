@@ -2,10 +2,11 @@
 	"error": {
 		"flash": {
 			"title": "Error",
+			"messageWithHint": "{{message}}: {{hint}}",
 			"messages": {
 				"genericApplication": "A generic application error occurred",
 				"backendTimeout": "A connection with the server cannot be established, check your connection and try again later",
-				"backendGeneric": "The server returned a generic error",
+				"backendGeneric": "The server returned an error",
 				"backendParse": "The server returned an unknown response",
 				"localCheckLoginStatus": "Cannot check local storage for user credentials",
 				"backendSignup": "An error occurred during signup",
@@ -26,6 +27,39 @@
 				"backendOwnPlatformSave": "Cannot save the platform to the server",
 				"backendOwnPlatformDelete": "Cannot delete the platform from the server",
 				"saveTvShowSeasonNumber": "A season with the same number already exists for this TV show"
+			},
+			"hints": {
+				"backEndTimeout": "the server did not respond in time, check your connection",
+				"backEndParse": "the server returned an unknown response",
+				"backEndUnreachable": "the server cannot be reached",
+				"backEndStatus": "the server responded with status {{status}}",
+				"backEndGenericApplication": "the server ran into an unexpected problem",
+				"backEndAuthentication": "the session is no longer valid, log in again",
+				"backEndAuthorization": "this account cannot access that data",
+				"backEndNotFound": "the requested data does not exist",
+				"backEndInvalidRequest": "the server rejected the submitted data",
+				"backEndDatabaseConnection": "the server cannot reach its database",
+				"backEndDatabaseFind": "the database could not read the data",
+				"backEndDatabaseSave": "the database could not save the data",
+				"backEndDatabaseUniqueness": "another element with the same values already exists",
+				"backEndDatabaseDelete": "the database could not delete the data",
+				"backEndDatabaseNotEmpty": "it still contains other elements",
+				"backEndExternalApi": "the external catalog service returned an error",
+				"backEndExternalApiTimeout": "the external catalog service did not respond in time",
+				"backEndExternalApiParse": "the external catalog service returned an unknown response",
+				"firebaseEmailAlreadyInUse": "this email address is already registered",
+				"firebaseInvalidEmail": "the email address is not valid",
+				"firebaseMissingEmail": "the email address is missing",
+				"firebaseMissingPassword": "the password is missing",
+				"firebaseWeakPassword": "the password is too weak, use at least six characters",
+				"firebaseInvalidCredentials": "the email address or the password is incorrect",
+				"firebaseUserDisabled": "this account has been disabled",
+				"firebaseTooManyRequests": "too many attempts, try again later",
+				"firebaseUnreachable": "the authentication service cannot be reached",
+				"firebaseOperationNotAllowed": "email and password sign-in is not enabled",
+				"firebaseRequiresRecentLogin": "log in again to complete this operation",
+				"firebaseMisconfigured": "the authentication service is not configured correctly",
+				"firebaseUnknown": "the authentication service returned \"{{code}}\""
 			}
 		}
 	},

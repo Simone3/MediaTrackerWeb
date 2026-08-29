@@ -18,6 +18,8 @@ The app ships English only and offers no language selector. The bundle is kept a
 
 It also gives the error layer somewhere to go. `ErrorHandlerComponent` turns an `AppError` into a message by looking it up here, which is what lets the whole app raise typed errors and still show readable text ([§6.4](06-redux.md#64-error-handling-and-the-async-pattern)).
 
+`error.flash` is split accordingly: `messages` holds one description per `AppError` constant, naming the operation that failed, and `hints` holds the short lowercase fragments that explain the cause, phrased to be appended to a description by `messageWithHint`. **A hint is a fragment, not a sentence**: it starts lowercase, carries no final punctuation, and has to read correctly after any of the descriptions.
+
 ---
 
 [← §12 Styling](12-styling.md) · [§14 Testing →](14-testing.md)
