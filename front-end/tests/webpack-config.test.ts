@@ -29,6 +29,8 @@ type WebpackConfig = {
 			__MEDIA_TRACKER_APP_ENV__?: string;
 			__MEDIA_TRACKER_BACK_END_BASE_URL__?: string;
 		};
+		source?: string;
+		target?: string;
 	}>;
 };
 
@@ -105,6 +107,16 @@ describe('webpack config', () => {
 		});
 
 		expect(htmlWebpackPlugin?.userOptions?.favicon).toBe('app/resources/images/ic_app_logo.png');
+	});
+
+	it('copies the social preview image into the build root under a fixed name', () => {
+		const webpackConfig = getWebpackConfig('production');
+		const copyFilePlugin = webpackConfig.plugins.find((plugin: { constructor?: { name?: string } }) => {
+			return plugin?.constructor?.name === 'CopyFilePlugin';
+		});
+
+		expect(copyFilePlugin?.source).toMatch(/public\/og_banner\.png$/);
+		expect(copyFilePlugin?.target).toBe('og_banner.png');
 	});
 
 	it('defaults MEDIA_TRACKER_APP_ENV to dev for development mode', () => {

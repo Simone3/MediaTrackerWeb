@@ -21,6 +21,7 @@ Where everything lives. Generated folders — `node_modules/`, `coverage/`, buil
 | `CLAUDE.md` | The rules and commands for Claude Code. Keep it aligned with these pages |
 | `README.md` | The short landing page for this sub-project; the detail is here |
 | `public/index.html` | The HTML template webpack serves and builds against |
+| `public/og_banner.png` | The social preview image, copied into the build root untouched ([§3.7](03-build-and-run.md#37-the-social-preview-card)) |
 
 ## 2.2 `app/components` — the UI
 

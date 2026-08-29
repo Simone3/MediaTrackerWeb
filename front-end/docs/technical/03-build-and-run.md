@@ -44,6 +44,7 @@ npm test -- tests/media-item-form-data.test.ts
 - the dev server on port **5173**, with the history API fallback on so deep links into `/media/...` resolve to the SPA
 - the `app` alias, which is what makes `app/...` imports resolve
 - `public/index.html` as the served and built template, which also carries the boot placeholder ([§12.4](12-styling.md#124-the-boot-placeholder))
+- `CopyFilePlugin`, a local plugin that copies `public/og_banner.png` into the build root untouched, because webpack has no built-in copy step and the social preview image cannot carry a content hash ([§3.7](#37-the-social-preview-card))
 - the injected define `__MEDIA_TRACKER_APP_ENV__`
 - the injected define `__MEDIA_TRACKER_BACK_END_BASE_URL__`, only when the variable is provided
 
@@ -59,12 +60,13 @@ The build lays `dist/` out in two halves, and the split is what makes the cachin
 dist/
 ├── index.html          no content hash — must always be revalidated
 ├── ic_app_logo.png     the favicon, copied by HtmlWebpackPlugin
+├── og_banner.png       the social preview image, copied by CopyFilePlugin
 └── assets/             every content-hashed output, and nothing else
     ├── bundle.<hash>.js
     └── <hash>.png
 ```
 
-`output.filename` and `output.assetModuleFilename` both write into `assets/`, so a file under that folder can never change without changing its name. `render.yaml` gives `/assets/*` a `Cache-Control` of `public, max-age=31536000, immutable`; everything outside it keeps the platform default. **Do not emit an unhashed file into `assets/`** — it would be cached for a year with no way to invalidate it, which is exactly why the favicon and `index.html` stay at the root.
+`output.filename` and `output.assetModuleFilename` both write into `assets/`, so a file under that folder can never change without changing its name. `render.yaml` gives `/assets/*` a `Cache-Control` of `public, max-age=31536000, immutable`; everything outside it keeps the platform default. **Do not emit an unhashed file into `assets/`** — it would be cached for a year with no way to invalidate it, which is exactly why the favicon, the social preview image and `index.html` stay at the root.
 
 Without that header the static host defaults to `max-age=0`, which makes the browser revalidate every asset on every page load — the icons then visibly pop in a fraction of a second after the rest of the page.
 
@@ -88,7 +90,22 @@ Source SVGs in `app/resources/images` are kept optimized — they were exported 
 Two deliberate exceptions:
 
 - **`ic_app_logo.png` stays**, and is referenced by nothing but the `HtmlWebpackPlugin` favicon option. SVG favicon support is still uneven, and the favicon is one uncached root-level request either way. Change both files when the mark changes.
+- **`og_banner.png` is raster** because the clients that read `og:image` do not reliably rasterize SVG ([§3.7](#37-the-social-preview-card)).
 - **`ic_google.png`, `ic_wikipedia.png`, `ic_justwatch.png` and `ic_howlongtobeat.png` are third-party brand marks** and are left as raster on purpose. Tracing someone else's logo produces a poor imitation of it; the right fix is the official vector asset, not a redrawing. They are 30 px sources shown at 20 CSS px, so they are soft on high-DPI screens.
+
+## 3.7 The social preview card
+
+A phone browser that shows a bookmark or a top site as a wide tile — Firefox for Android does — and every chat app that unfurls a link read the Open Graph tags off the loaded document and paint `og:image` across the card. Without one they fall back to the site icon, and `ic_app_logo.png` is 155 px square: large enough that Firefox treats it as artwork rather than as a favicon, so the tile ends up showing a blown-up cube with its sides cropped off.
+
+The tags live in the `<head>` of `public/index.html` and the image is `public/og_banner.png`. Three things about it are load-bearing:
+
+- **The URL is absolute and names the deployed origin.** A relative `og:image` is not resolved reliably by the clients that read it, so the tag hardcodes `https://media-tracker-front-end.onrender.com`, next to an `og:url` that does the same. Change both when the deployment moves.
+- **The file name carries no content hash.** That is why it is copied by `CopyFilePlugin` rather than imported as an asset module, and why it sits at the build root instead of under `assets/` ([§3.4](#34-build-output-and-caching)).
+- **It is 1200×630, with the logo and the wordmark in the middle.** Cards crop, several of them to a ratio wider than the image, so anything near an edge is the first thing to go.
+
+`tests/social-preview.test.ts` reads the width and height back out of the file's own PNG header and checks them against the declared `og:image:width` and `og:image:height`, so the image cannot be replaced with one of another size without the tags following.
+
+The banner itself is the app mark on the app background — the mark inside the same rounded shell the auth screen title uses, the name beside it, and the four media types under that. It was drawn once on a canvas and committed as a file; there is no build step behind it, so redraw it when the mark or the name changes.
 
 ---
 

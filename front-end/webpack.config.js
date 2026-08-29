@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -25,6 +26,38 @@ const svgToDataUri = (content) => {
 
 	return `data:image/svg+xml,${encoded}`;
 };
+
+/**
+ * Copies a file into the build output under a fixed, unhashed name, which webpack has no built-in way to do:
+ * an asset module would rename the file at every content change. The social preview image needs the opposite,
+ * because the absolute URL in the og:image meta tag of public/index.html has to keep resolving.
+ */
+class CopyFilePlugin {
+	/**
+	 * @param {string} source the file to copy, relative to this config
+	 * @param {string} target the name to emit it under, relative to the output folder
+	 */
+	constructor(source, target) {
+		this.source = path.resolve(__dirname, source);
+		this.target = target;
+	}
+
+	/**
+	 * Emits the file as an asset of every compilation.
+	 * @param {import('webpack').Compiler} compiler the webpack compiler
+	 */
+	apply(compiler) {
+		compiler.hooks.thisCompilation.tap(CopyFilePlugin.name, (compilation) => {
+			compilation.hooks.processAssets.tap({
+				name: CopyFilePlugin.name,
+				stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL
+			}, () => {
+				compilation.fileDependencies.add(this.source);
+				compilation.emitAsset(this.target, new compiler.webpack.sources.RawSource(fs.readFileSync(this.source)));
+			});
+		});
+	}
+}
 
 module.exports = (_env, argv = {}) => {
 	const appEnvironment = process.env.MEDIA_TRACKER_APP_ENV || (argv.mode === 'production' ? 'prod' : 'dev');
@@ -87,7 +120,8 @@ module.exports = (_env, argv = {}) => {
 			new HtmlWebpackPlugin({
 				template: 'public/index.html',
 				favicon: 'app/resources/images/ic_app_logo.png'
-			})
+			}),
+			new CopyFilePlugin('public/og_banner.png', 'og_banner.png')
 		],
 		devServer: {
 			static: {
