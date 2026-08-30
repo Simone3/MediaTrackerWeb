@@ -1,0 +1,56 @@
+front-end/app/components/containers/media-item/list/filter-modal.ts
+  s_357b1cc2357e07::t_373bb4044e2421 6,45-48
+front-end/app/components/presentational/media-item/list/filter-form/view/media-item.tsx
+  s_357b1cc2357e07::t_52139d37398b28 117-119,135-139
+front-end/app/components/presentational/media-item/list/filter-form/wrapper/book.tsx
+  s_357b1cc2357e07::t_89511a83b158f3 30
+front-end/app/components/presentational/media-item/list/filter-form/wrapper/media-item.tsx
+  s_357b1cc2357e07::t_6857a18787cf7d 77-81
+front-end/app/components/presentational/media-item/list/filter-form/wrapper/movie.tsx
+  s_357b1cc2357e07::t_a20018675fc5bc 30
+front-end/app/components/presentational/media-item/list/filter-form/wrapper/tv-show.tsx
+  s_357b1cc2357e07::t_5d44c95f3f975d 30
+front-end/app/components/presentational/media-item/list/filter-form/wrapper/videogame.tsx
+  s_357b1cc2357e07::t_4c3abcfb86b16a 30
+front-end/app/components/presentational/media-item/list/filter-modal/index.tsx
+  s_357b1cc2357e07::t_92445798b0b259 67-69,181-185
+front-end/app/redux/actions/media-item/const.ts
+  s_357b1cc2357e07::t_eddef2adc1f8b6 35
+front-end/app/redux/actions/media-item/generators.ts
+  s_357b1cc2357e07::t_3596d25364abdc 1-2,281-292
+front-end/app/redux/actions/media-item/types.ts
+  s_357b1cc2357e07::t_0b0efc0aa0d7c3 194-201
+front-end/app/redux/reducers/media-item/list.ts
+  s_357b1cc2357e07::t_dfbab1fee7ff0d 6-7,245-259
+front-end/app/resources/lang/lang-en.json
+  s_357b1cc2357e07::t_4acecd1fc81bfd 248
+front-end/app/web/styles.css
+  s_357b1cc2357e07::t_60a15bb4f74fcf 1943-1947
+front-end/docs/technical/10-features.md
+  s_357b1cc2357e07::t_75ad9ce05ee2d7 46,70-71
+front-end/tests/media-item-filter-modal.smoke.test.tsx
+  s_357b1cc2357e07::t_52ecba670c84bf 112,217-242
+front-end/tests/media-items-clear-filters.test.ts
+  s_357b1cc2357e07::t_e2bf845b470e31 1-96
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "a7cedd03b51c4127fc202c5f94c6e62779610d41",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_357b1cc2357e07": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5f09b561-d3b8-4e9b-8960-60bf0cf04c42",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
