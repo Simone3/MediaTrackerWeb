@@ -1,0 +1,32 @@
+front-end/app/components/presentational/media-item/details/form/view/media-item.tsx
+  s_e25e0410f6ad3f::t_da5a46f08c2705 374
+front-end/app/components/presentational/media-item/list/list/index.tsx
+  s_e25e0410f6ad3f::t_1a76a13e50c883 170
+front-end/app/resources/lang/lang-en.json
+  s_e25e0410f6ad3f::t_f9adb41654cfd6 228-229,333
+front-end/tests/media-item-details.smoke.test.tsx
+  s_e25e0410f6ad3f::t_809dd88a01fd29 895-908
+front-end/tests/media-items-list.smoke.test.tsx
+  s_e25e0410f6ad3f::t_2dfb759bd697ed 630-688
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "57c246d42204ee8afb004b54c500ede764f5cbff",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_e25e0410f6ad3f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "24719760-f8c1-4344-80f4-981d1dded5a7",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
