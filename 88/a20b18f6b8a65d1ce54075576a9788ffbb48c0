@@ -1,0 +1,58 @@
+front-end/app/components/containers/media-item/list/filter-modal.ts
+  s_71dd211373e43d::t_28638e52390ede 5,7,18-20,25-35,47-52
+front-end/app/components/presentational/media-item/list/filter-form/data/media-item.ts
+  s_71dd211373e43d::t_473f3859c4aa2a 1,3,5,7,41,43,46,48,51,53,56,58-94,112-113,188-191,210-213,256-262,288-294,335-488
+front-end/app/components/presentational/media-item/list/filter-form/view/media-item.tsx
+  s_71dd211373e43d::t_1f9d5eee59b4c0 5,61,68,70-71,81,88,90-91,136-155
+front-end/app/components/presentational/media-item/list/filter-form/wrapper/book.tsx
+  s_71dd211373e43d::t_e1a3363a7f89de 31-34
+front-end/app/components/presentational/media-item/list/filter-form/wrapper/media-item.tsx
+  s_71dd211373e43d::t_2ae33255122cb0 8,46-65
+front-end/app/components/presentational/media-item/list/filter-form/wrapper/movie.tsx
+  s_71dd211373e43d::t_068bd52135dc76 31-34
+front-end/app/components/presentational/media-item/list/filter-form/wrapper/tv-show.tsx
+  s_71dd211373e43d::t_b2e538ff27e035 31-34
+front-end/app/components/presentational/media-item/list/filter-form/wrapper/videogame.tsx
+  s_71dd211373e43d::t_7c6c924c642ad5 31-34
+front-end/app/components/presentational/media-item/list/filter-modal/index.tsx
+  s_71dd211373e43d::t_2278e1444158ff 3,5-6,14-29,60-66,73-101,127-166,182-191
+front-end/app/controllers/implementations/mocks/entities/media-items/media-item.ts
+  s_71dd211373e43d::t_43ed60e4dfbe28 145-146,155-192
+front-end/app/data/models/internal/media-items/media-item.ts
+  s_71dd211373e43d::t_59fe5f2345c545 77-82,93-98
+front-end/app/resources/lang/lang-en.json
+  s_71dd211373e43d::t_108c62ec5588f1 264-266,271-273
+front-end/app/web/styles.css
+  s_71dd211373e43d::t_edbe3fae80d61b 1913-1915,1923-1934
+front-end/docs/technical/09-data-layer.md
+  s_71dd211373e43d::t_ef3ad03cdd0172 116
+front-end/docs/technical/10-features.md
+  s_71dd211373e43d::t_640502509842d9 54-73
+front-end/docs/technical/15-invariants-and-pitfalls.md
+  s_71dd211373e43d::t_9810768772d11e 83-90
+front-end/tests/media-item-filter-form-mappers.test.ts
+  s_71dd211373e43d::t_fa0be8ccb10e55 106-172
+front-end/tests/media-item-filter-modal.smoke.test.tsx
+  s_71dd211373e43d::t_ed67bf280ceefc 4,6-7,77-118,129,168,185-265
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "88a20b18f6b8a65d1ce54075576a9788ffbb48c0",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_71dd211373e43d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6302d70c-681e-4906-b111-6f954e76d6c1",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
