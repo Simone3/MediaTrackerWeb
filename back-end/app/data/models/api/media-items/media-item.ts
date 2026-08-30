@@ -1,4 +1,4 @@
-import { CommonAddResponse, CommonRequest, CommonResponse, CommonSaveRequest } from 'app/data/models/api/common';
+import { CommonAddResponse, CommonRequest, CommonResponse, CommonSaveRequest, PaginationRequest, PaginationResponse } from 'app/data/models/api/common';
 import { Group } from 'app/data/models/api/group';
 import { OwnPlatform } from 'app/data/models/api/own-platform';
 import { ValuesOf } from 'app/utilities/helper-types';
@@ -361,12 +361,30 @@ export class UpdateMediaItemResponse extends CommonResponse {
  * Abstract request for the 'filter media items' API
  */
 export abstract class FilterMediaItemsRequest extends CommonRequest {
+	/**
+	 * Optional pagination options. If omitted, every matching media item is returned
+	 */
+	@IsOptional()
+	@Type(() => {
+		return PaginationRequest;
+	})
+	@ValidateNested()
+	public pagination?: PaginationRequest;
 }
 
 /**
  * Abstract response for the 'filter media items' API
  */
 export abstract class FilterMediaItemsResponse extends CommonResponse {
+	/**
+	 * The pagination details, returned only if the request asked for a page
+	 */
+	@IsOptional()
+	@Type(() => {
+		return PaginationResponse;
+	})
+	@ValidateNested()
+	public pagination?: PaginationResponse;
 }
 
 /**
@@ -379,12 +397,31 @@ export abstract class SearchMediaItemsRequest extends CommonRequest {
 	@IsNotEmpty()
 	@IsString()
 	public searchTerm!: string;
+
+	/**
+	 * Optional pagination options. If omitted, every matching media item is returned
+	 */
+	@IsOptional()
+	@Type(() => {
+		return PaginationRequest;
+	})
+	@ValidateNested()
+	public pagination?: PaginationRequest;
 }
 
 /**
  * Abstract response for the 'search media items' API
  */
 export abstract class SearchMediaItemsResponse extends CommonResponse {
+	/**
+	 * The pagination details, returned only if the request asked for a page
+	 */
+	@IsOptional()
+	@Type(() => {
+		return PaginationResponse;
+	})
+	@ValidateNested()
+	public pagination?: PaginationResponse;
 }
 
 /**

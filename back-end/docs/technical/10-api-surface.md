@@ -63,6 +63,10 @@ And the same six routes under each, with `<type>` standing for the segment above
 
 **The four are identical by construction** — they are assembled from the generic router builders in `app/routes/media-items/media-item.ts`, not written out four times ([§17.2](17-extension-playbooks.md#172-add-a-new-media-type)).
 
+**`filter` and `search` accept optional pagination**, as a `pagination: { offset, limit }` block in the request body. When it is present the response carries a `pagination: { offset, limit, totalCount }` block back; when it is absent the API returns every match and no pagination block, exactly as it did before ([§11.5](11-models-and-mapping.md#115-pagination-models)). `GET <type>` is not paginated — the front end does not call it.
+
+Because the block sits on the abstract `FilterMediaItemsRequest` / `SearchMediaItemsRequest` and their responses, all four media types get it without a per-type change.
+
 There is no seasons endpoint. TV show seasons travel inside the TV show payload ([§7.7](07-domain-model.md#77-tv-show-seasons)).
 
 ## 10.6 Catalog routes

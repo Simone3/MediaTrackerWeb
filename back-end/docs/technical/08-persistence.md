@@ -39,6 +39,7 @@ That is why API responses carry nested `groupData` and `ownPlatformData` objects
 `app/controllers/database/query-helper.ts` is the shared database helper every controller uses:
 
 - `find`
+- `count`
 - `findOne`
 - `save`
 - `updateSelectiveMany`
@@ -50,6 +51,7 @@ Details worth knowing:
 
 - **`find` uses English collation**, so sorting is case-insensitive — otherwise `Zorro` would sort before `apple`
 - optional populate flags are supported ([§8.4](#84-populate))
+- **`find` takes optional pagination options, and omitting them returns every matching document** ([§8.7](#87-pagination))
 - query performance logging is emitted when enabled ([§14.1](14-logging.md#141-logger-categories))
 - **`checkUniquenessAndSave` exists but no current entity controller uses it.** Uniqueness is handled by the duplicate-name confirmation flow in the front end instead, so there are no database-level uniqueness constraints enforced today ([§17.5](17-extension-playbooks.md#175-known-implementation-characteristics))
 
@@ -60,6 +62,16 @@ Details worth knowing:
 There is no transaction handling around the multi-step deletes, the own-platform merge, or the legacy import ([§17.5](17-extension-playbooks.md#175-known-implementation-characteristics)). A cascade that fails partway leaves the partial result behind.
 
 Know this before adding another multi-step write: it is a property of the current codebase, not something a new operation gets for free.
+
+## 8.7 Pagination
+
+`find` accepts an optional `{ offset, limit }` and turns it into Mongo's `skip` and `limit`. `count` runs the same conditions through `countDocuments`, under the same collation, and ignores the pagination — that is where a caller gets the total.
+
+**Omitting the pagination options must keep returning every matching document.** The cascades, the bulk reads and the legacy import all call `find` with no pagination and would silently start losing rows if a default page size were ever introduced ([§9.6](09-controllers.md#96-mediaitementitycontroller)).
+
+**Offset pagination, not a cursor.** The sort is caller-chosen, multi-field and per-field directional, and five of the sortable fields are nullable; a keyset predicate over that is a generated nested `$or` with explicit null handling, and it would need collation-matched indexes that do not exist. At the size of one user's category the `skip` cost that would justify the complexity is not there.
+
+**The second query is the price.** A paginated request runs `find` and `countDocuments`; an unpaginated one runs only `find`, because the results already are the total.
 
 ---
 

@@ -5,7 +5,7 @@ import { AbstractEntityController } from 'app/controllers/entities/helper';
 import { ownPlatformController } from 'app/controllers/entities/own-platform';
 import { AppError } from 'app/data/models/error/error';
 import { CategoryInternal, MediaTypeInternal } from 'app/data/models/internal/category';
-import { PersistedEntityInternal } from 'app/data/models/internal/common';
+import { PaginatedResultInternal, PaginationInternal, PersistedEntityInternal } from 'app/data/models/internal/common';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, MediaItemSortFieldInternal } from 'app/data/models/internal/media-items/media-item';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
@@ -54,10 +54,11 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @param categoryId category ID
 	 * @returns the retrieved media items, as a promise
 	 */
-	public getAllMediaItems(userId: string, categoryId: string): Promise<TMediaItemInternal[]> {
+	public async getAllMediaItems(userId: string, categoryId: string): Promise<TMediaItemInternal[]> {
 		const sortBy: TMediaItemSortByInternal[] = this.getDefaultSortBy();
 
-		return this.filterAndOrderMediaItems(userId, categoryId, undefined, sortBy);
+		const result = await this.filterAndOrderMediaItems(userId, categoryId, undefined, sortBy);
+		return result.elements;
 	}
 
 	/**
@@ -115,9 +116,10 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @param categoryId category ID
 	 * @param filterBy filter options
 	 * @param sortBy sort otions
-	 * @returns the media items, as a promise
+	 * @param pagination optional pagination options. If omitted, every matching media item is returned
+	 * @returns the media items and their total count, as a promise
 	 */
-	public filterAndOrderMediaItems(userId: string, categoryId: string, filterBy?: TMediaItemFilterInternal, sortBy?: TMediaItemSortByInternal[]): Promise<TMediaItemInternal[]> {
+	public filterAndOrderMediaItems(userId: string, categoryId: string, filterBy?: TMediaItemFilterInternal, sortBy?: TMediaItemSortByInternal[], pagination?: PaginationInternal): Promise<PaginatedResultInternal<TMediaItemInternal>> {
 		const andConditions: QueryFilter<MediaItemInternal>[] = [];
 		this.addConditionsFromFilter(userId, categoryId, this.castFilterQueryArray(andConditions), filterBy);
 		const conditions: QueryFilter<MediaItemInternal> = {
@@ -131,8 +133,9 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 				this.setSortConditions(value, sortDirection, sortConditions);
 			}
 		}
+		this.setTiebreakerSortCondition(sortConditions);
 
-		return this.queryHelper.find(this.castFilterQuery(conditions), sortConditions, this.getPopulateAll());
+		return this.findAndCount(this.castFilterQuery(conditions), sortConditions, pagination);
 	}
 
 	/**
@@ -141,9 +144,10 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @param categoryId category ID
 	 * @param term the search term
 	 * @param filterBy the optional filters
-	 * @returns the media items, as a promise
+	 * @param pagination optional pagination options. If omitted, every matching media item is returned
+	 * @returns the media items and their total count, as a promise
 	 */
-	public searchMediaItems(userId: string, categoryId: string, term: string, filterBy?: TMediaItemFilterInternal): Promise<TMediaItemInternal[]> {
+	public searchMediaItems(userId: string, categoryId: string, term: string, filterBy?: TMediaItemFilterInternal, pagination?: PaginationInternal): Promise<PaginatedResultInternal<TMediaItemInternal>> {
 		const termRegExp = new RegExp(miscUtils.escapeRegExp(term), 'i');
 		
 		// Common search conditions
@@ -169,8 +173,9 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 		// Sort
 		const sortBy: Sortable<TMediaItemInternal> = {};
 		sortBy.name = 'asc';
+		this.setTiebreakerSortCondition(sortBy);
 
-		return this.queryHelper.find(this.castFilterQuery(conditions), sortBy, this.getPopulateAll());
+		return this.findAndCount(this.castFilterQuery(conditions), sortBy, pagination);
 	}
 
 	/**
@@ -493,6 +498,33 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 		populate.group = true;
 		populate.ownPlatform = true;
 		return populate;
+	}
+
+	/**
+	 * Helper to run a list query and pair its results with the total number of matching media items. The count is
+	 * a second query, so it only runs when a page was actually requested: without pagination the results ARE the total
+	 * @param conditions the query conditions
+	 * @param sortBy the sort conditions
+	 * @param pagination the optional pagination options
+	 * @returns the media items and their total count, as a promise
+	 */
+	private async findAndCount(conditions: QueryFilter<TMediaItemInternal>, sortBy: Sortable<TMediaItemInternal>, pagination?: PaginationInternal): Promise<PaginatedResultInternal<TMediaItemInternal>> {
+		const elements = await this.queryHelper.find(conditions, sortBy, this.getPopulateAll(), pagination);
+
+		return {
+			elements: elements,
+			totalCount: pagination ? await this.queryHelper.count(conditions) : elements.length
+		};
+	}
+
+	/**
+	 * Helper to append the ID as the last sort condition. None of the sortable fields is unique, so without a
+	 * tiebreaker the order of two media items with the same sort value is undefined: harmless when the whole list
+	 * is returned at once, but enough to make a paginated request repeat one media item and skip another
+	 * @param sortConditions the sort conditions to complete
+	 */
+	private setTiebreakerSortCondition(sortConditions: Sortable<TMediaItemInternal>): void {
+		sortConditions._id = 'asc';
 	}
 
 	/**

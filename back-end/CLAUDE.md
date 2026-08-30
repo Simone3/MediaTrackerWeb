@@ -58,6 +58,7 @@ These are the rules a change can break silently. Do not relax one without changi
 - **Merging own platforms rewrites media-item references** from the removed platforms to the kept one; no item may be left pointing at a deleted platform.
 - **Code that writes or transforms `completedOn` must keep `completedLastOn` consistent** ([§7.5](docs/technical/07-domain-model.md#75-media-item-common-fields)).
 - **TV show seasons must stay positive, unique, and ordered by season number.**
+- **A `QueryHelper.find` without pagination options returns every matching document**, and every media-item sort ends with the ID as a tiebreaker. Cascades and bulk reads depend on the first; paginated requests silently repeat and skip rows without the second ([§8.7](docs/technical/08-persistence.md#87-pagination)).
 
 ## Code Conventions
 

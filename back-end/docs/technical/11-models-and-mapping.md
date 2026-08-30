@@ -46,6 +46,17 @@ It logs every mapping at debug level, which is what makes a wrong field traceabl
 
 **Anything that writes `completedOn` anywhere must keep `completedLastOn` consistent.** This mapper is where that is done today; a new write path is a new place it can be forgotten.
 
+## 11.5 Pagination models
+
+`PaginationRequest` and `PaginationResponse` live in `app/data/models/api/common.ts`, `PaginationInternal` and `PaginatedResultInternal<T>` in `app/data/models/internal/common.ts`, and `paginationMapper` in `app/data/mappers/common.ts` — the same `common.ts` in each of the three families, because pagination belongs to no single entity ([§8.7](08-persistence.md#87-pagination)).
+
+- **the whole request block is optional, but its two fields are not.** A `limit` with no `offset` is an ambiguous request rather than a partial one, so both are required once the block is present
+- **`limit` is capped by `PAGINATION_MAX_LIMIT`**, an exported constant next to the model rather than a config value — it is part of the API contract, the same way `MEDIA_ITEM_ORDER_IN_GROUP_MAX` is
+- **the response block is returned only when the request asked for a page.** A caller that does not paginate gets byte-for-byte the response it got before pagination existed
+- `totalCount` counts everything matching the request, ignoring `offset` and `limit`: it is what tells the caller whether another page exists
+
+Only media items are wired up today. The plumbing is entity-agnostic, so adding pagination to categories, groups or own platforms is a request field, a response field and one extra argument.
+
 ---
 
 [← §10 API surface](10-api-surface.md) · [§12 Catalog integrations →](12-catalog-integrations.md)

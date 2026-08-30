@@ -1,6 +1,6 @@
 import { config } from 'app/config/config';
 import { AppError } from 'app/data/models/error/error';
-import { PersistedEntityInternal } from 'app/data/models/internal/common';
+import { PaginationInternal, PersistedEntityInternal } from 'app/data/models/internal/common';
 import { logger, performanceLogger } from 'app/loggers/logger';
 import { HydratedDocument, Model, QueryFilter, SortOrder, UpdateQuery } from 'mongoose';
 
@@ -31,9 +31,11 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @param conditions optional query conditions
 	 * @param sortBy optional sort conditions
 	 * @param populate list of 'joined' columns to populate
+	 * @param pagination optional pagination options. If omitted, EVERY matching element is returned: callers that
+	 * read a whole collection (e.g. the delete cascades) rely on this and must keep working untouched
 	 * @returns a promise that will eventually contain the list of all internal model representations of the persisted elements
 	 */
-	public find(conditions?: QueryFilter<TPersistedEntity>, sortBy?: Sortable<TPersistedEntity>, populate?: Populatable<TPersistedEntity>): Promise<TPersistedEntity[]> {
+	public find(conditions?: QueryFilter<TPersistedEntity>, sortBy?: Sortable<TPersistedEntity>, populate?: Populatable<TPersistedEntity>, pagination?: PaginationInternal): Promise<TPersistedEntity[]> {
 		const startNs = process.hrtime.bigint();
 
 		return new Promise((resolve, reject): void => {
@@ -41,6 +43,12 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 				.find(conditions ? conditions : {})
 				.collation(COLLATION)
 				.sort(sortBy as Record<string, SortOrder> | undefined);
+
+			if(pagination) {
+				query
+					.skip(pagination.offset)
+					.limit(pagination.limit);
+			}
 
 			if(populate) {
 				for(const populateField in populate) {
@@ -60,6 +68,28 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 					reject(AppError.DATABASE_FIND.withDetails(error));
 				});
 		});
+	}
+
+	/**
+	 * Helper to count the database elements of a model matching the given conditions, ignoring any pagination
+	 * @param conditions optional query conditions
+	 * @returns a promise that will eventually contain the number of matching elements
+	 */
+	public async count(conditions?: QueryFilter<TPersistedEntity>): Promise<number> {
+		const startNs = process.hrtime.bigint();
+
+		try {
+			const matchingElements = await this.databaseModel
+				.countDocuments(conditions ? conditions : {})
+				.collation(COLLATION);
+
+			this.logPerformance('count', startNs);
+			return matchingElements;
+		}
+		catch(error) {
+			logger.error('Database count error: %s', error);
+			throw AppError.DATABASE_FIND.withDetails(error);
+		}
 	}
 
 	/**

@@ -1,8 +1,11 @@
 import { userResourceAuthorizationMiddleware } from 'app/auth/authorization';
 import { MediaItemCatalogController } from 'app/controllers/catalogs/media-items/media-item';
 import { MediaItemEntityController } from 'app/controllers/entities/media-items/media-item';
+import { paginationMapper } from 'app/data/mappers/common';
+import { PaginationResponse } from 'app/data/models/api/common';
 import { AddMediaItemRequest, AddMediaItemResponse, DeleteMediaItemResponse, FilterMediaItemsRequest, FilterMediaItemsResponse, GetAllMediaItemsResponse, GetMediaItemFromCatalogResponse, SearchMediaItemCatalogResponse, SearchMediaItemsRequest, SearchMediaItemsResponse, UpdateMediaItemRequest, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
 import { AppError } from 'app/data/models/error/error';
+import { PaginatedResultInternal, PaginationInternal } from 'app/data/models/internal/common';
 import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import { errorResponseFactory } from 'app/factories/error';
 import { logger } from 'app/loggers/logger';
@@ -104,10 +107,11 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 				.then((parsedRequest) => {
 					const filterOptions = routeConfig.filterRequestReader(parsedRequest);
 					const orderOptions = routeConfig.sortRequestReader(parsedRequest);
+					const paginationOptions = this.readPaginationOptions(parsedRequest);
 
-					this.mediaItemController.filterAndOrderMediaItems(userId, categoryId, filterOptions, orderOptions)
+					this.mediaItemController.filterAndOrderMediaItems(userId, categoryId, filterOptions, orderOptions, paginationOptions)
 						.then((mediaItems) => {
-							const responseBody: TResponse = routeConfig.responseBuilder({}, mediaItems);
+							const responseBody: TResponse = routeConfig.responseBuilder(this.buildPaginationResponse(mediaItems, paginationOptions), mediaItems.elements);
 							
 							response.json(responseBody);
 						})
@@ -145,10 +149,11 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 				.then((parsedRequest) => {
 					const filterBy = routeConfig.filterRequestReader(parsedRequest);
 					const searchTerm = parsedRequest.searchTerm;
+					const paginationOptions = this.readPaginationOptions(parsedRequest);
 
-					this.mediaItemController.searchMediaItems(userId, categoryId, searchTerm, filterBy)
+					this.mediaItemController.searchMediaItems(userId, categoryId, searchTerm, filterBy, paginationOptions)
 						.then((mediaItems) => {
-							const responseBody: TResponse = routeConfig.responseBuilder({}, mediaItems);
+							const responseBody: TResponse = routeConfig.responseBuilder(this.buildPaginationResponse(mediaItems, paginationOptions), mediaItems.elements);
 							
 							response.json(responseBody);
 						})
@@ -242,6 +247,36 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 					response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
 				});
 		});
+	}
+
+	/**
+	 * Helper to read the optional pagination options out of a parsed list request
+	 * @param parsedRequest the parsed request
+	 * @returns the internal pagination options, or undefined if the request did not ask for a page
+	 */
+	private readPaginationOptions(parsedRequest: FilterMediaItemsRequest | SearchMediaItemsRequest): PaginationInternal | undefined {
+		return parsedRequest.pagination ? paginationMapper.toInternal(parsedRequest.pagination) : undefined;
+	}
+
+	/**
+	 * Helper to build the common part of a list response, i.e. the pagination details. They are returned only if
+	 * the request asked for a page, so that a caller that did not paginate gets the same response it got before
+	 * @param result the controller result
+	 * @param paginationOptions the pagination options the request asked for, if any
+	 * @returns the common response
+	 */
+	private buildPaginationResponse(result: PaginatedResultInternal<TMediaItemInternal>, paginationOptions: PaginationInternal | undefined): { pagination?: PaginationResponse } {
+		if(!paginationOptions) {
+			return {};
+		}
+
+		return {
+			pagination: {
+				offset: paginationOptions.offset,
+				limit: paginationOptions.limit,
+				totalCount: result.totalCount
+			}
+		};
 	}
 
 	/**

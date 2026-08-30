@@ -110,6 +110,12 @@ An item marked as redo counts as *not* complete even though it carries completio
 - also searches one type-specific field, chosen by media type ([§9.7](#97-media-specific-entity-controllers))
 - **the search term is regex-escaped**, so a user typing `.*` searches for the literal characters instead of matching everything
 
+**Pagination:**
+
+`filterAndOrderMediaItems` and `searchMediaItems` take optional `{ offset, limit }` options and return `{ elements, totalCount }` rather than a bare list ([§8.7](08-persistence.md#87-pagination)). Without those options they return every match, and `totalCount` is just the number of elements — no second query runs.
+
+**Every sort ends with the ID as a tiebreaker.** None of the sortable fields is unique, so two media items with the same sort value have no defined order between them. That is invisible while the whole list comes back at once and becomes a bug the moment it does not: without the tiebreaker, one item can land on two consecutive pages while another never appears at all.
+
 ## 9.7 Media-specific entity controllers
 
 Each subclass contributes a default sort, one searchable field and one extra sort field:
