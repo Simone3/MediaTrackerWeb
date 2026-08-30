@@ -1,0 +1,54 @@
+back-end/CLAUDE.md
+  s_99297ed2521647::t_f03238c90f4c3c 61
+back-end/app/controllers/database/query-helper.ts
+  s_99297ed2521647::t_3ef3c21cbae60f 3,34-35,38,47-52,73-94
+back-end/app/controllers/entities/media-items/media-item.ts
+  s_99297ed2521647::t_e5ef653b276322 8,57,60-61,119-120,122,136,138,147-148,150,176,178,503-529
+back-end/app/data/mappers/common.ts
+  s_99297ed2521647::t_3d14091b042078 1-2,87-115
+back-end/app/data/models/api/common.ts
+  s_99297ed2521647::t_1c9795e2853f16 1,61-121
+back-end/app/data/models/api/media-items/media-item.ts
+  s_99297ed2521647::t_7a18ceaa8f792a 1,364-372,379-387,400-409,416-424
+back-end/app/data/models/internal/common.ts
+  s_99297ed2521647::t_da1338ab93f97d 8-25
+back-end/app/routes/media-items/media-item.ts
+  s_99297ed2521647::t_ffaa8ac890c4c7 4-5,8,110,112,114,152,154,156,252-281
+back-end/docs/technical/08-persistence.md
+  s_99297ed2521647::t_8743b4029c4a1a 42,54,66-75
+back-end/docs/technical/09-controllers.md
+  s_99297ed2521647::t_edccfcf38f39e8 113-118
+back-end/docs/technical/10-api-surface.md
+  s_99297ed2521647::t_dcbbe6c9b8a9d8 66-69
+back-end/docs/technical/11-models-and-mapping.md
+  s_99297ed2521647::t_f0135a975557a8 49-59
+back-end/test/integration/routes/media-items/movie-test.ts
+  s_99297ed2521647::t_9034e2f4b58f71 91-215,233-249
+back-end/test/integration/routes/security-test.ts
+  s_99297ed2521647::t_93747f7a0ee97f 129
+back-end/test/unit/controllers/database/query-helper-test.ts
+  s_99297ed2521647::t_fc10133307f631 173-203
+back-end/test/unit/controllers/entities/media-items/movie-test.ts
+  s_99297ed2521647::t_6747dbe2a6ee3e 4,6,27-28,31,34,244,258,266-314,483,497,524
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "a7c8e155d5b082a32ea035107761620a7250b140",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_99297ed2521647": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "59014796-102f-4622-b31e-70c5c62a4f59",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
