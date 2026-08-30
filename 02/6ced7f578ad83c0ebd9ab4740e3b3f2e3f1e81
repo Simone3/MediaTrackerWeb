@@ -1,0 +1,46 @@
+TESTBOOK.md
+  s_e25e0410f6ad3f::t_a2c67223a66cd5 114
+front-end/app/components/presentational/media-item/details/form/data/media-item.ts
+  s_e25e0410f6ad3f::t_04df00da1313c2 4,7-19,37-43
+front-end/app/components/presentational/media-item/details/form/view/media-item.tsx
+  s_e25e0410f6ad3f::t_3f8bf29d1e8aea 9,26-31,551-554
+front-end/app/components/presentational/media-item/list/row/view/media-item.tsx
+  s_e25e0410f6ad3f::t_a6177fe9cec088 80
+front-end/app/data/mappers/media-items/media-item.ts
+  s_e25e0410f6ad3f::t_64daad38a6b868 36,43
+front-end/app/data/models/api/media-items/media-item.ts
+  s_e25e0410f6ad3f::t_5f3e376929699b 2,56-66,89-90,93-95
+front-end/app/data/models/internal/media-items/media-item.ts
+  s_e25e0410f6ad3f::t_12af81f6fadc28 39-50
+front-end/docs/technical/08-domain-model.md
+  s_e25e0410f6ad3f::t_d765a5b98c6874 32-35
+front-end/docs/technical/10-features.md
+  s_e25e0410f6ad3f::t_5e0c59f6086d07 113
+front-end/tests/media-item-details.smoke.test.tsx
+  s_e25e0410f6ad3f::t_ea334528995170 772-814
+front-end/tests/media-item-form-data.test.ts
+  s_e25e0410f6ad3f::t_3c291e0bf1bc6a 1,5,149-193
+front-end/tests/media-items-list.smoke.test.tsx
+  s_e25e0410f6ad3f::t_23585d54762a4d 569-629
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "026ced7f578ad83c0ebd9ab4740e3b3f2e3f1e81",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_e25e0410f6ad3f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "24719760-f8c1-4344-80f4-981d1dded5a7",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
