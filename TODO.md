@@ -15,56 +15,43 @@
 
 - on-hover effect on lists on mobile
 
+- three dots menu in seasons/groups/platforms
 
-# FE bugs
+- exit guard on platform/group/season - TEST IT WITH REFRESH TOO
 
-- groups/platforms lists are difficult to read, especially on mobile - make them simpler by resizing the buttons? we can also move the delete button in the edit page
+- mobile bookmarks image
 
-- platform/group/seasons pages disable media item form guard when clicking on the header icon (home link)
+- pull to refresh
 
-
-
-# FE small improvements
-
-- what image is used for mobile bookmarks (big icon like wikipedia, not small favicon)? can it be changed?
-
-- why cant i pull down to reload? is it something websites allow / disallow?
-
-- map firebase errors in display message (now it just shows a generic error) - maybe also any other BE error?
+- errors with clearer messages
 
 - search in groups and platforms lists
 
+- redirect from sub-page
 
-# FE improvements
+- decimal values for groups
 
-- when opening /details route without context it just breaks - change routing so that multiple tabs could be opened? with be apis like "get details" to rebuild state from there. careful about forms, need to keep transient state on refresh
+- form validation error message
 
-- add login with mock/mock user that creates a mock state for local tests even in prod (create catalog mocks for all 4 media types with lord of the rings)
+- pagination
 
+- specific group and platform filters
 
-# FE+BE small improvements
-
-- add option for decimal group numbers for spinoffs (e.g. #2.5 in group)
+- clear filters button
 
 
 # FE+BE improvements
 
-- filter by specific platforms/groups/etc. (same dropdowns, after the current options)
-
-- suggest maybe a group name based on media item name?
-
-- aggregations by media type like how many books read by year - also view for remaining media (split by owned or not and/or by importance)
-
-- back-end pagination
+- aggregations by media type like how many books read by year - also view for remaining media (split by owned or not and/or by importance) - split by media item and/or category?
 
 
 # maybe in the future
 
 - while waiting for main image, action icons like wikipedia etc. are centered
 
+- add login with mock/mock user that creates a mock state for local tests even in prod (create catalog mocks for all 4 media types with lord of the rings)
 
-
-
+- suggest maybe a group name based on media item name?
 
 
 
