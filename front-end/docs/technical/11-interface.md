@@ -15,7 +15,7 @@ The container/presentational split the app inherited, and the shared pieces that
 - renders almost nothing itself
 - **throws early if required global context is missing**
 
-That last one is deliberate. A media-item container without `categoryGlobal.selectedCategory` cannot produce a correct screen, and failing at the boundary is easier to trace than rendering a half-empty one ([§15.1](15-invariants-and-pitfalls.md#151-category-context-is-required-for-most-media-flows)).
+That last one is deliberate. A media-item container without `categoryGlobal.selectedCategory` cannot produce a correct screen, and failing at the boundary is easier to trace than rendering a half-empty one ([§15.1](15-invariants-and-pitfalls.md#151-category-context-is-required-for-most-media-flows)). What the user sees when one of those throws is [§11.5](#115-the-screen-error-boundary).
 
 ## 11.2 Presentational components
 
@@ -42,6 +42,7 @@ Reach for these before writing a screen-specific variant:
 | `generic/entity-details-frame` | The standard details shell |
 | `generic/responsive-action-menu` | Popover on desktop, bottom sheet on mobile |
 | `generic/browser-back-navigation-guard` | Dirty-form protection, wired to the media item flow by `MediaItemUnsavedChangesGuardContainer` ([§15.3](15-invariants-and-pitfalls.md#153-dirty-form-protection-is-browser-oriented)) |
+| `generic/error-boundary` | The React error boundary around every screen, mounted by `ScreenErrorBoundary` ([§11.5](#115-the-screen-error-boundary)) |
 | `generic/same-name-confirmation` | The duplicate-name dialog the sagas trigger |
 | `generic/confirm-dialog` | The generic confirmation |
 | `generic/pill-button` | |
@@ -59,6 +60,19 @@ Layout responsiveness is CSS. Where behaviour has to change — not just appeara
 `ResponsiveActionMenuComponent` is currently the only shared component that switches behaviour on it.
 
 The authenticated experience is a shared sticky top header over a full-bleed dark shell. Preserve that structure rather than reintroducing per-screen navigation chrome or a light-shell variant.
+
+## 11.5 The screen error boundary
+
+`generic/error-boundary`, mounted by `ScreenErrorBoundary` in `containers/navigation/app-navigator.tsx` between `BrowserRouter` and the authentication navigator ([§5.2](05-navigation.md#52-router-composition)).
+
+**It exists because a container throw is not a contained failure.** The containers of [§11.1](#111-containers) throw from `mapStateToProps`, which runs during render, and React unmounts the whole root on an uncaught render error: without a boundary the entire app disappears and the user is left on a blank page with only a console message. The boundary turns that into an error screen with a way back to the home screen.
+
+Two props carry everything it needs from the router:
+
+- **`resetKey`** is `useLocation().key`. The boundary clears its error whenever the key changes, so opening a new screen — including through the recovery button and through browser back — gets a fresh attempt at rendering. Without it the fallback would outlive the screen that caused it.
+- **`recover`** navigates to the media section, whose catch-all lands on the categories list ([§5.1](05-navigation.md#51-route-map)).
+
+**This is a safety net, not a fix for the cold-URL problem.** A `/details` route opened directly still has no entity to show ([§15.1](15-invariants-and-pitfalls.md#151-category-context-is-required-for-most-media-flows)); the boundary only makes the failure visible and recoverable instead of blank. It also does not catch what is not a render error: saga failures still take the toast path of [§6.4](06-redux.md#64-error-handling-and-the-async-pattern).
 
 ---
 

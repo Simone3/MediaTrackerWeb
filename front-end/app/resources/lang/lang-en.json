@@ -1,5 +1,10 @@
 {
 	"error": {
+		"boundary": {
+			"title": "Something Went Wrong",
+			"message": "This page could not be opened. It may need some information that is only available while browsing the app, so try again from the home screen.",
+			"recoverButton": "Back to Home"
+		},
 		"flash": {
 			"title": "Error",
 			"messageWithHint": "{{message}}: {{hint}}",

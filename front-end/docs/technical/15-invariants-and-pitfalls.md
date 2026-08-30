@@ -12,7 +12,9 @@ Many media-item containers and sagas **throw** when `categoryGlobal.selectedCate
 
 That context is set by `SELECT_CATEGORY` ([§10.1](10-features.md#101-categories)) and restored by persistence ([§6.3](06-redux.md#63-the-persistence-contract)). If media screens fail after a reload or after a navigation change, check that the selected category is still being established — the missing value is the cause, not a symptom.
 
-It is also why opening a `/details` route directly, in a fresh tab, does not work: the route names a screen, not an entity ([§5.1](05-navigation.md#51-route-map)).
+It is also why opening a `/details` route directly, in a fresh tab, does not work: the route names a screen, not an entity ([§5.1](05-navigation.md#51-route-map)). A fresh tab is what makes this visible — persistence is `sessionStorage` while the login is not, so the user arrives authenticated but without any of the context the screen needs ([§6.3](06-redux.md#63-the-persistence-contract)).
+
+**The throw is caught by the screen error boundary** ([§11.5](11-interface.md#115-the-screen-error-boundary)), which shows a recoverable error screen. The screens that fall back to a default entity instead of throwing — category and group details open an empty form, the pickers fetch with no category and surface a toast — are still on their own.
 
 ## 15.2 Group/platform selections are global transient state
 

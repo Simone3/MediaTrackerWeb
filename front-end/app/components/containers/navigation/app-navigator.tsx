@@ -1,7 +1,12 @@
-import { Component, ReactNode, useEffect } from 'react';
+import { Component, ReactElement, ReactNode, useEffect } from 'react';
 import { BrowserRouter, NavigationType, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import { ConnectedAuthenticationNavigator } from 'app/components/containers/navigation/authentication-navigator';
+import { ErrorBoundaryComponent } from 'app/components/presentational/generic/error-boundary';
 import { navigationService } from 'app/utilities/navigation-service';
+import { screenToPath } from 'app/utilities/navigation-routes';
+import { AppSections } from 'app/utilities/screens';
+
+const homePath = screenToPath(AppSections.Media);
 
 const NavigationServiceBridge = (): null => {
 	const navigate = useNavigate();
@@ -39,6 +44,34 @@ const ScrollToTopOnNewScreen = (): null => {
 };
 
 /**
+ * Wraps the app screens with the error boundary, giving it the router handles it needs: the location key tells it when a new
+ * screen has been opened, so that the error of the previous one is cleared, and the recovery callback leaves the failed screen.
+ * @param props the input props
+ * @returns the component
+ */
+const ScreenErrorBoundary = (props: ScreenErrorBoundaryProps): ReactElement => {
+	const { key } = useLocation();
+	const navigate = useNavigate();
+
+	return (
+		<ErrorBoundaryComponent
+			resetKey={key}
+			recover={() => {
+				void navigate(homePath);
+			}}>
+			{props.children}
+		</ErrorBoundaryComponent>
+	);
+};
+
+/**
+ * ScreenErrorBoundary's props
+ */
+type ScreenErrorBoundaryProps = {
+	children: ReactNode;
+};
+
+/**
  * The root container that wraps the navigation logic
  */
 export class AppNavigationContainer extends Component {
@@ -50,7 +83,9 @@ export class AppNavigationContainer extends Component {
 			<BrowserRouter>
 				<NavigationServiceBridge />
 				<ScrollToTopOnNewScreen />
-				<ConnectedAuthenticationNavigator />
+				<ScreenErrorBoundary>
+					<ConnectedAuthenticationNavigator />
+				</ScreenErrorBoundary>
 			</BrowserRouter>
 		);
 	}

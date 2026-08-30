@@ -39,6 +39,7 @@ Navigation here is four things at once: React Router matching, Redux action disp
 `app/components/containers/navigation/*`
 
 - **`AppNavigationContainer`** owns `BrowserRouter` and bridges React Router's `navigate()` into `navigationService`, so code outside the component tree can still navigate.
+- **`ScreenErrorBoundary`**, in the same file, wraps every screen in `ErrorBoundaryComponent` ([§11.5](11-interface.md#115-the-screen-error-boundary)). It sits inside the router so that it can offer a way out of the screen that failed.
 - **`ConnectedAuthenticationNavigator`** chooses the auth-loading, unauthenticated, or authenticated subtree from Redux ([§7](07-authentication.md)).
 - **`AuthenticatedNavigator`** switches between `/media/*` and `/settings/*`.
 - **`MediaNavigator`** owns every media, category, group, platform and season route, and wraps the six screens the media item form opens in `MediaItemUnsavedChangesGuardContainer` ([§15.3](15-invariants-and-pitfalls.md#153-dirty-form-protection-is-browser-oriented)).
