@@ -1598,19 +1598,15 @@ input {
 	width: auto;
 	max-width: 100%;
 	min-width: 0;
-	/* Symmetric, so the centred label stays centred while the right gutter holds the native dropdown arrow */
-	padding: 10px 32px;
+	height: auto;
+	/* .select-input already replaces the native arrow with its own, 6px wide and ending 16px from the right edge.
+	   The gutter has to clear it: a shorthand that shrinks padding-right puts the label under the arrow */
+	padding: 10px 38px 10px 16px;
 	border-radius: 999px;
 	color: var(--color-text-on-dark-muted);
 	font-size: 0.92rem;
 	font-weight: 600;
-	text-align: center;
 	cursor: pointer;
-}
-
-.select-input.pagination-select:disabled {
-	cursor: default;
-	opacity: 0.6;
 }
 
 .media-items-list-items {
@@ -3368,7 +3364,6 @@ input {
 
 	.select-input.pagination-select {
 		flex: 0 1 auto;
-		padding: 10px 26px;
 	}
 
 	.media-item-row {
