@@ -32,7 +32,7 @@
 				"backendOwnPlatformSave": "Cannot save the platform to the server",
 				"backendOwnPlatformDelete": "Cannot delete the platform from the server",
 				"saveTvShowSeasonNumber": "A season with the same number already exists for this TV show",
-			"screenContextMissing": "That page cannot be opened directly, so you have been taken back to your categories"
+				"screenContextMissing": "That page cannot be opened directly, so you have been taken back to your categories"
 			},
 			"hints": {
 				"backEndTimeout": "the server did not respond in time, check your connection",
@@ -145,7 +145,7 @@
 			"importance": {
 				"400": "Very important",
 				"300": "Important",
-				"200" : "Fairly important",
+				"200": "Fairly important",
 				"100": "Unimportant"
 			}
 		},
@@ -256,7 +256,7 @@
 					"status": {
 						"ALL": "Any status",
 						"CURRENT": "Current",
-						"COMPLETE" : "Completed"
+						"COMPLETE": "Completed"
 					},
 					"group": {
 						"ALL": "With or without group",
@@ -277,6 +277,11 @@
 						"all": "Any importance"
 					}
 				}
+			},
+			"fetchError": {
+				"title": "Could not load this page",
+				"copy": "The media items could not be retrieved. Check your connection and try again.",
+				"retry": "Retry"
 			}
 		},
 		"details": {
@@ -578,6 +583,12 @@
 			"navigation": "App navigation",
 			"home": "Media",
 			"settings": "Settings"
+		},
+		"pagination": {
+			"label": "List pages",
+			"previous": "Previous",
+			"next": "Next",
+			"position": "Page {{current}} of {{total}}"
 		}
 	},
 	"auth": {

@@ -47,6 +47,10 @@ describe('MediaItemsListComponent', () => {
 				currentSearchTerm={undefined}
 				showEmptyState={false}
 				showSkeletons={false}
+				showFetchError={false}
+				currentPage={0}
+				totalPages={1}
+				isPageLoading={false}
 				openSearch={openSearch}
 				submitSearch={submitSearch}
 				closeSearch={jest.fn()}
@@ -61,6 +65,8 @@ describe('MediaItemsListComponent', () => {
 				viewMediaItemGroup={jest.fn()}
 				closeMediaItemMenu={jest.fn()}
 				exitViewGroupMode={jest.fn()}
+				goToPage={jest.fn()}
+				retryFetch={jest.fn()}
 			/>
 		);
 
@@ -106,6 +112,10 @@ describe('MediaItemsListComponent', () => {
 				currentSearchTerm={undefined}
 				showEmptyState={false}
 				showSkeletons={false}
+				showFetchError={false}
+				currentPage={0}
+				totalPages={1}
+				isPageLoading={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -120,6 +130,8 @@ describe('MediaItemsListComponent', () => {
 				viewMediaItemGroup={jest.fn()}
 				closeMediaItemMenu={jest.fn()}
 				exitViewGroupMode={jest.fn()}
+				goToPage={jest.fn()}
+				retryFetch={jest.fn()}
 			/>
 		);
 
@@ -149,6 +161,10 @@ describe('MediaItemsListComponent', () => {
 				currentSearchTerm={'old term'}
 				showEmptyState={false}
 				showSkeletons={false}
+				showFetchError={false}
+				currentPage={0}
+				totalPages={1}
+				isPageLoading={false}
 				openSearch={jest.fn()}
 				submitSearch={submitSearch}
 				closeSearch={closeSearch}
@@ -163,6 +179,8 @@ describe('MediaItemsListComponent', () => {
 				viewMediaItemGroup={jest.fn()}
 				closeMediaItemMenu={jest.fn()}
 				exitViewGroupMode={jest.fn()}
+				goToPage={jest.fn()}
+				retryFetch={jest.fn()}
 			/>
 		);
 
@@ -199,6 +217,10 @@ describe('MediaItemsListComponent', () => {
 				currentSearchTerm={undefined}
 				showEmptyState={false}
 				showSkeletons={true}
+				showFetchError={false}
+				currentPage={0}
+				totalPages={1}
+				isPageLoading={true}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -213,6 +235,8 @@ describe('MediaItemsListComponent', () => {
 				viewMediaItemGroup={jest.fn()}
 				closeMediaItemMenu={jest.fn()}
 				exitViewGroupMode={jest.fn()}
+				goToPage={jest.fn()}
+				retryFetch={jest.fn()}
 			/>
 		);
 
@@ -229,6 +253,10 @@ describe('MediaItemsListComponent', () => {
 				currentSearchTerm={undefined}
 				showEmptyState={true}
 				showSkeletons={false}
+				showFetchError={false}
+				currentPage={0}
+				totalPages={1}
+				isPageLoading={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -243,6 +271,8 @@ describe('MediaItemsListComponent', () => {
 				viewMediaItemGroup={jest.fn()}
 				closeMediaItemMenu={jest.fn()}
 				exitViewGroupMode={jest.fn()}
+				goToPage={jest.fn()}
+				retryFetch={jest.fn()}
 			/>
 		);
 
@@ -292,6 +322,10 @@ describe('MediaItemsListComponent', () => {
 				currentSearchTerm={undefined}
 				showEmptyState={false}
 				showSkeletons={false}
+				showFetchError={false}
+				currentPage={0}
+				totalPages={1}
+				isPageLoading={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -306,6 +340,8 @@ describe('MediaItemsListComponent', () => {
 				viewMediaItemGroup={jest.fn()}
 				closeMediaItemMenu={jest.fn()}
 				exitViewGroupMode={jest.fn()}
+				goToPage={jest.fn()}
+				retryFetch={jest.fn()}
 			/>
 		);
 
@@ -347,6 +383,10 @@ describe('MediaItemsListComponent', () => {
 				currentSearchTerm={undefined}
 				showEmptyState={false}
 				showSkeletons={false}
+				showFetchError={false}
+				currentPage={0}
+				totalPages={1}
+				isPageLoading={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -361,6 +401,8 @@ describe('MediaItemsListComponent', () => {
 				viewMediaItemGroup={jest.fn()}
 				closeMediaItemMenu={jest.fn()}
 				exitViewGroupMode={jest.fn()}
+				goToPage={jest.fn()}
+				retryFetch={jest.fn()}
 			/>
 		);
 
@@ -398,6 +440,10 @@ describe('MediaItemsListComponent', () => {
 				currentSearchTerm={undefined}
 				showEmptyState={false}
 				showSkeletons={false}
+				showFetchError={false}
+				currentPage={0}
+				totalPages={1}
+				isPageLoading={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -412,6 +458,8 @@ describe('MediaItemsListComponent', () => {
 				viewMediaItemGroup={jest.fn()}
 				closeMediaItemMenu={jest.fn()}
 				exitViewGroupMode={jest.fn()}
+				goToPage={jest.fn()}
+				retryFetch={jest.fn()}
 			/>
 		);
 
@@ -447,6 +495,10 @@ describe('MediaItemsListComponent', () => {
 				currentSearchTerm={undefined}
 				showEmptyState={false}
 				showSkeletons={false}
+				showFetchError={false}
+				currentPage={0}
+				totalPages={1}
+				isPageLoading={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -461,6 +513,8 @@ describe('MediaItemsListComponent', () => {
 				viewMediaItemGroup={jest.fn()}
 				closeMediaItemMenu={jest.fn()}
 				exitViewGroupMode={jest.fn()}
+				goToPage={jest.fn()}
+				retryFetch={jest.fn()}
 			/>
 		);
 
@@ -497,6 +551,10 @@ describe('MediaItemsListComponent', () => {
 				currentSearchTerm={undefined}
 				showEmptyState={false}
 				showSkeletons={false}
+				showFetchError={false}
+				currentPage={0}
+				totalPages={1}
+				isPageLoading={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -511,6 +569,8 @@ describe('MediaItemsListComponent', () => {
 				viewMediaItemGroup={jest.fn()}
 				closeMediaItemMenu={jest.fn()}
 				exitViewGroupMode={jest.fn()}
+				goToPage={jest.fn()}
+				retryFetch={jest.fn()}
 			/>
 		);
 
@@ -543,6 +603,10 @@ describe('MediaItemsListComponent', () => {
 				currentSearchTerm={undefined}
 				showEmptyState={false}
 				showSkeletons={false}
+				showFetchError={false}
+				currentPage={0}
+				totalPages={1}
+				isPageLoading={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -557,6 +621,8 @@ describe('MediaItemsListComponent', () => {
 				viewMediaItemGroup={jest.fn()}
 				closeMediaItemMenu={jest.fn()}
 				exitViewGroupMode={jest.fn()}
+				goToPage={jest.fn()}
+				retryFetch={jest.fn()}
 			/>
 		);
 
@@ -607,6 +673,10 @@ describe('MediaItemsListComponent', () => {
 				currentSearchTerm={undefined}
 				showEmptyState={false}
 				showSkeletons={false}
+				showFetchError={false}
+				currentPage={0}
+				totalPages={1}
+				isPageLoading={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -621,6 +691,8 @@ describe('MediaItemsListComponent', () => {
 				viewMediaItemGroup={jest.fn()}
 				closeMediaItemMenu={jest.fn()}
 				exitViewGroupMode={jest.fn()}
+				goToPage={jest.fn()}
+				retryFetch={jest.fn()}
 			/>
 		);
 
@@ -660,6 +732,10 @@ describe('MediaItemsListComponent', () => {
 				currentSearchTerm={undefined}
 				showEmptyState={false}
 				showSkeletons={false}
+				showFetchError={false}
+				currentPage={0}
+				totalPages={1}
+				isPageLoading={false}
 				openSearch={jest.fn()}
 				submitSearch={jest.fn()}
 				closeSearch={jest.fn()}
@@ -674,6 +750,8 @@ describe('MediaItemsListComponent', () => {
 				viewMediaItemGroup={jest.fn()}
 				closeMediaItemMenu={jest.fn()}
 				exitViewGroupMode={exitViewGroupMode}
+				goToPage={jest.fn()}
+				retryFetch={jest.fn()}
 			/>
 		);
 
@@ -685,5 +763,123 @@ describe('MediaItemsListComponent', () => {
 		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.buttons.exitViewGroup') }));
 
 		expect(exitViewGroupMode).toHaveBeenCalledTimes(1);
+	});
+
+	test('offers a retry next to the list when a page fetch fails', async() => {
+		const category: CategoryInternal = {
+			id: 'category-id',
+			name: 'My Books',
+			mediaType: 'BOOK',
+			color: defaultCategoryColor
+		};
+		const mediaItem: MediaItemInternal = {
+			id: 'media-id',
+			name: 'Dune',
+			mediaType: 'BOOK',
+			status: 'ACTIVE',
+			importance: '300'
+		};
+		const retryFetch = jest.fn();
+
+		render(
+			<MediaItemsListComponent
+				category={category}
+				mediaItems={[ mediaItem ]}
+				highlightedMediaItem={undefined}
+				currentViewGroup={undefined}
+				isSearchMode={false}
+				currentSearchTerm={undefined}
+				showEmptyState={false}
+				showSkeletons={false}
+				showFetchError={true}
+				currentPage={1}
+				totalPages={3}
+				isPageLoading={false}
+				openSearch={jest.fn()}
+				submitSearch={jest.fn()}
+				closeSearch={jest.fn()}
+				openFilters={jest.fn()}
+				selectMediaItem={jest.fn()}
+				highlightMediaItem={jest.fn()}
+				editMediaItem={jest.fn()}
+				deleteMediaItem={jest.fn()}
+				markMediaItemAsActive={jest.fn()}
+				markMediaItemAsComplete={jest.fn()}
+				markMediaItemAsRedo={jest.fn()}
+				viewMediaItemGroup={jest.fn()}
+				closeMediaItemMenu={jest.fn()}
+				exitViewGroupMode={jest.fn()}
+				goToPage={jest.fn()}
+				retryFetch={retryFetch}
+			/>
+		);
+
+		// The last known page stays on screen, so the failure does not wipe out what the user was reading
+		expect(screen.getByText('Dune')).toBeInTheDocument();
+		expect(screen.getByRole('alert')).toHaveTextContent(i18n.t('mediaItem.list.fetchError.title'));
+
+		const user = userEvent.setup();
+
+		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.fetchError.retry') }));
+
+		expect(retryFetch).toHaveBeenCalledTimes(1);
+	});
+
+	test('puts the user back at the top of the list when the page changes', () => {
+		const category: CategoryInternal = {
+			id: 'category-id',
+			name: 'My Books',
+			mediaType: 'BOOK',
+			color: defaultCategoryColor
+		};
+		const mediaItem: MediaItemInternal = {
+			id: 'media-id',
+			name: 'Dune',
+			mediaType: 'BOOK',
+			status: 'ACTIVE',
+			importance: '300'
+		};
+		const scrollTo = jest.spyOn(window, 'scrollTo').mockImplementation(() => {
+			// Nothing to do, jsdom does not scroll
+		});
+		const listProps = {
+			category: category,
+			mediaItems: [ mediaItem ],
+			highlightedMediaItem: undefined,
+			currentViewGroup: undefined,
+			isSearchMode: false,
+			currentSearchTerm: undefined,
+			showEmptyState: false,
+			showSkeletons: false,
+			showFetchError: false,
+			totalPages: 3,
+			isPageLoading: false,
+			openSearch: jest.fn(),
+			submitSearch: jest.fn(),
+			closeSearch: jest.fn(),
+			openFilters: jest.fn(),
+			selectMediaItem: jest.fn(),
+			highlightMediaItem: jest.fn(),
+			editMediaItem: jest.fn(),
+			deleteMediaItem: jest.fn(),
+			markMediaItemAsActive: jest.fn(),
+			markMediaItemAsComplete: jest.fn(),
+			markMediaItemAsRedo: jest.fn(),
+			viewMediaItemGroup: jest.fn(),
+			closeMediaItemMenu: jest.fn(),
+			exitViewGroupMode: jest.fn(),
+			goToPage: jest.fn(),
+			retryFetch: jest.fn()
+		};
+
+		const { rerender } = render(<MediaItemsListComponent {...listProps} currentPage={0} />);
+
+		expect(scrollTo).not.toHaveBeenCalled();
+
+		rerender(<MediaItemsListComponent {...listProps} currentPage={1} />);
+
+		expect(scrollTo).toHaveBeenCalledWith(0, 0);
+
+		scrollTo.mockRestore();
 	});
 });

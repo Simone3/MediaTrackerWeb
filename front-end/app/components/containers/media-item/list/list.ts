@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { config } from 'app/config/config';
 import { MediaItemsListComponent, MediaItemsListComponentInput, MediaItemsListComponentOutput } from 'app/components/presentational/media-item/list/list';
 import { AppError } from 'app/data/models/internal/error';
-import { deleteMediaItem, highlightMediaItem, loadMediaItemDetails, markMediaItemAsActive, markMediaItemAsComplete, markMediaItemAsRedo, removeMediaItemHighlight, searchMediaItems, startMediaItemsSearchMode, startMediaItemsSetFiltersMode, startMediaItemsViewGroupMode, stopMediaItemsSearchMode, stopMediaItemsViewGroupMode } from 'app/redux/actions/media-item/generators';
+import { changeMediaItemsPage, deleteMediaItem, fetchMediaItems, highlightMediaItem, loadMediaItemDetails, markMediaItemAsActive, markMediaItemAsComplete, markMediaItemAsRedo, removeMediaItemHighlight, searchMediaItems, startMediaItemsSearchMode, startMediaItemsSetFiltersMode, startMediaItemsViewGroupMode, stopMediaItemsSearchMode, stopMediaItemsViewGroupMode } from 'app/redux/actions/media-item/generators';
 import { State } from 'app/redux/state/state';
 
 const mapStateToProps = (state: State): MediaItemsListComponentInput => {
@@ -12,6 +13,7 @@ const mapStateToProps = (state: State): MediaItemsListComponentInput => {
 
 	const mediaItems = state.mediaItemsList.mediaItems;
 	const status = state.mediaItemsList.status;
+	const totalCount = state.mediaItemsList.totalCount;
 
 	return {
 		category: state.categoryGlobal.selectedCategory,
@@ -21,7 +23,11 @@ const mapStateToProps = (state: State): MediaItemsListComponentInput => {
 		isSearchMode: state.mediaItemsList.mode === 'SEARCH',
 		currentSearchTerm: state.mediaItemsList.mode === 'SEARCH' ? state.mediaItemsList.searchTerm : undefined,
 		showEmptyState: status === 'FETCHED' && mediaItems.length === 0,
-		showSkeletons: mediaItems.length === 0 && (status === 'REQUIRES_FETCH' || status === 'FETCHING')
+		showSkeletons: mediaItems.length === 0 && (status === 'REQUIRES_FETCH' || status === 'FETCHING'),
+		showFetchError: status === 'FETCH_FAILED',
+		currentPage: state.mediaItemsList.currentPage,
+		totalPages: Math.ceil(totalCount / config.ui.mediaItemsPageSize),
+		isPageLoading: status === 'REQUIRES_FETCH' || status === 'FETCHING'
 	};
 };
 
@@ -68,6 +74,12 @@ const mapDispatchToProps = (dispatch: Dispatch): MediaItemsListComponentOutput =
 		},
 		exitViewGroupMode: () => {
 			dispatch(stopMediaItemsViewGroupMode());
+		},
+		goToPage: (page) => {
+			dispatch(changeMediaItemsPage(page));
+		},
+		retryFetch: () => {
+			dispatch(fetchMediaItems());
 		}
 	};
 };

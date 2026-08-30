@@ -35,6 +35,22 @@ Entry files:
 - "view group" in the context menu switches the mode to `VIEW_GROUP`
 - leaving search or view-group mode resets to `NORMAL` **and marks the list for refetch**, because the previous mode's results are not the normal list
 
+### Pagination
+
+The list shows one page at a time, `config.ui.mediaItemsPageSize` items long ([§4.4](04-configuration.md#44-what-else-config-owns)). `currentPage` and `totalCount` live in the list slice, the fetch saga turns the page index into the `offset`/`limit` the filter and search endpoints take, and `PaginationComponent` renders the controls ([§11.3](11-interface.md#113-shared-building-blocks)). The header count is `totalCount`, not the size of the loaded page.
+
+**Classic pages rather than infinite scroll, because of what happens after a write.** Deleting or inline-updating an item marks the list for refetch, and the visible window has to be re-materialized from the server. With one bounded page that is a single request for the page the user is on; with an accumulated infinite-scroll window it would be either an unbounded reload, a reset that throws the user back to the top, or client-side filter logic deciding whether the changed row still belongs. Paging makes the question go away.
+
+Which actions move the user and which do not follows from that:
+
+- **the query changed** — submitting filters, submitting a search, leaving search or view-group mode — starts again from the first page, since the old page index means nothing against a new query
+- **the data changed** — saving, deleting, inline-updating — reloads **the current page**, so a write does not cost the user their place
+- **the current page can stop existing**, e.g. when the last item on it is deleted. The reducer notices the fetched page is past the end, falls back to the last page that does exist and marks the list for reload; when nothing matches at all it settles on the first page without a second request
+
+A failed page fetch keeps the last known rows on screen and renders a retry card under them, on top of the usual error toast: the toast names the cause and disappears, the card is the way back ([§6.4](06-redux.md#64-error-handling-and-the-async-pattern)).
+
+Changing page scrolls back to the top, from the list component itself: `ScrollToTopOnNewScreen` does not cover it, since moving between pages is not a navigation ([§5.5](05-navigation.md#55-scroll-position)).
+
 The context menu is `ResponsiveActionMenuComponent`: a floating popover on desktop, a bottom sheet on mobile ([§11.3](11-interface.md#113-shared-building-blocks)).
 
 **Inline status actions** — `MARK_MEDIA_ITEM_AS_ACTIVE`, `MARK_MEDIA_ITEM_AS_COMPLETE`, `MARK_MEDIA_ITEM_AS_REDO` — apply the rules in `inline-update-helper.ts`:

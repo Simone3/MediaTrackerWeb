@@ -1,5 +1,5 @@
-import { ASK_CONFIRMATION_BEFORE_SAVING_MEDIA_ITEM, COMPLETE_DELETING_MEDIA_ITEM, COMPLETE_FETCHING_MEDIA_ITEMS, COMPLETE_GETTING_MEDIA_ITEM_CATALOG_DETAILS, COMPLETE_INLINE_UPDATING_MEDIA_ITEM, COMPLETE_SAVING_MEDIA_ITEM, COMPLETE_SEARCHING_MEDIA_ITEMS_CATALOG, DELETE_MEDIA_ITEM, FAIL_DELETING_MEDIA_ITEM, FAIL_FETCHING_MEDIA_ITEMS, FAIL_GETTING_MEDIA_ITEM_CATALOG_DETAILS, FAIL_INLINE_UPDATING_MEDIA_ITEM, FAIL_SAVING_MEDIA_ITEM, FAIL_SEARCHING_MEDIA_ITEMS_CATALOG, FETCH_MEDIA_ITEMS, GET_MEDIA_ITEM_CATALOG_DETAILS, HIGHLIGHT_MEDIA_ITEM, LOAD_MEDIA_ITEM_DETAILS, LOAD_NEW_MEDIA_ITEM_DETAILS, MARK_MEDIA_ITEM_AS_ACTIVE, MARK_MEDIA_ITEM_AS_COMPLETE, MARK_MEDIA_ITEM_AS_REDO, REMOVE_MEDIA_ITEM_HIGHLIGHT, RESET_MEDIA_ITEMS_CATALOG_SEARCH, SAVE_MEDIA_ITEM, SEARCH_MEDIA_ITEMS, SEARCH_MEDIA_ITEMS_CATALOG, SET_MEDIA_ITEM_FORM_DRAFT, SET_MEDIA_ITEM_FORM_STATUS, START_DELETING_MEDIA_ITEM, START_FETCHING_MEDIA_ITEMS, START_GETTING_MEDIA_ITEM_CATALOG_DETAILS, START_INLINE_UPDATING_MEDIA_ITEM, START_MEDIA_ITEMS_SEARCH_MODE, START_MEDIA_ITEMS_SET_FILTERS_MODE, START_MEDIA_ITEMS_VIEW_GROUP_MODE, START_SAVING_MEDIA_ITEM, START_SEARCHING_MEDIA_ITEMS_CATALOG, STOP_MEDIA_ITEMS_SEARCH_MODE, STOP_MEDIA_ITEMS_SET_FILTERS_MODE, STOP_MEDIA_ITEMS_VIEW_GROUP_MODE, SUBMIT_MEDIA_ITEMS_FILTERS } from './const';
-import { AskConfirmationBeforeSavingMediaItemAction, CompleteDeletingMediaItemAction, CompleteFetchingMediaItemsAction, CompleteGettingMediaItemCatalogDetailsAction, CompleteInlineUpdatingMediaItemAction, CompleteSavingMediaItemAction, CompleteSearchingMediaItemsCatalogAction, DeleteMediaItemAction, FailDeletingMediaItemAction, FailFetchingMediaItemsAction, FailGettingMediaItemCatalogDetailsAction, FailInlineUpdatingMediaItemAction, FailSavingMediaItemAction, FailSearchingMediaItemsCatalogAction, FetchMediaItemsAction, GetMediaItemCatalogDetailsAction, HighlightMediaItemAction, LoadMediaItemDetailsAction, LoadNewMediaItemDetailsAction, MarkMediaItemAsActiveAction, MarkMediaItemAsCompleteAction, MarkMediaItemAsRedoAction, RemoveMediaItemHighlightAction, ResetMediaItemsCatalogSearchAction, SaveMediaItemAction, SearchMediaItemsAction, SearchMediaItemsCatalogAction, SetMediaItemFormDraftAction, SetMediaItemFormStatusAction, StartDeletingMediaItemAction, StartFetchingMediaItemsAction, StartGettingMediaItemCatalogDetailsAction, StartInlineUpdatingMediaItemAction, StartMediaItemsSearchModeAction, StartMediaItemsSetFiltersModeAction, StartMediaItemsViewGroupModeAction, StartSavingMediaItemAction, StartSearchingMediaItemsCatalogAction, StopMediaItemsSearchModeAction, StopMediaItemsSetFiltersModeAction, StopMediaItemsViewGroupModeAction, SubmitMediaItemsFiltersAction } from './types';
+import { ASK_CONFIRMATION_BEFORE_SAVING_MEDIA_ITEM, CHANGE_MEDIA_ITEMS_PAGE, COMPLETE_DELETING_MEDIA_ITEM, COMPLETE_FETCHING_MEDIA_ITEMS, COMPLETE_GETTING_MEDIA_ITEM_CATALOG_DETAILS, COMPLETE_INLINE_UPDATING_MEDIA_ITEM, COMPLETE_SAVING_MEDIA_ITEM, COMPLETE_SEARCHING_MEDIA_ITEMS_CATALOG, DELETE_MEDIA_ITEM, FAIL_DELETING_MEDIA_ITEM, FAIL_FETCHING_MEDIA_ITEMS, FAIL_GETTING_MEDIA_ITEM_CATALOG_DETAILS, FAIL_INLINE_UPDATING_MEDIA_ITEM, FAIL_SAVING_MEDIA_ITEM, FAIL_SEARCHING_MEDIA_ITEMS_CATALOG, FETCH_MEDIA_ITEMS, GET_MEDIA_ITEM_CATALOG_DETAILS, HIGHLIGHT_MEDIA_ITEM, LOAD_MEDIA_ITEM_DETAILS, LOAD_NEW_MEDIA_ITEM_DETAILS, MARK_MEDIA_ITEM_AS_ACTIVE, MARK_MEDIA_ITEM_AS_COMPLETE, MARK_MEDIA_ITEM_AS_REDO, REMOVE_MEDIA_ITEM_HIGHLIGHT, RESET_MEDIA_ITEMS_CATALOG_SEARCH, SAVE_MEDIA_ITEM, SEARCH_MEDIA_ITEMS, SEARCH_MEDIA_ITEMS_CATALOG, SET_MEDIA_ITEM_FORM_DRAFT, SET_MEDIA_ITEM_FORM_STATUS, START_DELETING_MEDIA_ITEM, START_FETCHING_MEDIA_ITEMS, START_GETTING_MEDIA_ITEM_CATALOG_DETAILS, START_INLINE_UPDATING_MEDIA_ITEM, START_MEDIA_ITEMS_SEARCH_MODE, START_MEDIA_ITEMS_SET_FILTERS_MODE, START_MEDIA_ITEMS_VIEW_GROUP_MODE, START_SAVING_MEDIA_ITEM, START_SEARCHING_MEDIA_ITEMS_CATALOG, STOP_MEDIA_ITEMS_SEARCH_MODE, STOP_MEDIA_ITEMS_SET_FILTERS_MODE, STOP_MEDIA_ITEMS_VIEW_GROUP_MODE, SUBMIT_MEDIA_ITEMS_FILTERS } from './const';
+import { AskConfirmationBeforeSavingMediaItemAction, ChangeMediaItemsPageAction, CompleteDeletingMediaItemAction, CompleteFetchingMediaItemsAction, CompleteGettingMediaItemCatalogDetailsAction, CompleteInlineUpdatingMediaItemAction, CompleteSavingMediaItemAction, CompleteSearchingMediaItemsCatalogAction, DeleteMediaItemAction, FailDeletingMediaItemAction, FailFetchingMediaItemsAction, FailGettingMediaItemCatalogDetailsAction, FailInlineUpdatingMediaItemAction, FailSavingMediaItemAction, FailSearchingMediaItemsCatalogAction, FetchMediaItemsAction, GetMediaItemCatalogDetailsAction, HighlightMediaItemAction, LoadMediaItemDetailsAction, LoadNewMediaItemDetailsAction, MarkMediaItemAsActiveAction, MarkMediaItemAsCompleteAction, MarkMediaItemAsRedoAction, RemoveMediaItemHighlightAction, ResetMediaItemsCatalogSearchAction, SaveMediaItemAction, SearchMediaItemsAction, SearchMediaItemsCatalogAction, SetMediaItemFormDraftAction, SetMediaItemFormStatusAction, StartDeletingMediaItemAction, StartFetchingMediaItemsAction, StartGettingMediaItemCatalogDetailsAction, StartInlineUpdatingMediaItemAction, StartMediaItemsSearchModeAction, StartMediaItemsSetFiltersModeAction, StartMediaItemsViewGroupModeAction, StartSavingMediaItemAction, StartSearchingMediaItemsCatalogAction, StopMediaItemsSearchModeAction, StopMediaItemsSetFiltersModeAction, StopMediaItemsViewGroupModeAction, SubmitMediaItemsFiltersAction } from './types';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
@@ -26,13 +26,27 @@ export const startFetchingMediaItems = (): StartFetchingMediaItemsAction => {
 
 /**
  * Generator for the complete fetching media items action, which marks the successful end of the media items list fetching operation
- * @param mediaItems the fetched media items, possibly an empty array
+ * @param mediaItems the fetched media items of the requested page, possibly an empty array
+ * @param totalCount the total number of media items matching the current query, across every page
  * @returns the action
  */
-export const completeFetchingMediaItems = (mediaItems: MediaItemInternal[]): CompleteFetchingMediaItemsAction => {
+export const completeFetchingMediaItems = (mediaItems: MediaItemInternal[], totalCount: number): CompleteFetchingMediaItemsAction => {
 	return {
 		type: COMPLETE_FETCHING_MEDIA_ITEMS,
-		mediaItems: mediaItems
+		mediaItems: mediaItems,
+		totalCount: totalCount
+	};
+};
+
+/**
+ * Generator for the change media items page action, which moves the list to another page and marks it for reload
+ * @param page the zero-based index of the page to display
+ * @returns the action
+ */
+export const changeMediaItemsPage = (page: number): ChangeMediaItemsPageAction => {
+	return {
+		type: CHANGE_MEDIA_ITEMS_PAGE,
+		page: page
 	};
 };
 

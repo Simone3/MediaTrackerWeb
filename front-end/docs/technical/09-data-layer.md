@@ -78,6 +78,10 @@ The authoritative list, with the behaviour behind each route, is the back end's 
 
 The four media types share one route shape exactly; that symmetry is what the factories in [§9.5](#95-media-type-factories) rely on.
 
+**The two list routes are paginated.** `filter` and `search` take an optional `PaginationInternal` (`offset`, `limit`) and answer with a `PaginatedResultInternal`: the page of elements plus the `totalCount` of everything that matched. Omitting the options asks for every match, and the back end then answers without a pagination block, so `totalCount` falls back to the length of what came back. Only media items are wired up — the plumbing on both sides is entity-agnostic, so the other lists can opt in later ([back end §10](../../../back-end/docs/technical/10-api-surface.md)).
+
+`limit` cannot exceed the back end's `PAGINATION_MAX_LIMIT` of 100, which `app/data/models/api/common.ts` mirrors so a misconfigured page size fails validation here instead of at the server. `PAGINATION_INTERNAL_MAX_LIMIT` mirrors it once more for code that cannot import the decorated API module, which is how the config test guards the configured page size ([§14](14-testing.md)).
+
 ## 9.5 Media-type factories
 
 `app/controllers/main/entities/media-items/factories.ts` holds three factory families, all switching on `MediaTypeInternal`:
@@ -106,6 +110,8 @@ Mock controllers extend `MockControllerHelper` and are in-memory:
 - optional error probability
 - seeded sample data
 - simplistic filter and sort behaviour
+
+Pagination is the one thing they do faithfully: `mockPaginate` slices the requested window and reports the full match count, so a paginated list behaves the same against mocks as against the server even when the filtering that produced it does not.
 
 **They are for UI work, not for behaviour parity.** Generic media-item mock filtering and sorting are intentionally incomplete, and the mock logs when it hits something the real back end would have handled. A flow that works against mocks has not been shown to work ([§15.8](15-invariants-and-pitfalls.md#158-mock-behaviour-is-not-production-parity)).
 

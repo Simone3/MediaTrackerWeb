@@ -23,6 +23,16 @@ export type StartFetchingMediaItemsAction = Action & {
 export type CompleteFetchingMediaItemsAction = Action & {
 	
 	mediaItems: MediaItemInternal[];
+
+	totalCount: number;
+};
+
+/**
+ * The change media items page action
+ */
+export type ChangeMediaItemsPageAction = Action & {
+	
+	page: number;
 };
 
 /**

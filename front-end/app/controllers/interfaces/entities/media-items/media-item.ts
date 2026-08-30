@@ -1,3 +1,4 @@
+import { PaginatedResultInternal, PaginationInternal } from 'app/data/models/internal/common';
 import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 
 /**
@@ -11,18 +12,20 @@ export interface MediaItemController<TMediaItemInternal extends MediaItemInterna
 	 * @param categoryId the category
 	 * @param filter the filter to apply
 	 * @param sortBy the order to apply
-	 * @returns the list of media items, as a promise
+	 * @param pagination the optional pagination options. If omitted, every matching media item is returned
+	 * @returns the requested page of media items and the total number of matches, as a promise
 	 */
-	filter(userId: string, categoryId: string, filter?: TMediaItemFilterInternal, sortBy?: TMediaItemSortByInternal[]): Promise<TMediaItemInternal[]>;
+	filter(userId: string, categoryId: string, filter?: TMediaItemFilterInternal, sortBy?: TMediaItemSortByInternal[], pagination?: PaginationInternal): Promise<PaginatedResultInternal<TMediaItemInternal>>;
 	
 	/**
 	 * Searches the media items of a category
 	 * @param userId the user
 	 * @param categoryId the category
 	 * @param searchTerm the search term
-	 * @returns the list of media items, as a promise
+	 * @param pagination the optional pagination options. If omitted, every matching media item is returned
+	 * @returns the requested page of media items and the total number of matches, as a promise
 	 */
-	search(userId: string, categoryId: string, searchTerm: string): Promise<TMediaItemInternal[]>;
+	search(userId: string, categoryId: string, searchTerm: string, pagination?: PaginationInternal): Promise<PaginatedResultInternal<TMediaItemInternal>>;
 
 	/**
 	 * Saves a media item into the given category, adding it if the ID is not specified or updating it otherwise

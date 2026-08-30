@@ -25,7 +25,7 @@ The slices, what survives a reload, and the two patterns every async flow follow
 | `categoryGlobal` | selected category | persisted |
 | `categoriesList` | categories list + highlighted row | list data persists, status resets to `REQUIRES_FETCH` |
 | `categoryDetails` | category form state | entity persists, save status resets |
-| `mediaItemsList` | current media list, mode, search/filter/sort | entity list persists, status resets to `REQUIRES_FETCH` |
+| `mediaItemsList` | current media page, mode, search/filter/sort, page index and total count | entity list and page index persist, status resets to `REQUIRES_FETCH` |
 | `mediaItemDetails` | current media item form + draft + catalog state | entity/draft persist, save/catalog statuses reset |
 | `groupGlobal` | selected group | persisted |
 | `groupsList` | groups list + highlighted row | list data persists, status resets to `REQUIRES_FETCH` |

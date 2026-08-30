@@ -83,6 +83,8 @@ The effect keys off `location.key` rather than the path, because [no path carrie
 
 There is no `<ScrollRestoration>` in the tree: that component requires a data router, and [§5.2](#52-router-composition) uses a plain `BrowserRouter`.
 
+**One screen scrolls on its own**: the media items list resets to the top when the user moves between pages, which is not a navigation and so never reaches this effect ([§10.2](10-features.md#102-media-items-list)).
+
 ## 5.6 Screens that cannot be opened cold
 
 `app/components/containers/navigation/screen-context-guard.tsx`

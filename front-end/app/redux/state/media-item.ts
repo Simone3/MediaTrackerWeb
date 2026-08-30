@@ -37,9 +37,19 @@ export type MediaItemsListState = {
 	readonly sortBy?: MediaItemSortByInternal[];
 	
 	/**
-	 * The list of available media items
+	 * The media items of the currently displayed page, NOT the whole list
 	 */
 	readonly mediaItems: MediaItemInternal[];
+
+	/**
+	 * The zero-based index of the currently displayed page
+	 */
+	readonly currentPage: number;
+
+	/**
+	 * The total number of media items that match the current query, i.e. across every page
+	 */
+	readonly totalCount: number;
 
 	/**
 	 * The currently highlighted (e.g. context menu is open) media item, or undefined if none is highlighted
@@ -58,6 +68,8 @@ export const mediaItemsListStateInitialValue: MediaItemsListState = {
 	searchTerm: undefined,
 	viewGroup: undefined,
 	mediaItems: [],
+	currentPage: 0,
+	totalCount: 0,
 	highlightedMediaItem: undefined
 };
 

@@ -1,5 +1,7 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
 import { SagaIterator } from 'redux-saga';
+import { config } from 'app/config/config';
+import { PaginatedResultInternal, PaginationInternal } from 'app/data/models/internal/common';
 import { AppError } from 'app/data/models/internal/error';
 import { MediaItemFilterInternal, MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { mediaItemControllerFactory, mediaItemDefinitionsControllerFactory } from 'app/controllers/main/entities/media-items/factories';
@@ -28,8 +30,15 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 		const mediaItemDefinitionsController = mediaItemDefinitionsControllerFactory.get(category);
 		const mediaItemController = mediaItemControllerFactory.get(category);
 
+		// Only the current page is requested: the list is paginated, and the total count tells the UI how many pages there are
+		const pageSize = config.ui.mediaItemsPageSize;
+		const pagination: PaginationInternal = {
+			offset: state.mediaItemsList.currentPage * pageSize,
+			limit: pageSize
+		};
+
 		// Retrieve media items from controller
-		let mediaItems: MediaItemInternal[];
+		let mediaItems: PaginatedResultInternal<MediaItemInternal>;
 		switch(mode) {
 			// Normal fetching mode is the standard one, based on the current filter and sort options
 			case 'NORMAL': {
@@ -39,7 +48,7 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 					throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find filter and sort options');
 				}
 
-				mediaItems = (yield call(mediaItemController.filter.bind(mediaItemController), user.id, category.id, filter, sortBy)) as MediaItemInternal[];
+				mediaItems = (yield call(mediaItemController.filter.bind(mediaItemController), user.id, category.id, filter, sortBy, pagination)) as PaginatedResultInternal<MediaItemInternal>;
 
 				break;
 			}
@@ -51,7 +60,7 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 					throw AppError.GENERIC.withDetails('Something went wrong during state initialization: cannot find search term');
 				}
 
-				mediaItems = (yield call(mediaItemController.search.bind(mediaItemController), user.id, category.id, term)) as MediaItemInternal[];
+				mediaItems = (yield call(mediaItemController.search.bind(mediaItemController), user.id, category.id, term, pagination)) as PaginatedResultInternal<MediaItemInternal>;
 
 				break;
 			}
@@ -71,7 +80,7 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 
 				const sortBy = mediaItemDefinitionsController.getViewGroupSortBy();
 				
-				mediaItems = (yield call(mediaItemController.filter.bind(mediaItemController), user.id, category.id, filter, sortBy)) as MediaItemInternal[];
+				mediaItems = (yield call(mediaItemController.filter.bind(mediaItemController), user.id, category.id, filter, sortBy, pagination)) as PaginatedResultInternal<MediaItemInternal>;
 
 				break;
 			}
@@ -82,7 +91,7 @@ const fetchMediaItemsSaga = function * (): SagaIterator {
 		}
 
 		// Get the media items and return them
-		yield put(completeFetchingMediaItems(mediaItems));
+		yield put(completeFetchingMediaItems(mediaItems.elements, mediaItems.totalCount));
 	}
 	catch(error) {
 		yield put(failFetchingMediaItems());

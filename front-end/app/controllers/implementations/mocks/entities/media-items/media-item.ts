@@ -1,5 +1,6 @@
 import { MockControllerHelper } from 'app/controllers/implementations/mocks/common/mock-helper';
 import { MediaItemCatalogController, MediaItemController } from 'app/controllers/interfaces/entities/media-items/media-item';
+import { PaginatedResultInternal, PaginationInternal } from 'app/data/models/internal/common';
 import { AppError } from 'app/data/models/internal/error';
 import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import { MovieSortByInternal } from 'app/data/models/internal/media-items/movie';
@@ -17,27 +18,28 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 	/**
 	 * @override
 	 */
-	public async filter(userId: string, categoryId: string, filter?: TMediaItemFilterInternal, sortBy?: TMediaItemSortByInternal[]): Promise<TMediaItemInternal[]> {
+	public async filter(userId: string, categoryId: string, filter?: TMediaItemFilterInternal, sortBy?: TMediaItemSortByInternal[], pagination?: PaginationInternal): Promise<PaginatedResultInternal<TMediaItemInternal>> {
 		return this.resolveResult(() => {
 			let categoryMediaItems = this.getCategoryMediaItems(userId, categoryId);
 			
 			categoryMediaItems = this.mockFilter(categoryMediaItems, filter);
 			categoryMediaItems = this.mockSort(categoryMediaItems, sortBy);
 
-			return categoryMediaItems.slice();
+			return this.mockPaginate(categoryMediaItems, pagination);
 		});
 	}
 	
 	/**
 	 * @override
 	 */
-	public async search(userId: string, categoryId: string, searchTerm: string): Promise<TMediaItemInternal[]> {
+	public async search(userId: string, categoryId: string, searchTerm: string, pagination?: PaginationInternal): Promise<PaginatedResultInternal<TMediaItemInternal>> {
 		return this.resolveResult(() => {
-			return this.getCategoryMediaItems(userId, categoryId)
+			const matches = this.getCategoryMediaItems(userId, categoryId)
 				.filter((item) => {
 					return item.name.toLowerCase().includes(searchTerm.toLowerCase());
-				})
-				.slice();
+				});
+
+			return this.mockPaginate(matches, pagination);
 		});
 	}
 	
@@ -81,6 +83,19 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 
 			this.mediaItems[userId][categoryId] = categoryMediaItems;
 		});
+	}
+
+	/**
+	 * Allows to mock-paginate a list, i.e. to cut out the requested page and report how many elements matched
+	 * @param mediaItems every matching media item
+	 * @param pagination the optional pagination options
+	 * @returns the requested page and the total number of matches
+	 */
+	protected mockPaginate(mediaItems: TMediaItemInternal[], pagination?: PaginationInternal): PaginatedResultInternal<TMediaItemInternal> {
+		return {
+			elements: pagination ? mediaItems.slice(pagination.offset, pagination.offset + pagination.limit) : mediaItems.slice(),
+			totalCount: mediaItems.length
+		};
 	}
 
 	/**

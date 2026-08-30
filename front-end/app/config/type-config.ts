@@ -18,6 +18,7 @@ export type Config = {
 			availableOwnPlatformColors: string[];
 		};
 		dateFormat: string;
+		mediaItemsPageSize: number;
 	};
 	external: {
 		googleSearch: (term: string) => string;

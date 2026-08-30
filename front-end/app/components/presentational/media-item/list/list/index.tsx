@@ -1,5 +1,6 @@
 import React, { Component, ReactElement, ReactNode } from 'react';
 import { InputComponent } from 'app/components/presentational/generic/input';
+import { PaginationComponent } from 'app/components/presentational/generic/pagination';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { MediaItemContextMenuAnchorRect, MediaItemContextMenuComponent } from 'app/components/presentational/media-item/list/context-menu';
 import { MediaItemRowComponent } from 'app/components/presentational/media-item/list/row';
@@ -39,6 +40,12 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 			this.searchInputRef.current?.focus();
 		}
 
+		// Changing page replaces the whole list, so the user is put back at the top of the new one. ScrollToTopOnNewScreen
+		// does not cover this, since moving between pages is not a navigation
+		if(prevProps.currentPage !== this.props.currentPage) {
+			window.scrollTo(0, 0);
+		}
+
 		if(prevProps.highlightedMediaItem && !this.props.highlightedMediaItem && this.state.menuAnchorRect) {
 			this.setState({
 				menuAnchorRect: undefined
@@ -55,6 +62,12 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 			category,
 			showEmptyState,
 			showSkeletons,
+			showFetchError,
+			currentPage,
+			totalPages,
+			isPageLoading,
+			goToPage,
+			retryFetch,
 			openFilters,
 			selectMediaItem,
 			highlightMediaItem,
@@ -172,6 +185,13 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 					</div>
 				)}
 				{listContent}
+				{showFetchError && this.renderFetchError(retryFetch)}
+				<PaginationComponent
+					currentPage={currentPage}
+					totalPages={totalPages}
+					disabled={isPageLoading}
+					goToPage={goToPage}
+				/>
 				<MediaItemContextMenuComponent
 					mediaItem={highlightedMediaItem}
 					anchorRect={this.state.menuAnchorRect}
@@ -203,6 +223,27 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 			<div className='media-items-list-empty'>
 				<p className='media-items-list-empty-title'>{emptyMessage}</p>
 				<p className='media-items-list-empty-copy'>{i18n.t('mediaItem.list.emptyHint')}</p>
+			</div>
+		);
+	}
+
+	/**
+	 * Helper method to render the failed-fetch card, which keeps the recovery next to the list that failed instead
+	 * of leaving the user with a toast that has already gone
+	 * @param retryFetch the callback that requests the page again
+	 * @returns the node portion
+	 */
+	private renderFetchError(retryFetch: () => void): ReactElement {
+		return (
+			<div className='media-items-list-fetch-error' role='alert'>
+				<p className='media-items-list-fetch-error-title'>{i18n.t('mediaItem.list.fetchError.title')}</p>
+				<p className='media-items-list-fetch-error-copy'>{i18n.t('mediaItem.list.fetchError.copy')}</p>
+				<PillButtonComponent
+					tone='secondary'
+					size='compact'
+					onClick={retryFetch}>
+					{i18n.t('mediaItem.list.fetchError.retry')}
+				</PillButtonComponent>
 			</div>
 		);
 	}
@@ -305,6 +346,26 @@ export type MediaItemsListComponentInput = {
 	 * Whether the list should render loading skeletons
 	 */
 	showSkeletons: boolean;
+
+	/**
+	 * Whether the list should render the failed-fetch card
+	 */
+	showFetchError: boolean;
+
+	/**
+	 * The zero-based index of the currently displayed page
+	 */
+	currentPage: number;
+
+	/**
+	 * The total number of pages the current query has
+	 */
+	totalPages: number;
+
+	/**
+	 * Whether a page is currently being fetched, i.e. whether the page controls are inert
+	 */
+	isPageLoading: boolean;
 };
 
 /**
@@ -380,6 +441,16 @@ export type MediaItemsListComponentOutput = {
 	 * Callback to exit the current view-group mode
 	 */
 	exitViewGroupMode: () => void;
+
+	/**
+	 * Callback to move the list to another page, receiving its zero-based index
+	 */
+	goToPage: (page: number) => void;
+
+	/**
+	 * Callback to request the current page again after a failed fetch
+	 */
+	retryFetch: () => void;
 };
 
 type MediaItemsListComponentState = {

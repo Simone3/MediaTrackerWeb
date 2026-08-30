@@ -1,9 +1,11 @@
 import { config } from 'app/config/config';
 import { backEndInvoker } from 'app/controllers/main/common/back-end-invoker';
 import { MovieCatalogController, MovieController } from 'app/controllers/interfaces/entities/media-items/movie';
+import { paginationMapper } from 'app/data/mappers/common';
 import { movieCatalogDetailsMapper, movieCatalogSearchMapper, movieFilterMapper, movieMapper, movieSortMapper } from 'app/data/mappers/media-items/movie';
 import { AddMediaItemResponse, DeleteMediaItemResponse, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
 import { AddMovieRequest, FilterMoviesRequest, FilterMoviesResponse, GetMovieFromCatalogResponse, SearchMovieCatalogResponse, SearchMoviesRequest, SearchMoviesResponse, UpdateMovieRequest } from 'app/data/models/api/media-items/movie';
+import { PaginatedResultInternal, PaginationInternal } from 'app/data/models/internal/common';
 import { CatalogMovieInternal, MovieFilterInternal, MovieInternal, MovieSortByInternal, SearchMovieCatalogResultInternal } from 'app/data/models/internal/media-items/movie';
 import { miscUtils } from 'app/utilities/misc-utils';
 
@@ -15,10 +17,11 @@ export class MovieBackEndController implements MovieController {
 	/**
 	 * @override
 	 */
-	public async filter(userId: string, categoryId: string, filter?: MovieFilterInternal, sortBy?: MovieSortByInternal[]): Promise<MovieInternal[]> {
+	public async filter(userId: string, categoryId: string, filter?: MovieFilterInternal, sortBy?: MovieSortByInternal[], pagination?: PaginationInternal): Promise<PaginatedResultInternal<MovieInternal>> {
 		const request: FilterMoviesRequest = {
 			filter: filter ? movieFilterMapper.toExternal(filter) : undefined,
-			sortBy: sortBy ? movieSortMapper.toExternalList(sortBy) : undefined
+			sortBy: sortBy ? movieSortMapper.toExternalList(sortBy) : undefined,
+			pagination: pagination ? paginationMapper.toExternal(pagination) : undefined
 		};
 
 		const response = await backEndInvoker.invoke({
@@ -31,16 +34,20 @@ export class MovieBackEndController implements MovieController {
 			responseBodyClass: FilterMoviesResponse
 		});
 		
-		return movieMapper.toInternalList(response.movies);
+		return {
+			elements: movieMapper.toInternalList(response.movies),
+			totalCount: response.pagination ? response.pagination.totalCount : response.movies.length
+		};
 	}
 
 	/**
 	 * @override
 	 */
-	public async search(userId: string, categoryId: string, searchTerm: string): Promise<MovieInternal[]> {
+	public async search(userId: string, categoryId: string, searchTerm: string, pagination?: PaginationInternal): Promise<PaginatedResultInternal<MovieInternal>> {
 		const request: SearchMoviesRequest = {
 			searchTerm: searchTerm,
-			filter: undefined
+			filter: undefined,
+			pagination: pagination ? paginationMapper.toExternal(pagination) : undefined
 		};
 
 		const response = await backEndInvoker.invoke({
@@ -53,7 +60,10 @@ export class MovieBackEndController implements MovieController {
 			responseBodyClass: SearchMoviesResponse
 		});
 		
-		return movieMapper.toInternalList(response.movies);
+		return {
+			elements: movieMapper.toInternalList(response.movies),
+			totalCount: response.pagination ? response.pagination.totalCount : response.movies.length
+		};
 	}
 	
 	/**

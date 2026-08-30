@@ -16,7 +16,7 @@ const mapStateToProps = (state: State): MediaItemsListScreenComponentInput => {
 		isLoading: listState.status === 'FETCHING' || listState.status === 'DELETING' || listState.status === 'INLINE_UPDATING',
 		requiresFetch: listState.status === 'REQUIRES_FETCH',
 		category: category,
-		mediaItemsCount: listState.mediaItems.length
+		mediaItemsCount: listState.totalCount
 	};
 };
 

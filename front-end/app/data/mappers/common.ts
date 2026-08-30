@@ -1,4 +1,6 @@
 import { config } from 'app/config/config';
+import { PaginationRequest } from 'app/data/models/api/common';
+import { PaginationInternal } from 'app/data/models/internal/common';
 
 /**
  * Generic model mapper between some internal model and some external model,
@@ -84,3 +86,32 @@ export abstract class ModelMapper<TInternal, TExternal, TParams> {
 	}
 }
 
+/**
+ * Mapper for pagination options
+ */
+class PaginationMapper extends ModelMapper<PaginationInternal, PaginationRequest, never> {
+	/**
+	 * @override
+	 */
+	protected convertToExternal(source: PaginationInternal): PaginationRequest {
+		return {
+			offset: source.offset,
+			limit: source.limit
+		};
+	}
+
+	/**
+	 * @override
+	 */
+	protected convertToInternal(source: PaginationRequest): PaginationInternal {
+		return {
+			offset: source.offset,
+			limit: source.limit
+		};
+	}
+}
+
+/**
+ * Singleton instance of the pagination mapper
+ */
+export const paginationMapper = new PaginationMapper();

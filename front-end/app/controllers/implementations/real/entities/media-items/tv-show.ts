@@ -1,9 +1,11 @@
 import { config } from 'app/config/config';
 import { backEndInvoker } from 'app/controllers/main/common/back-end-invoker';
 import { TvShowCatalogController, TvShowController } from 'app/controllers/interfaces/entities/media-items/tv-show';
+import { paginationMapper } from 'app/data/mappers/common';
 import { tvShowCatalogDetailsMapper, tvShowCatalogSearchMapper, tvShowFilterMapper, tvShowMapper, tvShowSortMapper } from 'app/data/mappers/media-items/tv-show';
 import { AddMediaItemResponse, DeleteMediaItemResponse, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
 import { AddTvShowRequest, FilterTvShowsRequest, FilterTvShowsResponse, GetTvShowFromCatalogResponse, SearchTvShowCatalogResponse, SearchTvShowsRequest, SearchTvShowsResponse, UpdateTvShowRequest } from 'app/data/models/api/media-items/tv-show';
+import { PaginatedResultInternal, PaginationInternal } from 'app/data/models/internal/common';
 import { CatalogTvShowInternal, SearchTvShowCatalogResultInternal, TvShowFilterInternal, TvShowInternal, TvShowSortByInternal } from 'app/data/models/internal/media-items/tv-show';
 import { miscUtils } from 'app/utilities/misc-utils';
 
@@ -15,10 +17,11 @@ export class TvShowBackEndController implements TvShowController {
 	/**
 	 * @override
 	 */
-	public async filter(userId: string, categoryId: string, filter?: TvShowFilterInternal, sortBy?: TvShowSortByInternal[]): Promise<TvShowInternal[]> {
+	public async filter(userId: string, categoryId: string, filter?: TvShowFilterInternal, sortBy?: TvShowSortByInternal[], pagination?: PaginationInternal): Promise<PaginatedResultInternal<TvShowInternal>> {
 		const request: FilterTvShowsRequest = {
 			filter: filter ? tvShowFilterMapper.toExternal(filter) : undefined,
-			sortBy: sortBy ? tvShowSortMapper.toExternalList(sortBy) : undefined
+			sortBy: sortBy ? tvShowSortMapper.toExternalList(sortBy) : undefined,
+			pagination: pagination ? paginationMapper.toExternal(pagination) : undefined
 		};
 
 		const response = await backEndInvoker.invoke({
@@ -31,16 +34,20 @@ export class TvShowBackEndController implements TvShowController {
 			responseBodyClass: FilterTvShowsResponse
 		});
 		
-		return tvShowMapper.toInternalList(response.tvShows);
+		return {
+			elements: tvShowMapper.toInternalList(response.tvShows),
+			totalCount: response.pagination ? response.pagination.totalCount : response.tvShows.length
+		};
 	}
 
 	/**
 	 * @override
 	 */
-	public async search(userId: string, categoryId: string, searchTerm: string): Promise<TvShowInternal[]> {
+	public async search(userId: string, categoryId: string, searchTerm: string, pagination?: PaginationInternal): Promise<PaginatedResultInternal<TvShowInternal>> {
 		const request: SearchTvShowsRequest = {
 			searchTerm: searchTerm,
-			filter: undefined
+			filter: undefined,
+			pagination: pagination ? paginationMapper.toExternal(pagination) : undefined
 		};
 
 		const response = await backEndInvoker.invoke({
@@ -53,7 +60,10 @@ export class TvShowBackEndController implements TvShowController {
 			responseBodyClass: SearchTvShowsResponse
 		});
 		
-		return tvShowMapper.toInternalList(response.tvShows);
+		return {
+			elements: tvShowMapper.toInternalList(response.tvShows),
+			totalCount: response.pagination ? response.pagination.totalCount : response.tvShows.length
+		};
 	}
 	
 	/**

@@ -1,9 +1,11 @@
 import { config } from 'app/config/config';
 import { backEndInvoker } from 'app/controllers/main/common/back-end-invoker';
 import { BookCatalogController, BookController } from 'app/controllers/interfaces/entities/media-items/book';
+import { paginationMapper } from 'app/data/mappers/common';
 import { bookCatalogDetailsMapper, bookCatalogSearchMapper, bookFilterMapper, bookMapper, bookSortMapper } from 'app/data/mappers/media-items/book';
 import { AddBookRequest, FilterBooksRequest, FilterBooksResponse, GetBookFromCatalogResponse, SearchBookCatalogResponse, SearchBooksRequest, SearchBooksResponse, UpdateBookRequest } from 'app/data/models/api/media-items/book';
 import { AddMediaItemResponse, DeleteMediaItemResponse, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
+import { PaginatedResultInternal, PaginationInternal } from 'app/data/models/internal/common';
 import { BookFilterInternal, BookInternal, BookSortByInternal, CatalogBookInternal, SearchBookCatalogResultInternal } from 'app/data/models/internal/media-items/book';
 import { miscUtils } from 'app/utilities/misc-utils';
 
@@ -15,10 +17,11 @@ export class BookBackEndController implements BookController {
 	/**
 	 * @override
 	 */
-	public async filter(userId: string, categoryId: string, filter?: BookFilterInternal, sortBy?: BookSortByInternal[]): Promise<BookInternal[]> {
+	public async filter(userId: string, categoryId: string, filter?: BookFilterInternal, sortBy?: BookSortByInternal[], pagination?: PaginationInternal): Promise<PaginatedResultInternal<BookInternal>> {
 		const request: FilterBooksRequest = {
 			filter: filter ? bookFilterMapper.toExternal(filter) : undefined,
-			sortBy: sortBy ? bookSortMapper.toExternalList(sortBy) : undefined
+			sortBy: sortBy ? bookSortMapper.toExternalList(sortBy) : undefined,
+			pagination: pagination ? paginationMapper.toExternal(pagination) : undefined
 		};
 
 		const response = await backEndInvoker.invoke({
@@ -31,16 +34,20 @@ export class BookBackEndController implements BookController {
 			responseBodyClass: FilterBooksResponse
 		});
 		
-		return bookMapper.toInternalList(response.books);
+		return {
+			elements: bookMapper.toInternalList(response.books),
+			totalCount: response.pagination ? response.pagination.totalCount : response.books.length
+		};
 	}
 
 	/**
 	 * @override
 	 */
-	public async search(userId: string, categoryId: string, searchTerm: string): Promise<BookInternal[]> {
+	public async search(userId: string, categoryId: string, searchTerm: string, pagination?: PaginationInternal): Promise<PaginatedResultInternal<BookInternal>> {
 		const request: SearchBooksRequest = {
 			searchTerm: searchTerm,
-			filter: undefined
+			filter: undefined,
+			pagination: pagination ? paginationMapper.toExternal(pagination) : undefined
 		};
 
 		const response = await backEndInvoker.invoke({
@@ -53,7 +60,10 @@ export class BookBackEndController implements BookController {
 			responseBodyClass: SearchBooksResponse
 		});
 		
-		return bookMapper.toInternalList(response.books);
+		return {
+			elements: bookMapper.toInternalList(response.books),
+			totalCount: response.pagination ? response.pagination.totalCount : response.books.length
+		};
 	}
 	
 	/**

@@ -48,6 +48,7 @@ Beyond the environment split, the config object is where tunable values live rat
 
 - **category and own-platform color presets** — the palettes the color picker offers ([§12.3](12-styling.md#123-colors-that-come-from-config))
 - **the default date format**
+- **`ui.mediaItemsPageSize`**, how many media items one page of the list holds. It is the `limit` the filter and search requests send, so it must stay within the back end's `PAGINATION_MAX_LIMIT` of 100 ([§10.2](10-features.md#102-media-items-list))
 - **external search URL builders** for Google, Wikipedia, JustWatch and HowLongToBeat, used by the media-item form's action buttons ([§10.3](10-features.md#103-media-item-details))
 - **logging flags** for request and mapping debug output
 - **`mocks.*`**, the flags that decide which controller implementation is live ([§9.2](09-data-layer.md#92-runtime-controller-selection))

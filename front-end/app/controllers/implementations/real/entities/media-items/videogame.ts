@@ -1,9 +1,11 @@
 import { config } from 'app/config/config';
 import { backEndInvoker } from 'app/controllers/main/common/back-end-invoker';
 import { VideogameCatalogController, VideogameController } from 'app/controllers/interfaces/entities/media-items/videogame';
+import { paginationMapper } from 'app/data/mappers/common';
 import { videogameCatalogDetailsMapper, videogameCatalogSearchMapper, videogameFilterMapper, videogameMapper, videogameSortMapper } from 'app/data/mappers/media-items/videogame';
 import { AddMediaItemResponse, DeleteMediaItemResponse, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
 import { AddVideogameRequest, FilterVideogamesRequest, FilterVideogamesResponse, GetVideogameFromCatalogResponse, SearchVideogameCatalogResponse, SearchVideogamesRequest, SearchVideogamesResponse, UpdateVideogameRequest } from 'app/data/models/api/media-items/videogame';
+import { PaginatedResultInternal, PaginationInternal } from 'app/data/models/internal/common';
 import { CatalogVideogameInternal, SearchVideogameCatalogResultInternal, VideogameFilterInternal, VideogameInternal, VideogameSortByInternal } from 'app/data/models/internal/media-items/videogame';
 import { miscUtils } from 'app/utilities/misc-utils';
 
@@ -15,10 +17,11 @@ export class VideogameBackEndController implements VideogameController {
 	/**
 	 * @override
 	 */
-	public async filter(userId: string, categoryId: string, filter?: VideogameFilterInternal, sortBy?: VideogameSortByInternal[]): Promise<VideogameInternal[]> {
+	public async filter(userId: string, categoryId: string, filter?: VideogameFilterInternal, sortBy?: VideogameSortByInternal[], pagination?: PaginationInternal): Promise<PaginatedResultInternal<VideogameInternal>> {
 		const request: FilterVideogamesRequest = {
 			filter: filter ? videogameFilterMapper.toExternal(filter) : undefined,
-			sortBy: sortBy ? videogameSortMapper.toExternalList(sortBy) : undefined
+			sortBy: sortBy ? videogameSortMapper.toExternalList(sortBy) : undefined,
+			pagination: pagination ? paginationMapper.toExternal(pagination) : undefined
 		};
 
 		const response = await backEndInvoker.invoke({
@@ -31,16 +34,20 @@ export class VideogameBackEndController implements VideogameController {
 			responseBodyClass: FilterVideogamesResponse
 		});
 		
-		return videogameMapper.toInternalList(response.videogames);
+		return {
+			elements: videogameMapper.toInternalList(response.videogames),
+			totalCount: response.pagination ? response.pagination.totalCount : response.videogames.length
+		};
 	}
 
 	/**
 	 * @override
 	 */
-	public async search(userId: string, categoryId: string, searchTerm: string): Promise<VideogameInternal[]> {
+	public async search(userId: string, categoryId: string, searchTerm: string, pagination?: PaginationInternal): Promise<PaginatedResultInternal<VideogameInternal>> {
 		const request: SearchVideogamesRequest = {
 			searchTerm: searchTerm,
-			filter: undefined
+			filter: undefined,
+			pagination: pagination ? paginationMapper.toExternal(pagination) : undefined
 		};
 
 		const response = await backEndInvoker.invoke({
@@ -53,7 +60,10 @@ export class VideogameBackEndController implements VideogameController {
 			responseBodyClass: SearchVideogamesResponse
 		});
 		
-		return videogameMapper.toInternalList(response.videogames);
+		return {
+			elements: videogameMapper.toInternalList(response.videogames),
+			totalCount: response.pagination ? response.pagination.totalCount : response.videogames.length
+		};
 	}
 	
 	/**
