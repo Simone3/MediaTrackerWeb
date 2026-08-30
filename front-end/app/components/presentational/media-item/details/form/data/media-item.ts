@@ -3,6 +3,7 @@ import { MEDIA_TYPES_INTERNAL, MediaTypeInternal } from 'app/data/models/interna
 import { GroupInternal } from 'app/data/models/internal/group';
 import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX, MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX_DECIMALS, MEDIA_ITEM_STATUS_INTERNAL_VALUES, MediaItemImportanceInternal, MediaItemInternal, MediaItemStatusInternal } from 'app/data/models/internal/media-items/media-item';
 import { OWN_PLATFORM_ICON_INTERNAL_VALUES, OwnPlatformIconInternal, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
+import { i18n } from 'app/utilities/i18n';
 
 /**
  * Checks that a number does not carry more decimal digits than the group order allows
@@ -22,7 +23,11 @@ const hasAllowedOrderInGroupDecimals = (value: number | undefined): boolean => {
  */
 export const mediaItemFormValidationShape = {
 	id: string(),
-	name: string().required(),
+	name: string()
+		.required(i18n.t('mediaItem.details.validation.name.required'))
+		.test('name-not-blank', i18n.t('mediaItem.details.validation.name.required'), (value) => {
+			return value === undefined || value.trim().length > 0;
+		}),
 	genres: array().of(string()).optional(),
 	description: string(),
 	releaseDate: date(),
@@ -35,11 +40,11 @@ export const mediaItemFormValidationShape = {
 		name: string()
 	}) as ObjectSchema<GroupInternal | undefined>,
 	orderInGroup: number()
-		.positive()
-		.max(MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX)
-		.test('order-in-group-decimals', 'Too many decimal digits', hasAllowedOrderInGroupDecimals)
+		.positive(i18n.t('mediaItem.details.validation.orderInGroup.positive'))
+		.max(MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX, i18n.t('mediaItem.details.validation.orderInGroup.max', { max: MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX }))
+		.test('order-in-group-decimals', i18n.t('mediaItem.details.validation.orderInGroup.decimals'), hasAllowedOrderInGroupDecimals)
 		.when('group', ([ value ]: (GroupInternal | undefined)[], schema: NumberSchema<number | undefined>) => {
-			return value && value.id ? schema.required() : schema;
+			return value && value.id ? schema.required(i18n.t('mediaItem.details.validation.orderInGroup.required')) : schema;
 		}),
 	ownPlatform: object({
 		id: string(),

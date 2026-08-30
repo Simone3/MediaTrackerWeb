@@ -112,6 +112,7 @@ This is a concise manual QA checklist for the current web app. The goal is featu
   [  ] group picker
   [  ] order-in-group appears only when a group is selected
   [  ] order-in-group accepts one decimal digit (2.5), steps by 0.1, and shows a whole order without a trailing .0
+  [  ] invalid fields (blank name, order-in-group 2.55 or 0) turn red with a message, but only after leaving the field
   [  ] user comment
   [  ] completion dates: empty hint, add, edit, remove
   [  ] books

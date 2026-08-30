@@ -2072,6 +2072,20 @@ input {
 	color: var(--color-text-on-dark-disabled);
 }
 
+.text-input[aria-invalid='true'],
+.select-input[aria-invalid='true'],
+.textarea-input[aria-invalid='true'] {
+	border-color: var(--color-danger-border-gradient);
+}
+
+.field-error {
+	margin: 0;
+	font-size: 0.78rem;
+	font-weight: 600;
+	line-height: 1.35;
+	color: var(--color-text-on-dark-danger);
+}
+
 .text-input,
 .select-input {
 	height: 48px;
@@ -2338,6 +2352,13 @@ input {
 	outline: none;
 	border-color: var(--color-accent-bright);
 	box-shadow: 0 0 0 3px var(--color-accent-focus-ring);
+}
+
+.text-input[aria-invalid='true']:focus,
+.select-input[aria-invalid='true']:focus,
+.textarea-input[aria-invalid='true']:focus {
+	border-color: var(--color-danger-gradient-start);
+	box-shadow: 0 0 0 3px var(--color-danger-soft);
 }
 
 .media-item-details-screen .loading-indicator-container-parent-size {

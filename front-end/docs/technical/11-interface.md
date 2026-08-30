@@ -47,6 +47,7 @@ Reach for these before writing a screen-specific variant:
 | `generic/confirm-dialog` | The generic confirmation |
 | `generic/pill-button` | |
 | `generic/input`, `generic/select`, `generic/textarea`, `generic/clearable-input` | The form controls |
+| `generic/field-error` | The inline validation message under a control, plus the two helpers that decide when it shows ([§11.6](#116-form-validation-feedback)) |
 | `generic/color-picker` | Fed by the config color presets ([§12.3](12-styling.md#123-colors-that-come-from-config)) |
 | `generic/responsive-header-add-button` | |
 | `generic/media-switcher` | |
@@ -73,6 +74,25 @@ Two props carry everything it needs from the router:
 - **`recover`** navigates to the media section, whose catch-all lands on the categories list ([§5.1](05-navigation.md#51-route-map)).
 
 **This is a safety net, not the answer to the cold-URL problem.** What keeps a directly opened route from reaching a screen it cannot render is the context guard ([§5.6](05-navigation.md#56-screens-that-cannot-be-opened-cold)); the boundary is what remains behind it, for the container throws that should now be unreachable from a URL. It also does not catch what is not a render error: saga failures still take the toast path of [§6.4](06-redux.md#64-error-handling-and-the-async-pattern).
+
+## 11.6 Form validation feedback
+
+Every form here is a Formik form over a yup schema, and the Save button is disabled while the form is invalid. **A disabled Save is not an explanation**, so a field that can actually fail also renders its message inline.
+
+Three pieces, all in `generic/field-error`:
+
+- `getVisibleFieldError(errors, touched, field)` returns the message only for a field Formik has marked touched. A form therefore opens clean instead of covered in errors for values nobody has typed
+- `buildFieldErrorInputProps(id, message)` returns the `aria-invalid` / `aria-describedby` pair to spread on the control. `aria-invalid` is what the stylesheet keys the red state off, so a control that skips it will validate without ever looking wrong ([§12.7](12-styling.md#127-the-invalid-control-state))
+- `FieldErrorComponent` renders the message as a `role='alert'` paragraph, or nothing
+
+**Touched is set on blur, which means the control needs both `name` and `onBlur={handleBlur}`.** Formik resolves `handleBlur` through `event.target.name`, and most fields in the media-item form drive Formik through `setFieldValue` rather than `handleChange`, so they carry no `name` unless one is added for this. A field wired to `FieldErrorComponent` without a `name` silently never shows a message.
+
+Two consequences worth keeping in mind:
+
+- **Every rule that a field displays needs a message from the bundle** ([§13.1](13-text-and-languages.md#131-every-user-facing-string-is-in-the-bundle)). A yup rule left with its default message would put developer text like `orderInGroup must be a positive number` on screen
+- **A rule enforced outside the schema cannot be explained.** The media-item form used to disable Save on a separate blank-name check, which no field could report; the check moved into the schema so the name field could show it. Keep new rules in the schema
+
+Only fields with a rule a user can actually trip are wired: the four name fields, the media item's order in group, and the season number and watched-episode count. The rest have nothing to say.
 
 ---
 

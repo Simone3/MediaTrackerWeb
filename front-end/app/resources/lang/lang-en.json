@@ -358,6 +358,17 @@
 			"subtitle": {
 				"new": "Create a new media item",
 				"existing": "Edit this media item"
+			},
+			"validation": {
+				"name": {
+					"required": "Give the item a name"
+				},
+				"orderInGroup": {
+					"required": "Set a position for the item inside the group",
+					"positive": "The position must be greater than zero",
+					"max": "The position can be at most {{max}}",
+					"decimals": "Use at most one decimal digit, e.g. 2.5"
+				}
 			}
 		}
 	},
@@ -399,6 +410,14 @@
 				"number": "Season number",
 				"episodesNumber": "Number of episodes",
 				"watchedEpisodesNumber": "Number of watched episodes"
+			},
+			"validation": {
+				"number": {
+					"required": "Give the season a number"
+				},
+				"watchedEpisodesNumber": {
+					"max": "Cannot be more than the number of episodes"
+				}
 			}
 		}
 	},
@@ -549,6 +568,9 @@
 		},
 		"fields": {
 			"color": "Color"
+		},
+		"validation": {
+			"required": "This field is required"
 		},
 		"drawer": {
 			"navigation": "App navigation",

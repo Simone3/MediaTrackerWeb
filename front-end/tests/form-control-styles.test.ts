@@ -28,4 +28,13 @@ describe('shared form control styles', () => {
 		expect(styles).toMatch(/\.select-input\s*\{[\s\S]*padding-right:\s*44px;/);
 		expect(styles).toMatch(/\.select-input\s*\{[\s\S]*calc\(100% - 22px\) 50%/);
 	});
+
+	test('give every control the same invalid state and inline message', () => {
+		const stylesPath = path.join(process.cwd(), 'app/web/styles.css');
+		const styles = readFileSync(stylesPath, 'utf8');
+
+		expect(styles).toMatch(/\.text-input\[aria-invalid='true'\],\s*\.select-input\[aria-invalid='true'\],\s*\.textarea-input\[aria-invalid='true'\]\s*\{[\s\S]*border-color:\s*var\(--color-danger-border-gradient\);/);
+		expect(styles).toMatch(/\.text-input\[aria-invalid='true'\]:focus,[\s\S]*box-shadow:\s*0 0 0 3px var\(--color-danger-soft\);/);
+		expect(styles).toMatch(/\.field-error\s*\{[\s\S]*color:\s*var\(--color-text-on-dark-danger\);/);
+	});
 });

@@ -51,6 +51,40 @@ describe('GroupDetailsScreenComponent', () => {
 		expect(notifyFormStatus).toHaveBeenCalled();
 	});
 
+	test('explains an empty name once the field has been left', async() => {
+		render(
+			<MemoryRouter>
+				<GroupDetailsScreenComponent
+					isLoading={false}
+					group={{
+						id: 'group-id',
+						name: 'Saga Shelf'
+					}}
+					sameNameConfirmationRequested={false}
+					saveGroup={jest.fn()}
+					notifyFormStatus={jest.fn()}
+					goBack={jest.fn()}
+				/>
+			</MemoryRouter>
+		);
+
+		const user = userEvent.setup();
+		const nameInput = screen.getByLabelText(i18n.t('group.details.placeholders.name'));
+
+		await user.clear(nameInput);
+
+		expect(screen.queryByText(i18n.t('common.validation.required'))).not.toBeInTheDocument();
+
+		await user.tab();
+
+		await waitFor(() => {
+			expect(screen.getByText(i18n.t('common.validation.required'))).toBeInTheDocument();
+		});
+
+		expect(nameInput).toHaveAttribute('aria-invalid', 'true');
+		expect(nameInput).toHaveAttribute('aria-describedby', 'group-name-error');
+	});
+
 	test('asks confirmation and retries save when same-name warning is requested', async() => {
 		const saveGroup = jest.fn();
 		const group: GroupInternal = {

@@ -812,6 +812,86 @@ describe('MediaItemDetailsScreenContainer', () => {
 		}));
 	});
 
+	test('explains an invalid order in group only once the field has been left', async() => {
+		const group: GroupInternal = {
+			id: 'group-id',
+			name: 'Dune saga'
+		};
+
+		renderScreen({
+			mediaItemDetails: {
+				mediaItem: {
+					...DEFAULT_BOOK,
+					id: 'book-id',
+					name: 'Dune',
+					group: group,
+					orderInGroup: 2
+				}
+			},
+			groupGlobal: {
+				selectedGroup: group
+			}
+		});
+
+		const user = userEvent.setup();
+		const orderInput = screen.getByLabelText(i18n.t('mediaItem.details.placeholders.orderInGroup'));
+		const saveButton = screen.getByRole('button', { name: i18n.t('common.buttons.save') });
+
+		await user.clear(orderInput);
+		await user.type(orderInput, '2.55');
+
+		await waitFor(() => {
+			expect(saveButton).toBeDisabled();
+		});
+
+		expect(orderInput).toHaveAttribute('aria-invalid', 'false');
+		expect(screen.queryByText(i18n.t('mediaItem.details.validation.orderInGroup.decimals'))).not.toBeInTheDocument();
+
+		await user.tab();
+
+		await waitFor(() => {
+			expect(screen.getByText(i18n.t('mediaItem.details.validation.orderInGroup.decimals'))).toBeInTheDocument();
+		});
+
+		expect(orderInput).toHaveAttribute('aria-invalid', 'true');
+		expect(orderInput).toHaveAttribute('aria-describedby', 'media-item-order-in-group-error');
+
+		await user.clear(orderInput);
+		await user.type(orderInput, '2.5');
+
+		await waitFor(() => {
+			expect(screen.queryByText(i18n.t('mediaItem.details.validation.orderInGroup.decimals'))).not.toBeInTheDocument();
+		});
+
+		expect(saveButton).toBeEnabled();
+	});
+
+	test('explains a blank name instead of only disabling save', async() => {
+		renderScreen({
+			mediaItemDetails: {
+				mediaItem: {
+					...DEFAULT_BOOK,
+					id: 'book-id',
+					name: 'Dune'
+				}
+			}
+		});
+
+		const user = userEvent.setup();
+		const nameInput = screen.getByLabelText(i18n.t('mediaItem.details.placeholders.name'));
+
+		await user.clear(nameInput);
+		await user.type(nameInput, '   ');
+		await user.tab();
+
+		await waitFor(() => {
+			expect(screen.getByText(i18n.t('mediaItem.details.validation.name.required'))).toBeInTheDocument();
+		});
+
+		expect(nameInput).toHaveAttribute('aria-invalid', 'true');
+		expect(screen.getByRole('button', { name: i18n.t('common.buttons.save') })).toBeDisabled();
+	});
+
 	test('keeps unsaved TV show edits when remounting from the seasons flow', async() => {
 		const savedMediaItem: TvShowInternal = {
 			id: 'tv-show-id',

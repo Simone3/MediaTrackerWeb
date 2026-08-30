@@ -56,6 +56,14 @@ They used to carry `overscroll-behavior-y: none`, added while fixing a desktop C
 
 Which means: **do not reach for `overscroll-behavior` on the root to hide something showing through at the edges.** What shows through is a background that is wrong, and suppressing the scroll gesture to hide it costs pull-to-refresh on every phone. `contain` is no cheaper than `none` here — both disable the gesture on the root scroller; only `auto` keeps it. The property is still the right tool one level down, on a scrollable panel that should not chain its scroll to the page behind it.
 
+## 12.7 The invalid control state
+
+`.text-input`, `.select-input` and `.textarea-input` turn red through `[aria-invalid='true']`, not through a class. The attribute has to be there anyway for screen readers, so keying the styling off it means a control cannot be visually invalid without also being announced as invalid — and the shared controls pass it through already, so no component had to grow an `invalid` prop.
+
+The inline message under the control is `.field-error`, painted `--color-text-on-dark-danger`. Both live next to the control rules rather than with the danger buttons, and `tests/form-control-styles.test.ts` asserts them.
+
+The states compose: the invalid focus rule wins on specificity, so a focused invalid control keeps the red border and swaps the accent focus ring for `--color-danger-soft`.
+
 ---
 
 [← §11 Interface](11-interface.md) · [§13 Text and languages →](13-text-and-languages.md)

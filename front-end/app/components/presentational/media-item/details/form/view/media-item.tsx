@@ -1,6 +1,7 @@
 import { Component, KeyboardEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import { FormikProps } from 'formik';
 import { ClearableInputComponent } from 'app/components/presentational/generic/clearable-input';
+import { buildFieldErrorInputProps, FieldErrorComponent, getVisibleFieldError } from 'app/components/presentational/generic/field-error';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { SelectComponent } from 'app/components/presentational/generic/select';
@@ -337,6 +338,8 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 	 * @returns the component
 	 */
 	private renderNameField(mediaItem: TMediaItem, fieldClassName: string = 'media-item-details-field'): ReactNode {
+		const nameError = this.getFieldError('name');
+
 		return (
 			<div className={fieldClassName}>
 				<label className='media-item-details-label' htmlFor='media-item-name'>
@@ -345,6 +348,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<div className='media-item-details-search-row'>
 					<InputComponent
 						id='media-item-name'
+						name='name'
 						type='text'
 						value={mediaItem.name}
 						onChange={(event) => {
@@ -357,6 +361,8 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 						onKeyDown={(event) => {
 							this.handleNameFieldKeyDown(event);
 						}}
+						onBlur={this.props.handleBlur}
+						{...buildFieldErrorInputProps('media-item-name-error', nameError)}
 					/>
 					<PillButtonComponent
 						tone='secondary'
@@ -368,6 +374,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 						Search
 					</PillButtonComponent>
 				</div>
+				<FieldErrorComponent id='media-item-name-error' message={nameError} />
 				{this.renderCatalogSearchResults()}
 			</div>
 		);
@@ -540,6 +547,8 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 			return null;
 		}
 
+		const orderInGroupError = this.getFieldError('orderInGroup');
+
 		return (
 			<div className={fieldClassName}>
 				<label className='media-item-details-label' htmlFor='media-item-order-in-group'>
@@ -547,6 +556,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				</label>
 				<InputComponent
 					id='media-item-order-in-group'
+					name='orderInGroup'
 					type='number'
 					inputMode='decimal'
 					step={MEDIA_ITEM_ORDER_IN_GROUP_STEP}
@@ -556,7 +566,10 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 					onChange={(event) => {
 						this.setFormField('orderInGroup', this.inputValueToNumber(event.target.value));
 					}}
+					onBlur={this.props.handleBlur}
+					{...buildFieldErrorInputProps('media-item-order-in-group-error', orderInGroupError)}
 				/>
+				<FieldErrorComponent id='media-item-order-in-group-error' message={orderInGroupError} />
 			</div>
 		);
 	}
@@ -846,6 +859,15 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 	 */
 	protected setFormField<K extends keyof TMediaItem>(key: K, value: TMediaItem[K]): void {
 		void this.props.setFieldValue(key as string, value);
+	}
+
+	/**
+	 * Reads the validation message a field should currently display
+	 * @param key the field key
+	 * @returns the message, or undefined if the field has nothing to show
+	 */
+	protected getFieldError(key: keyof TMediaItem & string): string | undefined {
+		return getVisibleFieldError(this.props.errors, this.props.touched, key);
 	}
 
 	/**

@@ -12,6 +12,8 @@
 
 Developer-facing text — console output, log messages, errors only a bug can raise — stays in the module that owns it and stays in English. It is not user-facing and does not belong in the bundle.
 
+**Validation messages are user-facing.** A yup rule whose message a field displays takes one from the bundle, because yup's own default is developer text built from the field key ([§11.6](11-interface.md#116-form-validation-feedback)). `common.validation` holds the wording that suits any field; anything phrased around one field lives under that entity, in `mediaItem.details.validation` and `tvShowSeason.details.validation`.
+
 ## 13.2 Why it stays, with one language
 
 The app ships English only and offers no language selector. The bundle is kept anyway because it is the thing that keeps a second language from being a rewrite: the cost of adding a key today is nearly zero, and the cost of extracting several hundred inline strings later is not.

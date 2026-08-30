@@ -1,5 +1,6 @@
 import { Component, ReactNode } from 'react';
 import { FormikProps } from 'formik';
+import { buildFieldErrorInputProps, FieldErrorComponent, getVisibleFieldError } from 'app/components/presentational/generic/field-error';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { i18n } from 'app/utilities/i18n';
@@ -33,8 +34,12 @@ export class GroupFormViewComponent extends Component<GroupFormViewComponentProp
 	public render(): ReactNode {
 		const {
 			values,
-			handleChange
+			errors,
+			touched,
+			handleChange,
+			handleBlur
 		} = this.props;
+		const nameError = getVisibleFieldError(errors, touched, 'name');
 
 		return (
 			<section className='entity-details-panel'>
@@ -50,7 +55,10 @@ export class GroupFormViewComponent extends Component<GroupFormViewComponentProp
 							value={values.name}
 							placeholder={i18n.t('group.details.placeholders.name')}
 							onChange={handleChange}
+							onBlur={handleBlur}
+							{...buildFieldErrorInputProps('group-name-error', nameError)}
 						/>
+						<FieldErrorComponent id='group-name-error' message={nameError} />
 					</div>
 				</div>
 			</section>
