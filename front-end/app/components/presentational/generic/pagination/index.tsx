@@ -1,10 +1,12 @@
 import { ReactElement } from 'react';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
+import { SelectComponent } from 'app/components/presentational/generic/select';
 import { i18n } from 'app/utilities/i18n';
 
 /**
- * Shared page navigation for a paginated list. Renders nothing when everything fits on a single page,
- * since page controls the user cannot act on are just noise
+ * Shared page navigation for a paginated list: a step either way, plus a picker that doubles as the position
+ * indicator, so its closed state reads as the sentence it replaces. Renders nothing when everything fits on a
+ * single page, since page controls the user cannot act on are just noise
  * @param props the input props
  * @returns the component
  */
@@ -22,6 +24,9 @@ export const PaginationComponent = (props: PaginationComponentProps): ReactEleme
 
 	const isFirstPage = currentPage <= 0;
 	const isLastPage = currentPage >= totalPages - 1;
+	const pages = Array.from({ length: totalPages }, (_, index) => {
+		return index;
+	});
 
 	return (
 		<nav className='pagination' aria-label={i18n.t('common.pagination.label')}>
@@ -36,12 +41,25 @@ export const PaginationComponent = (props: PaginationComponentProps): ReactEleme
 				}}>
 				{i18n.t('common.pagination.previous')}
 			</PillButtonComponent>
-			<span className='pagination-position' aria-live='polite'>
-				{i18n.t('common.pagination.position', {
-					current: currentPage + 1,
-					total: totalPages
+			<SelectComponent
+				className='pagination-select'
+				aria-label={i18n.t('common.pagination.goToPage')}
+				value={currentPage}
+				disabled={disabled}
+				onChangeValue={(value) => {
+					goToPage(Number(value));
+				}}>
+				{pages.map((page) => {
+					return (
+						<option key={page} value={page}>
+							{i18n.t('common.pagination.position', {
+								current: page + 1,
+								total: totalPages
+							})}
+						</option>
+					);
 				})}
-			</span>
+			</SelectComponent>
 			<PillButtonComponent
 				tone='secondary'
 				size='compact'

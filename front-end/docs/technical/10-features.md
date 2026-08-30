@@ -37,7 +37,7 @@ Entry files:
 
 ### Pagination
 
-The list shows one page at a time, `config.ui.mediaItemsPageSize` items long ([§4.4](04-configuration.md#44-what-else-config-owns)). `currentPage` and `totalCount` live in the list slice, the fetch saga turns the page index into the `offset`/`limit` the filter and search endpoints take, and `PaginationComponent` renders the controls ([§11.3](11-interface.md#113-shared-building-blocks)). The header count is `totalCount`, not the size of the loaded page.
+The list shows one page at a time, `config.ui.mediaItemsPageSize` items long ([§4.4](04-configuration.md#44-what-else-config-owns)). `currentPage` and `totalCount` live in the list slice, the fetch saga turns the page index into the `offset`/`limit` the filter and search endpoints take, and `PaginationComponent` renders a step either way around a picker that jumps to any page ([§11.3](11-interface.md#113-shared-building-blocks)). The header count is `totalCount`, not the size of the loaded page.
 
 **Classic pages rather than infinite scroll, because of what happens after a write.** Deleting or inline-updating an item marks the list for refetch, and the visible window has to be re-materialized from the server. With one bounded page that is a single request for the page the user is on; with an accumulated infinite-scroll window it would be either an unbounded reload, a reset that throws the user back to the top, or client-side filter logic deciding whether the changed row still belongs. Paging makes the question go away.
 

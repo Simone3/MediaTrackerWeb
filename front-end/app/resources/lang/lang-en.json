@@ -588,6 +588,7 @@
 			"label": "List pages",
 			"previous": "Previous",
 			"next": "Next",
+			"goToPage": "Go to page",
 			"position": "Page {{current}} of {{total}}"
 		}
 	},

@@ -49,7 +49,7 @@ Reach for these before writing a screen-specific variant:
 | `generic/input`, `generic/select`, `generic/textarea`, `generic/clearable-input` | The form controls |
 | `generic/field-error` | The inline validation message under a control, plus the two helpers that decide when it shows ([§11.6](#116-form-validation-feedback)) |
 | `generic/color-picker` | Fed by the config color presets ([§12.3](12-styling.md#123-colors-that-come-from-config)) |
-| `generic/pagination` | Previous/next page controls with the current position, used by the media items list. Renders nothing when there is a single page ([§10.2](10-features.md#102-media-items-list)) |
+| `generic/pagination` | Previous/next page controls around a page picker, used by the media items list. The picker is a `generic/select` whose options each read the whole "Page 3 of 7", so it doubles as the position indicator and no sentence is split around a control ([§13.1](13-text-and-languages.md#131-every-user-facing-string-is-in-the-bundle)). Renders nothing when there is a single page ([§10.2](10-features.md#102-media-items-list)) |
 | `generic/responsive-header-add-button` | |
 | `generic/media-switcher` | |
 
