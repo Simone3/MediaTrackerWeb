@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDateString, IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsBoolean, IsDateString, IsDefined, IsIn, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, Max, ValidateNested } from 'class-validator';
 import { CommonAddResponse, CommonRequest, CommonResponse, CommonSaveRequest } from 'app/data/models/api/common';
 import { Group } from 'app/data/models/api/group';
 import { OwnPlatform } from 'app/data/models/api/own-platform';
@@ -54,6 +54,17 @@ class CoreMediaItemData {
 }
 
 /**
+ * The maximum number of decimal digits allowed for a media item order inside a group
+ */
+export const MEDIA_ITEM_ORDER_IN_GROUP_MAX_DECIMALS = 1;
+
+/**
+ * The maximum value allowed for a media item order inside a group. Arbitrary upper bound: no series is
+ * anywhere near this long, and it keeps the field from holding a nonsensical value
+ */
+export const MEDIA_ITEM_ORDER_IN_GROUP_MAX = 9999;
+
+/**
  * Model for a media item group data, publicly exposed via API
  */
 export class MediaItemGroup {
@@ -75,10 +86,13 @@ export class MediaItemGroup {
 	public groupData?: Group;
 
 	/**
-	 * The media item order inside the group
+	 * The media item order inside the group. Allows one decimal digit, so that a spin-off can sit
+	 * between two main entries (e.g. 2.5), and must be greater than zero
 	 */
 	@IsNotEmpty()
-	@IsInt()
+	@IsNumber({ maxDecimalPlaces: MEDIA_ITEM_ORDER_IN_GROUP_MAX_DECIMALS })
+	@IsPositive()
+	@Max(MEDIA_ITEM_ORDER_IN_GROUP_MAX)
 	public orderInGroup!: number;
 }
 

@@ -111,6 +111,7 @@ This is a concise manual QA checklist for the current web app. The goal is featu
   [  ] platform picker
   [  ] group picker
   [  ] order-in-group appears only when a group is selected
+  [  ] order-in-group accepts one decimal digit (2.5), steps by 0.1, and shows a whole order without a trailing .0
   [  ] user comment
   [  ] completion dates: empty hint, add, edit, remove
   [  ] books

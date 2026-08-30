@@ -29,6 +29,10 @@ The internal models in `app/data/models/internal/*` — what the app works with,
 
 Groups are category-scoped and optional on a media item. They exist to collect a franchise or series, and `orderInGroup` gives the items a position within one ([§10.5](10-features.md#105-groups)).
 
+**`orderInGroup` is a decimal, not an integer.** It allows one decimal digit so that a spin-off can sit between two main entries (2.5), and it must be greater than zero and at most 9999. The bound lives twice, once per model family: `MEDIA_ITEM_ORDER_IN_GROUP_MAX_DECIMALS` / `MEDIA_ITEM_ORDER_IN_GROUP_MAX` on the API side and `MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX_DECIMALS` / `MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX` on the internal side, the same way the importance values are duplicated. Both mirror the back end's own bounds.
+
+A whole order carries no decimal digits anywhere: it is a plain `number`, so `2` renders as `2` and never as `2.0`. Nothing formats the field, and nothing should start.
+
 ## 8.4 Own platform
 
 - `id`

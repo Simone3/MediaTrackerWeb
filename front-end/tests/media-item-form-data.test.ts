@@ -1,7 +1,8 @@
-import { normalizeBookFormValues } from 'app/components/presentational/media-item/details/form/data/book';
+import { bookFormValidationSchema, normalizeBookFormValues } from 'app/components/presentational/media-item/details/form/data/book';
 import { normalizeMediaItemFormValues } from 'app/components/presentational/media-item/details/form/data/media-item';
 import { preserveTvShowSeasonProgress, tvShowFormValidationSchema } from 'app/components/presentational/media-item/details/form/data/tv-show';
 import { BookInternal } from 'app/data/models/internal/media-items/book';
+import { GroupInternal } from 'app/data/models/internal/group';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { TvShowInternal } from 'app/data/models/internal/media-items/tv-show';
 
@@ -144,5 +145,50 @@ describe('media-item form data helpers', () => {
 		};
 
 		await expect(tvShowFormValidationSchema.isValid(mediaItem)).resolves.toBe(false);
+	});
+
+	describe('order in group validation', () => {
+		const group: GroupInternal = {
+			id: 'group-id',
+			name: 'Dune saga'
+		};
+
+		/**
+		 * Builds a grouped book with the given order inside the group
+		 * @param orderInGroup the order inside the group
+		 * @returns the book
+		 */
+		const buildGroupedBook = (orderInGroup: number): BookInternal => {
+			return {
+				id: 'book-4',
+				name: 'Paul of Dune',
+				mediaType: 'BOOK',
+				status: 'ACTIVE',
+				importance: '300',
+				group: group,
+				orderInGroup: orderInGroup
+			};
+		};
+
+		test('accepts a whole order in group', async() => {
+			await expect(bookFormValidationSchema.isValid(buildGroupedBook(2))).resolves.toBe(true);
+		});
+
+		test('accepts an order in group with one decimal digit', async() => {
+			await expect(bookFormValidationSchema.isValid(buildGroupedBook(2.5))).resolves.toBe(true);
+		});
+
+		test('rejects an order in group with more than one decimal digit', async() => {
+			await expect(bookFormValidationSchema.isValid(buildGroupedBook(2.55))).resolves.toBe(false);
+		});
+
+		test('rejects an order in group that is not greater than zero', async() => {
+			await expect(bookFormValidationSchema.isValid(buildGroupedBook(0))).resolves.toBe(false);
+			await expect(bookFormValidationSchema.isValid(buildGroupedBook(-2.5))).resolves.toBe(false);
+		});
+
+		test('rejects an order in group above the allowed maximum', async() => {
+			await expect(bookFormValidationSchema.isValid(buildGroupedBook(10000))).resolves.toBe(false);
+		});
 	});
 });

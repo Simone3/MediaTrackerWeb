@@ -1,8 +1,21 @@
 import { NumberSchema, ObjectSchema, array, boolean, date, mixed, number, object, string } from 'yup';
 import { MEDIA_TYPES_INTERNAL, MediaTypeInternal } from 'app/data/models/internal/category';
 import { GroupInternal } from 'app/data/models/internal/group';
-import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MEDIA_ITEM_STATUS_INTERNAL_VALUES, MediaItemImportanceInternal, MediaItemInternal, MediaItemStatusInternal } from 'app/data/models/internal/media-items/media-item';
+import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX, MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX_DECIMALS, MEDIA_ITEM_STATUS_INTERNAL_VALUES, MediaItemImportanceInternal, MediaItemInternal, MediaItemStatusInternal } from 'app/data/models/internal/media-items/media-item';
 import { OWN_PLATFORM_ICON_INTERNAL_VALUES, OwnPlatformIconInternal, OwnPlatformInternal } from 'app/data/models/internal/own-platform';
+
+/**
+ * Checks that a number does not carry more decimal digits than the group order allows
+ * @param value the current value
+ * @returns whether the value fits in the allowed number of decimal digits
+ */
+const hasAllowedOrderInGroupDecimals = (value: number | undefined): boolean => {
+	if(value === undefined || Number.isNaN(value)) {
+		return true;
+	}
+
+	return Number(value.toFixed(MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX_DECIMALS)) === value;
+};
 
 /**
  * The generic media item form validation schema shape
@@ -21,9 +34,13 @@ export const mediaItemFormValidationShape = {
 		id: string(),
 		name: string()
 	}) as ObjectSchema<GroupInternal | undefined>,
-	orderInGroup: number().when('group', ([ value ]: (GroupInternal | undefined)[], schema: NumberSchema<number | undefined>) => {
-		return value && value.id ? schema.required() : schema;
-	}),
+	orderInGroup: number()
+		.positive()
+		.max(MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX)
+		.test('order-in-group-decimals', 'Too many decimal digits', hasAllowedOrderInGroupDecimals)
+		.when('group', ([ value ]: (GroupInternal | undefined)[], schema: NumberSchema<number | undefined>) => {
+			return value && value.id ? schema.required() : schema;
+		}),
 	ownPlatform: object({
 		id: string(),
 		name: string(),

@@ -37,6 +37,18 @@ export const MEDIA_ITEM_STATUS_INTERNAL_VALUES: [ 'ACTIVE', 'UPCOMING', 'REDO', 
 export type MediaItemStatusInternal = ValuesOf<typeof MEDIA_ITEM_STATUS_INTERNAL_VALUES>;
 
 /**
+ * The maximum number of decimal digits allowed for a media item order inside a group. Mirrors the
+ * API bound in MEDIA_ITEM_ORDER_IN_GROUP_MAX_DECIMALS
+ */
+export const MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX_DECIMALS = 1;
+
+/**
+ * The maximum value allowed for a media item order inside a group. Mirrors the API bound in
+ * MEDIA_ITEM_ORDER_IN_GROUP_MAX
+ */
+export const MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX = 9999;
+
+/**
  * A generic media item, internal type just for display purposes
  */
 export type MediaItemInternal = CoreMediaItemDataInternal & {

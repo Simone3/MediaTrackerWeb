@@ -33,14 +33,14 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 			imageUrl: source.imageUrl
 		};
 
-		if(source.group && source.orderInGroup) {
+		if(source.group && source.orderInGroup !== undefined) {
 			target.group = {
 				groupId: source.group.id,
 				groupData: groupMapper.toExternal(source.group),
 				orderInGroup: source.orderInGroup
 			};
 		}
-		else if(source.group || source.orderInGroup) {
+		else if(source.group || source.orderInGroup !== undefined) {
 			throw AppError.GENERIC.withDetails('Should never have "group" and not "orderInGroup" or vice-versa: either both or none');
 		}
 

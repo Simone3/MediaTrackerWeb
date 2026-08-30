@@ -566,4 +566,65 @@ describe('MediaItemsListComponent', () => {
 		expect(selectMediaItem).toHaveBeenCalledWith(mediaItem);
 		expect(screen.getByText(mediaItem.name)).toHaveClass('media-item-row-name');
 	});
+
+	test('prints a fractional group order as typed and a whole one without decimals', () => {
+		const category: CategoryInternal = {
+			id: 'category-id',
+			name: 'My Books',
+			mediaType: 'BOOK',
+			color: defaultCategoryColor
+		};
+		const group: GroupInternal = {
+			id: 'group-id',
+			name: 'Dune saga'
+		};
+		const mainEntry: MediaItemInternal = {
+			id: 'media-id-1',
+			name: 'Dune',
+			mediaType: 'BOOK',
+			status: 'ACTIVE',
+			importance: '300',
+			group: group,
+			orderInGroup: 2
+		};
+		const spinOff: MediaItemInternal = {
+			id: 'media-id-2',
+			name: 'Paul of Dune',
+			mediaType: 'BOOK',
+			status: 'ACTIVE',
+			importance: '300',
+			group: group,
+			orderInGroup: 2.5
+		};
+
+		render(
+			<MediaItemsListComponent
+				category={category}
+				mediaItems={[ mainEntry, spinOff ]}
+				highlightedMediaItem={undefined}
+				currentViewGroup={undefined}
+				isSearchMode={false}
+				currentSearchTerm={undefined}
+				showEmptyState={false}
+				showSkeletons={false}
+				openSearch={jest.fn()}
+				submitSearch={jest.fn()}
+				closeSearch={jest.fn()}
+				openFilters={jest.fn()}
+				selectMediaItem={jest.fn()}
+				highlightMediaItem={jest.fn()}
+				editMediaItem={jest.fn()}
+				deleteMediaItem={jest.fn()}
+				markMediaItemAsActive={jest.fn()}
+				markMediaItemAsComplete={jest.fn()}
+				markMediaItemAsRedo={jest.fn()}
+				viewMediaItemGroup={jest.fn()}
+				closeMediaItemMenu={jest.fn()}
+				exitViewGroupMode={jest.fn()}
+			/>
+		);
+
+		expect(screen.getByText('Dune saga, #2')).toBeInTheDocument();
+		expect(screen.getByText('Dune saga, #2.5')).toBeInTheDocument();
+	});
 });

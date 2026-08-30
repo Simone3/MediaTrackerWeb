@@ -110,6 +110,7 @@ Groups are category-scoped and serve two purposes: collecting a franchise, and b
 - a `EntitySearchBarComponent` above the list filters the loaded groups by name, client-side. It appears only once there is something to filter, the header count follows the filtered list, and while a search is running the "None" option and the empty-state copy give way to the no-results copy. **Seasons deliberately have no search bar**: a show's seasons are few and already ordered
 - selecting a group dispatches `SELECT_GROUP`, and the navigation saga goes back to the media-item form
 - add stays in the header, while edit and delete live in the row action menu ([§11.3](11-interface.md#113-shared-building-blocks))
+- the media-item form's order-in-group field is a `number` input stepping by `0.1`, bounded by the same one-decimal rule the schema validates ([§8.3](08-domain-model.md#83-group)). The form has no error messages, so an out-of-range order only shows up as a disabled Save
 
 **One screen is both the manager and the picker.** That is why arriving here from a form and arriving here from the menu look the same.
 
