@@ -113,7 +113,7 @@ Mock controllers extend `MockControllerHelper` and are in-memory:
 
 Pagination is the one thing they do faithfully: `mockPaginate` slices the requested window and reports the full match count, so a paginated list behaves the same against mocks as against the server even when the filtering that produced it does not.
 
-**They are for UI work, not for behaviour parity.** Generic media-item mock filtering and sorting are intentionally incomplete, and the mock logs when it hits something the real back end would have handled. A flow that works against mocks has not been shown to work ([§15.8](15-invariants-and-pitfalls.md#158-mock-behaviour-is-not-production-parity)).
+**They are for UI work, not for behaviour parity.** Generic media-item mock filtering and sorting are intentionally incomplete — name, importance, group and own platform are honoured, status is not — and the mock logs when it hits something the real back end would have handled. A flow that works against mocks has not been shown to work ([§15.8](15-invariants-and-pitfalls.md#158-mock-behaviour-is-not-production-parity)).
 
 ---
 

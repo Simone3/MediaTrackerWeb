@@ -261,12 +261,16 @@
 					"group": {
 						"ALL": "With or without group",
 						"ANY": "Only with group",
-						"NONE": "Only without group"
+						"NONE": "Only without group",
+						"unknown": "Group {{id}}",
+						"deleted": "{{name}} (deleted)"
 					},
 					"ownPlatform": {
 						"ALL": "Owned or not",
 						"ANY": "Only owned",
-						"NONE": "Only not owned"
+						"NONE": "Only not owned",
+						"unknown": "Platform {{id}}",
+						"deleted": "{{name}} (deleted)"
 					},
 					"sort": {
 						"DEFAULT": "Default order",

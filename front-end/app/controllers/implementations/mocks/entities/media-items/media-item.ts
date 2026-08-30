@@ -142,7 +142,8 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 		console.log(`Back-End would filter by ${JSON.stringify(filter)} - mocked implementation is non complete...`);
 
 		const nameFilter = filter.name;
-		const groupsIdsFilter = filter.groups ? filter.groups.groupIds : undefined;
+		const groupsFilter = filter.groups;
+		const ownPlatformsFilter = filter.ownPlatforms;
 		const importanceFilter = filter.importanceLevels;
 
 		if(nameFilter) {
@@ -151,10 +152,44 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 			});
 		}
 		
-		if(groupsIdsFilter && groupsIdsFilter.length > 0) {
-			mediaItems = mediaItems.filter((item) => {
-				return item.group && groupsIdsFilter.includes(item.group.id);
-			});
+		if(groupsFilter) {
+			// Specific IDs win over the generic options, just like they do in the back-end query
+			if(groupsFilter.groupIds && groupsFilter.groupIds.length > 0) {
+				const groupIds = groupsFilter.groupIds;
+				mediaItems = mediaItems.filter((item) => {
+					return item.group && groupIds.includes(item.group.id);
+				});
+			}
+			else if(groupsFilter.anyGroup && !groupsFilter.noGroup) {
+				mediaItems = mediaItems.filter((item) => {
+					return Boolean(item.group);
+				});
+			}
+			else if(!groupsFilter.anyGroup && groupsFilter.noGroup) {
+				mediaItems = mediaItems.filter((item) => {
+					return !item.group;
+				});
+			}
+		}
+
+		if(ownPlatformsFilter) {
+			// Specific IDs win over the generic options, just like they do in the back-end query
+			if(ownPlatformsFilter.ownPlatformIds && ownPlatformsFilter.ownPlatformIds.length > 0) {
+				const ownPlatformIds = ownPlatformsFilter.ownPlatformIds;
+				mediaItems = mediaItems.filter((item) => {
+					return item.ownPlatform && ownPlatformIds.includes(item.ownPlatform.id);
+				});
+			}
+			else if(ownPlatformsFilter.anyOwnPlatform && !ownPlatformsFilter.noOwnPlatform) {
+				mediaItems = mediaItems.filter((item) => {
+					return Boolean(item.ownPlatform);
+				});
+			}
+			else if(!ownPlatformsFilter.anyOwnPlatform && ownPlatformsFilter.noOwnPlatform) {
+				mediaItems = mediaItems.filter((item) => {
+					return !item.ownPlatform;
+				});
+			}
 		}
 
 		if(importanceFilter) {

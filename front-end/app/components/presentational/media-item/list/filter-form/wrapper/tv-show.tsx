@@ -28,6 +28,10 @@ export const TvShowFilterFormComponent = (props: TvShowFilterFormComponentProps)
 					<TvShowFilterFormViewComponent
 						{...formikProps}
 						close={props.close}
+						groupOptions={props.groupOptions}
+						ownPlatformOptions={props.ownPlatformOptions}
+						groupsLoading={props.groupsLoading}
+						ownPlatformsLoading={props.ownPlatformsLoading}
 					/>
 				);
 			}}

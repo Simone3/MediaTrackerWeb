@@ -51,6 +51,26 @@ A failed page fetch keeps the last known rows on screen and renders a retry card
 
 Changing page scrolls back to the top, from the list component itself: `ScrollToTopOnNewScreen` does not cover it, since moving between pages is not a navigation ([§5.5](05-navigation.md#55-scroll-position)).
 
+### Filters
+
+The modal is `MediaItemFilterModalComponent` over the Formik `filter-form` `wrapper`/`view`/`data` trio, one set per media type.
+
+Status, importance and sort offer a fixed set of options. **Group and own platform also list the user's actual groups and platforms**, under the generic "with or without", "only with" and "only without". A specific choice maps to the `groupIds`/`ownPlatformIds` that the filter endpoint already accepted, and a specific ID wins over the generic flags on both sides of the wire.
+
+**Those options load when the modal opens, and the load never blocks it.** The two slices are fetched only when their status is `REQUIRES_FETCH` or `FETCH_FAILED` — so a failure retries on the next open, which is the only retry the user can ask for here — and while a request is in flight the inputs stay usable with their generic options, under a small spinner next to the label rather than an overlay over the form. A failure raises the usual error toast and leaves the generic options working.
+
+**The filter carries the display names of what it selects**, in `groupNames`/`ownPlatformNames` beside the IDs. They are a display aid and never reach the back end: the modal fills them in on submit from the loaded lists, and persistence keeps them, so a reload can label a selected group before — or without — the groups list coming back. Three cases leave a selected ID with no matching option, and all three keep the selection rather than silently dropping it:
+
+| Case | What its option reads |
+| --- | --- |
+| the list has not come back yet, or its fetch failed | the carried name |
+| the list came back without the ID, i.e. the entity was deleted | the carried name, marked as deleted |
+| there is no carried name, e.g. a filter stored before they existed | the bare ID |
+
+**A specific group in the filter is deliberately not `VIEW_GROUP` mode.** Both end up querying `groupIds`, but view-group is its own mode with its own sort from the definitions controller, while the filter stays in `NORMAL` with whatever sort the user chose.
+
+The form mappers are what keep this stable while the options arrive, and they have to stay pure ([§15.10](15-invariants-and-pitfalls.md#1510-computed-formik-initialvalues-must-not-read-anything-else)).
+
 The context menu is `ResponsiveActionMenuComponent`: a floating popover on desktop, a bottom sheet on mobile ([§11.3](11-interface.md#113-shared-building-blocks)).
 
 **Inline status actions** — `MARK_MEDIA_ITEM_AS_ACTIVE`, `MARK_MEDIA_ITEM_AS_COMPLETE`, `MARK_MEDIA_ITEM_AS_REDO` — apply the rules in `inline-update-helper.ts`:

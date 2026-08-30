@@ -80,6 +80,14 @@ When something looks wrong, in order:
 
 The trace path that answers most of these: action generator → action constant/type → saga watcher/worker → reducer → container → presentational component.
 
+## 15.10 Computed Formik `initialValues` must not read anything else
+
+The Formik forms in the app pass `enableReinitialize`, and they hand Formik a *computed* `initialValues` — a mapper called on every render, not a prop passed straight through. Formik deep-compares that value and resets the form whenever it changes, so the mapper's output is a form-resetting signal, not just a starting point.
+
+That makes it a rule: **a mapper feeding `initialValues` may read its arguments and nothing else.** One that also reads asynchronously loaded state returns one thing before the data lands and another after, and Formik will wipe whatever the user typed in between, with the same inputs from beginning to end.
+
+The concrete case is the media items filter, whose group and own platform options arrive after the modal is already open ([§10.2](10-features.md#102-media-items-list)). Its mapper emits the selected ID whether or not the matching entity is loaded, and resolving that ID to a display name is left to the view.
+
 ---
 
 [← §14 Testing](14-testing.md) · [§16 Extension playbooks →](16-extension-playbooks.md)

@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import { FormikProps } from 'formik';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { SelectComponent } from 'app/components/presentational/generic/select';
-import { MEDIA_ITEM_FILTER_FORM_GROUP_VALUES, MEDIA_ITEM_FILTER_FORM_IMPORTANCE_VALUES, MEDIA_ITEM_FILTER_FORM_OWN_PLATFORM_VALUES, MEDIA_ITEM_FILTER_FORM_SORT_VALUES, MEDIA_ITEM_FILTER_FORM_STATUS_VALUES, MediaItemFilterFormValues } from 'app/components/presentational/media-item/list/filter-form/data/media-item';
+import { MEDIA_ITEM_FILTER_FORM_IMPORTANCE_VALUES, MEDIA_ITEM_FILTER_FORM_SORT_VALUES, MEDIA_ITEM_FILTER_FORM_STATUS_VALUES, MediaItemFilterFormOption, MediaItemFilterFormValues } from 'app/components/presentational/media-item/list/filter-form/data/media-item';
 import { i18n } from 'app/utilities/i18n';
 
 /**
@@ -58,16 +58,17 @@ export const MediaItemFilterFormViewComponent = <TFormValues extends MediaItemFi
 			<div className='media-item-filter-field'>
 				<label className='media-item-filter-label' htmlFor='media-item-filter-group'>
 					{i18n.t('mediaItem.list.filter.prompts.group')}
+					{props.groupsLoading ? <span className='media-item-filter-inline-spinner' aria-hidden={true} /> : null}
 				</label>
 				<SelectComponent
 					id='media-item-filter-group'
 					name='group'
 					value={props.values.group}
 					onChange={props.handleChange}>
-					{MEDIA_ITEM_FILTER_FORM_GROUP_VALUES.map((group) => {
+					{props.groupOptions.map((option) => {
 						return (
-							<option key={group} value={group}>
-								{i18n.t(`mediaItem.list.filter.values.group.${group}`)}
+							<option key={option.value} value={option.value}>
+								{option.label}
 							</option>
 						);
 					})}
@@ -77,16 +78,17 @@ export const MediaItemFilterFormViewComponent = <TFormValues extends MediaItemFi
 			<div className='media-item-filter-field'>
 				<label className='media-item-filter-label' htmlFor='media-item-filter-own-platform'>
 					{i18n.t('mediaItem.list.filter.prompts.ownPlatform')}
+					{props.ownPlatformsLoading ? <span className='media-item-filter-inline-spinner' aria-hidden={true} /> : null}
 				</label>
 				<SelectComponent
 					id='media-item-filter-own-platform'
 					name='ownPlatform'
 					value={props.values.ownPlatform}
 					onChange={props.handleChange}>
-					{MEDIA_ITEM_FILTER_FORM_OWN_PLATFORM_VALUES.map((ownPlatform) => {
+					{props.ownPlatformOptions.map((option) => {
 						return (
-							<option key={ownPlatform} value={ownPlatform}>
-								{i18n.t(`mediaItem.list.filter.values.ownPlatform.${ownPlatform}`)}
+							<option key={option.value} value={option.value}>
+								{option.label}
 							</option>
 						);
 					})}
@@ -131,6 +133,26 @@ export type MediaItemFilterFormViewComponentInput = {
 	 * Callback when the form requests to be closed
 	 */
 	close: () => void;
+
+	/**
+	 * The options of the group filter input
+	 */
+	groupOptions: MediaItemFilterFormOption[];
+
+	/**
+	 * The options of the own platform filter input
+	 */
+	ownPlatformOptions: MediaItemFilterFormOption[];
+
+	/**
+	 * If the groups are being fetched: the input stays usable, it only says that more options are on their way
+	 */
+	groupsLoading: boolean;
+
+	/**
+	 * If the own platforms are being fetched: the input stays usable, it only says that more options are on their way
+	 */
+	ownPlatformsLoading: boolean;
 };
 
 /**

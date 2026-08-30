@@ -28,6 +28,10 @@ export const BookFilterFormComponent = (props: BookFilterFormComponentProps): Re
 					<BookFilterFormViewComponent
 						{...formikProps}
 						close={props.close}
+						groupOptions={props.groupOptions}
+						ownPlatformOptions={props.ownPlatformOptions}
+						groupsLoading={props.groupsLoading}
+						ownPlatformsLoading={props.ownPlatformsLoading}
 					/>
 				);
 			}}

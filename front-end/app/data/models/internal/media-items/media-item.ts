@@ -74,6 +74,12 @@ export type MediaItemGroupFilterInternal = {
 	anyGroup?: boolean;
 	noGroup?: boolean;
 	groupIds?: string[];
+
+	/**
+	 * The display names of the filtered groups, in the same order as groupIds. Purely a display aid: it lets the filter form label a
+	 * selected group before (or without) the groups list being available, and it is never sent to the back end
+	 */
+	groupNames?: string[];
 };
 
 /**
@@ -84,6 +90,12 @@ export type MediaItemOwnPlatformFilterInternal = {
 	anyOwnPlatform?: boolean;
 	noOwnPlatform?: boolean;
 	ownPlatformIds?: string[];
+
+	/**
+	 * The display names of the filtered own platforms, in the same order as ownPlatformIds. Purely a display aid: it lets the filter form
+	 * label a selected own platform before (or without) the own platforms list being available, and it is never sent to the back end
+	 */
+	ownPlatformNames?: string[];
 };
 
 /**
