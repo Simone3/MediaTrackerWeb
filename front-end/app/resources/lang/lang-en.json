@@ -245,6 +245,7 @@
 			},
 			"filter": {
 				"title": "Filter",
+				"clearButton": "Clear",
 				"prompts": {
 					"status": "Status",
 					"group": "Group",

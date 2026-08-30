@@ -75,6 +75,11 @@ export type MediaItemFilterFormComponentOutput = {
 	submitFilter: (filter: MediaItemFilterInternal, sortBy: MediaItemSortByInternal[]) => void;
 
 	/**
+	 * Callback to reset the filter options to the defaults
+	 */
+	clearFilter: () => void;
+
+	/**
 	 * Callback when the form requests to be closed
 	 */
 	close: () => void;

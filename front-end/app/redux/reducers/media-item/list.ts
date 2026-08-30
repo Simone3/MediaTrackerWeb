@@ -3,8 +3,8 @@ import { config } from 'app/config/config';
 import { mediaItemDefinitionsControllerFactory } from 'app/controllers/main/entities/media-items/factories';
 import { SELECT_CATEGORY } from 'app/redux/actions/category/const';
 import { SelectCategoryAction } from 'app/redux/actions/category/types';
-import { CHANGE_MEDIA_ITEMS_PAGE, COMPLETE_DELETING_MEDIA_ITEM, COMPLETE_FETCHING_MEDIA_ITEMS, COMPLETE_INLINE_UPDATING_MEDIA_ITEM, COMPLETE_SAVING_MEDIA_ITEM, FAIL_DELETING_MEDIA_ITEM, FAIL_FETCHING_MEDIA_ITEMS, FAIL_INLINE_UPDATING_MEDIA_ITEM, HIGHLIGHT_MEDIA_ITEM, INVALIDATE_MEDIA_ITEMS, REMOVE_MEDIA_ITEM_HIGHLIGHT, SEARCH_MEDIA_ITEMS, START_DELETING_MEDIA_ITEM, START_FETCHING_MEDIA_ITEMS, START_INLINE_UPDATING_MEDIA_ITEM, START_MEDIA_ITEMS_SEARCH_MODE, START_MEDIA_ITEMS_SET_FILTERS_MODE, START_MEDIA_ITEMS_VIEW_GROUP_MODE, STOP_MEDIA_ITEMS_SEARCH_MODE, STOP_MEDIA_ITEMS_SET_FILTERS_MODE, STOP_MEDIA_ITEMS_VIEW_GROUP_MODE, SUBMIT_MEDIA_ITEMS_FILTERS } from 'app/redux/actions/media-item/const';
-import { ChangeMediaItemsPageAction, CompleteFetchingMediaItemsAction, HighlightMediaItemAction, SearchMediaItemsAction, StartMediaItemsViewGroupModeAction, SubmitMediaItemsFiltersAction } from 'app/redux/actions/media-item/types';
+import { CHANGE_MEDIA_ITEMS_PAGE, CLEAR_MEDIA_ITEMS_FILTERS, COMPLETE_DELETING_MEDIA_ITEM, COMPLETE_FETCHING_MEDIA_ITEMS, COMPLETE_INLINE_UPDATING_MEDIA_ITEM, COMPLETE_SAVING_MEDIA_ITEM, FAIL_DELETING_MEDIA_ITEM, FAIL_FETCHING_MEDIA_ITEMS, FAIL_INLINE_UPDATING_MEDIA_ITEM, HIGHLIGHT_MEDIA_ITEM, INVALIDATE_MEDIA_ITEMS, REMOVE_MEDIA_ITEM_HIGHLIGHT, SEARCH_MEDIA_ITEMS, START_DELETING_MEDIA_ITEM, START_FETCHING_MEDIA_ITEMS, START_INLINE_UPDATING_MEDIA_ITEM, START_MEDIA_ITEMS_SEARCH_MODE, START_MEDIA_ITEMS_SET_FILTERS_MODE, START_MEDIA_ITEMS_VIEW_GROUP_MODE, STOP_MEDIA_ITEMS_SEARCH_MODE, STOP_MEDIA_ITEMS_SET_FILTERS_MODE, STOP_MEDIA_ITEMS_VIEW_GROUP_MODE, SUBMIT_MEDIA_ITEMS_FILTERS } from 'app/redux/actions/media-item/const';
+import { ChangeMediaItemsPageAction, ClearMediaItemsFiltersAction, CompleteFetchingMediaItemsAction, HighlightMediaItemAction, SearchMediaItemsAction, StartMediaItemsViewGroupModeAction, SubmitMediaItemsFiltersAction } from 'app/redux/actions/media-item/types';
 import { MediaItemsListState, mediaItemsListStateInitialValue } from 'app/redux/state/media-item';
 
 /**
@@ -237,6 +237,21 @@ export const mediaItemsList = (state: MediaItemsListState = mediaItemsListStateI
 				...state,
 				filter: submitMediaItemsFiltersAction.filter,
 				sortBy: submitMediaItemsFiltersAction.sortBy,
+				status: 'REQUIRES_FETCH',
+				currentPage: 0
+			};
+		}
+
+		// When the filters are cleared, they go back to the category defaults, i.e. the same values the list starts with, and the list is marked for reload
+		case CLEAR_MEDIA_ITEMS_FILTERS: {
+			const clearMediaItemsFiltersAction = action as ClearMediaItemsFiltersAction;
+
+			const mediaItemDefinitionsController = mediaItemDefinitionsControllerFactory.get(clearMediaItemsFiltersAction.category);
+
+			return {
+				...state,
+				filter: mediaItemDefinitionsController.getDefaultFilter(),
+				sortBy: mediaItemDefinitionsController.getDefaultSortBy(),
 				status: 'REQUIRES_FETCH',
 				currentPage: 0
 			};

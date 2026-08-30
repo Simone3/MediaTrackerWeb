@@ -1940,6 +1940,11 @@ input {
 	gap: 10px;
 }
 
+/* The clear action sits apart from cancel and apply: it discards the whole filter rather than confirming or dropping the current edits */
+.media-item-filter-clear-button {
+	margin-right: auto;
+}
+
 .media-item-details-screen {
 	position: relative;
 	min-height: 100vh;

@@ -64,6 +64,9 @@ export class MediaItemFilterModalComponent extends Component<MediaItemFilterModa
 						submitFilter={(filter, sortBy) => {
 							this.submitFilter(filter, sortBy);
 						}}
+						clearFilter={() => {
+							this.props.clearFilter(this.props.category);
+						}}
 						close={this.props.close}
 					/>
 				</section>
@@ -174,6 +177,11 @@ export type MediaItemFilterModalComponentOutput = {
 	 * Callback to submit the filter options
 	 */
 	submitFilter: (filter: MediaItemFilterInternal, sortBy: MediaItemSortByInternal[]) => void;
+
+	/**
+	 * Callback to reset the filter and sort options to the category defaults
+	 */
+	clearFilter: (category: CategoryInternal) => void;
 
 	/**
 	 * Callback when the component requests to be closed

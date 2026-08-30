@@ -43,7 +43,7 @@ The list shows one page at a time, `config.ui.mediaItemsPageSize` items long ([�
 
 Which actions move the user and which do not follows from that:
 
-- **the query changed** — submitting filters, submitting a search, leaving search or view-group mode — starts again from the first page, since the old page index means nothing against a new query
+- **the query changed** — submitting or clearing filters, submitting a search, leaving search or view-group mode — starts again from the first page, since the old page index means nothing against a new query
 - **the data changed** — saving, deleting, inline-updating — reloads **the current page**, so a write does not cost the user their place
 - **the current page can stop existing**, e.g. when the last item on it is deleted. The reducer notices the fetched page is past the end, falls back to the last page that does exist and marks the list for reload; when nothing matches at all it settles on the first page without a second request
 
@@ -66,6 +66,8 @@ Status, importance and sort offer a fixed set of options. **Group and own platfo
 | the list has not come back yet, or its fetch failed | the carried name |
 | the list came back without the ID, i.e. the entity was deleted | the carried name, marked as deleted |
 | there is no carried name, e.g. a filter stored before they existed | the bare ID |
+
+**Clear resets rather than empties.** The third action of the form dispatches `CLEAR_MEDIA_ITEMS_FILTERS` with the current category and closes the modal, and the reducer puts back the filter and the sort options that `getDefaultFilter()`/`getDefaultSortBy()` give the category — the same values `SELECT_CATEGORY` starts the list with, which today is "current items only" for every media type, not "everything". The defaults are derived in the reducer, where they already are for `SELECT_CATEGORY`, so the form never has to know them; that also keeps the reset outside Formik, since the modal is closing anyway and the form values are rebuilt from the new filter on the next open.
 
 **A specific group in the filter is deliberately not `VIEW_GROUP` mode.** Both end up querying `groupIds`, but view-group is its own mode with its own sort from the definitions controller, while the filter stays in `NORMAL` with whatever sort the user chose.
 

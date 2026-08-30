@@ -192,6 +192,14 @@ export type SubmitMediaItemsFiltersAction = Action & {
 };
 
 /**
+ * The clear media items filters action
+ */
+export type ClearMediaItemsFiltersAction = Action & {
+	
+	category: CategoryInternal;
+};
+
+/**
  * The load new media item action
  */
 export type LoadNewMediaItemDetailsAction = Action & {

@@ -3,7 +3,7 @@ import { Dispatch } from 'redux';
 import { MediaItemFilterModalComponent, MediaItemFilterModalComponentInput, MediaItemFilterModalComponentOutput } from 'app/components/presentational/media-item/list/filter-modal';
 import { AppError } from 'app/data/models/internal/error';
 import { fetchGroups } from 'app/redux/actions/group/generators';
-import { stopMediaItemsSetFiltersMode, submitMediaItemsFilters } from 'app/redux/actions/media-item/generators';
+import { clearMediaItemsFilters, stopMediaItemsSetFiltersMode, submitMediaItemsFilters } from 'app/redux/actions/media-item/generators';
 import { fetchOwnPlatforms } from 'app/redux/actions/own-platform/generators';
 import { State } from 'app/redux/state/state';
 
@@ -41,6 +41,10 @@ const mapDispatchToProps = (dispatch: Dispatch): MediaItemFilterModalComponentOu
 		submitFilter: (filter, sortBy) => {
 			dispatch(stopMediaItemsSetFiltersMode());
 			dispatch(submitMediaItemsFilters(filter, sortBy));
+		},
+		clearFilter: (category) => {
+			dispatch(stopMediaItemsSetFiltersMode());
+			dispatch(clearMediaItemsFilters(category));
 		},
 		close: () => {
 			dispatch(stopMediaItemsSetFiltersMode());

@@ -114,6 +114,9 @@ export const MediaItemFilterFormViewComponent = <TFormValues extends MediaItemFi
 				</SelectComponent>
 			</div>
 			<div className='media-item-filter-actions'>
+				<PillButtonComponent className='media-item-filter-clear-button' tone='secondary' size='compact' appearance='subtle' onClick={props.clearFilter}>
+					{i18n.t('mediaItem.list.filter.clearButton')}
+				</PillButtonComponent>
 				<PillButtonComponent tone='secondary' size='compact' onClick={props.close}>
 					{i18n.t('common.alert.default.cancelButton')}
 				</PillButtonComponent>
@@ -129,6 +132,11 @@ export const MediaItemFilterFormViewComponent = <TFormValues extends MediaItemFi
  * MediaItemFilterFormViewComponent's input props
  */
 export type MediaItemFilterFormViewComponentInput = {
+	/**
+	 * Callback to reset the filter options to the defaults, which also closes the form
+	 */
+	clearFilter: () => void;
+
 	/**
 	 * Callback when the form requests to be closed
 	 */

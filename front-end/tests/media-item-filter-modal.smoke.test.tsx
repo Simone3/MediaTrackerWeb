@@ -109,6 +109,7 @@ const buildProps = (overrides: Partial<MediaItemFilterModalComponentProps>): Med
 		groupsRequireFetch: false,
 		ownPlatformsRequireFetch: false,
 		submitFilter: jest.fn(),
+		clearFilter: jest.fn(),
 		close: jest.fn(),
 		fetchGroups: jest.fn(),
 		fetchOwnPlatforms: jest.fn(),
@@ -211,6 +212,32 @@ describe('MediaItemFilterModalComponent', () => {
 				ownPlatformNames: [ 'Kindle' ]
 			}
 		}), expect.anything());
+	});
+
+	test('clears the filter back to the category defaults', async() => {
+		const category: CategoryInternal = {
+			id: 'category-id',
+			name: 'Books',
+			mediaType: 'BOOK',
+			color: config.ui.colors.availableCategoryColors[0]
+		};
+		const clearFilter = jest.fn();
+		const submitFilter = jest.fn();
+
+		render(<MediaItemFilterModalComponent {...buildProps({
+			category: category,
+			initialFilter: {
+				status: 'COMPLETE'
+			},
+			clearFilter: clearFilter,
+			submitFilter: submitFilter
+		})} />);
+
+		const user = userEvent.setup();
+		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.filter.clearButton') }));
+
+		expect(clearFilter).toHaveBeenCalledWith(category);
+		expect(submitFilter).not.toHaveBeenCalled();
 	});
 
 	test('loads the filter options when it opens, and not while it is closed', () => {

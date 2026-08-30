@@ -27,6 +27,7 @@ export const MovieFilterFormComponent = (props: MovieFilterFormComponentProps): 
 				return (
 					<MovieFilterFormViewComponent
 						{...formikProps}
+						clearFilter={props.clearFilter}
 						close={props.close}
 						groupOptions={props.groupOptions}
 						ownPlatformOptions={props.ownPlatformOptions}
