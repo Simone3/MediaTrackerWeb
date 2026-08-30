@@ -627,4 +627,63 @@ describe('MediaItemsListComponent', () => {
 		expect(screen.getByText('Dune saga, #2')).toBeInTheDocument();
 		expect(screen.getByText('Dune saga, #2.5')).toBeInTheDocument();
 	});
+
+	test('leaves view-group mode from the banner button', async() => {
+		const category: CategoryInternal = {
+			id: 'category-id',
+			name: 'My Books',
+			mediaType: 'BOOK',
+			color: defaultCategoryColor
+		};
+		const group: GroupInternal = {
+			id: 'group-id',
+			name: 'Dune saga'
+		};
+		const mediaItem: MediaItemInternal = {
+			id: 'media-id',
+			name: 'Dune',
+			mediaType: 'BOOK',
+			status: 'ACTIVE',
+			importance: '300',
+			group: group,
+			orderInGroup: 1
+		};
+		const exitViewGroupMode = jest.fn();
+
+		render(
+			<MediaItemsListComponent
+				category={category}
+				mediaItems={[ mediaItem ]}
+				highlightedMediaItem={undefined}
+				currentViewGroup={group}
+				isSearchMode={false}
+				currentSearchTerm={undefined}
+				showEmptyState={false}
+				showSkeletons={false}
+				openSearch={jest.fn()}
+				submitSearch={jest.fn()}
+				closeSearch={jest.fn()}
+				openFilters={jest.fn()}
+				selectMediaItem={jest.fn()}
+				highlightMediaItem={jest.fn()}
+				editMediaItem={jest.fn()}
+				deleteMediaItem={jest.fn()}
+				markMediaItemAsActive={jest.fn()}
+				markMediaItemAsComplete={jest.fn()}
+				markMediaItemAsRedo={jest.fn()}
+				viewMediaItemGroup={jest.fn()}
+				closeMediaItemMenu={jest.fn()}
+				exitViewGroupMode={exitViewGroupMode}
+			/>
+		);
+
+		expect(screen.getByText(i18n.t('mediaItem.list.viewGroup'))).toBeInTheDocument();
+		expect(screen.getByText(group.name)).toBeInTheDocument();
+
+		const user = userEvent.setup();
+
+		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.buttons.exitViewGroup') }));
+
+		expect(exitViewGroupMode).toHaveBeenCalledTimes(1);
+	});
 });

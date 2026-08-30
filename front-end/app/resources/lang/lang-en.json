@@ -225,7 +225,8 @@
 				"VIDEOGAME": "Search games..."
 			},
 			"buttons": {
-				"search": "Search"
+				"search": "Search",
+				"exitViewGroup": "Back"
 			},
 			"group": "{{groupName}}, #{{order}}",
 			"completed": {
@@ -329,6 +330,7 @@
 				"wikipedia": "Wikipedia Search",
 				"justWatch": "Just Watch Search",
 				"howLongToBeat": "How Long To Beat Search",
+				"searchCatalog": "Search",
 				"downloadCatalog": "Reload Catalog",
 				"addDate": "Add date"
 			},

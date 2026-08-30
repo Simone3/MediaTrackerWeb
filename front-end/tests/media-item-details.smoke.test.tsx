@@ -892,6 +892,20 @@ describe('MediaItemDetailsScreenContainer', () => {
 		expect(screen.getByRole('button', { name: i18n.t('common.buttons.save') })).toBeDisabled();
 	});
 
+	test('enables the catalog search button once the name field carries a term', async() => {
+		renderScreen();
+
+		const user = userEvent.setup();
+		const nameInput = screen.getByLabelText(i18n.t('mediaItem.details.placeholders.name'));
+		const searchButton = screen.getByRole('button', { name: i18n.t('mediaItem.details.buttons.searchCatalog') });
+
+		expect(searchButton).toBeDisabled();
+
+		await user.type(nameInput, 'Dune');
+
+		expect(searchButton).toBeEnabled();
+	});
+
 	test('keeps unsaved TV show edits when remounting from the seasons flow', async() => {
 		const savedMediaItem: TvShowInternal = {
 			id: 'tv-show-id',

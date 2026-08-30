@@ -371,7 +371,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 						onClick={() => {
 							this.submitCatalogSearch();
 						}}>
-						Search
+						{i18n.t('mediaItem.details.buttons.searchCatalog')}
 					</PillButtonComponent>
 				</div>
 				<FieldErrorComponent id='media-item-name-error' message={nameError} />

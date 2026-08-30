@@ -167,7 +167,7 @@ export class MediaItemsListComponent extends Component<MediaItemsListComponentIn
 							size='compact'
 							appearance='subtle'
 							onClick={exitViewGroupMode}>
-							Back
+							{i18n.t('mediaItem.list.buttons.exitViewGroup')}
 						</PillButtonComponent>
 					</div>
 				)}
