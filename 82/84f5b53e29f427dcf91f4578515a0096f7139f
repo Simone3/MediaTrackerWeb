@@ -1,0 +1,42 @@
+front-end/app/components/containers/navigation/media-navigator.tsx
+  s_4da89297a998e4::t_66dde99d4138ab 8,44-58,70-78
+front-end/app/components/containers/navigation/screen-context-guard.tsx
+  s_4da89297a998e4::t_a3849c5035a34e 1-127
+front-end/app/data/models/internal/error.ts
+  s_4da89297a998e4::t_828c537fa9f79a 37-38
+front-end/app/resources/lang/lang-en.json
+  s_4da89297a998e4::t_ad5bc1e31260b6 34-35
+front-end/docs/technical/05-navigation.md
+  s_4da89297a998e4::t_22decc1b76f2fd 35,45,86-110
+front-end/docs/technical/11-interface.md
+  s_4da89297a998e4::t_80abd759bc9673 75
+front-end/docs/technical/15-invariants-and-pitfalls.md
+  s_4da89297a998e4::t_4c559dda8389e2 17-19
+front-end/docs/technical/16-extension-playbooks.md
+  s_4da89297a998e4::t_bf25d8a9d96539 14-18
+front-end/tests/media-item-unsaved-changes-guard.test.tsx
+  s_4da89297a998e4::t_21f058e26d8548 9,12,18,27-30
+front-end/tests/screen-context-guard.test.tsx
+  s_4da89297a998e4::t_c77ca0116e1e86 1-160
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "8284f5b53e29f427dcf91f4578515a0096f7139f",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_4da89297a998e4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2cc68523-2314-4e52-95c3-61c882d7aa67",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
