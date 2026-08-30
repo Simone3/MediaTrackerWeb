@@ -41,6 +41,7 @@ It logs every mapping at debug level, which is what makes a wrong field traceabl
 - **API date strings become `Date` objects** on the way in
 - **`completedOn` is sorted before `completedLastOn` is derived from it** — the client may send completion dates in any order, and the denormalized "last" field is only correct if the list is sorted first ([§7.5](07-domain-model.md#75-media-item-common-fields))
 - **populated `group` and `ownPlatform` references become nested API objects** as `groupData` and `ownPlatformData` ([§8.4](08-persistence.md#84-populate))
+- **the `group` block is emitted when `orderInGroup` is defined, not when it is truthy** — the field is a number, so a truthiness test would drop the whole group from the response for an item ordered `0` ([§7.5](07-domain-model.md#75-media-item-common-fields))
 - boolean-ish values are normalized through `miscUtils.parseBoolean(...)` ([§15.2](15-utilities.md#152-miscutils))
 
 **Anything that writes `completedOn` anywhere must keep `completedLastOn` consistent.** This mapper is where that is done today; a new write path is a new place it can be forgotten.

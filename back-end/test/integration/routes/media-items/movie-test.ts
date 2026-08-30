@@ -7,7 +7,7 @@ import { MovieInternal } from 'app/data/models/internal/media-items/movie';
 import chai from 'chai';
 import { callHelper } from 'helpers/api-caller-helper';
 import { setupTestDatabaseConnection } from 'helpers/database-handler-helper';
-import { getTestMovie, initTestUCGHelper, TestUCG } from 'helpers/entities-builder-helper';
+import { getTestMovie, getTestMovieInGroup, initTestUCGHelper, TestUCG } from 'helpers/entities-builder-helper';
 import { setupTestServer } from 'helpers/server-handler-helper';
 import { extract, randomName } from 'helpers/test-misc-helper';
 import { setupMovieExternalServicesMocks } from 'mocks/external-services-mocks';
@@ -133,6 +133,60 @@ describe('Movie API Tests', () => {
 			}, {
 				expectedStatus: 500
 			});
+		});
+
+		it('Should sort movies in a group by their order, decimals included', async() => {
+			await movieEntityController.saveMediaItem(getTestMovieInGroup(undefined, firstUCG, 3, { name: 'Third' }));
+			await movieEntityController.saveMediaItem(getTestMovieInGroup(undefined, firstUCG, 1, { name: 'First' }));
+			await movieEntityController.saveMediaItem(getTestMovieInGroup(undefined, firstUCG, 2.5, { name: 'Spinoff' }));
+			await movieEntityController.saveMediaItem(getTestMovieInGroup(undefined, firstUCG, 2, { name: 'Second' }));
+
+			const response = await callHelper<FilterMoviesRequest, FilterMoviesResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/filter`, firstUCG.user, {
+				sortBy: [{
+					field: 'GROUP',
+					ascending: true
+				}]
+			});
+			expect(response.movies, 'API did not return the correct number of movies').to.have.lengthOf(4);
+			expect(extract(response.movies, 'name'), 'API did not sort the movies by their order in the group').to.be.eql([ 'First', 'Second', 'Spinoff', 'Third' ]);
+		});
+
+		it('Should save and then retrieve a decimal order in a group', async() => {
+			const name = randomName();
+			await callHelper<AddMovieRequest, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, firstUCG.user, {
+				newMovie: {
+					name: name,
+					importance: '100',
+					group: {
+						groupId: String(firstUCG.group),
+						orderInGroup: 2.5
+					}
+				}
+			});
+
+			const response = await callHelper<undefined, GetAllMoviesResponse>('GET', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, firstUCG.user);
+			expect(response.movies, 'API did not return the correct number of movies').to.have.lengthOf(1);
+			expect(response.movies[0].group, 'API did not return the movie group').not.to.be.undefined;
+			expect(response.movies[0].group?.orderInGroup, 'API did not return the decimal order in the group').to.equal(2.5);
+		});
+
+		it('Should check for order in group validity', async() => {
+			const invalidOrders = [ 2.55, 0, -1, 10000 ];
+
+			for(const invalidOrder of invalidOrders) {
+				await callHelper<AddMovieRequest, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, firstUCG.user, {
+					newMovie: {
+						name: randomName(),
+						importance: '100',
+						group: {
+							groupId: String(firstUCG.group),
+							orderInGroup: invalidOrder
+						}
+					}
+				}, {
+					expectedStatus: 500
+				});
+			}
 		});
 
 		it('Should search the movies catalog', async() => {

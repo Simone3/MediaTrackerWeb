@@ -41,7 +41,7 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 			imageUrl: source.imageUrl
 		};
 
-		if(source.group && source.orderInGroup && typeof source.group !== 'string') {
+		if(source.group && source.orderInGroup !== undefined && typeof source.group !== 'string') {
 			target.group = {
 				groupId: String(source.group._id),
 				groupData: groupMapper.toExternal(source.group),

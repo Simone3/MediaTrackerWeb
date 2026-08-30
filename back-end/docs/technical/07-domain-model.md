@@ -76,6 +76,7 @@ An own platform records *where* the user owns an item — a physical shelf, a st
 Semantics that are not obvious from the names:
 
 - **`importance`** is one of `'100' | '200' | '300' | '400'`
+- **`orderInGroup` is a decimal, not an integer** — greater than zero, at most `9999`, at most one decimal digit. The decimal digit is the point: it lets a spin-off take the `2.5` slot between two main entries without renumbering the rest of the group. It is stored as a plain BSON number and the `GROUP` sort orders on it directly, so no code has to know about the fractional part
 - **`completedOn` is the full list of completion dates** — a book read twice has two
 - **`completedLastOn` is denormalized from `completedOn`** purely so sorting and filtering can use a single date field instead of reaching into an array. It is redundant by construction, which is why **any code that writes or transforms `completedOn` must keep it consistent** ([§11.4](11-models-and-mapping.md#114-media-item-mapper-conventions))
 - **`active`** means currently reading, watching or playing
