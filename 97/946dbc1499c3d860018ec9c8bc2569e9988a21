@@ -1,0 +1,72 @@
+TESTBOOK.md
+  s_e25e0410f6ad3f::t_3303b5c04bd3d9 115
+front-end/CLAUDE.md
+  s_e25e0410f6ad3f::t_c8b8f8b623a338 53,56
+front-end/app/components/presentational/category/details/form/data/index.ts
+  s_e25e0410f6ad3f::t_ca27f95017542d 3,10
+front-end/app/components/presentational/category/details/form/view/index.tsx
+  s_e25e0410f6ad3f::t_382b940dd38564 5,40-41,43,46,60-61,63
+front-end/app/components/presentational/generic/field-error/index.tsx
+  s_e25e0410f6ad3f::t_76be1fe12398dc 1-71
+front-end/app/components/presentational/group/details/form/data/index.ts
+  s_e25e0410f6ad3f::t_d30506b885d1bc 3,10
+front-end/app/components/presentational/group/details/form/view/index.tsx
+  s_e25e0410f6ad3f::t_76269e9900cd0a 3,37-40,42,58-59,61
+front-end/app/components/presentational/media-item/details/form/data/media-item.ts
+  s_e25e0410f6ad3f::t_85190ea2139200 6,26-30,43-45,47
+front-end/app/components/presentational/media-item/details/form/view/media-item.tsx
+  s_e25e0410f6ad3f::t_6ae666b250f06b 4,341-342,351,364-365,377,550-551,559,569-570,572,864-872
+front-end/app/components/presentational/media-item/details/form/wrapper/media-item.tsx
+  s_e25e0410f6ad3f::t_169d1ab03be61b 112
+front-end/app/components/presentational/own-platform/details/form/data/index.ts
+  s_e25e0410f6ad3f::t_25b5e65e4b1c6d 3,10
+front-end/app/components/presentational/own-platform/details/form/view/index.tsx
+  s_e25e0410f6ad3f::t_de1dbca4eb28f1 4,41-42,44,47,63-64,66
+front-end/app/components/presentational/tv-show-season/details/form/data/index.ts
+  s_e25e0410f6ad3f::t_9fac08c324d7df 3,9,16
+front-end/app/components/presentational/tv-show-season/details/form/view/index.tsx
+  s_e25e0410f6ad3f::t_b5c73141bbf63c 3,37-39,42-43,54,62-63,65,87,94-95,97
+front-end/app/resources/lang/lang-en.json
+  s_e25e0410f6ad3f::t_bf3c802c805c55 361-371,413-420,572-574
+front-end/app/web/styles.css
+  s_e25e0410f6ad3f::t_72b179da1f6ee8 2075-2088,2357-2363
+front-end/docs/technical/10-features.md
+  s_e25e0410f6ad3f::t_f9e1bcc6f9d9fb 113
+front-end/docs/technical/11-interface.md
+  s_e25e0410f6ad3f::t_381bab134a75b2 50,78-96
+front-end/docs/technical/12-styling.md
+  s_e25e0410f6ad3f::t_58a1b18c901d15 59-66
+front-end/docs/technical/13-text-and-languages.md
+  s_e25e0410f6ad3f::t_d247f1c36d029d 15-16
+front-end/tests/field-error.test.tsx
+  s_e25e0410f6ad3f::t_d6fa38fa7d5ef3 1-47
+front-end/tests/form-control-styles.test.ts
+  s_e25e0410f6ad3f::t_dfc88433157157 31-39
+front-end/tests/group-details.smoke.test.tsx
+  s_e25e0410f6ad3f::t_7ea057bed10877 54-87
+front-end/tests/media-item-details.smoke.test.tsx
+  s_e25e0410f6ad3f::t_4751930d594b74 815-894
+front-end/tests/tv-show-season-details.smoke.test.tsx
+  s_e25e0410f6ad3f::t_ee74856dcf8e15 126-135
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "97946dbc1499c3d860018ec9c8bc2569e9988a21",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_e25e0410f6ad3f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "24719760-f8c1-4344-80f4-981d1dded5a7",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
