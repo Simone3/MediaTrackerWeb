@@ -1,0 +1,32 @@
+back-end/app/data/mappers/media-items/media-item.ts
+  s_c13d9f48cb39e6::t_ca69de114e4858 44
+back-end/app/data/models/api/media-items/media-item.ts
+  s_c13d9f48cb39e6::t_336d961c78eea7 6,56-66,89-90,93-95
+back-end/docs/technical/07-domain-model.md
+  s_c13d9f48cb39e6::t_3d91c7d0898a4f 79
+back-end/docs/technical/11-models-and-mapping.md
+  s_c13d9f48cb39e6::t_bc93b70967f600 44
+back-end/test/integration/routes/media-items/movie-test.ts
+  s_c13d9f48cb39e6::t_57cb7715aabc49 10,138-191
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "9b3390695a152aec74131621223e2ee3b30f5378",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_c13d9f48cb39e6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "29ab57c3-b226-4eaa-8b9c-d75e8316ea2b",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
