@@ -5,6 +5,7 @@ import { CategoryDetailsScreenContainer } from 'app/components/containers/catego
 import { MediaItemsListScreenContainer } from 'app/components/containers/media-item/list/screen';
 import { MediaItemDetailsScreenContainer } from 'app/components/containers/media-item/details/screen';
 import { MediaItemUnsavedChangesGuardContainer } from 'app/components/containers/media-item/details/unsaved-changes-guard';
+import { ScreenContextGuardContainer } from 'app/components/containers/navigation/screen-context-guard';
 import { GroupsListScreenContainer } from 'app/components/containers/group/list/screen';
 import { GroupDetailsScreenContainer } from 'app/components/containers/group/details/screen';
 import { OwnPlatformsListScreenContainer } from 'app/components/containers/own-platform/list/screen';
@@ -41,6 +42,21 @@ const mediaItemFormSubScreen = (screen: ReactElement): ReactElement => {
 };
 
 /**
+ * Wraps a screen that cannot render without global context with the guard that redirects to the categories list when that
+ * context is missing, e.g. when the route was opened directly instead of being reached from inside the app.
+ * @param screen the app screen
+ * @param element the screen to guard
+ * @returns the guarded screen
+ */
+const contextGuardedScreen = (screen: string, element: ReactElement): ReactElement => {
+	return (
+		<ScreenContextGuardContainer screen={screen}>
+			{element}
+		</ScreenContextGuardContainer>
+	);
+};
+
+/**
  * The navigator for the main section of the authenticated app, with the categories and media items lists
  */
 export class MediaNavigator extends Component {
@@ -51,15 +67,15 @@ export class MediaNavigator extends Component {
 		return (
 			<Routes>
 				<Route path={mediaRelativePath(AppScreens.CategoriesList)} element={<CategoriesListScreenContainer />} />
-				<Route path={mediaRelativePath(AppScreens.CategoryDetails)} element={<CategoryDetailsScreenContainer />} />
-				<Route path={mediaRelativePath(AppScreens.MediaItemsList)} element={<MediaItemsListScreenContainer />} />
-				<Route path={mediaRelativePath(AppScreens.MediaItemDetails)} element={<MediaItemDetailsScreenContainer />} />
-				<Route path={mediaRelativePath(AppScreens.GroupsList)} element={mediaItemFormSubScreen(<GroupsListScreenContainer />)} />
-				<Route path={mediaRelativePath(AppScreens.GroupDetails)} element={mediaItemFormSubScreen(<GroupDetailsScreenContainer />)} />
-				<Route path={mediaRelativePath(AppScreens.OwnPlatformsList)} element={mediaItemFormSubScreen(<OwnPlatformsListScreenContainer />)} />
-				<Route path={mediaRelativePath(AppScreens.OwnPlatformDetails)} element={mediaItemFormSubScreen(<OwnPlatformDetailsScreenContainer />)} />
-				<Route path={mediaRelativePath(AppScreens.TvShowSeasonsList)} element={mediaItemFormSubScreen(<TvShowSeasonsListScreenContainer />)} />
-				<Route path={mediaRelativePath(AppScreens.TvShowSeasonDetails)} element={mediaItemFormSubScreen(<TvShowSeasonDetailsScreenContainer />)} />
+				<Route path={mediaRelativePath(AppScreens.CategoryDetails)} element={contextGuardedScreen(AppScreens.CategoryDetails, <CategoryDetailsScreenContainer />)} />
+				<Route path={mediaRelativePath(AppScreens.MediaItemsList)} element={contextGuardedScreen(AppScreens.MediaItemsList, <MediaItemsListScreenContainer />)} />
+				<Route path={mediaRelativePath(AppScreens.MediaItemDetails)} element={contextGuardedScreen(AppScreens.MediaItemDetails, <MediaItemDetailsScreenContainer />)} />
+				<Route path={mediaRelativePath(AppScreens.GroupsList)} element={contextGuardedScreen(AppScreens.GroupsList, mediaItemFormSubScreen(<GroupsListScreenContainer />))} />
+				<Route path={mediaRelativePath(AppScreens.GroupDetails)} element={contextGuardedScreen(AppScreens.GroupDetails, mediaItemFormSubScreen(<GroupDetailsScreenContainer />))} />
+				<Route path={mediaRelativePath(AppScreens.OwnPlatformsList)} element={contextGuardedScreen(AppScreens.OwnPlatformsList, mediaItemFormSubScreen(<OwnPlatformsListScreenContainer />))} />
+				<Route path={mediaRelativePath(AppScreens.OwnPlatformDetails)} element={contextGuardedScreen(AppScreens.OwnPlatformDetails, mediaItemFormSubScreen(<OwnPlatformDetailsScreenContainer />))} />
+				<Route path={mediaRelativePath(AppScreens.TvShowSeasonsList)} element={contextGuardedScreen(AppScreens.TvShowSeasonsList, mediaItemFormSubScreen(<TvShowSeasonsListScreenContainer />))} />
+				<Route path={mediaRelativePath(AppScreens.TvShowSeasonDetails)} element={contextGuardedScreen(AppScreens.TvShowSeasonDetails, mediaItemFormSubScreen(<TvShowSeasonDetailsScreenContainer />))} />
 				<Route path='*' element={<Navigate to={mediaRelativePath(AppScreens.CategoriesList)} replace={true} />} />
 			</Routes>
 		);

@@ -11,10 +11,11 @@ The three changes that touch many files at once, in the order that keeps the bui
 1. `app/utilities/screens.ts`
 2. `app/utilities/navigation-routes.ts`
 3. the right navigator in `app/components/containers/navigation/*` ([§5.2](05-navigation.md#52-router-composition))
-4. the container and presentational components
-5. the navigation saga, if the screen is action-driven ([§5.4](05-navigation.md#54-saga-driven-navigation))
-6. the i18n strings ([§13](13-text-and-languages.md))
-7. a smoke test ([§14](14-testing.md))
+4. `screenRequiredContext`, if the screen cannot render without global context ([§5.6](05-navigation.md#56-screens-that-cannot-be-opened-cold))
+5. the container and presentational components
+6. the navigation saga, if the screen is action-driven ([§5.4](05-navigation.md#54-saga-driven-navigation))
+7. the i18n strings ([§13](13-text-and-languages.md))
+8. a smoke test ([§14](14-testing.md))
 
 ## 16.2 Add a media-item field
 

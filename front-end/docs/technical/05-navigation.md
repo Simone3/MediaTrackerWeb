@@ -32,7 +32,7 @@ Navigation here is four things at once: React Router matching, Redux action disp
 | `AppScreens.Settings` | `/settings` |
 | `AppScreens.Credits` | `/settings/credits` |
 
-**No path carries an entity ID.** A details route says which *kind* of thing is being edited; *which* thing it is comes from Redux. That is the port's model, and it is the reason a details URL opened cold has nothing to render ([§15.1](15-invariants-and-pitfalls.md#151-category-context-is-required-for-most-media-flows)).
+**No path carries an entity ID.** A details route says which *kind* of thing is being edited; *which* thing it is comes from Redux. That is the port's model, and it is the reason a details URL opened cold has nothing to render ([§15.1](15-invariants-and-pitfalls.md#151-category-context-is-required-for-most-media-flows)), and why those routes are guarded ([§5.6](#56-screens-that-cannot-be-opened-cold)).
 
 ## 5.2 Router composition
 
@@ -42,7 +42,7 @@ Navigation here is four things at once: React Router matching, Redux action disp
 - **`ScreenErrorBoundary`**, in the same file, wraps every screen in `ErrorBoundaryComponent` ([§11.5](11-interface.md#115-the-screen-error-boundary)). It sits inside the router so that it can offer a way out of the screen that failed.
 - **`ConnectedAuthenticationNavigator`** chooses the auth-loading, unauthenticated, or authenticated subtree from Redux ([§7](07-authentication.md)).
 - **`AuthenticatedNavigator`** switches between `/media/*` and `/settings/*`.
-- **`MediaNavigator`** owns every media, category, group, platform and season route, and wraps the six screens the media item form opens in `MediaItemUnsavedChangesGuardContainer` ([§15.3](15-invariants-and-pitfalls.md#153-dirty-form-protection-is-browser-oriented)).
+- **`MediaNavigator`** owns every media, category, group, platform and season route. It wraps the six screens the media item form opens in `MediaItemUnsavedChangesGuardContainer` ([§15.3](15-invariants-and-pitfalls.md#153-dirty-form-protection-is-browser-oriented)), and every screen that needs global context in `ScreenContextGuardContainer` ([§5.6](#56-screens-that-cannot-be-opened-cold)).
 - **`SettingsNavigator`** owns settings and the nested credits screen.
 
 ## 5.3 `navigationService`
@@ -82,6 +82,31 @@ Every screen change happens inside the same document, so the browser never reset
 The effect keys off `location.key` rather than the path, because [no path carries an entity ID](#51-route-map): two different media items share `/media/items/details`, and a path-keyed effect would not fire if the same path were ever pushed twice in a row.
 
 There is no `<ScrollRestoration>` in the tree: that component requires a data router, and [§5.2](#52-router-composition) uses a plain `BrowserRouter`.
+
+## 5.6 Screens that cannot be opened cold
+
+`app/components/containers/navigation/screen-context-guard.tsx`
+
+Because [no path carries an entity ID](#51-route-map), most routes only mean something as the continuation of a flow that started elsewhere. Open one directly — a bookmark, the browser history, a link someone shared — and the screen has no entity to show. The context lives in `sessionStorage` while the login does not ([§6.3](06-redux.md#63-the-persistence-contract)), so **a new tab is exactly the case that breaks**: the user arrives authenticated and contextless.
+
+`screenRequiredContext` maps each screen to the state it cannot render without:
+
+| Screen | Requires |
+| --- | --- |
+| `CategoriesList` | nothing |
+| `CategoryDetails` | `categoryDetails.category` |
+| `MediaItemsList` | `categoryGlobal.selectedCategory` |
+| `MediaItemDetails` | the selected category and `mediaItemDetails.mediaItem` |
+| `GroupsList`, `OwnPlatformsList` | `categoryGlobal.selectedCategory`, since both fetch per category |
+| `GroupDetails`, `OwnPlatformDetails` | the selected category and the loaded entity |
+| `TvShowSeasonsList` | `mediaItemDetails.mediaItem`, since the seasons flow only exists inside the form ([§10.4](10-features.md#104-tv-show-seasons-the-nested-flow)) |
+| `TvShowSeasonDetails` | the open media item form and `tvShowSeasonDetails.tvShowSeason` |
+
+A screen that is absent from the map can always render. When a predicate fails, the guard dispatches `AppError.SCREEN_CONTEXT_MISSING` for the usual toast ([§6.4](06-redux.md#64-error-handling-and-the-async-pattern)) and renders `<Navigate replace>` to the categories list. **The redirect replaces the history entry** so that browser back does not lead straight back into the screen that cannot open.
+
+**The predicates are all about presence, never about status.** No reducer clears a loaded entity — `COMPLETE_SAVING_*` only moves `saveStatus` to `SAVED` — so a save cannot make a guard fire underneath the screen the user is still on and steal the `back()` the saga is about to perform ([§5.4](#54-saga-driven-navigation)). A predicate written on a status flag would do exactly that.
+
+This is what makes the cold URL land somewhere sensible; the error boundary behind it ([§11.5](11-interface.md#115-the-screen-error-boundary)) stays as the net for the container throws that should now be unreachable from a URL.
 
 ---
 

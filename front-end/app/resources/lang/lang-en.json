@@ -31,7 +31,8 @@
 				"backendOwnPlatformFetch": "Cannot fetch platforms from the server",
 				"backendOwnPlatformSave": "Cannot save the platform to the server",
 				"backendOwnPlatformDelete": "Cannot delete the platform from the server",
-				"saveTvShowSeasonNumber": "A season with the same number already exists for this TV show"
+				"saveTvShowSeasonNumber": "A season with the same number already exists for this TV show",
+			"screenContextMissing": "That page cannot be opened directly, so you have been taken back to your categories"
 			},
 			"hints": {
 				"backEndTimeout": "the server did not respond in time, check your connection",

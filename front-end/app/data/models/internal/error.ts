@@ -34,6 +34,8 @@ export class AppError extends Error {
 
 	public static TV_SHOW_SEASON_SAME_NUMBER = new AppError('tvShowSeason.sameNumber', 'error.flash.messages.saveTvShowSeasonNumber');
 
+	public static SCREEN_CONTEXT_MISSING = new AppError('screen.contextMissing', 'error.flash.messages.screenContextMissing');
+
 	private _errorCode: string;
 	private _errorDescription: string;
 	private _userHint?: ErrorHint;

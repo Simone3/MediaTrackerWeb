@@ -6,13 +6,16 @@ import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-do
 import { Action, Store, createStore } from 'redux';
 import { MediaItemUnsavedChangesGuardContainer } from 'app/components/containers/media-item/details/unsaved-changes-guard';
 import { MediaNavigator } from 'app/components/containers/navigation/media-navigator';
+import { DEFAULT_CATEGORY } from 'app/data/models/internal/category';
 import { DEFAULT_BOOK } from 'app/data/models/internal/media-items/book';
 import { SET_MEDIA_ITEM_FORM_DRAFT } from 'app/redux/actions/media-item/const';
+import { CategoryGlobalState } from 'app/redux/state/category';
 import { GroupGlobalState, GroupsListState, groupGlobalStateInitialValue, groupsListStateInitialValue } from 'app/redux/state/group';
 import { MediaItemDetailsState, mediaItemDetailsStateInitialValue } from 'app/redux/state/media-item';
 import { i18n } from 'app/utilities/i18n';
 
 type GuardTestState = {
+	categoryGlobal: CategoryGlobalState;
 	mediaItemDetails: MediaItemDetailsState;
 	groupGlobal: GroupGlobalState;
 	groupsList: GroupsListState;
@@ -21,6 +24,10 @@ type GuardTestState = {
 const createGuardStore = (overrides: Partial<MediaItemDetailsState> = {}) => {
 	const dispatchedActions: Action[] = [];
 	const initialState: GuardTestState = {
+		// The media item form flow is always reached from inside a category, which is what the screen context guard checks
+		categoryGlobal: {
+			selectedCategory: DEFAULT_CATEGORY
+		},
 		mediaItemDetails: {
 			...mediaItemDetailsStateInitialValue,
 			mediaItem: DEFAULT_BOOK,

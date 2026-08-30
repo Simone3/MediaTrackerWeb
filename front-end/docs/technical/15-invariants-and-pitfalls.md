@@ -14,7 +14,9 @@ That context is set by `SELECT_CATEGORY` ([§10.1](10-features.md#101-categories
 
 It is also why opening a `/details` route directly, in a fresh tab, does not work: the route names a screen, not an entity ([§5.1](05-navigation.md#51-route-map)). A fresh tab is what makes this visible — persistence is `sessionStorage` while the login is not, so the user arrives authenticated but without any of the context the screen needs ([§6.3](06-redux.md#63-the-persistence-contract)).
 
-**The throw is caught by the screen error boundary** ([§11.5](11-interface.md#115-the-screen-error-boundary)), which shows a recoverable error screen. The screens that fall back to a default entity instead of throwing — category and group details open an empty form, the pickers fetch with no category and surface a toast — are still on their own.
+**The screens that need context are guarded** ([§5.6](05-navigation.md#56-screens-that-cannot-be-opened-cold)): the guard redirects to the categories list with an explanatory toast before the container can throw, and it covers the screens that used to degrade quietly — a details form falling back to a default entity, a picker fetching with no category — as well as the ones that threw. The screen error boundary ([§11.5](11-interface.md#115-the-screen-error-boundary)) stays behind it for anything that still manages to throw while rendering.
+
+**Adding a screen means deciding what it needs.** A new route with no entry in `screenRequiredContext` is assumed to be openable cold.
 
 ## 15.2 Group/platform selections are global transient state
 

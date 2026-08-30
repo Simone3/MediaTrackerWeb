@@ -72,7 +72,7 @@ Two props carry everything it needs from the router:
 - **`resetKey`** is `useLocation().key`. The boundary clears its error whenever the key changes, so opening a new screen — including through the recovery button and through browser back — gets a fresh attempt at rendering. Without it the fallback would outlive the screen that caused it.
 - **`recover`** navigates to the media section, whose catch-all lands on the categories list ([§5.1](05-navigation.md#51-route-map)).
 
-**This is a safety net, not a fix for the cold-URL problem.** A `/details` route opened directly still has no entity to show ([§15.1](15-invariants-and-pitfalls.md#151-category-context-is-required-for-most-media-flows)); the boundary only makes the failure visible and recoverable instead of blank. It also does not catch what is not a render error: saga failures still take the toast path of [§6.4](06-redux.md#64-error-handling-and-the-async-pattern).
+**This is a safety net, not the answer to the cold-URL problem.** What keeps a directly opened route from reaching a screen it cannot render is the context guard ([§5.6](05-navigation.md#56-screens-that-cannot-be-opened-cold)); the boundary is what remains behind it, for the container throws that should now be unreachable from a URL. It also does not catch what is not a render error: saga failures still take the toast path of [§6.4](06-redux.md#64-error-handling-and-the-async-pattern).
 
 ---
 
