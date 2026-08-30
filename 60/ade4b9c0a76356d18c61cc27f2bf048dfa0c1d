@@ -1,0 +1,34 @@
+front-end/app/components/presentational/generic/pagination/index.tsx
+  s_a5681e2dfeabdb::t_3eebb56eaf488b 3,7-9,27-29,44-60,62
+front-end/app/resources/lang/lang-en.json
+  s_a5681e2dfeabdb::t_b59edad32ab50d 591
+front-end/app/web/styles.css
+  s_a5681e2dfeabdb::t_452c7edde7df17 1596-1603,1608-1613,3369-3373
+front-end/docs/technical/10-features.md
+  s_a5681e2dfeabdb::t_4d3e8fe0c9f26c 40
+front-end/docs/technical/11-interface.md
+  s_a5681e2dfeabdb::t_51c2b7b0d50d8f 52
+front-end/tests/pagination.test.tsx
+  s_a5681e2dfeabdb::t_434b09700191f3 32,63-85,98
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "60ade4b9c0a76356d18c61cc27f2bf048dfa0c1d",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_a5681e2dfeabdb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c185a4ba-b8fa-46cc-b7d7-922234acee8f",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
