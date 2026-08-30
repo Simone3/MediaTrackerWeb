@@ -21,7 +21,6 @@ A change that spans both is two changes: make each one under its own rules, and 
 | --- | --- |
 | `README.md` | The landing page: what Media Tracker is, how to install it, how to run it locally and on Render. Every technical detail belongs in a sub-project's `docs/technical/` |
 | `TODO.md` | The outstanding work and the ideas that have not been committed to. Not maintained from here |
-| `TESTBOOK.md` | The manual QA checklist for the whole app, feature by feature |
 | `render.yaml` | The Render Blueprint that deploys both sub-projects |
 | `development/` | Local development scratch material, not part of either build |
 | `.claude/` | The permission settings and the `/check` and `/sync-docs` commands |

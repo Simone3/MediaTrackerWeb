@@ -22,8 +22,6 @@ The repository contains two self-sufficient projects, each with its own dependen
 - [`./front-end`](front-end) — the React + TypeScript web UI. See its [README](front-end/README.md) and [technical documentation](front-end/docs/technical/README.md).
 - [`./back-end`](back-end) — the Express + TypeScript REST API. See its [README](back-end/README.md) and [technical documentation](back-end/docs/technical/README.md).
 
-[`TESTBOOK.md`](TESTBOOK.md) is the manual QA checklist for the whole app.
-
 
 ## Installation
 

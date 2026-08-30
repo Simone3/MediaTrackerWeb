@@ -134,8 +134,6 @@ Credits is static and links to TMDb, IGDB and Google Books.
 
 auth loading · login · signup · categories list · category details · media items list · media item details · TV show seasons list · TV show season details · groups list · group details · own platforms list · own platform details · settings · credits
 
-`TESTBOOK.md` in the repository root walks all of it manually.
-
 ---
 
 [← §9 Data layer](09-data-layer.md) · [§11 Interface →](11-interface.md)
