@@ -9,6 +9,7 @@ import { groupGlobal } from 'app/redux/reducers/group/global';
 import { groupsList } from 'app/redux/reducers/group/list';
 import { mediaItemDetails } from 'app/redux/reducers/media-item/details';
 import { mediaItemsList } from 'app/redux/reducers/media-item/list';
+import { mediaItemsStats } from 'app/redux/reducers/media-item/stats';
 import { ownPlatformDetails } from 'app/redux/reducers/own-platform/details';
 import { ownPlatformGlobal } from 'app/redux/reducers/own-platform/global';
 import { ownPlatformsList } from 'app/redux/reducers/own-platform/list';
@@ -30,6 +31,7 @@ export const allReduces = combineReducers({
 	categoryDetails,
 	mediaItemsList,
 	mediaItemDetails,
+	mediaItemsStats,
 	tvShowSeasonsList,
 	tvShowSeasonDetails,
 	groupGlobal,

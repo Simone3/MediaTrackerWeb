@@ -134,6 +134,7 @@
 	--color-media-item-status-redo: #4bead7;
 	--color-media-item-status-complete: #e75fe7;
 	--color-media-item-status-new: var(--color-surface-overlay-emphasis);
+	--color-media-item-status-new-solid: #8b9ab6;
 }
 * {
 	box-sizing: border-box;
@@ -320,6 +321,7 @@ input {
 .categories-screen,
 .category-details-screen,
 .media-items-screen,
+.media-items-stats-screen,
 .media-item-details-screen,
 .entity-management-screen,
 .entity-details-screen,
@@ -1420,7 +1422,8 @@ input {
 	transform: translateY(-1px);
 }
 
-.media-items-screen {
+.media-items-screen,
+.media-items-stats-screen {
 	position: relative;
 	min-height: 100vh;
 	padding: 42px 40px 96px;
@@ -1431,7 +1434,8 @@ input {
 	color: var(--color-text-on-dark-primary);
 }
 
-.media-items-screen::before {
+.media-items-screen::before,
+.media-items-stats-screen::before {
 	content: '';
 	position: absolute;
 	inset: 0;
@@ -1439,7 +1443,8 @@ input {
 	pointer-events: none;
 }
 
-.media-items-screen-content {
+.media-items-screen-content,
+.media-items-stats-screen-content {
 	position: relative;
 	z-index: 1;
 	max-width: 1080px;
@@ -1447,12 +1452,14 @@ input {
 	min-width: 0;
 }
 
-.media-items-screen .loading-indicator-container-parent-size {
+.media-items-screen .loading-indicator-container-parent-size,
+.media-items-stats-screen .loading-indicator-container-parent-size {
 	background: var(--color-scrim);
 	backdrop-filter: blur(3px);
 }
 
-.media-items-screen .loading-indicator-spinner {
+.media-items-screen .loading-indicator-spinner,
+.media-items-stats-screen .loading-indicator-spinner {
 	border-color: var(--color-surface-overlay-border);
 	border-top-color: var(--color-accent-bright);
 }
@@ -1581,6 +1588,462 @@ input {
 .media-items-list-fetch-error-copy {
 	color: var(--color-text-on-dark-subtle);
 	line-height: 1.5;
+}
+
+.media-items-stats-body {
+	display: grid;
+	gap: 14px;
+	min-width: 0;
+}
+
+.media-items-stats-filters {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+	padding: 12px 14px;
+	border: 1px solid var(--color-border-control-medium);
+	border-radius: 18px;
+	background: var(--color-surface-overlay-soft);
+}
+
+.media-items-stats-filters-label {
+	font-size: 0.7rem;
+	font-weight: 700;
+	letter-spacing: 0.13em;
+	text-transform: uppercase;
+	color: var(--color-text-on-dark-subtle);
+}
+
+.media-items-stats-filters-field {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	min-width: 0;
+}
+
+.select-input.media-items-stats-filters-select {
+	width: auto;
+	max-width: 220px;
+	border-radius: 999px;
+}
+
+/* A narrowed control says so on its own, since the strip has no other room to name what it is filtering by */
+.select-input.media-items-stats-filters-select-set {
+	border-color: var(--color-accent-border);
+	background-color: var(--color-accent-surface);
+}
+
+.media-items-stats-filters-spinner {
+	flex: none;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	border: 2px solid var(--color-surface-overlay-border);
+	border-top-color: var(--color-accent);
+	animation: loading-spin 0.8s linear infinite;
+}
+
+.media-items-stats-filters-summary {
+	margin-left: auto;
+	font-size: 0.82rem;
+	color: var(--color-text-on-dark-muted);
+	font-variant-numeric: tabular-nums;
+}
+
+/* The two halves of the screen open with a section rule rather than a card: they are headings, not panels */
+.media-items-stats-section {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 8px 16px;
+	padding: 14px 2px 2px;
+}
+
+.media-items-stats-section-label {
+	font-size: 0.7rem;
+	font-weight: 700;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--color-text-on-dark-subtle);
+}
+
+.media-items-stats-section-figure {
+	display: flex;
+	align-items: baseline;
+	gap: 9px;
+}
+
+.media-items-stats-section-figure strong {
+	font-size: 2.1rem;
+	font-weight: 700;
+	line-height: 1;
+	letter-spacing: -0.02em;
+}
+
+.media-items-stats-section-figure span {
+	font-size: 0.94rem;
+	color: var(--color-text-on-dark-muted);
+}
+
+.media-items-stats-section-side {
+	margin-left: auto;
+	font-size: 0.83rem;
+	color: var(--color-text-on-dark-subtle);
+	font-variant-numeric: tabular-nums;
+}
+
+.media-items-stats-rule {
+	height: 1px;
+	margin: 0 2px 4px;
+	background: var(--color-surface-overlay-emphasis);
+}
+
+/* The two figures the screen is built around: completions in the "complete" colour, the backlog in the "active" one */
+.media-items-stats-figure-completions {
+	color: var(--color-media-item-status-complete);
+}
+
+.media-items-stats-figure-backlog {
+	color: var(--color-media-item-status-active);
+}
+
+.media-items-stats-number {
+	font-variant-numeric: tabular-nums;
+}
+
+.media-items-stats-card {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	min-width: 0;
+	padding: 16px 18px;
+	border: 1px solid var(--color-border-card);
+	border-radius: 20px;
+	background: linear-gradient(180deg, var(--color-background-card-start) 0%, var(--color-background-card-end) 100%);
+}
+
+.media-items-stats-card-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px 14px;
+}
+
+.media-items-stats-card-title {
+	margin: 0;
+	font-size: 0.7rem;
+	font-weight: 700;
+	letter-spacing: 0.13em;
+	text-transform: uppercase;
+	color: var(--color-text-on-dark-subtle);
+}
+
+.media-items-stats-empty {
+	margin: 0;
+	font-size: 0.85rem;
+	color: var(--color-text-on-dark-subtle);
+}
+
+.media-items-stats-chart {
+	position: relative;
+}
+
+.media-items-stats-chart svg {
+	display: block;
+	width: 100%;
+	height: auto;
+	overflow: visible;
+}
+
+.media-items-stats-chart-axis {
+	stroke: var(--color-surface-overlay-active);
+}
+
+.media-items-stats-chart-bar {
+	fill: var(--color-media-item-status-complete);
+	opacity: 0.92;
+	transition: opacity 0.15s ease;
+}
+
+/* A year with nothing keeps a sliver of a bar: a gap in the sequence would silently redraw the history as a shorter one */
+.media-items-stats-chart-bar-empty {
+	opacity: 0.25;
+}
+
+.media-items-stats-chart-value {
+	font-size: 11px;
+	font-weight: 700;
+	fill: var(--color-text-on-dark-muted);
+}
+
+.media-items-stats-chart-value-peak {
+	font-size: 12px;
+	fill: var(--color-text-on-dark-primary);
+}
+
+.media-items-stats-chart-tick {
+	font-size: 11px;
+	fill: var(--color-text-on-dark-subtle);
+}
+
+.media-items-stats-chart-hit-area {
+	fill: transparent;
+}
+
+.media-items-stats-chart-tooltip {
+	position: absolute;
+	z-index: 5;
+	transform: translate(-50%, calc(-100% - 8px));
+	padding: 7px 10px;
+	border: 1px solid var(--color-border-panel);
+	border-radius: 9px;
+	background: var(--color-background-screen-start);
+	box-shadow: 0 10px 26px var(--color-shadow-panel);
+	font-size: 0.78rem;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+	color: var(--color-text-on-dark-primary);
+	pointer-events: none;
+}
+
+.media-items-stats-donut-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 24px;
+}
+
+.media-items-stats-donut {
+	position: relative;
+	flex: 0 0 auto;
+}
+
+.media-items-stats-donut-track {
+	stroke: var(--color-surface-overlay-soft);
+}
+
+.media-items-stats-donut-centre {
+	position: absolute;
+	inset: 0;
+	display: grid;
+	place-content: center;
+	gap: 2px;
+	text-align: center;
+}
+
+.media-items-stats-donut-centre strong {
+	font-size: 2rem;
+	font-weight: 700;
+	line-height: 1;
+	letter-spacing: -0.02em;
+	font-variant-numeric: tabular-nums;
+}
+
+.media-items-stats-donut-centre span {
+	font-size: 0.7rem;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--color-text-on-dark-subtle);
+}
+
+.media-items-stats-donut-keys {
+	display: grid;
+	flex: 1 1 240px;
+	gap: 10px;
+	min-width: 0;
+}
+
+.media-items-stats-donut-key {
+	display: grid;
+	grid-template-columns: 12px minmax(0, 1fr) auto auto;
+	gap: 12px;
+	align-items: center;
+	font-size: 0.88rem;
+}
+
+.media-items-stats-donut-swatch {
+	width: 12px;
+	height: 12px;
+	border-radius: 3px;
+}
+
+.media-items-stats-donut-key-label {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: var(--color-text-on-dark-muted);
+}
+
+.media-items-stats-donut-key b {
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+
+.media-items-stats-donut-key-share {
+	min-width: 38px;
+	font-style: normal;
+	font-size: 0.8rem;
+	text-align: right;
+	color: var(--color-text-on-dark-subtle);
+	font-variant-numeric: tabular-nums;
+}
+
+/*
+ * The donut order is load-bearing and lives in the component that builds the segments: the active green and the redo teal are
+ * indistinguishable when adjacent, and the neutral and the orange between them are what keeps the ring readable. "Not started"
+ * takes the solid grey rather than the translucent overlay the status badges use, which would show the card through the ring
+ */
+.media-items-stats-status-new {
+	background: var(--color-media-item-status-new-solid);
+	stroke: var(--color-media-item-status-new-solid);
+}
+
+.media-items-stats-status-active {
+	background: var(--color-media-item-status-active);
+	stroke: var(--color-media-item-status-active);
+}
+
+.media-items-stats-status-upcoming {
+	background: var(--color-media-item-status-upcoming);
+	stroke: var(--color-media-item-status-upcoming);
+}
+
+.media-items-stats-status-redo {
+	background: var(--color-media-item-status-redo);
+	stroke: var(--color-media-item-status-redo);
+}
+
+/*
+ * The four importance boxes go two by two or one per row, never three and one. The query is on the card and not on the viewport,
+ * so the layout follows the room the boxes actually have rather than the width of the window around them
+ */
+.media-items-stats-card-boxes {
+	container-type: inline-size;
+}
+
+.media-items-stats-boxes {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+}
+
+@container (max-width: 560px) {
+	.media-items-stats-boxes {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+.media-items-stats-box {
+	display: flex;
+	flex-direction: column;
+	gap: 11px;
+	min-width: 0;
+	padding: 14px 15px;
+	border: 1px solid var(--color-border-card);
+	border-radius: 16px;
+	background: var(--color-surface-overlay-soft);
+}
+
+.media-items-stats-box-head {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.media-items-stats-box-label {
+	font-size: 0.85rem;
+	font-weight: 700;
+}
+
+.media-items-stats-box-total {
+	font-size: 1.15rem;
+	font-weight: 700;
+	color: var(--color-media-item-status-active);
+}
+
+/* A level with nothing left is still one of the four, but its zero is not a figure worth colouring */
+.media-items-stats-box-empty .media-items-stats-box-total {
+	color: var(--color-text-on-dark-subtle);
+}
+
+.media-items-stats-box-rows {
+	display: grid;
+	gap: 7px;
+}
+
+.media-items-stats-box-row {
+	display: grid;
+	grid-template-columns: 84px minmax(0, 1fr) 22px;
+	gap: 10px;
+	align-items: center;
+	font-size: 0.8rem;
+	color: var(--color-text-on-dark-muted);
+}
+
+.media-items-stats-box-row-name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.media-items-stats-box-row-track {
+	display: block;
+	height: 8px;
+	border-radius: 3px;
+	background: var(--color-surface-overlay-soft);
+	overflow: hidden;
+}
+
+.media-items-stats-box-row-fill {
+	display: block;
+	height: 100%;
+	border-radius: 3px;
+	background: var(--color-media-item-status-active);
+}
+
+.media-items-stats-box-row-value {
+	font-weight: 700;
+	text-align: right;
+	color: var(--color-text-on-dark-primary);
+}
+
+.media-items-stats-fetch-error {
+	display: grid;
+	justify-items: start;
+	gap: 10px;
+	padding: 24px 26px;
+	border-radius: 24px;
+	border: 1px solid var(--color-danger-border);
+	background: var(--color-danger-soft);
+}
+
+.media-items-stats-fetch-error-title,
+.media-items-stats-fetch-error-copy {
+	margin: 0;
+}
+
+.media-items-stats-fetch-error-title {
+	color: var(--color-text-on-dark-danger);
+	font-size: 1.05rem;
+	font-weight: 700;
+}
+
+.media-items-stats-fetch-error-copy {
+	color: var(--color-text-on-dark-subtle);
+	line-height: 1.5;
+}
+
+@media (hover: hover) {
+	/* Hovering a year pulls the others back, so that the bar under the pointer is the one being read */
+	.media-items-stats-chart-hovering .media-items-stats-chart-bar {
+		opacity: 0.4;
+	}
+
+	.media-items-stats-chart-hovering .media-items-stats-chart-year-active .media-items-stats-chart-bar {
+		opacity: 1;
+	}
 }
 
 .pagination {
@@ -3174,6 +3637,7 @@ input {
 	.categories-screen,
 	.category-details-screen,
 	.media-items-screen,
+	.media-items-stats-screen,
 	.media-item-details-screen,
 	.entity-management-screen,
 	.entity-details-screen,
@@ -3332,7 +3796,8 @@ input {
 		padding: 16px 16px calc(24px + env(safe-area-inset-bottom));
 	}
 
-	.media-items-screen {
+	.media-items-screen,
+	.media-items-stats-screen {
 		min-height: 100vh;
 		padding: 24px 18px calc(48px + env(safe-area-inset-bottom));
 	}
@@ -3341,6 +3806,13 @@ input {
 		gap: 12px;
 		flex-wrap: nowrap;
 		justify-content: flex-start;
+	}
+
+	/* Both push to the right of a row that has the room for it, and take a line of their own when it does not */
+	.media-items-stats-filters-summary,
+	.media-items-stats-section-side {
+		margin-left: 0;
+		width: 100%;
 	}
 
 	.media-items-list-search {

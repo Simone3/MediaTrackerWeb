@@ -1,5 +1,6 @@
 import { config } from 'app/config/config';
 import { backEndInvoker } from 'app/controllers/main/common/back-end-invoker';
+import { MediaItemBackEndController } from 'app/controllers/implementations/real/entities/media-items/media-item';
 import { BookCatalogController, BookController } from 'app/controllers/interfaces/entities/media-items/book';
 import { paginationMapper } from 'app/data/mappers/common';
 import { bookCatalogDetailsMapper, bookCatalogSearchMapper, bookFilterMapper, bookMapper, bookSortMapper } from 'app/data/mappers/media-items/book';
@@ -13,7 +14,12 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * Implementation of the BookController that queries the back-end APIs
  * @see BookController
  */
-export class BookBackEndController implements BookController {
+export class BookBackEndController extends MediaItemBackEndController implements BookController {
+	/**
+	 * @override
+	 */
+	protected readonly mediaItemPathName = 'books';
+
 	/**
 	 * @override
 	 */

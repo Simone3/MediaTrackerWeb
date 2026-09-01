@@ -77,6 +77,7 @@ When something looks wrong, in order:
 5. Which reducer owns the status flag or selected entity you expected?
 6. Did persistence restore stale context after a reload? ([§6.3](06-redux.md#63-the-persistence-contract))
 7. Is the missing value actually global Redux state rather than a route param? ([§15.1](#151-category-context-is-required-for-most-media-flows))
+8. If a media item is counted in one place and not another, do both sides still agree on how `status` is derived? ([§15.11](#1511-the-media-item-status-rule-lives-on-both-sides))
 
 The trace path that answers most of these: action generator → action constant/type → saga watcher/worker → reducer → container → presentational component.
 
@@ -87,6 +88,14 @@ The Formik forms in the app pass `enableReinitialize`, and they hand Formik a *c
 That makes it a rule: **a mapper feeding `initialValues` may read its arguments and nothing else.** One that also reads asynchronously loaded state returns one thing before the data lands and another after, and Formik will wipe whatever the user typed in between, with the same inputs from beginning to end.
 
 The concrete case is the media items filter, whose group and own platform options arrive after the modal is already open ([§10.2](10-features.md#102-media-items-list)). Its mapper emits the selected ID whether or not the matching entity is loaded, and resolving that ID to a display name is left to the view.
+
+## 15.11 The media item status rule lives on both sides
+
+`status` is derived, never stored: the front end computes it in `MediaItemMapper.buildStatusLabel`, and the back end applies the same five branches inside the stats aggregation, because the alternative is shipping every media item to the client to bucket it there ([§8.5](08-domain-model.md#85-generic-media-item), [§10.9](10-features.md#109-media-items-stats)).
+
+**Changing the precedence on one side alone fails silently**: nothing errors, the stats screen simply stops agreeing with the list rows about which items are still to do. Change both, or neither.
+
+A smaller version of the same split is already accepted: `UPCOMING` is evaluated against the browser's clock in the list and against the server's in the stats, so an item releasing today can land on different sides of the line. That one is harmless and deliberately not solved.
 
 ---
 

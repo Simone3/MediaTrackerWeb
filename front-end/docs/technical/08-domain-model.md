@@ -68,6 +68,8 @@ Shared across all four media types:
 
 Importance is one of `400`, `300`, `200`, `100`. Status is one of `ACTIVE`, `UPCOMING`, `REDO`, `COMPLETE`, `NEW`.
 
+**`status` is derived, not stored.** `MediaItemMapper.buildStatusLabel` computes it from `completedOn`, `active`, `markedAsRedo` and `releaseDate`, in that precedence. **The back end applies the same five branches** to bucket the stats backlog, because shipping enough per-item data to bucket on the client would defeat the point of an aggregate ([§10.9](10-features.md#109-media-items-stats)): the rule therefore lives in two places, and **changing it on one side without the other silently makes the stats screen disagree with the list rows** ([back end §9.6](../../../back-end/docs/technical/09-controllers.md#96-mediaitementitycontroller)). One consequence is accepted rather than solved: `UPCOMING` is decided against the browser's clock here and against the server's there, so an item releasing today can be counted differently by the two.
+
 **Nothing here may know about a specific media type.** The generic media-item components, models and mappers stay generic; subtype behaviour goes in the subtype wrapper, view, row or controller ([§16.3](16-extension-playbooks.md#163-add-a-new-media-type)).
 
 ## 8.6 Media-type-specific fields

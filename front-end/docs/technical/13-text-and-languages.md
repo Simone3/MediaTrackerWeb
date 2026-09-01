@@ -14,6 +14,8 @@ Developer-facing text — console output, log messages, errors only a bug can ra
 
 **Validation messages are user-facing.** A yup rule whose message a field displays takes one from the bundle, because yup's own default is developer text built from the field key ([§11.6](11-interface.md#116-form-validation-feedback)). `common.validation` holds the wording that suits any field; anything phrased around one field lives under that entity, in `mediaItem.details.validation` and `tvShowSeason.details.validation`.
 
+**Wording that changes with the media type is a key per `mediaType`**, not a `switch` in a component: `mediaItem.list.countByType.*`, `mediaItem.stats.perYear.title.*` and `mediaItem.stats.byStatus.values.*.*` all follow that shape. It is what lets the generic media-item components stay generic ([§8.5](08-domain-model.md#85-generic-media-item)) while still saying "watched", "read" or "played".
+
 ## 13.2 Why it stays, with one language
 
 The app ships English only and offers no language selector. The bundle is kept anyway because it is the thing that keeps a second language from being a rewrite: the cost of adding a key today is nearly zero, and the cost of extracting several hundred inline strings later is not.

@@ -4,6 +4,8 @@ import { MediaItemsListScreenComponent, MediaItemsListScreenComponentInput, Medi
 import { AppError } from 'app/data/models/internal/error';
 import { fetchMediaItems, loadNewMediaItemDetails } from 'app/redux/actions/media-item/generators';
 import { State } from 'app/redux/state/state';
+import { navigationService } from 'app/utilities/navigation-service';
+import { AppScreens } from 'app/utilities/screens';
 
 const mapStateToProps = (state: State): MediaItemsListScreenComponentInput => {
 	const listState = state.mediaItemsList;
@@ -27,6 +29,11 @@ const mapDispatchToProps = (dispatch: Dispatch): MediaItemsListScreenComponentOu
 		},
 		loadNewMediaItemDetails: (category) => {
 			dispatch(loadNewMediaItemDetails(category));
+		},
+
+		// Opening the stats is a plain navigation and not a saga: the screen loads its own data and the category is already global
+		openStats: () => {
+			navigationService.navigate(AppScreens.MediaItemsStats);
 		}
 	};
 };

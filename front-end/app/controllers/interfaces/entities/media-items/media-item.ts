@@ -1,5 +1,5 @@
 import { PaginatedResultInternal, PaginationInternal } from 'app/data/models/internal/common';
-import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
+import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, MediaItemsStatsFilterInternal, MediaItemsStatsInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 
 /**
  * The data controller for generic media items: provides methods to select, save and delete media items from the user database
@@ -26,6 +26,16 @@ export interface MediaItemController<TMediaItemInternal extends MediaItemInterna
 	 * @returns the requested page of media items and the total number of matches, as a promise
 	 */
 	search(userId: string, categoryId: string, searchTerm: string, pagination?: PaginationInternal): Promise<PaginatedResultInternal<TMediaItemInternal>>;
+
+	/**
+	 * Aggregates the statistics of the media items of a category: how much the user has completed and when, and what is left to do.
+	 * The three blocks of the result are deliberately not comparable with each other, see MediaItemsStatsInternal
+	 * @param userId the user
+	 * @param categoryId the category
+	 * @param filter the filter to apply
+	 * @returns the aggregated statistics, as a promise
+	 */
+	getStats(userId: string, categoryId: string, filter?: MediaItemsStatsFilterInternal): Promise<MediaItemsStatsInternal>;
 
 	/**
 	 * Saves a media item into the given category, adding it if the ID is not specified or updating it otherwise

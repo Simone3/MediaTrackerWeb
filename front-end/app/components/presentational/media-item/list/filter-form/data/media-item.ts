@@ -115,6 +115,116 @@ export const mediaItemFilterFormValidationShape = {
 };
 
 /**
+ * Converts a group filter block into the form value that selects it. Shared by the media items list filter form and by the stats
+ * filter strip, which offer the same options and must therefore read the same filter the same way
+ * @param source the group filter block, or undefined when nothing narrows the groups
+ * @returns the form value
+ */
+export const toGroupFilterFormValue = (source: MediaItemGroupFilterInternal | undefined): MediaItemFilterFormGroup => {
+	if(source) {
+		// Specific IDs win over the generic options, just like they do in the back-end query
+		if(source.groupIds && source.groupIds.length > 0) {
+			return `${MEDIA_ITEM_FILTER_FORM_GROUP_ID_PREFIX}${source.groupIds[0]}`;
+		}
+		if(source.anyGroup) {
+			return 'ANY';
+		}
+		if(source.noGroup) {
+			return 'NONE';
+		}
+	}
+
+	return 'ALL';
+};
+
+/**
+ * Converts an own platform filter block into the form value that selects it. Shared by the media items list filter form and by the
+ * stats filter strip, which offer the same options and must therefore read the same filter the same way
+ * @param source the own platform filter block, or undefined when nothing narrows the own platforms
+ * @returns the form value
+ */
+export const toOwnPlatformFilterFormValue = (source: MediaItemOwnPlatformFilterInternal | undefined): MediaItemFilterFormOwnPlatform => {
+	if(source) {
+		// Specific IDs win over the generic options, just like they do in the back-end query
+		if(source.ownPlatformIds && source.ownPlatformIds.length > 0) {
+			return `${MEDIA_ITEM_FILTER_FORM_OWN_PLATFORM_ID_PREFIX}${source.ownPlatformIds[0]}`;
+		}
+		if(source.anyOwnPlatform) {
+			return 'ANY';
+		}
+		if(source.noOwnPlatform) {
+			return 'NONE';
+		}
+	}
+
+	return 'ALL';
+};
+
+/**
+ * Converts a group filter form value into the filter block it means
+ * @param source the form value
+ * @returns the group filter block, or undefined when the value narrows nothing
+ */
+export const toGroupFilterModel = (source: MediaItemFilterFormGroup): MediaItemGroupFilterInternal | undefined => {
+	if(source.startsWith(MEDIA_ITEM_FILTER_FORM_GROUP_ID_PREFIX)) {
+		// The display name is not known here: the caller fills it in from the loaded groups before the filter is submitted
+		return {
+			groupIds: [ source.substring(MEDIA_ITEM_FILTER_FORM_GROUP_ID_PREFIX.length) ]
+		};
+	}
+
+	switch(source) {
+		case 'ALL':
+			return undefined;
+
+		case 'ANY':
+			return {
+				anyGroup: true
+			};
+
+		case 'NONE':
+			return {
+				noGroup: true
+			};
+
+		default:
+			throw AppError.GENERIC.withDetails('Cannot map group filter');
+	}
+};
+
+/**
+ * Converts an own platform filter form value into the filter block it means
+ * @param source the form value
+ * @returns the own platform filter block, or undefined when the value narrows nothing
+ */
+export const toOwnPlatformFilterModel = (source: MediaItemFilterFormOwnPlatform): MediaItemOwnPlatformFilterInternal | undefined => {
+	if(source.startsWith(MEDIA_ITEM_FILTER_FORM_OWN_PLATFORM_ID_PREFIX)) {
+		// The display name is not known here: the caller fills it in from the loaded own platforms before the filter is submitted
+		return {
+			ownPlatformIds: [ source.substring(MEDIA_ITEM_FILTER_FORM_OWN_PLATFORM_ID_PREFIX.length) ]
+		};
+	}
+
+	switch(source) {
+		case 'ALL':
+			return undefined;
+
+		case 'ANY':
+			return {
+				anyOwnPlatform: true
+			};
+
+		case 'NONE':
+			return {
+				noOwnPlatform: true
+			};
+
+		default:
+			throw AppError.GENERIC.withDetails('Cannot map own platform filter');
+	}
+};
+
+/**
  * Mapper for the media item filter form values
  */
 export abstract class MediaItemFilterFormMapper<TMediaItemFilterInternal extends MediaItemFilterInternal, TMediaItemSortByInternal extends MediaItemSortByInternal, TMediaItemFilterFormValues extends MediaItemFilterFormValues> {
@@ -184,20 +294,7 @@ export abstract class MediaItemFilterFormMapper<TMediaItemFilterInternal extends
 	 * @returns the target
 	 */
 	protected toGroupFormValue(source: MediaItemGroupFilterInternal | undefined): MediaItemFilterFormGroup {
-		if(source) {
-			// Specific IDs win over the generic options, just like they do in the back-end query
-			if(source.groupIds && source.groupIds.length > 0) {
-				return `${MEDIA_ITEM_FILTER_FORM_GROUP_ID_PREFIX}${source.groupIds[0]}`;
-			}
-			if(source.anyGroup) {
-				return 'ANY';
-			}
-			if(source.noGroup) {
-				return 'NONE';
-			}
-		}
-
-		return 'ALL';
+		return toGroupFilterFormValue(source);
 	}
 
 	/**
@@ -206,20 +303,7 @@ export abstract class MediaItemFilterFormMapper<TMediaItemFilterInternal extends
 	 * @returns the target
 	 */
 	protected toOwnPlatformFormValue(source: MediaItemOwnPlatformFilterInternal | undefined): MediaItemFilterFormOwnPlatform {
-		if(source) {
-			// Specific IDs win over the generic options, just like they do in the back-end query
-			if(source.ownPlatformIds && source.ownPlatformIds.length > 0) {
-				return `${MEDIA_ITEM_FILTER_FORM_OWN_PLATFORM_ID_PREFIX}${source.ownPlatformIds[0]}`;
-			}
-			if(source.anyOwnPlatform) {
-				return 'ANY';
-			}
-			if(source.noOwnPlatform) {
-				return 'NONE';
-			}
-		}
-
-		return 'ALL';
+		return toOwnPlatformFilterFormValue(source);
 	}
 
 	/**
@@ -253,30 +337,7 @@ export abstract class MediaItemFilterFormMapper<TMediaItemFilterInternal extends
 	 * @returns the target
 	 */
 	protected toGroupModel(source: MediaItemFilterFormGroup): MediaItemGroupFilterInternal | undefined {
-		if(source.startsWith(MEDIA_ITEM_FILTER_FORM_GROUP_ID_PREFIX)) {
-			// The display name is not known here: the modal fills it in from the loaded groups before the filter is submitted
-			return {
-				groupIds: [ source.substring(MEDIA_ITEM_FILTER_FORM_GROUP_ID_PREFIX.length) ]
-			};
-		}
-
-		switch(source) {
-			case 'ALL':
-				return undefined;
-
-			case 'ANY':
-				return {
-					anyGroup: true
-				};
-
-			case 'NONE':
-				return {
-					noGroup: true
-				};
-
-			default:
-				throw AppError.GENERIC.withDetails('Cannot map group filter');
-		}
+		return toGroupFilterModel(source);
 	}
 
 	/**
@@ -285,30 +346,7 @@ export abstract class MediaItemFilterFormMapper<TMediaItemFilterInternal extends
 	 * @returns the target
 	 */
 	protected toOwnPlatformModel(source: MediaItemFilterFormOwnPlatform): MediaItemOwnPlatformFilterInternal | undefined {
-		if(source.startsWith(MEDIA_ITEM_FILTER_FORM_OWN_PLATFORM_ID_PREFIX)) {
-			// The display name is not known here: the modal fills it in from the loaded own platforms before the filter is submitted
-			return {
-				ownPlatformIds: [ source.substring(MEDIA_ITEM_FILTER_FORM_OWN_PLATFORM_ID_PREFIX.length) ]
-			};
-		}
-
-		switch(source) {
-			case 'ALL':
-				return undefined;
-
-			case 'ANY':
-				return {
-					anyOwnPlatform: true
-				};
-
-			case 'NONE':
-				return {
-					noOwnPlatform: true
-				};
-
-			default:
-				throw AppError.GENERIC.withDetails('Cannot map own platform filter');
-		}
+		return toOwnPlatformFilterModel(source);
 	}
 
 	/**
@@ -340,7 +378,7 @@ export abstract class MediaItemFilterFormMapper<TMediaItemFilterInternal extends
  * @param id the ID to look up
  * @returns the display name, or undefined if the filter does not carry one
  */
-const findFilterDisplayName = (ids: string[] | undefined, names: string[] | undefined, id: string): string | undefined => {
+export const findFilterDisplayName = (ids: string[] | undefined, names: string[] | undefined, id: string): string | undefined => {
 	if(!ids || !names) {
 		return undefined;
 	}
@@ -370,12 +408,12 @@ const buildUnlistedOptionLabel = (name: string | undefined, id: string, listLoad
 /**
  * Builds the options of the group filter input: the generic ones, then one for each loaded group, then, if the filter targets a group the
  * loaded list does not contain, one that keeps the current selection both readable and reachable
- * @param filter the filter the form was initialized with
+ * @param groupsFilter the group filter block the form was initialized with
  * @param groups the currently loaded groups, empty while they are being fetched
  * @param groupsLoaded if the loaded groups are the authoritative list, i.e. the fetch completed successfully
  * @returns the select options
  */
-export const buildGroupFilterOptions = (filter: MediaItemFilterInternal, groups: GroupInternal[], groupsLoaded: boolean): MediaItemFilterFormOption[] => {
+export const buildGroupFilterOptions = (groupsFilter: MediaItemGroupFilterInternal | undefined, groups: GroupInternal[], groupsLoaded: boolean): MediaItemFilterFormOption[] => {
 	const options: MediaItemFilterFormOption[] = MEDIA_ITEM_FILTER_FORM_GENERIC_GROUP_VALUES.map((value) => {
 		return {
 			value: value,
@@ -390,7 +428,6 @@ export const buildGroupFilterOptions = (filter: MediaItemFilterInternal, groups:
 		});
 	}
 
-	const groupsFilter = filter.groups;
 	const selectedId = groupsFilter && groupsFilter.groupIds && groupsFilter.groupIds.length > 0 ? groupsFilter.groupIds[0] : undefined;
 	if(selectedId && !groups.some((group) => {
 		return group.id === selectedId;
@@ -407,12 +444,12 @@ export const buildGroupFilterOptions = (filter: MediaItemFilterInternal, groups:
 /**
  * Builds the options of the own platform filter input: the generic ones, then one for each loaded own platform, then, if the filter targets
  * an own platform the loaded list does not contain, one that keeps the current selection both readable and reachable
- * @param filter the filter the form was initialized with
+ * @param ownPlatformsFilter the own platform filter block the form was initialized with
  * @param ownPlatforms the currently loaded own platforms, empty while they are being fetched
  * @param ownPlatformsLoaded if the loaded own platforms are the authoritative list, i.e. the fetch completed successfully
  * @returns the select options
  */
-export const buildOwnPlatformFilterOptions = (filter: MediaItemFilterInternal, ownPlatforms: OwnPlatformInternal[], ownPlatformsLoaded: boolean): MediaItemFilterFormOption[] => {
+export const buildOwnPlatformFilterOptions = (ownPlatformsFilter: MediaItemOwnPlatformFilterInternal | undefined, ownPlatforms: OwnPlatformInternal[], ownPlatformsLoaded: boolean): MediaItemFilterFormOption[] => {
 	const options: MediaItemFilterFormOption[] = MEDIA_ITEM_FILTER_FORM_GENERIC_OWN_PLATFORM_VALUES.map((value) => {
 		return {
 			value: value,
@@ -427,7 +464,6 @@ export const buildOwnPlatformFilterOptions = (filter: MediaItemFilterInternal, o
 		});
 	}
 
-	const ownPlatformsFilter = filter.ownPlatforms;
 	const selectedId = ownPlatformsFilter && ownPlatformsFilter.ownPlatformIds && ownPlatformsFilter.ownPlatformIds.length > 0 ? ownPlatformsFilter.ownPlatformIds[0] : undefined;
 	if(selectedId && !ownPlatforms.some((ownPlatform) => {
 		return ownPlatform.id === selectedId;
@@ -450,8 +486,9 @@ export const buildOwnPlatformFilterOptions = (filter: MediaItemFilterInternal, o
  * @param groups the currently loaded groups
  * @param ownPlatforms the currently loaded own platforms
  * @returns the filter, with the display names of its groups and own platforms
+ * @template TFilter the filter type, which is the list filter on one screen and the stats filter on the other
  */
-export const withFilterDisplayNames = (filter: MediaItemFilterInternal, previousFilter: MediaItemFilterInternal, groups: GroupInternal[], ownPlatforms: OwnPlatformInternal[]): MediaItemFilterInternal => {
+export const withFilterDisplayNames = <TFilter extends { groups?: MediaItemGroupFilterInternal; ownPlatforms?: MediaItemOwnPlatformFilterInternal }>(filter: TFilter, previousFilter: TFilter, groups: GroupInternal[], ownPlatforms: OwnPlatformInternal[]): TFilter => {
 	const result = {
 		...filter
 	};

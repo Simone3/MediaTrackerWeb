@@ -21,6 +21,7 @@
 				"backendCategorySave": "Cannot save the category to the server",
 				"backendCategoryDelete": "Cannot delete the category from the server",
 				"backendMediaItemFetch": "Cannot fetch media items from the server",
+				"backendMediaItemStatsFetch": "Cannot fetch the media items stats from the server",
 				"backendMediaItemSave": "Cannot save the media item to the server",
 				"backendMediaItemDelete": "Cannot delete the media item from the server",
 				"backendMediaItemCatalogSearch": "Cannot search the media item catalog",
@@ -286,6 +287,139 @@
 			"fetchError": {
 				"title": "Could not load this page",
 				"copy": "The media items could not be retrieved. Check your connection and try again.",
+				"retry": "Retry"
+			}
+		},
+		"stats": {
+			"title": "{{category}} progress",
+			"open": "Progress",
+			"subtitle": {
+				"single": {
+					"BOOK": "1 book tracked",
+					"MOVIE": "1 movie tracked",
+					"TV_SHOW": "1 show tracked",
+					"VIDEOGAME": "1 game tracked"
+				},
+				"multiple": {
+					"BOOK": "{{count}} books tracked",
+					"MOVIE": "{{count}} movies tracked",
+					"TV_SHOW": "{{count}} shows tracked",
+					"VIDEOGAME": "{{count}} games tracked"
+				}
+			},
+			"back": "Back to list",
+			"filters": {
+				"label": "Filters",
+				"clearButton": "Clear",
+				"summary": {
+					"BOOK": "{{shown}} of {{total}} books",
+					"MOVIE": "{{shown}} of {{total}} movies",
+					"TV_SHOW": "{{shown}} of {{total}} shows",
+					"VIDEOGAME": "{{shown}} of {{total}} games"
+				}
+			},
+			"completed": {
+				"label": "Completed",
+				"unit": {
+					"BOOK": "readings, all time",
+					"MOVIE": "viewings, all time",
+					"TV_SHOW": "viewings, all time",
+					"VIDEOGAME": "playthroughs, all time"
+				},
+				"distinct": {
+					"single": {
+						"BOOK": "1 distinct book",
+						"MOVIE": "1 distinct movie",
+						"TV_SHOW": "1 distinct show",
+						"VIDEOGAME": "1 distinct game"
+					},
+					"multiple": {
+						"BOOK": "{{count}} distinct books",
+						"MOVIE": "{{count}} distinct movies",
+						"TV_SHOW": "{{count}} distinct shows",
+						"VIDEOGAME": "{{count}} distinct games"
+					}
+				},
+				"repeats": {
+					"single": "1 repeat",
+					"multiple": "{{count}} repeats"
+				}
+			},
+			"perYear": {
+				"title": {
+					"BOOK": "Read per year",
+					"MOVIE": "Watched per year",
+					"TV_SHOW": "Watched per year",
+					"VIDEOGAME": "Finished per year"
+				},
+				"average": "{{value}} a year on average",
+				"empty": "Nothing completed yet",
+				"accessibility": "Completions per year",
+				"tooltip": "{{year}}: {{count}}"
+			},
+			"todo": {
+				"label": "Still to do",
+				"count": {
+					"single": {
+						"BOOK": "book",
+						"MOVIE": "movie",
+						"TV_SHOW": "show",
+						"VIDEOGAME": "game"
+					},
+					"multiple": {
+						"BOOK": "books",
+						"MOVIE": "movies",
+						"TV_SHOW": "shows",
+						"VIDEOGAME": "games"
+					}
+				},
+				"centre": {
+					"BOOK": "to read",
+					"MOVIE": "to watch",
+					"TV_SHOW": "to watch",
+					"VIDEOGAME": "to play"
+				}
+			},
+			"byStatus": {
+				"title": "The backlog, by status",
+				"empty": "Nothing left. Everything here is done.",
+				"values": {
+					"NEW": {
+						"BOOK": "Not started",
+						"MOVIE": "Not started",
+						"TV_SHOW": "Not started",
+						"VIDEOGAME": "Not started"
+					},
+					"ACTIVE": {
+						"BOOK": "Reading",
+						"MOVIE": "Watching",
+						"TV_SHOW": "Watching",
+						"VIDEOGAME": "Playing"
+					},
+					"UPCOMING": {
+						"BOOK": "Upcoming",
+						"MOVIE": "Upcoming",
+						"TV_SHOW": "Upcoming",
+						"VIDEOGAME": "Upcoming"
+					},
+					"REDO": {
+						"BOOK": "To reread",
+						"MOVIE": "To rewatch",
+						"TV_SHOW": "To rewatch",
+						"VIDEOGAME": "To replay"
+					}
+				},
+				"share": "{{value}}%"
+			},
+			"byPlatform": {
+				"title": "The backlog, by importance and platform",
+				"empty": "Nothing left to place.",
+				"emptyLevel": "Nothing left here.",
+				"noOwnPlatform": "Not owned"
+			},
+			"fetchError": {
+				"title": "Could not load the stats",
+				"copy": "The media items stats could not be retrieved. Check your connection and try again.",
 				"retry": "Retry"
 			}
 		},

@@ -30,7 +30,7 @@ Where everything lives. Generated folders — `node_modules/`, `coverage/`, buil
 | `containers/auth/*` | Login, signup and the auth-loading shell |
 | `containers/navigation/*` | The router composition: the browser router, the authentication switch, and the media and settings navigators ([§5.2](05-navigation.md#52-router-composition)) |
 | `containers/category/*` | Categories list and category details |
-| `containers/media-item/*` | Media items list and media item details, the largest feature area |
+| `containers/media-item/*` | Media items list, media item details and the category stats, the largest feature area |
 | `containers/tv-show-season/*` | The nested seasons list and season details ([§10.4](10-features.md#104-tv-show-seasons-the-nested-flow)) |
 | `containers/group/*` | Groups list and group details |
 | `containers/own-platform/*` | Own platforms list and own platform details |
@@ -41,6 +41,7 @@ Where everything lives. Generated folders — `node_modules/`, `coverage/`, buil
 | `presentational/media-item/details/form/wrapper/*` | The shared media-item form plus one wrapper per media type |
 | `presentational/media-item/details/form/view/*` | The per-media-type field layouts |
 | `presentational/media-item/details/form/data/*` | Per-media-type validation, normalization and catalog defaults |
+| `presentational/media-item/stats/*` | The stats screen, its filter strip and its three charts, plus the `data/` helpers that shape the aggregate for them ([§10.9](10-features.md#109-media-items-stats)) |
 | `presentational/own-platform/common/icon-registry.ts` | The single place own-platform icons are declared ([§10.6](10-features.md#106-own-platforms)) |
 
 ## 2.3 `app/redux` — the state
@@ -63,7 +64,7 @@ Where everything lives. Generated folders — `node_modules/`, `coverage/`, buil
 | --- | --- |
 | `interfaces/entities/*` | The contracts each entity controller implements |
 | `interfaces/common/*` | Shared transport contracts, including the back-end invoker |
-| `implementations/real/*` | Firebase and REST-backed controllers |
+| `implementations/real/*` | Firebase and REST-backed controllers, with `entities/media-items/media-item.ts` holding the calls whose only per-type difference is the path segment |
 | `implementations/mocks/*` | In-memory substitutes with seeded data ([§9.7](09-data-layer.md#97-mock-controllers)) |
 | `main/*` | The runtime singletons: which implementation is live, decided from `config.mocks.*` ([§9.2](09-data-layer.md#92-runtime-controller-selection)) |
 | `main/entities/media-items/factories.ts` | The three media-type factory families ([§9.5](09-data-layer.md#95-media-type-factories)) |

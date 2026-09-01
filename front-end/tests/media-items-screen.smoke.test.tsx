@@ -41,6 +41,7 @@ describe('MediaItemsListScreenComponent', () => {
 	test('uses the dark shell, fetches when required and shows the desktop add action', async() => {
 		const fetchMediaItems = jest.fn();
 		const loadNewMediaItemDetails = jest.fn();
+		const openStats = jest.fn();
 		setViewportWidth(1280);
 
 		render(
@@ -52,6 +53,7 @@ describe('MediaItemsListScreenComponent', () => {
 					requiresFetch={true}
 					fetchMediaItems={fetchMediaItems}
 					loadNewMediaItemDetails={loadNewMediaItemDetails}
+					openStats={openStats}
 				/>
 			</MemoryRouter>
 		);
@@ -68,6 +70,10 @@ describe('MediaItemsListScreenComponent', () => {
 		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.list.add.MOVIE') }));
 
 		expect(loadNewMediaItemDetails).toHaveBeenCalledWith(category);
+
+		await user.click(screen.getByRole('button', { name: i18n.t('mediaItem.stats.open') }));
+
+		expect(openStats).toHaveBeenCalledTimes(1);
 	});
 
 	test('keeps the shared header add button on small screens', async() => {
@@ -83,6 +89,7 @@ describe('MediaItemsListScreenComponent', () => {
 					requiresFetch={false}
 					fetchMediaItems={jest.fn()}
 					loadNewMediaItemDetails={loadNewMediaItemDetails}
+					openStats={jest.fn()}
 				/>
 			</MemoryRouter>
 		);

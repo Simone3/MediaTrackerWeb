@@ -2,9 +2,9 @@ import { stripHtml } from 'string-strip-html';
 import { ModelMapper } from 'app/data/mappers/common';
 import { groupMapper } from 'app/data/mappers/group';
 import { ownPlatformMapper } from 'app/data/mappers/own-platform';
-import { CatalogMediaItem, MediaItem, MediaItemFilter, MediaItemGroupFilter, MediaItemOwnPlatformFilter, MediaItemSortBy, MediaItemSortField, SearchMediaItemCatalogResult } from 'app/data/models/api/media-items/media-item';
+import { CatalogMediaItem, GetMediaItemsStatsResponse, MediaItem, MediaItemFilter, MediaItemGroupFilter, MediaItemOwnPlatformFilter, MediaItemSortBy, MediaItemSortField, MediaItemsStatsFilter, SearchMediaItemCatalogResult } from 'app/data/models/api/media-items/media-item';
 import { AppError } from 'app/data/models/internal/error';
-import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemGroupFilterInternal, MediaItemInternal, MediaItemOwnPlatformFilterInternal, MediaItemSortByInternal, MediaItemSortFieldInternal, MediaItemStatusFilterInternal, MediaItemStatusInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
+import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemGroupFilterInternal, MediaItemInternal, MediaItemOwnPlatformFilterInternal, MediaItemSortByInternal, MediaItemSortFieldInternal, MediaItemStatusFilterInternal, MediaItemStatusInternal, MediaItemsStatsFilterInternal, MediaItemsStatsInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import { dateUtils } from 'app/utilities/date-utils';
 
 /**
@@ -414,3 +414,101 @@ export abstract class MediaItemCatalogDetailsMapper<TCatalogMediaItemInternal ex
 	}
 }
 
+/**
+ * Mapper for the media items stats filter
+ */
+class MediaItemsStatsFilterMapper extends ModelMapper<MediaItemsStatsFilterInternal, MediaItemsStatsFilter, never> {
+	/**
+	 * @override
+	 */
+	protected convertToExternal(source: MediaItemsStatsFilterInternal): MediaItemsStatsFilter {
+		const target: MediaItemsStatsFilter = {};
+
+		if(source.groups) {
+			target.groups = {
+				anyGroup: source.groups.anyGroup,
+				noGroup: source.groups.noGroup,
+				groupIds: source.groups.groupIds
+			};
+		}
+
+		if(source.ownPlatforms) {
+			target.ownPlatforms = {
+				anyOwnPlatform: source.ownPlatforms.anyOwnPlatform,
+				noOwnPlatform: source.ownPlatforms.noOwnPlatform,
+				ownPlatformIds: source.ownPlatforms.ownPlatformIds
+			};
+		}
+
+		return target;
+	}
+
+	/**
+	 * @override
+	 */
+	protected convertToInternal(): MediaItemsStatsFilterInternal {
+		throw AppError.GENERIC.withDetails('The media items stats filter is built by the app and never travels inwards');
+	}
+}
+
+/**
+ * Mapper for the media items stats
+ */
+class MediaItemsStatsMapper extends ModelMapper<MediaItemsStatsInternal, GetMediaItemsStatsResponse, never> {
+	/**
+	 * @override
+	 */
+	protected convertToExternal(): GetMediaItemsStatsResponse {
+		throw AppError.GENERIC.withDetails('The media items stats are computed by the back end and never travel outwards');
+	}
+
+	/**
+	 * @override
+	 */
+	protected convertToInternal(source: GetMediaItemsStatsResponse): MediaItemsStatsInternal {
+		return {
+			mediaItems: {
+				total: source.mediaItems.total,
+				filtered: source.mediaItems.filtered
+			},
+			completions: {
+				total: source.completions.total,
+				mediaItems: source.completions.mediaItems,
+				byYear: source.completions.byYear.map((year) => {
+					return {
+						year: year.year,
+						count: year.count
+					};
+				})
+			},
+			backlog: {
+				total: source.backlog.total,
+				byStatus: source.backlog.byStatus.map((status) => {
+					return {
+						status: status.status,
+						count: status.count
+					};
+				}),
+				byImportanceAndOwnPlatform: source.backlog.byImportanceAndOwnPlatform.map((entry) => {
+					return {
+						importance: entry.importance,
+
+						// The API says "not owned" with an explicit null, which is simply the absence of an own platform in here
+						ownPlatformId: entry.ownPlatformId === null ? undefined : entry.ownPlatformId,
+						count: entry.count
+					};
+				})
+			}
+		};
+	}
+}
+
+/**
+ * Singleton instance of the media items stats filter mapper
+ */
+export const mediaItemsStatsFilterMapper = new MediaItemsStatsFilterMapper();
+
+/**
+ * Singleton instance of the media items stats mapper
+ */
+export const mediaItemsStatsMapper = new MediaItemsStatsMapper();

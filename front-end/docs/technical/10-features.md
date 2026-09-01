@@ -170,7 +170,59 @@ Credits is static and links to TMDb, IGDB and Google Books.
 
 ## 10.8 The current screen set
 
-auth loading · login · signup · categories list · category details · media items list · media item details · TV show seasons list · TV show season details · groups list · group details · own platforms list · own platform details · settings · credits
+auth loading · login · signup · categories list · category details · media items list · media item details · media items stats · TV show seasons list · TV show season details · groups list · group details · own platforms list · own platform details · settings · credits
+
+## 10.9 Media items stats
+
+Entry files:
+
+- `app/components/containers/media-item/stats/screen.ts`
+- `app/components/containers/media-item/stats/filters.ts`
+- `app/components/presentational/media-item/stats/screen/index.tsx`
+- `app/components/presentational/media-item/stats/data/media-item.ts`
+- `app/redux/reducers/media-item/stats.ts`
+- `app/redux/sagas/media-item/fetch-stats.ts`
+
+One category, two questions that are **deliberately never compared to each other**:
+
+| Half | Question | Unit |
+| --- | --- | --- |
+| Completed | how much have I finished, and when? | completions |
+| Still to do | what is left, and where is it? | media items |
+
+They share no bar, no percentage and no total, and the screen is laid out as two stacked sections with their own headline figures. A backlog grows because the user keeps adding to it, so measuring it against a lifetime of completions would say nothing — and an item completed twice and marked for redo is on both sides at once, which is exactly why the two do not add up to the size of the category.
+
+The whole aggregate is one `stats` call ([§9.4](09-data-layer.md#94-endpoint-patterns)), reached from the media items list header and left with `navigationService.back()` ([§5.4](05-navigation.md#54-saga-driven-navigation)). The slice fetches on mount and on update while its status is `REQUIRES_FETCH`, like the list screens.
+
+### The filters
+
+A single strip above the content, with a group select and an own platform select offering the same options as the media items list filter ([§10.2](#102-media-items-list)) — including the carried display names and the `unknown`/`deleted` fallbacks, since both screens share the option builders and the form-value conversions in `.../list/filter-form/data/media-item.ts`.
+
+**There is no importance filter and no status filter**, and that is a design decision rather than an omission: importance and status are the two axes the backlog is broken down along, so filtering by either would reduce its own panel to a single value, and filtering to "completed only" would empty one half of the screen outright.
+
+The strip shows **nothing else while both filters target everything** — no clear action, no summary. As soon as either is set, a Clear action and a `29 of 128 movies` summary appear. Changing a filter marks the slice `REQUIRES_FETCH` and both halves recompute; the header subtitle does not, since it is context for the screen rather than one of its figures.
+
+The groups and own platforms load exactly the way the filter modal loads them: only when their status is `REQUIRES_FETCH` or `FETCH_FAILED`, never blocking, with a small spinner beside the control while in flight.
+
+### The three charts
+
+**Watched per year** is one bar per year from the first completion to the current one, **zeros included**: a year in which the user finished nothing is a fact about the history, and a gap in the sequence would silently redraw it as a shorter, busier one. The back end sends only the years that have something and the client fills the rest in `buildYearSeries`, so the payload stays proportional to the data rather than to the range. The card head carries the yearly average, which divides by the number of years shown and therefore counts the current, partial year as a whole one.
+
+**A long history thins its own axis out.** Once the bars are too narrow to hold a year under them, only every *n*th year is written, counted back from the last one so that the year the chart ends at is always labelled and never lands on top of its neighbour; narrower still, only the tallest bar keeps its value. The hover tooltip names every year regardless, so nothing the chart was saying is lost.
+
+**The backlog by status** is a donut with a key. **Its segment order is load-bearing and must not be changed**: the active green and the redo teal are indistinguishable when adjacent, so the neutral grey of *Not started* and the orange of *Upcoming* sit between them. The green–orange pair that remains is still weak under deuteranopia, which is why every segment is also named and counted in the key and why the segments carry a gap.
+
+**The backlog by importance and platform** is four boxes, one per importance level, laid out **two by two or one per row, never three and one**. The layout is driven by a container query on the card rather than a viewport media query, so it follows the room the boxes actually have. **All the bars across all four boxes share one scale** — the largest single count anywhere in the panel — and that shared scale is the whole point: it is what makes the boxes comparable to each other instead of four unrelated charts. A platform with nothing left at a level is not listed, and the four levels are always all there, since dropping an empty one would say the level does not exist rather than that it is clear.
+
+### Colour
+
+Only three decisions, all reusing the status tokens ([§12.2](12-styling.md#122-semantic-custom-properties)): `--color-media-item-status-complete` for the completions, `--color-media-item-status-active` for the backlog, and the four status tokens for the donut. *Not started* takes `--color-media-item-status-new-solid` rather than the status token itself, which is a translucent white overlay that would let the card show through the ring.
+
+**The category colour is used nowhere here.** It identifies a category in a list of categories; on this screen there is only one, and spending a colour on it would compete with the two that carry meaning.
+
+### Where the numbers come from
+
+Every figure is in the one response, `mediaItems`/`completions`/`backlog`, and none is derived from another slice. That includes the two counts the filter summary compares and the category size in the header subtitle: **the subtitle stays blank until the stats arrive** rather than borrowing the media items list's `totalCount`, which answers a different query and would visibly change under the user once the real figure landed.
 
 ---
 

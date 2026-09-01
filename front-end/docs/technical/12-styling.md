@@ -18,6 +18,10 @@ It also covers the shared skeleton and loading styles, so a new screen's loading
 
 **Use the tokens. Avoid raw hex and `rgba()` in components** — a literal color in a component is invisible to the theme and will drift from it.
 
+### The status colors are used twice
+
+The five `--color-media-item-status-*` tokens paint the badges on the list rows, and the stats screen borrows four of them for its own figures and for the donut ([§10.9](10-features.md#109-media-items-stats)). One of the two uses needed something the other did not: `--color-media-item-status-new` is a translucent white overlay, which reads correctly on a row but lets the card show through a ring segment, so `--color-media-item-status-new-solid` sits beside it as the opaque grey the donut paints *Not started* with. **They are meant to look like the same colour** — changing one without the other makes the two screens disagree about what "not started" looks like.
+
 ## 12.3 Colors that come from config
 
 Two kinds of color are deliberately *not* tokens:

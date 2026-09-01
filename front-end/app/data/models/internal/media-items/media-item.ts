@@ -145,3 +145,78 @@ export type SearchMediaItemCatalogResultInternal = {
 	name: string;
 	releaseDate?: Date;
 };
+
+/**
+ * Array of all media item backlog statuses, in the order the stats screen reports them, internal type just for display purposes
+ */
+export const MEDIA_ITEM_BACKLOG_STATUS_INTERNAL_VALUES: [ 'NEW', 'ACTIVE', 'UPCOMING', 'REDO' ] = [ 'NEW', 'ACTIVE', 'UPCOMING', 'REDO' ];
+
+/**
+ * The media item statuses a backlog entry can have, internal type just for display purposes. 'COMPLETE' is not one of them on purpose:
+ * an item in that state is exactly what the backlog leaves out
+ */
+export type MediaItemBacklogStatusInternal = ValuesOf<typeof MEDIA_ITEM_BACKLOG_STATUS_INTERNAL_VALUES>;
+
+/**
+ * A filter for the media items stats, internal type just for display purposes. It deliberately has neither an importance nor a status
+ * option: the stats break the backlog down by both, and filtering by either would reduce the corresponding chart to a single value
+ */
+export type MediaItemsStatsFilterInternal = {
+
+	groups?: MediaItemGroupFilterInternal;
+	ownPlatforms?: MediaItemOwnPlatformFilterInternal;
+};
+
+/**
+ * The number of media item completions in one year, internal type just for display purposes
+ */
+export type MediaItemsStatsYearInternal = {
+
+	year: number;
+	count: number;
+};
+
+/**
+ * The number of backlog media items in one status, internal type just for display purposes
+ */
+export type MediaItemsStatsStatusInternal = {
+
+	status: MediaItemBacklogStatusInternal;
+	count: number;
+};
+
+/**
+ * The number of backlog media items with one importance level on one own platform, internal type just for display purposes. An undefined
+ * own platform is the "not owned" bucket
+ */
+export type MediaItemsStatsImportanceAndOwnPlatformInternal = {
+
+	importance: MediaItemImportanceInternal;
+	ownPlatformId?: string;
+	count: number;
+};
+
+/**
+ * Aggregated statistics for the media items of a category, internal type just for display purposes.
+ *
+ * The three blocks answer three different questions and are deliberately not comparable with each other: 'mediaItems' counts entities,
+ * 'completions' counts completion dates whatever the item status, and 'backlog' counts the items that are not complete. An item
+ * completed twice and marked for redo contributes 1, 2 and 1 respectively
+ */
+export type MediaItemsStatsInternal = {
+
+	mediaItems: {
+		total: number;
+		filtered: number;
+	};
+	completions: {
+		total: number;
+		mediaItems: number;
+		byYear: MediaItemsStatsYearInternal[];
+	};
+	backlog: {
+		total: number;
+		byStatus: MediaItemsStatsStatusInternal[];
+		byImportanceAndOwnPlatform: MediaItemsStatsImportanceAndOwnPlatformInternal[];
+	};
+};

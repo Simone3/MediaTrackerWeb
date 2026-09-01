@@ -70,13 +70,16 @@ The authoritative list, with the behaviour behind each route, is the back end's 
 
 - `POST /users/:userId/categories/:categoryId/<type>/filter`
 - `POST /users/:userId/categories/:categoryId/<type>/search`
+- `POST /users/:userId/categories/:categoryId/<type>/stats`
 - `POST /users/:userId/categories/:categoryId/<type>`
 - `PUT /users/:userId/categories/:categoryId/<type>/:id`
 - `DELETE /users/:userId/categories/:categoryId/<type>/:id`
 - `GET /catalog/<type>/search/:searchTerm`
 - `GET /catalog/<type>/:catalogId`
 
-The four media types share one route shape exactly; that symmetry is what the factories in [§9.5](#95-media-type-factories) rely on.
+The four media types share one route shape exactly; that symmetry is what the factories in [§9.5](#95-media-type-factories) rely on. It is also why `implementations/real/entities/media-items/media-item.ts` exists: `stats` differs between the four only by its path segment, so the real controllers extend one base that declares `mediaItemPathName` and holds the call once.
+
+**`stats` is a read with a filter body, so it is a `POST` like the other two, and it sends the browser's own time zone.** Completion dates are written at local midnight and stored as the matching instant, so a completion dated the 1st of January is stored in the previous year for anyone east of Greenwich: without the time zone the server would group those completions into the wrong bar ([§10.9](10-features.md#109-media-items-stats)).
 
 **The two list routes are paginated.** `filter` and `search` take an optional `PaginationInternal` (`offset`, `limit`) and answer with a `PaginatedResultInternal`: the page of elements plus the `totalCount` of everything that matched. Omitting the options asks for every match, and the back end then answers without a pagination block, so `totalCount` falls back to the length of what came back. Only media items are wired up — the plumbing on both sides is entity-agnostic, so the other lists can opt in later ([back end §10](../../../back-end/docs/technical/10-api-surface.md)).
 

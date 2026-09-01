@@ -1,5 +1,6 @@
 import { config } from 'app/config/config';
 import { backEndInvoker } from 'app/controllers/main/common/back-end-invoker';
+import { MediaItemBackEndController } from 'app/controllers/implementations/real/entities/media-items/media-item';
 import { TvShowCatalogController, TvShowController } from 'app/controllers/interfaces/entities/media-items/tv-show';
 import { paginationMapper } from 'app/data/mappers/common';
 import { tvShowCatalogDetailsMapper, tvShowCatalogSearchMapper, tvShowFilterMapper, tvShowMapper, tvShowSortMapper } from 'app/data/mappers/media-items/tv-show';
@@ -13,7 +14,12 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * Implementation of the TvShowController that queries the back-end APIs
  * @see TvShowController
  */
-export class TvShowBackEndController implements TvShowController {
+export class TvShowBackEndController extends MediaItemBackEndController implements TvShowController {
+	/**
+	 * @override
+	 */
+	protected readonly mediaItemPathName = 'tv-shows';
+
 	/**
 	 * @override
 	 */

@@ -56,6 +56,24 @@ class DateUtils {
 			return undefined;
 		}
 	}
+
+	/**
+	 * Helper to read the time zone the browser is in, e.g. 'Europe/Rome'. Needed by the calls that ask the back end to group dates by a
+	 * calendar unit: the app writes dates at local midnight, so a date grouped by year in UTC would land in the previous year for any
+	 * user east of Greenwich
+	 * @returns the IANA time zone identifier, or undefined if the environment does not resolve one
+	 */
+	public getCurrentTimeZone(): string | undefined {
+		return Intl.DateTimeFormat().resolvedOptions().timeZone;
+	}
+
+	/**
+	 * Helper to read the current year in the browser's own time zone, which is the year the back end counted the latest completions in
+	 * @returns the current year
+	 */
+	public getCurrentYear(): number {
+		return new Date().getFullYear();
+	}
 }
 
 /**

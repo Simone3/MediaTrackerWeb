@@ -23,6 +23,7 @@ Navigation here is four things at once: React Router matching, Redux action disp
 | `AppScreens.CategoryDetails` | `/media/categories/details` |
 | `AppScreens.MediaItemsList` | `/media/items` |
 | `AppScreens.MediaItemDetails` | `/media/items/details` |
+| `AppScreens.MediaItemsStats` | `/media/items/stats` |
 | `AppScreens.TvShowSeasonsList` | `/media/tv-show-seasons` |
 | `AppScreens.TvShowSeasonDetails` | `/media/tv-show-seasons/details` |
 | `AppScreens.GroupsList` | `/media/groups` |
@@ -42,7 +43,7 @@ Navigation here is four things at once: React Router matching, Redux action disp
 - **`ScreenErrorBoundary`**, in the same file, wraps every screen in `ErrorBoundaryComponent` ([§11.5](11-interface.md#115-the-screen-error-boundary)). It sits inside the router so that it can offer a way out of the screen that failed.
 - **`ConnectedAuthenticationNavigator`** chooses the auth-loading, unauthenticated, or authenticated subtree from Redux ([§7](07-authentication.md)).
 - **`AuthenticatedNavigator`** switches between `/media/*` and `/settings/*`.
-- **`MediaNavigator`** owns every media, category, group, platform and season route. It wraps the six screens the media item form opens in `MediaItemUnsavedChangesGuardContainer` ([§15.3](15-invariants-and-pitfalls.md#153-dirty-form-protection-is-browser-oriented)), and every screen that needs global context in `ScreenContextGuardContainer` ([§5.6](#56-screens-that-cannot-be-opened-cold)).
+- **`MediaNavigator`** owns every media, category, group, platform, season and stats route. It wraps the six screens the media item form opens in `MediaItemUnsavedChangesGuardContainer` ([§15.3](15-invariants-and-pitfalls.md#153-dirty-form-protection-is-browser-oriented)), and every screen that needs global context in `ScreenContextGuardContainer` ([§5.6](#56-screens-that-cannot-be-opened-cold)).
 - **`SettingsNavigator`** owns settings and the nested credits screen.
 
 ## 5.3 `navigationService`
@@ -73,6 +74,8 @@ Navigation here is four things at once: React Router matching, Redux action disp
 
 **The pattern is the same throughout: a component dispatches an intent, a reducer records it, and the navigation saga moves the screen.** That is why adding a `navigate()` call to a click handler usually produces a double navigation rather than the intended one — the saga was already going to handle it.
 
+**Two screens are deliberately not in the table**: the credits screen and the media items stats screen ([§10.9](10-features.md#109-media-items-stats)) navigate straight from their container. Neither has state to settle before it opens — the stats screen fetches its own data once it is mounted, and the category it needs is already in `categoryGlobal` — so a saga entry would only add an action for the router to react to. Leaving is `navigationService.back()` from the container, as on the group, platform and season screens.
+
 ## 5.5 Scroll position
 
 Every screen change happens inside the same document, so the browser never resets the scroll offset on its own when a screen is *opened*: a details screen pushed from a scrolled-down list would render under the viewport offset the list was left at. `ScrollToTopOnNewScreen`, in `app/components/containers/navigation/app-navigator.tsx`, scrolls the window back to the top on every `PUSH` and `REPLACE` navigation to correct that.
@@ -99,6 +102,7 @@ Because [no path carries an entity ID](#51-route-map), most routes only mean som
 | `CategoryDetails` | `categoryDetails.category` |
 | `MediaItemsList` | `categoryGlobal.selectedCategory` |
 | `MediaItemDetails` | the selected category and `mediaItemDetails.mediaItem` |
+| `MediaItemsStats` | `categoryGlobal.selectedCategory` |
 | `GroupsList`, `OwnPlatformsList` | `categoryGlobal.selectedCategory`, since both fetch per category |
 | `GroupDetails`, `OwnPlatformDetails` | the selected category and the loaded entity |
 | `TvShowSeasonsList` | `mediaItemDetails.mediaItem`, since the seasons flow only exists inside the form ([§10.4](10-features.md#104-tv-show-seasons-the-nested-flow)) |

@@ -5,6 +5,7 @@ import { CategoryDetailsScreenContainer } from 'app/components/containers/catego
 import { MediaItemsListScreenContainer } from 'app/components/containers/media-item/list/screen';
 import { MediaItemDetailsScreenContainer } from 'app/components/containers/media-item/details/screen';
 import { MediaItemUnsavedChangesGuardContainer } from 'app/components/containers/media-item/details/unsaved-changes-guard';
+import { MediaItemsStatsScreenContainer } from 'app/components/containers/media-item/stats/screen';
 import { ScreenContextGuardContainer } from 'app/components/containers/navigation/screen-context-guard';
 import { GroupsListScreenContainer } from 'app/components/containers/group/list/screen';
 import { GroupDetailsScreenContainer } from 'app/components/containers/group/details/screen';
@@ -70,6 +71,7 @@ export class MediaNavigator extends Component {
 				<Route path={mediaRelativePath(AppScreens.CategoryDetails)} element={contextGuardedScreen(AppScreens.CategoryDetails, <CategoryDetailsScreenContainer />)} />
 				<Route path={mediaRelativePath(AppScreens.MediaItemsList)} element={contextGuardedScreen(AppScreens.MediaItemsList, <MediaItemsListScreenContainer />)} />
 				<Route path={mediaRelativePath(AppScreens.MediaItemDetails)} element={contextGuardedScreen(AppScreens.MediaItemDetails, <MediaItemDetailsScreenContainer />)} />
+				<Route path={mediaRelativePath(AppScreens.MediaItemsStats)} element={contextGuardedScreen(AppScreens.MediaItemsStats, <MediaItemsStatsScreenContainer />)} />
 				<Route path={mediaRelativePath(AppScreens.GroupsList)} element={contextGuardedScreen(AppScreens.GroupsList, mediaItemFormSubScreen(<GroupsListScreenContainer />))} />
 				<Route path={mediaRelativePath(AppScreens.GroupDetails)} element={contextGuardedScreen(AppScreens.GroupDetails, mediaItemFormSubScreen(<GroupDetailsScreenContainer />))} />
 				<Route path={mediaRelativePath(AppScreens.OwnPlatformsList)} element={contextGuardedScreen(AppScreens.OwnPlatformsList, mediaItemFormSubScreen(<OwnPlatformsListScreenContainer />))} />

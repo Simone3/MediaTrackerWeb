@@ -57,8 +57,8 @@ export class MediaItemFilterModalComponent extends Component<MediaItemFilterModa
 						category={this.props.category}
 						initialFilter={this.props.initialFilter}
 						initialSortBy={this.props.initialSortBy}
-						groupOptions={buildGroupFilterOptions(this.props.initialFilter, this.props.groups, this.props.groupsLoaded)}
-						ownPlatformOptions={buildOwnPlatformFilterOptions(this.props.initialFilter, this.props.ownPlatforms, this.props.ownPlatformsLoaded)}
+						groupOptions={buildGroupFilterOptions(this.props.initialFilter.groups, this.props.groups, this.props.groupsLoaded)}
+						ownPlatformOptions={buildOwnPlatformFilterOptions(this.props.initialFilter.ownPlatforms, this.props.ownPlatforms, this.props.ownPlatformsLoaded)}
 						groupsLoading={this.props.groupsLoading}
 						ownPlatformsLoading={this.props.ownPlatformsLoading}
 						submitFilter={(filter, sortBy) => {

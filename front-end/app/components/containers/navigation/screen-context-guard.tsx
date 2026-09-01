@@ -26,6 +26,9 @@ export const screenRequiredContext: { [screen: string]: (state: State) => boolea
 	[AppScreens.MediaItemDetails]: (state) => {
 		return Boolean(state.categoryGlobal.selectedCategory) && Boolean(state.mediaItemDetails.mediaItem);
 	},
+	[AppScreens.MediaItemsStats]: (state) => {
+		return Boolean(state.categoryGlobal.selectedCategory);
+	},
 	[AppScreens.GroupsList]: (state) => {
 		return Boolean(state.categoryGlobal.selectedCategory);
 	},

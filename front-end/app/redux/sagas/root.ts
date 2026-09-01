@@ -10,6 +10,7 @@ import { watchGetMediaItemCatalogDetailsSaga } from 'app/redux/sagas/media-item/
 import { watchSearchMediaItemsCatalogSaga } from 'app/redux/sagas/media-item/catalog-search';
 import { watchDeleteMediaItemSaga } from 'app/redux/sagas/media-item/delete';
 import { watchFetchMediaItemsSaga } from 'app/redux/sagas/media-item/fetch';
+import { watchFetchMediaItemsStatsSaga } from 'app/redux/sagas/media-item/fetch-stats';
 import { watchInlineMediaItemUpdateSaga } from 'app/redux/sagas/media-item/inline-update';
 import { watchSaveMediaItemSaga } from 'app/redux/sagas/media-item/save';
 import { watchNavigationSaga } from 'app/redux/sagas/navigation/navigation';
@@ -42,6 +43,7 @@ export const rootSaga = function * (): SagaIterator {
 		call(watchDeleteCategorySaga),
 
 		call(watchFetchMediaItemsSaga),
+		call(watchFetchMediaItemsStatsSaga),
 		call(watchDeleteMediaItemSaga),
 		call(watchInlineMediaItemUpdateSaga),
 		call(watchSearchMediaItemsCatalogSaga),

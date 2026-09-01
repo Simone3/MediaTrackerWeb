@@ -3,6 +3,7 @@ import { MediaItemsListContainer } from 'app/components/containers/media-item/li
 import { AuthenticatedPageHeaderComponent } from 'app/components/presentational/generic/authenticated-page-header';
 import { MediaItemFilterModalContainer } from 'app/components/containers/media-item/list/filter-modal';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
+import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { ResponsiveHeaderAddButtonComponent } from 'app/components/presentational/generic/responsive-header-add-button';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { i18n } from 'app/utilities/i18n';
@@ -32,6 +33,7 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 		const {
 			category,
 			loadNewMediaItemDetails,
+			openStats,
 			isLoading,
 			mediaItemsCount
 		} = this.props;
@@ -47,7 +49,14 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 					<AuthenticatedPageHeaderComponent
 						title={category.name}
 						subtitle={countLabel}
-						actions={
+						actions={<>
+							<PillButtonComponent
+								tone='secondary'
+								size='compact'
+								appearance='subtle'
+								onClick={openStats}>
+								{i18n.t('mediaItem.stats.open')}
+							</PillButtonComponent>
 							<ResponsiveHeaderAddButtonComponent
 								label={i18n.t(`mediaItem.list.add.${category.mediaType}`)}
 								mobileLabel={i18n.t('common.buttons.add')}
@@ -55,7 +64,7 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 									loadNewMediaItemDetails(category);
 								}}
 							/>
-						}
+						</>}
 					/>
 					<MediaItemsListContainer/>
 				</div>
@@ -116,4 +125,9 @@ export type MediaItemsListScreenComponentOutput = {
 	 * Callback to load the details of a new media item for the given category
 	 */
 	loadNewMediaItemDetails: (category: CategoryInternal) => void;
+
+	/**
+	 * Callback to open the stats of the current category
+	 */
+	openStats: () => void;
 };

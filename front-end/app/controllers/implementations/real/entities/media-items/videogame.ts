@@ -1,5 +1,6 @@
 import { config } from 'app/config/config';
 import { backEndInvoker } from 'app/controllers/main/common/back-end-invoker';
+import { MediaItemBackEndController } from 'app/controllers/implementations/real/entities/media-items/media-item';
 import { VideogameCatalogController, VideogameController } from 'app/controllers/interfaces/entities/media-items/videogame';
 import { paginationMapper } from 'app/data/mappers/common';
 import { videogameCatalogDetailsMapper, videogameCatalogSearchMapper, videogameFilterMapper, videogameMapper, videogameSortMapper } from 'app/data/mappers/media-items/videogame';
@@ -13,7 +14,12 @@ import { miscUtils } from 'app/utilities/misc-utils';
  * Implementation of the VideogameController that queries the back-end APIs
  * @see VideogameController
  */
-export class VideogameBackEndController implements VideogameController {
+export class VideogameBackEndController extends MediaItemBackEndController implements VideogameController {
+	/**
+	 * @override
+	 */
+	protected readonly mediaItemPathName = 'videogames';
+
 	/**
 	 * @override
 	 */

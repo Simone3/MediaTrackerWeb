@@ -9,6 +9,7 @@ export const AppScreens = {
 	CategoryDetails: 'CategoryDetailsScreen',
 	MediaItemsList: 'MediaItemsListScreen',
 	MediaItemDetails: 'MediaItemDetailsScreen',
+	MediaItemsStats: 'MediaItemsStatsScreen',
 	TvShowSeasonsList: 'TvShowSeasonsListScreen',
 	TvShowSeasonDetails: 'TvShowSeasonDetailsScreen',
 	GroupsList: 'GroupsListScreen',

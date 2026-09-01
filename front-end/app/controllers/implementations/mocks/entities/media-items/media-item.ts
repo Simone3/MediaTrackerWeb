@@ -2,7 +2,7 @@ import { MockControllerHelper } from 'app/controllers/implementations/mocks/comm
 import { MediaItemCatalogController, MediaItemController } from 'app/controllers/interfaces/entities/media-items/media-item';
 import { PaginatedResultInternal, PaginationInternal } from 'app/data/models/internal/common';
 import { AppError } from 'app/data/models/internal/error';
-import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
+import { CatalogMediaItemInternal, MEDIA_ITEM_BACKLOG_STATUS_INTERNAL_VALUES, MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, MediaItemsStatsFilterInternal, MediaItemsStatsImportanceAndOwnPlatformInternal, MediaItemsStatsInternal, MediaItemsStatsStatusInternal, MediaItemsStatsYearInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import { MovieSortByInternal } from 'app/data/models/internal/media-items/movie';
 
 /**
@@ -43,6 +43,27 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 		});
 	}
 	
+	/**
+	 * @override
+	 */
+	public async getStats(userId: string, categoryId: string, filter?: MediaItemsStatsFilterInternal): Promise<MediaItemsStatsInternal> {
+		return this.resolveResult(() => {
+			const categoryMediaItems = this.getCategoryMediaItems(userId, categoryId);
+
+			// The stats filter is a subset of the list filter, so the same incomplete mock filtering applies to both
+			const filtered = this.mockFilter(categoryMediaItems, filter as TMediaItemFilterInternal | undefined);
+
+			return {
+				mediaItems: {
+					total: categoryMediaItems.length,
+					filtered: filtered.length
+				},
+				completions: this.mockCompletions(filtered),
+				backlog: this.mockBacklog(filtered)
+			};
+		});
+	}
+
 	/**
 	 * @override
 	 */
@@ -199,6 +220,102 @@ export abstract class MediaItemMockedController<TMediaItemInternal extends Media
 		}
 
 		return mediaItems;
+	}
+
+	/**
+	 * Helper to aggregate the completions half of the stats: it counts completion dates, whatever the status of the media items
+	 * carrying them, and reports the years in ascending order and without the empty ones, exactly as the back end does
+	 * @param mediaItems the media items the stats cover
+	 * @returns the completions block
+	 */
+	private mockCompletions(mediaItems: TMediaItemInternal[]): MediaItemsStatsInternal['completions'] {
+		const countsByYear = new Map<number, number>();
+		let total = 0;
+		let completedMediaItems = 0;
+
+		for(const mediaItem of mediaItems) {
+			if(!mediaItem.completedOn || mediaItem.completedOn.length === 0) {
+				continue;
+			}
+
+			completedMediaItems += 1;
+			for(const completion of mediaItem.completedOn) {
+				const year = completion.getFullYear();
+				countsByYear.set(year, (countsByYear.get(year) || 0) + 1);
+				total += 1;
+			}
+		}
+
+		const byYear: MediaItemsStatsYearInternal[] = Array.from(countsByYear.entries())
+			.map(([ year, count ]) => {
+				return {
+					year: year,
+					count: count
+				};
+			})
+			.sort((first, second) => {
+				return first.year - second.year;
+			});
+
+		return {
+			total: total,
+			mediaItems: completedMediaItems,
+			byYear: byYear
+		};
+	}
+
+	/**
+	 * Helper to aggregate the backlog half of the stats, i.e. everything that is not complete. The status is read off the media item
+	 * rather than derived again: the mapper already resolved it when the item was built
+	 * @param mediaItems the media items the stats cover
+	 * @returns the backlog block
+	 */
+	private mockBacklog(mediaItems: TMediaItemInternal[]): MediaItemsStatsInternal['backlog'] {
+		const backlog = mediaItems.filter((mediaItem) => {
+			return mediaItem.status !== 'COMPLETE';
+		});
+
+		const byStatus: MediaItemsStatsStatusInternal[] = [];
+		for(const status of MEDIA_ITEM_BACKLOG_STATUS_INTERNAL_VALUES) {
+			const count = backlog.filter((mediaItem) => {
+				return mediaItem.status === status;
+			}).length;
+
+			if(count > 0) {
+				byStatus.push({
+					status: status,
+					count: count
+				});
+			}
+		}
+
+		const byImportanceAndOwnPlatform: MediaItemsStatsImportanceAndOwnPlatformInternal[] = [];
+		for(const importance of MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES) {
+			const countsByOwnPlatform = new Map<string | undefined, number>();
+
+			for(const mediaItem of backlog) {
+				if(mediaItem.importance !== importance) {
+					continue;
+				}
+
+				const ownPlatformId = mediaItem.ownPlatform ? mediaItem.ownPlatform.id : undefined;
+				countsByOwnPlatform.set(ownPlatformId, (countsByOwnPlatform.get(ownPlatformId) || 0) + 1);
+			}
+
+			for(const [ ownPlatformId, count ] of countsByOwnPlatform.entries()) {
+				byImportanceAndOwnPlatform.push({
+					importance: importance,
+					ownPlatformId: ownPlatformId,
+					count: count
+				});
+			}
+		}
+
+		return {
+			total: backlog.length,
+			byStatus: byStatus,
+			byImportanceAndOwnPlatform: byImportanceAndOwnPlatform
+		};
 	}
 
 	/**
