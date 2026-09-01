@@ -1,0 +1,16 @@
+TODO.md
+  h_08e8a5184a38af 47
+back-end/app/controllers/entities/media-items/media-item.ts
+  h_08e8a5184a38af 17-20,635,639,643,645
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "42e2b64773cffc34590969f8a3bd31bce5eefc8f",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
