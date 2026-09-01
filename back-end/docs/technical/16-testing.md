@@ -58,6 +58,7 @@ The static payloads live in `test/resources/mocks/`. Some of them are **delibera
 - authentication and authorization behaviour
 - CRUD for categories, groups, own platforms and every media type
 - filtering, sorting and searching
+- the media items stats aggregate: the five status branches, the completion years and their time zone, the filters and the cross-user isolation
 - population of linked group and own-platform data
 - catalog mapping, including the responses whose invalid list items are discarded
 - legacy import mapping

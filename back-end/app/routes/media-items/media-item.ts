@@ -2,8 +2,9 @@ import { userResourceAuthorizationMiddleware } from 'app/auth/authorization';
 import { MediaItemCatalogController } from 'app/controllers/catalogs/media-items/media-item';
 import { MediaItemEntityController } from 'app/controllers/entities/media-items/media-item';
 import { paginationMapper } from 'app/data/mappers/common';
+import { mediaItemsStatsFilterMapper, mediaItemsStatsMapper } from 'app/data/mappers/media-items/media-item';
 import { PaginationResponse } from 'app/data/models/api/common';
-import { AddMediaItemRequest, AddMediaItemResponse, DeleteMediaItemResponse, FilterMediaItemsRequest, FilterMediaItemsResponse, GetAllMediaItemsResponse, GetMediaItemFromCatalogResponse, SearchMediaItemCatalogResponse, SearchMediaItemsRequest, SearchMediaItemsResponse, UpdateMediaItemRequest, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
+import { AddMediaItemRequest, AddMediaItemResponse, DeleteMediaItemResponse, FilterMediaItemsRequest, FilterMediaItemsResponse, GetAllMediaItemsResponse, GetMediaItemFromCatalogResponse, GetMediaItemsStatsRequest, GetMediaItemsStatsResponse, SearchMediaItemCatalogResponse, SearchMediaItemsRequest, SearchMediaItemsResponse, UpdateMediaItemRequest, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
 import { AppError } from 'app/data/models/error/error';
 import { PaginatedResultInternal, PaginationInternal } from 'app/data/models/internal/common';
 import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
@@ -169,6 +170,41 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 		});
 	}
 	
+	/**
+	 * Route to get the aggregated statistics of the saved media items. It is a read with a filter body, hence a POST
+	 * like 'filter' and 'search'. It takes no per-media-type configuration because it returns no media item: the
+	 * request, the response and the aggregation are the same for all four types
+	 */
+	public stats(): void {
+		this.router.post(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/stats`, userResourceAuthorizationMiddleware, (request, response) => {
+			const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
+			const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
+
+			parserValidator.parseAndValidate(GetMediaItemsStatsRequest, request.body)
+				.then((parsedRequest) => {
+					const filterOptions = parsedRequest.filter ? mediaItemsStatsFilterMapper.toInternal(parsedRequest.filter) : undefined;
+
+					this.mediaItemController.getMediaItemsStats(userId, categoryId, filterOptions, parsedRequest.timezone)
+						.then((stats) => {
+							const responseBody: GetMediaItemsStatsResponse = {
+								...mediaItemsStatsMapper.toExternal(stats),
+								message: 'Stats successfully retrieved'
+							};
+
+							response.json(responseBody);
+						})
+						.catch((error) => {
+							logger.error('Get media items stats generic error: %s', error);
+							response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+						});
+				})
+				.catch((error) => {
+					logger.error('Get media items stats request error: %s', error);
+					response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
+				});
+		});
+	}
+
 	/**
 	 * Route to add a new media item
 	 * @param routeConfig the route configuration

@@ -78,6 +78,7 @@ Responsibilities:
 - get one media item, or all for a category
 - filter and sort
 - search by term
+- aggregate the category statistics
 - save, update, delete
 - bulk delete by group, category or user
 - bulk replace own-platform references (used by the merge above)
@@ -113,6 +114,36 @@ An item marked as redo counts as *not* complete even though it carries completio
 **Pagination:**
 
 `filterAndOrderMediaItems` and `searchMediaItems` take optional `{ offset, limit }` options and return `{ elements, totalCount }` rather than a bare list ([§8.7](08-persistence.md#87-pagination)). Without those options they return every match, and `totalCount` is just the number of elements — no second query runs.
+
+**Statistics:**
+
+`getMediaItemsStats` answers the stats screen ([§10.5](10-api-surface.md#105-media-item-entity-routes)) in **one database round trip**: a `$facet` aggregation over the media items of one category, whose branches produce the item counts, the completions grouped by year, and the backlog grouped by status and by importance/own platform. Nothing is loaded into the application to be reduced here — a category can hold thousands of media items and the answer is a few dozen numbers.
+
+It reuses `addCommonConditionsFromFilter`, so a filter means exactly what it means on the list. Only the group and own-platform blocks are ever set: filtering the stats by importance or by own platform would reduce the corresponding breakdown to a single value.
+
+Three things worth knowing about it:
+
+- **the counts are deliberately not comparable with each other.** An item completed twice and marked for redo contributes 1 to the item count, 2 to the completions and 1 to the backlog. The three blocks answer three different questions
+- **the completion year is computed in the caller's time zone**, taken from the request and defaulting to UTC. Completion dates are written by the front end at local midnight and stored as the corresponding instant, so a completion dated the 1st of January is stored in the previous year for any client east of Greenwich, and extracting the year in UTC would put it in the wrong bar
+- **the status rule below is duplicated in the front end**
+
+### The status rule
+
+The four backlog statuses are **not persisted**. They are derived, and the front end derives them too, in `MediaItemMapper.buildStatusLabel`. The precedence, in both places:
+
+| # | Condition | Status |
+| --- | --- | --- |
+| 1 | `completedOn` is non-empty and `markedAsRedo` is falsy | `COMPLETE` |
+| 2 | `active` | `ACTIVE` |
+| 3 | `completedOn` is non-empty and `markedAsRedo` | `REDO` |
+| 4 | `releaseDate` is in the future | `UPCOMING` |
+| 5 | otherwise | `NEW` |
+
+`COMPLETE` never appears in the response: those are exactly the items the backlog excludes.
+
+**This rule is a contract between the two sides.** The alternative to computing it here would be shipping enough per-item data for the client to bucket the whole backlog itself, which is what an aggregate exists to avoid — so the duplication is accepted, and changing it on one side without the other silently makes the stats screen disagree with the list rows.
+
+`UPCOMING` is evaluated against the server clock here and against the browser clock on the list, so an item releasing today can be counted differently by the two. That is harmless and is not worth solving.
 
 **Every sort ends with the ID as a tiebreaker.** None of the sortable fields is unique, so two media items with the same sort value have no defined order between them. That is invisible while the whole list comes back at once and becomes a bug the moment it does not: without the tiebreaker, one item can land on two consecutive pages while another never appears at all.
 

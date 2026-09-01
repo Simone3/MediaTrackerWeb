@@ -1,4 +1,4 @@
-import { commonMediaItemSchemaDefinition, commonMediaItemSchemaOptions } from 'app/schemas/media-items/media-item';
+import { addCommonMediaItemSchemaIndexes, commonMediaItemSchemaDefinition, commonMediaItemSchemaOptions } from 'app/schemas/media-items/media-item';
 import { Schema } from 'mongoose';
 
 /**
@@ -13,6 +13,8 @@ export const VideogameSchema: Schema = new Schema({
 }, {
 	...commonMediaItemSchemaOptions
 });
+
+addCommonMediaItemSchemaIndexes(VideogameSchema);
 
 /**
  * Videogames collection name

@@ -16,6 +16,8 @@
 
 This is also why `index.ts` imports `reflect-metadata` before anything else: the decorators do not work without it.
 
+When `class-validator` has no constraint for what a field means, the answer is a **custom constraint** in `app/utilities/validators.ts`, not a check in the route ([§15.4](15-utilities.md#154-validators)).
+
 ## 6.2 What a validation failure returns
 
 A failed request validation generally responds with:

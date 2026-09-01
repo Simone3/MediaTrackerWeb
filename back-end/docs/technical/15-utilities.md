@@ -13,10 +13,13 @@ The shared helpers whose behaviour is not obvious from their names.
 - **partial year/month/day inputs resolve to the last possible day** — `2019` becomes 31 December 2019, `2019-03` becomes 31 March 2019
 - all helper-generated dates are **UTC**
 - string conversions use ISO format
+- `isValidTimeZone` accepts an IANA identifier such as `Europe/Rome` or a UTC offset such as `+02:00`
 
 The partial-date rule exists for Google Books, which routinely publishes a year alone ([§12.4](12-catalog-integrations.md#124-books-google-books)). Resolving to the last possible day rather than the first means a partially-dated item sorts after everything definitely released earlier in that period, which is the safer error for a release date.
 
 UTC everywhere is what keeps a release date from shifting a day depending on where the server runs.
+
+**`isValidTimeZone` has no list to compare against.** The only reliable check is asking `Intl.DateTimeFormat` to build a formatter for the value, which throws for anything the runtime does not recognize. It backs the `IsTimeZone` constraint ([§15.4](#154-validators)).
 
 ## 15.2 `miscUtils`
 
@@ -41,6 +44,16 @@ The permissive list exists because boolean-ish values arrive from several source
 `app/utilities/string-utils.ts`, used mostly by the logging exclusions.
 
 - `matches(string, regularExpressions)` — tests a string against a list of patterns, which is how the request and response body exclusion regexes are applied ([§14.2](14-logging.md#142-requestresponse-logging))
+
+## 15.4 `validators`
+
+`app/utilities/validators.ts` holds the custom `class-validator` constraints — today just one:
+
+- `IsTimeZone` — used by the media items stats request ([§10.5](10-api-surface.md#105-media-item-entity-routes))
+
+**A custom constraint rather than a check in the route or the controller.** Validation here is model-driven ([§6.1](06-validation-and-errors.md#61-one-validator-for-everything)), and the alternative for a time zone is letting an unknown value reach MongoDB and fail inside the aggregation, where the error says nothing about which request field was wrong.
+
+This file is where the next one goes. A one-off validity check written into a route is a rule that no longer lives with the shape it constrains.
 
 ---
 

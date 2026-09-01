@@ -1,4 +1,4 @@
-import { commonMediaItemSchemaDefinition, commonMediaItemSchemaOptions } from 'app/schemas/media-items/media-item';
+import { addCommonMediaItemSchemaIndexes, commonMediaItemSchemaDefinition, commonMediaItemSchemaOptions } from 'app/schemas/media-items/media-item';
 import { Schema } from 'mongoose';
 
 /**
@@ -11,6 +11,8 @@ export const MovieSchema: Schema = new Schema({
 }, {
 	...commonMediaItemSchemaOptions
 });
+
+addCommonMediaItemSchemaIndexes(MovieSchema);
 
 /**
  * Movies collection name

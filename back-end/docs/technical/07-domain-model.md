@@ -82,6 +82,8 @@ Semantics that are not obvious from the names:
 - **`active`** means currently reading, watching or playing
 - **`markedAsRedo`** means the item was completed before and has been moved back into the current workflow. It is what lets the `complete` filter distinguish "finished" from "finished once, doing it again" ([§9.6](09-controllers.md#96-mediaitementitycontroller))
 
+**There is no status field.** What the user sees as a status — new, active, upcoming, redo, complete — is derived from `completedOn`, `markedAsRedo`, `active` and `releaseDate`, by a precedence rule the stats aggregate and the front end each apply for themselves ([§9.6](09-controllers.md#96-mediaitementitycontroller)).
+
 **Nothing here may know about a specific media type.** Generic media-item files stay generic; subtype behaviour goes in the subtype module ([§17.2](17-extension-playbooks.md#172-add-a-new-media-type)).
 
 ## 7.6 Media-type-specific fields

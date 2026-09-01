@@ -52,11 +52,12 @@ One base path per type:
 - books → `/users/:userId/categories/:categoryId/books`
 - videogames → `/users/:userId/categories/:categoryId/videogames`
 
-And the same six routes under each, with `<type>` standing for the segment above:
+And the same seven routes under each, with `<type>` standing for the segment above:
 
 - `GET /users/:userId/categories/:categoryId/<type>`
 - `POST /users/:userId/categories/:categoryId/<type>/filter`
 - `POST /users/:userId/categories/:categoryId/<type>/search`
+- `POST /users/:userId/categories/:categoryId/<type>/stats`
 - `POST /users/:userId/categories/:categoryId/<type>`
 - `PUT /users/:userId/categories/:categoryId/<type>/:id`
 - `DELETE /users/:userId/categories/:categoryId/<type>/:id`
@@ -66,6 +67,10 @@ And the same six routes under each, with `<type>` standing for the segment above
 **`filter` and `search` accept optional pagination**, as a `pagination: { offset, limit }` block in the request body. When it is present the response carries a `pagination: { offset, limit, totalCount }` block back; when it is absent the API returns every match and no pagination block, exactly as it did before ([§11.5](11-models-and-mapping.md#115-pagination-models)). `GET <type>` is not paginated — the front end does not call it.
 
 Because the block sits on the abstract `FilterMediaItemsRequest` / `SearchMediaItemsRequest` and their responses, all four media types get it without a per-type change.
+
+**`stats` returns aggregated numbers, not media items.** It is a read with a filter body, hence a `POST` like `filter` and `search`. Its request and response are `GetMediaItemsStatsRequest` and `GetMediaItemsStatsResponse`, and unlike the other five they are **not** subclassed per media type: nothing in them is type-specific, so the four routes share one pair of classes.
+
+The request carries the group and own-platform filter blocks of `filter`, unchanged, plus an optional `timezone`. The response carries three blocks — `mediaItems`, `completions` and `backlog` — that answer three different questions and are deliberately not comparable with each other; the aggregation and the status rule behind them are in [§9.6](09-controllers.md#96-mediaitementitycontroller), the models in [§11.6](11-models-and-mapping.md#116-stats-models).
 
 There is no seasons endpoint. TV show seasons travel inside the TV show payload ([§7.7](07-domain-model.md#77-tv-show-seasons)).
 

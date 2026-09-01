@@ -40,6 +40,8 @@ That is why API responses carry nested `groupData` and `ownPlatformData` objects
 
 - `find`
 - `count`
+- `aggregate`
+- `castConditions`
 - `findOne`
 - `save`
 - `updateSelectiveMany`
@@ -49,11 +51,15 @@ That is why API responses carry nested `groupData` and `ownPlatformData` objects
 
 Details worth knowing:
 
-- **`find` uses English collation**, so sorting is case-insensitive — otherwise `Zorro` would sort before `apple`
+- **every read uses English collation**, so sorting is case-insensitive — otherwise `Zorro` would sort before `apple`. The constant lives in `app/schemas/common.ts` because the indexes have to declare the same one ([§8.8](#88-indexes))
 - optional populate flags are supported ([§8.4](#84-populate))
 - **`find` takes optional pagination options, and omitting them returns every matching document** ([§8.7](#87-pagination))
 - query performance logging is emitted when enabled ([§14.1](14-logging.md#141-logger-categories))
 - **`checkUniquenessAndSave` exists but no current entity controller uses it.** Uniqueness is handled by the duplicate-name confirmation flow in the front end instead, so there are no database-level uniqueness constraints enforced today ([§17.5](17-extension-playbooks.md#175-known-implementation-characteristics))
+
+**`aggregate` runs a pipeline** and exists for the reads whose answer is a handful of numbers over a lot of documents — today only the media items stats ([§9.6](09-controllers.md#96-mediaitementitycontroller)). Loading those documents into the application to reduce them here is what it avoids.
+
+**Mongoose does not cast an aggregation pipeline**, which is what `castConditions` is for. Every other method casts on its own: a `find` given `category: '65f…'` turns the string into an ObjectId against the schema, while the identical condition written inside a `$match` stage stays a string and matches nothing. There is no error, only an empty result — so any query condition going into a pipeline has to be run through `castConditions` first.
 
 **Go through `QueryHelper` rather than reaching for Mongoose directly.** One-off access styles per controller lose the collation, the populate flags and the performance logging, all silently.
 
@@ -72,6 +78,24 @@ Know this before adding another multi-step write: it is a property of the curren
 **Offset pagination, not a cursor.** The sort is caller-chosen, multi-field and per-field directional, and five of the sortable fields are nullable; a keyset predicate over that is a generated nested `$or` with explicit null handling, and it would need collation-matched indexes that do not exist. At the size of one user's category the `skip` cost that would justify the complexity is not there.
 
 **The second query is the price.** A paginated request runs `find` and `countDocuments`; an unpaginated one runs only `find`, because the results already are the total.
+
+## 8.8 Indexes
+
+One index is declared, on the four media-item collections:
+
+```
+{ owner: 1, category: 1 }   collation { locale: 'en' }
+```
+
+`addCommonMediaItemSchemaIndexes` in `app/schemas/media-items/media-item.ts` adds it, and each media type's schema file calls it — the same "define it once" arrangement as the shared field definition ([§8.3](#83-the-shared-media-item-schema)).
+
+**Every media-item read is scoped to an owner and, in all but the delete-everything-for-a-user cascade, to a category.** That prefix is what the list, the filter, the search, the cascades and the stats aggregate all start from, so one index serves all of them.
+
+**The collation is not optional.** An index is usable only by a query that runs under the same collation, and `QueryHelper` runs every read under English collation ([§8.5](#85-queryhelper)). A plain index would be silently ignored by every query in the application; declaring it from the same `DATABASE_COLLATION` constant is what keeps the two from drifting apart.
+
+Nothing else is indexed. The categories, groups and own platforms of one user are a handful of documents each, and the sortable media-item fields are chosen by the caller, are five-deep and multi-directional — indexing for those is a different exercise from indexing for the access scope ([§8.7](#87-pagination)).
+
+Mongoose builds the index at startup, on model initialization.
 
 ---
 

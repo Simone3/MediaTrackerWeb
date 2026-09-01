@@ -2,14 +2,8 @@ import { config } from 'app/config/config';
 import { AppError } from 'app/data/models/error/error';
 import { PaginationInternal, PersistedEntityInternal } from 'app/data/models/internal/common';
 import { logger, performanceLogger } from 'app/loggers/logger';
-import { HydratedDocument, Model, QueryFilter, SortOrder, UpdateQuery } from 'mongoose';
-
-/**
- * Collation search options (for case insensitive ordering)
- */
-const COLLATION = {
-	locale: 'en'
-};
+import { DATABASE_COLLATION } from 'app/schemas/common';
+import { HydratedDocument, Model, PipelineStage, QueryFilter, SortOrder, UpdateQuery } from 'mongoose';
 
 /**
  * Helper controller that contains util methods for database manipulation
@@ -41,7 +35,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 		return new Promise((resolve, reject): void => {
 			const query = this.databaseModel
 				.find(conditions ? conditions : {})
-				.collation(COLLATION)
+				.collation(DATABASE_COLLATION)
 				.sort(sortBy as Record<string, SortOrder> | undefined);
 
 			if(pagination) {
@@ -81,7 +75,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 		try {
 			const matchingElements = await this.databaseModel
 				.countDocuments(conditions ? conditions : {})
-				.collation(COLLATION);
+				.collation(DATABASE_COLLATION);
 
 			this.logPerformance('count', startNs);
 			return matchingElements;
@@ -90,6 +84,43 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 			logger.error('Database count error: %s', error);
 			throw AppError.DATABASE_FIND.withDetails(error);
 		}
+	}
+
+	/**
+	 * Helper to run an aggregation pipeline on a model. Meant for the queries that must not load documents into the
+	 * application only to reduce them there: the stats aggregate returns a handful of numbers out of a whole category
+	 * @param pipeline the aggregation stages. NOTE that Mongoose does NOT cast an aggregation pipeline against the
+	 * schema, so any query condition inside it must first go through {@link castConditions}
+	 * @returns a promise that will eventually contain the aggregation result documents
+	 * @template TResult the shape of the result documents
+	 */
+	public async aggregate<TResult>(pipeline: PipelineStage[]): Promise<TResult[]> {
+		const startNs = process.hrtime.bigint();
+
+		try {
+			const results = await this.databaseModel
+				.aggregate<TResult>(pipeline)
+				.collation(DATABASE_COLLATION);
+
+			this.logPerformance('aggregate', startNs);
+			return results;
+		}
+		catch(error) {
+			logger.error('Database aggregate error: %s', error);
+			throw AppError.DATABASE_FIND.withDetails(error);
+		}
+	}
+
+	/**
+	 * Helper to cast query conditions against the model schema, i.e. to turn the ID strings the application works with
+	 * into the ObjectIds the database stores. Every other method here casts on its own: this is only needed by the
+	 * callers of {@link aggregate}, because Mongoose leaves an aggregation pipeline exactly as it was written and an
+	 * uncast condition on a reference field would silently match nothing
+	 * @param conditions the query conditions
+	 * @returns the same conditions, cast against the schema
+	 */
+	public castConditions(conditions: QueryFilter<TPersistedEntity>): QueryFilter<TPersistedEntity> {
+		return this.databaseModel.find().cast(this.databaseModel, conditions);
 	}
 
 	/**

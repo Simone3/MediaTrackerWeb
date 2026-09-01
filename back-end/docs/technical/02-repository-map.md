@@ -69,7 +69,8 @@ Where everything lives. Generated folders — `node_modules/`, `build/`, `covera
 | `data/mappers/common.ts` | `ModelMapper`, the generic base ([§11.3](11-models-and-mapping.md#113-the-generic-mapper-base)) |
 | `data/mappers/media-items/**`, `external-services/**`, `import/**` | The conversions themselves |
 | `schemas/category.ts`, `group.ts`, `own-platform.ts` | The Mongoose schemas |
-| `schemas/media-items/media-item.ts` | The shared media-item fields, defined once |
+| `schemas/common.ts` | `DATABASE_COLLATION`, shared by the queries and the indexes that serve them ([§8.8](08-persistence.md#88-indexes)) |
+| `schemas/media-items/media-item.ts` | The shared media-item fields and indexes, defined once |
 | `schemas/media-items/movie.ts`, `tv-show.ts`, `book.ts`, `videogame.ts` | The per-type schemas. `tv-show.ts` carries the season validation ([§7.7](07-domain-model.md#77-tv-show-seasons)) |
 | `factories/media-item.ts` | `mediaItemFactory`, the media-type resolution point ([§9.8](09-controllers.md#98-mediaitemfactory)) |
 
@@ -81,8 +82,9 @@ Where everything lives. Generated folders — `node_modules/`, `build/`, `covera
 | `loggers/express-logger.ts` | Request/response logging and the correlation ID |
 | `loggers/log-redactor.ts` | Key redaction before output ([§14.3](14-logging.md#143-redaction)) |
 | `utilities/parser-validator.ts` | The one validation entry point ([§6.1](06-validation-and-errors.md#61-one-validator-for-everything)) |
+| `utilities/validators.ts` | The custom `class-validator` constraints, currently `IsTimeZone` ([§15.4](15-utilities.md#154-validators)) |
 | `utilities/request-scope-context.ts` | Per-request user and correlation IDs ([§5.3](05-authentication.md#53-request-scope-and-correlation)) |
-| `utilities/date-utils.ts` | Partial-date resolution and UTC conversion ([§15.1](15-utilities.md#151-dateutils)) |
+| `utilities/date-utils.ts` | Partial-date resolution, UTC conversion and time zone validation ([§15.1](15-utilities.md#151-dateutils)) |
 | `utilities/misc-utils.ts` | `escapeRegExp`, `buildUrl`, `parseBoolean` and the filter/sort helpers ([§15.2](15-utilities.md#152-miscutils)) |
 | `utilities/string-utils.ts` | `matches`, used by the logging exclusions ([§15.3](15-utilities.md#153-stringutils)) |
 | `utilities/request-param-utils.ts` | Request parameter extraction |

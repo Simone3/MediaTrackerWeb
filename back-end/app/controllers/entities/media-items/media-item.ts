@@ -7,11 +7,29 @@ import { AppError } from 'app/data/models/error/error';
 import { CategoryInternal, MediaTypeInternal } from 'app/data/models/internal/category';
 import { PaginatedResultInternal, PaginationInternal, PersistedEntityInternal } from 'app/data/models/internal/common';
 import { GroupInternal } from 'app/data/models/internal/group';
-import { MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, MediaItemSortFieldInternal } from 'app/data/models/internal/media-items/media-item';
+import { INTERNAL_MEDIA_ITEM_BACKLOG_STATUSES, MediaItemBacklogStatusInternal, MediaItemFilterInternal, MediaItemImportanceInternal, MediaItemInternal, MediaItemsStatsImportanceAndOwnPlatformInternal, MediaItemsStatsInternal, MediaItemsStatsStatusInternal, MediaItemsStatsYearInternal, MediaItemSortByInternal, MediaItemSortFieldInternal } from 'app/data/models/internal/media-items/media-item';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { logger } from 'app/loggers/logger';
 import { miscUtils } from 'app/utilities/misc-utils';
-import { HydratedDocument, Model, QueryFilter, SortOrder, UpdateQuery } from 'mongoose';
+import { HydratedDocument, Model, PipelineStage, QueryFilter, SortOrder, UpdateQuery } from 'mongoose';
+
+/**
+ * The status the media items stats aggregation gives to the media items the backlog leaves out. It only exists inside
+ * the pipeline, long enough for the following stage to drop the documents carrying it
+ */
+const COMPLETE_STATUS = 'COMPLETE';
+
+/**
+ * Raw shape of the media items stats aggregation result, i.e. one array per facet branch
+ */
+type MediaItemsStatsAggregationResult = {
+	categoryTotal: { value: number }[];
+	filteredTotal: { value: number }[];
+	completionMediaItems: { value: number }[];
+	completionsByYear: { _id: number; count: number }[];
+	backlogByStatus: { _id: MediaItemBacklogStatusInternal; count: number }[];
+	backlogByImportanceAndOwnPlatform: { _id: { importance: MediaItemImportanceInternal; ownPlatform: unknown }; count: number }[];
+};
 
 /**
  * Abstract controller for media item entities
@@ -176,6 +194,94 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 		this.setTiebreakerSortCondition(sortBy);
 
 		return this.findAndCount(this.castFilterQuery(conditions), sortBy, pagination);
+	}
+
+	/**
+	 * Computes the aggregated statistics of the media items matching the given filter, in a single database round trip:
+	 * a category can hold thousands of media items and the result is a few dozen numbers, so nothing is loaded into the
+	 * application to be reduced here
+	 * @param userId user ID
+	 * @param categoryId category ID
+	 * @param filterBy the optional filters. Only the group and own platform blocks are meaningful here
+	 * @param timezone the optional IANA time zone the completion years are computed in, defaulting to UTC
+	 * @returns the statistics, as a promise
+	 */
+	public async getMediaItemsStats(userId: string, categoryId: string, filterBy?: MediaItemFilterInternal, timezone?: string): Promise<MediaItemsStatsInternal> {
+		// A single "now" for the whole aggregation, so that every branch agrees on which media items are still upcoming
+		const now = new Date();
+
+		// Mongoose does not cast an aggregation pipeline, so every condition inside it has to be cast by hand
+		const categoryConditions = this.queryHelper.castConditions(this.castFilterQuery({
+			owner: userId,
+			category: categoryId
+		}));
+
+		const filterAndConditions: QueryFilter<MediaItemInternal>[] = [];
+		this.addCommonConditionsFromFilter(userId, categoryId, filterAndConditions, filterBy);
+		const filterStage: PipelineStage.Match = {
+			$match: this.queryHelper.castConditions(this.castFilterQuery({
+				$and: filterAndConditions
+			}))
+		};
+
+		// The backlog branches share their first stages: filter, resolve the status, and drop what is complete
+		const backlogStages: PipelineStage.FacetPipelineStage[] = [
+			filterStage,
+			{
+				$project: {
+					_id: 0,
+					importance: 1,
+					ownPlatform: 1,
+					status: this.buildBacklogStatusExpression(now)
+				}
+			},
+			{
+				$match: {
+					status: {
+						$ne: COMPLETE_STATUS
+					}
+				}
+			}
+		];
+
+		const results = await this.queryHelper.aggregate<MediaItemsStatsAggregationResult>([
+			{
+				$match: categoryConditions
+			},
+			{
+				$facet: {
+					categoryTotal: [
+						{ $count: 'value' }
+					],
+					filteredTotal: [
+						filterStage,
+						{ $count: 'value' }
+					],
+					completionMediaItems: [
+						filterStage,
+						{ $match: { 'completedOn.0': { $exists: true } } },
+						{ $count: 'value' }
+					],
+					completionsByYear: [
+						filterStage,
+						{ $unwind: '$completedOn' },
+						{ $group: { _id: this.buildCompletionYearExpression(timezone), count: { $sum: 1 } } },
+						{ $sort: { _id: 1 } }
+					],
+					backlogByStatus: [
+						...backlogStages,
+						{ $group: { _id: '$status', count: { $sum: 1 } } }
+					],
+					backlogByImportanceAndOwnPlatform: [
+						...backlogStages,
+						{ $group: { _id: { importance: '$importance', ownPlatform: { $ifNull: [ '$ownPlatform', null ] } }, count: { $sum: 1 } } },
+						{ $sort: { '_id.importance': -1, '_id.ownPlatform': 1 } }
+					]
+				}
+			}
+		]);
+
+		return this.buildStatsResult(results[0]);
 	}
 
 	/**
@@ -498,6 +604,140 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 		populate.group = true;
 		populate.ownPlatform = true;
 		return populate;
+	}
+
+	/**
+	 * Helper to build the aggregation expression that resolves the status of a media item.
+	 *
+	 * THIS RULE IS DUPLICATED IN THE FRONT END, in MediaItemMapper.buildStatusLabel: the four statuses are not persisted
+	 * anywhere, they are derived from other fields, and the alternative to computing them here would be shipping enough
+	 * per-item data for the client to bucket the whole backlog itself. The precedence below is the contract between the
+	 * two sides, and changing it on one of them silently makes this aggregate disagree with the list rows.
+	 *
+	 * Note that 'UPCOMING' is decided against the server clock here and against the browser clock there, so an item
+	 * releasing today can be counted differently by the two. That is harmless and is not worth solving
+	 * @param now the instant a release date is compared against
+	 * @returns the aggregation expression
+	 */
+	private buildBacklogStatusExpression(now: Date): PipelineStage.Project['$project'][string] {
+		const hasCompletions = {
+			$gt: [{ $size: { $ifNull: [ '$completedOn', []] } }, 0 ]
+		};
+
+		return {
+			$switch: {
+				branches: [{
+					// Completed and not marked for redo: what the backlog leaves out
+					case: { $and: [ hasCompletions, { $ne: [ '$markedAsRedo', true ] }] },
+					then: COMPLETE_STATUS
+				}, {
+					// Marked as currently active, whatever else it carries
+					case: { $eq: [ '$active', true ] },
+					then: 'ACTIVE'
+				}, {
+					// Completed in the past but moved back to the current list
+					case: { $and: [ hasCompletions, { $eq: [ '$markedAsRedo', true ] }] },
+					then: 'REDO'
+				}, {
+					// Not released yet
+					case: { $gt: [ '$releaseDate', now ] },
+					then: 'UPCOMING'
+				}],
+				default: 'NEW'
+			}
+		};
+	}
+
+	/**
+	 * Helper to build the aggregation expression that extracts the year of a completion date.
+	 *
+	 * The time zone matters: completion dates are written by the client at local midnight and stored as the
+	 * corresponding instant, so a completion dated the 1st of January is stored in the previous year for any client east
+	 * of Greenwich. Extracting the year in UTC would put those completions in the wrong year
+	 * @param timezone the optional IANA time zone, defaulting to UTC
+	 * @returns the aggregation expression
+	 */
+	private buildCompletionYearExpression(timezone?: string): PipelineStage.Group['$group']['_id'] {
+		if(timezone) {
+			return {
+				$year: {
+					date: '$completedOn',
+					timezone: timezone
+				}
+			};
+		}
+
+		return {
+			$year: '$completedOn'
+		};
+	}
+
+	/**
+	 * Helper to turn the raw aggregation result into the internal stats model
+	 * @param result the raw aggregation result
+	 * @returns the internal stats model
+	 */
+	private buildStatsResult(result: MediaItemsStatsAggregationResult): MediaItemsStatsInternal {
+		const byYear: MediaItemsStatsYearInternal[] = result.completionsByYear.map((entry) => {
+			return {
+				year: entry._id,
+				count: entry.count
+			};
+		});
+
+		// The statuses come out of the database in group order: they are reordered here so that the result is stable
+		const byStatus: MediaItemsStatsStatusInternal[] = [];
+		for(const status of INTERNAL_MEDIA_ITEM_BACKLOG_STATUSES) {
+			const entry = result.backlogByStatus.find((candidate) => {
+				return candidate._id === status;
+			});
+
+			if(entry) {
+				byStatus.push({
+					status: status,
+					count: entry.count
+				});
+			}
+		}
+
+		const byImportanceAndOwnPlatform: MediaItemsStatsImportanceAndOwnPlatformInternal[] = result.backlogByImportanceAndOwnPlatform.map((entry) => {
+			return {
+				importance: entry._id.importance,
+				ownPlatformId: entry._id.ownPlatform === null || entry._id.ownPlatform === undefined ? undefined : String(entry._id.ownPlatform),
+				count: entry.count
+			};
+		});
+
+		return {
+			mediaItems: {
+				total: this.readAggregationCount(result.categoryTotal),
+				filtered: this.readAggregationCount(result.filteredTotal)
+			},
+			completions: {
+				// The total is the sum of the years rather than another branch: they cannot disagree if there is only one source
+				total: byYear.reduce((total, entry) => {
+					return total + entry.count;
+				}, 0),
+				mediaItems: this.readAggregationCount(result.completionMediaItems),
+				byYear: byYear
+			},
+			backlog: {
+				total: byStatus.reduce((total, entry) => {
+					return total + entry.count;
+				}, 0),
+				byStatus: byStatus,
+				byImportanceAndOwnPlatform: byImportanceAndOwnPlatform
+			}
+		};
+	}
+
+	/**
+	 * Helper to read a $count facet branch, which is an empty array (and not a zero) when nothing matched
+	 * @param branch the raw branch result
+	 * @returns the count
+	 */
+	private readAggregationCount(branch: { value: number }[]): number {
+		return branch.length > 0 ? branch[0].value : 0;
 	}
 
 	/**

@@ -1,5 +1,5 @@
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
-import { commonMediaItemSchemaDefinition, commonMediaItemSchemaOptions } from 'app/schemas/media-items/media-item';
+import { addCommonMediaItemSchemaIndexes, commonMediaItemSchemaDefinition, commonMediaItemSchemaOptions } from 'app/schemas/media-items/media-item';
 import { Schema, ValidateOpts } from 'mongoose';
 
 /**
@@ -50,6 +50,8 @@ export const TvShowSchema: Schema = new Schema({
 }, {
 	...commonMediaItemSchemaOptions
 });
+
+addCommonMediaItemSchemaIndexes(TvShowSchema);
 
 /**
  * TvShows collection name

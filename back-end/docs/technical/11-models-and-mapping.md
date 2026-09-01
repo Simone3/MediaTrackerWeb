@@ -57,6 +57,18 @@ It logs every mapping at debug level, which is what makes a wrong field traceabl
 
 Only media items are wired up today. The plumbing is entity-agnostic, so adding pagination to categories, groups or own platforms is a request field, a response field and one extra argument.
 
+## 11.6 Stats models
+
+The media items stats live alongside the other media-item models: `GetMediaItemsStatsRequest` / `GetMediaItemsStatsResponse` and their nested blocks in `app/data/models/api/media-items/media-item.ts`, `MediaItemsStatsInternal` in the matching internal file, and `mediaItemsStatsFilterMapper` / `mediaItemsStatsMapper` in `app/data/mappers/media-items/media-item.ts`.
+
+Three things are specific to them:
+
+- **`MediaItemsStatsFilter` reuses `MediaItemGroupFilter` and `MediaItemOwnPlatformFilter` unchanged**, and its mapper produces an ordinary `MediaItemFilterInternal` with only those two blocks set. The stats query is then the list query's own condition builder, which is what stops the two screens from drifting apart on what a filter means
+- **the stats mapper only goes outwards.** Stats are computed by the database and never travel into the application, so `convertToInternal` throws rather than pretending to be implemented
+- **`ownPlatformId` is emitted as an explicit `null`** for the media items the user does not own. It is a bucket of the result rather than a missing value, and an absent key would read as the latter
+
+There are no per-media-type subclasses: nothing in these models is type-specific ([§10.5](10-api-surface.md#105-media-item-entity-routes)).
+
 ---
 
 [← §10 API surface](10-api-surface.md) · [§12 Catalog integrations →](12-catalog-integrations.md)
