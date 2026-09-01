@@ -42,8 +42,9 @@
 
 # FE+BE improvements
 
-- aggregations by media type like how many books read by year - also view for remaining media (split by owned or not and/or by importance) - split by media item and/or category?
+- aggregations
 
+- no index at all on mongo except the one created for aggregation!
 
 # maybe in the future
 

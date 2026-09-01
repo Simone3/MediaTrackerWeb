@@ -13,11 +13,11 @@ import { logger } from 'app/loggers/logger';
 import { miscUtils } from 'app/utilities/misc-utils';
 import { HydratedDocument, Model, PipelineStage, QueryFilter, SortOrder, UpdateQuery } from 'mongoose';
 
-/**
- * The status the media items stats aggregation gives to the media items the backlog leaves out. It only exists inside
- * the pipeline, long enough for the following stage to drop the documents carrying it
- */
 const COMPLETE_STATUS = 'COMPLETE';
+const ACTIVE_STATUS = 'ACTIVE';
+const REDO_STATUS = 'REDO';
+const UPCOMING_STATUS = 'UPCOMING';
+const NEW_STATUS = 'NEW';
 
 /**
  * Raw shape of the media items stats aggregation result, i.e. one array per facet branch
@@ -30,7 +30,6 @@ type MediaItemsStatsAggregationResult = {
 	backlogByStatus: { _id: MediaItemBacklogStatusInternal; count: number }[];
 	backlogByImportanceAndOwnPlatform: { _id: { importance: MediaItemImportanceInternal; ownPlatform: unknown }; count: number }[];
 };
-
 /**
  * Abstract controller for media item entities
  * @template TMediaItemInternal the media item entity
@@ -633,17 +632,17 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 				}, {
 					// Marked as currently active, whatever else it carries
 					case: { $eq: [ '$active', true ] },
-					then: 'ACTIVE'
+					then: ACTIVE_STATUS
 				}, {
 					// Completed in the past but moved back to the current list
 					case: { $and: [ hasCompletions, { $eq: [ '$markedAsRedo', true ] }] },
-					then: 'REDO'
+					then: REDO_STATUS
 				}, {
 					// Not released yet
 					case: { $gt: [ '$releaseDate', now ] },
-					then: 'UPCOMING'
+					then: UPCOMING_STATUS
 				}],
-				default: 'NEW'
+				default: NEW_STATUS
 			}
 		};
 	}
