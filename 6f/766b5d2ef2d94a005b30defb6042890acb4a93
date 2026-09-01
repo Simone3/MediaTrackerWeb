@@ -1,0 +1,128 @@
+front-end/app/components/containers/media-item/stats/screen.ts
+  s_8c6ece4fc22d4a::t_beab8326fb3591 1-45
+front-end/app/components/containers/navigation/media-navigator.tsx
+  s_8c6ece4fc22d4a::t_5868636cb7b543 8,74
+front-end/app/components/containers/navigation/screen-context-guard.tsx
+  s_8c6ece4fc22d4a::t_b39fc11e879193 29-31
+front-end/app/components/presentational/media-item/list/filter-form/data/media-item.ts
+  s_8c6ece4fc22d4a::t_8f7008303eedec 117-226,297,306,340,349,381,411,416,447,452,489,491
+front-end/app/components/presentational/media-item/list/filter-modal/index.tsx
+  s_8c6ece4fc22d4a::t_d73415e07c78f5 60-61
+front-end/app/components/presentational/media-item/stats/importance-boxes/index.tsx
+  s_8c6ece4fc22d4a::t_1443d230b261cd 1-135
+front-end/app/components/presentational/media-item/stats/screen/index.tsx
+  s_8c6ece4fc22d4a::t_692ecf6dfc9f12 1-287
+front-end/app/components/presentational/media-item/stats/status-donut/index.tsx
+  s_8c6ece4fc22d4a::t_2c613a790cdccb 1-168
+front-end/app/controllers/implementations/real/entities/media-items/book.ts
+  s_8c6ece4fc22d4a::t_323f96de7d89b3 3,17-22
+front-end/app/controllers/implementations/real/entities/media-items/media-item.ts
+  s_8c6ece4fc22d4a::t_62e2a211550a4b 1-43
+front-end/app/controllers/implementations/real/entities/media-items/movie.ts
+  s_8c6ece4fc22d4a::t_06d3386d780813 3,17-22
+front-end/app/controllers/implementations/real/entities/media-items/tv-show.ts
+  s_8c6ece4fc22d4a::t_cbae17975f6206 3,17-22
+front-end/app/controllers/implementations/real/entities/media-items/videogame.ts
+  s_8c6ece4fc22d4a::t_bb387b21708007 3,17-22
+front-end/app/controllers/interfaces/entities/media-items/media-item.ts
+  s_8c6ece4fc22d4a::t_5d17794a6b6de5 2,30-39
+front-end/app/data/models/api/media-items/media-item.ts
+  s_8c6ece4fc22d4a::t_a0be1b4db9f048 2,465-710
+front-end/app/data/models/internal/error.ts
+  s_8c6ece4fc22d4a::t_082b49a006c7c2 22
+front-end/app/data/models/internal/media-items/media-item.ts
+  s_8c6ece4fc22d4a::t_f4fd21f4c543b7 148-222
+front-end/app/redux/actions/media-item/const.ts
+  s_8c6ece4fc22d4a::t_393dd22d10e649 9-14
+front-end/app/redux/actions/media-item/generators.ts
+  s_8c6ece4fc22d4a::t_04c5d43c00f840 1-2,5,63-116
+front-end/app/redux/actions/media-item/types.ts
+  s_8c6ece4fc22d4a::t_b3cf9100e0a0ab 4,45-81
+front-end/app/redux/reducers/media-item/stats.ts
+  s_8c6ece4fc22d4a::t_ee4e3b93f654c2 1-64
+front-end/app/redux/reducers/root.ts
+  s_8c6ece4fc22d4a::t_93b7467cc33ae7 12,34
+front-end/app/redux/sagas/media-item/fetch-stats.ts
+  s_8c6ece4fc22d4a::t_f5b7417e61a25f 1-46
+front-end/app/redux/sagas/root.ts
+  s_8c6ece4fc22d4a::t_5f0c039c34de05 13,46
+front-end/app/redux/state/media-item-stats.ts
+  s_8c6ece4fc22d4a::t_6c81366bcd2ee9 1-57
+front-end/app/redux/state/state.ts
+  s_8c6ece4fc22d4a::t_c98cdb35699c94 5,54-58,115
+front-end/app/resources/lang/lang-en.json
+  s_8c6ece4fc22d4a::t_25d1edeadfada8 24,293-425
+front-end/app/utilities/date-utils.ts
+  s_8c6ece4fc22d4a::t_550925302711bc 59-76
+front-end/app/utilities/navigation-routes.ts
+  s_8c6ece4fc22d4a::t_40e6879238e62b 19
+front-end/app/utilities/screens.ts
+  s_8c6ece4fc22d4a::t_15e876ca0865a9 12
+front-end/app/components/containers/media-item/list/screen.ts
+  s_8c6ece4fc22d4a::t_d426ea14ff19eb 7-8,32-36
+front-end/app/components/containers/media-item/stats/filters.ts
+  s_8c6ece4fc22d4a::t_f976a32a033c8f 1-60
+front-end/app/components/presentational/media-item/list/screen/index.tsx
+  s_8c6ece4fc22d4a::t_88c34a16bf8145 6,36,52-59,67,128-132
+front-end/app/components/presentational/media-item/stats/data/media-item.ts
+  s_8c6ece4fc22d4a::t_577dd1080104ee 1-138
+front-end/app/components/presentational/media-item/stats/filters/index.tsx
+  s_8c6ece4fc22d4a::t_46949798b3988f 1-267
+front-end/app/components/presentational/media-item/stats/year-chart/index.tsx
+  s_8c6ece4fc22d4a::t_502a5d3abec6b9 1-216
+front-end/app/controllers/implementations/mocks/entities/media-items/media-item.ts
+  s_8c6ece4fc22d4a::t_349ddeda9621c4 5,46-66,225-320
+front-end/app/data/mappers/media-items/media-item.ts
+  s_8c6ece4fc22d4a::t_26a80b9139beb9 5,7,417-514
+front-end/app/web/styles.css
+  s_8c6ece4fc22d4a::t_bd27035006290a 137,324,1425-1426,1437-1438,1446-1447,1455-1456,1461-1462,1593-2048,3640,3799-3800,3811-3817
+front-end/docs/technical/02-repository-map.md
+  s_8c6ece4fc22d4a::t_0d8e398f0324a7 33,44,67
+front-end/docs/technical/05-navigation.md
+  s_8c6ece4fc22d4a::t_9198a42aac4662 26,46,77-78,105
+front-end/docs/technical/06-redux.md
+  s_8c6ece4fc22d4a::t_dad453b891cafc 30
+front-end/docs/technical/08-domain-model.md
+  s_8c6ece4fc22d4a::t_c4c57be079966b 71-72
+front-end/docs/technical/09-data-layer.md
+  s_8c6ece4fc22d4a::t_9e5acf69ea396a 73,80-82
+front-end/docs/technical/10-features.md
+  s_8c6ece4fc22d4a::t_e61d9b73a2ec7e 173-225
+front-end/docs/technical/12-styling.md
+  s_8c6ece4fc22d4a::t_27d32b54f76559 21-24
+front-end/docs/technical/13-text-and-languages.md
+  s_8c6ece4fc22d4a::t_6040488eac8491 17-18
+front-end/docs/technical/14-testing.md
+  s_8c6ece4fc22d4a::t_4960a0a1dd796e 51
+front-end/docs/technical/15-invariants-and-pitfalls.md
+  s_8c6ece4fc22d4a::t_8b16143fca6eb3 80,92-99
+front-end/tests/media-items-screen.smoke.test.tsx
+  s_8c6ece4fc22d4a::t_ea08035052cb4a 44,56,73-76,92
+front-end/tests/media-items-stats-data.test.ts
+  s_8c6ece4fc22d4a::t_dd95a861e62173 1-114
+front-end/tests/media-items-stats-screen.smoke.test.tsx
+  s_8c6ece4fc22d4a::t_b70eddf9bb8fbd 1-204
+front-end/tests/media-items-stats-state.test.ts
+  s_8c6ece4fc22d4a::t_1e226733791fa8 1-86
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "6f766b5d2ef2d94a005b30defb6042890acb4a93",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_8c6ece4fc22d4a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3793074b-7a50-4069-a8fa-5f5be9d11e15",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
