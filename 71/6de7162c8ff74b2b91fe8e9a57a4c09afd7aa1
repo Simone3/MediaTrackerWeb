@@ -1,0 +1,80 @@
+back-end/app/controllers/database/query-helper.ts
+  s_945f9acc53893f::t_9be17e631f6e8e 5-6,38,78,89-125
+back-end/app/controllers/entities/media-items/media-item.ts
+  s_945f9acc53893f::t_fa05c1cc3c9b2c 10,14-32,199-286,609-742
+back-end/app/data/mappers/media-items/media-item.ts
+  s_945f9acc53893f::t_ebebf36dcc5ee0 4,6,312-429
+back-end/app/data/models/api/media-items/media-item.ts
+  s_945f9acc53893f::t_4a24b235b732d5 5,7,473-720
+back-end/app/data/models/internal/media-items/media-item.ts
+  s_945f9acc53893f::t_d228047636fc5f 5,97-156
+back-end/app/routes/media-items/book.ts
+  s_945f9acc53893f::t_e391febc6845ff 89-91
+back-end/app/routes/media-items/media-item.ts
+  s_945f9acc53893f::t_e74a22c734a67c 5,7,173-207
+back-end/app/routes/media-items/movie.ts
+  s_945f9acc53893f::t_2ccfa3cb319953 89-91
+back-end/app/routes/media-items/tv-show.ts
+  s_945f9acc53893f::t_2d151d75c8b60f 89-91
+back-end/app/routes/media-items/videogame.ts
+  s_945f9acc53893f::t_3ff014e1a1d0e4 89-91
+back-end/app/schemas/common.ts
+  s_945f9acc53893f::t_b065f9720904ad 1-8
+back-end/app/schemas/media-items/book.ts
+  s_945f9acc53893f::t_bce3b7e71c042a 1,15-16
+back-end/app/schemas/media-items/media-item.ts
+  s_945f9acc53893f::t_7ee9c464f88ee8 2,36-45
+back-end/app/schemas/media-items/movie.ts
+  s_945f9acc53893f::t_face865031aa87 1,15-16
+back-end/app/schemas/media-items/tv-show.ts
+  s_945f9acc53893f::t_6ae03884265302 2,54-55
+back-end/app/schemas/media-items/videogame.ts
+  s_945f9acc53893f::t_538fa2015b7423 1,17-18
+back-end/app/utilities/date-utils.ts
+  s_945f9acc53893f::t_305b15e8b32a1f 99-115
+back-end/app/utilities/validators.ts
+  s_945f9acc53893f::t_5227f08d9b6f71 1-30
+back-end/docs/technical/02-repository-map.md
+  s_945f9acc53893f::t_c678bec9016945 72-73,85,87
+back-end/docs/technical/06-validation-and-errors.md
+  s_945f9acc53893f::t_f728e051bfbb5d 19-20
+back-end/docs/technical/07-domain-model.md
+  s_945f9acc53893f::t_5544e68aad2b53 85-86
+back-end/docs/technical/08-persistence.md
+  s_945f9acc53893f::t_617699b1063584 43-44,54,60-63,82-99
+back-end/docs/technical/09-controllers.md
+  s_945f9acc53893f::t_88f41ea3d1279d 81,118-147
+back-end/docs/technical/10-api-surface.md
+  s_945f9acc53893f::t_8df6a27699d54f 55,60,71-74
+back-end/docs/technical/11-models-and-mapping.md
+  s_945f9acc53893f::t_2dff64d94c31e2 60-71
+back-end/docs/technical/15-utilities.md
+  s_945f9acc53893f::t_0f6de19bd5ec99 16,22-23,48-57
+back-end/docs/technical/16-testing.md
+  s_945f9acc53893f::t_55b09c03d1780f 61
+back-end/test/integration/routes/media-items/stats-test.ts
+  s_945f9acc53893f::t_c2be0c4e6e4178 1-324
+back-end/test/unit/utilities/date-utils-test.ts
+  s_945f9acc53893f::t_9518c021bde67a 40-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "716de7162c8ff74b2b91fe8e9a57a4c09afd7aa1",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_945f9acc53893f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "335328ef-7d93-464e-829c-e8aabdc7318b",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
