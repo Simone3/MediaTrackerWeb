@@ -52,6 +52,7 @@ Provider-specific values live here too, and belong here rather than inline: imag
 
 - `level`: `debug | info | warn | error | off`
 - `file`
+- `fileBackups`
 - `apisInputOutput.active`
 - `apisInputOutput.excludeRequestBodyRegExp`
 - `apisInputOutput.excludeResponseBodyRegExp`
@@ -59,6 +60,8 @@ Provider-specific values live here too, and belong here rather than inline: imag
 - `databaseQueries.active`
 
 **`config.log.file` is required by validation, but an empty string is meaningful.** A non-empty value sends logs to both the file and the console; an empty one makes logger setup fall back to console-only. That is how a containerized deployment with no writable log path is configured — the key is still required, so its absence is a mistake rather than a silent default ([§14](14-logging.md)).
+
+**`config.log.fileBackups` is how many rolled files are kept besides the current one.** log4js defaults a `dateFile` appender to one, which would make yesterday the oldest log available, so the value is configured rather than left to the library ([§14.1](14-logging.md#141-one-logger)).
 
 ---
 

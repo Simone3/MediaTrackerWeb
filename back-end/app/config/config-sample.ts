@@ -102,6 +102,7 @@ export const sampleConfig: Config = {
 	log: {
 		level: 'debug',
 		file: '<your_path_here>/media-tracker.log',
+		fileBackups: 14,
 		apisInputOutput: {
 			active: true,
 			excludeRequestBodyRegExp: [],

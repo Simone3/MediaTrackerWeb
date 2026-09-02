@@ -20,12 +20,6 @@ const layout: PatternLayout = {
 	}
 };
 
-/**
- * Number of rolled log files to keep besides the current one. log4js defaults it to 1, i.e. yesterday would be the
- * oldest log available: this must be set explicitly to keep any history worth reading
- */
-const LOG_FILE_BACKUPS = 14;
-
 // Global log4js configuration
 if(config.log.file) {
 	configure({
@@ -36,7 +30,7 @@ if(config.log.file) {
 				layout: layout,
 				keepFileExt: true,
 				compress: true,
-				numBackups: LOG_FILE_BACKUPS
+				numBackups: config.log.fileBackups
 			},
 			console: {
 				type: 'console',

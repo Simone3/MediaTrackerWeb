@@ -425,6 +425,10 @@ class LogConfig {
 	public file!: string;
 
 	@IsDefined()
+	@IsNumber()
+	public fileBackups!: number;
+
+	@IsDefined()
 	@Type(() => {
 		return LogApisInputOutputConfig;
 	})
