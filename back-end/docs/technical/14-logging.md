@@ -66,9 +66,13 @@ The methods that delegate to another one here — `findOne`, `checkUniquenessAnd
 
 ## 14.5 Redaction and error formatting
 
-`app/loggers/log-redactor.ts` redacts the object keys `api_key` and `key` during JSON stringification, before anything reaches the output.
+`app/loggers/log-redactor.ts` redacts the object keys that name a credential — `api_key`, `key`, `token`, `access_token`, `refresh_token`, `authorization`, `password`, `secret`, `client_secret` — during JSON stringification, before anything reaches the output.
+
+**Keys are matched on their lowercase alphanumeric form**, so one entry covers `api_key`, `apiKey` and `API-KEY`: a provider's choice of casing and separator is not something a redaction list should have to enumerate. The match is on the whole normalized key, not a substring, so `keyword` and `monkey` are left alone.
 
 **External catalog calls carry provider API keys in their query parameters**, and outbound request logging would otherwise write them to a file in plain text ([§12](12-catalog-integrations.md)). Redaction at the stringification step is what keeps that from depending on every call site remembering.
+
+**The redactor only sees object keys, so it is not the whole defence.** The Twitch token request sends its client secret in a form-encoded string body, where there are no keys to match; that call sets `hideRequestBodyInLogs` and `hideResponseBodyInLogs` instead ([§12.1](12-catalog-integrations.md#121-the-shared-invoker)). A credential that is not an object property has to be hidden at the call site.
 
 **Errors are not JSON-stringified.** An `Error`'s message and stack are not enumerable properties, so `JSON.stringify` renders one as `{}` — which is what the `%s` of every `logger.error('…: %s', error)` used to print. `logger` formats them instead: a raw error becomes its stack, and an `AppError` becomes its cause chain flattened onto the one line, `generic.application - Generic application error <- db.find - Database find query returned an error <- …`.
 

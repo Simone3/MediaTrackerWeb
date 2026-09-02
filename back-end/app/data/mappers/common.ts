@@ -1,6 +1,5 @@
 import { PaginationRequest } from 'app/data/models/api/common';
 import { PaginationInternal } from 'app/data/models/internal/common';
-import { logger } from 'app/loggers/logger';
 
 /**
  * Generic model mapper between some internal model and some external model,
@@ -41,9 +40,7 @@ export abstract class ModelMapper<TInternal, TExternal, TParams> {
 	 * @returns the mapping target
 	 */
 	public toExternal(source: TInternal, extraParams?: TParams): TExternal {
-		const target = this.convertToExternal(source, extraParams);
-		this.logMapping(source, target);
-		return target;
+		return this.convertToExternal(source, extraParams);
 	}
 
 	/**
@@ -53,9 +50,7 @@ export abstract class ModelMapper<TInternal, TExternal, TParams> {
 	 * @returns the mapping target
 	 */
 	public toInternal(source: TExternal, extraParams?: TParams): TInternal {
-		const target = this.convertToInternal(source, extraParams);
-		this.logMapping(source, target);
-		return target;
+		return this.convertToInternal(source, extraParams);
 	}
 
 	/**
@@ -73,15 +68,6 @@ export abstract class ModelMapper<TInternal, TExternal, TParams> {
 	 * @returns the mapping target
 	 */
 	protected abstract convertToInternal(source: TExternal, extraParams?: TParams): TInternal;
-
-	/**
-	 * Helper to log source and target of a mapping
-	 * @param source the mapping source
-	 * @param target the mapping target
-	 */
-	private logMapping(source: unknown, target: unknown): void {
-		logger.debug('Mapping: %s --------> %s', source, target);
-	}
 }
 
 /**

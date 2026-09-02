@@ -31,7 +31,7 @@ Routes never pass a raw request body into a controller. Everything crosses throu
 - `toInternal`
 - `toInternalList`
 
-It logs every mapping at debug level, which is what makes a wrong field traceable without adding prints ([§14.1](14-logging.md#141-one-logger)).
+**It does not log the mappings.** It used to write both sides of every conversion at debug level, which meant one line per entity per list response — the noisiest line in the application, and on the one logger there is no way to read anything else at debug without it. The request and response bodies are already logged ([§14.2](14-logging.md#142-requestresponse-logging)), and they are what a wrong field shows up in.
 
 ## 11.4 Media-item mapper conventions
 
