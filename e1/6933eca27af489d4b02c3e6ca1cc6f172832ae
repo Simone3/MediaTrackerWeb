@@ -1,0 +1,32 @@
+back-end/app/config/config-sample.ts
+  s_fdba367dd468cd::t_b9a110fcf66e31 105
+back-end/app/config/type-config.ts
+  s_fdba367dd468cd::t_1227447166b64d 427-430
+back-end/app/loggers/logger.ts
+  s_fdba367dd468cd::t_19e1ea0509d157 33
+back-end/docs/technical/04-configuration.md
+  s_fdba367dd468cd::t_99ce0a7c488716 55,64-65
+back-end/test/global/config-test.ts
+  s_fdba367dd468cd::t_8205eded472443 104
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "e16933eca27af489d4b02c3e6ca1cc6f172832ae",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_fdba367dd468cd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3bcad5db-2786-4b06-bfe2-59d1d08a817b",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
