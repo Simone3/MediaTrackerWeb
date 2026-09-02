@@ -1,0 +1,30 @@
+back-end/app/data/mappers/common.ts
+  s_fdba367dd468cd::t_8e4bb3d2942bf4 43,53
+back-end/app/loggers/log-redactor.ts
+  s_fdba367dd468cd::t_f6824444552b25 13,16-24,37,53-62
+back-end/docs/technical/11-models-and-mapping.md
+  s_fdba367dd468cd::t_d5fa26bff0b3a8 34
+back-end/docs/technical/14-logging.md
+  s_fdba367dd468cd::t_5bed871cac250e 69-71,75-76
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "6ed20ba11ec04485453a196b810b7b8cb9bcad70",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_fdba367dd468cd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3bcad5db-2786-4b06-bfe2-59d1d08a817b",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
