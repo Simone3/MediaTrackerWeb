@@ -1,0 +1,32 @@
+back-end/app/schemas/category.ts
+  s_bc7bca93d70d94::t_46ca46c76fe198 2,17-23
+back-end/app/schemas/group.ts
+  s_bc7bca93d70d94::t_c5051ce68680fc 2,16-23
+back-end/app/schemas/own-platform.ts
+  s_bc7bca93d70d94::t_8088f21783a3c0 2,18-25
+back-end/docs/technical/02-repository-map.md
+  s_bc7bca93d70d94::t_7f1728a6adba44 69
+back-end/docs/technical/08-persistence.md
+  s_bc7bca93d70d94::t_c7194bae9491e2 84,86-91,93,95,97,99,101-105
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "931baf1557fca0ff643614b2fd8e5c618fdad996",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_bc7bca93d70d94": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4c527f5f-a5f2-4c09-b361-bd461578b67a",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
