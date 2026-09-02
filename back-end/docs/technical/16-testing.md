@@ -59,6 +59,7 @@ The static payloads live in `test/resources/mocks/`. Some of them are **delibera
 - CRUD for categories, groups, own platforms and every media type
 - filtering, sorting and searching
 - the media items stats aggregate: the five status branches, the completion years and their time zone, the filters and the cross-user isolation
+- the media item status rule on its own, one seeded media item per case, as a table duplicated in the front-end suite so that the two sides cannot drift apart unnoticed ([§9.6](09-controllers.md#96-mediaitementitycontroller))
 - population of linked group and own-platform data
 - catalog mapping, including the responses whose invalid list items are discarded
 - legacy import mapping

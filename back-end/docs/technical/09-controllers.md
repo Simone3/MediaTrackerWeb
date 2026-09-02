@@ -129,7 +129,7 @@ Three things worth knowing about it:
 
 ### The status rule
 
-The four backlog statuses are **not persisted**. They are derived, and the front end derives them too, in `MediaItemMapper.buildStatusLabel`. The precedence, in both places:
+The four backlog statuses are **not persisted**. They are derived, and the front end derives them too, in `mediaItemUtils.buildStatusLabel`. The precedence, in both places:
 
 | # | Condition | Status |
 | --- | --- | --- |
@@ -142,6 +142,8 @@ The four backlog statuses are **not persisted**. They are derived, and the front
 `COMPLETE` never appears in the response: those are exactly the items the backlog excludes.
 
 **This rule is a contract between the two sides.** The alternative to computing it here would be shipping enough per-item data for the client to bucket the whole backlog itself, which is what an aggregate exists to avoid — so the duplication is accepted, and changing it on one side without the other silently makes the stats screen disagree with the list rows.
+
+What keeps the two honest is **the same table of cases, written out twice**: `test/integration/routes/media-items/status-rule-test.ts` here seeds one media item per case and reads the bucket it lands in back off the stats API, and `tests/media-item-status-rule.test.ts` in the front end runs the identical table through its helper. Neither project can import the other, so the copies are kept identical by hand and each file's header says so. `COMPLETE` is asserted here as an absence from the backlog plus a completion, since it is the one status this endpoint cannot report. A precedence change on one side alone fails a test naming the exact case, on both sides.
 
 `UPCOMING` is evaluated against the server clock here and against the browser clock on the list, so an item releasing today can be counted differently by the two. That is harmless and is not worth solving.
 
