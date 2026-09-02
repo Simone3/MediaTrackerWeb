@@ -1,0 +1,30 @@
+back-end/docs/technical/07-domain-model.md
+  s_ad23fda45f6ffa::t_0d02cf66b788f3 85
+back-end/docs/technical/09-controllers.md
+  s_ad23fda45f6ffa::t_8733151726b112 132,146-147
+back-end/docs/technical/16-testing.md
+  s_ad23fda45f6ffa::t_41930c4f38b01c 62
+back-end/test/integration/routes/media-items/status-rule-test.ts
+  s_ad23fda45f6ffa::t_e44af8f1af5993 1-144
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "8bbea273d4296e4ccf3e8466d8281523f42058c7",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_ad23fda45f6ffa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3451d76d-16a0-4aec-a7e9-d2c7a2eeb31a",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
