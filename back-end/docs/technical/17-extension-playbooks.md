@@ -68,9 +68,8 @@ Reach for what exists before inventing anything:
 
 Not necessarily bugs, but each one changes what a new feature can assume:
 
-- **Most route failures return HTTP `500`**, including validation and some precondition failures ([§6.2](06-validation-and-errors.md#62-what-a-validation-failure-returns)).
+- **Most route failures return HTTP `500`**, including validation and some precondition failures ([§6.2](06-validation-and-errors.md#62-what-a-validation-failure-returns)). The mapping is in one place now ([§6.3](06-validation-and-errors.md#63-the-error-model)), but changing it is still an API change the front end has to make too.
 - **There is no transaction handling** around multi-step deletes, merges or imports ([§8.6](08-persistence.md#86-no-transactions)).
-- **There is no central error middleware** ([§6.3](06-validation-and-errors.md#63-the-error-model)).
 - **No database uniqueness constraints are enforced by the current controllers** — `QueryHelper.checkUniquenessAndSave` exists but is unused ([§8.5](08-persistence.md#85-queryhelper)).
 - **Catalog routes require authentication** even though they are not user-scoped ([§5.4](05-authentication.md#54-catalog-routes)).
 - **The app starts listening before the database connection resolves**; a failed database init throws after the port is already bound ([§1.4](01-architecture.md#14-startup)).

@@ -41,6 +41,7 @@ Where everything lives. Generated folders — `node_modules/`, `build/`, `covera
 | `media-items/media-item.ts` | The generic media-item router builders every media type is assembled from |
 | `media-items/movie.ts`, `tv-show.ts`, `book.ts`, `videogame.ts` | The per-type routers and catalog routes |
 | `catch-all.ts` | The final 404 middleware |
+| `error-handler.ts` | The error middleware every route delegates to ([§6.3](06-validation-and-errors.md#63-the-error-model)) |
 
 ## 2.4 `app/controllers`
 

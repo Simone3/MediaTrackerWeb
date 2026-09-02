@@ -85,7 +85,7 @@ These proxy an external catalog lookup and map the result into the app's own mod
 
 ## 10.8 Catch-all
 
-Every unmatched route ends in the middleware from `app/routes/catch-all.ts`, which returns HTTP `404` with `AppError.NOT_FOUND`.
+Every unmatched route ends in the middleware from `app/routes/catch-all.ts`, which passes `AppError.NOT_FOUND` to the error middleware, answering HTTP `404` ([§6.3](06-validation-and-errors.md#63-the-error-model)).
 
 **An unauthenticated request to an unknown route returns `401`, not `404`**, because authentication runs earlier in the stack ([§1.5](01-architecture.md#15-the-middleware-stack)). That is the correct order — it means the API does not tell an anonymous caller which routes exist.
 

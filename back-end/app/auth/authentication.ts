@@ -21,12 +21,14 @@ const getAuthToken = (request: Request): string | undefined => {
 };
 
 /**
- * Helper to send a 401 error
+ * Helper to send a 401 error. It answers directly instead of going through the error middleware because its response
+ * body is not the standard error payload
+ * @param request the request
  * @param response the response
  * @param error the error to log
  */
-const onAuthenticationError = (response: Response, error: unknown): void => {
-	logger.error('Authentication error: %s', error);
+const onAuthenticationError = (request: Request, response: Response, error: unknown): void => {
+	logger.warn('API %s %s - Rejected Request: Authentication error: %s', request.method, request.originalUrl, error);
 
 	response
 		.status(401)
@@ -56,7 +58,7 @@ export const authenticationMiddleware: RequestHandler = (request, response, next
 
 	// Check auth header presence
 	if(!authToken) {
-		onAuthenticationError(response, 'Missing or invalid Authorization header');
+		onAuthenticationError(request, response, 'Missing or invalid Authorization header');
 		return;
 	}
 
@@ -68,6 +70,6 @@ export const authenticationMiddleware: RequestHandler = (request, response, next
 			next();
 		})
 		.catch((error) => {
-			onAuthenticationError(response, error);
+			onAuthenticationError(request, response, error);
 		});
 };

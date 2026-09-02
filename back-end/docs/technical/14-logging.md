@@ -19,11 +19,11 @@
 | `externalApisInputOutput.active` | The outbound request and response lines ([§12.1](12-catalog-integrations.md#121-the-shared-invoker)) |
 | `databaseQueries.active` | The per-query lines ([§14.3](#143-query-logging)) |
 
-**`warn` is for a degraded but served response** — the catalog dropping unreadable items from a provider payload ([§6.4](06-validation-and-errors.md#64-tolerating-bad-provider-data)) — as opposed to `error`, which means the caller got nothing.
+**`warn` is for a request nobody needs to act on** — a caller's invalid payload or unknown route, decided by the error middleware ([§6.3](06-validation-and-errors.md#63-the-error-model)), and a degraded but served response, the catalog dropping unreadable items from a provider payload ([§6.4](06-validation-and-errors.md#64-tolerating-bad-provider-data)). `error` is reserved for what the application itself got wrong, so that a log read at `level: 'error'` is a list of things to fix rather than a list of people mistyping URLs.
 
 Every line carries the current user ID and the correlation ID through the layout ([§5.3](05-authentication.md#53-request-scope-and-correlation)).
 
-**`numBackups` is set explicitly on the file appender.** log4js defaults a `dateFile` appender to keeping one rolled file, which would make yesterday the oldest log available.
+**`numBackups` is set explicitly on the file appender**, from `config.log.fileBackups` ([§4.4](04-configuration.md#44-logging-config)). log4js defaults a `dateFile` appender to keeping one rolled file, which would make yesterday the oldest log available.
 
 ## 14.2 Request/response logging
 
@@ -39,6 +39,16 @@ Every line carries the current user ID and the correlation ID through the layout
 Both exclusion lists are empty in the sample config: no current endpoint carries a body large or sensitive enough to keep out of the log.
 
 **The logging middleware is mounted above the authentication middleware** ([§1.5](01-architecture.md#15-the-middleware-stack)). A request rejected by authentication is a request worth seeing, and below the authentication it would have produced an error line naming neither the URL nor a correlation ID.
+
+**A failed request is three lines under one correlation ID** — the request, the failure from the error middleware, and the response with its status and elapsed time. The failure line is the only one a route contributes, and it does not write it itself:
+
+```
+INFO - API GET /unknown-route - Received Request: -
+WARN - API GET /unknown-route - Rejected Request: api.not.found - Cannot find the requested API
+INFO - API GET /unknown-route - Sent Response: 404 in 3.5 ms - {"errorCode":"api.not.found",…}
+```
+
+The authentication and authorization middlewares are the exception: they log their own rejection and answer directly, because their response body is not the standard error payload ([§5](05-authentication.md)).
 
 ## 14.3 Query logging
 

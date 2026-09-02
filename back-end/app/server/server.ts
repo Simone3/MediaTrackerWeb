@@ -2,6 +2,7 @@ import { authenticationMiddleware } from 'app/auth/authentication';
 import { config } from 'app/config/config';
 import { logCorrelationMiddleware, requestLoggerMiddleware, responseBodyCaptureMiddleware, responseLoggerMiddleware } from 'app/loggers/express-logger';
 import { catchAllMiddleware } from 'app/routes/catch-all';
+import { errorHandlerMiddleware } from 'app/routes/error-handler';
 import { categoryRouter } from 'app/routes/category';
 import { groupRouter } from 'app/routes/group';
 import { bookCatalogRouter, bookEntityRouter } from 'app/routes/media-items/book';
@@ -60,6 +61,9 @@ app.use('/', videogameCatalogRouter);
 
 // Final catch-all middleware
 app.use(catchAllMiddleware);
+
+// Error handling middleware, after every route so that it receives what they pass to next(...)
+app.use(errorHandlerMiddleware);
 
 /**
  * Main Express server instance, just requires a .listen() call

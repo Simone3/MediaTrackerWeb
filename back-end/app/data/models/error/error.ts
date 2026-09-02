@@ -55,6 +55,14 @@ export class AppError extends Error {
 	}
 
 	/**
+	 * The first error of the nested chain, i.e. the one that actually went wrong under the generic labels that wrap it
+	 * @returns the source error, or this same error if it wraps no other one
+	 */
+	public get sourceError(): AppError {
+		return this.errorDetails instanceof AppError ? this.errorDetails.sourceError : this;
+	}
+
+	/**
 	 * Adds details to an error constant
 	 * @param errorDetails the error details
 	 * @returns a new AppError with the given details

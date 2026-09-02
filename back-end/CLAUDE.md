@@ -38,6 +38,7 @@ npm test           # nyc node test/run-tests.cjs
 ## Architecture Rules
 
 - **Keep routes thin.** A route file validates requests, maps API models to internal models, calls a controller, and maps the result back to an API response. Business rules belong in controllers ([§1.2](docs/technical/01-architecture.md#12-the-layers)).
+- **A route reports a failure with `next(someAppError.withDetails(error))`** and never logs it or builds an error response itself: the status, the log level and the payload are the error middleware's job ([§6.3](docs/technical/06-validation-and-errors.md#63-the-error-model)).
 - Use the existing layering consistently: API boundary types in `app/data/models/api`, internal application types in `app/data/models/internal`, persistence shape in `app/schemas`, conversions in `app/data/mappers`, business logic in `app/controllers`.
 - **Use `parserValidator` plus the existing API model classes** for request validation instead of ad hoc validation in routes or controllers ([§6.1](docs/technical/06-validation-and-errors.md#61-one-validator-for-everything)).
 - **Use `QueryHelper`** for database access instead of adding one-off Mongoose access styles per controller — a direct query loses the collation, the populate flags and the query logging ([§8.5](docs/technical/08-persistence.md#85-queryhelper)).

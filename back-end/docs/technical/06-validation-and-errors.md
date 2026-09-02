@@ -25,7 +25,7 @@ A failed request validation generally responds with:
 - HTTP **`500`**
 - an error payload derived from `AppError.INVALID_REQUEST`
 
-**A `400` would be the conventional answer, and this is not it.** The behaviour is current and deliberate rather than accidental, and the front end handles it, so changing the status is an API change that both sides have to make together — not a local fix.
+**A `400` would be the conventional answer, and this is not it.** The behaviour is current and deliberate rather than accidental, and the front end handles it, so changing the status is an API change that both sides have to make together — not a local fix. It is now a one-line change on this side: `ERROR_STATUS_CODES` in `app/routes/error-handler.ts` ([§6.3](#63-the-error-model)).
 
 ## 6.3 The error model
 
@@ -39,11 +39,15 @@ A failed request validation generally responds with:
 - database uniqueness
 - external API invocation, timeout, parsing and generic failures
 
-Routes convert an `AppError` into an API payload with `errorResponseFactory`.
+`app/routes/error-handler.ts` converts an `AppError` into an API payload with `errorResponseFactory`. Routes do not do it themselves: each one wraps its failure in the `AppError` that describes it — `AppError.INVALID_REQUEST` for a rejected payload, `AppError.GENERIC` for anything the controller raised — and hands it to `next(...)`.
 
 **`errorResponseFactory` unwraps nested `AppError` chains** and exposes the first source error's code, description and details. A database failure wrapped by a controller error wrapped by a route error still surfaces the thing that actually went wrong, instead of the outermost generic label.
 
-There is no central error middleware ([§1.5](01-architecture.md#15-the-middleware-stack)) — each route handles its own failures inline — and most route failures, including validation and some precondition failures, currently return `500` ([§17.5](17-extension-playbooks.md#175-known-implementation-characteristics)).
+**The middleware reads the source error, not the outermost one.** Every route wraps its failure in a generic label, so the outermost `AppError` is the same on every route and says nothing; the status code, the log level and the response body all follow `AppError.sourceError`, the innermost error of the chain.
+
+**A failure the caller caused is logged as a warning**, not as an error: an invalid payload, an unknown route, a uniqueness rejection and a non-empty delete say nothing about the health of the application, and at `level: 'error'` they would be the whole log. A `500` logged at `warn` is the honest reading of a validation failure that answers `500` ([§6.2](#62-what-a-validation-failure-returns)) — the status is the part that is wrong.
+
+Only `AppError.NOT_FOUND` maps to a status of its own, `404`. Everything else returns `500`, including validation and some precondition failures ([§17.5](17-extension-playbooks.md#175-known-implementation-characteristics)) — `ERROR_STATUS_CODES` in `app/routes/error-handler.ts` is the one place that would change.
 
 ## 6.4 Tolerating bad provider data
 

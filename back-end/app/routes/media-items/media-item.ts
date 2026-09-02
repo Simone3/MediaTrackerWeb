@@ -8,8 +8,6 @@ import { AddMediaItemRequest, AddMediaItemResponse, DeleteMediaItemResponse, Fil
 import { AppError } from 'app/data/models/error/error';
 import { PaginatedResultInternal, PaginationInternal } from 'app/data/models/internal/common';
 import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
-import { errorResponseFactory } from 'app/factories/error';
-import { logger } from 'app/loggers/logger';
 import { ClassType } from 'app/utilities/helper-types';
 import { parserValidator } from 'app/utilities/parser-validator';
 import { requestParamUtils } from 'app/utilities/request-param-utils';
@@ -67,7 +65,7 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 	public getAll<TResponse extends GetAllMediaItemsResponse>(routeConfig: {
 		responseBuilder: TWriteResponse<GetAllMediaItemsResponse, TMediaItemInternal[], TResponse>;
 	}): void {
-		this.router.get(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}`, userResourceAuthorizationMiddleware, (request, response): void => {
+		this.router.get(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}`, userResourceAuthorizationMiddleware, (request, response, next): void => {
 			const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 			const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
@@ -78,8 +76,7 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 					response.json(responseBody);
 				})
 				.catch((error) => {
-					logger.error('Get media items generic error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+					next(AppError.GENERIC.withDetails(error));
 				});
 		});
 	}
@@ -100,7 +97,7 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 		sortRequestReader: TReadRequestOptional<TRequest, TMediaItemSortByInternal[]>;
 		responseBuilder: TWriteResponse<FilterMediaItemsResponse, TMediaItemInternal[], TResponse>;
 	}): void {
-		this.router.post(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/filter`, userResourceAuthorizationMiddleware, (request, response) => {
+		this.router.post(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/filter`, userResourceAuthorizationMiddleware, (request, response, next) => {
 			const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 			const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
@@ -117,13 +114,11 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 							response.json(responseBody);
 						})
 						.catch((error) => {
-							logger.error('Filter media items generic error: %s', error);
-							response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+							next(AppError.GENERIC.withDetails(error));
 						});
 				})
 				.catch((error) => {
-					logger.error('Filter media items request error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
+					next(AppError.INVALID_REQUEST.withDetails(error));
 				});
 		});
 	}
@@ -142,7 +137,7 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 		filterRequestReader: TReadRequestOptional<TRequest, TMediaItemFilterInternal>;
 		responseBuilder: TWriteResponse<SearchMediaItemsResponse, TMediaItemInternal[], TResponse>;
 	}): void {
-		this.router.post(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/search`, userResourceAuthorizationMiddleware, (request, response) => {
+		this.router.post(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/search`, userResourceAuthorizationMiddleware, (request, response, next) => {
 			const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 			const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
@@ -159,13 +154,11 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 							response.json(responseBody);
 						})
 						.catch((error) => {
-							logger.error('Search media items generic error: %s', error);
-							response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+							next(AppError.GENERIC.withDetails(error));
 						});
 				})
 				.catch((error) => {
-					logger.error('Search media items request error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
+					next(AppError.INVALID_REQUEST.withDetails(error));
 				});
 		});
 	}
@@ -176,7 +169,7 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 	 * request, the response and the aggregation are the same for all four types
 	 */
 	public stats(): void {
-		this.router.post(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/stats`, userResourceAuthorizationMiddleware, (request, response) => {
+		this.router.post(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/stats`, userResourceAuthorizationMiddleware, (request, response, next) => {
 			const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 			const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
@@ -194,13 +187,11 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 							response.json(responseBody);
 						})
 						.catch((error) => {
-							logger.error('Get media items stats generic error: %s', error);
-							response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+							next(AppError.GENERIC.withDetails(error));
 						});
 				})
 				.catch((error) => {
-					logger.error('Get media items stats request error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
+					next(AppError.INVALID_REQUEST.withDetails(error));
 				});
 		});
 	}
@@ -216,7 +207,7 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 		requestClass: ClassType<TRequest>;
 		mediaItemRequestReader: TReadRequestWithExtraData<TRequest, TMediaItemInternal>;
 	}): void {
-		this.router.post(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}`, userResourceAuthorizationMiddleware, (request, response) => {
+		this.router.post(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}`, userResourceAuthorizationMiddleware, (request, response, next) => {
 			const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 			const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
@@ -234,13 +225,11 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 							response.json(responseBody);
 						})
 						.catch((error) => {
-							logger.error('Add media item generic error: %s', error);
-							response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+							next(AppError.GENERIC.withDetails(error));
 						});
 				})
 				.catch((error) => {
-					logger.error('Add media item request error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
+					next(AppError.INVALID_REQUEST.withDetails(error));
 				});
 		});
 	}
@@ -256,7 +245,7 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 		requestClass: ClassType<TRequest>;
 		mediaItemRequestReader: TReadRequestWithExtraData<TRequest, TMediaItemInternal>;
 	}): void {
-		this.router.put(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/:id`, userResourceAuthorizationMiddleware, (request, response) => {
+		this.router.put(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/:id`, userResourceAuthorizationMiddleware, (request, response, next) => {
 			const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 			const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 			const id = requestParamUtils.getRequiredString(request.params.id, 'id');
@@ -274,13 +263,11 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 							response.json(responseBody);
 						})
 						.catch((error) => {
-							logger.error('Update media item generic error: %s', error);
-							response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+							next(AppError.GENERIC.withDetails(error));
 						});
 				})
 				.catch((error) => {
-					logger.error('Update media item request error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
+					next(AppError.INVALID_REQUEST.withDetails(error));
 				});
 		});
 	}
@@ -319,7 +306,7 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 	 * Route to delete a media item
 	 */
 	public delete(): void {
-		this.router.delete(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/:id`, userResourceAuthorizationMiddleware, (request, response) => {
+		this.router.delete(`/users/:userId/categories/:categoryId/${this.mediaItemPathName}/:id`, userResourceAuthorizationMiddleware, (request, response, next) => {
 			const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 			const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 			const id = requestParamUtils.getRequiredString(request.params.id, 'id');
@@ -333,8 +320,7 @@ export class MediaItemEntityRouterBuilder<TMediaItemInternal extends MediaItemIn
 					response.json(responseBody);
 				})
 				.catch((error) => {
-					logger.error('Delete media item generic error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+					next(AppError.GENERIC.withDetails(error));
 				});
 		});
 	}
@@ -370,7 +356,7 @@ export class MediaItemCatalogRouterBuilder<TSearchMediaItemCatalogResultInternal
 	public search<TResponse extends SearchMediaItemCatalogResponse>(routeConfig: {
 		responseBuilder: TWriteResponse<SearchMediaItemCatalogResponse, TSearchMediaItemCatalogResultInternal[], TResponse>;
 	}): void {
-		this.router.get(`/catalog/${this.mediaItemPathName}/search/:searchTerm`, (request, response) => {
+		this.router.get(`/catalog/${this.mediaItemPathName}/search/:searchTerm`, (request, response, next) => {
 			const searchTerm = requestParamUtils.getRequiredString(request.params.searchTerm, 'searchTerm');
 
 			this.mediaItemCatalogController.searchMediaItemCatalogByTerm(searchTerm)
@@ -380,8 +366,7 @@ export class MediaItemCatalogRouterBuilder<TSearchMediaItemCatalogResultInternal
 					response.json(responseBody);
 				})
 				.catch((error) => {
-					logger.error('Media item catalog search generic error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+					next(AppError.GENERIC.withDetails(error));
 				});
 		});
 	}
@@ -395,7 +380,7 @@ export class MediaItemCatalogRouterBuilder<TSearchMediaItemCatalogResultInternal
 	public details<TResponse extends GetMediaItemFromCatalogResponse>(routeConfig: {
 		responseBuilder: TWriteResponse<GetMediaItemFromCatalogResponse, TCatalogMediaItemInternal, TResponse>;
 	}): void {
-		this.router.get(`/catalog/${this.mediaItemPathName}/:catalogId`, (request, response) => {
+		this.router.get(`/catalog/${this.mediaItemPathName}/:catalogId`, (request, response, next) => {
 			const catalogId = requestParamUtils.getRequiredString(request.params.catalogId, 'catalogId');
 
 			this.mediaItemCatalogController.getMediaItemFromCatalog(catalogId)
@@ -405,8 +390,7 @@ export class MediaItemCatalogRouterBuilder<TSearchMediaItemCatalogResultInternal
 					response.json(responseBody);
 				})
 				.catch((error) => {
-					logger.error('Media item catalog details generic error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+					next(AppError.GENERIC.withDetails(error));
 				});
 		});
 	}

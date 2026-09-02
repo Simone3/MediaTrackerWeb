@@ -66,10 +66,11 @@ Shutdown closes log4js, the Express server instance, and the Mongoose connection
 5. `authenticationMiddleware` ([§5.1](05-authentication.md#51-authentication))
 6. the routers
 7. the catch-all 404 middleware
+8. `errorHandlerMiddleware` ([§6.3](06-validation-and-errors.md#63-the-error-model))
 
 **Authentication is mounted globally, above every router.** That is what makes catalog routes authenticated even though they carry no `:userId`, and what makes an unknown route return `401` rather than `404` to an unauthenticated caller ([§10.8](10-api-surface.md#108-catch-all)).
 
-**There is no central error-handling middleware.** Each route handles its own failures inline ([§6.3](06-validation-and-errors.md#63-the-error-model)).
+**Routes do not answer their own failures.** Each one passes an `AppError` to `next(...)` and the error middleware, mounted last, decides the status, the log level and the payload ([§6.3](06-validation-and-errors.md#63-the-error-model)).
 
 ---
 
