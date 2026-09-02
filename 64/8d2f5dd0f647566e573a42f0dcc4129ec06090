@@ -1,0 +1,58 @@
+back-end/CLAUDE.md
+  s_fdba367dd468cd::t_b00cf2e44d625a 41
+back-end/app/auth/authentication.ts
+  s_fdba367dd468cd::t_9b6a57af39255e 24-26,30-31,61,73
+back-end/app/auth/authorization.ts
+  s_fdba367dd468cd::t_5812d421a6744f 4,7-9,13-14,33,39
+back-end/app/data/models/error/error.ts
+  s_fdba367dd468cd::t_b44ba08c540810 57-64
+back-end/app/factories/error.ts
+  s_fdba367dd468cd::t_06ccd35dc17472 15
+back-end/app/routes/catch-all.ts
+  s_fdba367dd468cd::t_eb9b28ce036842 6-8,10-11
+back-end/app/routes/category.ts
+  s_fdba367dd468cd::t_96fb503eeca30e 15,27,34,49,53,60,76,80,87,103,107,114,127
+back-end/app/routes/error-handler.ts
+  s_fdba367dd468cd::t_8304d9f20f2850 1-58
+back-end/app/routes/group.ts
+  s_fdba367dd468cd::t_00ec8418671db5 15,28,35,51,55,62,79,83,90,107,111,118,132
+back-end/app/routes/media-items/media-item.ts
+  s_fdba367dd468cd::t_68c17449a517a4 68,79,100,117,121,140,157,161,172,190,194,210,228,232,248,266,270,309,323,359,369,383,393
+back-end/app/routes/own-platform.ts
+  s_fdba367dd468cd::t_cc48fe9c4ebea2 15,28,35,51,55,62,79,83,90,106,110,117,134,138,145,159
+back-end/app/server/server.ts
+  s_fdba367dd468cd::t_a1ffd43943c339 5,65-67
+back-end/docs/technical/01-architecture.md
+  s_fdba367dd468cd::t_f4be6994ba3941 69,73
+back-end/docs/technical/02-repository-map.md
+  s_fdba367dd468cd::t_f9c0ab82b31b99 44
+back-end/docs/technical/06-validation-and-errors.md
+  s_fdba367dd468cd::t_067fd55df6a7d3 28,42,46-50
+back-end/docs/technical/10-api-surface.md
+  s_fdba367dd468cd::t_01e74d11e661d2 88
+back-end/docs/technical/14-logging.md
+  s_fdba367dd468cd::t_2405da7784404b 22,26,43-52
+back-end/docs/technical/17-extension-playbooks.md
+  s_fdba367dd468cd::t_43727288ae99aa 71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "648d2f5dd0f647566e573a42f0dcc4129ec06090",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_fdba367dd468cd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3bcad5db-2786-4b06-bfe2-59d1d08a817b",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
