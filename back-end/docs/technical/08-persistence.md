@@ -81,21 +81,28 @@ Know this before adding another multi-step write: it is a property of the curren
 
 ## 8.8 Indexes
 
-One index is declared, on the four media-item collections:
+Four indexes are declared, all under the English collation:
 
-```
-{ owner: 1, category: 1 }   collation { locale: 'en' }
-```
+| Collection | Index |
+| --- | --- |
+| `Movie` · `TvShow` · `Book` · `Videogame` | `{ owner: 1, category: 1 }` |
+| `Category` | `{ owner: 1, name: 1 }` |
+| `Group` | `{ owner: 1, category: 1, name: 1 }` |
+| `OwnPlatform` | `{ owner: 1, category: 1, name: 1 }` |
 
-`addCommonMediaItemSchemaIndexes` in `app/schemas/media-items/media-item.ts` adds it, and each media type's schema file calls it — the same "define it once" arrangement as the shared field definition ([§8.3](#83-the-shared-media-item-schema)).
+The media-item one is added by `addCommonMediaItemSchemaIndexes` in `app/schemas/media-items/media-item.ts`, which each media type's schema file calls — the same "define it once" arrangement as the shared field definition ([§8.3](#83-the-shared-media-item-schema)). The other three are declared in their own schema files.
 
-**Every media-item read is scoped to an owner and, in all but the delete-everything-for-a-user cascade, to a category.** That prefix is what the list, the filter, the search, the cascades and the stats aggregate all start from, so one index serves all of them.
+**Every index starts from the access scope, because every query does.** A media-item read is scoped to an owner and a category, and that prefix is where the list, the filter, the search, the cascades and the stats aggregate all begin. A category read is scoped to an owner and ordered by name; a group or own-platform read is scoped to an owner and a category and ordered by name, and the category delete cascade filters on those same two fields — so one index per collection serves everything that collection is asked.
 
-**The collation is not optional.** An index is usable only by a query that runs under the same collation, and `QueryHelper` runs every read under English collation ([§8.5](#85-queryhelper)). A plain index would be silently ignored by every query in the application; declaring it from the same `DATABASE_COLLATION` constant is what keeps the two from drifting apart.
+**The collation is not optional.** An index is usable only by a query that runs under the same collation, and `QueryHelper` runs every read under English collation ([§8.5](#85-queryhelper)). A plain index would be silently ignored by every query in the application; declaring them all from the same `DATABASE_COLLATION` constant is what keeps the two from drifting apart.
 
-Nothing else is indexed. The categories, groups and own platforms of one user are a handful of documents each, and the sortable media-item fields are chosen by the caller, are five-deep and multi-directional — indexing for those is a different exercise from indexing for the access scope ([§8.7](#87-pagination)).
+One consequence to know: the `name` filters are case-insensitive regexes, and MongoDB cannot use a non-simple-collation index to satisfy a regex. The index still earns its place on those queries — it serves the equality prefix and the sort, with the regex left as a residual filter.
 
-Mongoose builds the index at startup, on model initialization.
+**The categories, groups and own platforms of one user are a handful of documents, but the collections holding them are not.** They contain every user's, and an unindexed read scans all of it. That is the reason those three are indexed even though the per-user data is tiny: the cost grows with the number of registered users rather than with how much any one of them entered, so it grows without anyone using the application more.
+
+**The media-item sort fields are deliberately not indexed.** The access scope is; the ordering is not. The sort is caller-chosen, and the four patterns the front end actually issues — the default `{ active: -1, importance: -1, releaseDate: 1 }`, the group view's `{ group: 1, orderInGroup: 1 }`, name, and completion date — are multi-field and mixed-direction, and each ends with the ascending `_id` tiebreaker ([§8.7](#87-pagination)). No index serves two of them, and none can be reversed into another, so covering them means four compound indexes on each of four collections: sixteen, to remove a sort over what one person entered by hand. A category of a few thousand media items is a sort of a few megabytes, far under the blocking-sort limit. **Measure before revisiting this**: turn on the performance logger ([§14.1](14-logging.md#141-logger-categories)) and `explain()` the list query against real data. If it ever does need solving, the one change worth making is widening the existing media-item index to `{ owner: 1, category: 1, active: -1, importance: -1, releaseDate: 1, _id: 1 }`, which keeps the prefix every other query depends on and so replaces that index rather than adding to it.
+
+Mongoose builds the indexes at startup, on model initialization.
 
 ---
 

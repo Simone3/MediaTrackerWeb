@@ -66,7 +66,7 @@ Where everything lives. Generated folders — `node_modules/`, `build/`, `covera
 | `data/models/error/error.ts` | `AppError` and the predefined error groups ([§6.3](06-validation-and-errors.md#63-the-error-model)) |
 | `data/mappers/common.ts` | `ModelMapper`, the generic base ([§11.3](11-models-and-mapping.md#113-the-generic-mapper-base)) |
 | `data/mappers/media-items/**`, `external-services/**`, `import/**` | The conversions themselves |
-| `schemas/category.ts`, `group.ts`, `own-platform.ts` | The Mongoose schemas |
+| `schemas/category.ts`, `group.ts`, `own-platform.ts` | The Mongoose schemas, each with its own index ([§8.8](08-persistence.md#88-indexes)) |
 | `schemas/common.ts` | `DATABASE_COLLATION`, shared by the queries and the indexes that serve them ([§8.8](08-persistence.md#88-indexes)) |
 | `schemas/media-items/media-item.ts` | The shared media-item fields and indexes, defined once |
 | `schemas/media-items/movie.ts`, `tv-show.ts`, `book.ts`, `videogame.ts` | The per-type schemas. `tv-show.ts` carries the season validation ([§7.7](07-domain-model.md#77-tv-show-seasons)) |
