@@ -37,7 +37,7 @@ UTC everywhere is what keeps a release date from shifting a day depending on whe
 
 **`parseBoolean` treats exactly these as true**: `true`, `'true'`, `1`, `'1'`, `'on'`, `'yes'`. Everything else is false.
 
-The permissive list exists because boolean-ish values arrive from several sources with different conventions — JSON bodies, query strings, legacy import payloads — and normalizing them in one place beats each mapper guessing ([§11.4](11-models-and-mapping.md#114-media-item-mapper-conventions)).
+The permissive list exists because boolean-ish values arrive from several sources with different conventions — JSON bodies, query strings — and normalizing them in one place beats each mapper guessing ([§11.4](11-models-and-mapping.md#114-media-item-mapper-conventions)).
 
 ## 15.3 `stringUtils`
 

@@ -361,19 +361,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	}
 
 	/**
-	 * Deletes all media items for the given user
-	 * @param userId user ID
-	 * @returns the number of deleted elements as a promise
-	 */
-	public deleteAllMediaItemsForUser(userId: string): Promise<number> {
-		const conditions: QueryFilter<MediaItemInternal> = {
-			owner: userId
-		};
-
-		return this.queryHelper.delete(this.castFilterQuery(conditions));
-	}
-
-	/**
 	 * Replaces an own platform in all media items in the given category
 	 * @param userId the user ID
 	 * @param categoryId the category ID

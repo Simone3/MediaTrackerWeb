@@ -2,7 +2,7 @@
 
 Instructions for Claude Code when working in `back-end/`.
 
-`docs/technical/` is the detailed reference for this sub-project, split into numbered sections: architecture, repository map, build and run, configuration, authentication, validation and errors, the domain model, persistence, controllers, the API surface, mapping, catalog integrations, the legacy import, logging, utilities, testing and the extension playbooks. Start from [`docs/technical/README.md`](docs/technical/README.md) and read ONLY the sections relevant to the current task, before changing code in an area you have not touched yet in the current session. This file holds only the rules and commands; the reasoning behind them lives there.
+`docs/technical/` is the detailed reference for this sub-project, split into numbered sections: architecture, repository map, build and run, configuration, authentication, validation and errors, the domain model, persistence, controllers, the API surface, mapping, catalog integrations, logging, utilities, testing and the extension playbooks. Start from [`docs/technical/README.md`](docs/technical/README.md) and read ONLY the sections relevant to the current task, before changing code in an area you have not touched yet in the current session. This file holds only the rules and commands; the reasoning behind them lives there.
 
 ## Project
 

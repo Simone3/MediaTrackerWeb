@@ -1,6 +1,6 @@
 # §14 — Logging
 
-*[Index](README.md) · [← §13 Legacy import](13-legacy-import.md)*
+*[Index](README.md) · [← §12 Catalog integrations](12-catalog-integrations.md)*
 
 ---
 
@@ -30,7 +30,7 @@ Every line carries the current user ID and the correlation ID through the layout
 - logs response bodies unless the URL matches a configured exclusion regex
 - uses `express-mung` to reach JSON responses
 
-The sample config excludes request body logging for `^/users/[^/]+/import/old-app$` — a legacy import payload is a whole library and logging it is neither useful nor cheap ([§13.2](13-legacy-import.md#132-the-controller-flow)).
+Both exclusion lists are empty in the sample config: no current endpoint carries a body large or sensitive enough to keep out of the log.
 
 ## 14.3 Redaction
 
@@ -40,4 +40,4 @@ The sample config excludes request body logging for `^/users/[^/]+/import/old-ap
 
 ---
 
-[← §13 Legacy import](13-legacy-import.md) · [§15 Utilities →](15-utilities.md)
+[← §12 Catalog integrations](12-catalog-integrations.md) · [§15 Utilities →](15-utilities.md)

@@ -18,9 +18,9 @@ It serves the web front end in `../front-end` and nothing else. There is no HTML
 | --- | --- |
 | `app/server` | Builds the Express app, mounts middleware, registers routers |
 | `app/routes` | Defines the HTTP endpoints and converts request/response payloads |
-| `app/controllers` | Business logic, database access helpers, external catalog integrations, the legacy import |
+| `app/controllers` | Business logic, database access helpers, external catalog integrations |
 | `app/data/models` | API models, internal models, external service payload models, error models |
-| `app/data/mappers` | Conversions between API, internal, external and legacy-import shapes |
+| `app/data/mappers` | Conversions between API, internal and external shapes |
 | `app/schemas` | Mongoose schemas and collection names |
 | `app/auth` | Firebase authentication and user-resource authorization |
 | `app/config` | Runtime configuration loading and validation |
@@ -59,7 +59,7 @@ Shutdown closes log4js, the Express server instance, and the Mongoose connection
 
 `app/server/server.ts` configures the app in this order:
 
-1. `express.json({ limit: '10mb' })` — the limit is generous because legacy import payloads are large ([§13](13-legacy-import.md))
+1. `express.json({ limit: '10mb' })` — a deliberately generous limit; no current endpoint comes close to it
 2. `requestScopeContextMiddleware` ([§5.3](05-authentication.md#53-request-scope-and-correlation))
 3. CORS: `origin: '*'`, `credentials: true`, `methods: GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS`, `preflightContinue: true`
 4. `authenticationMiddleware` ([§5.1](05-authentication.md#51-authentication))

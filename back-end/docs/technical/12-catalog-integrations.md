@@ -63,4 +63,4 @@ Authenticated through Twitch app credentials ([§4.3](04-configuration.md#43-ext
 
 ---
 
-[← §11 API models and mapping](11-models-and-mapping.md) · [§13 Legacy import →](13-legacy-import.md)
+[← §11 API models and mapping](11-models-and-mapping.md) · [§14 Logging →](14-logging.md)

@@ -103,7 +103,7 @@ export const testConfig: Config = {
 		file: './test/build-test/log/media-tracker.log',
 		apisInputOutput: {
 			active: true,
-			excludeRequestBodyRegExp: [ '^/users/[^/]+/import/old-app$' ],
+			excludeRequestBodyRegExp: [],
 			excludeResponseBodyRegExp: []
 		},
 		externalApisInputOutput: {

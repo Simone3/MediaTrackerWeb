@@ -83,12 +83,6 @@ There is no seasons endpoint. TV show seasons travel inside the TV show payload 
 
 These proxy an external catalog lookup and map the result into the app's own models ([§12](12-catalog-integrations.md)). They are **authenticated but not user-resource-authorized**, because they carry no `:userId` ([§5.4](05-authentication.md#54-catalog-routes)).
 
-## 10.7 Legacy import
-
-- `POST /users/:userId/import/old-app`
-
-**Destructive**: it clears every existing entity for that user first, then imports categories and their media items from the old export format, creating one default own platform per imported category from the request options ([§13](13-legacy-import.md)).
-
 ## 10.8 Catch-all
 
 Every unmatched route ends in the middleware from `app/routes/catch-all.ts`, which returns HTTP `404` with `AppError.NOT_FOUND`.

@@ -40,7 +40,6 @@ Where everything lives. Generated folders — `node_modules/`, `build/`, `covera
 | `own-platform.ts` | The own-platform endpoints, including `merge` |
 | `media-items/media-item.ts` | The generic media-item router builders every media type is assembled from |
 | `media-items/movie.ts`, `tv-show.ts`, `book.ts`, `videogame.ts` | The per-type routers and catalog routes |
-| `import/old-app.ts` | The legacy import endpoint ([§13](13-legacy-import.md)) |
 | `catch-all.ts` | The final 404 middleware |
 
 ## 2.4 `app/controllers`
@@ -56,7 +55,6 @@ Where everything lives. Generated folders — `node_modules/`, `build/`, `covera
 | `entities/media-items/movie.ts`, `tv-show.ts`, `book.ts`, `videogame.ts` | The per-type subclasses ([§9.7](09-controllers.md#97-media-specific-entity-controllers)) |
 | `catalogs/media-items/**` | The external catalog controllers, one per media type ([§12](12-catalog-integrations.md)) |
 | `external-services/rest-json-invoker.ts` | The shared HTTP client for outbound calls ([§12.1](12-catalog-integrations.md#121-the-shared-invoker)) |
-| `import/old-app.ts` | The legacy import flow ([§13.2](13-legacy-import.md#132-the-controller-flow)) |
 
 ## 2.5 `app/data`, `app/schemas`, `app/factories`
 

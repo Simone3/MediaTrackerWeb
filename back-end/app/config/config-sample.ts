@@ -104,7 +104,7 @@ export const sampleConfig: Config = {
 		file: '<your_path_here>/media-tracker.log',
 		apisInputOutput: {
 			active: true,
-			excludeRequestBodyRegExp: [ '^/users/[^/]+/import/old-app$' ],
+			excludeRequestBodyRegExp: [],
 			excludeResponseBodyRegExp: []
 		},
 		externalApisInputOutput: {

@@ -11,7 +11,6 @@
 | API models | `app/data/models/api/**` |
 | Internal models | `app/data/models/internal/**` |
 | External service response models | `app/data/models/external-services/**` |
-| Legacy import models | `app/data/models/api/import/**` and `app/data/models/internal/import/**` |
 
 **Use internal models inside controllers and API models at the route boundary.** A controller that accepts an API model has let the transport shape into the business logic, and the two stop being separable from that point on.
 

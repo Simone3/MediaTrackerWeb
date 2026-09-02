@@ -19,7 +19,6 @@ Touch all of:
 And, when they apply:
 
 - the external-service mapper, if the field comes from a catalog ([§12](12-catalog-integrations.md))
-- the old-app import mapper, if it should be carried over from legacy data ([§13.4](13-legacy-import.md#134-media-item-mapping))
 - route request validation, if the field is new API input ([§6.1](06-validation-and-errors.md#61-one-validator-for-everything))
 
 **The front end has to agree.** A persisted field also needs its internal model, API model, mapper, form data, form view and possibly its list row on the other side — see the front end's [§16.2](../../../front-end/docs/technical/16-extension-playbooks.md).

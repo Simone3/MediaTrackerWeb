@@ -195,20 +195,6 @@ class OwnPlatformController extends AbstractEntityController {
 	}
 
 	/**
-	 * Deletes all own platforms for the given user
-	 * This method does NOT cascade delete all media items in the own platforms
-	 * @param userId user ID
-	 * @returns the number of deleted elements as a promise
-	 */
-	public deleteAllOwnPlatformsForUser(userId: string): Promise<number> {
-		const conditions: QueryConditions = {
-			owner: userId
-		};
-
-		return this.queryHelper.delete(conditions);
-	}
-
-	/**
 	 * Helper to check preconditions on a insert/update/delete method
 	 * @param errorToThow error to throw if the preconditions fail
 	 * @param userId the user

@@ -28,7 +28,6 @@ The front end that calls this API documents itself in [`../../../front-end/docs/
 | 10 | [API surface](10-api-surface.md) | Every route and what it does |
 | 11 | [API models and mapping](11-models-and-mapping.md) | The four model families and why the mapper layer exists |
 | 12 | [Catalog integrations](12-catalog-integrations.md) | TMDb, Google Books and IGDB, and what their payloads become |
-| 13 | [Legacy import](13-legacy-import.md) | The old-app migration and the assumptions it makes |
 | 14 | [Logging](14-logging.md) | The categories, the correlation IDs and the redaction |
 | 15 | [Utilities](15-utilities.md) | The shared helpers whose behaviour is not obvious |
 | 16 | [Testing](16-testing.md) | How tests start, what they mock, and what they already guarantee |
