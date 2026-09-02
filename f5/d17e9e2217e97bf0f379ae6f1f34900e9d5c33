@@ -1,0 +1,36 @@
+front-end/app/data/mappers/media-items/media-item.ts
+  s_ad23fda45f6ffa::t_140396d9276f91 7,9,64-67,75-80,85-86
+front-end/app/redux/sagas/media-item/inline-update-helper.ts
+  s_ad23fda45f6ffa::t_95dbd5363efc12 4,10-12,24,33,39,46-49
+front-end/app/utilities/media-item-utils.ts
+  s_ad23fda45f6ffa::t_5db2616e9bbe93 1,4-8,40-77
+front-end/docs/technical/08-domain-model.md
+  s_ad23fda45f6ffa::t_7cc13f7fa34b6a 71
+front-end/docs/technical/14-testing.md
+  s_ad23fda45f6ffa::t_48e8c9ee85e560 52
+front-end/docs/technical/15-invariants-and-pitfalls.md
+  s_ad23fda45f6ffa::t_4c4c4e5b2eaafa 94,98-100
+front-end/tests/media-item-status-rule.test.ts
+  s_ad23fda45f6ffa::t_4ce7f5764c138c 1-108
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "f5d17e9e2217e97bf0f379ae6f1f34900e9d5c33",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_ad23fda45f6ffa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3451d76d-16a0-4aec-a7e9-d2c7a2eeb31a",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
