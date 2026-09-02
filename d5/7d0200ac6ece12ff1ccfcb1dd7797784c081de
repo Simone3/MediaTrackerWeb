@@ -1,0 +1,48 @@
+front-end/app/controllers/implementations/real/entities/media-items-definitions/book.ts
+  s_6540f3f28051c2::t_b56aa258bc519f 1-2,8
+front-end/app/controllers/implementations/real/entities/media-items-definitions/media-item.ts
+  s_6540f3f28051c2::t_636a8f38eed18c 1-81
+front-end/app/controllers/implementations/real/entities/media-items-definitions/movie.ts
+  s_6540f3f28051c2::t_07ff58cbfc1e11 1-2,8
+front-end/app/controllers/implementations/real/entities/media-items-definitions/tv-show.ts
+  s_6540f3f28051c2::t_3583b90d5febfd 1-2,8
+front-end/app/controllers/implementations/real/entities/media-items-definitions/videogame.ts
+  s_6540f3f28051c2::t_b977b786be06c6 1-2,8
+front-end/app/controllers/implementations/real/entities/media-items/book.ts
+  s_6540f3f28051c2::t_c8305a9e91a9a3 1,6,13,22-33,43-44,49,51-55,57,61-64,70-73,81-96,100,107
+front-end/app/controllers/implementations/real/entities/media-items/media-item.ts
+  s_6540f3f28051c2::t_ba51df683d6099 1,4,6-8,13-16,18,24-61,76,83-263
+front-end/app/controllers/implementations/real/entities/media-items/movie.ts
+  s_6540f3f28051c2::t_c0b65871666395 1,6,13,22-33,43-44,49,51-55,57,61-64,70-73,81-96,100,107
+front-end/app/controllers/implementations/real/entities/media-items/tv-show.ts
+  s_6540f3f28051c2::t_7ab37a1c066fea 1,6,13,22-33,43-44,49,51-55,57,61-64,70-73,81-96,100,107
+front-end/app/controllers/implementations/real/entities/media-items/videogame.ts
+  s_6540f3f28051c2::t_1ce125b8c8021f 1,6,13,22-33,43-44,49,51-55,57,61-64,70-73,81-96,100,107
+front-end/docs/technical/02-repository-map.md
+  s_6540f3f28051c2::t_1c2f9d348f3ab0 67
+front-end/docs/technical/09-data-layer.md
+  s_6540f3f28051c2::t_0edc1af9aa78ee 80-89,109,115-117
+front-end/docs/technical/16-extension-playbooks.md
+  s_6540f3f28051c2::t_6a4f7b86e47d9f 42,51-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "d57d0200ac6ece12ff1ccfcb1dd7797784c081de",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_6540f3f28051c2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "805991c5-d98e-4224-af70-2fa7d8510443",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
