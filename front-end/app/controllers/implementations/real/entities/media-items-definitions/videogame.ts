@@ -1,45 +1,11 @@
-import { MediaItemDefinitionsController } from 'app/controllers/interfaces/entities/media-items/media-item';
+import { MediaItemDefinitionsControllerImpl } from 'app/controllers/implementations/real/entities/media-items-definitions/media-item';
+import { VideogameDefinitionsController } from 'app/controllers/interfaces/entities/media-items/videogame';
 import { DEFAULT_VIDEOGAME, VideogameFilterInternal, VideogameInternal, VideogameSortByInternal } from 'app/data/models/internal/media-items/videogame';
 
 /**
  * Shared implementation of the Videogame definitions controller
  */
-export class VideogameDefinitionsControllerImpl implements MediaItemDefinitionsController<VideogameInternal, VideogameSortByInternal, VideogameFilterInternal> {
-	/**
-	 * @override
-	 */
-	public getDefaultFilter(): VideogameFilterInternal {
-		return {
-			status: 'CURRENT'
-		};
-	}
-
-	/**
-	 * @override
-	 */
-	public getDefaultSortBy(): VideogameSortByInternal[] {
-		return [{
-			field: 'ACTIVE',
-			ascending: false
-		}, {
-			field: 'IMPORTANCE',
-			ascending: false
-		}, {
-			field: 'RELEASE_DATE',
-			ascending: true
-		}];
-	}
-
-	/**
-	 * @override
-	 */
-	public getViewGroupSortBy(): VideogameSortByInternal[] {
-		return [{
-			field: 'GROUP',
-			ascending: true
-		}];
-	}
-
+export class VideogameDefinitionsControllerImpl extends MediaItemDefinitionsControllerImpl<VideogameInternal, VideogameSortByInternal, VideogameFilterInternal> implements VideogameDefinitionsController {
 	/**
 	 * @override
 	 */

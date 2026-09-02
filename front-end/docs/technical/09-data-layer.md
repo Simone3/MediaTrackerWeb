@@ -77,7 +77,16 @@ The authoritative list, with the behaviour behind each route, is the back end's 
 - `GET /catalog/<type>/search/:searchTerm`
 - `GET /catalog/<type>/:catalogId`
 
-The four media types share one route shape exactly; that symmetry is what the factories in [§9.5](#95-media-type-factories) rely on. It is also why `implementations/real/entities/media-items/media-item.ts` exists: `stats` differs between the four only by its path segment, so the real controllers extend one base that declares `mediaItemPathName` and holds the call once.
+The four media types share one route shape exactly; that symmetry is what the factories in [§9.5](#95-media-type-factories) rely on. It is also why `implementations/real/entities/media-items/media-item.ts` exists: **every one of those calls is made there once**, by `MediaItemBackEndController` for the user database routes and by `MediaItemCatalogBackEndController` for the catalog ones.
+
+A subtype controller therefore holds no transport code at all. It declares:
+
+- `mediaItemPathName`, the path segment that tells the routes apart
+- the response classes of the calls whose response model is media-type-specific, since those are what the parser validates against
+- `buildFilterRequest`, `buildSearchRequest`, `buildAddRequest` and `buildUpdateRequest`, which are where the type's own mappers live
+- `getMediaItemsFromResponse`, and the two catalog equivalents, because the request and response bodies name their field after the media type: `books`, `newBook`, `catalogBook`
+
+**The URLs, the HTTP methods, the add-versus-update branch and the pagination fallback are the base's business, not the subtype's.** Anything that would otherwise have to be edited four times identically belongs there.
 
 **`stats` is a read with a filter body, so it is a `POST` like the other two, and it sends the browser's own time zone.** Completion dates are written at local midnight and stored as the matching instant, so a completion dated the 1st of January is stored in the previous year for anyone east of Greenwich: without the time zone the server would group those completions into the wrong bar ([§10.9](10-features.md#109-media-items-stats)).
 
@@ -97,13 +106,15 @@ The four media types share one route shape exactly; that symmetry is what the fa
 
 ## 9.6 Media definitions controllers
 
-Every media type currently shares the same defaults:
+`MediaItemDefinitionsControllerImpl` in `implementations/real/entities/media-items-definitions/media-item.ts` holds the defaults, because every media type currently shares them:
 
 - default filter: `status: 'CURRENT'`
 - default sort: `ACTIVE desc`, `IMPORTANCE desc`, `RELEASE_DATE asc`
 - view-group sort: `GROUP asc`
 
-They also expose creator-name extraction, duration extraction, and default media-item creation — the three things that are phrased differently per type ("author", "director", "creator", "developer") but mean the same thing to the list row.
+A subtype controller implements only the three things that are phrased differently per type but mean the same thing to the list row: creator-name extraction ("author", "director", "creator", "developer"), duration extraction, and default media-item creation. **A media type that wants its own default filter or sort order says so with an override**, which is what keeps "they are all the same" a statement the code makes rather than a coincidence four files happen to share.
+
+The generic sort options carry no `field`, since each media type widens it with its own values, so the shared defaults are built against the common fields and converted on the way out.
 
 ## 9.7 Mock controllers
 

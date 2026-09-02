@@ -64,7 +64,7 @@ Where everything lives. Generated folders — `node_modules/`, `coverage/`, buil
 | --- | --- |
 | `interfaces/entities/*` | The contracts each entity controller implements |
 | `interfaces/common/*` | Shared transport contracts, including the back-end invoker |
-| `implementations/real/*` | Firebase and REST-backed controllers, with `entities/media-items/media-item.ts` holding the calls whose only per-type difference is the path segment |
+| `implementations/real/*` | Firebase and REST-backed controllers, with `entities/media-items/media-item.ts` and `entities/media-items-definitions/media-item.ts` holding everything the four media types do identically |
 | `implementations/mocks/*` | In-memory substitutes with seeded data ([§9.7](09-data-layer.md#97-mock-controllers)) |
 | `main/*` | The runtime singletons: which implementation is live, decided from `config.mocks.*` ([§9.2](09-data-layer.md#92-runtime-controller-selection)) |
 | `main/entities/media-items/factories.ts` | The three media-type factory families ([§9.5](09-data-layer.md#95-media-type-factories)) |

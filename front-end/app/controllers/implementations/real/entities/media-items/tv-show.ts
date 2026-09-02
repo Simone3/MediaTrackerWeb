@@ -1,20 +1,16 @@
-import { config } from 'app/config/config';
-import { backEndInvoker } from 'app/controllers/main/common/back-end-invoker';
-import { MediaItemBackEndController } from 'app/controllers/implementations/real/entities/media-items/media-item';
+import { MediaItemBackEndController, MediaItemCatalogBackEndController } from 'app/controllers/implementations/real/entities/media-items/media-item';
 import { TvShowCatalogController, TvShowController } from 'app/controllers/interfaces/entities/media-items/tv-show';
 import { paginationMapper } from 'app/data/mappers/common';
 import { tvShowCatalogDetailsMapper, tvShowCatalogSearchMapper, tvShowFilterMapper, tvShowMapper, tvShowSortMapper } from 'app/data/mappers/media-items/tv-show';
-import { AddMediaItemResponse, DeleteMediaItemResponse, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
 import { AddTvShowRequest, FilterTvShowsRequest, FilterTvShowsResponse, GetTvShowFromCatalogResponse, SearchTvShowCatalogResponse, SearchTvShowsRequest, SearchTvShowsResponse, UpdateTvShowRequest } from 'app/data/models/api/media-items/tv-show';
-import { PaginatedResultInternal, PaginationInternal } from 'app/data/models/internal/common';
+import { PaginationInternal } from 'app/data/models/internal/common';
 import { CatalogTvShowInternal, SearchTvShowCatalogResultInternal, TvShowFilterInternal, TvShowInternal, TvShowSortByInternal } from 'app/data/models/internal/media-items/tv-show';
-import { miscUtils } from 'app/utilities/misc-utils';
 
 /**
  * Implementation of the TvShowController that queries the back-end APIs
  * @see TvShowController
  */
-export class TvShowBackEndController extends MediaItemBackEndController implements TvShowController {
+export class TvShowBackEndController extends MediaItemBackEndController<TvShowInternal, TvShowSortByInternal, TvShowFilterInternal> implements TvShowController {
 	/**
 	 * @override
 	 */
@@ -23,105 +19,58 @@ export class TvShowBackEndController extends MediaItemBackEndController implemen
 	/**
 	 * @override
 	 */
-	public async filter(userId: string, categoryId: string, filter?: TvShowFilterInternal, sortBy?: TvShowSortByInternal[], pagination?: PaginationInternal): Promise<PaginatedResultInternal<TvShowInternal>> {
-		const request: FilterTvShowsRequest = {
+	protected readonly filterResponseClass = FilterTvShowsResponse;
+
+	/**
+	 * @override
+	 */
+	protected readonly searchResponseClass = SearchTvShowsResponse;
+
+	/**
+	 * @override
+	 */
+	protected buildFilterRequest(filter?: TvShowFilterInternal, sortBy?: TvShowSortByInternal[], pagination?: PaginationInternal): FilterTvShowsRequest {
+		return {
 			filter: filter ? tvShowFilterMapper.toExternal(filter) : undefined,
 			sortBy: sortBy ? tvShowSortMapper.toExternalList(sortBy) : undefined,
 			pagination: pagination ? paginationMapper.toExternal(pagination) : undefined
 		};
-
-		const response = await backEndInvoker.invoke({
-			method: 'POST',
-			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/tv-shows/filter' ], {
-				userId: userId,
-				categoryId: categoryId
-			}),
-			requestBody: request,
-			responseBodyClass: FilterTvShowsResponse
-		});
-		
-		return {
-			elements: tvShowMapper.toInternalList(response.tvShows),
-			totalCount: response.pagination ? response.pagination.totalCount : response.tvShows.length
-		};
 	}
 
 	/**
 	 * @override
 	 */
-	public async search(userId: string, categoryId: string, searchTerm: string, pagination?: PaginationInternal): Promise<PaginatedResultInternal<TvShowInternal>> {
-		const request: SearchTvShowsRequest = {
+	protected buildSearchRequest(searchTerm: string, pagination?: PaginationInternal): SearchTvShowsRequest {
+		return {
 			searchTerm: searchTerm,
 			filter: undefined,
 			pagination: pagination ? paginationMapper.toExternal(pagination) : undefined
 		};
+	}
 
-		const response = await backEndInvoker.invoke({
-			method: 'POST',
-			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/tv-shows/search' ], {
-				userId: userId,
-				categoryId: categoryId
-			}),
-			requestBody: request,
-			responseBodyClass: SearchTvShowsResponse
-		});
-		
+	/**
+	 * @override
+	 */
+	protected getMediaItemsFromResponse(response: FilterTvShowsResponse | SearchTvShowsResponse): TvShowInternal[] {
+		return tvShowMapper.toInternalList(response.tvShows);
+	}
+
+	/**
+	 * @override
+	 */
+	protected buildAddRequest(tvShow: TvShowInternal): AddTvShowRequest {
 		return {
-			elements: tvShowMapper.toInternalList(response.tvShows),
-			totalCount: response.pagination ? response.pagination.totalCount : response.tvShows.length
+			newTvShow: tvShowMapper.toExternal(tvShow)
 		};
 	}
-	
-	/**
-	 * @override
-	 */
-	public async save(userId: string, categoryId: string, tvShow: TvShowInternal): Promise<void> {
-		if(tvShow.id) {
-			const request: UpdateTvShowRequest = {
-				tvShow: tvShowMapper.toExternal(tvShow)
-			};
-	
-			await backEndInvoker.invoke({
-				method: 'PUT',
-				url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/tv-shows/:id' ], {
-					userId: userId,
-					categoryId: categoryId,
-					id: tvShow.id
-				}),
-				requestBody: request,
-				responseBodyClass: UpdateMediaItemResponse
-			});
-		}
-		else {
-			const request: AddTvShowRequest = {
-				newTvShow: tvShowMapper.toExternal(tvShow)
-			};
-	
-			await backEndInvoker.invoke({
-				method: 'POST',
-				url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/tv-shows' ], {
-					userId: userId,
-					categoryId: categoryId
-				}),
-				requestBody: request,
-				responseBodyClass: AddMediaItemResponse
-			});
-		}
-	}
 
 	/**
 	 * @override
 	 */
-	public async delete(userId: string, categoryId: string, tvShowId: string): Promise<void> {
-		await backEndInvoker.invoke({
-			method: 'DELETE',
-			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/tv-shows/:id' ], {
-				userId: userId,
-				categoryId: categoryId,
-				id: tvShowId
-			}),
-			responseBodyClass: DeleteMediaItemResponse
-		});
+	protected buildUpdateRequest(tvShow: TvShowInternal): UpdateTvShowRequest {
+		return {
+			tvShow: tvShowMapper.toExternal(tvShow)
+		};
 	}
 }
 
@@ -129,34 +78,33 @@ export class TvShowBackEndController extends MediaItemBackEndController implemen
  * Implementation of the TvShowCatalogController that queries the back-end APIs
  * @see TvShowCatalogController
  */
-export class TvShowCatalogBackEndController implements TvShowCatalogController {
+export class TvShowCatalogBackEndController extends MediaItemCatalogBackEndController<SearchTvShowCatalogResultInternal, CatalogTvShowInternal> implements TvShowCatalogController {
 	/**
 	 * @override
 	 */
-	public async search(searchTerm: string): Promise<SearchTvShowCatalogResultInternal[]> {
-		const response = await backEndInvoker.invoke({
-			method: 'GET',
-			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/catalog/tv-shows/search/:searchTerm' ], {
-				searchTerm: searchTerm
-			}),
-			responseBodyClass: SearchTvShowCatalogResponse
-		});
-		
+	protected readonly mediaItemPathName = 'tv-shows';
+
+	/**
+	 * @override
+	 */
+	protected readonly catalogSearchResponseClass = SearchTvShowCatalogResponse;
+
+	/**
+	 * @override
+	 */
+	protected readonly catalogDetailsResponseClass = GetTvShowFromCatalogResponse;
+
+	/**
+	 * @override
+	 */
+	protected getSearchResultsFromResponse(response: SearchTvShowCatalogResponse): SearchTvShowCatalogResultInternal[] {
 		return tvShowCatalogSearchMapper.toInternalList(response.searchResults);
 	}
 
 	/**
 	 * @override
 	 */
-	public async getDetails(catalogId: string): Promise<CatalogTvShowInternal> {
-		const response = await backEndInvoker.invoke({
-			method: 'GET',
-			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/catalog/tv-shows/:catalogId' ], {
-				catalogId: catalogId
-			}),
-			responseBodyClass: GetTvShowFromCatalogResponse
-		});
-		
+	protected getCatalogDetailsFromResponse(response: GetTvShowFromCatalogResponse): CatalogTvShowInternal {
 		return tvShowCatalogDetailsMapper.toInternal(response.catalogTvShow);
 	}
 }

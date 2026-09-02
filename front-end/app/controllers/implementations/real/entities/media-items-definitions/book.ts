@@ -1,45 +1,11 @@
-import { MediaItemDefinitionsController } from 'app/controllers/interfaces/entities/media-items/media-item';
+import { MediaItemDefinitionsControllerImpl } from 'app/controllers/implementations/real/entities/media-items-definitions/media-item';
+import { BookDefinitionsController } from 'app/controllers/interfaces/entities/media-items/book';
 import { BookFilterInternal, BookInternal, BookSortByInternal, DEFAULT_BOOK } from 'app/data/models/internal/media-items/book';
 
 /**
  * Shared implementation of the Book definitions controller
  */
-export class BookDefinitionsControllerImpl implements MediaItemDefinitionsController<BookInternal, BookSortByInternal, BookFilterInternal> {
-	/**
-	 * @override
-	 */
-	public getDefaultFilter(): BookFilterInternal {
-		return {
-			status: 'CURRENT'
-		};
-	}
-
-	/**
-	 * @override
-	 */
-	public getDefaultSortBy(): BookSortByInternal[] {
-		return [{
-			field: 'ACTIVE',
-			ascending: false
-		}, {
-			field: 'IMPORTANCE',
-			ascending: false
-		}, {
-			field: 'RELEASE_DATE',
-			ascending: true
-		}];
-	}
-
-	/**
-	 * @override
-	 */
-	public getViewGroupSortBy(): BookSortByInternal[] {
-		return [{
-			field: 'GROUP',
-			ascending: true
-		}];
-	}
-
+export class BookDefinitionsControllerImpl extends MediaItemDefinitionsControllerImpl<BookInternal, BookSortByInternal, BookFilterInternal> implements BookDefinitionsController {
 	/**
 	 * @override
 	 */

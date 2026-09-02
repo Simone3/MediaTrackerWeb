@@ -39,7 +39,7 @@ The largest change in the app. Expect all of:
 2. internal and API models
 3. mappers
 4. controller interfaces
-5. real controllers
+5. real controllers — the subtype halves only: the path segment, the type-specific response classes, the request builders and the response readers ([§9.4](09-data-layer.md#94-endpoint-patterns))
 6. mock controllers
 7. `app/controllers/main/entities/media-items/*`
 8. the factory switches ([§9.5](09-data-layer.md#95-media-type-factories))
@@ -47,6 +47,8 @@ The largest change in the app. Expect all of:
 10. the subtype list row files
 11. i18n keys
 12. tests
+
+The definitions controller is a subclass too, and it only needs the three per-type extractions unless the new media type wants defaults of its own ([§9.6](09-data-layer.md#96-media-definitions-controllers)).
 
 **Keep the generic media-item components generic.** Media-type-specific logic belongs in a subtype wrapper, a subtype view, a subtype row, a definitions controller, or subtype controller/mapper code — never in the shared media-item base ([§8.5](08-domain-model.md#85-generic-media-item)).
 

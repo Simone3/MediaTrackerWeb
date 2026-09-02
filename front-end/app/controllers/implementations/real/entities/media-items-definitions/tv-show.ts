@@ -1,45 +1,11 @@
-import { MediaItemDefinitionsController } from 'app/controllers/interfaces/entities/media-items/media-item';
+import { MediaItemDefinitionsControllerImpl } from 'app/controllers/implementations/real/entities/media-items-definitions/media-item';
+import { TvShowDefinitionsController } from 'app/controllers/interfaces/entities/media-items/tv-show';
 import { DEFAULT_TV_SHOW, TvShowFilterInternal, TvShowInternal, TvShowSortByInternal } from 'app/data/models/internal/media-items/tv-show';
 
 /**
  * Shared implementation of the TV show definitions controller
  */
-export class TvShowDefinitionsControllerImpl implements MediaItemDefinitionsController<TvShowInternal, TvShowSortByInternal, TvShowFilterInternal> {
-	/**
-	 * @override
-	 */
-	public getDefaultFilter(): TvShowFilterInternal {
-		return {
-			status: 'CURRENT'
-		};
-	}
-
-	/**
-	 * @override
-	 */
-	public getDefaultSortBy(): TvShowSortByInternal[] {
-		return [{
-			field: 'ACTIVE',
-			ascending: false
-		}, {
-			field: 'IMPORTANCE',
-			ascending: false
-		}, {
-			field: 'RELEASE_DATE',
-			ascending: true
-		}];
-	}
-
-	/**
-	 * @override
-	 */
-	public getViewGroupSortBy(): TvShowSortByInternal[] {
-		return [{
-			field: 'GROUP',
-			ascending: true
-		}];
-	}
-
+export class TvShowDefinitionsControllerImpl extends MediaItemDefinitionsControllerImpl<TvShowInternal, TvShowSortByInternal, TvShowFilterInternal> implements TvShowDefinitionsController {
 	/**
 	 * @override
 	 */

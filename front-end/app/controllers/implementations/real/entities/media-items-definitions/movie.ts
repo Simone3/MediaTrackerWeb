@@ -1,45 +1,11 @@
-import { MediaItemDefinitionsController } from 'app/controllers/interfaces/entities/media-items/media-item';
+import { MediaItemDefinitionsControllerImpl } from 'app/controllers/implementations/real/entities/media-items-definitions/media-item';
+import { MovieDefinitionsController } from 'app/controllers/interfaces/entities/media-items/movie';
 import { DEFAULT_MOVIE, MovieFilterInternal, MovieInternal, MovieSortByInternal } from 'app/data/models/internal/media-items/movie';
 
 /**
  * Shared implementation of the Movie definitions controller
  */
-export class MovieDefinitionsControllerImpl implements MediaItemDefinitionsController<MovieInternal, MovieSortByInternal, MovieFilterInternal> {
-	/**
-	 * @override
-	 */
-	public getDefaultFilter(): MovieFilterInternal {
-		return {
-			status: 'CURRENT'
-		};
-	}
-
-	/**
-	 * @override
-	 */
-	public getDefaultSortBy(): MovieSortByInternal[] {
-		return [{
-			field: 'ACTIVE',
-			ascending: false
-		}, {
-			field: 'IMPORTANCE',
-			ascending: false
-		}, {
-			field: 'RELEASE_DATE',
-			ascending: true
-		}];
-	}
-
-	/**
-	 * @override
-	 */
-	public getViewGroupSortBy(): MovieSortByInternal[] {
-		return [{
-			field: 'GROUP',
-			ascending: true
-		}];
-	}
-
+export class MovieDefinitionsControllerImpl extends MediaItemDefinitionsControllerImpl<MovieInternal, MovieSortByInternal, MovieFilterInternal> implements MovieDefinitionsController {
 	/**
 	 * @override
 	 */
