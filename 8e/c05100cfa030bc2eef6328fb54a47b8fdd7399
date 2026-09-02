@@ -1,0 +1,38 @@
+back-end/CLAUDE.md
+  s_7a0588bc5ba12b::t_67d24ef9cacf18 5
+back-end/app/config/config-sample.ts
+  s_7a0588bc5ba12b::t_5eafeda76defac 107
+back-end/docs/technical/01-architecture.md
+  s_7a0588bc5ba12b::t_5d2b178e71bcbf 21,23,62
+back-end/docs/technical/08-persistence.md
+  s_7a0588bc5ba12b::t_fd29eb40537595 68,76
+back-end/docs/technical/12-catalog-integrations.md
+  s_7a0588bc5ba12b::t_48686aeca7530e 66
+back-end/docs/technical/14-logging.md
+  s_7a0588bc5ba12b::t_8289c415cbd638 3,33,43
+back-end/docs/technical/15-utilities.md
+  s_7a0588bc5ba12b::t_cc8d79c23beeb8 40
+back-end/test/global/config-test.ts
+  s_7a0588bc5ba12b::t_e116adf15ec234 106
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "8ec05100cfa030bc2eef6328fb54a47b8fdd7399",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_7a0588bc5ba12b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "24e0c205-1d76-4572-8e69-15d4815b1b22",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
