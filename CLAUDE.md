@@ -22,7 +22,6 @@ A change that spans both is two changes: make each one under its own rules, and 
 | `README.md` | The landing page: what Media Tracker is, how to install it, how to run it locally and on Render. Every technical detail belongs in a sub-project's `docs/technical/` |
 | `TODO.md` | The outstanding work and the ideas that have not been committed to. Not maintained from here |
 | `render.yaml` | The Render Blueprint that deploys both sub-projects |
-| `docs/` | Specifications for work that spans both sub-projects, one folder each. A sub-project's own reference stays in its `docs/technical/` |
 | `development/` | Local development scratch material, not part of either build |
 | `.claude/` | The permission settings and the `/check` and `/sync-docs` commands |
 
