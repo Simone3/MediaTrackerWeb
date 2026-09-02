@@ -4,8 +4,9 @@ import { groupMapper } from 'app/data/mappers/group';
 import { ownPlatformMapper } from 'app/data/mappers/own-platform';
 import { CatalogMediaItem, GetMediaItemsStatsResponse, MediaItem, MediaItemFilter, MediaItemGroupFilter, MediaItemOwnPlatformFilter, MediaItemSortBy, MediaItemSortField, MediaItemsStatsFilter, SearchMediaItemCatalogResult } from 'app/data/models/api/media-items/media-item';
 import { AppError } from 'app/data/models/internal/error';
-import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemGroupFilterInternal, MediaItemInternal, MediaItemOwnPlatformFilterInternal, MediaItemSortByInternal, MediaItemSortFieldInternal, MediaItemStatusFilterInternal, MediaItemStatusInternal, MediaItemsStatsFilterInternal, MediaItemsStatsInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
+import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemGroupFilterInternal, MediaItemInternal, MediaItemOwnPlatformFilterInternal, MediaItemSortByInternal, MediaItemSortFieldInternal, MediaItemStatusFilterInternal, MediaItemsStatsFilterInternal, MediaItemsStatsInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import { dateUtils } from 'app/utilities/date-utils';
+import { mediaItemUtils } from 'app/utilities/media-item-utils';
 
 /**
  * Abstract mapper for media items
@@ -60,6 +61,10 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 	 * @returns the mapping target
 	 */
 	protected commonToInternal(source: MediaItem): MediaItemInternal {
+		// The status is derived from the internal values, not the API ones, so that the rule compares dates and never strings
+		const completedOn = dateUtils.toDateList(source.completedOn);
+		const releaseDate = dateUtils.toDate(source.releaseDate);
+
 		const target: MediaItemInternal = {
 			
 			// These two will be overridden by the specific mappers. Done like this to avoid setting the fields as optional (= useless undefined checks throughout the app)
@@ -67,13 +72,18 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 			mediaType: 'BOOK',
 			
 			name: source.name,
-			status: this.buildStatusLabel(source),
+			status: mediaItemUtils.buildStatusLabel({
+				completedOn: completedOn,
+				releaseDate: releaseDate,
+				active: source.active,
+				markedAsRedo: source.markedAsRedo
+			}),
 			importance: source.importance,
 			genres: source.genres,
 			description: source.description,
 			userComment: source.userComment,
-			completedOn: dateUtils.toDateList(source.completedOn),
-			releaseDate: dateUtils.toDate(source.releaseDate),
+			completedOn: completedOn,
+			releaseDate: releaseDate,
 			active: source.active,
 			markedAsRedo: source.markedAsRedo,
 			catalogId: source.catalogId,
@@ -97,34 +107,6 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 		}
 
 		return target;
-	}
-
-	/**
-	 * Helper to build the internal "status" label based on other media item data
-	 * @param source the source data
-	 * @returns the internal "status"
-	 */
-	private buildStatusLabel(source: MediaItem): MediaItemStatusInternal {
-		if(source.completedOn && source.completedOn.length > 0 && !source.markedAsRedo) {
-			// Items that have been completed
-			return 'COMPLETE';
-		}
-		else if(source.active) {
-			// Items marked as currently active (e.g. currently reading)
-			return 'ACTIVE';
-		}
-		else if(source.completedOn && source.completedOn.length > 0 && source.markedAsRedo) {
-			// Items that have been completed but have been marked for redo (e.g. rewatch)
-			return 'REDO';
-		}
-		else if(source.releaseDate && new Date(source.releaseDate) > new Date()) {
-			// Items with a future release date
-			return 'UPCOMING';
-		}
-		else {
-			// All other items
-			return 'NEW';
-		}
 	}
 }
 

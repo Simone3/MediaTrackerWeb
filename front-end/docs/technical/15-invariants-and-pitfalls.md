@@ -91,11 +91,13 @@ The concrete case is the media items filter, whose group and own platform option
 
 ## 15.11 The media item status rule lives on both sides
 
-`status` is derived, never stored: the front end computes it in `MediaItemMapper.buildStatusLabel`, and the back end applies the same five branches inside the stats aggregation, because the alternative is shipping every media item to the client to bucket it there ([§8.5](08-domain-model.md#85-generic-media-item), [§10.9](10-features.md#109-media-items-stats)).
+`status` is derived, never stored: the front end computes it in `mediaItemUtils.buildStatusLabel`, and the back end applies the same five branches as a MongoDB expression inside the stats aggregation, because the alternative is shipping every media item to the client to bucket it there ([§8.5](08-domain-model.md#85-generic-media-item), [§10.9](10-features.md#109-media-items-stats)).
 
 **Changing the precedence on one side alone fails silently**: nothing errors, the stats screen simply stops agreeing with the list rows about which items are still to do. Change both, or neither.
 
-A smaller version of the same split is already accepted: `UPCOMING` is evaluated against the browser's clock in the list and against the server's in the stats, so an item releasing today can land on different sides of the line. That one is harmless and deliberately not solved.
+The two sides are pinned together by **the same table of cases, written out twice**: `tests/media-item-status-rule.test.ts` here runs it through the helper, and `test/integration/routes/media-items/status-rule-test.ts` in the back end seeds one media item per case and reads the bucket it lands in back off the stats API. Neither project can import the other, so the copies are kept identical by hand and each file's header says so. A precedence change on one side alone now fails a test naming the exact case, on both sides.
+
+A smaller version of the same split is still accepted: `UPCOMING` is evaluated against the browser's clock in the list and against the server's in the stats, so an item releasing today can land on different sides of the line. That one is harmless and deliberately not solved — it is also why the back-end copy of the table builds its dates as offsets from the current instant, while the front-end copy pins them against a fixed one.
 
 ---
 

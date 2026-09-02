@@ -1,11 +1,15 @@
 import { AppError } from 'app/data/models/internal/error';
 import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { MARK_MEDIA_ITEM_AS_ACTIVE, MARK_MEDIA_ITEM_AS_COMPLETE, MARK_MEDIA_ITEM_AS_REDO } from 'app/redux/actions/media-item/const';
+import { mediaItemUtils } from 'app/utilities/media-item-utils';
 
 export type InlineMediaItemUpdateActionType = typeof MARK_MEDIA_ITEM_AS_ACTIVE | typeof MARK_MEDIA_ITEM_AS_COMPLETE | typeof MARK_MEDIA_ITEM_AS_REDO;
 
 /**
  * Applies the inline media item changes for a specific action type without mutating the source item.
+ *
+ * Each case sets the stored fields only: the "status" label is derived from them afterwards, by the same helper the
+ * mapper uses, so that an inline update cannot label a row differently from the refetch that follows it
  * @param sourceMediaItem the source media item
  * @param actionType the inline update action type
  * @param now the current timestamp to use for completion updates
@@ -17,8 +21,7 @@ export const applyInlineMediaItemUpdate = (sourceMediaItem: MediaItemInternal, a
 	switch(actionType) {
 		case MARK_MEDIA_ITEM_AS_ACTIVE: {
 			mediaItem.active = true;
-			mediaItem.status = 'ACTIVE';
-			return mediaItem;
+			break;
 		}
 
 		case MARK_MEDIA_ITEM_AS_COMPLETE: {
@@ -27,19 +30,21 @@ export const applyInlineMediaItemUpdate = (sourceMediaItem: MediaItemInternal, a
 			mediaItem.completedOn = completionDates;
 			mediaItem.active = false;
 			mediaItem.markedAsRedo = false;
-			mediaItem.status = 'COMPLETE';
-			return mediaItem;
+			break;
 		}
 
 		case MARK_MEDIA_ITEM_AS_REDO: {
 			mediaItem.active = false;
 			mediaItem.markedAsRedo = true;
-			mediaItem.status = 'REDO';
-			return mediaItem;
+			break;
 		}
 
 		default: {
 			throw AppError.GENERIC.withDetails(`Action was intercepted by saga but no case was matched`);
 		}
 	}
+
+	mediaItem.status = mediaItemUtils.buildStatusLabel(mediaItem, now);
+
+	return mediaItem;
 };

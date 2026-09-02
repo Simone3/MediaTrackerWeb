@@ -49,6 +49,7 @@ Tests live in one flat `tests/` folder: `*.test.ts(x)` for units, `*.smoke.test.
 - the webpack config
 - the boot placeholder, against the tokens it copies
 - the media items stats screen, its state slice, and the two pieces of real logic behind its charts: filling the year range including the empty years, and the bar scale the four importance boxes share ([§10.9](10-features.md#109-media-items-stats))
+- the media item status rule, as a table of cases duplicated in the back-end suite so that the two sides cannot drift apart unnoticed ([§15.11](15-invariants-and-pitfalls.md#1511-the-media-item-status-rule-lives-on-both-sides))
 
 New logic in `app/utilities`, `app/redux` and the media-item form data helpers should come with a unit test; a new screen should come with a smoke test.
 
