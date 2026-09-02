@@ -13,7 +13,7 @@ The four external providers behind `/catalog/*` ([§10.6](10-api-surface.md#106-
 - uses `axios`
 - always sends JSON headers and the configured `User-Agent`
 - supports query params, headers, a request body and a timeout
-- logs request and response when enabled ([§14.1](14-logging.md#141-logger-categories))
+- logs request and response, the response carrying the elapsed time, when enabled ([§14.1](14-logging.md#141-one-logger))
 - **validates JSON responses against typed classes** unless `assumeWellFormedResponse` is set ([§6.1](06-validation-and-errors.md#61-one-validator-for-everything))
 - **discards the invalid list items instead of the whole response** when `discardInvalidResponseItems` is set ([§6.4](06-validation-and-errors.md#64-tolerating-bad-provider-data)), logging a warning with how many were dropped
 

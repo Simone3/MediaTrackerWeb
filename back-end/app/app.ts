@@ -1,7 +1,7 @@
 import { config } from 'app/config/config';
 import { databaseManager } from 'app/controllers/database/database-manager';
 import { AppError } from 'app/data/models/error/error';
-import { finalizeAndCloseAllLoggers, logger } from 'app/loggers/logger';
+import { finalizeAndCloseLogger, logger } from 'app/loggers/logger';
 import { server } from 'app/server/server';
 import exitHook from 'exit-hook';
 import { cert, initializeApp } from 'firebase-admin/app';
@@ -35,7 +35,7 @@ export const init = (): void => {
 		logger.info('Received shutdown signal');
 
 		// Shutdown log4js
-		finalizeAndCloseAllLoggers();
+		finalizeAndCloseLogger();
 
 		// Shutdown Express
 		serverInstance.close();

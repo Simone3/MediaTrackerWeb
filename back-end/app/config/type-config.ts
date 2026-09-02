@@ -382,7 +382,7 @@ class ExternalApisConfig {
 	public igdb!: IgdbConfig;
 }
 
-const LOG_LEVEL_CONFIG_VALUES: [ 'debug', 'info', 'error', 'off' ] = [ 'debug', 'info', 'error', 'off' ];
+const LOG_LEVEL_CONFIG_VALUES: [ 'debug', 'info', 'warn', 'error', 'off' ] = [ 'debug', 'info', 'warn', 'error', 'off' ];
 
 type LogLevelConfig = ValuesOf<typeof LOG_LEVEL_CONFIG_VALUES>;
 
@@ -409,12 +409,6 @@ class LogExternalApisInputOutputConfig {
 }
 
 class LogDatabaseQueriesConfig {
-	@IsDefined()
-	@IsBoolean()
-	public active!: boolean;
-}
-
-class LogPerformanceConfig {
 	@IsDefined()
 	@IsBoolean()
 	public active!: boolean;
@@ -450,13 +444,6 @@ class LogConfig {
 	})
 	@ValidateNested()
 	public databaseQueries!: LogDatabaseQueriesConfig;
-
-	@IsDefined()
-	@Type(() => {
-		return LogPerformanceConfig;
-	})
-	@ValidateNested()
-	public performance!: LogPerformanceConfig;
 }
 
 class FirebaseConfig {

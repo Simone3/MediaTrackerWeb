@@ -76,9 +76,10 @@ Where everything lives. Generated folders — `node_modules/`, `build/`, `covera
 
 | File | Purpose |
 | --- | --- |
-| `loggers/logger.ts` | The log4js categories and the layout that carries user and correlation IDs ([§14.1](14-logging.md#141-logger-categories)) |
-| `loggers/express-logger.ts` | Request/response logging and the correlation ID |
-| `loggers/log-redactor.ts` | Key redaction before output ([§14.3](14-logging.md#143-redaction)) |
+| `loggers/logger.ts` | The single logger and the layout that carries user and correlation IDs ([§14.1](14-logging.md#141-one-logger)) |
+| `loggers/express-logger.ts` | Request/response logging and the correlation ID ([§14.2](14-logging.md#142-requestresponse-logging)) |
+| `loggers/elapsed-time.ts` | The operation timer printed inline in log messages ([§14.4](14-logging.md#144-elapsed-time-is-inline)) |
+| `loggers/log-redactor.ts` | Key redaction before output ([§14.5](14-logging.md#145-redaction-and-error-formatting)) |
 | `utilities/parser-validator.ts` | The one validation entry point ([§6.1](06-validation-and-errors.md#61-one-validator-for-everything)) |
 | `utilities/validators.ts` | The custom `class-validator` constraints, currently `IsTimeZone` ([§15.4](15-utilities.md#154-validators)) |
 | `utilities/request-scope-context.ts` | Per-request user and correlation IDs ([§5.3](05-authentication.md#53-request-scope-and-correlation)) |

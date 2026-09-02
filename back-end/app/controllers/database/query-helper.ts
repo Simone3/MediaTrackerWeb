@@ -1,7 +1,8 @@
 import { config } from 'app/config/config';
 import { AppError } from 'app/data/models/error/error';
 import { PaginationInternal, PersistedEntityInternal } from 'app/data/models/internal/common';
-import { logger, performanceLogger } from 'app/loggers/logger';
+import { elapsedTime } from 'app/loggers/elapsed-time';
+import { logger } from 'app/loggers/logger';
 import { DATABASE_COLLATION } from 'app/schemas/common';
 import { HydratedDocument, Model, PipelineStage, QueryFilter, SortOrder, UpdateQuery } from 'mongoose';
 
@@ -30,7 +31,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @returns a promise that will eventually contain the list of all internal model representations of the persisted elements
 	 */
 	public find(conditions?: QueryFilter<TPersistedEntity>, sortBy?: Sortable<TPersistedEntity>, populate?: Populatable<TPersistedEntity>, pagination?: PaginationInternal): Promise<TPersistedEntity[]> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 
 		return new Promise((resolve, reject): void => {
 			const query = this.databaseModel
@@ -54,7 +55,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 
 			query
 				.then((documents: HydratedDocument<TPersistedEntity>[]) => {
-					this.logPerformance('find', startNs);
+					this.logQuery('find', startNs, conditions);
 					resolve(documents);
 				})
 				.catch((error) => {
@@ -70,14 +71,14 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @returns a promise that will eventually contain the number of matching elements
 	 */
 	public async count(conditions?: QueryFilter<TPersistedEntity>): Promise<number> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 
 		try {
 			const matchingElements = await this.databaseModel
 				.countDocuments(conditions ? conditions : {})
 				.collation(DATABASE_COLLATION);
 
-			this.logPerformance('count', startNs);
+			this.logQuery('count', startNs, conditions);
 			return matchingElements;
 		}
 		catch(error) {
@@ -95,14 +96,14 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @template TResult the shape of the result documents
 	 */
 	public async aggregate<TResult>(pipeline: PipelineStage[]): Promise<TResult[]> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 
 		try {
 			const results = await this.databaseModel
 				.aggregate<TResult>(pipeline)
 				.collation(DATABASE_COLLATION);
 
-			this.logPerformance('aggregate', startNs);
+			this.logQuery('aggregate', startNs, pipeline);
 			return results;
 		}
 		catch(error) {
@@ -130,7 +131,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @returns a promise that will eventually contain the internal model representation of the persisted element, or undefined if not found
 	 */
 	public findOne(conditions: QueryFilter<TPersistedEntity>, populate?: Populatable<TPersistedEntity>): Promise<TPersistedEntity | undefined> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 		
 		return new Promise((resolve, reject): void => {
 			this.find(conditions, undefined, populate)
@@ -139,7 +140,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 						reject(AppError.DATABASE_FIND.withDetails('findOne conditions matched more than one element'));
 					}
 					else {
-						this.logPerformance('findOne', startNs);
+						this.logQuery('findOne', startNs);
 
 						if(results.length === 0) {
 							resolve(undefined);
@@ -163,7 +164,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @returns the persisted entity, as a promise
 	 */
 	public checkUniquenessAndSave(internalModel: TPersistedEntity, emptyDocument: HydratedDocument<TPersistedEntity>, uniquenessConditions: QueryFilter<TPersistedEntity>): Promise<TPersistedEntity> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 		
 		return new Promise((resolve, reject): void => {
 			this.find(uniquenessConditions)
@@ -186,7 +187,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 					else {
 						this.save(internalModel, emptyDocument)
 							.then((saveResult) => {
-								this.logPerformance('checkUniquenessAndSave', startNs);
+								this.logQuery('checkUniquenessAndSave', startNs);
 								resolve(saveResult);
 							})
 							.catch((error) => {
@@ -209,7 +210,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @returns the promise that will eventually return the newly saved element
 	 */
 	public async save(internalModel: TPersistedEntity, emptyDocument: HydratedDocument<TPersistedEntity>): Promise<TPersistedEntity> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 	
 		// Manage IDs (save original autogenerated for inserts and make sure internalModel ID's is 'null' and not 'undefined' for Object.assign)
 		const autogeneratedId = emptyDocument._id;
@@ -231,7 +232,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 
 		const savedDocument = await document.save();
 		if(document === savedDocument) {
-			this.logPerformance('save', startNs);
+			this.logQuery('save', startNs);
 			return savedDocument;
 		}
 		else {
@@ -247,11 +248,11 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @returns the number of updated records, as a promise
 	 */
 	public async updateSelectiveMany(set: UpdateQuery<TPersistedEntity>, conditions?: QueryFilter<TPersistedEntity>): Promise<number> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 
 		const result = await this.databaseModel.updateMany(conditions ? conditions : {}, set);
 		if(result.acknowledged) {
-			this.logPerformance('updateSelectiveMany', startNs);
+			this.logQuery('updateSelectiveMany', startNs, conditions);
 			return result.modifiedCount;
 		}
 		else {
@@ -266,13 +267,13 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @returns a promise with the number of deleted elements
 	 */
 	public deleteById(id: string): Promise<number> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 		
 		return new Promise((resolve, reject): void => {
 			this.databaseModel.findOneAndDelete({ _id: id } as QueryFilter<TPersistedEntity>)
 				.then((deletedDocument) => {
 					if(deletedDocument) {
-						this.logPerformance('deleteById', startNs);
+						this.logQuery('deleteById', startNs, { _id: id });
 						resolve(1);
 					}
 					else {
@@ -293,12 +294,12 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @returns a promise with the number of deleted elements
 	 */
 	public delete(conditions: QueryFilter<TPersistedEntity>): Promise<number> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 		
 		return new Promise((resolve, reject): void => {
 			this.databaseModel.deleteMany(conditions)
 				.then((deletedDocumentsCount) => {
-					this.logPerformance('delete', startNs);
+					this.logQuery('delete', startNs, conditions);
 					resolve(deletedDocumentsCount && deletedDocumentsCount.deletedCount ? deletedDocumentsCount.deletedCount : 0);
 				})
 				.catch((error) => {
@@ -309,17 +310,19 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	}
 
 	/**
-	 * Helper to log the query performance
+	 * Helper to log a query, with the time it took printed inline
 	 * @param queryMethod the method name
 	 * @param startNs the invocation start
+	 * @param conditions the query conditions, omitted by the methods that delegate to another one here, which logs them already
 	 */
-	private logPerformance(queryMethod: string, startNs: bigint): void {
-		if(config.log.performance.active) {
-			const endNs = process.hrtime.bigint();
-			const elapsedTimeNs = endNs - startNs;
-			const elapsedTimeMs = elapsedTimeNs / BigInt(1e6);
-			
-			performanceLogger.debug('Query %s on %s took %s ms [%s ns]', queryMethod, this.databaseModel.collection.name, elapsedTimeMs, elapsedTimeNs);
+	private logQuery(queryMethod: string, startNs: bigint, conditions?: unknown): void {
+		if(config.log.databaseQueries.active) {
+			if(conditions === undefined) {
+				logger.info('Query %s on %s took %s', queryMethod, this.databaseModel.collection.name, elapsedTime.since(startNs));
+			}
+			else {
+				logger.info('Query %s on %s with %s took %s', queryMethod, this.databaseModel.collection.name, conditions, elapsedTime.since(startNs));
+			}
 		}
 	}
 }

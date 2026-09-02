@@ -50,14 +50,13 @@ Provider-specific values live here too, and belong here rather than inline: imag
 
 `config.log`:
 
-- `level`: `debug | info | error | off`
+- `level`: `debug | info | warn | error | off`
 - `file`
 - `apisInputOutput.active`
 - `apisInputOutput.excludeRequestBodyRegExp`
 - `apisInputOutput.excludeResponseBodyRegExp`
 - `externalApisInputOutput.active`
 - `databaseQueries.active`
-- `performance.active`
 
 **`config.log.file` is required by validation, but an empty string is meaningful.** A non-empty value sends logs to both the file and the console; an empty one makes logger setup fall back to console-only. That is how a containerized deployment with no writable log path is configured — the key is still required, so its absence is a mistake rather than a silent default ([§14](14-logging.md)).
 

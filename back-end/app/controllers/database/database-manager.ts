@@ -1,6 +1,5 @@
-import { config } from 'app/config/config';
 import { AppError } from 'app/data/models/error/error';
-import { databaseLogger, logger } from 'app/loggers/logger';
+import { logger } from 'app/loggers/logger';
 import mongoose from 'mongoose';
 
 /**
@@ -16,12 +15,6 @@ class DatabaseManager {
 		return new Promise((resolve, reject): void => {
 			logger.info('Starting database connection...');
 
-			if(config.log.databaseQueries.active) {
-				mongoose.set('debug', (collection: string, method: string, query: object, document: object): void => {
-					databaseLogger.info('Accessing collection %s with %s query %s and document %s', collection, method, query, document);
-				});
-			}
-	
 			mongoose.connect(databaseUrl);
 	
 			const db = mongoose.connection;

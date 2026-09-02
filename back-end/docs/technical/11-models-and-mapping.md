@@ -31,7 +31,7 @@ Routes never pass a raw request body into a controller. Everything crosses throu
 - `toInternal`
 - `toInternalList`
 
-It logs every mapping at debug level, which is what makes a wrong field traceable without adding prints ([§14.1](14-logging.md#141-logger-categories)).
+It logs every mapping at debug level, which is what makes a wrong field traceable without adding prints ([§14.1](14-logging.md#141-one-logger)).
 
 ## 11.4 Media-item mapper conventions
 

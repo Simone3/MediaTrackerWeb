@@ -111,9 +111,6 @@ export const testConfig: Config = {
 		},
 		databaseQueries: {
 			active: true
-		},
-		performance: {
-			active: true
 		}
 	},
 	firebase: {

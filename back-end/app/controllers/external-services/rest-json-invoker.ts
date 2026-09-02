@@ -1,6 +1,7 @@
 import { config } from 'app/config/config';
 import { AppError } from 'app/data/models/error/error';
-import { externalInvocationsInputOutputLogger, logger, performanceLogger } from 'app/loggers/logger';
+import { elapsedTime } from 'app/loggers/elapsed-time';
+import { logger } from 'app/loggers/logger';
 import { ClassType, InvocationParams } from 'app/utilities/helper-types';
 import { parserValidator } from 'app/utilities/parser-validator';
 import axios, { AxiosError, AxiosRequestConfig, Cancel } from 'axios';
@@ -19,7 +20,7 @@ export class RestJsonInvoker {
 	 * @template TResponse the response class
 	 */
 	public invoke<TRequest extends object | string | undefined, TResponse extends object>(parameters: InvocationParams<TRequest, TResponse>): Promise<TResponse> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 
 		return new Promise((resolve, reject): void => {
 			// Build request options
@@ -50,8 +51,7 @@ export class RestJsonInvoker {
 			axios.request(options)
 				.then((axiosResponse) => {
 					const rawResponseBody = axiosResponse.data;
-					this.logSuccessfulResponse(options, rawResponseBody, parameters.hideResponseBodyInLogs);
-					this.logPerformance(options, startNs);
+					this.logSuccessfulResponse(options, rawResponseBody, startNs, parameters.hideResponseBodyInLogs);
 
 					// Check if we "trust" the API response to be valid...
 					if(parameters.assumeWellFormedResponse) {
@@ -74,7 +74,7 @@ export class RestJsonInvoker {
 					}
 				})
 				.catch((error) => {
-					logger.error('External API invocation error: %s', error);
+					logger.error('External Service %s %s - Invocation error after %s: %s', options.method, options.url, elapsedTime.since(startNs), error);
 
 					if(this.isTimeout(error)) {
 						reject(AppError.EXTERNAL_API_TIMEOUT.withDetails(error));
@@ -186,35 +186,21 @@ export class RestJsonInvoker {
 	private logRequest(options: AxiosRequestConfig, hideRequestBody?: boolean): void {
 		if(config.log.externalApisInputOutput.active) {
 			const requestBody = hideRequestBody ? '<hidden>' : options.data;
-			externalInvocationsInputOutputLogger.info('External Service %s %s %s - Sent Request: %s', options.method, options.url, options.params, requestBody);
+			logger.info('External Service %s %s %s - Sent Request: %s', options.method, options.url, options.params, requestBody);
 		}
 	}
 
 	/**
-	 * Helper to log the successful response
+	 * Helper to log the successful response, with the time the invocation took printed inline
 	 * @param options the request options
 	 * @param rawResponseBody the response body
+	 * @param startNs the invocation start
 	 * @param hideResponseBody whether the response body should be hidden
 	 */
-	private logSuccessfulResponse(options: AxiosRequestConfig, rawResponseBody: unknown, hideResponseBody?: boolean): void {
+	private logSuccessfulResponse(options: AxiosRequestConfig, rawResponseBody: unknown, startNs: bigint, hideResponseBody?: boolean): void {
 		if(config.log.externalApisInputOutput.active) {
 			const responseBody = hideResponseBody ? '<hidden>' : rawResponseBody;
-			externalInvocationsInputOutputLogger.info('External Service %s %s - Received Response: %s', options.method, options.url, responseBody);
-		}
-	}
-
-	/**
-	 * Helper to log the invocation performance
-	 * @param options the request options
-	 * @param startNs the invocation start
-	 */
-	private logPerformance(options: AxiosRequestConfig, startNs: bigint): void {
-		if(config.log.performance.active) {
-			const endNs = process.hrtime.bigint();
-			const elapsedTimeNs = endNs - startNs;
-			const elapsedTimeMs = elapsedTimeNs / BigInt(1e6);
-			
-			performanceLogger.debug('External Service %s %s took %s ms [%s ns]', options.method, options.url, elapsedTimeMs, elapsedTimeNs);
+			logger.info('External Service %s %s - Received Response in %s: %s', options.method, options.url, elapsedTime.since(startNs), responseBody);
 		}
 	}
 }

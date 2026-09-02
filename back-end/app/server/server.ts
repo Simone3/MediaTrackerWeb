@@ -1,6 +1,6 @@
 import { authenticationMiddleware } from 'app/auth/authentication';
 import { config } from 'app/config/config';
-import { logCorrelationMiddleware, performanceLoggerMiddleware, requestLoggerMiddleware, responseLoggerMiddleware } from 'app/loggers/express-logger';
+import { logCorrelationMiddleware, requestLoggerMiddleware, responseBodyCaptureMiddleware, responseLoggerMiddleware } from 'app/loggers/express-logger';
 import { catchAllMiddleware } from 'app/routes/catch-all';
 import { categoryRouter } from 'app/routes/category';
 import { groupRouter } from 'app/routes/group';
@@ -29,18 +29,16 @@ app.use(cors({
 	preflightContinue: true
 }));
 
-// Authentication
-app.use(authenticationMiddleware);
-
-// Logging
+// Logging, before the authentication so that a rejected request is logged too and carries its correlation ID
 app.use(logCorrelationMiddleware);
 if(config.log.apisInputOutput.active) {
-	app.use(requestLoggerMiddleware);
 	app.use(responseLoggerMiddleware);
+	app.use(responseBodyCaptureMiddleware);
+	app.use(requestLoggerMiddleware);
 }
-if(config.log.performance.active) {
-	app.use(performanceLoggerMiddleware);
-}
+
+// Authentication
+app.use(authenticationMiddleware);
 
 // Misc routes
 app.use('/', miscRouter);

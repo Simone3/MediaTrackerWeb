@@ -24,7 +24,7 @@ It serves the web front end in `../front-end` and nothing else. There is no HTML
 | `app/schemas` | Mongoose schemas and collection names |
 | `app/auth` | Firebase authentication and user-resource authorization |
 | `app/config` | Runtime configuration loading and validation |
-| `app/loggers` | Application, request/response, database, performance and external API logging |
+| `app/loggers` | The single application logger, the request/response middleware and the redactor |
 | `app/utilities` | Request-scoped context, validation, date conversion, string and misc helpers |
 | `app/factories` | Resolution helpers, mainly media type to the right media-item controllers |
 
@@ -62,8 +62,8 @@ Shutdown closes log4js, the Express server instance, and the Mongoose connection
 1. `express.json({ limit: '10mb' })` — a deliberately generous limit; no current endpoint comes close to it
 2. `requestScopeContextMiddleware` ([§5.3](05-authentication.md#53-request-scope-and-correlation))
 3. CORS: `origin: '*'`, `credentials: true`, `methods: GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS`, `preflightContinue: true`
-4. `authenticationMiddleware` ([§5.1](05-authentication.md#51-authentication))
-5. the logging middleware ([§14.2](14-logging.md#142-requestresponse-logging))
+4. the logging middleware ([§14.2](14-logging.md#142-requestresponse-logging))
+5. `authenticationMiddleware` ([§5.1](05-authentication.md#51-authentication))
 6. the routers
 7. the catch-all 404 middleware
 
