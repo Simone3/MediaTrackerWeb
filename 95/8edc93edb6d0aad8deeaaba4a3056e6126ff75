@@ -1,0 +1,94 @@
+front-end/CLAUDE.md
+  s_ae956c832423df::t_df480fd7eeb6f2 54
+front-end/app/components/containers/auth/loading.tsx
+  s_ae956c832423df::t_e7ac7d337b5a3a 1,5,7,17,19-23
+front-end/app/components/containers/auth/login.tsx
+  s_ae956c832423df::t_eab7692e823a78 1,5,8,14,24,26-31
+front-end/app/components/containers/auth/signup.tsx
+  s_ae956c832423df::t_6f05ab5782f46a 1,5,8,14,24,26-31
+front-end/app/components/containers/category/details/screen.tsx
+  s_ae956c832423df::t_0f42acfc8537f3 1,7,11,15,26,37-41,45-46,48-57
+front-end/app/components/containers/category/list/list.tsx
+  s_ae956c832423df::t_16608935b3983d 1,5,8,20,42,44-49
+front-end/app/components/containers/category/list/screen.tsx
+  s_ae956c832423df::t_feba8b3de874a9 1,5,8,18,31,33-38
+front-end/app/components/containers/generic/error-handler.tsx
+  s_ae956c832423df::t_6b6b5be6fdcd9f 1,3,5,8-10,12,16,26-27,29-37
+front-end/app/components/containers/group/details/screen.tsx
+  s_ae956c832423df::t_ae1103da628b25 1,6,10,18,34,36-41
+front-end/app/components/containers/group/list/screen.tsx
+  s_ae956c832423df::t_736f55b0d51af0 1,5,9,22,47,49-54
+front-end/app/components/containers/media-item/details/form/book.tsx
+  s_ae956c832423df::t_94bda4c7f08b07 1-2,4,6,10,12-22
+front-end/app/components/containers/media-item/details/form/media-item.ts
+  s_ae956c832423df::t_c4fb6402223dca 1-2,12-18,20-50,52-54,56-58,60,64-66,68-75,80,84
+front-end/app/components/containers/media-item/details/form/movie.tsx
+  s_ae956c832423df::t_dbe32f47c262d4 1-2,4,6,10,12-22
+front-end/app/components/containers/media-item/details/form/switcher.tsx
+  s_ae956c832423df::t_862bba99fe5115 1,4,7,19,21-25
+front-end/app/components/containers/media-item/details/form/tv-show.tsx
+  s_ae956c832423df::t_807b5357aa05f1 1,3,8,11-12,14,21,23,32,34-45
+front-end/app/components/containers/media-item/details/form/videogame.tsx
+  s_ae956c832423df::t_55ae6493b8aea8 1-2,4,6,10,12-22
+front-end/app/components/containers/media-item/details/unsaved-changes-guard.tsx
+  s_ae956c832423df::t_170d0651551ba0 1,5,10,24,28,32,38,46-51,56-61,63-74
+front-end/app/components/containers/media-item/list/filter-modal.tsx
+  s_ae956c832423df::t_5f6e69917276f2 1,8,11,40,64,66-71
+front-end/app/components/containers/media-item/list/list.tsx
+  s_ae956c832423df::t_ae1d7316e4307a 1,7,10,35,90,92-97
+front-end/app/components/containers/media-item/list/screen.tsx
+  s_ae956c832423df::t_1acbcff4941791 1,6,11,26,44,46-51
+front-end/app/components/containers/media-item/stats/filters.tsx
+  s_ae956c832423df::t_778d672badb2b3 1,8,11,41,57,59-64
+front-end/app/components/containers/media-item/stats/screen.tsx
+  s_ae956c832423df::t_4127ed23005d78 1,6,10,27,42,44-49
+front-end/app/components/containers/navigation/authentication-navigator.tsx
+  s_ae956c832423df::t_d01126c266d536 1,5,10,12,16,24,26-41
+front-end/app/components/containers/navigation/screen-context-guard.tsx
+  s_ae956c832423df::t_5c298aa7a9429d 6,64,77,81,89-96,98,101-110
+front-end/app/components/containers/own-platform/details/screen.tsx
+  s_ae956c832423df::t_f4af6c43d1b712 1,6,10,18,34,36-41
+front-end/app/components/containers/own-platform/list/screen.tsx
+  s_ae956c832423df::t_084db38e709c66 1,5,9,22,47,49-54
+front-end/app/components/containers/settings/screen.tsx
+  s_ae956c832423df::t_9cb8d8b5979127 1,5,10,17,30,32-37
+front-end/app/components/containers/tv-show-season/details/screen.tsx
+  s_ae956c832423df::t_3b2886f73f3e05 1,6,10,17,33,35-40
+front-end/app/components/containers/tv-show-season/list/screen.tsx
+  s_ae956c832423df::t_4ca0752f35d42d 1,5,9,15,43,45-50
+front-end/app/components/presentational/auth/loading/screen/index.tsx
+  s_ae956c832423df::t_55284ff8dd743b 29-31,33-35
+front-end/app/redux/hooks.ts
+  s_ae956c832423df::t_669bebaaaa3b12 1-39
+front-end/docs/technical/01-architecture.md
+  s_ae956c832423df::t_e5f2a904e12956 32
+front-end/docs/technical/02-repository-map.md
+  s_ae956c832423df::t_b0f1a7221fc9a0 39
+front-end/docs/technical/10-features.md
+  s_ae956c832423df::t_cb740824a63a2f 24-25,93,179-180
+front-end/docs/technical/11-interface.md
+  s_ae956c832423df::t_4f859b984160ce 11,13-15,20-40,91
+front-end/tests/container-hooks.test.tsx
+  s_ae956c832423df::t_6b0600885f2326 1-123
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "958edc93edb6d0aad8deeaaba4a3056e6126ff75",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_ae956c832423df": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "18246035-3c5d-4d3f-a15c-05ccc98c8941",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
