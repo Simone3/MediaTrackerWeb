@@ -1,0 +1,50 @@
+front-end/app/components/containers/media-item/details/form/book.tsx
+  s_ae956c832423df::t_d81c05bb9a9069 11
+front-end/app/components/containers/media-item/details/form/movie.tsx
+  s_ae956c832423df::t_9a233bb0cb6fc6 11
+front-end/app/components/containers/media-item/details/form/tv-show.tsx
+  s_ae956c832423df::t_584260c5b60540 5,34
+front-end/app/components/containers/media-item/details/form/videogame.tsx
+  s_ae956c832423df::t_6768b843267aaa 11
+front-end/app/components/presentational/media-item/details/form/view/media-item.tsx
+  s_ae956c832423df::t_318d66d25bfe7a 427
+front-end/app/components/presentational/media-item/list/row/book.tsx
+  s_ae956c832423df::t_7d73ced95aa6cd 9
+front-end/app/components/presentational/media-item/list/row/movie.tsx
+  s_ae956c832423df::t_0c894e8eb98e81 9
+front-end/app/components/presentational/media-item/list/row/tv-show.tsx
+  s_ae956c832423df::t_69852e3465b24f 9
+front-end/app/components/presentational/media-item/list/row/videogame.tsx
+  s_ae956c832423df::t_748ae875d00631 9
+front-end/app/components/presentational/own-platform/details/form/view/index.tsx
+  s_ae956c832423df::t_449b9ad5d23b66 93
+front-end/app/controllers/implementations/mocks/entities/user.ts
+  s_ae956c832423df::t_1a94379f2f3768 36
+front-end/app/utilities/error-hint.ts
+  s_ae956c832423df::t_d7aa6ccd1dda95 161
+front-end/app/utilities/misc-utils.ts
+  s_ae956c832423df::t_b1064a9e3d51b8 56
+front-end/docs/technical/14-testing.md
+  s_ae956c832423df::t_767ff3b8c2b06e 39-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "a1420665e425ce021d5a7407ec72c024f3f90434",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_ae956c832423df": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "18246035-3c5d-4d3f-a15c-05ccc98c8941",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
