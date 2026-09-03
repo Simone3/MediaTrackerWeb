@@ -1,0 +1,40 @@
+README.md
+  s_455e8d1be1a635::t_54cf4dfe3fd099 30
+back-end/CLAUDE.md
+  s_455e8d1be1a635::t_559ae1b19a74c3 9
+back-end/README.md
+  s_455e8d1be1a635::t_62edc4092d5fe8 7
+back-end/docs/technical/01-architecture.md
+  s_455e8d1be1a635::t_520577ed7527a1 11
+back-end/docs/technical/02-repository-map.md
+  s_455e8d1be1a635::t_b4c8e05379c492 14
+back-end/docs/technical/03-build-and-run.md
+  s_455e8d1be1a635::t_94cd4776fbc6e5 9
+back-end/docs/technical/README.md
+  s_455e8d1be1a635::t_267124f486a9c5 7
+back-end/package.json
+  s_455e8d1be1a635::t_0b989b241d33f9 7
+render.yaml
+  s_455e8d1be1a635::t_bd98c4bc62c53f 42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "a4bc2857d98338c7c88279affc0ef86d9d3db31d",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_455e8d1be1a635": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b38e16d4-a09a-44c3-8d01-e11032ad3b37",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
