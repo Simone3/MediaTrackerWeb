@@ -158,5 +158,5 @@ export const getErrorHint = (error: unknown): ErrorHint | undefined => {
 		return undefined;
 	}
 
-	return getFirebaseErrorHint(error as PossibleFirebaseError) || getBackEndErrorHint(error as PossibleAxiosError);
+	return getFirebaseErrorHint(error) || getBackEndErrorHint(error);
 };

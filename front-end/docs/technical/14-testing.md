@@ -36,6 +36,8 @@ Tests live in one flat `tests/` folder: `*.test.ts(x)` for units, `*.smoke.test.
 - React and React Hooks safety rules are enabled
 - the repository style is tabs and single quotes
 
+**`npm run lint` is expected to report nothing at all.** Every rule in the config is warning-level, so the command exits 0 either way and a warning will not fail a build — the zero is the bar, and the only way to keep it meaningful is to read the output rather than the exit code.
+
 **ESLint is held at 9.x on purpose.** `eslint-plugin-import` and `eslint-plugin-react` both still declare a peer ceiling of ESLint 9, and they have published nothing that accepts 10, so the linter cannot move ahead of them. Check those two plugins first when the question comes up again; nothing else in the config blocks it.
 
 ## 14.4 What the current suite covers

@@ -424,7 +424,7 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 						this.setFormField('releaseDate', this.inputValueToDate(event.target.value));
 					}}
 					onClear={() => {
-						this.setFormField('releaseDate', undefined as TMediaItem['releaseDate']);
+						this.setFormField('releaseDate', undefined);
 					}}
 				/>
 			</div>

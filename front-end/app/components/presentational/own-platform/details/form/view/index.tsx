@@ -90,7 +90,7 @@ export class OwnPlatformFormViewComponent extends Component<OwnPlatformFormViewC
 								name='icon'
 								value={values.icon}
 								onChange={(event) => {
-									void setFieldValue('icon', event.target.value as OwnPlatformInternal['icon']);
+									void setFieldValue('icon', event.target.value);
 								}}>
 								{OWN_PLATFORM_ICON_INTERNAL_VALUES.map((icon) => {
 									return (
