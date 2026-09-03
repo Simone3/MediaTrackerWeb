@@ -4,7 +4,7 @@ The web application UI: a React + TypeScript single-page app for tracking books,
 
 ## Run it
 
-Requires Node `>=20.9.0`, and the back end running locally.
+Requires Node 24.x, and the back end running locally.
 
 ```sh
 npm install

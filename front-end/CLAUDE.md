@@ -67,7 +67,7 @@ Testing stays minimal but meaningful: focused unit tests for important logic plu
 
 Prefer focused tests close to the changed component or container — a tiny local Redux store is usually better than importing broad app modules. **Be careful with broad imports in tests**: the decorator-heavy API models can cause unrelated Jest/Babel parsing failures.
 
-The dependency baseline is Node `>=20.9.0`. All three checks must pass before a feature or fix is considered done:
+The dependency baseline is Node 24.x. All three checks must pass before a feature or fix is considered done:
 
 ```sh
 npm run lint && npm run typecheck && npm test

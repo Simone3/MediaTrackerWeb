@@ -8,7 +8,7 @@ The commands, what each one does, and how webpack is wired.
 
 ## 3.1 Node baseline
 
-`engines.node` is `>=20.9.0`. Dependencies are pinned to exact versions — no `^`, no `~` — so an install reproduces the same tree.
+`engines.node` is `24.x`. Dependencies are pinned to exact versions — no `^`, no `~` — so an install reproduces the same tree.
 
 ## 3.2 Commands
 
@@ -106,6 +106,15 @@ The tags live in the `<head>` of `public/index.html` and the image is `public/og
 `tests/social-preview.test.ts` reads the width and height back out of the file's own PNG header and checks them against the declared `og:image:width` and `og:image:height`, so the image cannot be replaced with one of another size without the tags following.
 
 The banner itself is the app mark on the app background — the mark inside the same rounded shell the auth screen title uses, the name beside it, and the four media types under that. It was drawn once on a canvas and committed as a file; there is no build step behind it, so redraw it when the mark or the name changes.
+
+## 3.8 Babel and the legacy decorators
+
+`babel.config.js` is what `babel-jest` transforms TS/TSX with under Jest; the webpack build does not use it, since it type-checks through `ts-loader` instead ([§3.3](#33-webpack)). Two settings in it are load-bearing and neither is obvious:
+
+- **`@babel/plugin-proposal-decorators` runs with `version: 'legacy'`.** The API models carry `class-validator` decorators ([§9](09-data-layer.md)), which are the legacy, pre-standard kind. Babel 8 dropped the old `legacy: true` shorthand for this option, so the version has to be named outright.
+- **`@babel/preset-env` forces `transform-class-properties` on through `include`.** The legacy decorators transform rewrites a decorated class property into an initializer that the class properties transform has to finish. Every browser the `esmodules` target covers supports class fields natively, so preset-env would otherwise leave that transform out, and every decorated model would throw *"Decorating class property failed"* the moment it was constructed — under Jest only, which is what makes it easy to miss.
+
+The transform has to run **after** `@babel/preset-typescript` has stripped the `declare` fields, and **after** the decorators transform. Babel runs plugins before presets and presets in reverse order, so forcing it on inside preset-env is what satisfies both: adding `@babel/plugin-transform-class-properties` next to the decorators plugin instead puts it ahead of preset-typescript, and every `declare` field then fails to parse.
 
 ---
 

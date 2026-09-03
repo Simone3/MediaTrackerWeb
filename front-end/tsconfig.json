@@ -14,6 +14,7 @@
     },
     "types": ["jest", "node"],
     "noEmit": true,
+    "strict": false,
     "strictNullChecks": false
   },
   "include": ["index.tsx", "app/**/*", "tests/**/*", "webpack.config.js"]

@@ -20,7 +20,7 @@ services:
         - front-end/**
     envVars:
       - key: NODE_VERSION
-        value: 22.22.0
+        value: 24.20.0
       - key: MEDIA_TRACKER_APP_ENV
         value: prod
       - key: MEDIA_TRACKER_BACK_END_BASE_URL

@@ -62,6 +62,8 @@ The store carries `Date` objects, persistence encodes and revives them itself, a
 
 New types and refactors that implicitly assume strict null safety will typecheck and then fail at runtime. Be explicit about the nullable cases rather than trusting the compiler here.
 
+`strict` is pinned to `false` alongside it, and that line is doing real work: TypeScript 6 turns `strict` **on** by default, so without it the whole family — `noImplicitAny` first among them — would come back on at the next compiler bump and the codebase would stop compiling. Turning the strict flags on is a deliberate migration, not something to inherit from a dependency upgrade; if you want them, turn them on one at a time and fix what each one surfaces.
+
 ## 15.8 Mock behaviour is not production parity
 
 Mocks help with UI work, but filtering and sorting are simplified, the seeded data is small, and some flows only approximate the back end ([§9.7](09-data-layer.md#97-mock-controllers)). A flow verified only against mocks is not verified.
