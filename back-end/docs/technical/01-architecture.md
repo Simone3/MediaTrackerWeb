@@ -8,7 +8,7 @@ The layers, the path a request takes through them, and what happens between `nod
 
 ## 1.1 What the service is
 
-A plain Express + TypeScript API backed by MongoDB through Mongoose, with Firebase for authentication. The runtime target is Node.js 22.x, declared in `package.json`.
+A plain Express + TypeScript API backed by MongoDB through Mongoose, with Firebase for authentication. The runtime target is Node.js 24.x, declared in `package.json`.
 
 It serves the web front end in `../front-end` and nothing else. There is no HTML, no session, no cookie: every request carries a Firebase ID token and is answered with JSON.
 

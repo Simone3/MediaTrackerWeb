@@ -11,7 +11,7 @@ Where everything lives. Generated folders — `node_modules/`, `build/`, `covera
 | File | Purpose |
 | --- | --- |
 | `index.ts` | The entry point: `reflect-metadata`, then `init()` |
-| `package.json` | Scripts and exact dependency versions. `engines.node` is `22.x` |
+| `package.json` | Scripts and exact dependency versions. `engines.node` is `24.x` |
 | `tsconfig.json` | The application TypeScript config, with the path aliases `tsc-alias` rewrites at build time |
 | `tsconfig.common.json` | The base both the application and `test/tsconfig.json` extend |
 | `eslint.config.js` | The flat ESLint config used by `npm run lint` |

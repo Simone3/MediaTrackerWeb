@@ -4,7 +4,7 @@
   "description": "Back-End for the Media Tracker app",
   "main": "index.ts",
   "engines": {
-    "node": "22.x"
+    "node": "24.x"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

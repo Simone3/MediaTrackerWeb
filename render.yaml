@@ -39,6 +39,6 @@ services:
         - back-end/**
     envVars:
       - key: NODE_VERSION
-        value: 22.22.0
+        value: 24.20.0
       - key: MEDIA_TRACKER_BE_CONFIG
         sync: false

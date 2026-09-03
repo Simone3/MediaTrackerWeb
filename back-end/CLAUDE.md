@@ -6,7 +6,7 @@ Instructions for Claude Code when working in `back-end/`.
 
 ## Project
 
-The back end of Media Tracker: a plain Express + TypeScript API on MongoDB via Mongoose, authenticated with Firebase, running on Node.js 22.x. It serves the web front end and nothing else — no HTML, no sessions, no cookies.
+The back end of Media Tracker: a plain Express + TypeScript API on MongoDB via Mongoose, authenticated with Firebase, running on Node.js 24.x. It serves the web front end and nothing else — no HTML, no sessions, no cookies.
 
 The front end lives in `../front-end` and is a separate self-sufficient project with its own `CLAUDE.md` and `docs/technical/`. Work here unless asked otherwise.
 

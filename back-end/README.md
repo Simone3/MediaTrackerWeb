@@ -4,7 +4,7 @@ The REST API behind Media Tracker: plain Express + TypeScript on MongoDB via Mon
 
 ## Run it
 
-Requires Node 22.x, a running MongoDB, and a configuration.
+Requires Node 24.x, a running MongoDB, and a configuration.
 
 ```sh
 npm install

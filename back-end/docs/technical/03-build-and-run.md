@@ -6,7 +6,7 @@
 
 ## 3.1 Node baseline
 
-`engines.node` is `22.x`. Dependencies are pinned to exact versions — no `^`, no `~` — so an install reproduces the same tree.
+`engines.node` is `24.x`. Dependencies are pinned to exact versions — no `^`, no `~` — so an install reproduces the same tree.
 
 ## 3.2 Commands
 

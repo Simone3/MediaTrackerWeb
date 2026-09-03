@@ -4,7 +4,7 @@
 
 How the service is built: how a request flows through it, which entities exist and how they relate, which routes exist and what they do, and where validation, mapping, persistence, logging and the external integrations live.
 
-A plain Express + TypeScript API on MongoDB via Mongoose, authenticated with Firebase, running on Node.js 22.x. It serves the web front end in `../front-end` and nothing else.
+A plain Express + TypeScript API on MongoDB via Mongoose, authenticated with Firebase, running on Node.js 24.x. It serves the web front end in `../front-end` and nothing else.
 
 What is worth knowing before changing anything: **there is no user collection** — ownership is a Firebase UID on each document, and the `:userId` match is the whole access-control system ([§5.2](05-authentication.md#52-authorization)); **each media type has its own collection**, which is why `mediaItemFactory` exists and why a category's media type is immutable once it holds items ([§8.1](08-persistence.md#81-collections), [§9.8](09-controllers.md#98-mediaitemfactory)); and **the delete cascades are asymmetric on purpose** — a group owns its items, a platform only describes them ([§9.2](09-controllers.md#92-the-delete-cascades-in-one-place)).
 

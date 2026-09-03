@@ -27,7 +27,7 @@ The repository contains two self-sufficient projects, each with its own dependen
 
 If you want to install your own version of the webapp:
 
-- Download and install NodeJS 22.x and NPM from [here](https://nodejs.org/en/download/).
+- Download and install NodeJS 24.x and NPM from [here](https://nodejs.org/en/download/).
 - Signup and request an API key from [Google Books](https://books.google.com).
 - Signup and request an API key from [The Movie Database (TMDb)](https://www.themoviedb.org).
 - Signup and register an application on [Twitch](https://dev.twitch.tv/console/apps) to get the client ID and client secret used to access [IGDB](https://www.igdb.com).
