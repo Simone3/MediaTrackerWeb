@@ -39,12 +39,12 @@
 
 - clear filters button
 
+- aggregations page
 
-# FE+BE improvements
+- BE logs
 
-- aggregations
+- general NRT for deps upgrade
 
-- no index at all on mongo except the one created for aggregation!
 
 # maybe in the future
 
