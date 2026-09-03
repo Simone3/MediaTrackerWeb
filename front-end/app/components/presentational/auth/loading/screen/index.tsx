@@ -26,9 +26,13 @@ export class AuthLoadingScreenComponent extends Component<AuthLoadingScreenCompo
 }
 
 /**
- * AuthLoadingScreenComponent's input props
+ * AuthLoadingScreenComponent's input props: the screen reads nothing from the state.
+ * Empty rather than `Record<string, never>`, whose index signature would type every
+ * output prop as `never` once the two are intersected below.
  */
-export type AuthLoadingScreenComponentInput = Record<string, never>;
+export type AuthLoadingScreenComponentInput = {
+
+};
 
 /**
  * AuthLoadingScreenComponent's output props

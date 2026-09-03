@@ -1,11 +1,12 @@
-import { connect } from 'react-redux';
+import { ReactElement } from 'react';
 import { Dispatch } from 'redux';
 import { OwnPlatformsListScreenComponent, OwnPlatformsListScreenComponentInput, OwnPlatformsListScreenComponentOutput } from 'app/components/presentational/own-platform/list/screen';
 import { deleteOwnPlatform, fetchOwnPlatforms, loadNewOwnPlatformDetails, loadOwnPlatformDetails, selectOwnPlatform } from 'app/redux/actions/own-platform/generators';
+import { useContainerInput, useContainerOutput } from 'app/redux/hooks';
 import { State } from 'app/redux/state/state';
 import { navigationService } from 'app/utilities/navigation-service';
 
-const mapStateToProps = (state: State): OwnPlatformsListScreenComponentInput => {
+const selectInput = (state: State): OwnPlatformsListScreenComponentInput => {
 	const listState = state.ownPlatformsList;
 
 	return {
@@ -18,7 +19,7 @@ const mapStateToProps = (state: State): OwnPlatformsListScreenComponentInput => 
 	};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): OwnPlatformsListScreenComponentOutput => {
+const buildOutput = (dispatch: Dispatch): OwnPlatformsListScreenComponentOutput => {
 	return {
 		fetchOwnPlatforms: () => {
 			dispatch(fetchOwnPlatforms());
@@ -43,8 +44,11 @@ const mapDispatchToProps = (dispatch: Dispatch): OwnPlatformsListScreenComponent
 
 /**
  * Container component that handles Redux state for OwnPlatformsListScreenComponent
+ * @returns the connected own platforms list screen
  */
-export const OwnPlatformsListScreenContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(OwnPlatformsListScreenComponent);
+export const OwnPlatformsListScreenContainer = (): ReactElement => {
+	const input = useContainerInput(selectInput);
+	const output = useContainerOutput(buildOutput);
+
+	return <OwnPlatformsListScreenComponent {...input} {...output} />;
+};

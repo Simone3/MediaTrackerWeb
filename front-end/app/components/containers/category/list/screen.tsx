@@ -1,10 +1,11 @@
-import { connect } from 'react-redux';
+import { ReactElement } from 'react';
 import { Dispatch } from 'redux';
 import { CategoriesListScreenComponent, CategoriesListScreenComponentInput, CategoriesListScreenComponentOutput } from 'app/components/presentational/category/list/screen';
 import { fetchCategories, loadNewCategoryDetails } from 'app/redux/actions/category/generators';
+import { useContainerInput, useContainerOutput } from 'app/redux/hooks';
 import { State } from 'app/redux/state/state';
 
-const mapStateToProps = (state: State): CategoriesListScreenComponentInput => {
+const selectInput = (state: State): CategoriesListScreenComponentInput => {
 	const listState = state.categoriesList;
 
 	return {
@@ -14,7 +15,7 @@ const mapStateToProps = (state: State): CategoriesListScreenComponentInput => {
 	};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): CategoriesListScreenComponentOutput => {
+const buildOutput = (dispatch: Dispatch): CategoriesListScreenComponentOutput => {
 	return {
 		fetchCategories: () => {
 			dispatch(fetchCategories());
@@ -27,8 +28,11 @@ const mapDispatchToProps = (dispatch: Dispatch): CategoriesListScreenComponentOu
 
 /**
  * Container component that handles Redux state for CategoriesListScreenComponent
+ * @returns the connected categories list screen
  */
-export const CategoriesListScreenContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(CategoriesListScreenComponent);
+export const CategoriesListScreenContainer = (): ReactElement => {
+	const input = useContainerInput(selectInput);
+	const output = useContainerOutput(buildOutput);
+
+	return <CategoriesListScreenComponent {...input} {...output} />;
+};

@@ -1,11 +1,12 @@
-import { connect } from 'react-redux';
+import { ReactElement } from 'react';
 import { Dispatch } from 'redux';
 import { GroupsListScreenComponent, GroupsListScreenComponentInput, GroupsListScreenComponentOutput } from 'app/components/presentational/group/list/screen';
 import { deleteGroup, fetchGroups, loadGroupDetails, loadNewGroupDetails, selectGroup } from 'app/redux/actions/group/generators';
+import { useContainerInput, useContainerOutput } from 'app/redux/hooks';
 import { State } from 'app/redux/state/state';
 import { navigationService } from 'app/utilities/navigation-service';
 
-const mapStateToProps = (state: State): GroupsListScreenComponentInput => {
+const selectInput = (state: State): GroupsListScreenComponentInput => {
 	const listState = state.groupsList;
 
 	return {
@@ -18,7 +19,7 @@ const mapStateToProps = (state: State): GroupsListScreenComponentInput => {
 	};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): GroupsListScreenComponentOutput => {
+const buildOutput = (dispatch: Dispatch): GroupsListScreenComponentOutput => {
 	return {
 		fetchGroups: () => {
 			dispatch(fetchGroups());
@@ -43,8 +44,11 @@ const mapDispatchToProps = (dispatch: Dispatch): GroupsListScreenComponentOutput
 
 /**
  * Container component that handles Redux state for GroupsListScreenComponent
+ * @returns the connected groups list screen
  */
-export const GroupsListScreenContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(GroupsListScreenComponent);
+export const GroupsListScreenContainer = (): ReactElement => {
+	const input = useContainerInput(selectInput);
+	const output = useContainerOutput(buildOutput);
+
+	return <GroupsListScreenComponent {...input} {...output} />;
+};

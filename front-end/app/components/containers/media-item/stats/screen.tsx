@@ -1,12 +1,13 @@
-import { connect } from 'react-redux';
+import { ReactElement } from 'react';
 import { Dispatch } from 'redux';
 import { MediaItemsStatsScreenComponent, MediaItemsStatsScreenComponentInput, MediaItemsStatsScreenComponentOutput } from 'app/components/presentational/media-item/stats/screen';
 import { AppError } from 'app/data/models/internal/error';
 import { fetchMediaItemsStats } from 'app/redux/actions/media-item/generators';
+import { useContainerInput, useContainerOutput } from 'app/redux/hooks';
 import { State } from 'app/redux/state/state';
 import { navigationService } from 'app/utilities/navigation-service';
 
-const mapStateToProps = (state: State): MediaItemsStatsScreenComponentInput => {
+const selectInput = (state: State): MediaItemsStatsScreenComponentInput => {
 	const statsState = state.mediaItemsStats;
 	const category = state.categoryGlobal.selectedCategory;
 	if(!category) {
@@ -23,7 +24,7 @@ const mapStateToProps = (state: State): MediaItemsStatsScreenComponentInput => {
 	};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): MediaItemsStatsScreenComponentOutput => {
+const buildOutput = (dispatch: Dispatch): MediaItemsStatsScreenComponentOutput => {
 	return {
 		fetchStats: () => {
 			dispatch(fetchMediaItemsStats());
@@ -38,8 +39,11 @@ const mapDispatchToProps = (dispatch: Dispatch): MediaItemsStatsScreenComponentO
 
 /**
  * Container component that handles Redux state for MediaItemsStatsScreenComponent
+ * @returns the connected media items stats screen
  */
-export const MediaItemsStatsScreenContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(MediaItemsStatsScreenComponent);
+export const MediaItemsStatsScreenContainer = (): ReactElement => {
+	const input = useContainerInput(selectInput);
+	const output = useContainerOutput(buildOutput);
+
+	return <MediaItemsStatsScreenComponent {...input} {...output} />;
+};

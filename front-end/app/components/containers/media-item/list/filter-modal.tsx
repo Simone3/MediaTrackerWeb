@@ -1,13 +1,14 @@
-import { connect } from 'react-redux';
+import { ReactElement } from 'react';
 import { Dispatch } from 'redux';
 import { MediaItemFilterModalComponent, MediaItemFilterModalComponentInput, MediaItemFilterModalComponentOutput } from 'app/components/presentational/media-item/list/filter-modal';
 import { AppError } from 'app/data/models/internal/error';
 import { fetchGroups } from 'app/redux/actions/group/generators';
 import { clearMediaItemsFilters, stopMediaItemsSetFiltersMode, submitMediaItemsFilters } from 'app/redux/actions/media-item/generators';
 import { fetchOwnPlatforms } from 'app/redux/actions/own-platform/generators';
+import { useContainerInput, useContainerOutput } from 'app/redux/hooks';
 import { State } from 'app/redux/state/state';
 
-const mapStateToProps = (state: State): MediaItemFilterModalComponentInput => {
+const selectInput = (state: State): MediaItemFilterModalComponentInput => {
 	const category = state.categoryGlobal.selectedCategory;
 	const currentFilter = state.mediaItemsList.filter;
 	const currentSortBy = state.mediaItemsList.sortBy;
@@ -36,7 +37,7 @@ const mapStateToProps = (state: State): MediaItemFilterModalComponentInput => {
 	};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): MediaItemFilterModalComponentOutput => {
+const buildOutput = (dispatch: Dispatch): MediaItemFilterModalComponentOutput => {
 	return {
 		submitFilter: (filter, sortBy) => {
 			dispatch(stopMediaItemsSetFiltersMode());
@@ -60,8 +61,11 @@ const mapDispatchToProps = (dispatch: Dispatch): MediaItemFilterModalComponentOu
 
 /**
  * Container component that handles Redux state for MediaItemFilterModalComponent
+ * @returns the connected media item filter modal
  */
-export const MediaItemFilterModalContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(MediaItemFilterModalComponent);
+export const MediaItemFilterModalContainer = (): ReactElement => {
+	const input = useContainerInput(selectInput);
+	const output = useContainerOutput(buildOutput);
+
+	return <MediaItemFilterModalComponent {...input} {...output} />;
+};

@@ -1,13 +1,14 @@
-import { connect } from 'react-redux';
+import { ReactElement } from 'react';
 import { Dispatch } from 'redux';
 import { MediaItemsStatsFiltersComponent, MediaItemsStatsFiltersComponentInput, MediaItemsStatsFiltersComponentOutput } from 'app/components/presentational/media-item/stats/filters';
 import { AppError } from 'app/data/models/internal/error';
 import { fetchGroups } from 'app/redux/actions/group/generators';
 import { setMediaItemsStatsFilter } from 'app/redux/actions/media-item/generators';
 import { fetchOwnPlatforms } from 'app/redux/actions/own-platform/generators';
+import { useContainerInput, useContainerOutput } from 'app/redux/hooks';
 import { State } from 'app/redux/state/state';
 
-const mapStateToProps = (state: State): MediaItemsStatsFiltersComponentInput => {
+const selectInput = (state: State): MediaItemsStatsFiltersComponentInput => {
 	const category = state.categoryGlobal.selectedCategory;
 	if(!category) {
 		throw AppError.GENERIC.withDetails('App navigated to the media items stats screen without category data');
@@ -37,7 +38,7 @@ const mapStateToProps = (state: State): MediaItemsStatsFiltersComponentInput => 
 	};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): MediaItemsStatsFiltersComponentOutput => {
+const buildOutput = (dispatch: Dispatch): MediaItemsStatsFiltersComponentOutput => {
 	return {
 		setFilter: (filter) => {
 			dispatch(setMediaItemsStatsFilter(filter));
@@ -53,8 +54,11 @@ const mapDispatchToProps = (dispatch: Dispatch): MediaItemsStatsFiltersComponent
 
 /**
  * Container component that handles Redux state for MediaItemsStatsFiltersComponent
+ * @returns the connected media items stats filters
  */
-export const MediaItemsStatsFiltersContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(MediaItemsStatsFiltersComponent);
+export const MediaItemsStatsFiltersContainer = (): ReactElement => {
+	const input = useContainerInput(selectInput);
+	const output = useContainerOutput(buildOutput);
+
+	return <MediaItemsStatsFiltersComponent {...input} {...output} />;
+};

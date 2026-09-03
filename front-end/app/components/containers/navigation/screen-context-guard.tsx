@@ -1,9 +1,9 @@
 import { ReactElement, ReactNode, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import { AppError } from 'app/data/models/internal/error';
 import { setError } from 'app/redux/actions/error/generators';
+import { useContainerInput, useContainerOutput } from 'app/redux/hooks';
 import { State } from 'app/redux/state/state';
 import { screenToPath } from 'app/utilities/navigation-routes';
 import { AppScreens } from 'app/utilities/screens';
@@ -61,7 +61,7 @@ export const hasScreenRequiredContext = (state: State, screen: string): boolean 
 	return requiredContext ? requiredContext(state) : true;
 };
 
-type ScreenContextGuardOwnProps = {
+type ScreenContextGuardProps = {
 
 	/**
 	 * The guarded app screen
@@ -74,23 +74,11 @@ type ScreenContextGuardOwnProps = {
 	children?: ReactNode;
 };
 
-type ScreenContextGuardStateProps = {
-	hasRequiredContext: boolean;
-};
-
-type ScreenContextGuardDispatchProps = {
+type ScreenContextGuardOutput = {
 	notifyMissingContext: () => void;
 };
 
-type ScreenContextGuardProps = ScreenContextGuardOwnProps & ScreenContextGuardStateProps & ScreenContextGuardDispatchProps;
-
-const mapStateToProps = (state: State, ownProps: ScreenContextGuardOwnProps): ScreenContextGuardStateProps => {
-	return {
-		hasRequiredContext: hasScreenRequiredContext(state, ownProps.screen)
-	};
-};
-
-const mapDispatchToProps = (dispatch: Dispatch): ScreenContextGuardDispatchProps => {
+const buildOutput = (dispatch: Dispatch): ScreenContextGuardOutput => {
 	return {
 		notifyMissingContext: () => {
 			dispatch(setError(AppError.SCREEN_CONTEXT_MISSING));
@@ -98,12 +86,28 @@ const mapDispatchToProps = (dispatch: Dispatch): ScreenContextGuardDispatchProps
 	};
 };
 
-const ScreenContextGuardWrapperComponent = (props: ScreenContextGuardProps): ReactElement => {
+/**
+ * Container component that keeps a screen from rendering without the global context it requires, sending the user to the
+ * categories list instead. The redirect replaces the current history entry, so that browser back does not lead straight
+ * back to the screen that cannot open.
+ * @param props the container props
+ * @returns the guarded screen, or the redirect that replaces it
+ */
+export const ScreenContextGuardContainer = (props: ScreenContextGuardProps): ReactElement => {
 	const {
-		hasRequiredContext,
-		notifyMissingContext,
+		screen,
 		children
 	} = props;
+	const {
+		hasRequiredContext
+	} = useContainerInput((state: State) => {
+		return {
+			hasRequiredContext: hasScreenRequiredContext(state, screen)
+		};
+	});
+	const {
+		notifyMissingContext
+	} = useContainerOutput(buildOutput);
 
 	// The redirect alone would look like the app ignored the URL, so the user gets the usual toast to explain it
 	useEffect(() => {
@@ -118,13 +122,3 @@ const ScreenContextGuardWrapperComponent = (props: ScreenContextGuardProps): Rea
 
 	return <>{children}</>;
 };
-
-/**
- * Container component that keeps a screen from rendering without the global context it requires, sending the user to the
- * categories list instead. The redirect replaces the current history entry, so that browser back does not lead straight
- * back to the screen that cannot open.
- */
-export const ScreenContextGuardContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(ScreenContextGuardWrapperComponent);

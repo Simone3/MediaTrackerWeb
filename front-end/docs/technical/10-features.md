@@ -21,8 +21,8 @@ Category details still use the older custom header/form shell rather than `Entit
 
 Entry files:
 
-- `app/components/containers/media-item/list/screen.ts`
-- `app/components/containers/media-item/list/list.ts`
+- `app/components/containers/media-item/list/screen.tsx`
+- `app/components/containers/media-item/list/list.tsx`
 - `app/redux/reducers/media-item/list.ts`
 - `app/redux/sagas/media-item/fetch.ts`
 
@@ -90,7 +90,7 @@ Completion appends rather than replaces: `completedOn` is the full history of co
 Entry files:
 
 - `app/components/containers/media-item/details/screen.ts`
-- `app/components/containers/media-item/details/unsaved-changes-guard.ts`
+- `app/components/containers/media-item/details/unsaved-changes-guard.tsx`
 - `app/components/presentational/media-item/details/form/wrapper/media-item.tsx`
 - subtype wrappers in `.../form/wrapper/*`
 - subtype views in `.../form/view/*`
@@ -176,8 +176,8 @@ auth loading · login · signup · categories list · category details · media 
 
 Entry files:
 
-- `app/components/containers/media-item/stats/screen.ts`
-- `app/components/containers/media-item/stats/filters.ts`
+- `app/components/containers/media-item/stats/screen.tsx`
+- `app/components/containers/media-item/stats/filters.tsx`
 - `app/components/presentational/media-item/stats/screen/index.tsx`
 - `app/components/presentational/media-item/stats/data/media-item.ts`
 - `app/redux/reducers/media-item/stats.ts`

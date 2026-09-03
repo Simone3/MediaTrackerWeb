@@ -36,6 +36,7 @@ Where everything lives. Generated folders — `node_modules/`, `coverage/`, buil
 | `containers/own-platform/*` | Own platforms list and own platform details |
 | `containers/settings/*`, `containers/credits/*` | Settings and the static credits screen |
 | `containers/generic/*` | Cross-cutting containers, including the global error handler |
+| `redux/hooks.ts` | `useContainerInput` and `useContainerOutput`, the two hooks every container binds to Redux with ([§11.1](11-interface.md#111-containers)) |
 | `presentational/generic/*` | The shared building blocks every feature should reach for first ([§11.3](11-interface.md#113-shared-building-blocks)) |
 | `presentational/<feature>/*` | Screen markup, Formik forms and dialogs per feature |
 | `presentational/media-item/details/form/wrapper/*` | The shared media-item form plus one wrapper per media type |

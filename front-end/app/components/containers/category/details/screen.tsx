@@ -1,20 +1,18 @@
-import React, { ReactElement } from 'react';
-import { connect } from 'react-redux';
+import { ReactElement } from 'react';
 import { Dispatch } from 'redux';
 import { BrowserBackNavigationGuardComponent } from 'app/components/presentational/generic/browser-back-navigation-guard';
 import { CategoryDetailsScreenComponent, CategoryDetailsScreenComponentInput, CategoryDetailsScreenComponentOutput } from 'app/components/presentational/category/details/screen';
 import { DEFAULT_CATEGORY } from 'app/data/models/internal/category';
 import { saveCategory, setCategoryFormStatus } from 'app/redux/actions/category/generators';
+import { useContainerInput, useContainerOutput } from 'app/redux/hooks';
 import { State } from 'app/redux/state/state';
 import { i18n } from 'app/utilities/i18n';
 
-type CategoryDetailsScreenContainerStateProps = CategoryDetailsScreenComponentInput & {
+type CategoryDetailsScreenContainerInput = CategoryDetailsScreenComponentInput & {
 	blockBrowserBack: boolean;
 };
 
-type CategoryDetailsScreenContainerProps = CategoryDetailsScreenContainerStateProps & CategoryDetailsScreenComponentOutput;
-
-const mapStateToProps = (state: State): CategoryDetailsScreenContainerStateProps => {
+const selectInput = (state: State): CategoryDetailsScreenContainerInput => {
 	return {
 		isLoading: state.categoryDetails.saveStatus === 'SAVING',
 		category: state.categoryDetails.category || DEFAULT_CATEGORY,
@@ -25,7 +23,7 @@ const mapStateToProps = (state: State): CategoryDetailsScreenContainerStateProps
 	};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): CategoryDetailsScreenComponentOutput => {
+const buildOutput = (dispatch: Dispatch): CategoryDetailsScreenComponentOutput => {
 	return {
 		saveCategory: (category, confirmSameName) => {
 			dispatch(saveCategory(category, confirmSameName));
@@ -36,29 +34,26 @@ const mapDispatchToProps = (dispatch: Dispatch): CategoryDetailsScreenComponentO
 	};
 };
 
-const CategoryDetailsScreenGuardedComponent = (props: CategoryDetailsScreenContainerProps): ReactElement => {
+/**
+ * Container component that handles Redux state for CategoryDetailsScreenComponent
+ * @returns the connected category details screen, guarded against losing an unsaved form
+ */
+export const CategoryDetailsScreenContainer = (): ReactElement => {
 	const {
 		blockBrowserBack,
 		...screenProps
-	} = props;
+	} = useContainerInput(selectInput);
+	const output = useContainerOutput(buildOutput);
 
-	return React.createElement(
-		BrowserBackNavigationGuardComponent,
-		{
-			when: blockBrowserBack,
-			title: i18n.t('common.alert.form.exit.title'),
-			message: i18n.t('common.alert.form.exit.message'),
-			confirmLabel: i18n.t('common.alert.default.okButton'),
-			cancelLabel: i18n.t('common.alert.default.cancelButton')
-		},
-		React.createElement(CategoryDetailsScreenComponent, screenProps)
+	return (
+		<BrowserBackNavigationGuardComponent
+			when={blockBrowserBack}
+			title={i18n.t('common.alert.form.exit.title')}
+			message={i18n.t('common.alert.form.exit.message')}
+			confirmLabel={i18n.t('common.alert.default.okButton')}
+			cancelLabel={i18n.t('common.alert.default.cancelButton')}
+		>
+			<CategoryDetailsScreenComponent {...screenProps} {...output} />
+		</BrowserBackNavigationGuardComponent>
 	);
 };
-
-/**
- * Container component that handles Redux state for CategoryDetailsScreenComponent
- */
-export const CategoryDetailsScreenContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(CategoryDetailsScreenGuardedComponent);

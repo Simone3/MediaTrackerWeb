@@ -1,12 +1,13 @@
-import { connect } from 'react-redux';
+import { ReactElement } from 'react';
 import { Dispatch } from 'redux';
 import { GroupDetailsScreenComponent, GroupDetailsScreenComponentInput, GroupDetailsScreenComponentOutput } from 'app/components/presentational/group/details/screen';
 import { DEFAULT_GROUP } from 'app/data/models/internal/group';
 import { saveGroup, setGroupFormStatus } from 'app/redux/actions/group/generators';
+import { useContainerInput, useContainerOutput } from 'app/redux/hooks';
 import { State } from 'app/redux/state/state';
 import { navigationService } from 'app/utilities/navigation-service';
 
-const mapStateToProps = (state: State): GroupDetailsScreenComponentInput => {
+const selectInput = (state: State): GroupDetailsScreenComponentInput => {
 	return {
 		isLoading: state.groupDetails.saveStatus === 'SAVING',
 		group: state.groupDetails.group || DEFAULT_GROUP,
@@ -14,7 +15,7 @@ const mapStateToProps = (state: State): GroupDetailsScreenComponentInput => {
 	};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): GroupDetailsScreenComponentOutput => {
+const buildOutput = (dispatch: Dispatch): GroupDetailsScreenComponentOutput => {
 	return {
 		saveGroup: (group, confirmSameName) => {
 			dispatch(saveGroup(group, confirmSameName));
@@ -30,8 +31,11 @@ const mapDispatchToProps = (dispatch: Dispatch): GroupDetailsScreenComponentOutp
 
 /**
  * Container component that handles Redux state for GroupDetailsScreenComponent
+ * @returns the connected group details screen
  */
-export const GroupDetailsScreenContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(GroupDetailsScreenComponent);
+export const GroupDetailsScreenContainer = (): ReactElement => {
+	const input = useContainerInput(selectInput);
+	const output = useContainerOutput(buildOutput);
+
+	return <GroupDetailsScreenComponent {...input} {...output} />;
+};

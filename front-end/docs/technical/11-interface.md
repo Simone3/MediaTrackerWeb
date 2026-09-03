@@ -8,14 +8,35 @@ The container/presentational split the app inherited, and the shared pieces that
 
 ## 11.1 Containers
 
-`app/components/containers/**`. A container typically:
+`app/components/containers/**`. A container is a function component that:
 
-- maps Redux state to props
-- maps dispatch functions to props
-- renders almost nothing itself
+- selects the presentational component's **input** props out of Redux
+- builds its **output** props, the callbacks that dispatch back
+- renders that one component and almost nothing else
 - **throws early if required global context is missing**
 
 That last one is deliberate. A media-item container without `categoryGlobal.selectedCategory` cannot produce a correct screen, and failing at the boundary is easier to trace than rendering a half-empty one ([§15.1](15-invariants-and-pitfalls.md#151-category-context-is-required-for-most-media-flows)). What the user sees when one of those throws is [§11.5](#115-the-screen-error-boundary).
+
+The shape is the same in all of them, and the two hooks it is built on are in `app/redux/hooks.ts`:
+
+```tsx
+const selectInput = (state: State): XComponentInput => { /* ... */ };
+
+const buildOutput = (dispatch: Dispatch): XComponentOutput => { /* ... */ };
+
+export const XContainer = (): ReactElement => {
+	const input = useContainerInput(selectInput);
+	const output = useContainerOutput(buildOutput);
+
+	return <XComponent {...input} {...output} />;
+};
+```
+
+**`useContainerInput` compares its result shallowly and `useContainerOutput` builds the callbacks once per store**, which together are what keep a container from re-rendering on every action. Both matter: a selector returning a new object on each run would never compare equal, and a callback whose identity changed every render would defeat the prop comparisons the presentational components do in `componentDidUpdate` — and, in `ScreenContextGuardContainer`, would re-fire the effect that reports the missing context. A container that has to *derive* an object or an array, rather than return one already held in the state, therefore has to memoize it: `useCommonMediaItemFormInput` in `containers/media-item/details/form/media-item.ts` is the worked example, since it hands the form its own copy of the media item and of the restored draft.
+
+Containers take props of their own only where a parent has something to pass: `ErrorHandlerContainer` and `MediaItemUnsavedChangesGuardContainer` take their children, and `ScreenContextGuardContainer` takes the screen it guards.
+
+**There is no `connect` left in the app**, and `react-redux` is imported in only three places: `app/redux/hooks.ts`, the media-item form hook beside it, and `Provider` in `app/app.tsx`.
 
 ## 11.2 Presentational components
 
@@ -67,7 +88,7 @@ The authenticated experience is a shared sticky top header over a full-bleed dar
 
 `generic/error-boundary`, mounted by `ScreenErrorBoundary` in `containers/navigation/app-navigator.tsx` between `BrowserRouter` and the authentication navigator ([§5.2](05-navigation.md#52-router-composition)).
 
-**It exists because a container throw is not a contained failure.** The containers of [§11.1](#111-containers) throw from `mapStateToProps`, which runs during render, and React unmounts the whole root on an uncaught render error: without a boundary the entire app disappears and the user is left on a blank page with only a console message. The boundary turns that into an error screen with a way back to the home screen.
+**It exists because a container throw is not a contained failure.** The containers of [§11.1](#111-containers) throw from their selector, which runs during render, and React unmounts the whole root on an uncaught render error: without a boundary the entire app disappears and the user is left on a blank page with only a console message. The boundary turns that into an error screen with a way back to the home screen.
 
 Two props carry everything it needs from the router:
 

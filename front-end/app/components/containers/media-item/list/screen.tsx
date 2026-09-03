@@ -1,13 +1,14 @@
-import { connect } from 'react-redux';
+import { ReactElement } from 'react';
 import { Dispatch } from 'redux';
 import { MediaItemsListScreenComponent, MediaItemsListScreenComponentInput, MediaItemsListScreenComponentOutput } from 'app/components/presentational/media-item/list/screen';
 import { AppError } from 'app/data/models/internal/error';
 import { fetchMediaItems, loadNewMediaItemDetails } from 'app/redux/actions/media-item/generators';
+import { useContainerInput, useContainerOutput } from 'app/redux/hooks';
 import { State } from 'app/redux/state/state';
 import { navigationService } from 'app/utilities/navigation-service';
 import { AppScreens } from 'app/utilities/screens';
 
-const mapStateToProps = (state: State): MediaItemsListScreenComponentInput => {
+const selectInput = (state: State): MediaItemsListScreenComponentInput => {
 	const listState = state.mediaItemsList;
 	const category = state.categoryGlobal.selectedCategory;
 	if(!category) {
@@ -22,7 +23,7 @@ const mapStateToProps = (state: State): MediaItemsListScreenComponentInput => {
 	};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): MediaItemsListScreenComponentOutput => {
+const buildOutput = (dispatch: Dispatch): MediaItemsListScreenComponentOutput => {
 	return {
 		fetchMediaItems: () => {
 			dispatch(fetchMediaItems());
@@ -40,8 +41,11 @@ const mapDispatchToProps = (dispatch: Dispatch): MediaItemsListScreenComponentOu
 
 /**
  * Container component that handles Redux state for MediaItemsListScreenComponent
+ * @returns the connected media items list screen
  */
-export const MediaItemsListScreenContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(MediaItemsListScreenComponent);
+export const MediaItemsListScreenContainer = (): ReactElement => {
+	const input = useContainerInput(selectInput);
+	const output = useContainerOutput(buildOutput);
+
+	return <MediaItemsListScreenComponent {...input} {...output} />;
+};

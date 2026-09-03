@@ -1,12 +1,13 @@
-import { connect } from 'react-redux';
+import { ReactElement } from 'react';
 import { Dispatch } from 'redux';
 import { config } from 'app/config/config';
 import { MediaItemsListComponent, MediaItemsListComponentInput, MediaItemsListComponentOutput } from 'app/components/presentational/media-item/list/list';
 import { AppError } from 'app/data/models/internal/error';
 import { changeMediaItemsPage, deleteMediaItem, fetchMediaItems, highlightMediaItem, loadMediaItemDetails, markMediaItemAsActive, markMediaItemAsComplete, markMediaItemAsRedo, removeMediaItemHighlight, searchMediaItems, startMediaItemsSearchMode, startMediaItemsSetFiltersMode, startMediaItemsViewGroupMode, stopMediaItemsSearchMode, stopMediaItemsViewGroupMode } from 'app/redux/actions/media-item/generators';
+import { useContainerInput, useContainerOutput } from 'app/redux/hooks';
 import { State } from 'app/redux/state/state';
 
-const mapStateToProps = (state: State): MediaItemsListComponentInput => {
+const selectInput = (state: State): MediaItemsListComponentInput => {
 	if(!state.categoryGlobal.selectedCategory) {
 		throw AppError.GENERIC.withDetails('Category cannot be null while rendering the media items list');
 	}
@@ -31,7 +32,7 @@ const mapStateToProps = (state: State): MediaItemsListComponentInput => {
 	};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): MediaItemsListComponentOutput => {
+const buildOutput = (dispatch: Dispatch): MediaItemsListComponentOutput => {
 	return {
 		highlightMediaItem: (mediaItem) => {
 			dispatch(highlightMediaItem(mediaItem));
@@ -86,8 +87,11 @@ const mapDispatchToProps = (dispatch: Dispatch): MediaItemsListComponentOutput =
 
 /**
  * Container component that handles Redux state for MediaItemsListComponent
+ * @returns the connected media items list
  */
-export const MediaItemsListContainer = connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(MediaItemsListComponent);
+export const MediaItemsListContainer = (): ReactElement => {
+	const input = useContainerInput(selectInput);
+	const output = useContainerOutput(buildOutput);
+
+	return <MediaItemsListComponent {...input} {...output} />;
+};

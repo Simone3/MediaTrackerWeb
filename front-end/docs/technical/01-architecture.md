@@ -29,7 +29,7 @@ What that inheritance means in practice:
 
 - **Redux is the source of screen state**, not the URL. Most screens read the entity they are showing out of a global slice rather than out of a route parameter ([§6](06-redux.md)).
 - **Sagas orchestrate async work and many navigation side effects.** A screen frequently opens because an action was dispatched, not because a component navigated ([§5.4](05-navigation.md#54-saga-driven-navigation)).
-- **Containers are still mostly `connect(...)`-based** and many presentational components are class components with `componentDidMount` / `componentDidUpdate` fetch triggers ([§11](11-interface.md)).
+- **Many presentational components are class components** with `componentDidMount` / `componentDidUpdate` fetch triggers ([§11](11-interface.md)). The containers in front of them are function components that read Redux through hooks ([§11.1](11-interface.md#111-containers)).
 - **Styling is one global stylesheet** with semantic custom properties, not per-component CSS modules ([§12](12-styling.md)).
 
 Prefer parity with that architecture over modernization. A refactor that only makes the code look more current is not worth the churn; a refactor that removes a real duplication is.
