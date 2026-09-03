@@ -2,7 +2,7 @@ import { logger } from 'app/loggers/logger';
 import { STATUS_ROUTE_PATH } from 'app/routes/misc';
 import { requestScopeContext } from 'app/utilities/request-scope-context';
 import { Request, RequestHandler, Response } from 'express-serve-static-core';
-import { auth } from 'firebase-admin';
+import { getAuth } from 'firebase-admin/auth';
 
 /**
  * Helper to extract the authorization header value from the request
@@ -63,7 +63,7 @@ export const authenticationMiddleware: RequestHandler = (request, response, next
 	}
 
 	// Verify token via Firebase
-	auth().verifyIdToken(authToken)
+	getAuth().verifyIdToken(authToken)
 		.then((userInfo) => {
 			// Save the user UID in the request-scoped global map
 			requestScopeContext.currentUserId = userInfo.uid;

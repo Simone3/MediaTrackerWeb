@@ -28,7 +28,7 @@ The ordering matters: config is loaded and validated once, synchronously, at imp
 
 ## 16.3 Auth mocking
 
-`test/helpers/auth-handler-helper.ts` replaces `firebase-admin`'s `auth` with a fake implementation. The test token is simply **a JSON string containing a `uid`**.
+`test/helpers/auth-handler-helper.ts` replaces `firebase-admin/auth`'s `getAuth` with a fake implementation. The test token is simply **a JSON string containing a `uid`**.
 
 That is what lets integration tests exercise the real authentication and authorization middleware — including the `403` on a `:userId` mismatch ([§5.2](05-authentication.md#52-authorization)) — without a Firebase project or a network round trip.
 

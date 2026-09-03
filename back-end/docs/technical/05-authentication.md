@@ -11,7 +11,7 @@
 - `OPTIONS` requests are always allowed
 - `GET /status` is always allowed
 - **every other route requires `Authorization: Bearer <token>`**
-- the token is verified with `firebase-admin`'s `auth().verifyIdToken(...)`
+- the token is verified with `getAuth().verifyIdToken(...)` from `firebase-admin/auth`
 - on success, `requestScopeContext.currentUserId` is set to the Firebase UID
 - on failure, the response is `401 { error: 'Unauthorized' }`
 
