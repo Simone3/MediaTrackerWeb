@@ -19,6 +19,10 @@ import { State } from 'app/redux/state/state';
  */
 export const useCommonMediaItemFormInput = (): CommonMediaItemFormComponentInputMain => {
 	const mediaItem = useSelector((state: State) => {
+		if(!state.mediaItemDetails.mediaItem) {
+			throw AppError.GENERIC.withDetails('App navigated to the media item form with undefined details');
+		}
+
 		return state.mediaItemDetails.mediaItem;
 	});
 	const formDraft = useSelector((state: State) => {
@@ -50,16 +54,12 @@ export const useCommonMediaItemFormInput = (): CommonMediaItemFormComponentInput
 	});
 
 	const initialValues = useMemo(() => {
-		return mediaItem ? { ...mediaItem } : undefined;
+		return { ...mediaItem };
 	}, [ mediaItem ]);
 
 	const restoredDraft = useMemo(() => {
 		return formDraft ? { ...formDraft } : undefined;
 	}, [ formDraft ]);
-
-	if(!mediaItem) {
-		throw AppError.GENERIC.withDetails('App navigated to the media item form with undefined details');
-	}
 
 	const groupsLoading = groupsStatus === 'DELETING' || groupsStatus === 'FETCHING';
 	const platformsLoading = ownPlatformsStatus === 'DELETING' || ownPlatformsStatus === 'FETCHING';

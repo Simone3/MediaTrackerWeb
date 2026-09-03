@@ -378,7 +378,7 @@ export abstract class MediaItemFilterFormMapper<TMediaItemFilterInternal extends
  * @param id the ID to look up
  * @returns the display name, or undefined if the filter does not carry one
  */
-export const findFilterDisplayName = (ids: string[] | undefined, names: string[] | undefined, id: string): string | undefined => {
+export const findFilterDisplayName = (ids: string[] | undefined, names: (string | undefined)[] | undefined, id: string): string | undefined => {
 	if(!ids || !names) {
 		return undefined;
 	}
@@ -429,7 +429,7 @@ export const buildGroupFilterOptions = (groupsFilter: MediaItemGroupFilterIntern
 	}
 
 	const selectedId = groupsFilter && groupsFilter.groupIds && groupsFilter.groupIds.length > 0 ? groupsFilter.groupIds[0] : undefined;
-	if(selectedId && !groups.some((group) => {
+	if(groupsFilter && selectedId && !groups.some((group) => {
 		return group.id === selectedId;
 	})) {
 		options.push({
@@ -465,7 +465,7 @@ export const buildOwnPlatformFilterOptions = (ownPlatformsFilter: MediaItemOwnPl
 	}
 
 	const selectedId = ownPlatformsFilter && ownPlatformsFilter.ownPlatformIds && ownPlatformsFilter.ownPlatformIds.length > 0 ? ownPlatformsFilter.ownPlatformIds[0] : undefined;
-	if(selectedId && !ownPlatforms.some((ownPlatform) => {
+	if(ownPlatformsFilter && selectedId && !ownPlatforms.some((ownPlatform) => {
 		return ownPlatform.id === selectedId;
 	})) {
 		options.push({

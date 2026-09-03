@@ -18,8 +18,9 @@ class DateUtils {
 	 */
 	public toStringList(dates: Date[] | undefined | null): string[] | undefined {
 		if(dates) {
+			// The elements are dates, so the single-value helper cannot return undefined for any of them
 			return dates.map((date) => {
-				return this.toString(date);
+				return date.toISOString();
 			});
 		}
 		else {
@@ -48,8 +49,9 @@ class DateUtils {
 	 */
 	public toDateList(dateStrings: string[] | undefined | null): Date[] | undefined {
 		if(dateStrings) {
+			// The elements are strings, so the single-value helper cannot return undefined for any of them
 			return dateStrings.map((dateString) => {
-				return this.toDate(dateString);
+				return new Date(dateString);
 			});
 		}
 		else {

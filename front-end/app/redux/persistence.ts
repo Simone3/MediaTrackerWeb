@@ -63,7 +63,7 @@ export const loadPersistedReduxState = (): State | undefined => {
 		return undefined;
 	}
 
-	let serializedState: string | undefined;
+	let serializedState: string | null | undefined;
 	try {
 		serializedState = window.sessionStorage.getItem(STORAGE_KEY);
 	}

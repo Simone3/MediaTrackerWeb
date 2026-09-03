@@ -56,13 +56,13 @@ Persisted list slices come back as `REQUIRES_FETCH` on purpose, so a browser ref
 
 The store carries `Date` objects, persistence encodes and revives them itself, and the Redux Toolkit serializable checks are off ([§6.5](06-redux.md#65-redux-holds-non-plain-values)). **Nothing will warn you** when a new date or object goes into state — check it yourself.
 
-## 15.7 `strictNullChecks` is off
+## 15.7 `strict` is on, and Formik blanks empty strings
 
-`tsconfig.json` has `strictNullChecks` disabled, and the codebase leans on runtime guards and inherited assumptions in a number of places.
+`tsconfig.json` sets `strict: true`, which is the whole family: `strictNullChecks`, `noImplicitAny` and the rest. It was off for most of this project's life, so **code written before that, and anything ported from the React Native original, may still carry assumptions the compiler now rejects.**
 
-New types and refactors that implicitly assume strict null safety will typecheck and then fail at runtime. Be explicit about the nullable cases rather than trusting the compiler here.
+The one non-obvious trap the migration turned up is worth keeping in mind, because the compiler agrees with the wrong answer:
 
-`strict` is pinned to `false` alongside it, and that line is doing real work: TypeScript 6 turns `strict` **on** by default, so without it the whole family — `noImplicitAny` first among them — would come back on at the next compiler bump and the codebase would stop compiling. Turning the strict flags on is a deliberate migration, not something to inherit from a dependency upgrade; if you want them, turn them on one at a time and fix what each one surfaces.
+**Formik replaces empty strings with `undefined` before it validates.** A yup schema typed straight off an internal model will therefore fail on a brand new entity, whose `id` is `''` and reaches the schema as `undefined`. This is why the three entity form schemas ([§11.6](11-interface.md#116-form-validation-feedback)) declare `id` optional and are typed as `ObjectSchema<Omit<XInternal, 'id'> & { id?: string }>` rather than `ObjectSchema<XInternal>`. Tightening one of those to `string().defined()` typechecks and then disables Save on every create form; the smoke tests catch it, so run them.
 
 ## 15.8 Mock behaviour is not production parity
 

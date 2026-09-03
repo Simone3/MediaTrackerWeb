@@ -60,7 +60,7 @@ The environment comes from `MEDIA_TRACKER_APP_ENV` (`dev` by default): `MEDIA_TR
 - **Every hover effect belongs inside a `@media (hover: hover)` block**, since a touch screen's emulated hover makes lists tremble while scrolling. A rule that pairs `:hover` with `:focus-visible` gets split, and the focus half stays outside ([§12.5](docs/technical/12-styling.md#125-hover-effects-are-gated-on-a-hovering-pointer)).
 - **For responsive JS behaviour, reuse `MOBILE_LAYOUT_BREAKPOINT` from `app/utilities/layout.ts`.** Do not introduce a new hardcoded breakpoint.
 - Tunable values (color presets, date formats, external search URLs, timeouts) belong in `app/config`, not inline in modules.
-- `strictNullChecks` is off. Be explicit about nullable cases rather than trusting the compiler ([§15.7](docs/technical/15-invariants-and-pitfalls.md#157-strictnullchecks-is-off)).
+- `strict` is on, `strictNullChecks` included. A yup schema for an entity form still declares `id` optional, because Formik turns the empty id of a new entity into `undefined` before validating ([§15.7](docs/technical/15-invariants-and-pitfalls.md#157-strict-is-on-and-formik-blanks-empty-strings)).
 
 ## Testing
 

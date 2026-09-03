@@ -52,7 +52,7 @@ describe('MediaItemsListContainer', () => {
 				viewGroup: undefined
 			}
 		};
-		const store = createStore((state: MediaItemsListContainerTestState = initialState, action: Action & { mediaItem?: MediaItemInternal }) => {
+		const store = createStore((state: MediaItemsListContainerTestState = initialState, action: Action & { mediaItem?: MediaItemInternal }): MediaItemsListContainerTestState => {
 			switch(action.type) {
 				case HIGHLIGHT_MEDIA_ITEM: {
 					return {
@@ -116,7 +116,7 @@ describe('MediaItemsListContainer', () => {
 				viewGroup: undefined
 			}
 		};
-		const store = createStore((state: MediaItemsListContainerTestState = initialState, action: Action & { mediaItem?: MediaItemInternal; term?: string }) => {
+		const store = createStore((state: MediaItemsListContainerTestState = initialState, action: Action & { mediaItem?: MediaItemInternal; term?: string }): MediaItemsListContainerTestState => {
 			switch(action.type) {
 				case START_MEDIA_ITEMS_SEARCH_MODE: {
 					return {

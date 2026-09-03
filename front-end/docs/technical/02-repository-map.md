@@ -13,7 +13,7 @@ Where everything lives. Generated folders — `node_modules/`, `coverage/`, buil
 | `index.tsx` | The browser entry point: `reflect-metadata`, the global stylesheet, and `<App />` in strict mode |
 | `package.json` | Scripts and exact dependency versions. `engines.node` is `24.x` |
 | `webpack.config.js` | Bundling, the dev server, the `app` alias and the injected environment defines ([§3.3](03-build-and-run.md#33-webpack)) |
-| `tsconfig.json` | TypeScript for the application. Note that `strict` and `strictNullChecks` are both off ([§15.7](15-invariants-and-pitfalls.md#157-strictnullchecks-is-off)) |
+| `tsconfig.json` | TypeScript for the application, `strict` included ([§15.7](15-invariants-and-pitfalls.md#157-strict-is-on-and-formik-blanks-empty-strings)) |
 | `tsconfig.webpack.json` | The separate TypeScript config the webpack config itself is checked against |
 | `babel.config.js` | The Babel setup `babel-jest` uses to transform TS/TSX in tests, including the legacy decorators wiring ([§3.8](03-build-and-run.md#38-babel-and-the-legacy-decorators)) |
 | `jest.config.js` | Test environment, roots and the CSS/image mocks ([§14.2](14-testing.md#142-jest)) |
