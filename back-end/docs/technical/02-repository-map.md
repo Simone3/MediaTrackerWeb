@@ -86,7 +86,7 @@ Where everything lives. Generated folders — `node_modules/`, `build/`, `covera
 | `utilities/request-scope-context.ts` | Per-request user and correlation IDs ([§5.3](05-authentication.md#53-request-scope-and-correlation)) |
 | `utilities/date-utils.ts` | Partial-date resolution, UTC conversion and time zone validation ([§15.1](15-utilities.md#151-dateutils)) |
 | `utilities/misc-utils.ts` | `escapeRegExp`, `buildUrl`, `parseBoolean` and the filter/sort helpers ([§15.2](15-utilities.md#152-miscutils)) |
-| `utilities/string-utils.ts` | `matches`, used by the logging exclusions ([§15.3](15-utilities.md#153-stringutils)) |
+| `utilities/string-utils.ts` | `join`, which skips the falsy elements ([§15.3](15-utilities.md#153-stringutils)) |
 | `utilities/request-param-utils.ts` | Request parameter extraction |
 | `utilities/helper-types.ts` | Shared type helpers |
 

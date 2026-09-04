@@ -49,23 +49,6 @@ class StringUtils {
 			return defaultIfEmpty;
 		}
 	}
-
-	/**
-	 * Checks if a string matches at least one of the given RegExp
-	 * @param string the string to check
-	 * @param regularExpressions the array of regular expressions
-	 * @returns true if at least one of the regular expressions matches
-	 */
-	public matches(string: string, regularExpressions: (RegExp | string)[]): boolean {
-		for(const regExp of regularExpressions) {
-			const compiledRegExp = typeof regExp === 'string' ? new RegExp(regExp) : regExp;
-			if(compiledRegExp.test(string)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
 }
 
 /**

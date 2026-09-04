@@ -54,10 +54,15 @@ Provider-specific values live here too, and belong here rather than inline: imag
 - `file`
 - `fileBackups`
 - `apisInputOutput.active`
-- `apisInputOutput.excludeRequestBodyRegExp`
-- `apisInputOutput.excludeResponseBodyRegExp`
+- `apisInputOutput.includeBodies`
 - `externalApisInputOutput.active`
+- `externalApisInputOutput.includeBodies`
 - `databaseQueries.active`
+- `databaseQueries.includeConditions`
+
+**Each of the three switches is a pair**: `active` decides whether the lines are written at all, and the second flag decides whether the payload goes on them — the request and response bodies for the two `inputOutput` ones, the query conditions for `databaseQueries` ([§14.1](14-logging.md#141-one-logger)). The payloads are what makes a log unreadable long before the lines themselves do, so turning one off leaves the trail of what happened and drops only the bulk.
+
+**`apisInputOutput.includeBodies` replaced a pair of exclusion regex lists.** `excludeRequestBodyRegExp` and `excludeResponseBodyRegExp` matched the URL to keep individual endpoints' bodies out of the log; both were empty in every config the project shipped, and per-endpoint precision is not the choice anybody actually makes about a log — the choice is bodies or no bodies.
 
 **`config.log.file` is required by validation, but an empty string is meaningful.** A non-empty value sends logs to both the file and the console; an empty one makes logger setup fall back to console-only. That is how a containerized deployment with no writable log path is configured — the key is still required, so its absence is a mistake rather than a silent default ([§14](14-logging.md)).
 

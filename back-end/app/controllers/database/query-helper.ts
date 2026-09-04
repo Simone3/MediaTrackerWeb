@@ -317,7 +317,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 */
 	private logQuery(queryMethod: string, startNs: bigint, conditions?: unknown): void {
 		if(config.log.databaseQueries.active) {
-			if(conditions === undefined) {
+			if(conditions === undefined || !config.log.databaseQueries.includeConditions) {
 				logger.info('Query %s on %s took %s', queryMethod, this.databaseModel.collection.name, elapsedTime.since(startNs));
 			}
 			else {

@@ -41,9 +41,13 @@ The permissive list exists because boolean-ish values arrive from several source
 
 ## 15.3 `stringUtils`
 
-`app/utilities/string-utils.ts`, used mostly by the logging exclusions.
+`app/utilities/string-utils.ts`, down to a single helper:
 
-- `matches(string, regularExpressions)` — tests a string against a list of patterns, which is how the request and response body exclusion regexes are applied ([§14.2](14-logging.md#142-requestresponse-logging))
+- `join(array, separator, defaultIfEmpty, properties)` — joins an array skipping the falsy elements, optionally reading the first defined one of several properties per element rather than the element itself
+
+**It exists because `Array.prototype.join` writes the empty elements out as separators.** The values it is given are provider data — a genre with no name, a missing author — and the plain join turns those into `, , `. The `properties` argument covers the same shape from the other side: a provider that names a field differently between two of its endpoints is read with both names listed in preference order ([§12](12-catalog-integrations.md)).
+
+**`matches` used to live here too**, testing a string against a list of patterns for the request and response body exclusion regexes. Those were replaced by a boolean ([§4.4](04-configuration.md#44-logging-config)) and nothing else needed it.
 
 ## 15.4 `validators`
 

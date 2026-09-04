@@ -16,8 +16,13 @@
 | --- | --- |
 | `level` | Everything below it, `off` included |
 | `apisInputOutput.active` | The API request and response lines ([§14.2](#142-requestresponse-logging)) |
+| `apisInputOutput.includeBodies` | The bodies on those lines, replaced by `<hidden>` |
 | `externalApisInputOutput.active` | The outbound request and response lines ([§12.1](12-catalog-integrations.md#121-the-shared-invoker)) |
+| `externalApisInputOutput.includeBodies` | The bodies on those lines, replaced by `<hidden>` |
 | `databaseQueries.active` | The per-query lines ([§14.3](#143-query-logging)) |
+| `databaseQueries.includeConditions` | The conditions on those lines, which fall back to the shorter form without them |
+
+**The payload of a line is switched separately from the line itself.** A body or a set of query conditions is most of the log's volume and almost none of its navigational value: with the payload flags off, the log still says which API was called, which query ran against which collection and how long each took, which is what a log is read for most of the time. `<hidden>` is a single shared constant in `app/loggers/logger.ts`, so a redacted value looks the same wherever it comes from — the per-call `hideRequestBodyInLogs` of the outbound invoker included ([§14.5](#145-redaction-and-error-formatting)).
 
 **`warn` is for a request nobody needs to act on** — a caller's invalid payload or unknown route, decided by the error middleware ([§6.3](06-validation-and-errors.md#63-the-error-model)), and a degraded but served response, the catalog dropping unreadable items from a provider payload ([§6.4](06-validation-and-errors.md#64-tolerating-bad-provider-data)). `error` is reserved for what the application itself got wrong, so that a log read at `level: 'error'` is a list of things to fix rather than a list of people mistyping URLs.
 
@@ -30,13 +35,11 @@ Every line carries the current user ID and the correlation ID through the layout
 `app/loggers/express-logger.ts`:
 
 - sets the correlation ID
-- logs request bodies unless the URL matches a configured exclusion regex
+- logs the request body, unless `apisInputOutput.includeBodies` is off
 - captures the JSON response body with `express-mung`, because a response cannot be read back once it has been sent
 - logs the response — status, elapsed time and body — from the response `finish` event
 
 **The response line is written on `finish`, not in the `express-mung` hook.** The hook only sees responses that carry a JSON body, so a response without one would otherwise go unlogged; `finish` also gives the true end of the exchange to measure against.
-
-Both exclusion lists are empty in the sample config: no current endpoint carries a body large or sensitive enough to keep out of the log.
 
 **The CORS preflights and the status pings are written at `debug`, not `info`.** An `OPTIONS` request and a `GET /status` are not part of the application API surface — the first is the browser asking permission before the request that matters, the second is the platform health check running on a timer — so at `info` they were most of the log and said nothing about what the application was doing. They are demoted rather than dropped, so a config with `level: 'debug'` still shows them.
 

@@ -1,9 +1,8 @@
 import { config } from 'app/config/config';
 import { elapsedTime } from 'app/loggers/elapsed-time';
-import { logger } from 'app/loggers/logger';
+import { HIDDEN_LOG_VALUE, logger } from 'app/loggers/logger';
 import { STATUS_ROUTE_PATH } from 'app/routes/misc';
 import { requestScopeContext } from 'app/utilities/request-scope-context';
-import { stringUtils } from 'app/utilities/string-utils';
 import mung from 'express-mung';
 import { Request, RequestHandler } from 'express-serve-static-core';
 import { v4 as uuid4 } from 'uuid';
@@ -43,10 +42,8 @@ export const logCorrelationMiddleware: RequestHandler = (_, __, next): void => {
  * @param next the next callback
  */
 export const requestLoggerMiddleware: RequestHandler = (req, _, next): void => {
-	const logUrl = req.originalUrl;
-	const skipBodyRegExp = config.log.apisInputOutput.excludeRequestBodyRegExp;
-	const logBody = skipBodyRegExp.length === 0 || !stringUtils.matches(logUrl, skipBodyRegExp) ? req.body : '{body-log-skipped}';
-	getLogLine(req)('API %s %s - Received Request: %s', req.method, logUrl, logBody);
+	const logBody = config.log.apisInputOutput.includeBodies ? req.body : HIDDEN_LOG_VALUE;
+	getLogLine(req)('API %s %s - Received Request: %s', req.method, req.originalUrl, logBody);
 
 	next();
 };
@@ -73,11 +70,8 @@ export const responseLoggerMiddleware: RequestHandler = (req, res, next): void =
 	const startNs = elapsedTime.start();
 
 	res.on('finish', () => {
-		const logUrl = req.originalUrl;
-		const skipBodyRegExp = config.log.apisInputOutput.excludeResponseBodyRegExp;
-		const responseBody = res.locals[RESPONSE_LOG_BODY];
-		const logBody = skipBodyRegExp.length === 0 || !stringUtils.matches(logUrl, skipBodyRegExp) ? responseBody : '{body-log-skipped}';
-		getLogLine(req)('API %s %s - Sent Response: %s in %s - %s', req.method, logUrl, res.statusCode, elapsedTime.since(startNs), logBody);
+		const logBody = config.log.apisInputOutput.includeBodies ? res.locals[RESPONSE_LOG_BODY] : HIDDEN_LOG_VALUE;
+		getLogLine(req)('API %s %s - Sent Response: %s in %s - %s', req.method, req.originalUrl, res.statusCode, elapsedTime.since(startNs), logBody);
 	});
 
 	next();

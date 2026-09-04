@@ -1,7 +1,7 @@
 import { config } from 'app/config/config';
 import { AppError } from 'app/data/models/error/error';
 import { elapsedTime } from 'app/loggers/elapsed-time';
-import { logger } from 'app/loggers/logger';
+import { HIDDEN_LOG_VALUE, logger } from 'app/loggers/logger';
 import { ClassType, InvocationParams } from 'app/utilities/helper-types';
 import { parserValidator } from 'app/utilities/parser-validator';
 import axios, { AxiosError, AxiosRequestConfig, Cancel } from 'axios';
@@ -185,7 +185,7 @@ export class RestJsonInvoker {
 	 */
 	private logRequest(options: AxiosRequestConfig, hideRequestBody?: boolean): void {
 		if(config.log.externalApisInputOutput.active) {
-			const requestBody = hideRequestBody ? '<hidden>' : options.data;
+			const requestBody = hideRequestBody || !config.log.externalApisInputOutput.includeBodies ? HIDDEN_LOG_VALUE : options.data;
 			logger.info('External Service %s %s %s - Sent Request: %s', options.method, options.url, options.params, requestBody);
 		}
 	}
@@ -199,7 +199,7 @@ export class RestJsonInvoker {
 	 */
 	private logSuccessfulResponse(options: AxiosRequestConfig, rawResponseBody: unknown, startNs: bigint, hideResponseBody?: boolean): void {
 		if(config.log.externalApisInputOutput.active) {
-			const responseBody = hideResponseBody ? '<hidden>' : rawResponseBody;
+			const responseBody = hideResponseBody || !config.log.externalApisInputOutput.includeBodies ? HIDDEN_LOG_VALUE : rawResponseBody;
 			logger.info('External Service %s %s - Received Response in %s: %s', options.method, options.url, elapsedTime.since(startNs), responseBody);
 		}
 	}

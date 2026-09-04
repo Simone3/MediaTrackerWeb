@@ -104,14 +104,15 @@ export const testConfig: Config = {
 		fileBackups: 14,
 		apisInputOutput: {
 			active: true,
-			excludeRequestBodyRegExp: [],
-			excludeResponseBodyRegExp: []
+			includeBodies: true
 		},
 		externalApisInputOutput: {
-			active: true
+			active: true,
+			includeBodies: true
 		},
 		databaseQueries: {
-			active: true
+			active: true,
+			includeConditions: true
 		}
 	},
 	firebase: {

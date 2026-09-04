@@ -5,6 +5,11 @@ import { requestScopeContext } from 'app/utilities/request-scope-context';
 import { configure, getLogger, Logger, PatternLayout, shutdown } from 'log4js';
 
 /**
+ * What a log line prints in place of a value that the configuration keeps out of the log
+ */
+export const HIDDEN_LOG_VALUE = '<hidden>';
+
+/**
  * Pattern layout for log4js
  */
 const layout: PatternLayout = {

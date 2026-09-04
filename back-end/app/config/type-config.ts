@@ -392,26 +392,28 @@ class LogApisInputOutputConfig {
 	public active!: boolean;
 	
 	@IsDefined()
-	@IsDefined({ each: true })
-	@IsString({ each: true })
-	public excludeRequestBodyRegExp!: string[];
-
-	@IsDefined()
-	@IsDefined({ each: true })
-	@IsString({ each: true })
-	public excludeResponseBodyRegExp!: string[];
+	@IsBoolean()
+	public includeBodies!: boolean;
 }
 
 class LogExternalApisInputOutputConfig {
 	@IsDefined()
 	@IsBoolean()
 	public active!: boolean;
+
+	@IsDefined()
+	@IsBoolean()
+	public includeBodies!: boolean;
 }
 
 class LogDatabaseQueriesConfig {
 	@IsDefined()
 	@IsBoolean()
 	public active!: boolean;
+
+	@IsDefined()
+	@IsBoolean()
+	public includeConditions!: boolean;
 }
 
 class LogConfig {
