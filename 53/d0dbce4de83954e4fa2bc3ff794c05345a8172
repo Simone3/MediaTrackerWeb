@@ -1,0 +1,58 @@
+front-end/CLAUDE.md
+  s_42c34cec1a796c::t_7f24f0e8eff551 55,61
+front-end/app/components/presentational/category/list/screen/index.tsx
+  s_42c34cec1a796c::t_3f3458a5889694 5,47
+front-end/app/components/presentational/generic/authenticated-page-header/index.tsx
+  s_42c34cec1a796c::t_d9103286b33c53 65-90
+front-end/app/components/presentational/generic/entity-management-screen/index.tsx
+  s_42c34cec1a796c::t_bbc9b9d73cc39b 4,15
+front-end/app/components/presentational/generic/responsive-header-button/index.tsx
+  s_42c34cec1a796c::t_d9c84825e780b8 1-3,6-7,11-12,15-19,25,28
+front-end/app/components/presentational/media-item/list/screen/index.tsx
+  s_42c34cec1a796c::t_2aef7177c0f5a6 3,6,8,53-58
+front-end/app/components/presentational/media-item/stats/screen/index.tsx
+  s_42c34cec1a796c::t_726b6a234c6a48 5,58-60,62-63
+front-end/app/components/presentational/media-item/stats/year-chart/index.tsx
+  s_42c34cec1a796c::t_fd72e7be91f1f0 1,4,7,9-17,56-57,59-60,70-71,87,100,107,210-226,242-252
+front-end/app/resources/images/ic_stats.svg
+  s_42c34cec1a796c::t_fdcf15a8ea960c 1
+front-end/app/resources/lang/lang-en.json
+  s_42c34cec1a796c::t_b9d81de7a16abb 681
+front-end/app/utilities/layout.ts
+  s_42c34cec1a796c::t_57d6838c2e76d8 1-6,8-48
+front-end/app/web/styles.css
+  s_42c34cec1a796c::t_cb16160fac7d76 429-435,3818,3824-3852
+front-end/docs/technical/02-repository-map.md
+  s_42c34cec1a796c::t_3ad9e0bcc6febd 93
+front-end/docs/technical/10-features.md
+  s_42c34cec1a796c::t_4ff06929e3aaef 197-198,209-210,215-216,219
+front-end/docs/technical/11-interface.md
+  s_42c34cec1a796c::t_2cdd01762b03f7 59,74,83-85
+front-end/docs/technical/14-testing.md
+  s_42c34cec1a796c::t_ababe99f49c9da 55-56
+front-end/tests/media-items-stats-year-chart.test.tsx
+  s_42c34cec1a796c::t_f44d3463a0c50d 1-52
+front-end/tests/responsive-header-button.test.tsx
+  s_42c34cec1a796c::t_7832e63ee52648 3,5,25,47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "53d0dbce4de83954e4fa2bc3ff794c05345a8172",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_42c34cec1a796c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "42c4e0ed-945e-448b-b717-401a0b7c1060",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
