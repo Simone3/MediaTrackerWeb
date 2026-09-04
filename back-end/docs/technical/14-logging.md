@@ -38,6 +38,10 @@ Every line carries the current user ID and the correlation ID through the layout
 
 Both exclusion lists are empty in the sample config: no current endpoint carries a body large or sensitive enough to keep out of the log.
 
+**The CORS preflights and the status pings are written at `debug`, not `info`.** An `OPTIONS` request and a `GET /status` are not part of the application API surface — the first is the browser asking permission before the request that matters, the second is the platform health check running on a timer — so at `info` they were most of the log and said nothing about what the application was doing. They are demoted rather than dropped, so a config with `level: 'debug'` still shows them.
+
+**The rule is duplicated in `app/loggers/express-logger.ts` and `app/auth/authentication.ts` rather than shared.** The two sets coincide today — the unauthenticated requests are exactly the uninteresting ones ([§5.1](05-authentication.md#51-authentication)) — but they are different questions, and one helper behind both would turn "stop logging this endpoint" into "stop authenticating it".
+
 **The logging middleware is mounted above the authentication middleware** ([§1.5](01-architecture.md#15-the-middleware-stack)). A request rejected by authentication is a request worth seeing, and below the authentication it would have produced an error line naming neither the URL nor a correlation ID.
 
 **A failed request is three lines under one correlation ID** — the request, the failure from the error middleware, and the response with its status and elapsed time. The failure line is the only one a route contributes, and it does not write it itself:
