@@ -1,0 +1,44 @@
+back-end/app/config/config-sample.ts
+  s_dd6492f3980cb0::t_da03e3274ed8f5 108,111-112,115-116
+back-end/app/config/type-config.ts
+  s_dd6492f3980cb0::t_5ffa8f90b835d5 395-396,403-406,413-416
+back-end/app/controllers/database/query-helper.ts
+  s_dd6492f3980cb0::t_dab9abad979cb9 320
+back-end/app/controllers/external-services/rest-json-invoker.ts
+  s_dd6492f3980cb0::t_1a3d08aca55967 4,188,202
+back-end/app/loggers/express-logger.ts
+  s_dd6492f3980cb0::t_c0ee90dc808562 3,45-46,73-74
+back-end/app/loggers/logger.ts
+  s_dd6492f3980cb0::t_48492760ae2406 7-11
+back-end/docs/technical/02-repository-map.md
+  s_dd6492f3980cb0::t_9085783b500886 89
+back-end/docs/technical/04-configuration.md
+  s_dd6492f3980cb0::t_32256735a4783c 57,59,61-65
+back-end/docs/technical/14-logging.md
+  s_dd6492f3980cb0::t_dbf6259f2e2b1a 19,21,23-25,38
+back-end/docs/technical/15-utilities.md
+  s_dd6492f3980cb0::t_4c9a3f33be3ef1 44,46-50
+back-end/test/global/config-test.ts
+  s_dd6492f3980cb0::t_63887b6150556c 107,110-111,114-115
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "fef5c936cad4dcd08eb81515f100416bb9b34b32",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_dd6492f3980cb0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d0078d13-b819-4c42-a44c-18ab3cc1f410",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
