@@ -1,0 +1,26 @@
+back-end/app/loggers/express-logger.ts
+  s_dd6492f3980cb0::t_ef4613931de1f6 4,8,16-27,49,80
+back-end/docs/technical/14-logging.md
+  s_dd6492f3980cb0::t_4840eb2021eec5 41-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "007ec9250a9d7d4b7392a6156bf0f2e9ac7f6c34",
+  "prompts": {},
+  "humans": {
+    "h_08e8a5184a38af": {
+      "author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_dd6492f3980cb0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d0078d13-b819-4c42-a44c-18ab3cc1f410",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
