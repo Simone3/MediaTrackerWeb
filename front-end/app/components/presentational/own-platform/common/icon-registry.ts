@@ -14,6 +14,7 @@ import platformKindleIcon from 'app/resources/images/ic_platform_kindle.svg';
 import platformNetflixIcon from 'app/resources/images/ic_platform_netflix.svg';
 import platformOriginIcon from 'app/resources/images/ic_platform_origin.svg';
 import platformPlaystationIcon from 'app/resources/images/ic_platform_playstation.svg';
+import platformPrimeVideoIcon from 'app/resources/images/ic_platform_primevideo.svg';
 import platformSteamIcon from 'app/resources/images/ic_platform_steam.svg';
 import platformSwitchIcon from 'app/resources/images/ic_platform_switch.svg';
 import platformUplayIcon from 'app/resources/images/ic_platform_uplay.svg';
@@ -33,6 +34,7 @@ export const ownPlatformIcons: Record<OwnPlatformIconInternal, string> = {
 	netflix: platformNetflixIcon,
 	origin: platformOriginIcon,
 	playstation: platformPlaystationIcon,
+	primevideo: platformPrimeVideoIcon,
 	steam: platformSteamIcon,
 	switch: platformSwitchIcon,
 	uplay: platformUplayIcon

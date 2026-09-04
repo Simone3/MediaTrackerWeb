@@ -1,7 +1,9 @@
-import { CSSProperties, Component, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
+import { EntityManagementListComponent } from 'app/components/presentational/generic/entity-management-list';
 import { EntityManagementScreenComponent } from 'app/components/presentational/generic/entity-management-screen';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
+import { ResponsiveActionMenuAction } from 'app/components/presentational/generic/responsive-action-menu';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { i18n } from 'app/utilities/i18n';
 
@@ -50,74 +52,73 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 							</>
 						);
 					}}>
-					<div className='entity-management-list'>
-						{tvShowSeasons.length === 0 ?
-							<div className='entity-management-list-empty'>
-								<p className='entity-management-list-empty-title'>{i18n.t('tvShowSeason.list.empty')}</p>
-								<p className='entity-management-list-empty-copy'>{i18n.t('tvShowSeason.list.emptyHint')}</p>
-							</div> :
-							<ul className='entity-management-list-items'>
-								{tvShowSeasons.map((tvShowSeason: TvShowSeasonInternal) => {
-									const episodesNumber = tvShowSeason.episodesNumber ? tvShowSeason.episodesNumber : 0;
-									const watchedEpisodesNumber = tvShowSeason.watchedEpisodesNumber ? tvShowSeason.watchedEpisodesNumber : 0;
-									const completeDisabled = !episodesNumber || watchedEpisodesNumber === episodesNumber;
+					<EntityManagementListComponent
+						items={tvShowSeasons}
+						menuCloseAriaLabel={i18n.t('common.a11y.closeTvShowSeasonActions')}
+						emptyTitle={i18n.t('tvShowSeason.list.empty')}
+						emptyCopy={i18n.t('tvShowSeason.list.emptyHint')}
+						showEmptyState={tvShowSeasons.length === 0}
+						showSkeletons={false}
+						getItemKey={(tvShowSeason) => {
+							return String(tvShowSeason.number);
+						}}
+						getItemName={(tvShowSeason) => {
+							return i18n.t('tvShowSeason.list.row.main', {
+								seasonNumber: tvShowSeason.number
+							});
+						}}
+						getItemAccentColor={(tvShowSeason) => {
+							return this.getSeasonAccent(tvShowSeason);
+						}}
+						renderItemBadge={(tvShowSeason) => {
+							return <span className='entity-management-list-badge'>{tvShowSeason.number}</span>;
+						}}
+						renderItemMeta={(tvShowSeason) => {
+							return (
+								<span className='entity-management-list-meta'>
+									{i18n.t('tvShowSeason.list.row.secondary', {
+										episodesNumber: this.getEpisodesNumber(tvShowSeason),
+										watchedEpisodesNumber: this.getWatchedEpisodesNumber(tvShowSeason)
+									})}
+								</span>
+							);
+						}}
+						onSelect={(tvShowSeason) => {
+							this.props.editTvShowSeason(tvShowSeason);
+						}}
+						getItemActions={(tvShowSeason, closeMenu) => {
+							const actions: ResponsiveActionMenuAction[] = [
+								{
+									label: i18n.t('tvShowSeason.list.edit'),
+									onClick: () => {
+										closeMenu();
+										this.props.editTvShowSeason(tvShowSeason);
+									}
+								}
+							];
 
-									return (
-										<li
-											key={String(tvShowSeason.number)}
-											className='entity-management-list-row'
-											style={{ '--entity-management-row-accent': this.getSeasonAccent(tvShowSeason) } as CSSProperties}>
-											<button
-												type='button'
-												className='entity-management-list-main'
-												onClick={() => {
-													this.props.editTvShowSeason(tvShowSeason);
-												}}>
-												<span className='entity-management-list-badge-shell' aria-hidden={true}>
-													<span className='entity-management-list-badge'>{tvShowSeason.number}</span>
-												</span>
-												<span className='entity-management-list-main-copy'>
-													<span className='entity-management-list-name'>
-														{i18n.t('tvShowSeason.list.row.main', {
-															seasonNumber: tvShowSeason.number
-														})}
-													</span>
-													<span className='entity-management-list-meta'>
-														{i18n.t('tvShowSeason.list.row.secondary', {
-															episodesNumber: episodesNumber,
-															watchedEpisodesNumber: watchedEpisodesNumber
-														})}
-													</span>
-												</span>
-												<span className='entity-management-list-progress'>
-													<span className='entity-management-list-progress-strong'>{watchedEpisodesNumber}</span>
-													/{episodesNumber}
-												</span>
-											</button>
-											<div className='entity-management-list-actions'>
-												<button
-													type='button'
-													className='entity-management-list-action'
-													disabled={completeDisabled}
-													onClick={() => {
-														this.props.completeTvShowSeason(tvShowSeason);
-													}}>
-													{i18n.t('tvShowSeason.list.complete')}
-												</button>
-												<button
-													type='button'
-													className='entity-management-list-action entity-management-list-action-danger'
-													onClick={() => {
-														this.requestDeleteTvShowSeason(tvShowSeason);
-													}}>
-													{i18n.t('tvShowSeason.list.delete')}
-												</button>
-											</div>
-										</li>
-									);
-								})}
-							</ul>}
-					</div>
+							if(this.canCompleteSeason(tvShowSeason)) {
+								actions.push({
+									label: i18n.t('tvShowSeason.list.complete'),
+									onClick: () => {
+										closeMenu();
+										this.props.completeTvShowSeason(tvShowSeason);
+									}
+								});
+							}
+
+							actions.push({
+								label: i18n.t('tvShowSeason.list.delete'),
+								onClick: () => {
+									closeMenu();
+									this.requestDeleteTvShowSeason(tvShowSeason);
+								},
+								tone: 'danger'
+							});
+
+							return actions;
+						}}
+					/>
 				</EntityManagementScreenComponent>
 				<ConfirmDialogComponent
 					visible={Boolean(pendingDeleteTvShowSeason)}
@@ -154,13 +155,42 @@ export class TvShowSeasonsListScreenComponent extends Component<TvShowSeasonsLis
 	}
 
 	/**
+	 * Returns the season total episodes, defaulting to zero
+	 * @param tvShowSeason the season
+	 * @returns the number of episodes
+	 */
+	private getEpisodesNumber(tvShowSeason: TvShowSeasonInternal): number {
+		return tvShowSeason.episodesNumber ? tvShowSeason.episodesNumber : 0;
+	}
+
+	/**
+	 * Returns the season watched episodes, defaulting to zero
+	 * @param tvShowSeason the season
+	 * @returns the number of watched episodes
+	 */
+	private getWatchedEpisodesNumber(tvShowSeason: TvShowSeasonInternal): number {
+		return tvShowSeason.watchedEpisodesNumber ? tvShowSeason.watchedEpisodesNumber : 0;
+	}
+
+	/**
+	 * Tells if the season can still be marked as complete
+	 * @param tvShowSeason the season
+	 * @returns true if the complete action is available
+	 */
+	private canCompleteSeason(tvShowSeason: TvShowSeasonInternal): boolean {
+		const episodesNumber = this.getEpisodesNumber(tvShowSeason);
+
+		return episodesNumber > 0 && this.getWatchedEpisodesNumber(tvShowSeason) !== episodesNumber;
+	}
+
+	/**
 	 * Resolves the accent color for the provided season row
 	 * @param tvShowSeason the season
 	 * @returns the accent color
 	 */
 	private getSeasonAccent(tvShowSeason: TvShowSeasonInternal): string {
-		const episodesNumber = tvShowSeason.episodesNumber ? tvShowSeason.episodesNumber : 0;
-		const watchedEpisodesNumber = tvShowSeason.watchedEpisodesNumber ? tvShowSeason.watchedEpisodesNumber : 0;
+		const episodesNumber = this.getEpisodesNumber(tvShowSeason);
+		const watchedEpisodesNumber = this.getWatchedEpisodesNumber(tvShowSeason);
 
 		if(episodesNumber > 0 && watchedEpisodesNumber === episodesNumber) {
 			return TV_SHOW_SEASONS_SCREEN_COMPLETE_ACCENT;

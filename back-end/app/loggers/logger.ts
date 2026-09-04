@@ -5,11 +5,16 @@ import { requestScopeContext } from 'app/utilities/request-scope-context';
 import { configure, getLogger, Logger, PatternLayout, shutdown } from 'log4js';
 
 /**
+ * What a log line prints in place of a value that the configuration keeps out of the log
+ */
+export const HIDDEN_LOG_VALUE = '<hidden>';
+
+/**
  * Pattern layout for log4js
  */
 const layout: PatternLayout = {
 	type: 'pattern',
-	pattern: '[%d] [%x{currentUserId}] [%x{correlationId}] %p %c - %m',
+	pattern: '[%d] [%x{currentUserId}] [%x{correlationId}] %p - %m',
 	tokens: {
 		correlationId: () => {
 			return requestScopeContext.correlationId || 'NONE';
@@ -27,7 +32,10 @@ if(config.log.file) {
 			file: {
 				type: 'dateFile',
 				filename: config.log.file,
-				layout: layout
+				layout: layout,
+				keepFileExt: true,
+				compress: true,
+				numBackups: config.log.fileBackups
 			},
 			console: {
 				type: 'console',
@@ -37,7 +45,7 @@ if(config.log.file) {
 		categories: {
 			default: {
 				appenders: [ 'file', 'console' ],
-				level: 'debug'
+				level: config.log.level
 			}
 		}
 	});
@@ -53,22 +61,18 @@ else {
 		categories: {
 			default: {
 				appenders: [ 'console' ],
-				level: 'debug'
+				level: config.log.level
 			}
 		}
 	});
 }
 
 /**
- * Application logger
+ * Application logger. There is a single one for the whole application: what a log line is about is already written in
+ * the line itself, and how much of it gets written is decided by the config.log switches at the call sites
  */
 class MediaTrackerLogger {
-	private log4js: Logger;
-
-	public constructor(logCategory: string) {
-		this.log4js = getLogger(logCategory);
-		this.log4js.level = config.log.level;
-	}
+	private log4js: Logger = getLogger();
 
 	/**
 	 * Writes a debug message if debug is enabled
@@ -93,6 +97,17 @@ class MediaTrackerLogger {
 	}
 
 	/**
+	 * Writes a warning message if warning is enabled
+	 * @param message the log message, with optional %s placeholders
+	 * @param args the optional arguments for the placeholders
+	 */
+	public warn(message: string, ...args: unknown[]): void {
+		if(this.log4js.isWarnEnabled()) {
+			this.log4js.warn(message, ...this.stringify(args));
+		}
+	}
+
+	/**
 	 * Writes an error message if error is enabled
 	 * @param message the log message, with optional %s placeholders
 	 * @param args the optional arguments for the placeholders
@@ -100,71 +115,61 @@ class MediaTrackerLogger {
 	public error(message: string, ...args: unknown[]): void {
 		if(this.log4js.isErrorEnabled()) {
 			this.log4js.error(message, ...this.stringify(args));
-
-			for(const arg of args) {
-				if(arg instanceof AppError) {
-					let currentArg: string | AppError | undefined = arg;
-
-					while(currentArg && currentArg instanceof AppError) {
-						this.log4js.error('Caused by AppError:');
-						this.log4js.error(currentArg);
-
-						currentArg = currentArg.errorDetails;
-					}
-				}
-				else if(arg instanceof Error) {
-					this.log4js.error('Caused by raw Error:');
-					this.log4js.error(arg);
-				}
-			}
 		}
 	}
 
 	/**
-	 * Internal helper to write objects as JSON strings
+	 * Internal helper to write the placeholder arguments as single-line strings
 	 * @param args the arguments for the placeholders
 	 * @returns the resulting array of string values
 	 */
 	private stringify(args: unknown[]): string[] {
-		if(args && args.length > 0) {
-			return args.map((arg) => {
-				return logRedactor.processAndStringify(arg).replace(/\r?\n|\r|\t/g, ' ');
-			});
+		return args.map((arg) => {
+			const stringValue = arg instanceof Error ? this.stringifyError(arg) : logRedactor.processAndStringify(arg);
+			return stringValue.replace(/\r?\n|\r|\t/g, ' ');
+		});
+	}
+
+	/**
+	 * Internal helper to write an error as a string: JSON stringification is useless here, because the interesting
+	 * parts of an Error (its message and its stack) are not enumerable properties and would produce an empty object
+	 * @param error the error to write
+	 * @returns the resulting string value
+	 */
+	private stringifyError(error: Error): string {
+		if(error instanceof AppError) {
+			// An AppError carries its cause chain in its details, which is more useful than its own stack: flatten it into the same line
+			let result = `${error.errorCode} - ${error.errorDescription}`;
+			let cause = error.errorDetails;
+
+			while(cause !== undefined) {
+				if(cause instanceof AppError) {
+					result += ` <- ${cause.errorCode} - ${cause.errorDescription}`;
+					cause = cause.errorDetails;
+				}
+				else {
+					result += ` <- ${cause}`;
+					cause = undefined;
+				}
+			}
+
+			return result;
 		}
 		else {
-			return [];
+			// A raw error has no cause chain and its stack is the only place the origin is written
+			return error.stack ? error.stack : `${error.name}: ${error.message}`;
 		}
 	}
 }
 
 /**
- * Generic logger, used for 'manual' application logging
+ * Generic logger, used for all application logging
  */
-export const logger = new MediaTrackerLogger('Application');
+export const logger = new MediaTrackerLogger();
 
 /**
- * Logger for APIs input-output
+ * Callback to gracefully close the logger
  */
-export const inputOutputLogger = new MediaTrackerLogger('Input-Output');
-
-/**
- * Logger for external APIs input-output
- */
-export const externalInvocationsInputOutputLogger = new MediaTrackerLogger('External-API');
-
-/**
- * Logger for database queries
- */
-export const databaseLogger = new MediaTrackerLogger('Database');
-
-/**
- * Logger for performance metrics
- */
-export const performanceLogger = new MediaTrackerLogger('Performance');
-
-/**
- * Callback to gracefully close all loggers
- */
-export const finalizeAndCloseAllLoggers = (): void => {
+export const finalizeAndCloseLogger = (): void => {
 	shutdown();
 };

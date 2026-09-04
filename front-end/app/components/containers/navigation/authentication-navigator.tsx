@@ -1,44 +1,19 @@
-import { Component, ReactNode } from 'react';
-import { connect } from 'react-redux';
+import { ReactElement } from 'react';
 import { AuthLoadingScreenContainer } from 'app/components/containers/auth/loading';
 import { AuthenticatedNavigator } from 'app/components/containers/navigation/authenticated-navigator';
 import { UnauthenticatedNavigator } from 'app/components/containers/navigation/unauthenticated-navigator';
+import { useContainerInput } from 'app/redux/hooks';
 import { State } from 'app/redux/state/state';
 import { UserStatus } from 'app/redux/state/user';
 
 /**
- * The navigator to switch between unauthenticated and authenticated flows
+ * AuthenticationNavigator's input props
  */
-class AuthenticationNavigator extends Component<AuthenticationNavigatorProps> {
-	/**
-	 * @override
-	 */
-	public render(): ReactNode {
-		const {
-			userStatus
-		} = this.props;
-
-		if(userStatus === 'REQUIRES_CHECK') {
-			return <AuthLoadingScreenContainer />;
-		}
-		if(userStatus === 'UNAUTHENTICATED') {
-			return <UnauthenticatedNavigator />;
-		}
-		if(userStatus === 'AUTHENTICATED') {
-			return <AuthenticatedNavigator />;
-		}
-		throw Error('Unhandled user status');
-	}
-}
-
-/**
- * AuthenticationSwitchNavigator's props
- */
-type AuthenticationNavigatorProps = {
+type AuthenticationNavigatorInput = {
 	userStatus: UserStatus;
 };
 
-const mapStateToProps = (state: State): AuthenticationNavigatorProps => {
+const selectInput = (state: State): AuthenticationNavigatorInput => {
 	return {
 		userStatus: state.userGlobal.status
 	};
@@ -46,7 +21,21 @@ const mapStateToProps = (state: State): AuthenticationNavigatorProps => {
 
 /**
  * The navigator to switch between unauthenticated and authenticated flows (connected via Redux)
+ * @returns the navigator matching the current user status
  */
-export const ConnectedAuthenticationNavigator = connect(
-	mapStateToProps
-)(AuthenticationNavigator);
+export const ConnectedAuthenticationNavigator = (): ReactElement => {
+	const {
+		userStatus
+	} = useContainerInput(selectInput);
+
+	if(userStatus === 'REQUIRES_CHECK') {
+		return <AuthLoadingScreenContainer />;
+	}
+	if(userStatus === 'UNAUTHENTICATED') {
+		return <UnauthenticatedNavigator />;
+	}
+	if(userStatus === 'AUTHENTICATED') {
+		return <AuthenticatedNavigator />;
+	}
+	throw Error('Unhandled user status');
+};

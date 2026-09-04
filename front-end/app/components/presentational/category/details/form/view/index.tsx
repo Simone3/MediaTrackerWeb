@@ -2,6 +2,7 @@ import { Component, ReactNode } from 'react';
 import { FormikProps } from 'formik';
 import { MediaIconComponent } from 'app/components/presentational/category/common/media-icon';
 import { ColorPickerComponent } from 'app/components/presentational/generic/color-picker';
+import { buildFieldErrorInputProps, FieldErrorComponent, getVisibleFieldError } from 'app/components/presentational/generic/field-error';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { config } from 'app/config/config';
 import { CategoryInternal, MEDIA_TYPES_INTERNAL } from 'app/data/models/internal/category';
@@ -36,9 +37,13 @@ export class CategoryFormViewComponent extends Component<CategoryFormViewCompone
 	public render(): ReactNode {
 		const {
 			values,
+			errors,
+			touched,
 			handleChange,
+			handleBlur,
 			setFieldValue
 		} = this.props;
+		const nameError = getVisibleFieldError(errors, touched, 'name');
 
 		return (
 			<>
@@ -52,7 +57,10 @@ export class CategoryFormViewComponent extends Component<CategoryFormViewCompone
 						type='text'
 						value={values.name}
 						onChange={handleChange}
+						onBlur={handleBlur}
+						{...buildFieldErrorInputProps('category-name-error', nameError)}
 					/>
+					<FieldErrorComponent id='category-name-error' message={nameError} />
 				</div>
 				<div className='category-details-section'>
 					<p className='category-details-label'>{i18n.t('category.details.prompts.mediaType')}</p>

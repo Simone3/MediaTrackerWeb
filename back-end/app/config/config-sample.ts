@@ -102,19 +102,18 @@ export const sampleConfig: Config = {
 	log: {
 		level: 'debug',
 		file: '<your_path_here>/media-tracker.log',
+		fileBackups: 14,
 		apisInputOutput: {
 			active: true,
-			excludeRequestBodyRegExp: [ '^/users/[^/]+/import/old-app$' ],
-			excludeResponseBodyRegExp: []
+			includeBodies: true
 		},
 		externalApisInputOutput: {
-			active: true
+			active: true,
+			includeBodies: true
 		},
 		databaseQueries: {
-			active: true
-		},
-		performance: {
-			active: true
+			active: true,
+			includeConditions: true
 		}
 	},
 	firebase: {

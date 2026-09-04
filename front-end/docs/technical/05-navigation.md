@@ -1,0 +1,119 @@
+# §5 — Navigation
+
+*[Index](README.md) · [← §4 Configuration](04-configuration.md)*
+
+Navigation here is four things at once: React Router matching, Redux action dispatches, saga side effects, and a global `navigationService`. **If a screen opens or redirects unexpectedly, the cause is almost always [§5.4](#54-saga-driven-navigation), not a click handler.**
+
+---
+
+## 5.1 Route map
+
+`app/utilities/navigation-routes.ts` maps the screen identifiers in `app/utilities/screens.ts` to paths.
+
+| Screen/Section | Path |
+| --- | --- |
+| `AppSections.Unauthenticated` | `/auth` |
+| `AppSections.Authenticated` | `/app` |
+| `AppSections.Media` | `/media` |
+| `AppSections.Settings` | `/settings` |
+| `AppScreens.AuthLoading` | `/auth/loading` |
+| `AppScreens.UserLogin` | `/auth/login` |
+| `AppScreens.UserSignup` | `/auth/signup` |
+| `AppScreens.CategoriesList` | `/media/categories` |
+| `AppScreens.CategoryDetails` | `/media/categories/details` |
+| `AppScreens.MediaItemsList` | `/media/items` |
+| `AppScreens.MediaItemDetails` | `/media/items/details` |
+| `AppScreens.MediaItemsStats` | `/media/items/stats` |
+| `AppScreens.TvShowSeasonsList` | `/media/tv-show-seasons` |
+| `AppScreens.TvShowSeasonDetails` | `/media/tv-show-seasons/details` |
+| `AppScreens.GroupsList` | `/media/groups` |
+| `AppScreens.GroupDetails` | `/media/groups/details` |
+| `AppScreens.OwnPlatformsList` | `/media/platforms` |
+| `AppScreens.OwnPlatformDetails` | `/media/platforms/details` |
+| `AppScreens.Settings` | `/settings` |
+| `AppScreens.Credits` | `/settings/credits` |
+
+**No path carries an entity ID.** A details route says which *kind* of thing is being edited; *which* thing it is comes from Redux. That is the port's model, and it is the reason a details URL opened cold has nothing to render ([§15.1](15-invariants-and-pitfalls.md#151-category-context-is-required-for-most-media-flows)), and why those routes are guarded ([§5.6](#56-screens-that-cannot-be-opened-cold)).
+
+## 5.2 Router composition
+
+`app/components/containers/navigation/*`
+
+- **`AppNavigationContainer`** owns `BrowserRouter` and bridges React Router's `navigate()` into `navigationService`, so code outside the component tree can still navigate.
+- **`ScreenErrorBoundary`**, in the same file, wraps every screen in `ErrorBoundaryComponent` ([§11.5](11-interface.md#115-the-screen-error-boundary)). It sits inside the router so that it can offer a way out of the screen that failed.
+- **`ConnectedAuthenticationNavigator`** chooses the auth-loading, unauthenticated, or authenticated subtree from Redux ([§7](07-authentication.md)).
+- **`AuthenticatedNavigator`** switches between `/media/*` and `/settings/*`.
+- **`MediaNavigator`** owns every media, category, group, platform, season and stats route. It wraps the six screens the media item form opens in `MediaItemUnsavedChangesGuardContainer` ([§15.3](15-invariants-and-pitfalls.md#153-dirty-form-protection-is-browser-oriented)), and every screen that needs global context in `ScreenContextGuardContainer` ([§5.6](#56-screens-that-cannot-be-opened-cold)).
+- **`SettingsNavigator`** owns settings and the nested credits screen.
+
+## 5.3 `navigationService`
+
+`app/utilities/navigation-service.ts` is the global handle sagas use:
+
+- `navigate(routeName)` converts a screen ID to a path and pushes it
+- `back()` uses `navigate(-1)` semantics through the router
+- **`setParam()` is intentionally a stub that only logs to the console**
+
+`setParam()` is a leftover of the React Native navigator's API. It was not ported because the web app carries screen context in Redux instead of in route params. **Do not build logic that depends on it** — it will silently do nothing.
+
+## 5.4 Saga-driven navigation
+
+`app/redux/sagas/navigation/navigation.ts` is where most screen changes actually happen.
+
+| Action | Effect |
+| --- | --- |
+| `SELECT_CATEGORY` | navigate to the media items list |
+| `LOAD_*_DETAILS`, `LOAD_NEW_*_DETAILS` | navigate to the matching details screen |
+| `COMPLETE_SAVING_*` | go back |
+| `REQUEST_GROUP_SELECTION` | open the groups list |
+| `REQUEST_OWN_PLATFORM_SELECTION` | open the own-platforms list |
+| `SELECT_GROUP` | go back |
+| `SELECT_OWN_PLATFORM` | go back |
+| `START_TV_SHOW_SEASONS_HANDLING` | open the seasons list |
+| `COMPLETE_TV_SHOW_SEASONS_HANDLING` | go back |
+
+**The pattern is the same throughout: a component dispatches an intent, a reducer records it, and the navigation saga moves the screen.** That is why adding a `navigate()` call to a click handler usually produces a double navigation rather than the intended one — the saga was already going to handle it.
+
+**Two screens are deliberately not in the table**: the credits screen and the media items stats screen ([§10.9](10-features.md#109-media-items-stats)) navigate straight from their container. Neither has state to settle before it opens — the stats screen fetches its own data once it is mounted, and the category it needs is already in `categoryGlobal` — so a saga entry would only add an action for the router to react to. Leaving is `navigationService.back()` from the container, as on the group, platform and season screens.
+
+## 5.5 Scroll position
+
+Every screen change happens inside the same document, so the browser never resets the scroll offset on its own when a screen is *opened*: a details screen pushed from a scrolled-down list would render under the viewport offset the list was left at. `ScrollToTopOnNewScreen`, in `app/components/containers/navigation/app-navigator.tsx`, scrolls the window back to the top on every `PUSH` and `REPLACE` navigation to correct that.
+
+**It deliberately does nothing on `POP`.** `history.scrollRestoration` is left at its default `'auto'`, so going back — including the saga-driven `back()` calls in [§5.4](#54-saga-driven-navigation) — lets the browser put the previous screen back at the exact offset the user left it at. Scrolling to the top there too would break that.
+
+The effect keys off `location.key` rather than the path, because [no path carries an entity ID](#51-route-map): two different media items share `/media/items/details`, and a path-keyed effect would not fire if the same path were ever pushed twice in a row.
+
+There is no `<ScrollRestoration>` in the tree: that component requires a data router, and [§5.2](#52-router-composition) uses a plain `BrowserRouter`.
+
+**One screen scrolls on its own**: the media items list resets to the top when the user moves between pages, which is not a navigation and so never reaches this effect ([§10.2](10-features.md#102-media-items-list)).
+
+## 5.6 Screens that cannot be opened cold
+
+`app/components/containers/navigation/screen-context-guard.tsx`
+
+Because [no path carries an entity ID](#51-route-map), most routes only mean something as the continuation of a flow that started elsewhere. Open one directly — a bookmark, the browser history, a link someone shared — and the screen has no entity to show. The context lives in `sessionStorage` while the login does not ([§6.3](06-redux.md#63-the-persistence-contract)), so **a new tab is exactly the case that breaks**: the user arrives authenticated and contextless.
+
+`screenRequiredContext` maps each screen to the state it cannot render without:
+
+| Screen | Requires |
+| --- | --- |
+| `CategoriesList` | nothing |
+| `CategoryDetails` | `categoryDetails.category` |
+| `MediaItemsList` | `categoryGlobal.selectedCategory` |
+| `MediaItemDetails` | the selected category and `mediaItemDetails.mediaItem` |
+| `MediaItemsStats` | `categoryGlobal.selectedCategory` |
+| `GroupsList`, `OwnPlatformsList` | `categoryGlobal.selectedCategory`, since both fetch per category |
+| `GroupDetails`, `OwnPlatformDetails` | the selected category and the loaded entity |
+| `TvShowSeasonsList` | `mediaItemDetails.mediaItem`, since the seasons flow only exists inside the form ([§10.4](10-features.md#104-tv-show-seasons-the-nested-flow)) |
+| `TvShowSeasonDetails` | the open media item form and `tvShowSeasonDetails.tvShowSeason` |
+
+A screen that is absent from the map can always render. When a predicate fails, the guard dispatches `AppError.SCREEN_CONTEXT_MISSING` for the usual toast ([§6.4](06-redux.md#64-error-handling-and-the-async-pattern)) and renders `<Navigate replace>` to the categories list. **The redirect replaces the history entry** so that browser back does not lead straight back into the screen that cannot open.
+
+**The predicates are all about presence, never about status.** No reducer clears a loaded entity — `COMPLETE_SAVING_*` only moves `saveStatus` to `SAVED` — so a save cannot make a guard fire underneath the screen the user is still on and steal the `back()` the saga is about to perform ([§5.4](#54-saga-driven-navigation)). A predicate written on a status flag would do exactly that.
+
+This is what makes the cold URL land somewhere sensible; the error boundary behind it ([§11.5](11-interface.md#115-the-screen-error-boundary)) stays as the net for the container throws that should now be unreachable from a URL.
+
+---
+
+[← §4 Configuration](04-configuration.md) · [§6 Redux state →](06-redux.md)

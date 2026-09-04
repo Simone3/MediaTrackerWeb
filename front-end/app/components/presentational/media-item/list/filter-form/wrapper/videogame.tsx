@@ -27,7 +27,12 @@ export const VideogameFilterFormComponent = (props: VideogameFilterFormComponent
 				return (
 					<VideogameFilterFormViewComponent
 						{...formikProps}
+						clearFilter={props.clearFilter}
 						close={props.close}
+						groupOptions={props.groupOptions}
+						ownPlatformOptions={props.ownPlatformOptions}
+						groupsLoading={props.groupsLoading}
+						ownPlatformsLoading={props.ownPlatformsLoading}
 					/>
 				);
 			}}

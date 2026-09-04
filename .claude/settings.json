@@ -1,0 +1,48 @@
+{
+	"permissions": {
+		"allow": [
+			"Bash(npm run lint)",
+			"Bash(npm run lint:*)",
+			"Bash(npm run typecheck)",
+			"Bash(npm test)",
+			"Bash(npm test:*)",
+			"Bash(npm run build)",
+			"Bash(npx tsc:*)",
+			"Bash(npx eslint:*)",
+			"Bash(npx jest:*)",
+			"Bash(git status:*)",
+			"Bash(git diff:*)",
+			"Bash(git log:*)",
+			"Bash(git show:*)",
+			"Bash(git add:*)",
+			"Bash(git commit:*)",
+			"Bash(git branch:*)",
+			"Bash(git stash:*)",
+			"Bash(ls:*)",
+			"Bash(find:*)",
+			"Bash(grep:*)",
+			"Bash(rg:*)",
+			"Bash(cat:*)",
+			"Bash(head:*)",
+			"Bash(tail:*)",
+			"Bash(sed -n:*)",
+			"Bash(wc:*)"
+		],
+		"deny": [
+			"Read(./TODO.md)",
+			"Edit(./front-end/package-lock.json)",
+			"Edit(./back-end/package-lock.json)",
+			"Read(./front-end/node_modules/**)",
+			"Read(./back-end/node_modules/**)",
+			"Read(./front-end/coverage/**)",
+			"Read(./back-end/coverage/**)",
+			"Read(./back-end/build/**)",
+			"Read(./back-end/test/build-test/**)",
+			"Bash(git push:*)",
+			"Bash(git reset --hard:*)",
+			"Bash(git commit --amend:*)",
+			"Bash(git rebase:*)",
+			"Bash(rm -rf:*)"
+		]
+	}
+}

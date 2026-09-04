@@ -132,11 +132,13 @@ export class MediaItemContextMenuComponent extends Component<MediaItemContextMen
 			});
 		}
 
-		if(visibility.canViewGroup && mediaItem.group) {
+		// Captured before the handler, both to keep the narrowing inside the closure and to act on the group the menu was built for
+		const group = mediaItem.group;
+		if(visibility.canViewGroup && group) {
 			actions.push({
 				label: i18n.t('mediaItem.list.viewGroup'),
 				onClick: () => {
-					this.props.viewGroup(mediaItem.group);
+					this.props.viewGroup(group);
 					close();
 				}
 			});

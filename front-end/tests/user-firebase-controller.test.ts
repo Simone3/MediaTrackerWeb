@@ -47,7 +47,7 @@ describe('UserFirebaseController', () => {
 		};
 
 		firebaseAuthMock.getAuth.mockReturnValue(auth);
-		firebaseAuthMock.onAuthStateChanged.mockImplementation((_auth, next) => {
+		firebaseAuthMock.onAuthStateChanged.mockImplementation((_auth: unknown, next: (user: unknown) => void) => {
 			Promise.resolve().then(() => {
 				auth.currentUser = {
 					uid: 'user-id',
@@ -73,7 +73,7 @@ describe('UserFirebaseController', () => {
 		};
 
 		firebaseAuthMock.getAuth.mockReturnValue(auth);
-		firebaseAuthMock.onAuthStateChanged.mockImplementation((_auth, next) => {
+		firebaseAuthMock.onAuthStateChanged.mockImplementation((_auth: unknown, next: (user: unknown) => void) => {
 			Promise.resolve().then(() => {
 				next(null);
 			});

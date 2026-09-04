@@ -1,7 +1,7 @@
 import { CSSProperties, ReactElement, ReactNode } from 'react';
 import { AuthenticatedPageHeaderComponent } from 'app/components/presentational/generic/authenticated-page-header';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
-import { ResponsiveHeaderAddButtonComponent } from 'app/components/presentational/generic/responsive-header-add-button';
+import { ResponsiveHeaderButtonComponent } from 'app/components/presentational/generic/responsive-header-button';
 import { i18n } from 'app/utilities/i18n';
 
 /**
@@ -12,7 +12,7 @@ import { i18n } from 'app/utilities/i18n';
 export const EntityManagementScreenComponent = (props: EntityManagementScreenComponentProps): ReactElement => {
 	const defaultAddAction = props.onAdd && props.addButtonLabel ?
 		(
-			<ResponsiveHeaderAddButtonComponent
+			<ResponsiveHeaderButtonComponent
 				label={props.addButtonLabel}
 				mobileLabel={i18n.t('common.buttons.add')}
 				onClick={props.onAdd}

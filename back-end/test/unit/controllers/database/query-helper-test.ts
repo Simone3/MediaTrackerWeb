@@ -170,6 +170,37 @@ describe('QueryHelper Tests', () => {
 			expect(String(foundEntities[0]._id), 'Find did not return the correct results').to.equal(String(insertedEntities[1]._id));
 		});
 
+		it('Find with pagination should return only the requested page', async() => {
+			for(const name of [ 'Aaa', 'Bbb', 'Ccc', 'Ddd' ]) {
+				await queryHelper.save({ _id: undefined, name: name }, new TestModel());
+			}
+
+			const foundEntities = await queryHelper.find({}, { name: 'asc' }, undefined, { offset: 1, limit: 2 });
+			expect(foundEntities.map((entity) => {
+				return entity.name;
+			}), 'Find did not return the correct page').to.be.eql([ 'Bbb', 'Ccc' ]);
+		});
+
+		it('Find without pagination should return every matching entity', async() => {
+			for(const name of [ 'Aaa', 'Bbb', 'Ccc', 'Ddd' ]) {
+				await queryHelper.save({ _id: undefined, name: name }, new TestModel());
+			}
+
+			const foundEntities = await queryHelper.find({});
+			expect(foundEntities, 'Find did not return every entity').to.have.lengthOf(4);
+		});
+
+		it('Count should return the number of matching entities', async() => {
+			const nameToFind = randomName('CountMe');
+			await queryHelper.save({ _id: undefined, name: nameToFind }, new TestModel());
+			await queryHelper.save({ _id: undefined, name: nameToFind }, new TestModel());
+			await queryHelper.save({ _id: undefined, name: randomName() }, new TestModel());
+
+			expect(await queryHelper.count({}), 'Count with empty conditions did not return every entity').to.equal(3);
+			expect(await queryHelper.count({ name: nameToFind }), 'Count did not return the matching entities').to.equal(2);
+			expect(await queryHelper.count({ name: randomName('NoSuchName') }), 'Count did not return zero for a non-matching condition').to.equal(0);
+		});
+
 		it('FindOne should return undefined if empty database', async() => {
 			const foundEntity = await queryHelper.findOne({});
 			expect(foundEntity, 'Find returned a defined result').to.be.undefined;

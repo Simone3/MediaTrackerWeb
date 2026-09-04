@@ -1,5 +1,6 @@
 import { Component, ReactNode } from 'react';
 import { FormikProps } from 'formik';
+import { buildFieldErrorInputProps, FieldErrorComponent, getVisibleFieldError } from 'app/components/presentational/generic/field-error';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { TvShowSeasonInternal } from 'app/data/models/internal/media-items/tv-show';
 import { i18n } from 'app/utilities/i18n';
@@ -33,8 +34,13 @@ export class TvShowSeasonFormViewComponent extends Component<TvShowSeasonFormVie
 	public render(): ReactNode {
 		const {
 			values,
+			errors,
+			touched,
+			handleBlur,
 			addingNewSeason
 		} = this.props;
+		const numberError = getVisibleFieldError(errors, touched, 'number');
+		const watchedEpisodesError = getVisibleFieldError(errors, touched, 'watchedEpisodesNumber');
 
 		return (
 			<section className='entity-details-panel'>
@@ -45,6 +51,7 @@ export class TvShowSeasonFormViewComponent extends Component<TvShowSeasonFormVie
 						</label>
 						<InputComponent
 							id='tv-show-season-number'
+							name='number'
 							type='number'
 							value={values.number ?? ''}
 							placeholder={i18n.t('tvShowSeason.details.placeholders.number')}
@@ -52,7 +59,10 @@ export class TvShowSeasonFormViewComponent extends Component<TvShowSeasonFormVie
 							onChange={(event) => {
 								this.setOptionalNumberField('number', event.target.value);
 							}}
+							onBlur={handleBlur}
+							{...buildFieldErrorInputProps('tv-show-season-number-error', numberError)}
 						/>
+						<FieldErrorComponent id='tv-show-season-number-error' message={numberError} />
 					</div>
 					<div className='entity-details-field'>
 						<label className='entity-details-label' htmlFor='tv-show-season-episodes'>
@@ -74,13 +84,17 @@ export class TvShowSeasonFormViewComponent extends Component<TvShowSeasonFormVie
 						</label>
 						<InputComponent
 							id='tv-show-season-watched'
+							name='watchedEpisodesNumber'
 							type='number'
 							value={values.watchedEpisodesNumber ?? ''}
 							placeholder={i18n.t('tvShowSeason.details.placeholders.watchedEpisodesNumber')}
 							onChange={(event) => {
 								this.setOptionalNumberField('watchedEpisodesNumber', event.target.value);
 							}}
+							onBlur={handleBlur}
+							{...buildFieldErrorInputProps('tv-show-season-watched-error', watchedEpisodesError)}
 						/>
+						<FieldErrorComponent id='tv-show-season-watched-error' message={watchedEpisodesError} />
 					</div>
 				</div>
 			</section>

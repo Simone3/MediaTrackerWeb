@@ -1,8 +1,9 @@
 import { categoryController } from 'app/controllers/entities/category';
 import { movieEntityController } from 'app/controllers/entities/media-items/movie';
 import { ownPlatformController } from 'app/controllers/entities/own-platform';
+import { PaginatedResultInternal } from 'app/data/models/internal/common';
 import { GroupInternal } from 'app/data/models/internal/group';
-import { MovieInternal } from 'app/data/models/internal/media-items/movie';
+import { MovieInternal, MovieSortByInternal } from 'app/data/models/internal/media-items/movie';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import chai from 'chai';
 import { setupTestDatabaseConnection } from 'helpers/database-handler-helper';
@@ -23,14 +24,14 @@ describe('MovieController Tests', () => {
 		const thirdUCG: TestUCG = { user: '', category: '' };
 		const wrongMediaUCG: TestUCG = { user: '', category: '' };
 
-		const helperCompareResults = (expected: string[], result: MovieInternal[], matchInOrder?: boolean): void => {
-			expect(result, 'helperCompareResults - Number of results does not match').to.have.lengthOf(expected.length);
+		const helperCompareResults = (expected: string[], result: PaginatedResultInternal<MovieInternal>, matchInOrder?: boolean): void => {
+			expect(result.elements, 'helperCompareResults - Number of results does not match').to.have.lengthOf(expected.length);
 			
 			if(matchInOrder) {
-				expect(extract(result, 'name'), 'helperCompareResults - Ordered results do not match').to.eql(expected);
+				expect(extract(result.elements, 'name'), 'helperCompareResults - Ordered results do not match').to.eql(expected);
 			}
 			else {
-				expect(extract(result, 'name'), 'helperCompareResults - Unordered results do not match').to.have.members(expected);
+				expect(extract(result.elements, 'name'), 'helperCompareResults - Unordered results do not match').to.have.members(expected);
 			}
 		};
 
@@ -240,7 +241,7 @@ describe('MovieController Tests', () => {
 		it('FilterAndOrder result should contain group data', async() => {
 			await movieEntityController.saveMediaItem(getTestMovieInGroup(undefined, firstUCG, 2, { name: 'Aaa' }));
 
-			const foundMovies = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category);
+			const { elements: foundMovies } = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category);
 			expect(foundMovies, 'GetMediaItem returned the wrong number of results').to.have.lengthOf(1);
 			expect(foundMovies[0].group, 'GetMediaItem returned an undefined group').not.to.be.undefined;
 			const groupData = foundMovies[0].group as GroupInternal;
@@ -254,12 +255,61 @@ describe('MovieController Tests', () => {
 
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { ownPlatform: ownPlatformId }));
 
-			const foundMovies = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category);
+			const { elements: foundMovies } = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category);
 			expect(foundMovies, 'GetMediaItem returned the wrong number of results').to.have.lengthOf(1);
 			expect(foundMovies[0].ownPlatform, 'GetMediaItem returned an undefined own platform').not.to.be.undefined;
 			const ownPlatformData = foundMovies[0].ownPlatform as OwnPlatformInternal;
 			expect(String(ownPlatformData._id), 'GetMediaItem returned an invalid own platform ID').to.equal(String(ownPlatformId));
 			expect(ownPlatformData.name, 'GetMediaItem returned an invalid own platform name').to.equal(ownPlatformName);
+		});
+
+		it('FilterAndOrder should return every result and their count if no pagination is given', async() => {
+			for(const name of [ 'Aaa', 'Bbb', 'Ccc' ]) {
+				await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: name }));
+			}
+
+			const result = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category);
+			expect(result.elements, 'FilterAndOrder did not return every movie').to.have.lengthOf(3);
+			expect(result.totalCount, 'FilterAndOrder did not return the total count').to.equal(3);
+		});
+
+		it('FilterAndOrder should return the requested page and the total count', async() => {
+			for(const name of [ 'Aaa', 'Bbb', 'Ccc', 'Ddd' ]) {
+				await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: name }));
+			}
+			await movieEntityController.saveMediaItem(getTestMovie(undefined, secondUCG, { name: 'Eee' }));
+
+			const sortBy: MovieSortByInternal[] = [{
+				field: 'NAME',
+				ascending: true
+			}];
+
+			const firstPage = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category, undefined, sortBy, {
+				offset: 0,
+				limit: 3
+			});
+			expect(extract(firstPage.elements, 'name'), 'FilterAndOrder did not return the first page').to.be.eql([ 'Aaa', 'Bbb', 'Ccc' ]);
+			expect(firstPage.totalCount, 'FilterAndOrder did not count every matching movie').to.equal(4);
+
+			const secondPage = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category, undefined, sortBy, {
+				offset: 3,
+				limit: 3
+			});
+			expect(extract(secondPage.elements, 'name'), 'FilterAndOrder did not return the second page').to.be.eql([ 'Ddd' ]);
+			expect(secondPage.totalCount, 'FilterAndOrder did not count every matching movie').to.equal(4);
+		});
+
+		it('SearchMediaItem should return the requested page and the total count', async() => {
+			for(const name of [ 'testAaa', 'testBbb', 'testCcc' ]) {
+				await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: name }));
+			}
+
+			const result = await movieEntityController.searchMediaItems(firstUCG.user, firstUCG.category, 'test', undefined, {
+				offset: 0,
+				limit: 2
+			});
+			expect(extract(result.elements, 'name'), 'SearchMediaItem did not return the requested page').to.be.eql([ 'testAaa', 'testBbb' ]);
+			expect(result.totalCount, 'SearchMediaItem did not count every matching movie').to.equal(3);
 		});
 
 		it('SearchMediaIterm should return the correct results', async() => {
@@ -430,7 +480,7 @@ describe('MovieController Tests', () => {
 
 			await categoryController.deleteCategory(firstUCG.user, firstUCG.category);
 
-			const foundMovies = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category);
+			const { elements: foundMovies } = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category);
 			expect(foundMovies, 'FilterAndOrder did not return the correct number of results').to.have.lengthOf(0);
 		});
 
@@ -444,7 +494,7 @@ describe('MovieController Tests', () => {
 
 			await ownPlatformController.deleteOwnPlatform(firstUCG.user, firstUCG.category, ownPlatformId1);
 
-			const foundMovies = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category);
+			const { elements: foundMovies } = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category);
 			expect(foundMovies, 'FilterAndOrder did not return the correct number of results').to.have.lengthOf(3);
 			const ownPlatforms: (OwnPlatformInternal | undefined)[] = extract(foundMovies, 'ownPlatform');
 			expect(ownPlatforms.filter((value) => {
@@ -471,7 +521,7 @@ describe('MovieController Tests', () => {
 			const mergedName = randomName('TheMergedName');
 			await ownPlatformController.mergeOwnPlatforms([ ownPlatformId1, ownPlatformId2 ], getTestOwnPlatform(undefined, firstUCG, mergedName));
 
-			const foundMovies = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category);
+			const { elements: foundMovies } = await movieEntityController.filterAndOrderMediaItems(firstUCG.user, firstUCG.category);
 			expect(foundMovies, 'FilterAndOrder did not return the correct number of results').to.have.lengthOf(4);
 			const ownPlatforms: (OwnPlatformInternal | undefined)[] = extract(foundMovies, 'ownPlatform');
 			expect(ownPlatforms.filter((value) => {

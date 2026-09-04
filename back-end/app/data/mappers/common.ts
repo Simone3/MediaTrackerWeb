@@ -1,4 +1,5 @@
-import { logger } from 'app/loggers/logger';
+import { PaginationRequest } from 'app/data/models/api/common';
+import { PaginationInternal } from 'app/data/models/internal/common';
 
 /**
  * Generic model mapper between some internal model and some external model,
@@ -39,9 +40,7 @@ export abstract class ModelMapper<TInternal, TExternal, TParams> {
 	 * @returns the mapping target
 	 */
 	public toExternal(source: TInternal, extraParams?: TParams): TExternal {
-		const target = this.convertToExternal(source, extraParams);
-		this.logMapping(source, target);
-		return target;
+		return this.convertToExternal(source, extraParams);
 	}
 
 	/**
@@ -51,9 +50,7 @@ export abstract class ModelMapper<TInternal, TExternal, TParams> {
 	 * @returns the mapping target
 	 */
 	public toInternal(source: TExternal, extraParams?: TParams): TInternal {
-		const target = this.convertToInternal(source, extraParams);
-		this.logMapping(source, target);
-		return target;
+		return this.convertToInternal(source, extraParams);
 	}
 
 	/**
@@ -71,14 +68,34 @@ export abstract class ModelMapper<TInternal, TExternal, TParams> {
 	 * @returns the mapping target
 	 */
 	protected abstract convertToInternal(source: TExternal, extraParams?: TParams): TInternal;
+}
+
+/**
+ * Mapper for pagination options
+ */
+class PaginationMapper extends ModelMapper<PaginationInternal, PaginationRequest, never> {
+	/**
+	 * @override
+	 */
+	protected convertToExternal(source: PaginationInternal): PaginationRequest {
+		return {
+			offset: source.offset,
+			limit: source.limit
+		};
+	}
 
 	/**
-	 * Helper to log source and target of a mapping
-	 * @param source the mapping source
-	 * @param target the mapping target
+	 * @override
 	 */
-	private logMapping(source: unknown, target: unknown): void {
-		logger.debug('Mapping: %s --------> %s', source, target);
+	protected convertToInternal(source: PaginationRequest): PaginationInternal {
+		return {
+			offset: source.offset,
+			limit: source.limit
+		};
 	}
 }
 
+/**
+ * Singleton instance of the pagination mapper
+ */
+export const paginationMapper = new PaginationMapper();

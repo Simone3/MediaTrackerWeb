@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 import { CategoryInternal } from 'app/data/models/internal/category';
 import { GroupInternal } from 'app/data/models/internal/group';
-import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
+import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, MediaItemsStatsFilterInternal, MediaItemsStatsInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 
 /**
  * The fetch media items action
@@ -23,6 +23,16 @@ export type StartFetchingMediaItemsAction = Action & {
 export type CompleteFetchingMediaItemsAction = Action & {
 	
 	mediaItems: MediaItemInternal[];
+
+	totalCount: number;
+};
+
+/**
+ * The change media items page action
+ */
+export type ChangeMediaItemsPageAction = Action & {
+	
+	page: number;
 };
 
 /**
@@ -30,6 +40,43 @@ export type CompleteFetchingMediaItemsAction = Action & {
  */
 export type FailFetchingMediaItemsAction = Action & {
 	
+};
+
+/**
+ * The fetch media items stats action
+ */
+export type FetchMediaItemsStatsAction = Action & {
+	
+};
+
+/**
+ * The start fetching media items stats action
+ */
+export type StartFetchingMediaItemsStatsAction = Action & {
+	
+};
+
+/**
+ * The complete fetching media items stats action
+ */
+export type CompleteFetchingMediaItemsStatsAction = Action & {
+	
+	stats: MediaItemsStatsInternal;
+};
+
+/**
+ * The fail fetching media items stats action
+ */
+export type FailFetchingMediaItemsStatsAction = Action & {
+	
+};
+
+/**
+ * The set media items stats filter action
+ */
+export type SetMediaItemsStatsFilterAction = Action & {
+	
+	filter: MediaItemsStatsFilterInternal;
 };
 
 /**
@@ -179,6 +226,14 @@ export type SubmitMediaItemsFiltersAction = Action & {
 	
 	filter: MediaItemFilterInternal;
 	sortBy: MediaItemSortByInternal[];
+};
+
+/**
+ * The clear media items filters action
+ */
+export type ClearMediaItemsFiltersAction = Action & {
+	
+	category: CategoryInternal;
 };
 
 /**

@@ -1,6 +1,63 @@
+const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+/**
+ * The size under which a raster image is inlined as a data URI instead of emitted as its own file.
+ * Every icon in the project is comfortably below it and every real photograph is comfortably above it,
+ * so an image that grows past this stops being inlined on its own.
+ */
+const RASTER_INLINE_MAX_BYTES = 4 * 1024;
+
+/**
+ * Turns an SVG into an inline data URI, so that icons are part of the bundle instead of separate requests.
+ * The encoding is URI-escaped rather than base64: it stays text, which compresses far better, and it escapes
+ * everything that would terminate an unquoted CSS url(...), which is how the own-platform mask icons are used.
+ * @param {Buffer} content the raw file contents
+ * @returns {string} the data URI
+ */
+const svgToDataUri = (content) => {
+	const encoded = encodeURIComponent(content.toString())
+		.replace(/'/g, '%27')
+		.replace(/"/g, '%22')
+		.replace(/\(/g, '%28')
+		.replace(/\)/g, '%29');
+
+	return `data:image/svg+xml,${encoded}`;
+};
+
+/**
+ * Copies a file into the build output under a fixed, unhashed name, which webpack has no built-in way to do:
+ * an asset module would rename the file at every content change. The social preview image needs the opposite,
+ * because the absolute URL in the og:image meta tag of public/index.html has to keep resolving.
+ */
+class CopyFilePlugin {
+	/**
+	 * @param {string} source the file to copy, relative to this config
+	 * @param {string} target the name to emit it under, relative to the output folder
+	 */
+	constructor(source, target) {
+		this.source = path.resolve(__dirname, source);
+		this.target = target;
+	}
+
+	/**
+	 * Emits the file as an asset of every compilation.
+	 * @param {import('webpack').Compiler} compiler the webpack compiler
+	 */
+	apply(compiler) {
+		compiler.hooks.thisCompilation.tap(CopyFilePlugin.name, (compilation) => {
+			compilation.hooks.processAssets.tap({
+				name: CopyFilePlugin.name,
+				stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL
+			}, () => {
+				compilation.fileDependencies.add(this.source);
+				compilation.emitAsset(this.target, new compiler.webpack.sources.RawSource(fs.readFileSync(this.source)));
+			});
+		});
+	}
+}
 
 module.exports = (_env, argv = {}) => {
 	const appEnvironment = process.env.MEDIA_TRACKER_APP_ENV || (argv.mode === 'production' ? 'prod' : 'dev');
@@ -10,7 +67,8 @@ module.exports = (_env, argv = {}) => {
 		entry: './index.tsx',
 		output: {
 			path: path.resolve(__dirname, 'dist'),
-			filename: 'bundle.[contenthash].js',
+			filename: 'assets/bundle.[contenthash].js',
+			assetModuleFilename: 'assets/[contenthash][ext]',
 			publicPath: '/',
 			clean: true
 		},
@@ -37,8 +95,20 @@ module.exports = (_env, argv = {}) => {
 					use: [ 'style-loader', 'css-loader' ]
 				},
 				{
-					test: /\.(png|jpg|jpeg|gif|svg)$/i,
-					type: 'asset/resource'
+					test: /\.svg$/i,
+					type: 'asset/inline',
+					generator: {
+						dataUrl: svgToDataUri
+					}
+				},
+				{
+					test: /\.(png|jpg|jpeg|gif)$/i,
+					type: 'asset',
+					parser: {
+						dataUrlCondition: {
+							maxSize: RASTER_INLINE_MAX_BYTES
+						}
+					}
 				}
 			]
 		},
@@ -50,7 +120,8 @@ module.exports = (_env, argv = {}) => {
 			new HtmlWebpackPlugin({
 				template: 'public/index.html',
 				favicon: 'app/resources/images/ic_app_logo.png'
-			})
+			}),
+			new CopyFilePlugin('public/og_banner.png', 'og_banner.png')
 		],
 		devServer: {
 			static: {

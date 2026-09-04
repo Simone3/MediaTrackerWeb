@@ -1,10 +1,11 @@
 import { Component, CSSProperties, ReactNode } from 'react';
 import { MediaItemsListContainer } from 'app/components/containers/media-item/list/list';
-import { AuthenticatedPageHeaderComponent } from 'app/components/presentational/generic/authenticated-page-header';
+import { AuthenticatedPageHeaderComponent, AuthenticatedPageHeaderIconButtonComponent } from 'app/components/presentational/generic/authenticated-page-header';
 import { MediaItemFilterModalContainer } from 'app/components/containers/media-item/list/filter-modal';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
-import { ResponsiveHeaderAddButtonComponent } from 'app/components/presentational/generic/responsive-header-add-button';
+import { ResponsiveHeaderButtonComponent } from 'app/components/presentational/generic/responsive-header-button';
 import { CategoryInternal } from 'app/data/models/internal/category';
+import statsIcon from 'app/resources/images/ic_stats.svg';
 import { i18n } from 'app/utilities/i18n';
 
 /**
@@ -32,6 +33,7 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 		const {
 			category,
 			loadNewMediaItemDetails,
+			openStats,
 			isLoading,
 			mediaItemsCount
 		} = this.props;
@@ -47,15 +49,20 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 					<AuthenticatedPageHeaderComponent
 						title={category.name}
 						subtitle={countLabel}
-						actions={
-							<ResponsiveHeaderAddButtonComponent
+						actions={<>
+							<AuthenticatedPageHeaderIconButtonComponent
+								icon={statsIcon}
+								label={i18n.t('mediaItem.stats.open')}
+								onClick={openStats}
+							/>
+							<ResponsiveHeaderButtonComponent
 								label={i18n.t(`mediaItem.list.add.${category.mediaType}`)}
 								mobileLabel={i18n.t('common.buttons.add')}
 								onClick={() => {
 									loadNewMediaItemDetails(category);
 								}}
 							/>
-						}
+						</>}
 					/>
 					<MediaItemsListContainer/>
 				</div>
@@ -116,4 +123,9 @@ export type MediaItemsListScreenComponentOutput = {
 	 * Callback to load the details of a new media item for the given category
 	 */
 	loadNewMediaItemDetails: (category: CategoryInternal) => void;
+
+	/**
+	 * Callback to open the stats of the current category
+	 */
+	openStats: () => void;
 };

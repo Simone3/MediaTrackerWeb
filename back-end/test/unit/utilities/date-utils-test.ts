@@ -37,5 +37,18 @@ describe('DateUtils Tests', () => {
 			
 			done();
 		});
+
+		it('Should recognize the valid time zones', (done) => {
+			expect(dateUtils.isValidTimeZone('Europe/Rome'), 'A valid IANA time zone was rejected').to.be.true;
+			expect(dateUtils.isValidTimeZone('America/New_York'), 'A valid IANA time zone was rejected').to.be.true;
+			expect(dateUtils.isValidTimeZone('UTC'), 'UTC was rejected').to.be.true;
+			expect(dateUtils.isValidTimeZone('+02:00'), 'A UTC offset was rejected').to.be.true;
+
+			expect(dateUtils.isValidTimeZone('Middle/Earth'), 'An unknown time zone was accepted').to.be.false;
+			expect(dateUtils.isValidTimeZone(''), 'An empty time zone was accepted').to.be.false;
+			expect(dateUtils.isValidTimeZone('Europe'), 'An incomplete time zone was accepted').to.be.false;
+
+			done();
+		});
 	});
 });

@@ -2,10 +2,11 @@ import { stripHtml } from 'string-strip-html';
 import { ModelMapper } from 'app/data/mappers/common';
 import { groupMapper } from 'app/data/mappers/group';
 import { ownPlatformMapper } from 'app/data/mappers/own-platform';
-import { CatalogMediaItem, MediaItem, MediaItemFilter, MediaItemGroupFilter, MediaItemOwnPlatformFilter, MediaItemSortBy, MediaItemSortField, SearchMediaItemCatalogResult } from 'app/data/models/api/media-items/media-item';
+import { CatalogMediaItem, GetMediaItemsStatsResponse, MediaItem, MediaItemFilter, MediaItemGroupFilter, MediaItemOwnPlatformFilter, MediaItemSortBy, MediaItemSortField, MediaItemsStatsFilter, SearchMediaItemCatalogResult } from 'app/data/models/api/media-items/media-item';
 import { AppError } from 'app/data/models/internal/error';
-import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemGroupFilterInternal, MediaItemInternal, MediaItemOwnPlatformFilterInternal, MediaItemSortByInternal, MediaItemSortFieldInternal, MediaItemStatusFilterInternal, MediaItemStatusInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
+import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemGroupFilterInternal, MediaItemInternal, MediaItemOwnPlatformFilterInternal, MediaItemSortByInternal, MediaItemSortFieldInternal, MediaItemStatusFilterInternal, MediaItemsStatsFilterInternal, MediaItemsStatsInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import { dateUtils } from 'app/utilities/date-utils';
+import { mediaItemUtils } from 'app/utilities/media-item-utils';
 
 /**
  * Abstract mapper for media items
@@ -33,14 +34,14 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 			imageUrl: source.imageUrl
 		};
 
-		if(source.group && source.orderInGroup) {
+		if(source.group && source.orderInGroup !== undefined) {
 			target.group = {
 				groupId: source.group.id,
 				groupData: groupMapper.toExternal(source.group),
 				orderInGroup: source.orderInGroup
 			};
 		}
-		else if(source.group || source.orderInGroup) {
+		else if(source.group || source.orderInGroup !== undefined) {
 			throw AppError.GENERIC.withDetails('Should never have "group" and not "orderInGroup" or vice-versa: either both or none');
 		}
 
@@ -60,6 +61,10 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 	 * @returns the mapping target
 	 */
 	protected commonToInternal(source: MediaItem): MediaItemInternal {
+		// The status is derived from the internal values, not the API ones, so that the rule compares dates and never strings
+		const completedOn = dateUtils.toDateList(source.completedOn);
+		const releaseDate = dateUtils.toDate(source.releaseDate);
+
 		const target: MediaItemInternal = {
 			
 			// These two will be overridden by the specific mappers. Done like this to avoid setting the fields as optional (= useless undefined checks throughout the app)
@@ -67,13 +72,18 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 			mediaType: 'BOOK',
 			
 			name: source.name,
-			status: this.buildStatusLabel(source),
+			status: mediaItemUtils.buildStatusLabel({
+				completedOn: completedOn,
+				releaseDate: releaseDate,
+				active: source.active,
+				markedAsRedo: source.markedAsRedo
+			}),
 			importance: source.importance,
 			genres: source.genres,
 			description: source.description,
 			userComment: source.userComment,
-			completedOn: dateUtils.toDateList(source.completedOn),
-			releaseDate: dateUtils.toDate(source.releaseDate),
+			completedOn: completedOn,
+			releaseDate: releaseDate,
 			active: source.active,
 			markedAsRedo: source.markedAsRedo,
 			catalogId: source.catalogId,
@@ -97,34 +107,6 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 		}
 
 		return target;
-	}
-
-	/**
-	 * Helper to build the internal "status" label based on other media item data
-	 * @param source the source data
-	 * @returns the internal "status"
-	 */
-	private buildStatusLabel(source: MediaItem): MediaItemStatusInternal {
-		if(source.completedOn && source.completedOn.length > 0 && !source.markedAsRedo) {
-			// Items that have been completed
-			return 'COMPLETE';
-		}
-		else if(source.active) {
-			// Items marked as currently active (e.g. currently reading)
-			return 'ACTIVE';
-		}
-		else if(source.completedOn && source.completedOn.length > 0 && source.markedAsRedo) {
-			// Items that have been completed but have been marked for redo (e.g. rewatch)
-			return 'REDO';
-		}
-		else if(source.releaseDate && new Date(source.releaseDate) > new Date()) {
-			// Items with a future release date
-			return 'UPCOMING';
-		}
-		else {
-			// All other items
-			return 'NEW';
-		}
 	}
 }
 
@@ -414,3 +396,101 @@ export abstract class MediaItemCatalogDetailsMapper<TCatalogMediaItemInternal ex
 	}
 }
 
+/**
+ * Mapper for the media items stats filter
+ */
+class MediaItemsStatsFilterMapper extends ModelMapper<MediaItemsStatsFilterInternal, MediaItemsStatsFilter, never> {
+	/**
+	 * @override
+	 */
+	protected convertToExternal(source: MediaItemsStatsFilterInternal): MediaItemsStatsFilter {
+		const target: MediaItemsStatsFilter = {};
+
+		if(source.groups) {
+			target.groups = {
+				anyGroup: source.groups.anyGroup,
+				noGroup: source.groups.noGroup,
+				groupIds: source.groups.groupIds
+			};
+		}
+
+		if(source.ownPlatforms) {
+			target.ownPlatforms = {
+				anyOwnPlatform: source.ownPlatforms.anyOwnPlatform,
+				noOwnPlatform: source.ownPlatforms.noOwnPlatform,
+				ownPlatformIds: source.ownPlatforms.ownPlatformIds
+			};
+		}
+
+		return target;
+	}
+
+	/**
+	 * @override
+	 */
+	protected convertToInternal(): MediaItemsStatsFilterInternal {
+		throw AppError.GENERIC.withDetails('The media items stats filter is built by the app and never travels inwards');
+	}
+}
+
+/**
+ * Mapper for the media items stats
+ */
+class MediaItemsStatsMapper extends ModelMapper<MediaItemsStatsInternal, GetMediaItemsStatsResponse, never> {
+	/**
+	 * @override
+	 */
+	protected convertToExternal(): GetMediaItemsStatsResponse {
+		throw AppError.GENERIC.withDetails('The media items stats are computed by the back end and never travel outwards');
+	}
+
+	/**
+	 * @override
+	 */
+	protected convertToInternal(source: GetMediaItemsStatsResponse): MediaItemsStatsInternal {
+		return {
+			mediaItems: {
+				total: source.mediaItems.total,
+				filtered: source.mediaItems.filtered
+			},
+			completions: {
+				total: source.completions.total,
+				mediaItems: source.completions.mediaItems,
+				byYear: source.completions.byYear.map((year) => {
+					return {
+						year: year.year,
+						count: year.count
+					};
+				})
+			},
+			backlog: {
+				total: source.backlog.total,
+				byStatus: source.backlog.byStatus.map((status) => {
+					return {
+						status: status.status,
+						count: status.count
+					};
+				}),
+				byImportanceAndOwnPlatform: source.backlog.byImportanceAndOwnPlatform.map((entry) => {
+					return {
+						importance: entry.importance,
+
+						// The API says "not owned" with an explicit null, which is simply the absence of an own platform in here
+						ownPlatformId: entry.ownPlatformId === null ? undefined : entry.ownPlatformId,
+						count: entry.count
+					};
+				})
+			}
+		};
+	}
+}
+
+/**
+ * Singleton instance of the media items stats filter mapper
+ */
+export const mediaItemsStatsFilterMapper = new MediaItemsStatsFilterMapper();
+
+/**
+ * Singleton instance of the media items stats mapper
+ */
+export const mediaItemsStatsMapper = new MediaItemsStatsMapper();

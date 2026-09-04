@@ -140,6 +140,32 @@ describe('BrowserBackNavigationGuardComponent', () => {
 		expect(screen.getByText('Settings page')).toBeInTheDocument();
 	});
 
+	test('leaves browser back alone but still guards in-app links when browser back is not intercepted', async() => {
+		renderGuardWithSiblingNavigation({
+			interceptBrowserBack: false
+		});
+
+		await waitFor(() => {
+			expect(screen.getByText('Guarded page')).toBeInTheDocument();
+		});
+
+		expect(window.history.state).not.toEqual(expect.objectContaining({
+			__browserBackGuardPath: '/media/items/details'
+		}));
+
+		await act(async() => {
+			window.dispatchEvent(new PopStateEvent('popstate'));
+		});
+
+		expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+		const user = userEvent.setup();
+		await user.click(screen.getByRole('link', { name: 'Settings' }));
+
+		expect(screen.getByRole('dialog')).toHaveTextContent('You have unsaved changes, are you sure you want to exit?');
+		expect(screen.getByTestId('guard-location')).toHaveTextContent('/media/items/details');
+	});
+
 	test('keeps the current route when sibling in-app navigation is canceled', async() => {
 		renderGuardWithSiblingNavigation();
 

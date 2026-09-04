@@ -123,6 +123,16 @@ describe('TvShowSeasonDetailsScreenComponent', () => {
 			expect(saveButton).toBeDisabled();
 		});
 
+		expect(screen.queryByText(i18n.t('tvShowSeason.details.validation.watchedEpisodesNumber.max'))).not.toBeInTheDocument();
+
+		await user.tab();
+
+		await waitFor(() => {
+			expect(screen.getByText(i18n.t('tvShowSeason.details.validation.watchedEpisodesNumber.max'))).toBeInTheDocument();
+		});
+
+		expect(watchedInput).toHaveAttribute('aria-invalid', 'true');
+
 		await user.click(saveButton);
 
 		expect(saveTvShowSeason).not.toHaveBeenCalled();

@@ -1,4 +1,22 @@
 type WebpackConfig = {
+	output: {
+		filename?: string;
+		assetModuleFilename?: string;
+	};
+	module: {
+		rules: Array<{
+			test?: RegExp;
+			type?: string;
+			generator?: {
+				dataUrl?: (content: Buffer) => string;
+			};
+			parser?: {
+				dataUrlCondition?: {
+					maxSize?: number;
+				};
+			};
+		}>;
+	};
 	plugins: Array<{
 		constructor?: {
 			name?: string;
@@ -11,6 +29,8 @@ type WebpackConfig = {
 			__MEDIA_TRACKER_APP_ENV__?: string;
 			__MEDIA_TRACKER_BACK_END_BASE_URL__?: string;
 		};
+		source?: string;
+		target?: string;
 	}>;
 };
 
@@ -41,6 +61,45 @@ describe('webpack config', () => {
 		delete getProcessEnv().MEDIA_TRACKER_BACK_END_BASE_URL;
 	});
 
+	const getSvgRule = (webpackConfig: WebpackConfig) => {
+		return webpackConfig.module.rules.find((rule) => {
+			return rule.test?.test('icon.svg');
+		});
+	};
+
+	it('emits every content-hashed output under assets/', () => {
+		const webpackConfig = getWebpackConfig('production');
+
+		expect(webpackConfig.output.filename).toBe('assets/bundle.[contenthash].js');
+		expect(webpackConfig.output.assetModuleFilename).toBe('assets/[contenthash][ext]');
+	});
+
+	it('inlines svg icons instead of emitting them as separate files', () => {
+		const webpackConfig = getWebpackConfig('production');
+
+		expect(getSvgRule(webpackConfig)?.type).toBe('asset/inline');
+	});
+
+	it('inlines raster images only while they stay small', () => {
+		const webpackConfig = getWebpackConfig('production');
+		const rasterRule = webpackConfig.module.rules.find((rule) => {
+			return rule.test?.test('picture.png');
+		});
+
+		expect(rasterRule?.type).toBe('asset');
+		expect(rasterRule?.parser?.dataUrlCondition?.maxSize).toBe(4096);
+	});
+
+	it('escapes everything that would break an svg data uri inside an unquoted css url()', () => {
+		const webpackConfig = getWebpackConfig('production');
+		const svg = '<svg xmlns="http://www.w3.org/2000/svg"><path d="M0 0" transform="scale(2)" style="fill:#000"/></svg>';
+
+		const dataUrl = getSvgRule(webpackConfig)?.generator?.dataUrl?.(Buffer.from(svg));
+
+		expect(dataUrl).toMatch(/^data:image\/svg\+xml,/);
+		expect(dataUrl).not.toMatch(/["'()\s#]/);
+	});
+
 	it('injects the app favicon into the generated html', () => {
 		const webpackConfig = getWebpackConfig('development');
 		const htmlWebpackPlugin = webpackConfig.plugins.find((plugin: { userOptions?: { template?: string; favicon?: string } }) => {
@@ -48,6 +107,16 @@ describe('webpack config', () => {
 		});
 
 		expect(htmlWebpackPlugin?.userOptions?.favicon).toBe('app/resources/images/ic_app_logo.png');
+	});
+
+	it('copies the social preview image into the build root under a fixed name', () => {
+		const webpackConfig = getWebpackConfig('production');
+		const copyFilePlugin = webpackConfig.plugins.find((plugin: { constructor?: { name?: string } }) => {
+			return plugin?.constructor?.name === 'CopyFilePlugin';
+		});
+
+		expect(copyFilePlugin?.source).toMatch(/public\/og_banner\.png$/);
+		expect(copyFilePlugin?.target).toBe('og_banner.png');
 	});
 
 	it('defaults MEDIA_TRACKER_APP_ENV to dev for development mode', () => {

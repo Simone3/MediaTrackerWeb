@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDefined, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 /**
  * Result of the external TV show search service
@@ -23,7 +23,6 @@ export class TmdbTvShowSearchResult {
  */
 export class TmdbTvShowSearchResponse {
 	@IsOptional()
-	@IsDefined({ each: true })
 	@Type(() => {
 		return TmdbTvShowSearchResult;
 	})
@@ -79,7 +78,6 @@ export class TmdbTvShowDetailsResponse {
 	public in_production?: boolean;
 
 	@IsOptional()
-	@IsDefined({ each: true })
 	@Type(() => {
 		return TmdbTvShowGenre;
 	})
@@ -99,7 +97,6 @@ export class TmdbTvShowDetailsResponse {
 	public episode_run_time?: number[];
 
 	@IsOptional()
-	@IsDefined({ each: true })
 	@Type(() => {
 		return TmdbTvShowSeason;
 	})
@@ -107,7 +104,6 @@ export class TmdbTvShowDetailsResponse {
 	public seasons?: TmdbTvShowSeason[];
 
 	@IsOptional()
-	@IsDefined({ each: true })
 	@Type(() => {
 		return TmdbTvShowCreator;
 	})
@@ -133,7 +129,6 @@ export class TmdbTvShowEpisode {
  */
 export class TmdbTvShowSeasonDataResponse {
 	@IsOptional()
-	@IsDefined({ each: true })
 	@Type(() => {
 		return TmdbTvShowEpisode;
 	})

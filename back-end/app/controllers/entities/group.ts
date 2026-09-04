@@ -148,20 +148,6 @@ class GroupController extends AbstractEntityController {
 	}
 
 	/**
-	 * Deletes all groups for the given user, returning the number of deleted elements as a promise
-	 * This method does NOT cascade delete all media items in the groups
-	 * @param userId user ID
-	 * @returns the number of deleted elements as a promise
-	 */
-	public deleteAllGroupsForUser(userId: string): Promise<number> {
-		const conditions: QueryConditions = {
-			owner: userId
-		};
-
-		return this.queryHelper.delete(conditions);
-	}
-
-	/**
 	 * Helper to check preconditions on a insert/update/delete method
 	 * @param errorToThow error to throw if the preconditions fail
 	 * @param userId the user

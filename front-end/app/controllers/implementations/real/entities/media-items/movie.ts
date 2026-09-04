@@ -1,111 +1,76 @@
-import { config } from 'app/config/config';
-import { backEndInvoker } from 'app/controllers/main/common/back-end-invoker';
+import { MediaItemBackEndController, MediaItemCatalogBackEndController } from 'app/controllers/implementations/real/entities/media-items/media-item';
 import { MovieCatalogController, MovieController } from 'app/controllers/interfaces/entities/media-items/movie';
+import { paginationMapper } from 'app/data/mappers/common';
 import { movieCatalogDetailsMapper, movieCatalogSearchMapper, movieFilterMapper, movieMapper, movieSortMapper } from 'app/data/mappers/media-items/movie';
-import { AddMediaItemResponse, DeleteMediaItemResponse, UpdateMediaItemResponse } from 'app/data/models/api/media-items/media-item';
 import { AddMovieRequest, FilterMoviesRequest, FilterMoviesResponse, GetMovieFromCatalogResponse, SearchMovieCatalogResponse, SearchMoviesRequest, SearchMoviesResponse, UpdateMovieRequest } from 'app/data/models/api/media-items/movie';
+import { PaginationInternal } from 'app/data/models/internal/common';
 import { CatalogMovieInternal, MovieFilterInternal, MovieInternal, MovieSortByInternal, SearchMovieCatalogResultInternal } from 'app/data/models/internal/media-items/movie';
-import { miscUtils } from 'app/utilities/misc-utils';
 
 /**
  * Implementation of the MovieController that queries the back-end APIs
  * @see MovieController
  */
-export class MovieBackEndController implements MovieController {
+export class MovieBackEndController extends MediaItemBackEndController<MovieInternal, MovieSortByInternal, MovieFilterInternal> implements MovieController {
 	/**
 	 * @override
 	 */
-	public async filter(userId: string, categoryId: string, filter?: MovieFilterInternal, sortBy?: MovieSortByInternal[]): Promise<MovieInternal[]> {
-		const request: FilterMoviesRequest = {
+	protected readonly mediaItemPathName = 'movies';
+
+	/**
+	 * @override
+	 */
+	protected readonly filterResponseClass = FilterMoviesResponse;
+
+	/**
+	 * @override
+	 */
+	protected readonly searchResponseClass = SearchMoviesResponse;
+
+	/**
+	 * @override
+	 */
+	protected buildFilterRequest(filter?: MovieFilterInternal, sortBy?: MovieSortByInternal[], pagination?: PaginationInternal): FilterMoviesRequest {
+		return {
 			filter: filter ? movieFilterMapper.toExternal(filter) : undefined,
-			sortBy: sortBy ? movieSortMapper.toExternalList(sortBy) : undefined
+			sortBy: sortBy ? movieSortMapper.toExternalList(sortBy) : undefined,
+			pagination: pagination ? paginationMapper.toExternal(pagination) : undefined
 		};
-
-		const response = await backEndInvoker.invoke({
-			method: 'POST',
-			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/movies/filter' ], {
-				userId: userId,
-				categoryId: categoryId
-			}),
-			requestBody: request,
-			responseBodyClass: FilterMoviesResponse
-		});
-		
-		return movieMapper.toInternalList(response.movies);
 	}
 
 	/**
 	 * @override
 	 */
-	public async search(userId: string, categoryId: string, searchTerm: string): Promise<MovieInternal[]> {
-		const request: SearchMoviesRequest = {
+	protected buildSearchRequest(searchTerm: string, pagination?: PaginationInternal): SearchMoviesRequest {
+		return {
 			searchTerm: searchTerm,
-			filter: undefined
+			filter: undefined,
+			pagination: pagination ? paginationMapper.toExternal(pagination) : undefined
 		};
+	}
 
-		const response = await backEndInvoker.invoke({
-			method: 'POST',
-			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/movies/search' ], {
-				userId: userId,
-				categoryId: categoryId
-			}),
-			requestBody: request,
-			responseBodyClass: SearchMoviesResponse
-		});
-		
+	/**
+	 * @override
+	 */
+	protected getMediaItemsFromResponse(response: FilterMoviesResponse | SearchMoviesResponse): MovieInternal[] {
 		return movieMapper.toInternalList(response.movies);
 	}
-	
+
 	/**
 	 * @override
 	 */
-	public async save(userId: string, categoryId: string, movie: MovieInternal): Promise<void> {
-		if(movie.id) {
-			const request: UpdateMovieRequest = {
-				movie: movieMapper.toExternal(movie)
-			};
-	
-			await backEndInvoker.invoke({
-				method: 'PUT',
-				url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/movies/:id' ], {
-					userId: userId,
-					categoryId: categoryId,
-					id: movie.id
-				}),
-				requestBody: request,
-				responseBodyClass: UpdateMediaItemResponse
-			});
-		}
-		else {
-			const request: AddMovieRequest = {
-				newMovie: movieMapper.toExternal(movie)
-			};
-	
-			await backEndInvoker.invoke({
-				method: 'POST',
-				url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/movies' ], {
-					userId: userId,
-					categoryId: categoryId
-				}),
-				requestBody: request,
-				responseBodyClass: AddMediaItemResponse
-			});
-		}
+	protected buildAddRequest(movie: MovieInternal): AddMovieRequest {
+		return {
+			newMovie: movieMapper.toExternal(movie)
+		};
 	}
 
 	/**
 	 * @override
 	 */
-	public async delete(userId: string, categoryId: string, movieId: string): Promise<void> {
-		await backEndInvoker.invoke({
-			method: 'DELETE',
-			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/users/:userId/categories/:categoryId/movies/:id' ], {
-				userId: userId,
-				categoryId: categoryId,
-				id: movieId
-			}),
-			responseBodyClass: DeleteMediaItemResponse
-		});
+	protected buildUpdateRequest(movie: MovieInternal): UpdateMovieRequest {
+		return {
+			movie: movieMapper.toExternal(movie)
+		};
 	}
 }
 
@@ -113,34 +78,33 @@ export class MovieBackEndController implements MovieController {
  * Implementation of the MovieCatalogController that queries the back-end APIs
  * @see MovieCatalogController
  */
-export class MovieCatalogBackEndController implements MovieCatalogController {
+export class MovieCatalogBackEndController extends MediaItemCatalogBackEndController<SearchMovieCatalogResultInternal, CatalogMovieInternal> implements MovieCatalogController {
 	/**
 	 * @override
 	 */
-	public async search(searchTerm: string): Promise<SearchMovieCatalogResultInternal[]> {
-		const response = await backEndInvoker.invoke({
-			method: 'GET',
-			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/catalog/movies/search/:searchTerm' ], {
-				searchTerm: searchTerm
-			}),
-			responseBodyClass: SearchMovieCatalogResponse
-		});
-		
+	protected readonly mediaItemPathName = 'movies';
+
+	/**
+	 * @override
+	 */
+	protected readonly catalogSearchResponseClass = SearchMovieCatalogResponse;
+
+	/**
+	 * @override
+	 */
+	protected readonly catalogDetailsResponseClass = GetMovieFromCatalogResponse;
+
+	/**
+	 * @override
+	 */
+	protected getSearchResultsFromResponse(response: SearchMovieCatalogResponse): SearchMovieCatalogResultInternal[] {
 		return movieCatalogSearchMapper.toInternalList(response.searchResults);
 	}
 
 	/**
 	 * @override
 	 */
-	public async getDetails(catalogId: string): Promise<CatalogMovieInternal> {
-		const response = await backEndInvoker.invoke({
-			method: 'GET',
-			url: miscUtils.buildUrl([ config.backEnd.baseUrl, '/catalog/movies/:catalogId' ], {
-				catalogId: catalogId
-			}),
-			responseBodyClass: GetMovieFromCatalogResponse
-		});
-		
+	protected getCatalogDetailsFromResponse(response: GetMovieFromCatalogResponse): CatalogMovieInternal {
 		return movieCatalogDetailsMapper.toInternal(response.catalogMovie);
 	}
 }

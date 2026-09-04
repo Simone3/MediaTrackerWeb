@@ -77,7 +77,7 @@ const getThirdRow = (mediaItem: MediaItemInternal): string | undefined => {
  * @returns the row text, if any
  */
 const getFourthRow = (mediaItem: MediaItemInternal): string | undefined => {
-	if(mediaItem.group && mediaItem.orderInGroup) {
+	if(mediaItem.group && mediaItem.orderInGroup !== undefined) {
 		return i18n.t('mediaItem.list.group', {
 			order: mediaItem.orderInGroup,
 			groupName: mediaItem.group.name

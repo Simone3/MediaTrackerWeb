@@ -12,28 +12,13 @@ class ErrorResponseFactory {
 	 * @returns the error response
 	 */
 	public from(error: AppError): ErrorResponse {
-		const sourceError = this.getSourceAppError(error);
+		const sourceError = error.sourceError;
 		
 		return {
 			errorCode: sourceError.errorCode,
 			errorDescription: sourceError.errorDescription,
 			errorDetails: sourceError.errorDetails as string
 		};
-	}
-
-	/**
-	 * Helper to extract the source error from the stack of AppErrors
-	 * @param error the final error
-	 * @returns the first error of the nested chain
-	 */
-	private getSourceAppError(error: AppError): AppError {
-		let currentError: AppError = error;
-
-		while(currentError.errorDetails && currentError.errorDetails instanceof AppError) {
-			currentError = currentError.errorDetails as AppError;
-		}
-
-		return currentError;
 	}
 }
 

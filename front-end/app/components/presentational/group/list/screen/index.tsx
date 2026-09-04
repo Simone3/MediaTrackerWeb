@@ -2,8 +2,10 @@ import { Component, ReactNode } from 'react';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { EntityManagementListComponent } from 'app/components/presentational/generic/entity-management-list';
 import { EntityManagementScreenComponent } from 'app/components/presentational/generic/entity-management-screen';
+import { EntitySearchBarComponent } from 'app/components/presentational/generic/entity-search-bar';
 import { GroupInternal } from 'app/data/models/internal/group';
 import { i18n } from 'app/utilities/i18n';
+import { textSearchUtils } from 'app/utilities/text-search';
 
 const GROUPS_SCREEN_ACCENT = 'var(--color-management-accent-default)';
 
@@ -12,7 +14,8 @@ const GROUPS_SCREEN_ACCENT = 'var(--color-management-accent-default)';
  */
 export class GroupsListScreenComponent extends Component<GroupsListScreenComponentInput & GroupsListScreenComponentOutput, GroupsListScreenComponentState> {
 	public state: GroupsListScreenComponentState = {
-		pendingDeleteGroup: undefined
+		pendingDeleteGroup: undefined,
+		searchTerm: ''
 	};
 
 	/**
@@ -42,11 +45,18 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 			showSkeletons
 		} = this.props;
 		const {
-			pendingDeleteGroup
+			pendingDeleteGroup,
+			searchTerm
 		} = this.state;
-		const countLabel = groups.length === 1 ?
+		const isSearching = Boolean(textSearchUtils.normalize(searchTerm));
+		const visibleGroups = textSearchUtils.filter(groups, searchTerm, (group) => {
+			return group.name;
+		});
+		const noneOptionLabel = i18n.t('group.list.none');
+		const noneOptionVisible = textSearchUtils.matches(noneOptionLabel, searchTerm);
+		const countLabel = visibleGroups.length === 1 ?
 			i18n.t('group.list.count.single') :
-			i18n.t('group.list.count.multiple', { count: groups.length });
+			i18n.t('group.list.count.multiple', { count: visibleGroups.length });
 
 		return (
 			<>
@@ -58,15 +68,26 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 					addButtonLabel={i18n.t('group.details.title.new')}
 					loadingVisible={isLoading}
 					onAdd={loadNewGroupDetails}>
+					{!showSkeletons && groups.length > 0 && (
+						<EntitySearchBarComponent
+							id='groups-list-search'
+							value={searchTerm}
+							placeholder={i18n.t('group.list.search')}
+							onChangeValue={(value) => {
+								this.setState({
+									searchTerm: value
+								});
+							}}
+						/>
+					)}
 					<EntityManagementListComponent
-						items={groups}
+						items={visibleGroups}
 						selectedItemId={selectedGroupId}
 						selectedLabel={i18n.t('common.state.selected')}
-						editLabel={i18n.t('group.list.edit')}
-						deleteLabel={i18n.t('group.list.delete')}
-						emptyTitle={i18n.t('group.list.empty')}
-						emptyCopy={i18n.t('group.list.emptyHint')}
-						showEmptyState={showEmptyState}
+						menuCloseAriaLabel={i18n.t('common.a11y.closeGroupActions')}
+						emptyTitle={isSearching ? i18n.t('group.list.noResults') : i18n.t('group.list.empty')}
+						emptyCopy={isSearching ? i18n.t('group.list.noResultsHint') : i18n.t('group.list.emptyHint')}
+						showEmptyState={showEmptyState || (isSearching && visibleGroups.length === 0)}
 						showSkeletons={showSkeletons}
 						getItemKey={(group) => {
 							return group.id;
@@ -83,22 +104,37 @@ export class GroupsListScreenComponent extends Component<GroupsListScreenCompone
 						onSelect={(group) => {
 							this.props.selectGroup(group);
 						}}
-						onEdit={(group) => {
-							this.props.editGroup(group);
+						getItemActions={(group, closeMenu) => {
+							return [
+								{
+									label: i18n.t('group.list.edit'),
+									onClick: () => {
+										closeMenu();
+										this.props.editGroup(group);
+									}
+								},
+								{
+									label: i18n.t('group.list.delete'),
+									onClick: () => {
+										closeMenu();
+										this.requestDeleteGroup(group);
+									},
+									tone: 'danger'
+								}
+							];
 						}}
-						onDelete={(group) => {
-							this.requestDeleteGroup(group);
-						}}
-						noneOption={{
-							label: i18n.t('group.list.none'),
-							badge: <span className='entity-management-list-badge'>-</span>,
-							accentColor: GROUPS_SCREEN_ACCENT,
-							selected: !selectedGroupId,
-							onSelect: () => {
-								this.props.selectGroup(undefined);
-							},
-							badgeShellClassName: ' entity-management-list-badge-shell-muted'
-						}}
+						noneOption={noneOptionVisible ?
+							{
+								label: noneOptionLabel,
+								badge: <span className='entity-management-list-badge'>-</span>,
+								accentColor: GROUPS_SCREEN_ACCENT,
+								selected: !selectedGroupId,
+								onSelect: () => {
+									this.props.selectGroup(undefined);
+								},
+								badgeShellClassName: ' entity-management-list-badge-shell-muted'
+							} :
+							undefined}
 						skeletonAccentColor={GROUPS_SCREEN_ACCENT}
 						skeletonKeyPrefix='group-loading'
 					/>
@@ -240,4 +276,5 @@ export type GroupsListScreenComponentOutput = {
 
 type GroupsListScreenComponentState = {
 	pendingDeleteGroup?: GroupInternal;
+	searchTerm: string;
 };

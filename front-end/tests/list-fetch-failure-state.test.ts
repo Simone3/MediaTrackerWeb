@@ -62,6 +62,8 @@ describe('list fetch failure reducers', () => {
 			searchTerm: undefined,
 			viewGroup: undefined,
 			mediaItems: [ mediaItem ],
+			currentPage: 0,
+			totalCount: 1,
 			highlightedMediaItem: undefined
 		};
 

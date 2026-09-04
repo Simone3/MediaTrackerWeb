@@ -53,7 +53,7 @@ class MiscUtils {
 		const result: (keyof T)[] = [];
 
 		for(const key in source) {
-			result.push(key as keyof T);
+			result.push(key);
 		}
 
 		return result;

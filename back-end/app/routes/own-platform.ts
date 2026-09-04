@@ -1,11 +1,8 @@
-
 import { userResourceAuthorizationMiddleware } from 'app/auth/authorization';
 import { ownPlatformController } from 'app/controllers/entities/own-platform';
 import { ownPlatformFilterMapper, ownPlatformMapper } from 'app/data/mappers/own-platform';
 import { AddOwnPlatformRequest, AddOwnPlatformResponse, DeleteOwnPlatformResponse, FilterOwnPlatformsRequest, FilterOwnPlatformsResponse, GetAllOwnPlatformsResponse, MergeOwnPlatformsRequest, MergeOwnPlatformsResponse, UpdateOwnPlatformRequest, UpdateOwnPlatformResponse } from 'app/data/models/api/own-platform';
 import { AppError } from 'app/data/models/error/error';
-import { errorResponseFactory } from 'app/factories/error';
-import { logger } from 'app/loggers/logger';
 import { parserValidator } from 'app/utilities/parser-validator';
 import { requestParamUtils } from 'app/utilities/request-param-utils';
 import express, { Router } from 'express';
@@ -15,7 +12,7 @@ const router: Router = express.Router();
 /**
  * Route to get all saved own platforms
  */
-router.get('/users/:userId/categories/:categoryId/own-platforms', userResourceAuthorizationMiddleware, (request, response) => {
+router.get('/users/:userId/categories/:categoryId/own-platforms', userResourceAuthorizationMiddleware, (request, response, next) => {
 	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 	const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
@@ -28,15 +25,14 @@ router.get('/users/:userId/categories/:categoryId/own-platforms', userResourceAu
 			response.json(responseBody);
 		})
 		.catch((error) => {
-			logger.error('Get own platforms generic error: %s', error);
-			response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+			next(AppError.GENERIC.withDetails(error));
 		});
 });
 
 /**
  * Route to get all saved own platforms matching some filter
  */
-router.post('/users/:userId/categories/:categoryId/own-platforms/filter', userResourceAuthorizationMiddleware, (request, response) => {
+router.post('/users/:userId/categories/:categoryId/own-platforms/filter', userResourceAuthorizationMiddleware, (request, response, next) => {
 	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 	const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
@@ -52,20 +48,18 @@ router.post('/users/:userId/categories/:categoryId/own-platforms/filter', userRe
 					response.json(responseBody);
 				})
 				.catch((error) => {
-					logger.error('Filter own platforms generic error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+					next(AppError.GENERIC.withDetails(error));
 				});
 		})
 		.catch((error) => {
-			logger.error('Filter own platforms request error: %s', error);
-			response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
+			next(AppError.INVALID_REQUEST.withDetails(error));
 		});
 });
 
 /**
  * Route to add a new own platform
  */
-router.post('/users/:userId/categories/:categoryId/own-platforms', userResourceAuthorizationMiddleware, (request, response) => {
+router.post('/users/:userId/categories/:categoryId/own-platforms', userResourceAuthorizationMiddleware, (request, response, next) => {
 	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 	const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
@@ -82,20 +76,18 @@ router.post('/users/:userId/categories/:categoryId/own-platforms', userResourceA
 					response.json(responseBody);
 				})
 				.catch((error) => {
-					logger.error('Add own platform generic error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+					next(AppError.GENERIC.withDetails(error));
 				});
 		})
 		.catch((error) => {
-			logger.error('Add own platform request error: %s', error);
-			response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
+			next(AppError.INVALID_REQUEST.withDetails(error));
 		});
 });
 
 /**
  * Route to merge two or more existing own platforms
  */
-router.put('/users/:userId/categories/:categoryId/own-platforms/merge', userResourceAuthorizationMiddleware, (request, response) => {
+router.put('/users/:userId/categories/:categoryId/own-platforms/merge', userResourceAuthorizationMiddleware, (request, response, next) => {
 	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 	const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 
@@ -111,20 +103,18 @@ router.put('/users/:userId/categories/:categoryId/own-platforms/merge', userReso
 					response.json(responseBody);
 				})
 				.catch((error) => {
-					logger.error('Merge own platforms generic error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+					next(AppError.GENERIC.withDetails(error));
 				});
 		})
 		.catch((error) => {
-			logger.error('Merge own platforms request error: %s', error);
-			response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
+			next(AppError.INVALID_REQUEST.withDetails(error));
 		});
 });
 
 /**
  * Route to update an existing own platform
  */
-router.put('/users/:userId/categories/:categoryId/own-platforms/:id', userResourceAuthorizationMiddleware, (request, response) => {
+router.put('/users/:userId/categories/:categoryId/own-platforms/:id', userResourceAuthorizationMiddleware, (request, response, next) => {
 	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 	const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 	const id = requestParamUtils.getRequiredString(request.params.id, 'id');
@@ -141,20 +131,18 @@ router.put('/users/:userId/categories/:categoryId/own-platforms/:id', userResour
 					response.json(responseBody);
 				})
 				.catch((error) => {
-					logger.error('Update own platform generic error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+					next(AppError.GENERIC.withDetails(error));
 				});
 		})
 		.catch((error) => {
-			logger.error('Update own platform request error: %s', error);
-			response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
+			next(AppError.INVALID_REQUEST.withDetails(error));
 		});
 });
 
 /**
  * Route to delete a own platform
  */
-router.delete('/users/:userId/categories/:categoryId/own-platforms/:id', userResourceAuthorizationMiddleware, (request, response) => {
+router.delete('/users/:userId/categories/:categoryId/own-platforms/:id', userResourceAuthorizationMiddleware, (request, response, next) => {
 	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 	const categoryId = requestParamUtils.getRequiredString(request.params.categoryId, 'categoryId');
 	const id = requestParamUtils.getRequiredString(request.params.id, 'id');
@@ -168,8 +156,7 @@ router.delete('/users/:userId/categories/:categoryId/own-platforms/:id', userRes
 			response.json(responseBody);
 		})
 		.catch((error) => {
-			logger.error('Delete own platform generic error: %s', error);
-			response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+			next(AppError.GENERIC.withDetails(error));
 		});
 });
 

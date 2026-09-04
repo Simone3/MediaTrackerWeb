@@ -39,9 +39,14 @@ describe('TvShowSeasonsListScreenComponent', () => {
 		);
 
 		const user = userEvent.setup();
-		await user.click(screen.getByText(i18n.t('tvShowSeason.list.row.main', { seasonNumber: 2 })));
-		await user.click(screen.getAllByRole('button', { name: i18n.t('tvShowSeason.list.complete') })[1]);
-		await user.click(screen.getAllByRole('button', { name: i18n.t('tvShowSeason.list.delete') })[1]);
+		const secondSeasonName = i18n.t('tvShowSeason.list.row.main', { seasonNumber: 2 });
+		const secondSeasonOptionsLabel = i18n.t('common.a11y.optionsFor', { name: secondSeasonName });
+
+		await user.click(screen.getByText(secondSeasonName));
+		await user.click(screen.getByRole('button', { name: secondSeasonOptionsLabel }));
+		await user.click(screen.getByRole('button', { name: i18n.t('tvShowSeason.list.complete') }));
+		await user.click(screen.getByRole('button', { name: secondSeasonOptionsLabel }));
+		await user.click(screen.getByRole('button', { name: i18n.t('tvShowSeason.list.delete') }));
 		expect(deleteTvShowSeason).toHaveBeenCalledTimes(0);
 		await user.click(screen.getByRole('button', { name: i18n.t('common.alert.default.okButton') }));
 		await user.click(screen.getByRole('button', { name: i18n.t('common.buttons.done') }));

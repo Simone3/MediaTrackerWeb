@@ -1,0 +1,54 @@
+import { ReactElement } from 'react';
+import { Dispatch } from 'redux';
+import { GroupsListScreenComponent, GroupsListScreenComponentInput, GroupsListScreenComponentOutput } from 'app/components/presentational/group/list/screen';
+import { deleteGroup, fetchGroups, loadGroupDetails, loadNewGroupDetails, selectGroup } from 'app/redux/actions/group/generators';
+import { useContainerInput, useContainerOutput } from 'app/redux/hooks';
+import { State } from 'app/redux/state/state';
+import { navigationService } from 'app/utilities/navigation-service';
+
+const selectInput = (state: State): GroupsListScreenComponentInput => {
+	const listState = state.groupsList;
+
+	return {
+		isLoading: listState.status === 'FETCHING' || listState.status === 'DELETING',
+		requiresFetch: listState.status === 'REQUIRES_FETCH',
+		groups: listState.groups,
+		selectedGroupId: state.groupGlobal.selectedGroup?.id,
+		showEmptyState: listState.status === 'FETCHED' && listState.groups.length === 0,
+		showSkeletons: listState.groups.length === 0 && (listState.status === 'REQUIRES_FETCH' || listState.status === 'FETCHING')
+	};
+};
+
+const buildOutput = (dispatch: Dispatch): GroupsListScreenComponentOutput => {
+	return {
+		fetchGroups: () => {
+			dispatch(fetchGroups());
+		},
+		loadNewGroupDetails: () => {
+			dispatch(loadNewGroupDetails());
+		},
+		selectGroup: (group) => {
+			dispatch(selectGroup(group));
+		},
+		editGroup: (group) => {
+			dispatch(loadGroupDetails(group));
+		},
+		deleteGroup: (group) => {
+			dispatch(deleteGroup(group));
+		},
+		goBack: () => {
+			navigationService.back();
+		}
+	};
+};
+
+/**
+ * Container component that handles Redux state for GroupsListScreenComponent
+ * @returns the connected groups list screen
+ */
+export const GroupsListScreenContainer = (): ReactElement => {
+	const input = useContainerInput(selectInput);
+	const output = useContainerOutput(buildOutput);
+
+	return <GroupsListScreenComponent {...input} {...output} />;
+};

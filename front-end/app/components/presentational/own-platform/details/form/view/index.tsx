@@ -1,6 +1,7 @@
 import { Component, ReactNode } from 'react';
 import { FormikProps } from 'formik';
 import { ColorPickerComponent } from 'app/components/presentational/generic/color-picker';
+import { buildFieldErrorInputProps, FieldErrorComponent, getVisibleFieldError } from 'app/components/presentational/generic/field-error';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { SelectComponent } from 'app/components/presentational/generic/select';
 import { config } from 'app/config/config';
@@ -37,9 +38,13 @@ export class OwnPlatformFormViewComponent extends Component<OwnPlatformFormViewC
 	public render(): ReactNode {
 		const {
 			values,
+			errors,
+			touched,
 			handleChange,
+			handleBlur,
 			setFieldValue
 		} = this.props;
+		const nameError = getVisibleFieldError(errors, touched, 'name');
 
 		return (
 			<section className='entity-details-panel'>
@@ -55,7 +60,10 @@ export class OwnPlatformFormViewComponent extends Component<OwnPlatformFormViewC
 							value={values.name}
 							placeholder={i18n.t('ownPlatform.details.placeholders.name')}
 							onChange={handleChange}
+							onBlur={handleBlur}
+							{...buildFieldErrorInputProps('own-platform-name-error', nameError)}
 						/>
+						<FieldErrorComponent id='own-platform-name-error' message={nameError} />
 					</div>
 					<div className='entity-details-field entity-details-field-span-2'>
 						<label className='entity-details-label' htmlFor='own-platform-icon'>
@@ -82,7 +90,7 @@ export class OwnPlatformFormViewComponent extends Component<OwnPlatformFormViewC
 								name='icon'
 								value={values.icon}
 								onChange={(event) => {
-									void setFieldValue('icon', event.target.value as OwnPlatformInternal['icon']);
+									void setFieldValue('icon', event.target.value);
 								}}>
 								{OWN_PLATFORM_ICON_INTERNAL_VALUES.map((icon) => {
 									return (

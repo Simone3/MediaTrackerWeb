@@ -1,5 +1,6 @@
 import { Component, ReactNode } from 'react';
 import { AppError } from 'app/data/models/internal/error';
+import { ErrorHint } from 'app/utilities/error-hint';
 import { i18n } from 'app/utilities/i18n';
 
 /**
@@ -24,7 +25,7 @@ export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps,
 			return;
 		}
 
-		const messageDescription = typeof error === 'string' ? error : this.getAppErrorDescription(error);
+		const messageDescription = typeof error === 'string' ? error : this.getAppErrorMessage(error);
 		this.setState({
 			visibleError: messageDescription
 		});
@@ -74,16 +75,45 @@ export class ErrorHandlerComponent extends Component<ErrorHandlerComponentProps,
 	}
 
 	/**
-	 * Helper to extract the correct description from an AppError object
+	 * Helper to build the message to be shown for an AppError object: the description of the operation that failed,
+	 * followed by the hint of the innermost error that carries one, if any
 	 * @param error the source error
-	 * @returns the description to be shown
+	 * @returns the message to be shown
 	 */
-	private getAppErrorDescription(error: AppError): string {
-		let originalAppError: AppError = error;
-		while(originalAppError.errorDetails && originalAppError.errorDetails instanceof AppError) {
-			originalAppError = originalAppError.errorDetails;
+	private getAppErrorMessage(error: AppError): string {
+		const description = i18n.t(error.errorDescription);
+		const hint = this.getAppErrorHint(error);
+
+		if(!hint) {
+			return description;
 		}
-		return i18n.t(originalAppError.errorDescription);
+
+		const hintDescription = hint.params ? i18n.t(hint.key, hint.params) : i18n.t(hint.key);
+
+		return i18n.t('error.flash.messageWithHint', {
+			message: description,
+			hint: hintDescription
+		});
+	}
+
+	/**
+	 * Helper to extract the most specific hint from the chain of nested AppError objects
+	 * @param error the source error
+	 * @returns the deepest available hint, if any
+	 */
+	private getAppErrorHint(error: AppError): ErrorHint | undefined {
+		let currentAppError: AppError = error;
+		let deepestHint = currentAppError.userHint;
+
+		while(currentAppError.errorDetails && currentAppError.errorDetails instanceof AppError) {
+			currentAppError = currentAppError.errorDetails;
+
+			if(currentAppError.userHint) {
+				deepestHint = currentAppError.userHint;
+			}
+		}
+
+		return deepestHint;
 	}
 }
 

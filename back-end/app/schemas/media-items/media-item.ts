@@ -1,4 +1,5 @@
 import { CATEGORY_COLLECTION_NAME } from 'app/schemas/category';
+import { DATABASE_COLLATION } from 'app/schemas/common';
 import { GROUP_COLLECTION_NAME } from 'app/schemas/group';
 import { OWN_PLATFORM_COLLECTION_NAME } from 'app/schemas/own-platform';
 import { Schema, SchemaDefinition, SchemaOptions } from 'mongoose';
@@ -31,4 +32,14 @@ export const commonMediaItemSchemaDefinition: SchemaDefinition = {
  */
 export const commonMediaItemSchemaOptions: SchemaOptions = {
 	timestamps: true
+};
+
+/**
+ * Adds to a media item schema the indexes shared by every media type. Every media-item read is scoped to an owner and,
+ * in all but the "delete everything for a user" cascade, to a category: without this index each of them is a full
+ * collection scan. The English collation is required for the queries that run under it to be able to use the index
+ * @param schema the media type schema
+ */
+export const addCommonMediaItemSchemaIndexes = (schema: Schema): void => {
+	schema.index({ owner: 1, category: 1 }, { collation: DATABASE_COLLATION });
 };

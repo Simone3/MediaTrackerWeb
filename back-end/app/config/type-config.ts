@@ -382,7 +382,7 @@ class ExternalApisConfig {
 	public igdb!: IgdbConfig;
 }
 
-const LOG_LEVEL_CONFIG_VALUES: [ 'debug', 'info', 'error', 'off' ] = [ 'debug', 'info', 'error', 'off' ];
+const LOG_LEVEL_CONFIG_VALUES: [ 'debug', 'info', 'warn', 'error', 'off' ] = [ 'debug', 'info', 'warn', 'error', 'off' ];
 
 type LogLevelConfig = ValuesOf<typeof LOG_LEVEL_CONFIG_VALUES>;
 
@@ -392,32 +392,28 @@ class LogApisInputOutputConfig {
 	public active!: boolean;
 	
 	@IsDefined()
-	@IsDefined({ each: true })
-	@IsString({ each: true })
-	public excludeRequestBodyRegExp!: string[];
-
-	@IsDefined()
-	@IsDefined({ each: true })
-	@IsString({ each: true })
-	public excludeResponseBodyRegExp!: string[];
+	@IsBoolean()
+	public includeBodies!: boolean;
 }
 
 class LogExternalApisInputOutputConfig {
 	@IsDefined()
 	@IsBoolean()
 	public active!: boolean;
+
+	@IsDefined()
+	@IsBoolean()
+	public includeBodies!: boolean;
 }
 
 class LogDatabaseQueriesConfig {
 	@IsDefined()
 	@IsBoolean()
 	public active!: boolean;
-}
 
-class LogPerformanceConfig {
 	@IsDefined()
 	@IsBoolean()
-	public active!: boolean;
+	public includeConditions!: boolean;
 }
 
 class LogConfig {
@@ -429,6 +425,10 @@ class LogConfig {
 	@IsDefined()
 	@IsString()
 	public file!: string;
+
+	@IsDefined()
+	@IsNumber()
+	public fileBackups!: number;
 
 	@IsDefined()
 	@Type(() => {
@@ -450,13 +450,6 @@ class LogConfig {
 	})
 	@ValidateNested()
 	public databaseQueries!: LogDatabaseQueriesConfig;
-
-	@IsDefined()
-	@Type(() => {
-		return LogPerformanceConfig;
-	})
-	@ValidateNested()
-	public performance!: LogPerformanceConfig;
 }
 
 class FirebaseConfig {

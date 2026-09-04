@@ -1,6 +1,7 @@
 import { call, put, select, takeLatest } from '@redux-saga/core/effects';
 import { SagaIterator } from 'redux-saga';
 import { AppError } from 'app/data/models/internal/error';
+import { PaginatedResultInternal } from 'app/data/models/internal/common';
 import { MediaItemFilterInternal, MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { mediaItemControllerFactory } from 'app/controllers/main/entities/media-items/factories';
 import { setError } from 'app/redux/actions/error/generators';
@@ -36,10 +37,10 @@ const saveMediaItemSaga = function * (action: SaveMediaItemAction): SagaIterator
 			const filter: MediaItemFilterInternal = {
 				name: mediaItem.name
 			};
-			const mediaItemsWithSameName = (yield call(mediaItemController.filter.bind(mediaItemController), user.id, category.id, filter)) as MediaItemInternal[];
+			const mediaItemsWithSameName = (yield call(mediaItemController.filter.bind(mediaItemController), user.id, category.id, filter)) as PaginatedResultInternal<MediaItemInternal>;
 			
 			// If so, dispatch confirmation request action and exit
-			if(mediaItemsWithSameName.length > 0) {
+			if(mediaItemsWithSameName.totalCount > 0) {
 				yield put(askConfirmationBeforeSavingMediaItem());
 				return;
 			}

@@ -1,11 +1,8 @@
-
 import { userResourceAuthorizationMiddleware } from 'app/auth/authorization';
 import { categoryController } from 'app/controllers/entities/category';
 import { categoryFilterMapper, categoryMapper } from 'app/data/mappers/category';
 import { AddCategoryRequest, AddCategoryResponse, DeleteCategoryResponse, FilterCategoriesRequest, FilterCategoriesResponse, GetAllCategoriesResponse, UpdateCategoryRequest, UpdateCategoryResponse } from 'app/data/models/api/category';
 import { AppError } from 'app/data/models/error/error';
-import { errorResponseFactory } from 'app/factories/error';
-import { logger } from 'app/loggers/logger';
 import { parserValidator } from 'app/utilities/parser-validator';
 import { requestParamUtils } from 'app/utilities/request-param-utils';
 import express, { Router } from 'express';
@@ -15,7 +12,7 @@ const router: Router = express.Router();
 /**
  * Route to get all saved categories
  */
-router.get('/users/:userId/categories', userResourceAuthorizationMiddleware, (request, response) => {
+router.get('/users/:userId/categories', userResourceAuthorizationMiddleware, (request, response, next) => {
 	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 
 	categoryController.getAllCategories(userId)
@@ -27,15 +24,14 @@ router.get('/users/:userId/categories', userResourceAuthorizationMiddleware, (re
 			response.json(responseBody);
 		})
 		.catch((error) => {
-			logger.error('Get categories generic error: %s', error);
-			response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+			next(AppError.GENERIC.withDetails(error));
 		});
 });
 
 /**
  * Route to get all saved categories matching some filter
  */
-router.post('/users/:userId/categories/filter', userResourceAuthorizationMiddleware, (request, response) => {
+router.post('/users/:userId/categories/filter', userResourceAuthorizationMiddleware, (request, response, next) => {
 	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 
 	parserValidator.parseAndValidate(FilterCategoriesRequest, request.body)
@@ -50,20 +46,18 @@ router.post('/users/:userId/categories/filter', userResourceAuthorizationMiddlew
 					response.json(responseBody);
 				})
 				.catch((error) => {
-					logger.error('Filter categories generic error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+					next(AppError.GENERIC.withDetails(error));
 				});
 		})
 		.catch((error) => {
-			logger.error('Filter category request error: %s', error);
-			response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
+			next(AppError.INVALID_REQUEST.withDetails(error));
 		});
 });
 
 /**
  * Route to add a new category
  */
-router.post('/users/:userId/categories', userResourceAuthorizationMiddleware, (request, response) => {
+router.post('/users/:userId/categories', userResourceAuthorizationMiddleware, (request, response, next) => {
 	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 
 	parserValidator.parseAndValidate(AddCategoryRequest, request.body)
@@ -79,20 +73,18 @@ router.post('/users/:userId/categories', userResourceAuthorizationMiddleware, (r
 					response.json(responseBody);
 				})
 				.catch((error) => {
-					logger.error('Add category generic error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+					next(AppError.GENERIC.withDetails(error));
 				});
 		})
 		.catch((error) => {
-			logger.error('Add category request error: %s', error);
-			response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
+			next(AppError.INVALID_REQUEST.withDetails(error));
 		});
 });
 
 /**
  * Route to update an existing category
  */
-router.put('/users/:userId/categories/:id', userResourceAuthorizationMiddleware, (request, response) => {
+router.put('/users/:userId/categories/:id', userResourceAuthorizationMiddleware, (request, response, next) => {
 	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 	const id = requestParamUtils.getRequiredString(request.params.id, 'id');
 
@@ -108,20 +100,18 @@ router.put('/users/:userId/categories/:id', userResourceAuthorizationMiddleware,
 					response.json(responseBody);
 				})
 				.catch((error) => {
-					logger.error('Update category generic error: %s', error);
-					response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+					next(AppError.GENERIC.withDetails(error));
 				});
 		})
 		.catch((error) => {
-			logger.error('Update category request error: %s', error);
-			response.status(500).json(errorResponseFactory.from(AppError.INVALID_REQUEST.withDetails(error)));
+			next(AppError.INVALID_REQUEST.withDetails(error));
 		});
 });
 
 /**
  * Route to delete a category
  */
-router.delete('/users/:userId/categories/:id', userResourceAuthorizationMiddleware, (request, response) => {
+router.delete('/users/:userId/categories/:id', userResourceAuthorizationMiddleware, (request, response, next) => {
 	const userId = requestParamUtils.getRequiredString(request.params.userId, 'userId');
 	const id = requestParamUtils.getRequiredString(request.params.id, 'id');
 
@@ -134,8 +124,7 @@ router.delete('/users/:userId/categories/:id', userResourceAuthorizationMiddlewa
 			response.json(responseBody);
 		})
 		.catch((error) => {
-			logger.error('Delete category generic error: %s', error);
-			response.status(500).json(errorResponseFactory.from(AppError.GENERIC.withDetails(error)));
+			next(AppError.GENERIC.withDetails(error));
 		});
 });
 

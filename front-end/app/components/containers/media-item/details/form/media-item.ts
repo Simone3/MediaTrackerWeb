@@ -1,84 +1,87 @@
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import { requestGroupSelection } from 'app/redux/actions/group/generators';
 import { getMediaItemCatalogDetails, resetMediaItemsCatalogSearch, saveMediaItem, searchMediaItemsCatalog, setMediaItemFormDraft, setMediaItemFormStatus } from 'app/redux/actions/media-item/generators';
 import { requestOwnPlatformSelection } from 'app/redux/actions/own-platform/generators';
 import { CommonMediaItemFormComponentInputMain, CommonMediaItemFormComponentOutput } from 'app/components/presentational/media-item/details/form/wrapper/media-item';
 import { AppError } from 'app/data/models/internal/error';
-import { MediaItemInternal } from 'app/data/models/internal/media-items/media-item';
 import { State } from 'app/redux/state/state';
 
 /**
- * Common helper to build the saved media-item values used as Formik initial values
- * @param state the Redux state
- * @returns the initial form values
+ * Common input props for all media-item form containers.
+ *
+ * The state is read one value at a time instead of through a single derived object, because the two copies below have
+ * to be memoized: the form is handed its own copy of the saved media item and of the restored draft, so that editing
+ * the form cannot reach back into the objects held in the store. Rebuilding those copies on every state change would
+ * hand the form a new object each time and defeat the comparison that decides whether anything actually changed.
+ * @returns the shared form input props
  */
-const buildInitialMediaItemFormValues = (state: State): MediaItemInternal => {
-	const {
-		mediaItem
-	} = state.mediaItemDetails;
+export const useCommonMediaItemFormInput = (): CommonMediaItemFormComponentInputMain => {
+	const mediaItem = useSelector((state: State) => {
+		if(!state.mediaItemDetails.mediaItem) {
+			throw AppError.GENERIC.withDetails('App navigated to the media item form with undefined details');
+		}
 
-	if(!mediaItem) {
-		throw AppError.GENERIC.withDetails('App navigated to the media item form with undefined details');
-	}
+		return state.mediaItemDetails.mediaItem;
+	});
+	const formDraft = useSelector((state: State) => {
+		return state.mediaItemDetails.formDraft;
+	});
+	const saveStatus = useSelector((state: State) => {
+		return state.mediaItemDetails.saveStatus;
+	});
+	const catalogStatus = useSelector((state: State) => {
+		return state.mediaItemDetails.catalogStatus;
+	});
+	const catalogSearchResults = useSelector((state: State) => {
+		return state.mediaItemDetails.catalogSearchResults;
+	});
+	const catalogDetails = useSelector((state: State) => {
+		return state.mediaItemDetails.catalogDetails;
+	});
+	const groupsStatus = useSelector((state: State) => {
+		return state.groupsList.status;
+	});
+	const ownPlatformsStatus = useSelector((state: State) => {
+		return state.ownPlatformsList.status;
+	});
+	const selectedGroup = useSelector((state: State) => {
+		return state.groupGlobal.selectedGroup;
+	});
+	const selectedOwnPlatform = useSelector((state: State) => {
+		return state.ownPlatformGlobal.selectedOwnPlatform;
+	});
+
+	const initialValues = useMemo(() => {
+		return { ...mediaItem };
+	}, [ mediaItem ]);
+
+	const restoredDraft = useMemo(() => {
+		return formDraft ? { ...formDraft } : undefined;
+	}, [ formDraft ]);
+
+	const groupsLoading = groupsStatus === 'DELETING' || groupsStatus === 'FETCHING';
+	const platformsLoading = ownPlatformsStatus === 'DELETING' || ownPlatformsStatus === 'FETCHING';
 
 	return {
-		...mediaItem
+		isLoading: saveStatus === 'SAVING' || catalogStatus === 'FETCHING' || groupsLoading || platformsLoading,
+		initialValues: initialValues,
+		restoredDraft: restoredDraft,
+		sameNameConfirmationRequested: saveStatus === 'REQUIRES_CONFIRMATION',
+		catalogSearchResults: catalogSearchResults,
+		catalogDetails: catalogDetails,
+		selectedGroup: selectedGroup,
+		selectedOwnPlatform: selectedOwnPlatform
 	};
 };
 
 /**
- * Common helper to build the optional media-item draft restored after mount
- * @param state the Redux state
- * @returns the restored draft, if any
- */
-const buildRestoredMediaItemFormDraft = (state: State): MediaItemInternal | undefined => {
-	const {
-		formDraft
-	} = state.mediaItemDetails;
-
-	if(!formDraft) {
-		return undefined;
-	}
-
-	return {
-		...formDraft
-	};
-};
-
-/**
- * Common mapStateToProps for all media-item form containers
- * @param state the Redux state
- * @returns the shared form props
- */
-export const commonMediaItemFormMapStateToProps = (state: State): CommonMediaItemFormComponentInputMain => {
-	const details = state.mediaItemDetails;
-	const mediaItemLoading = details.saveStatus === 'SAVING';
-	const catalogLoading = details.catalogStatus === 'FETCHING';
-	const groupsLoading = state.groupsList.status === 'DELETING' || state.groupsList.status === 'FETCHING';
-	const platformsLoading = state.ownPlatformsList.status === 'DELETING' || state.ownPlatformsList.status === 'FETCHING';
-
-	if(!details.mediaItem) {
-		throw AppError.GENERIC.withDetails('App navigated to the media item form with undefined details');
-	}
-
-	return {
-		isLoading: mediaItemLoading || catalogLoading || groupsLoading || platformsLoading,
-		initialValues: buildInitialMediaItemFormValues(state),
-		restoredDraft: buildRestoredMediaItemFormDraft(state),
-		sameNameConfirmationRequested: details.saveStatus === 'REQUIRES_CONFIRMATION',
-		catalogSearchResults: details.catalogSearchResults,
-		catalogDetails: details.catalogDetails,
-		selectedGroup: state.groupGlobal.selectedGroup,
-		selectedOwnPlatform: state.ownPlatformGlobal.selectedOwnPlatform
-	};
-};
-
-/**
- * Common mapDispatchToProps for all media-item form containers
+ * Common output props for all media-item form containers
  * @param dispatch the Redux dispatch function
  * @returns the shared form callbacks
  */
-export const commonMediaItemFormMapDispatchToProps = (dispatch: Dispatch): CommonMediaItemFormComponentOutput => {
+export const buildCommonMediaItemFormOutput = (dispatch: Dispatch): CommonMediaItemFormComponentOutput => {
 	return {
 		saveMediaItem: (mediaItem, confirmSameName) => {
 			dispatch(saveMediaItem(mediaItem, confirmSameName));

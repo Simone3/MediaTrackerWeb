@@ -1,7 +1,8 @@
-import { CSSProperties, ReactElement, ReactNode } from 'react';
+import { CSSProperties, ReactElement, ReactNode, useState } from 'react';
+import { ResponsiveActionMenuAction, ResponsiveActionMenuAnchorRect, ResponsiveActionMenuComponent } from 'app/components/presentational/generic/responsive-action-menu';
 import { i18n } from 'app/utilities/i18n';
 
-const renderNoneOption = (noneOption: EntityManagementListNoneOption, selectedLabel: string): ReactElement => {
+const renderNoneOption = (noneOption: EntityManagementListNoneOption, selectedLabel: string | undefined): ReactElement => {
 	return (
 		<li
 			className={`entity-management-list-row entity-management-list-row-standalone${noneOption.selected ? ' entity-management-list-row-selected' : ''}`}
@@ -44,9 +45,8 @@ const renderSkeletonRows: <T>(props: EntityManagementListComponentProps<T>) => R
 					</span>
 					<span className='entity-management-list-selection list-skeleton-block entity-management-list-skeleton-pill' />
 				</div>
-				<div className='entity-management-list-actions'>
-					<span className='entity-management-list-action list-skeleton-block entity-management-list-skeleton-action' />
-					<span className='entity-management-list-action list-skeleton-block entity-management-list-skeleton-action' />
+				<div className='entity-management-list-options'>
+					<span className='list-skeleton-block entity-management-list-skeleton-options-icon' />
 				</div>
 			</li>
 		);
@@ -54,11 +54,22 @@ const renderSkeletonRows: <T>(props: EntityManagementListComponentProps<T>) => R
 };
 
 /**
- * Shared selectable list used by the group and own-platform management screens.
+ * Shared selectable list used by the group, own platform and TV show season management screens.
+ * Each row exposes its actions via the shared responsive action menu.
  * @param props the input props
  * @returns the component
  */
 export const EntityManagementListComponent: <T>(props: EntityManagementListComponentProps<T>) => ReactElement = (props) => {
+	const [ openMenu, setOpenMenu ] = useState<EntityManagementListOpenMenu | undefined>(undefined);
+	const selectable = Boolean(props.selectedLabel);
+	const menuItem = openMenu ?
+		props.items.find((item) => {
+			return props.getItemKey(item) === openMenu.itemKey;
+		}) :
+		undefined;
+	const closeMenu = (): void => {
+		setOpenMenu(undefined);
+	};
 	let listContent: ReactNode;
 
 	if(props.showSkeletons) {
@@ -77,17 +88,18 @@ export const EntityManagementListComponent: <T>(props: EntityManagementListCompo
 					const itemName = props.getItemName(item);
 					const itemKey = props.getItemKey(item);
 					const selected = itemKey === props.selectedItemId;
+					const highlighted = itemKey === openMenu?.itemKey;
 					const badgeShellClassName = props.getBadgeShellClassName ? props.getBadgeShellClassName(item) : '';
 
 					return (
 						<li
 							key={itemKey}
-							className={`entity-management-list-row${selected ? ' entity-management-list-row-selected' : ''}`}
+							className={`entity-management-list-row${selected ? ' entity-management-list-row-selected' : ''}${highlighted ? ' entity-management-list-row-highlighted' : ''}`}
 							style={{ '--entity-management-row-accent': props.getItemAccentColor(item) } as CSSProperties}>
 							<button
 								type='button'
 								className='entity-management-list-main'
-								aria-pressed={selected}
+								aria-pressed={selectable ? selected : undefined}
 								onClick={() => {
 									props.onSelect(item);
 								}}>
@@ -100,26 +112,27 @@ export const EntityManagementListComponent: <T>(props: EntityManagementListCompo
 								</span>
 								{selected && <span className='entity-management-list-selection'>{props.selectedLabel}</span>}
 							</button>
-							<div className='entity-management-list-actions'>
-								<button
-									type='button'
-									className='entity-management-list-action'
-									onClick={() => {
-										props.onEdit(item);
-									}}
-									aria-label={i18n.t('common.a11y.edit', { name: itemName })}>
-									{props.editLabel}
-								</button>
-								<button
-									type='button'
-									className='entity-management-list-action entity-management-list-action-danger'
-									onClick={() => {
-										props.onDelete(item);
-									}}
-									aria-label={i18n.t('common.a11y.delete', { name: itemName })}>
-									{props.deleteLabel}
-								</button>
-							</div>
+							<button
+								type='button'
+								className='entity-management-list-options'
+								onClick={(event) => {
+									const buttonRect = event.currentTarget.getBoundingClientRect();
+
+									setOpenMenu({
+										itemKey: itemKey,
+										anchorRect: {
+											top: buttonRect.top,
+											bottom: buttonRect.bottom,
+											left: buttonRect.left,
+											right: buttonRect.right,
+											width: buttonRect.width,
+											height: buttonRect.height
+										}
+									});
+								}}
+								aria-label={i18n.t('common.a11y.optionsFor', { name: itemName })}>
+								<span className='entity-management-list-options-icon' aria-hidden={true}>...</span>
+							</button>
 						</li>
 					);
 				})}
@@ -135,15 +148,23 @@ export const EntityManagementListComponent: <T>(props: EntityManagementListCompo
 					<p className='entity-management-list-empty-title'>{props.emptyTitle}</p>
 					<p className='entity-management-list-empty-copy'>{props.emptyCopy}</p>
 				</div>}
+			{menuItem && (
+				<ResponsiveActionMenuComponent
+					visible={true}
+					anchorRect={openMenu?.anchorRect}
+					title={props.getItemName(menuItem)}
+					closeAriaLabel={props.menuCloseAriaLabel}
+					onClose={closeMenu}
+					actions={props.getItemActions(menuItem, closeMenu)}
+				/>
+			)}
 		</div>
 	);
 };
 
 export type EntityManagementListComponentProps<T> = {
 	items: T[];
-	selectedLabel: string;
-	editLabel: string;
-	deleteLabel: string;
+	menuCloseAriaLabel: string;
 	emptyTitle: string;
 	emptyCopy: string;
 	showEmptyState: boolean;
@@ -152,17 +173,17 @@ export type EntityManagementListComponentProps<T> = {
 	getItemName: (item: T) => string;
 	getItemAccentColor: (item: T) => string;
 	renderItemBadge: (item: T) => ReactNode;
+	getItemActions: (item: T, closeMenu: () => void) => ResponsiveActionMenuAction[];
 	onSelect: (item: T) => void;
-	onEdit: (item: T) => void;
-	onDelete: (item: T) => void;
 	getBadgeShellClassName?: (item: T) => string;
 	renderItemMeta?: (item: T) => ReactNode;
 	noneOption?: EntityManagementListNoneOption;
+	selectedLabel?: string;
 	selectedItemId?: string;
 	skeletonRowCount?: number;
-	skeletonAccentColor: string;
+	skeletonAccentColor?: string;
 	skeletonBadgeShellClassName?: string;
-	skeletonKeyPrefix: string;
+	skeletonKeyPrefix?: string;
 };
 
 type EntityManagementListNoneOption = {
@@ -172,4 +193,9 @@ type EntityManagementListNoneOption = {
 	selected: boolean;
 	onSelect: () => void;
 	badgeShellClassName?: string;
+};
+
+type EntityManagementListOpenMenu = {
+	itemKey: string;
+	anchorRect: ResponsiveActionMenuAnchorRect;
 };

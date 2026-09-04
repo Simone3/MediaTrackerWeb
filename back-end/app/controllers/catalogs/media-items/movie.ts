@@ -31,7 +31,8 @@ class MovieCatalogController extends MediaItemCatalogController<SearchMovieCatal
 				url: url,
 				responseBodyClass: TmdbMovieSearchResponse,
 				queryParams: queryParams,
-				timeoutMilliseconds: config.externalApis.timeoutMilliseconds
+				timeoutMilliseconds: config.externalApis.timeoutMilliseconds,
+				discardInvalidResponseItems: true
 			};
 
 			restJsonInvoker.invoke(invocationParams)
@@ -71,7 +72,8 @@ class MovieCatalogController extends MediaItemCatalogController<SearchMovieCatal
 				url: url,
 				responseBodyClass: TmdbMovieDetailsResponse,
 				queryParams: queryParams,
-				timeoutMilliseconds: config.externalApis.timeoutMilliseconds
+				timeoutMilliseconds: config.externalApis.timeoutMilliseconds,
+				discardInvalidResponseItems: true
 			};
 
 			restJsonInvoker.invoke(invocationParams)

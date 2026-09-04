@@ -1,11 +1,13 @@
+import { ErrorHint, getErrorHint } from 'app/utilities/error-hint';
+
 /**
  * An application error that can be thrown or promise-rejected in the code and then handled with a negative user message
  */
 export class AppError extends Error {
 	public static GENERIC = new AppError('generic.application', 'error.flash.messages.genericApplication');
-	public static BACKEND_TIMEOUT = new AppError('backend.timeout', 'error.flash.messages.backendTimeout');
+	public static BACKEND_TIMEOUT = new AppError('backend.timeout', 'error.flash.messages.backendTimeout', { key: 'error.flash.hints.backEndTimeout' });
 	public static BACKEND_GENERIC_ERROR = new AppError('backend.generic', 'error.flash.messages.backendGeneric');
-	public static BACKEND_PARSE = new AppError('backend.parse', 'error.flash.messages.backendParse');
+	public static BACKEND_PARSE = new AppError('backend.parse', 'error.flash.messages.backendParse', { key: 'error.flash.hints.backEndParse' });
 
 	public static BACKEND_USER_CHECK_LOGIN_STATUS = new AppError('backend.user.checkLoginStatus', 'error.flash.messages.localCheckLoginStatus');
 	public static BACKEND_USER_SIGNUP = new AppError('backend.user.signup', 'error.flash.messages.backendSignup');
@@ -17,6 +19,7 @@ export class AppError extends Error {
 	public static BACKEND_CATEGORY_DELETE = new AppError('backend.category.delete', 'error.flash.messages.backendCategoryDelete');
 	
 	public static BACKEND_MEDIA_ITEM_FETCH = new AppError('backend.mediaItem.fetch', 'error.flash.messages.backendMediaItemFetch');
+	public static BACKEND_MEDIA_ITEM_STATS_FETCH = new AppError('backend.mediaItem.statsFetch', 'error.flash.messages.backendMediaItemStatsFetch');
 	public static BACKEND_MEDIA_ITEM_SAVE = new AppError('backend.mediaItem.save', 'error.flash.messages.backendMediaItemSave');
 	public static BACKEND_MEDIA_ITEM_DELETE = new AppError('backend.mediaItem.delete', 'error.flash.messages.backendMediaItemDelete');
 	public static BACKEND_MEDIA_ITEM_CATALOG_SEARCH = new AppError('backend.mediaItem.catalogSearch', 'error.flash.messages.backendMediaItemCatalogSearch');
@@ -32,15 +35,19 @@ export class AppError extends Error {
 
 	public static TV_SHOW_SEASON_SAME_NUMBER = new AppError('tvShowSeason.sameNumber', 'error.flash.messages.saveTvShowSeasonNumber');
 
+	public static SCREEN_CONTEXT_MISSING = new AppError('screen.contextMissing', 'error.flash.messages.screenContextMissing');
+
 	private _errorCode: string;
 	private _errorDescription: string;
+	private _userHint?: ErrorHint;
 	private _errorDetails?: string | AppError;
 
-	private constructor(errorCode: string, errorDescription: string, errorDetails?: string | AppError) {
+	private constructor(errorCode: string, errorDescription: string, userHint?: ErrorHint, errorDetails?: string | AppError) {
 		super(`${errorCode} - ${errorDescription} - ${errorDetails}`);
 
 		this._errorCode = errorCode;
 		this._errorDescription = errorDescription;
+		this._userHint = userHint;
 		this._errorDetails = errorDetails;
 	}
 
@@ -61,6 +68,14 @@ export class AppError extends Error {
 	}
 
 	/**
+	 * The optional user-facing hint that explains the cause of this error
+	 * @returns the optional user hint
+	 */
+	public get userHint(): ErrorHint | undefined {
+		return this._userHint;
+	}
+
+	/**
 	 * The optional error details
 	 * @returns the optional error details
 	 */
@@ -69,7 +84,8 @@ export class AppError extends Error {
 	}
 
 	/**
-	 * Adds details to an error constant
+	 * Adds details to an error constant. If the constant does not declare a hint of its own, the source error is inspected
+	 * to extract a user-facing explanation of the failure.
 	 * @param errorDetails the error details
 	 * @returns a new AppError with the given details
 	 */
@@ -87,6 +103,8 @@ export class AppError extends Error {
 			convertedErrorDetails = '';
 		}
 
-		return new AppError(this.errorCode, this.errorDescription, convertedErrorDetails);
+		const userHint = this.userHint || getErrorHint(errorDetails);
+
+		return new AppError(this.errorCode, this.errorDescription, userHint, convertedErrorDetails);
 	}
 }

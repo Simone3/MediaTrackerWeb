@@ -126,7 +126,7 @@ describe('Security API Tests', () => {
 			const categories = await categoryController.filterCategories(firstUC.user, { name: '.*' });
 			const groups = await groupController.filterGroups(firstUC.user, firstUC.category, { name: '.*' });
 			const ownPlatforms = await ownPlatformController.filterOwnPlatforms(firstUC.user, firstUC.category, { name: '.*' });
-			const movies = await movieEntityController.filterAndOrderMediaItems(firstUC.user, firstUC.category, { name: '.*' });
+			const { elements: movies } = await movieEntityController.filterAndOrderMediaItems(firstUC.user, firstUC.category, { name: '.*' });
 
 			expect(extractAsString(categories, 'name'), 'Category filter treated input as a regex').to.eql([ '.*' ]);
 			expect(extractAsString(groups, 'name'), 'Group filter treated input as a regex').to.eql([ '.*' ]);

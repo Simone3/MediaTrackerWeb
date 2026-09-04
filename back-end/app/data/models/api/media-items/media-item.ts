@@ -1,9 +1,10 @@
-import { CommonAddResponse, CommonRequest, CommonResponse, CommonSaveRequest } from 'app/data/models/api/common';
+import { CommonAddResponse, CommonRequest, CommonResponse, CommonSaveRequest, PaginationRequest, PaginationResponse } from 'app/data/models/api/common';
 import { Group } from 'app/data/models/api/group';
 import { OwnPlatform } from 'app/data/models/api/own-platform';
 import { ValuesOf } from 'app/utilities/helper-types';
+import { IsTimeZone } from 'app/utilities/validators';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDateString, IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsBoolean, IsDateString, IsDefined, IsIn, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, Max, ValidateNested } from 'class-validator';
 
 /**
  * Util class to extract common fields to both media item entities and catalog entries
@@ -54,6 +55,17 @@ class CoreMediaItemData {
 }
 
 /**
+ * The maximum number of decimal digits allowed for a media item order inside a group
+ */
+export const MEDIA_ITEM_ORDER_IN_GROUP_MAX_DECIMALS = 1;
+
+/**
+ * The maximum value allowed for a media item order inside a group. Arbitrary upper bound: no series is
+ * anywhere near this long, and it keeps the field from holding a nonsensical value
+ */
+export const MEDIA_ITEM_ORDER_IN_GROUP_MAX = 9999;
+
+/**
  * Model for a media item group data, publicly exposed via API
  */
 export class MediaItemGroup {
@@ -75,10 +87,13 @@ export class MediaItemGroup {
 	public groupData?: Group;
 
 	/**
-	 * The media item order inside the group
+	 * The media item order inside the group. Allows one decimal digit, so that a spin-off can sit
+	 * between two main entries (e.g. 2.5), and must be greater than zero
 	 */
 	@IsNotEmpty()
-	@IsInt()
+	@IsNumber({ maxDecimalPlaces: MEDIA_ITEM_ORDER_IN_GROUP_MAX_DECIMALS })
+	@IsPositive()
+	@Max(MEDIA_ITEM_ORDER_IN_GROUP_MAX)
 	public orderInGroup!: number;
 }
 
@@ -347,12 +362,30 @@ export class UpdateMediaItemResponse extends CommonResponse {
  * Abstract request for the 'filter media items' API
  */
 export abstract class FilterMediaItemsRequest extends CommonRequest {
+	/**
+	 * Optional pagination options. If omitted, every matching media item is returned
+	 */
+	@IsOptional()
+	@Type(() => {
+		return PaginationRequest;
+	})
+	@ValidateNested()
+	public pagination?: PaginationRequest;
 }
 
 /**
  * Abstract response for the 'filter media items' API
  */
 export abstract class FilterMediaItemsResponse extends CommonResponse {
+	/**
+	 * The pagination details, returned only if the request asked for a page
+	 */
+	@IsOptional()
+	@Type(() => {
+		return PaginationResponse;
+	})
+	@ValidateNested()
+	public pagination?: PaginationResponse;
 }
 
 /**
@@ -365,12 +398,31 @@ export abstract class SearchMediaItemsRequest extends CommonRequest {
 	@IsNotEmpty()
 	@IsString()
 	public searchTerm!: string;
+
+	/**
+	 * Optional pagination options. If omitted, every matching media item is returned
+	 */
+	@IsOptional()
+	@Type(() => {
+		return PaginationRequest;
+	})
+	@ValidateNested()
+	public pagination?: PaginationRequest;
 }
 
 /**
  * Abstract response for the 'search media items' API
  */
 export abstract class SearchMediaItemsResponse extends CommonResponse {
+	/**
+	 * The pagination details, returned only if the request asked for a page
+	 */
+	@IsOptional()
+	@Type(() => {
+		return PaginationResponse;
+	})
+	@ValidateNested()
+	public pagination?: PaginationResponse;
 }
 
 /**
@@ -418,3 +470,251 @@ export abstract class SearchMediaItemCatalogResponse extends CommonResponse {
 export abstract class GetMediaItemFromCatalogResponse extends CommonResponse {
 }
 
+/**
+ * Array of all media item backlog statuses, publicly exposed via API
+ */
+export const MEDIA_ITEM_BACKLOG_STATUS_VALUES: [ 'NEW', 'ACTIVE', 'UPCOMING', 'REDO' ] = [ 'NEW', 'ACTIVE', 'UPCOMING', 'REDO' ];
+
+/**
+ * The media item statuses a backlog entry can have, publicly exposed via API
+ */
+export type MediaItemBacklogStatus = ValuesOf<typeof MEDIA_ITEM_BACKLOG_STATUS_VALUES>;
+
+/**
+ * Media items stats filtering options, publicly exposed via API. It reuses the group and own platform blocks of the
+ * 'filter media items' API unchanged, so that the stats screen and the list screen mean the same thing by the same
+ * words. It deliberately has nothing else: the stats break the backlog down by importance and by own platform, and
+ * filtering by either of those axes would reduce the corresponding chart to a single value
+ */
+export class MediaItemsStatsFilter {
+	/**
+	 * Filter for groups
+	 */
+	@IsOptional()
+	@Type(() => {
+		return MediaItemGroupFilter;
+	})
+	@ValidateNested()
+	public groups?: MediaItemGroupFilter;
+
+	/**
+	 * Filter for own platforms
+	 */
+	@IsOptional()
+	@Type(() => {
+		return MediaItemOwnPlatformFilter;
+	})
+	@ValidateNested()
+	public ownPlatforms?: MediaItemOwnPlatformFilter;
+}
+
+/**
+ * Request for the 'get media items stats' API
+ */
+export class GetMediaItemsStatsRequest extends CommonRequest {
+	/**
+	 * Filtering options
+	 */
+	@IsOptional()
+	@Type(() => {
+		return MediaItemsStatsFilter;
+	})
+	@ValidateNested()
+	public filter?: MediaItemsStatsFilter;
+
+	/**
+	 * The time zone the completion years must be computed in, as an IANA identifier such as 'Europe/Rome' or a UTC
+	 * offset such as '+02:00', defaulting to UTC when absent.
+	 * Completion dates are written by the client at local midnight and stored as the corresponding instant, so a
+	 * completion dated the 1st of January is stored in the previous year for any client east of Greenwich: grouping
+	 * them without the client's own time zone would put those completions in the wrong bar
+	 */
+	@IsOptional()
+	@IsTimeZone()
+	public timezone?: string;
+}
+
+/**
+ * The number of media item completions in one year, publicly exposed via API
+ */
+export class MediaItemsStatsYear {
+	/**
+	 * The year
+	 */
+	@IsDefined()
+	@IsInt()
+	public year!: number;
+
+	/**
+	 * The number of completions in the year
+	 */
+	@IsDefined()
+	@IsInt()
+	public count!: number;
+}
+
+/**
+ * The number of backlog media items in one status, publicly exposed via API
+ */
+export class MediaItemsStatsStatus {
+	/**
+	 * The status
+	 */
+	@IsNotEmpty()
+	@IsString()
+	@IsIn(MEDIA_ITEM_BACKLOG_STATUS_VALUES)
+	public status!: MediaItemBacklogStatus;
+
+	/**
+	 * The number of backlog media items in the status
+	 */
+	@IsDefined()
+	@IsInt()
+	public count!: number;
+}
+
+/**
+ * The number of backlog media items with one importance level on one own platform, publicly exposed via API
+ */
+export class MediaItemsStatsImportanceAndOwnPlatform {
+	/**
+	 * The importance level
+	 */
+	@IsNotEmpty()
+	@IsString()
+	@IsIn(MEDIA_ITEM_IMPORTANCE_VALUES)
+	public importance!: MediaItemImportance;
+
+	/**
+	 * The own platform ID, or null for the media items the user does not own
+	 */
+	@IsOptional()
+	@IsString()
+	public ownPlatformId!: string | null;
+
+	/**
+	 * The number of backlog media items with the importance level on the own platform
+	 */
+	@IsDefined()
+	@IsInt()
+	public count!: number;
+}
+
+/**
+ * The number of media items a stats request covers, publicly exposed via API
+ */
+export class MediaItemsStatsMediaItems {
+	/**
+	 * The number of media items in the category, ignoring the request filter
+	 */
+	@IsDefined()
+	@IsInt()
+	public total!: number;
+
+	/**
+	 * The number of media items matching the request filter
+	 */
+	@IsDefined()
+	@IsInt()
+	public filtered!: number;
+}
+
+/**
+ * The completions half of the media items stats, publicly exposed via API
+ */
+export class MediaItemsStatsCompletions {
+	/**
+	 * The total number of completion dates, whatever the status of the media items carrying them
+	 */
+	@IsDefined()
+	@IsInt()
+	public total!: number;
+
+	/**
+	 * The number of distinct media items completed at least once
+	 */
+	@IsDefined()
+	@IsInt()
+	public mediaItems!: number;
+
+	/**
+	 * The completions grouped by year, ordered by year and WITHOUT the years that have none: the client knows the
+	 * current year and fills the gaps, which keeps the payload proportional to the data rather than to the range
+	 */
+	@IsDefined()
+	@IsDefined({ each: true })
+	@Type(() => {
+		return MediaItemsStatsYear;
+	})
+	@ValidateNested()
+	public byYear: MediaItemsStatsYear[] = [];
+}
+
+/**
+ * The backlog half of the media items stats, publicly exposed via API
+ */
+export class MediaItemsStatsBacklog {
+	/**
+	 * The number of media items whose status is not 'COMPLETE'
+	 */
+	@IsDefined()
+	@IsInt()
+	public total!: number;
+
+	/**
+	 * The backlog grouped by status, WITHOUT the statuses that have no media item
+	 */
+	@IsDefined()
+	@IsDefined({ each: true })
+	@Type(() => {
+		return MediaItemsStatsStatus;
+	})
+	@ValidateNested()
+	public byStatus: MediaItemsStatsStatus[] = [];
+
+	/**
+	 * The backlog grouped by importance level and own platform, WITHOUT the combinations that have no media item
+	 */
+	@IsDefined()
+	@IsDefined({ each: true })
+	@Type(() => {
+		return MediaItemsStatsImportanceAndOwnPlatform;
+	})
+	@ValidateNested()
+	public byImportanceAndOwnPlatform: MediaItemsStatsImportanceAndOwnPlatform[] = [];
+}
+
+/**
+ * Response for the 'get media items stats' API
+ */
+export class GetMediaItemsStatsResponse extends CommonResponse {
+	/**
+	 * The number of media items the stats cover
+	 */
+	@IsDefined()
+	@Type(() => {
+		return MediaItemsStatsMediaItems;
+	})
+	@ValidateNested()
+	public mediaItems!: MediaItemsStatsMediaItems;
+
+	/**
+	 * What the user has finished
+	 */
+	@IsDefined()
+	@Type(() => {
+		return MediaItemsStatsCompletions;
+	})
+	@ValidateNested()
+	public completions!: MediaItemsStatsCompletions;
+
+	/**
+	 * What the user has left to do
+	 */
+	@IsDefined()
+	@Type(() => {
+		return MediaItemsStatsBacklog;
+	})
+	@ValidateNested()
+	public backlog!: MediaItemsStatsBacklog;
+}

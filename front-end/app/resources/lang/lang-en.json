@@ -1,11 +1,17 @@
 {
 	"error": {
+		"boundary": {
+			"title": "Something Went Wrong",
+			"message": "This page could not be opened. It may need some information that is only available while browsing the app, so try again from the home screen.",
+			"recoverButton": "Back to Home"
+		},
 		"flash": {
 			"title": "Error",
+			"messageWithHint": "{{message}}: {{hint}}",
 			"messages": {
 				"genericApplication": "A generic application error occurred",
 				"backendTimeout": "A connection with the server cannot be established, check your connection and try again later",
-				"backendGeneric": "The server returned a generic error",
+				"backendGeneric": "The server returned an error",
 				"backendParse": "The server returned an unknown response",
 				"localCheckLoginStatus": "Cannot check local storage for user credentials",
 				"backendSignup": "An error occurred during signup",
@@ -15,6 +21,7 @@
 				"backendCategorySave": "Cannot save the category to the server",
 				"backendCategoryDelete": "Cannot delete the category from the server",
 				"backendMediaItemFetch": "Cannot fetch media items from the server",
+				"backendMediaItemStatsFetch": "Cannot fetch the media items stats from the server",
 				"backendMediaItemSave": "Cannot save the media item to the server",
 				"backendMediaItemDelete": "Cannot delete the media item from the server",
 				"backendMediaItemCatalogSearch": "Cannot search the media item catalog",
@@ -25,7 +32,41 @@
 				"backendOwnPlatformFetch": "Cannot fetch platforms from the server",
 				"backendOwnPlatformSave": "Cannot save the platform to the server",
 				"backendOwnPlatformDelete": "Cannot delete the platform from the server",
-				"saveTvShowSeasonNumber": "A season with the same number already exists for this TV show"
+				"saveTvShowSeasonNumber": "A season with the same number already exists for this TV show",
+				"screenContextMissing": "That page cannot be opened directly, so you have been taken back to your categories"
+			},
+			"hints": {
+				"backEndTimeout": "the server did not respond in time, check your connection",
+				"backEndParse": "the server returned an unknown response",
+				"backEndUnreachable": "the server cannot be reached",
+				"backEndStatus": "the server responded with status {{status}}",
+				"backEndGenericApplication": "the server ran into an unexpected problem",
+				"backEndAuthentication": "the session is no longer valid, log in again",
+				"backEndAuthorization": "this account cannot access that data",
+				"backEndNotFound": "the requested data does not exist",
+				"backEndInvalidRequest": "the server rejected the submitted data",
+				"backEndDatabaseConnection": "the server cannot reach its database",
+				"backEndDatabaseFind": "the database could not read the data",
+				"backEndDatabaseSave": "the database could not save the data",
+				"backEndDatabaseUniqueness": "another element with the same values already exists",
+				"backEndDatabaseDelete": "the database could not delete the data",
+				"backEndDatabaseNotEmpty": "it still contains other elements",
+				"backEndExternalApi": "the external catalog service returned an error",
+				"backEndExternalApiTimeout": "the external catalog service did not respond in time",
+				"backEndExternalApiParse": "the external catalog service returned an unknown response",
+				"firebaseEmailAlreadyInUse": "this email address is already registered",
+				"firebaseInvalidEmail": "the email address is not valid",
+				"firebaseMissingEmail": "the email address is missing",
+				"firebaseMissingPassword": "the password is missing",
+				"firebaseWeakPassword": "the password is too weak, use at least six characters",
+				"firebaseInvalidCredentials": "the email address or the password is incorrect",
+				"firebaseUserDisabled": "this account has been disabled",
+				"firebaseTooManyRequests": "too many attempts, try again later",
+				"firebaseUnreachable": "the authentication service cannot be reached",
+				"firebaseOperationNotAllowed": "email and password sign-in is not enabled",
+				"firebaseRequiresRecentLogin": "log in again to complete this operation",
+				"firebaseMisconfigured": "the authentication service is not configured correctly",
+				"firebaseUnknown": "the authentication service returned \"{{code}}\""
 			}
 		}
 	},
@@ -105,7 +146,7 @@
 			"importance": {
 				"400": "Very important",
 				"300": "Important",
-				"200" : "Fairly important",
+				"200": "Fairly important",
 				"100": "Unimportant"
 			}
 		},
@@ -185,7 +226,8 @@
 				"VIDEOGAME": "Search games..."
 			},
 			"buttons": {
-				"search": "Search"
+				"search": "Search",
+				"exitViewGroup": "Back"
 			},
 			"group": "{{groupName}}, #{{order}}",
 			"completed": {
@@ -204,6 +246,7 @@
 			},
 			"filter": {
 				"title": "Filter",
+				"clearButton": "Clear",
 				"prompts": {
 					"status": "Status",
 					"group": "Group",
@@ -215,17 +258,21 @@
 					"status": {
 						"ALL": "Any status",
 						"CURRENT": "Current",
-						"COMPLETE" : "Completed"
+						"COMPLETE": "Completed"
 					},
 					"group": {
 						"ALL": "With or without group",
 						"ANY": "Only with group",
-						"NONE": "Only without group"
+						"NONE": "Only without group",
+						"unknown": "Group {{id}}",
+						"deleted": "{{name}} (deleted)"
 					},
 					"ownPlatform": {
 						"ALL": "Owned or not",
 						"ANY": "Only owned",
-						"NONE": "Only not owned"
+						"NONE": "Only not owned",
+						"unknown": "Platform {{id}}",
+						"deleted": "{{name}} (deleted)"
 					},
 					"sort": {
 						"DEFAULT": "Default order",
@@ -236,6 +283,144 @@
 						"all": "Any importance"
 					}
 				}
+			},
+			"fetchError": {
+				"title": "Could not load this page",
+				"copy": "The media items could not be retrieved. Check your connection and try again.",
+				"retry": "Retry"
+			}
+		},
+		"stats": {
+			"title": "{{category}} progress",
+			"open": "Progress",
+			"subtitle": {
+				"single": {
+					"BOOK": "1 book tracked",
+					"MOVIE": "1 movie tracked",
+					"TV_SHOW": "1 show tracked",
+					"VIDEOGAME": "1 game tracked"
+				},
+				"multiple": {
+					"BOOK": "{{count}} books tracked",
+					"MOVIE": "{{count}} movies tracked",
+					"TV_SHOW": "{{count}} shows tracked",
+					"VIDEOGAME": "{{count}} games tracked"
+				}
+			},
+			"back": "Back to list",
+			"filters": {
+				"label": "Filters",
+				"clearButton": "Clear",
+				"summary": {
+					"BOOK": "{{shown}} of {{total}} books",
+					"MOVIE": "{{shown}} of {{total}} movies",
+					"TV_SHOW": "{{shown}} of {{total}} shows",
+					"VIDEOGAME": "{{shown}} of {{total}} games"
+				}
+			},
+			"completed": {
+				"label": "Completed",
+				"unit": {
+					"BOOK": "readings, all time",
+					"MOVIE": "viewings, all time",
+					"TV_SHOW": "viewings, all time",
+					"VIDEOGAME": "playthroughs, all time"
+				},
+				"distinct": {
+					"single": {
+						"BOOK": "1 distinct book",
+						"MOVIE": "1 distinct movie",
+						"TV_SHOW": "1 distinct show",
+						"VIDEOGAME": "1 distinct game"
+					},
+					"multiple": {
+						"BOOK": "{{count}} distinct books",
+						"MOVIE": "{{count}} distinct movies",
+						"TV_SHOW": "{{count}} distinct shows",
+						"VIDEOGAME": "{{count}} distinct games"
+					}
+				},
+				"repeats": {
+					"single": "1 repeat",
+					"multiple": "{{count}} repeats"
+				}
+			},
+			"perYear": {
+				"title": {
+					"BOOK": "Read per year",
+					"MOVIE": "Watched per year",
+					"TV_SHOW": "Watched per year",
+					"VIDEOGAME": "Finished per year"
+				},
+				"average": "{{value}} a year on average",
+				"empty": "Nothing completed yet",
+				"accessibility": "Completions per year",
+				"tooltip": "{{year}}: {{count}}"
+			},
+			"todo": {
+				"label": "Still to do",
+				"count": {
+					"single": {
+						"BOOK": "book",
+						"MOVIE": "movie",
+						"TV_SHOW": "show",
+						"VIDEOGAME": "game"
+					},
+					"multiple": {
+						"BOOK": "books",
+						"MOVIE": "movies",
+						"TV_SHOW": "shows",
+						"VIDEOGAME": "games"
+					}
+				},
+				"centre": {
+					"BOOK": "to read",
+					"MOVIE": "to watch",
+					"TV_SHOW": "to watch",
+					"VIDEOGAME": "to play"
+				}
+			},
+			"byStatus": {
+				"title": "The backlog, by status",
+				"empty": "Nothing left. Everything here is done.",
+				"values": {
+					"NEW": {
+						"BOOK": "Not started",
+						"MOVIE": "Not started",
+						"TV_SHOW": "Not started",
+						"VIDEOGAME": "Not started"
+					},
+					"ACTIVE": {
+						"BOOK": "Reading",
+						"MOVIE": "Watching",
+						"TV_SHOW": "Watching",
+						"VIDEOGAME": "Playing"
+					},
+					"UPCOMING": {
+						"BOOK": "Upcoming",
+						"MOVIE": "Upcoming",
+						"TV_SHOW": "Upcoming",
+						"VIDEOGAME": "Upcoming"
+					},
+					"REDO": {
+						"BOOK": "To reread",
+						"MOVIE": "To rewatch",
+						"TV_SHOW": "To rewatch",
+						"VIDEOGAME": "To replay"
+					}
+				},
+				"share": "{{value}}%"
+			},
+			"byPlatform": {
+				"title": "The backlog, by importance and platform",
+				"empty": "Nothing left to place.",
+				"emptyLevel": "Nothing left here.",
+				"noOwnPlatform": "Not owned"
+			},
+			"fetchError": {
+				"title": "Could not load the stats",
+				"copy": "The media items stats could not be retrieved. Check your connection and try again.",
+				"retry": "Retry"
 			}
 		},
 		"details": {
@@ -289,6 +474,7 @@
 				"wikipedia": "Wikipedia Search",
 				"justWatch": "Just Watch Search",
 				"howLongToBeat": "How Long To Beat Search",
+				"searchCatalog": "Search",
 				"downloadCatalog": "Reload Catalog",
 				"addDate": "Add date"
 			},
@@ -318,6 +504,17 @@
 			"subtitle": {
 				"new": "Create a new media item",
 				"existing": "Edit this media item"
+			},
+			"validation": {
+				"name": {
+					"required": "Give the item a name"
+				},
+				"orderInGroup": {
+					"required": "Set a position for the item inside the group",
+					"positive": "The position must be greater than zero",
+					"max": "The position can be at most {{max}}",
+					"decimals": "Use at most one decimal digit, e.g. 2.5"
+				}
 			}
 		}
 	},
@@ -342,6 +539,7 @@
 				"main": "Season {{seasonNumber}}",
 				"secondary": "Watched {{watchedEpisodesNumber}} out of {{episodesNumber}} episodes"
 			},
+			"edit": "Edit season",
 			"delete": "Delete season",
 			"complete": "Complete season"
 		},
@@ -358,6 +556,14 @@
 				"number": "Season number",
 				"episodesNumber": "Number of episodes",
 				"watchedEpisodesNumber": "Number of watched episodes"
+			},
+			"validation": {
+				"number": {
+					"required": "Give the season a number"
+				},
+				"watchedEpisodesNumber": {
+					"max": "Cannot be more than the number of episodes"
+				}
 			}
 		}
 	},
@@ -382,6 +588,9 @@
 			},
 			"empty": "No groups",
 			"emptyHint": "Create a group to keep sagas, franchises, and collections together.",
+			"search": "Search groups...",
+			"noResults": "No matching groups",
+			"noResultsHint": "No group matches your search. Try a different term.",
 			"none": "None",
 			"edit": "Edit group",
 			"delete": "Delete group"
@@ -420,6 +629,9 @@
 			},
 			"empty": "No platforms",
 			"emptyHint": "Add a platform so each entry can show where you own it.",
+			"search": "Search platforms...",
+			"noResults": "No matching platforms",
+			"noResultsHint": "No platform matches your search. Try a different term.",
 			"none": "None",
 			"edit": "Edit platform",
 			"delete": "Delete platform"
@@ -454,6 +666,7 @@
 			"netflix": "Netflix",
 			"origin": "Origin",
 			"playstation": "PlayStation",
+			"primevideo": "Prime Video",
 			"steam": "Steam",
 			"switch": "Nintendo Switch",
 			"uplay": "Uplay"
@@ -465,6 +678,7 @@
 		},
 		"buttons": {
 			"add": "Add",
+			"back": "Back",
 			"clear": "Clear",
 			"done": "Done",
 			"save": "Save",
@@ -494,15 +708,28 @@
 			"selectColor": "Select color {{color}}",
 			"icon": "{{name}} icon",
 			"closeCategoryActions": "Close category actions",
-			"closeMediaItemActions": "Close media item actions"
+			"closeMediaItemActions": "Close media item actions",
+			"closeGroupActions": "Close group actions",
+			"closeOwnPlatformActions": "Close platform actions",
+			"closeTvShowSeasonActions": "Close season actions"
 		},
 		"fields": {
 			"color": "Color"
+		},
+		"validation": {
+			"required": "This field is required"
 		},
 		"drawer": {
 			"navigation": "App navigation",
 			"home": "Media",
 			"settings": "Settings"
+		},
+		"pagination": {
+			"label": "List pages",
+			"previous": "Previous",
+			"next": "Next",
+			"goToPage": "Go to page",
+			"position": "Page {{current}} of {{total}}"
 		}
 	},
 	"auth": {

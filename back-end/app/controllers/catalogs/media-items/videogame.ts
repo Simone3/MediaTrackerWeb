@@ -148,13 +148,21 @@ class VideogameCatalogController extends MediaItemCatalogController<SearchVideog
 	}
 
 	/**
-	 * Helper to parse and validate IGDB game array responses
+	 * Helper to parse and validate IGDB game array responses, discarding the games (and the parts of a game)
+	 * that failed validation
 	 * @param response the raw response
 	 * @returns the parsed response
 	 */
 	private parseIgdbGamesResponse(response: unknown): Promise<IgdbGame[]> {
 		if(response instanceof Array) {
-			return parserValidator.parseAndValidateList(IgdbGame, response as object[]);
+			return parserValidator.parseAndValidateListDiscardingInvalid(IgdbGame, response as object[])
+				.then((parseResult) => {
+					if(parseResult.discardedItems > 0) {
+						logger.warn('Videogame catalog - Discarded %s invalid response list item(s)', parseResult.discardedItems);
+					}
+
+					return parseResult.value;
+				});
 		}
 		else {
 			return Promise.reject(AppError.EXTERNAL_API_PARSE.withDetails('IGDB response is not an array'));

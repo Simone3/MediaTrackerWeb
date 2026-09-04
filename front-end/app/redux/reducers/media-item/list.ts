@@ -1,9 +1,10 @@
 import { Action } from 'redux';
+import { config } from 'app/config/config';
 import { mediaItemDefinitionsControllerFactory } from 'app/controllers/main/entities/media-items/factories';
 import { SELECT_CATEGORY } from 'app/redux/actions/category/const';
 import { SelectCategoryAction } from 'app/redux/actions/category/types';
-import { COMPLETE_DELETING_MEDIA_ITEM, COMPLETE_FETCHING_MEDIA_ITEMS, COMPLETE_INLINE_UPDATING_MEDIA_ITEM, COMPLETE_SAVING_MEDIA_ITEM, FAIL_DELETING_MEDIA_ITEM, FAIL_FETCHING_MEDIA_ITEMS, FAIL_INLINE_UPDATING_MEDIA_ITEM, HIGHLIGHT_MEDIA_ITEM, INVALIDATE_MEDIA_ITEMS, REMOVE_MEDIA_ITEM_HIGHLIGHT, SEARCH_MEDIA_ITEMS, START_DELETING_MEDIA_ITEM, START_FETCHING_MEDIA_ITEMS, START_INLINE_UPDATING_MEDIA_ITEM, START_MEDIA_ITEMS_SEARCH_MODE, START_MEDIA_ITEMS_SET_FILTERS_MODE, START_MEDIA_ITEMS_VIEW_GROUP_MODE, STOP_MEDIA_ITEMS_SEARCH_MODE, STOP_MEDIA_ITEMS_SET_FILTERS_MODE, STOP_MEDIA_ITEMS_VIEW_GROUP_MODE, SUBMIT_MEDIA_ITEMS_FILTERS } from 'app/redux/actions/media-item/const';
-import { CompleteFetchingMediaItemsAction, HighlightMediaItemAction, SearchMediaItemsAction, StartMediaItemsViewGroupModeAction, SubmitMediaItemsFiltersAction } from 'app/redux/actions/media-item/types';
+import { CHANGE_MEDIA_ITEMS_PAGE, CLEAR_MEDIA_ITEMS_FILTERS, COMPLETE_DELETING_MEDIA_ITEM, COMPLETE_FETCHING_MEDIA_ITEMS, COMPLETE_INLINE_UPDATING_MEDIA_ITEM, COMPLETE_SAVING_MEDIA_ITEM, FAIL_DELETING_MEDIA_ITEM, FAIL_FETCHING_MEDIA_ITEMS, FAIL_INLINE_UPDATING_MEDIA_ITEM, HIGHLIGHT_MEDIA_ITEM, INVALIDATE_MEDIA_ITEMS, REMOVE_MEDIA_ITEM_HIGHLIGHT, SEARCH_MEDIA_ITEMS, START_DELETING_MEDIA_ITEM, START_FETCHING_MEDIA_ITEMS, START_INLINE_UPDATING_MEDIA_ITEM, START_MEDIA_ITEMS_SEARCH_MODE, START_MEDIA_ITEMS_SET_FILTERS_MODE, START_MEDIA_ITEMS_VIEW_GROUP_MODE, STOP_MEDIA_ITEMS_SEARCH_MODE, STOP_MEDIA_ITEMS_SET_FILTERS_MODE, STOP_MEDIA_ITEMS_VIEW_GROUP_MODE, SUBMIT_MEDIA_ITEMS_FILTERS } from 'app/redux/actions/media-item/const';
+import { ChangeMediaItemsPageAction, ClearMediaItemsFiltersAction, CompleteFetchingMediaItemsAction, HighlightMediaItemAction, SearchMediaItemsAction, StartMediaItemsViewGroupModeAction, SubmitMediaItemsFiltersAction } from 'app/redux/actions/media-item/types';
 import { MediaItemsListState, mediaItemsListStateInitialValue } from 'app/redux/state/media-item';
 
 /**
@@ -39,14 +40,41 @@ export const mediaItemsList = (state: MediaItemsListState = mediaItemsListStateI
 			};
 		}
 	
-		// When the app completes the fetching process, the status is reset and the retrieved list is saved
+		// When the app completes the fetching process, the status is reset and the retrieved page is saved
 		case COMPLETE_FETCHING_MEDIA_ITEMS: {
 			const receiveMediaItemsAction = action as CompleteFetchingMediaItemsAction;
-			
+
+			const totalCount = receiveMediaItemsAction.totalCount;
+			const lastPage = Math.max(0, Math.ceil(totalCount / config.ui.mediaItemsPageSize) - 1);
+
+			// The current page can stop existing while the user is on it, e.g. after deleting the only media item it
+			// contained: fall back to the last page that does exist and reload, unless nothing matches at all anymore
+			if(state.currentPage > lastPage) {
+				return {
+					...state,
+					status: totalCount === 0 ? 'FETCHED' : 'REQUIRES_FETCH',
+					currentPage: lastPage,
+					mediaItems: receiveMediaItemsAction.mediaItems,
+					totalCount: totalCount
+				};
+			}
+
 			return {
 				...state,
 				status: 'FETCHED',
-				mediaItems: receiveMediaItemsAction.mediaItems
+				mediaItems: receiveMediaItemsAction.mediaItems,
+				totalCount: totalCount
+			};
+		}
+
+		// When another page is requested, it is saved in the state and the list is marked for reload
+		case CHANGE_MEDIA_ITEMS_PAGE: {
+			const changeMediaItemsPageAction = action as ChangeMediaItemsPageAction;
+
+			return {
+				...state,
+				status: 'REQUIRES_FETCH',
+				currentPage: changeMediaItemsPageAction.page
 			};
 		}
 
@@ -154,7 +182,8 @@ export const mediaItemsList = (state: MediaItemsListState = mediaItemsListStateI
 
 			return {
 				...state,
-				searchTerm: searchMediaItemsAction.term
+				searchTerm: searchMediaItemsAction.term,
+				currentPage: 0
 			};
 		}
 		
@@ -164,7 +193,8 @@ export const mediaItemsList = (state: MediaItemsListState = mediaItemsListStateI
 				...state,
 				mode: 'NORMAL',
 				status: 'REQUIRES_FETCH',
-				searchTerm: undefined
+				searchTerm: undefined,
+				currentPage: 0
 			};
 		}
 		
@@ -175,7 +205,8 @@ export const mediaItemsList = (state: MediaItemsListState = mediaItemsListStateI
 			return {
 				...state,
 				mode: 'VIEW_GROUP',
-				viewGroup: startMediaItemsViewGroupModeAction.group
+				viewGroup: startMediaItemsViewGroupModeAction.group,
+				currentPage: 0
 			};
 		}
 		
@@ -185,7 +216,8 @@ export const mediaItemsList = (state: MediaItemsListState = mediaItemsListStateI
 				...state,
 				mode: 'NORMAL',
 				status: 'REQUIRES_FETCH',
-				viewGroup: undefined
+				viewGroup: undefined,
+				currentPage: 0
 			};
 		}
 
@@ -205,7 +237,23 @@ export const mediaItemsList = (state: MediaItemsListState = mediaItemsListStateI
 				...state,
 				filter: submitMediaItemsFiltersAction.filter,
 				sortBy: submitMediaItemsFiltersAction.sortBy,
-				status: 'REQUIRES_FETCH'
+				status: 'REQUIRES_FETCH',
+				currentPage: 0
+			};
+		}
+
+		// When the filters are cleared, they go back to the category defaults, i.e. the same values the list starts with, and the list is marked for reload
+		case CLEAR_MEDIA_ITEMS_FILTERS: {
+			const clearMediaItemsFiltersAction = action as ClearMediaItemsFiltersAction;
+
+			const mediaItemDefinitionsController = mediaItemDefinitionsControllerFactory.get(clearMediaItemsFiltersAction.category);
+
+			return {
+				...state,
+				filter: mediaItemDefinitionsController.getDefaultFilter(),
+				sortBy: mediaItemDefinitionsController.getDefaultSortBy(),
+				status: 'REQUIRES_FETCH',
+				currentPage: 0
 			};
 		}
 

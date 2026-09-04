@@ -109,7 +109,7 @@ export class CommonMediaItemFormComponent<TMediaItem extends MediaItemInternal =
 										<PillButtonComponent
 											tone='primary'
 											size='compact'
-											disabled={!formikProps.isValid || !formikProps.values.name.trim() || isLoading}
+											disabled={!formikProps.isValid || isLoading}
 											onClick={() => {
 												void formikProps.submitForm();
 											}}>

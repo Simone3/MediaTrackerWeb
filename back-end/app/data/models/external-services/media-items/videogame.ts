@@ -1,13 +1,13 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsDefined, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 /**
  * Named reference model for the external videogame service
  */
 export class IgdbNamedReference {
-	@IsNotEmpty()
+	@IsOptional()
 	@IsInt()
-	public id!: number;
+	public id?: number;
 
 	@IsNotEmpty()
 	@IsString()
@@ -18,9 +18,9 @@ export class IgdbNamedReference {
  * Image model for the external videogame service
  */
 export class IgdbImage {
-	@IsNotEmpty()
+	@IsOptional()
 	@IsInt()
-	public id!: number;
+	public id?: number;
 
 	@IsNotEmpty()
 	@IsString()
@@ -31,9 +31,9 @@ export class IgdbImage {
  * Involved company model for the external videogame service
  */
 export class IgdbInvolvedCompany {
-	@IsNotEmpty()
+	@IsOptional()
 	@IsInt()
-	public id!: number;
+	public id?: number;
 
 	@IsOptional()
 	@IsBoolean()
@@ -76,7 +76,6 @@ export class IgdbGame {
 	public storyline?: string;
 
 	@IsOptional()
-	@IsDefined({ each: true })
 	@Type(() => {
 		return IgdbNamedReference;
 	})
@@ -84,7 +83,6 @@ export class IgdbGame {
 	public genres?: IgdbNamedReference[];
 
 	@IsOptional()
-	@IsDefined({ each: true })
 	@Type(() => {
 		return IgdbNamedReference;
 	})
@@ -92,7 +90,6 @@ export class IgdbGame {
 	public platforms?: IgdbNamedReference[];
 
 	@IsOptional()
-	@IsDefined({ each: true })
 	@Type(() => {
 		return IgdbInvolvedCompany;
 	})

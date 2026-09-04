@@ -16,6 +16,7 @@ export const navigationRoutes: { [screen: string]: string } = {
 	[AppScreens.CategoryDetails]: '/media/categories/details',
 	[AppScreens.MediaItemsList]: '/media/items',
 	[AppScreens.MediaItemDetails]: '/media/items/details',
+	[AppScreens.MediaItemsStats]: '/media/items/stats',
 	[AppScreens.TvShowSeasonsList]: '/media/tv-show-seasons',
 	[AppScreens.TvShowSeasonDetails]: '/media/tv-show-seasons/details',
 	[AppScreens.GroupsList]: '/media/groups',

@@ -5,14 +5,31 @@ import { AbstractEntityController } from 'app/controllers/entities/helper';
 import { ownPlatformController } from 'app/controllers/entities/own-platform';
 import { AppError } from 'app/data/models/error/error';
 import { CategoryInternal, MediaTypeInternal } from 'app/data/models/internal/category';
-import { PersistedEntityInternal } from 'app/data/models/internal/common';
+import { PaginatedResultInternal, PaginationInternal, PersistedEntityInternal } from 'app/data/models/internal/common';
 import { GroupInternal } from 'app/data/models/internal/group';
-import { MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, MediaItemSortFieldInternal } from 'app/data/models/internal/media-items/media-item';
+import { INTERNAL_MEDIA_ITEM_BACKLOG_STATUSES, MediaItemBacklogStatusInternal, MediaItemFilterInternal, MediaItemImportanceInternal, MediaItemInternal, MediaItemsStatsImportanceAndOwnPlatformInternal, MediaItemsStatsInternal, MediaItemsStatsStatusInternal, MediaItemsStatsYearInternal, MediaItemSortByInternal, MediaItemSortFieldInternal } from 'app/data/models/internal/media-items/media-item';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { logger } from 'app/loggers/logger';
 import { miscUtils } from 'app/utilities/misc-utils';
-import { HydratedDocument, Model, QueryFilter, SortOrder, UpdateQuery } from 'mongoose';
+import { HydratedDocument, Model, PipelineStage, QueryFilter, SortOrder, UpdateQuery } from 'mongoose';
 
+const COMPLETE_STATUS = 'COMPLETE';
+const ACTIVE_STATUS = 'ACTIVE';
+const REDO_STATUS = 'REDO';
+const UPCOMING_STATUS = 'UPCOMING';
+const NEW_STATUS = 'NEW';
+
+/**
+ * Raw shape of the media items stats aggregation result, i.e. one array per facet branch
+ */
+type MediaItemsStatsAggregationResult = {
+	categoryTotal: { value: number }[];
+	filteredTotal: { value: number }[];
+	completionMediaItems: { value: number }[];
+	completionsByYear: { _id: number; count: number }[];
+	backlogByStatus: { _id: MediaItemBacklogStatusInternal; count: number }[];
+	backlogByImportanceAndOwnPlatform: { _id: { importance: MediaItemImportanceInternal; ownPlatform: unknown }; count: number }[];
+};
 /**
  * Abstract controller for media item entities
  * @template TMediaItemInternal the media item entity
@@ -54,10 +71,11 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @param categoryId category ID
 	 * @returns the retrieved media items, as a promise
 	 */
-	public getAllMediaItems(userId: string, categoryId: string): Promise<TMediaItemInternal[]> {
+	public async getAllMediaItems(userId: string, categoryId: string): Promise<TMediaItemInternal[]> {
 		const sortBy: TMediaItemSortByInternal[] = this.getDefaultSortBy();
 
-		return this.filterAndOrderMediaItems(userId, categoryId, undefined, sortBy);
+		const result = await this.filterAndOrderMediaItems(userId, categoryId, undefined, sortBy);
+		return result.elements;
 	}
 
 	/**
@@ -115,9 +133,10 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @param categoryId category ID
 	 * @param filterBy filter options
 	 * @param sortBy sort otions
-	 * @returns the media items, as a promise
+	 * @param pagination optional pagination options. If omitted, every matching media item is returned
+	 * @returns the media items and their total count, as a promise
 	 */
-	public filterAndOrderMediaItems(userId: string, categoryId: string, filterBy?: TMediaItemFilterInternal, sortBy?: TMediaItemSortByInternal[]): Promise<TMediaItemInternal[]> {
+	public filterAndOrderMediaItems(userId: string, categoryId: string, filterBy?: TMediaItemFilterInternal, sortBy?: TMediaItemSortByInternal[], pagination?: PaginationInternal): Promise<PaginatedResultInternal<TMediaItemInternal>> {
 		const andConditions: QueryFilter<MediaItemInternal>[] = [];
 		this.addConditionsFromFilter(userId, categoryId, this.castFilterQueryArray(andConditions), filterBy);
 		const conditions: QueryFilter<MediaItemInternal> = {
@@ -131,8 +150,9 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 				this.setSortConditions(value, sortDirection, sortConditions);
 			}
 		}
+		this.setTiebreakerSortCondition(sortConditions);
 
-		return this.queryHelper.find(this.castFilterQuery(conditions), sortConditions, this.getPopulateAll());
+		return this.findAndCount(this.castFilterQuery(conditions), sortConditions, pagination);
 	}
 
 	/**
@@ -141,9 +161,10 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 	 * @param categoryId category ID
 	 * @param term the search term
 	 * @param filterBy the optional filters
-	 * @returns the media items, as a promise
+	 * @param pagination optional pagination options. If omitted, every matching media item is returned
+	 * @returns the media items and their total count, as a promise
 	 */
-	public searchMediaItems(userId: string, categoryId: string, term: string, filterBy?: TMediaItemFilterInternal): Promise<TMediaItemInternal[]> {
+	public searchMediaItems(userId: string, categoryId: string, term: string, filterBy?: TMediaItemFilterInternal, pagination?: PaginationInternal): Promise<PaginatedResultInternal<TMediaItemInternal>> {
 		const termRegExp = new RegExp(miscUtils.escapeRegExp(term), 'i');
 		
 		// Common search conditions
@@ -169,8 +190,97 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 		// Sort
 		const sortBy: Sortable<TMediaItemInternal> = {};
 		sortBy.name = 'asc';
+		this.setTiebreakerSortCondition(sortBy);
 
-		return this.queryHelper.find(this.castFilterQuery(conditions), sortBy, this.getPopulateAll());
+		return this.findAndCount(this.castFilterQuery(conditions), sortBy, pagination);
+	}
+
+	/**
+	 * Computes the aggregated statistics of the media items matching the given filter, in a single database round trip:
+	 * a category can hold thousands of media items and the result is a few dozen numbers, so nothing is loaded into the
+	 * application to be reduced here
+	 * @param userId user ID
+	 * @param categoryId category ID
+	 * @param filterBy the optional filters. Only the group and own platform blocks are meaningful here
+	 * @param timezone the optional IANA time zone the completion years are computed in, defaulting to UTC
+	 * @returns the statistics, as a promise
+	 */
+	public async getMediaItemsStats(userId: string, categoryId: string, filterBy?: MediaItemFilterInternal, timezone?: string): Promise<MediaItemsStatsInternal> {
+		// A single "now" for the whole aggregation, so that every branch agrees on which media items are still upcoming
+		const now = new Date();
+
+		// Mongoose does not cast an aggregation pipeline, so every condition inside it has to be cast by hand
+		const categoryConditions = this.queryHelper.castConditions(this.castFilterQuery({
+			owner: userId,
+			category: categoryId
+		}));
+
+		const filterAndConditions: QueryFilter<MediaItemInternal>[] = [];
+		this.addCommonConditionsFromFilter(userId, categoryId, filterAndConditions, filterBy);
+		const filterStage: PipelineStage.Match = {
+			$match: this.queryHelper.castConditions(this.castFilterQuery({
+				$and: filterAndConditions
+			}))
+		};
+
+		// The backlog branches share their first stages: filter, resolve the status, and drop what is complete
+		const backlogStages: PipelineStage.FacetPipelineStage[] = [
+			filterStage,
+			{
+				$project: {
+					_id: 0,
+					importance: 1,
+					ownPlatform: 1,
+					status: this.buildBacklogStatusExpression(now)
+				}
+			},
+			{
+				$match: {
+					status: {
+						$ne: COMPLETE_STATUS
+					}
+				}
+			}
+		];
+
+		const results = await this.queryHelper.aggregate<MediaItemsStatsAggregationResult>([
+			{
+				$match: categoryConditions
+			},
+			{
+				$facet: {
+					categoryTotal: [
+						{ $count: 'value' }
+					],
+					filteredTotal: [
+						filterStage,
+						{ $count: 'value' }
+					],
+					completionMediaItems: [
+						filterStage,
+						{ $match: { 'completedOn.0': { $exists: true } } },
+						{ $count: 'value' }
+					],
+					completionsByYear: [
+						filterStage,
+						{ $unwind: '$completedOn' },
+						{ $group: { _id: this.buildCompletionYearExpression(timezone), count: { $sum: 1 } } },
+						{ $sort: { _id: 1 } }
+					],
+					backlogByStatus: [
+						...backlogStages,
+						{ $group: { _id: '$status', count: { $sum: 1 } } }
+					],
+					backlogByImportanceAndOwnPlatform: [
+						...backlogStages,
+						{ $group: { _id: { importance: '$importance', ownPlatform: { $ifNull: [ '$ownPlatform', null ] } }, count: { $sum: 1 } } },
+						{ $sort: { '_id.importance': -1, '_id.ownPlatform': 1 } }
+					]
+				}
+			}
+		]);
+
+		return this.buildStatsResult(results[0]);
 	}
 
 	/**
@@ -245,19 +355,6 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 		const conditions: QueryFilter<MediaItemInternal> = {
 			owner: userId,
 			category: categoryId
-		};
-
-		return this.queryHelper.delete(this.castFilterQuery(conditions));
-	}
-
-	/**
-	 * Deletes all media items for the given user
-	 * @param userId user ID
-	 * @returns the number of deleted elements as a promise
-	 */
-	public deleteAllMediaItemsForUser(userId: string): Promise<number> {
-		const conditions: QueryFilter<MediaItemInternal> = {
-			owner: userId
 		};
 
 		return this.queryHelper.delete(this.castFilterQuery(conditions));
@@ -493,6 +590,167 @@ export abstract class MediaItemEntityController<TMediaItemInternal extends Media
 		populate.group = true;
 		populate.ownPlatform = true;
 		return populate;
+	}
+
+	/**
+	 * Helper to build the aggregation expression that resolves the status of a media item.
+	 *
+	 * THIS RULE IS DUPLICATED IN THE FRONT END, in MediaItemMapper.buildStatusLabel: the four statuses are not persisted
+	 * anywhere, they are derived from other fields, and the alternative to computing them here would be shipping enough
+	 * per-item data for the client to bucket the whole backlog itself. The precedence below is the contract between the
+	 * two sides, and changing it on one of them silently makes this aggregate disagree with the list rows.
+	 *
+	 * Note that 'UPCOMING' is decided against the server clock here and against the browser clock there, so an item
+	 * releasing today can be counted differently by the two. That is harmless and is not worth solving
+	 * @param now the instant a release date is compared against
+	 * @returns the aggregation expression
+	 */
+	private buildBacklogStatusExpression(now: Date): PipelineStage.Project['$project'][string] {
+		const hasCompletions = {
+			$gt: [{ $size: { $ifNull: [ '$completedOn', []] } }, 0 ]
+		};
+
+		return {
+			$switch: {
+				branches: [{
+					// Completed and not marked for redo: what the backlog leaves out
+					case: { $and: [ hasCompletions, { $ne: [ '$markedAsRedo', true ] }] },
+					then: COMPLETE_STATUS
+				}, {
+					// Marked as currently active, whatever else it carries
+					case: { $eq: [ '$active', true ] },
+					then: ACTIVE_STATUS
+				}, {
+					// Completed in the past but moved back to the current list
+					case: { $and: [ hasCompletions, { $eq: [ '$markedAsRedo', true ] }] },
+					then: REDO_STATUS
+				}, {
+					// Not released yet
+					case: { $gt: [ '$releaseDate', now ] },
+					then: UPCOMING_STATUS
+				}],
+				default: NEW_STATUS
+			}
+		};
+	}
+
+	/**
+	 * Helper to build the aggregation expression that extracts the year of a completion date.
+	 *
+	 * The time zone matters: completion dates are written by the client at local midnight and stored as the
+	 * corresponding instant, so a completion dated the 1st of January is stored in the previous year for any client east
+	 * of Greenwich. Extracting the year in UTC would put those completions in the wrong year
+	 * @param timezone the optional IANA time zone, defaulting to UTC
+	 * @returns the aggregation expression
+	 */
+	private buildCompletionYearExpression(timezone?: string): PipelineStage.Group['$group']['_id'] {
+		if(timezone) {
+			return {
+				$year: {
+					date: '$completedOn',
+					timezone: timezone
+				}
+			};
+		}
+
+		return {
+			$year: '$completedOn'
+		};
+	}
+
+	/**
+	 * Helper to turn the raw aggregation result into the internal stats model
+	 * @param result the raw aggregation result
+	 * @returns the internal stats model
+	 */
+	private buildStatsResult(result: MediaItemsStatsAggregationResult): MediaItemsStatsInternal {
+		const byYear: MediaItemsStatsYearInternal[] = result.completionsByYear.map((entry) => {
+			return {
+				year: entry._id,
+				count: entry.count
+			};
+		});
+
+		// The statuses come out of the database in group order: they are reordered here so that the result is stable
+		const byStatus: MediaItemsStatsStatusInternal[] = [];
+		for(const status of INTERNAL_MEDIA_ITEM_BACKLOG_STATUSES) {
+			const entry = result.backlogByStatus.find((candidate) => {
+				return candidate._id === status;
+			});
+
+			if(entry) {
+				byStatus.push({
+					status: status,
+					count: entry.count
+				});
+			}
+		}
+
+		const byImportanceAndOwnPlatform: MediaItemsStatsImportanceAndOwnPlatformInternal[] = result.backlogByImportanceAndOwnPlatform.map((entry) => {
+			return {
+				importance: entry._id.importance,
+				ownPlatformId: entry._id.ownPlatform === null || entry._id.ownPlatform === undefined ? undefined : String(entry._id.ownPlatform),
+				count: entry.count
+			};
+		});
+
+		return {
+			mediaItems: {
+				total: this.readAggregationCount(result.categoryTotal),
+				filtered: this.readAggregationCount(result.filteredTotal)
+			},
+			completions: {
+				// The total is the sum of the years rather than another branch: they cannot disagree if there is only one source
+				total: byYear.reduce((total, entry) => {
+					return total + entry.count;
+				}, 0),
+				mediaItems: this.readAggregationCount(result.completionMediaItems),
+				byYear: byYear
+			},
+			backlog: {
+				total: byStatus.reduce((total, entry) => {
+					return total + entry.count;
+				}, 0),
+				byStatus: byStatus,
+				byImportanceAndOwnPlatform: byImportanceAndOwnPlatform
+			}
+		};
+	}
+
+	/**
+	 * Helper to read a $count facet branch, which is an empty array (and not a zero) when nothing matched
+	 * @param branch the raw branch result
+	 * @returns the count
+	 */
+	private readAggregationCount(branch: { value: number }[]): number {
+		return branch.length > 0 ? branch[0].value : 0;
+	}
+
+	/**
+	 * Helper to run a list query and pair its results with the total number of matching media items. The count is
+	 * a second query, so it only runs when a page was actually requested: without pagination the results ARE the total
+	 * @param conditions the query conditions
+	 * @param sortBy the sort conditions
+	 * @param pagination the optional pagination options
+	 * @returns the media items and their total count, as a promise
+	 */
+	private async findAndCount(conditions: QueryFilter<TMediaItemInternal>, sortBy: Sortable<TMediaItemInternal>, pagination?: PaginationInternal): Promise<PaginatedResultInternal<TMediaItemInternal>> {
+		const elements = await this.queryHelper.find(conditions, sortBy, this.getPopulateAll(), pagination);
+
+		return {
+			elements: elements,
+			totalCount: pagination ? await this.queryHelper.count(conditions) : elements.length
+		};
+	}
+
+	/**
+	 * Helper to append the ID as the last sort condition. None of the sortable fields is unique, so without a
+	 * tiebreaker the order of two media items with the same sort value is undefined: harmless when the whole list
+	 * is returned at once, but enough to make a paginated request repeat one media item and skip another
+	 * @param sortConditions the sort conditions to complete
+	 */
+	private setTiebreakerSortCondition(sortConditions: Sortable<TMediaItemInternal>): void {
+		sortConditions._id = 'asc';
 	}
 
 	/**

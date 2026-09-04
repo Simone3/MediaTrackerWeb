@@ -1,10 +1,10 @@
 import { authenticationMiddleware } from 'app/auth/authentication';
 import { config } from 'app/config/config';
-import { logCorrelationMiddleware, performanceLoggerMiddleware, requestLoggerMiddleware, responseLoggerMiddleware } from 'app/loggers/express-logger';
+import { logCorrelationMiddleware, requestLoggerMiddleware, responseBodyCaptureMiddleware, responseLoggerMiddleware } from 'app/loggers/express-logger';
 import { catchAllMiddleware } from 'app/routes/catch-all';
+import { errorHandlerMiddleware } from 'app/routes/error-handler';
 import { categoryRouter } from 'app/routes/category';
 import { groupRouter } from 'app/routes/group';
-import { importRouter } from 'app/routes/import/old-app';
 import { bookCatalogRouter, bookEntityRouter } from 'app/routes/media-items/book';
 import { movieCatalogRouter, movieEntityRouter } from 'app/routes/media-items/movie';
 import { tvShowCatalogRouter, tvShowEntityRouter } from 'app/routes/media-items/tv-show';
@@ -30,18 +30,16 @@ app.use(cors({
 	preflightContinue: true
 }));
 
-// Authentication
-app.use(authenticationMiddleware);
-
-// Logging
+// Logging, before the authentication so that a rejected request is logged too and carries its correlation ID
 app.use(logCorrelationMiddleware);
 if(config.log.apisInputOutput.active) {
-	app.use(requestLoggerMiddleware);
 	app.use(responseLoggerMiddleware);
+	app.use(responseBodyCaptureMiddleware);
+	app.use(requestLoggerMiddleware);
 }
-if(config.log.performance.active) {
-	app.use(performanceLoggerMiddleware);
-}
+
+// Authentication
+app.use(authenticationMiddleware);
 
 // Misc routes
 app.use('/', miscRouter);
@@ -61,11 +59,11 @@ app.use('/', bookCatalogRouter);
 app.use('/', videogameEntityRouter);
 app.use('/', videogameCatalogRouter);
 
-// Bulk import routes
-app.use('/', importRouter);
-
 // Final catch-all middleware
 app.use(catchAllMiddleware);
+
+// Error handling middleware, after every route so that it receives what they pass to next(...)
+app.use(errorHandlerMiddleware);
 
 /**
  * Main Express server instance, just requires a .listen() call

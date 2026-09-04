@@ -18,7 +18,8 @@ const config: Config = {
 			availableCategoryColors: availableEntityColors.slice(),
 			availableOwnPlatformColors: availableEntityColors.slice()
 		},
-		dateFormat: 'dd/MM/yyyy'
+		dateFormat: 'dd/MM/yyyy',
+		mediaItemsPageSize: 50
 	},
 	mocks: {
 		user: false,

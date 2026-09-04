@@ -2,6 +2,7 @@ import { CategoriesListState, CategoryDetailsState, CategoryGlobalState, mapCate
 import { ErrorState, mapErrorForPersistence } from 'app/redux/state/error';
 import { GroupDetailsState, GroupGlobalState, GroupsListState, mapGroupDetailsForPersistence, mapGroupGlobalForPersistence, mapGroupsListForPersistence } from 'app/redux/state/group';
 import { MediaItemDetailsState, MediaItemsListState, mapMediaItemDetailsForPersistence, mapMediaItemsListForPersistence } from 'app/redux/state/media-item';
+import { MediaItemsStatsState, mapMediaItemsStatsForPersistence } from 'app/redux/state/media-item-stats';
 import { OwnPlatformDetailsState, OwnPlatformGlobalState, OwnPlatformsListState, mapOwnPlatformDetailsForPersistence, mapOwnPlatformGlobalForPersistence, mapOwnPlatformsListForPersistence } from 'app/redux/state/own-platform';
 import { TvShowSeasonDetailsState, TvShowSeasonsListState, mapTvShowSeasonDetailsForPersistence, mapTvShowSeasonsListForPersistence } from 'app/redux/state/tv-show-season';
 import { UserGlobalState, UserOperationsState, mapUserGlobalForPersistence, mapUserOperationsForPersistence } from 'app/redux/state/user';
@@ -49,6 +50,11 @@ export class State {
 	 * Portion of the state with the media item details information
 	 */
 	public readonly mediaItemDetails!: MediaItemDetailsState;
+
+	/**
+	 * Portion of the state with the media items stats information
+	 */
+	public readonly mediaItemsStats!: MediaItemsStatsState;
 
 	/**
 	 * Portion of the state with the TV show seasons list information
@@ -106,6 +112,7 @@ export const mapStateForPersistence = (state: State): State => {
 		categoryDetails: mapCategoryDetailsForPersistence(state.categoryDetails),
 		mediaItemsList: mapMediaItemsListForPersistence(state.mediaItemsList),
 		mediaItemDetails: mapMediaItemDetailsForPersistence(state.mediaItemDetails),
+		mediaItemsStats: mapMediaItemsStatsForPersistence(state.mediaItemsStats),
 		tvShowSeasonsList: mapTvShowSeasonsListForPersistence(state.tvShowSeasonsList),
 		tvShowSeasonDetails: mapTvShowSeasonDetailsForPersistence(state.tvShowSeasonDetails),
 		groupGlobal: mapGroupGlobalForPersistence(state.groupGlobal),

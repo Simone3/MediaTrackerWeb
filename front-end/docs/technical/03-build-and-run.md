@@ -1,0 +1,121 @@
+# §3 — Build and run
+
+*[Index](README.md) · [← §2 Repository map](02-repository-map.md)*
+
+The commands, what each one does, and how webpack is wired.
+
+---
+
+## 3.1 Node baseline
+
+`engines.node` is `24.x`. Dependencies are pinned to exact versions — no `^`, no `~` — so an install reproduces the same tree.
+
+## 3.2 Commands
+
+```sh
+npm start          # webpack dev server, development mode, port 5173
+npm run build      # webpack production build
+npm run lint       # ESLint over app/, tests/ and index.tsx
+npm run typecheck  # tsc --noEmit
+npm test           # Jest
+```
+
+The environment the bundle is built or served with comes from `MEDIA_TRACKER_APP_ENV` ([§4](04-configuration.md)), so all four combinations are available:
+
+```sh
+npm start                                  # local, dev config
+MEDIA_TRACKER_APP_ENV=prod npm start       # local, prod config
+npm run build                              # production build, prod config
+MEDIA_TRACKER_APP_ENV=dev npm run build    # production build, dev config
+```
+
+Running the app end to end also needs the back end from `../back-end` and a MongoDB instance behind it; the repository root `README.md` has that setup.
+
+While iterating, prefer running one test file:
+
+```sh
+npm test -- tests/media-item-form-data.test.ts
+```
+
+## 3.3 Webpack
+
+`webpack.config.js` owns:
+
+- the dev server on port **5173**, with the history API fallback on so deep links into `/media/...` resolve to the SPA
+- the `app` alias, which is what makes `app/...` imports resolve
+- `public/index.html` as the served and built template, which also carries the boot placeholder ([§12.4](12-styling.md#124-the-boot-placeholder))
+- `CopyFilePlugin`, a local plugin that copies `public/og_banner.png` into the build root untouched, because webpack has no built-in copy step and the social preview image cannot carry a content hash ([§3.7](#37-the-social-preview-card))
+- the injected define `__MEDIA_TRACKER_APP_ENV__`
+- the injected define `__MEDIA_TRACKER_BACK_END_BASE_URL__`, only when the variable is provided
+
+Both defines are read back through `app/utilities/env.ts`, which is what lets the same config code work in the browser bundle and under Jest, where neither define exists ([§4.1](04-configuration.md#41-how-the-environment-is-resolved)). `tests/webpack-config.test.ts` covers the config itself, so a change here has a test to answer to.
+
+**No application framework owns the build.** Webpack bundles, Babel transforms and Jest runs the tests; routing, rendering and the component model stay plain React. Do not introduce Vite, Next.js or an equivalent ([§1.2](01-architecture.md#12-it-is-a-port-and-it-still-reads-like-one)).
+
+## 3.4 Build output and caching
+
+The build lays `dist/` out in two halves, and the split is what makes the caching rule safe to write:
+
+```
+dist/
+├── index.html          no content hash — must always be revalidated
+├── ic_app_logo.png     the favicon, copied by HtmlWebpackPlugin
+├── og_banner.png       the social preview image, copied by CopyFilePlugin
+└── assets/             every content-hashed output, and nothing else
+    ├── bundle.<hash>.js
+    └── <hash>.png
+```
+
+`output.filename` and `output.assetModuleFilename` both write into `assets/`, so a file under that folder can never change without changing its name. `render.yaml` gives `/assets/*` a `Cache-Control` of `public, max-age=31536000, immutable`; everything outside it keeps the platform default. **Do not emit an unhashed file into `assets/`** — it would be cached for a year with no way to invalidate it, which is exactly why the favicon, the social preview image and `index.html` stay at the root.
+
+Without that header the static host defaults to `max-age=0`, which makes the browser revalidate every asset on every page load — the icons then visibly pop in a fraction of a second after the rest of the page.
+
+## 3.5 Images are inlined into the bundle
+
+`.svg` is an `asset/inline` module: an icon becomes a data URI inside the bundle, so it costs no request and paints with the first render. `.png`, `.jpg` and `.gif` are `asset` modules with a 4 KB threshold — under it they inline too, over it they are emitted into `assets/` as their own file. Every image in the project is currently under the threshold, so **a production page loads `index.html`, the bundle and nothing else**; the threshold exists so that adding a real photograph does not silently bloat the bundle.
+
+The data URI is **URI-escaped, not base64**. Two reasons, and both are load-bearing:
+
+- an escaped SVG stays text, so it compresses roughly as well as the file it replaces, where base64 would not
+- the escaping covers `(`, `)`, `"`, `'` and whitespace on top of what `encodeURIComponent` handles, because own-platform icons end up inside an unquoted CSS `url(...)` in a mask ([§12.3](12-styling.md#123-colors-that-come-from-config)), and any of those characters would terminate it early
+
+`svgToDataUri` in `webpack.config.js` owns that escaping and `tests/webpack-config.test.ts` covers it.
+
+Source SVGs in `app/resources/images` are kept optimized — they were exported from drawing tools and arrived carrying editor metadata, roughly two thirds of their bytes. Run a new icon through SVGO before committing it, and keep its `viewBox`: the icons are scaled by CSS, and several are painted through `mask-size: contain`.
+
+## 3.6 Which artwork is vector and which is not
+
+`ic_app_logo.svg` and `im_media_item_form_default.svg` are the app's own mark — a ring, a round-capped handle and three cube faces — redrawn as vector primitives from the PNGs they replaced, so they stay sharp on high-DPI screens where the 155 px original was visibly soft.
+
+Two deliberate exceptions:
+
+- **`ic_app_logo.png` stays**, and is referenced by nothing but the `HtmlWebpackPlugin` favicon option. SVG favicon support is still uneven, and the favicon is one uncached root-level request either way. Change both files when the mark changes.
+- **`og_banner.png` is raster** because the clients that read `og:image` do not reliably rasterize SVG ([§3.7](#37-the-social-preview-card)).
+- **`ic_google.png`, `ic_wikipedia.png`, `ic_justwatch.png` and `ic_howlongtobeat.png` are third-party brand marks** and are left as raster on purpose. Tracing someone else's logo produces a poor imitation of it; the right fix is the official vector asset, not a redrawing. They are 30 px sources shown at 20 CSS px, so they are soft on high-DPI screens.
+
+## 3.7 The social preview card
+
+A phone browser that shows a bookmark or a top site as a wide tile — Firefox for Android does — and every chat app that unfurls a link read the Open Graph tags off the loaded document and paint `og:image` across the card. Without one they fall back to the site icon, and `ic_app_logo.png` is 155 px square: large enough that Firefox treats it as artwork rather than as a favicon, so the tile ends up showing a blown-up cube with its sides cropped off.
+
+The tags live in the `<head>` of `public/index.html` and the image is `public/og_banner.png`. Three things about it are load-bearing:
+
+- **The URL is absolute and names the deployed origin.** A relative `og:image` is not resolved reliably by the clients that read it, so the tag hardcodes `https://media-tracker-front-end.onrender.com`, next to an `og:url` that does the same. Change both when the deployment moves.
+- **The file name carries no content hash.** That is why it is copied by `CopyFilePlugin` rather than imported as an asset module, and why it sits at the build root instead of under `assets/` ([§3.4](#34-build-output-and-caching)).
+- **It is 1200×630, with the logo and the wordmark in the middle.** Cards crop, several of them to a ratio wider than the image, so anything near an edge is the first thing to go.
+
+`tests/social-preview.test.ts` reads the width and height back out of the file's own PNG header and checks them against the declared `og:image:width` and `og:image:height`, so the image cannot be replaced with one of another size without the tags following.
+
+The banner itself is the app mark on the app background — the mark inside the same rounded shell the auth screen title uses, the name beside it, and the four media types under that. It was drawn once on a canvas and committed as a file; there is no build step behind it, so redraw it when the mark or the name changes.
+
+## 3.8 Babel and the legacy decorators
+
+`babel.config.js` is what `babel-jest` transforms TS/TSX with under Jest; the webpack build does not use it, since it type-checks through `ts-loader` instead ([§3.3](#33-webpack)). Two settings in it are load-bearing and neither is obvious:
+
+- **`@babel/plugin-proposal-decorators` runs with `version: 'legacy'`.** The API models carry `class-validator` decorators ([§9](09-data-layer.md)), which are the legacy, pre-standard kind. Babel 8 dropped the old `legacy: true` shorthand for this option, so the version has to be named outright.
+- **`@babel/preset-env` forces `transform-class-properties` on through `include`.** The legacy decorators transform rewrites a decorated class property into an initializer that the class properties transform has to finish. Every browser the `esmodules` target covers supports class fields natively, so preset-env would otherwise leave that transform out, and every decorated model would throw *"Decorating class property failed"* the moment it was constructed — under Jest only, which is what makes it easy to miss.
+
+The transform has to run **after** `@babel/preset-typescript` has stripped the `declare` fields, and **after** the decorators transform. Babel runs plugins before presets and presets in reverse order, so forcing it on inside preset-env is what satisfies both: adding `@babel/plugin-transform-class-properties` next to the decorators plugin instead puts it ahead of preset-typescript, and every `declare` field then fails to parse.
+
+---
+
+[← §2 Repository map](02-repository-map.md) · [§4 Configuration →](04-configuration.md)

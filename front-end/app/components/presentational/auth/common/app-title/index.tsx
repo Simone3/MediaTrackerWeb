@@ -1,6 +1,6 @@
 import React, { Component, ReactNode } from 'react';
 import { i18n } from 'app/utilities/i18n';
-import appLogo from 'app/resources/images/ic_app_logo.png';
+import appLogo from 'app/resources/images/ic_app_logo.svg';
 
 /**
  * Presentational component to display the app title with the app logo

@@ -1,9 +1,9 @@
 import { ModelMapper } from 'app/data/mappers/common';
 import { groupMapper } from 'app/data/mappers/group';
 import { ownPlatformMapper } from 'app/data/mappers/own-platform';
-import { CatalogMediaItem, MediaItem, MediaItemFilter, MediaItemSortBy, MediaItemSortField, SearchMediaItemCatalogResult } from 'app/data/models/api/media-items/media-item';
+import { CatalogMediaItem, GetMediaItemsStatsResponse, MediaItem, MediaItemFilter, MediaItemsStatsFilter, MediaItemSortBy, MediaItemSortField, SearchMediaItemCatalogResult } from 'app/data/models/api/media-items/media-item';
 import { AppError } from 'app/data/models/error/error';
-import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemInternal, MediaItemSortByInternal, MediaItemSortFieldInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
+import { CatalogMediaItemInternal, MediaItemFilterInternal, MediaItemInternal, MediaItemsStatsInternal, MediaItemSortByInternal, MediaItemSortFieldInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import { dateUtils } from 'app/utilities/date-utils';
 import { miscUtils } from 'app/utilities/misc-utils';
 
@@ -41,7 +41,7 @@ export abstract class MediaItemMapper<TMediaItemInternal extends MediaItemIntern
 			imageUrl: source.imageUrl
 		};
 
-		if(source.group && source.orderInGroup && typeof source.group !== 'string') {
+		if(source.group && source.orderInGroup !== undefined && typeof source.group !== 'string') {
 			target.group = {
 				groupId: String(source.group._id),
 				groupData: groupMapper.toExternal(source.group),
@@ -309,3 +309,121 @@ export abstract class MediaItemCatalogDetailsMapper<TCatalogMediaItemInternal ex
 	}
 }
 
+/**
+ * Mapper for the media items stats filter. It maps into the same internal filter the list APIs use, with only the
+ * group and own platform blocks set: the stats controller then runs the very same query conditions as the list, which
+ * is what keeps the two screens agreeing on what a filter means
+ */
+class MediaItemsStatsFilterMapper extends ModelMapper<MediaItemFilterInternal, MediaItemsStatsFilter, never> {
+	/**
+	 * @override
+	 */
+	protected convertToExternal(source: MediaItemFilterInternal): MediaItemsStatsFilter {
+		const target: MediaItemsStatsFilter = {};
+
+		if(source.groups) {
+			target.groups = {
+				anyGroup: source.groups.anyGroup,
+				noGroup: source.groups.noGroup,
+				groupIds: source.groups.groupIds
+			};
+		}
+
+		if(source.ownPlatforms) {
+			target.ownPlatforms = {
+				anyOwnPlatform: source.ownPlatforms.anyOwnPlatform,
+				noOwnPlatform: source.ownPlatforms.noOwnPlatform,
+				ownPlatformIds: source.ownPlatforms.ownPlatformIds
+			};
+		}
+
+		return target;
+	}
+
+	/**
+	 * @override
+	 */
+	protected convertToInternal(source: MediaItemsStatsFilter): MediaItemFilterInternal {
+		const target: MediaItemFilterInternal = {};
+
+		if(source.groups) {
+			target.groups = {
+				anyGroup: source.groups.anyGroup,
+				noGroup: source.groups.noGroup,
+				groupIds: source.groups.groupIds
+			};
+		}
+
+		if(source.ownPlatforms) {
+			target.ownPlatforms = {
+				anyOwnPlatform: source.ownPlatforms.anyOwnPlatform,
+				noOwnPlatform: source.ownPlatforms.noOwnPlatform,
+				ownPlatformIds: source.ownPlatforms.ownPlatformIds
+			};
+		}
+
+		return target;
+	}
+}
+
+/**
+ * Mapper for the media items stats
+ */
+class MediaItemsStatsMapper extends ModelMapper<MediaItemsStatsInternal, GetMediaItemsStatsResponse, never> {
+	/**
+	 * @override
+	 */
+	protected convertToExternal(source: MediaItemsStatsInternal): GetMediaItemsStatsResponse {
+		return {
+			mediaItems: {
+				total: source.mediaItems.total,
+				filtered: source.mediaItems.filtered
+			},
+			completions: {
+				total: source.completions.total,
+				mediaItems: source.completions.mediaItems,
+				byYear: source.completions.byYear.map((year) => {
+					return {
+						year: year.year,
+						count: year.count
+					};
+				})
+			},
+			backlog: {
+				total: source.backlog.total,
+				byStatus: source.backlog.byStatus.map((status) => {
+					return {
+						status: status.status,
+						count: status.count
+					};
+				}),
+				byImportanceAndOwnPlatform: source.backlog.byImportanceAndOwnPlatform.map((entry) => {
+					return {
+						importance: entry.importance,
+
+						// Explicitly null and not simply absent: "not owned" is a bucket of the result, not a missing value
+						ownPlatformId: entry.ownPlatformId === undefined ? null : entry.ownPlatformId,
+						count: entry.count
+					};
+				})
+			}
+		};
+	}
+
+	/**
+	 * @override
+	 */
+	protected convertToInternal(): MediaItemsStatsInternal {
+		throw AppError.GENERIC.withDetails('Media items stats are computed by the database and never travel inwards');
+	}
+}
+
+/**
+ * Singleton instance of the media items stats filter mapper
+ */
+export const mediaItemsStatsFilterMapper = new MediaItemsStatsFilterMapper();
+
+/**
+ * Singleton instance of the media items stats mapper
+ */
+export const mediaItemsStatsMapper = new MediaItemsStatsMapper();

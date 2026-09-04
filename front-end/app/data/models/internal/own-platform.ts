@@ -15,7 +15,7 @@ export type OwnPlatformInternal = {
 /**
  * Array of all own platform icons, internal type just for display purposes
  */
-export const OWN_PLATFORM_ICON_INTERNAL_VALUES: [ 'default', 'android', 'apple', 'book', 'disc', 'disney', 'download', 'epic', 'gog', 'hulu', 'kindle', 'netflix', 'origin', 'playstation', 'steam', 'switch', 'uplay' ] = [ 'default', 'android', 'apple', 'book', 'disc', 'disney', 'download', 'epic', 'gog', 'hulu', 'kindle', 'netflix', 'origin', 'playstation', 'steam', 'switch', 'uplay' ];
+export const OWN_PLATFORM_ICON_INTERNAL_VALUES: [ 'default', 'android', 'apple', 'book', 'disc', 'disney', 'download', 'epic', 'gog', 'hulu', 'kindle', 'netflix', 'origin', 'playstation', 'primevideo', 'steam', 'switch', 'uplay' ] = [ 'default', 'android', 'apple', 'book', 'disc', 'disney', 'download', 'epic', 'gog', 'hulu', 'kindle', 'netflix', 'origin', 'playstation', 'primevideo', 'steam', 'switch', 'uplay' ];
 
 /**
  * The own platform icon, internal type just for display purposes

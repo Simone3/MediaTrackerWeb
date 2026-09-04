@@ -5,6 +5,7 @@ import { TvShowFilterFormComponent } from './tv-show';
 import { VideogameFilterFormComponent } from './videogame';
 import { MediaTypeSwitcherComponent } from 'app/components/presentational/generic/media-switcher';
 import { MediaItemFilterInternal, MediaItemSortByInternal } from 'app/data/models/internal/media-items/media-item';
+import { MediaItemFilterFormOption } from 'app/components/presentational/media-item/list/filter-form/data/media-item';
 import { CategoryInternal } from 'app/data/models/internal/category';
 
 /**
@@ -42,6 +43,26 @@ export type MediaItemFilterFormComponentInput = {
 	 * The linked category
 	 */
 	category: CategoryInternal;
+
+	/**
+	 * The options of the group filter input
+	 */
+	groupOptions: MediaItemFilterFormOption[];
+
+	/**
+	 * The options of the own platform filter input
+	 */
+	ownPlatformOptions: MediaItemFilterFormOption[];
+
+	/**
+	 * If the groups are being fetched
+	 */
+	groupsLoading: boolean;
+
+	/**
+	 * If the own platforms are being fetched
+	 */
+	ownPlatformsLoading: boolean;
 };
 
 /**
@@ -52,6 +73,11 @@ export type MediaItemFilterFormComponentOutput = {
 	 * Callback to submit the filter options
 	 */
 	submitFilter: (filter: MediaItemFilterInternal, sortBy: MediaItemSortByInternal[]) => void;
+
+	/**
+	 * Callback to reset the filter options to the defaults
+	 */
+	clearFilter: () => void;
 
 	/**
 	 * Callback when the form requests to be closed

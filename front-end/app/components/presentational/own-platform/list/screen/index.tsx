@@ -2,9 +2,11 @@ import { Component, ReactNode } from 'react';
 import { ConfirmDialogComponent } from 'app/components/presentational/generic/confirm-dialog';
 import { EntityManagementListComponent } from 'app/components/presentational/generic/entity-management-list';
 import { EntityManagementScreenComponent } from 'app/components/presentational/generic/entity-management-screen';
+import { EntitySearchBarComponent } from 'app/components/presentational/generic/entity-search-bar';
 import { buildOwnPlatformMaskStyle } from 'app/components/presentational/own-platform/common/icon-registry';
 import { OwnPlatformInternal } from 'app/data/models/internal/own-platform';
 import { i18n } from 'app/utilities/i18n';
+import { textSearchUtils } from 'app/utilities/text-search';
 
 const OWN_PLATFORMS_SCREEN_ACCENT = 'var(--color-management-accent-default)';
 
@@ -13,7 +15,8 @@ const OWN_PLATFORMS_SCREEN_ACCENT = 'var(--color-management-accent-default)';
  */
 export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListScreenComponentInput & OwnPlatformsListScreenComponentOutput, OwnPlatformsListScreenComponentState> {
 	public state: OwnPlatformsListScreenComponentState = {
-		pendingDeleteOwnPlatform: undefined
+		pendingDeleteOwnPlatform: undefined,
+		searchTerm: ''
 	};
 
 	/**
@@ -43,11 +46,18 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 			showSkeletons
 		} = this.props;
 		const {
-			pendingDeleteOwnPlatform
+			pendingDeleteOwnPlatform,
+			searchTerm
 		} = this.state;
-		const countLabel = ownPlatforms.length === 1 ?
+		const isSearching = Boolean(textSearchUtils.normalize(searchTerm));
+		const visibleOwnPlatforms = textSearchUtils.filter(ownPlatforms, searchTerm, (ownPlatform) => {
+			return ownPlatform.name;
+		});
+		const noneOptionLabel = i18n.t('ownPlatform.list.none');
+		const noneOptionVisible = textSearchUtils.matches(noneOptionLabel, searchTerm);
+		const countLabel = visibleOwnPlatforms.length === 1 ?
 			i18n.t('ownPlatform.list.count.single') :
-			i18n.t('ownPlatform.list.count.multiple', { count: ownPlatforms.length });
+			i18n.t('ownPlatform.list.count.multiple', { count: visibleOwnPlatforms.length });
 
 		return (
 			<>
@@ -59,15 +69,26 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 					addButtonLabel={i18n.t('ownPlatform.details.title.new')}
 					loadingVisible={isLoading}
 					onAdd={loadNewOwnPlatformDetails}>
+					{!showSkeletons && ownPlatforms.length > 0 && (
+						<EntitySearchBarComponent
+							id='own-platforms-list-search'
+							value={searchTerm}
+							placeholder={i18n.t('ownPlatform.list.search')}
+							onChangeValue={(value) => {
+								this.setState({
+									searchTerm: value
+								});
+							}}
+						/>
+					)}
 					<EntityManagementListComponent
-						items={ownPlatforms}
+						items={visibleOwnPlatforms}
 						selectedItemId={selectedOwnPlatformId}
 						selectedLabel={i18n.t('common.state.selected')}
-						editLabel={i18n.t('ownPlatform.list.edit')}
-						deleteLabel={i18n.t('ownPlatform.list.delete')}
-						emptyTitle={i18n.t('ownPlatform.list.empty')}
-						emptyCopy={i18n.t('ownPlatform.list.emptyHint')}
-						showEmptyState={showEmptyState}
+						menuCloseAriaLabel={i18n.t('common.a11y.closeOwnPlatformActions')}
+						emptyTitle={isSearching ? i18n.t('ownPlatform.list.noResults') : i18n.t('ownPlatform.list.empty')}
+						emptyCopy={isSearching ? i18n.t('ownPlatform.list.noResultsHint') : i18n.t('ownPlatform.list.emptyHint')}
+						showEmptyState={showEmptyState || (isSearching && visibleOwnPlatforms.length === 0)}
 						showSkeletons={showSkeletons}
 						getItemKey={(ownPlatform) => {
 							return ownPlatform.id;
@@ -97,22 +118,37 @@ export class OwnPlatformsListScreenComponent extends Component<OwnPlatformsListS
 						onSelect={(ownPlatform) => {
 							this.props.selectOwnPlatform(ownPlatform);
 						}}
-						onEdit={(ownPlatform) => {
-							this.props.editOwnPlatform(ownPlatform);
+						getItemActions={(ownPlatform, closeMenu) => {
+							return [
+								{
+									label: i18n.t('ownPlatform.list.edit'),
+									onClick: () => {
+										closeMenu();
+										this.props.editOwnPlatform(ownPlatform);
+									}
+								},
+								{
+									label: i18n.t('ownPlatform.list.delete'),
+									onClick: () => {
+										closeMenu();
+										this.requestDeleteOwnPlatform(ownPlatform);
+									},
+									tone: 'danger'
+								}
+							];
 						}}
-						onDelete={(ownPlatform) => {
-							this.requestDeleteOwnPlatform(ownPlatform);
-						}}
-						noneOption={{
-							label: i18n.t('ownPlatform.list.none'),
-							badge: <span className='entity-management-list-badge'>-</span>,
-							accentColor: OWN_PLATFORMS_SCREEN_ACCENT,
-							selected: !selectedOwnPlatformId,
-							onSelect: () => {
-								this.props.selectOwnPlatform(undefined);
-							},
-							badgeShellClassName: ' entity-management-list-badge-shell-muted entity-management-list-badge-shell-accent'
-						}}
+						noneOption={noneOptionVisible ?
+							{
+								label: noneOptionLabel,
+								badge: <span className='entity-management-list-badge'>-</span>,
+								accentColor: OWN_PLATFORMS_SCREEN_ACCENT,
+								selected: !selectedOwnPlatformId,
+								onSelect: () => {
+									this.props.selectOwnPlatform(undefined);
+								},
+								badgeShellClassName: ' entity-management-list-badge-shell-muted entity-management-list-badge-shell-accent'
+							} :
+							undefined}
 						skeletonAccentColor={OWN_PLATFORMS_SCREEN_ACCENT}
 						skeletonBadgeShellClassName=' entity-management-list-badge-shell-accent'
 						skeletonKeyPrefix='own-platform-loading'
@@ -234,4 +270,5 @@ export type OwnPlatformsListScreenComponentOutput = {
 
 type OwnPlatformsListScreenComponentState = {
 	pendingDeleteOwnPlatform?: OwnPlatformInternal;
+	searchTerm: string;
 };

@@ -1,15 +1,17 @@
 import { logger } from 'app/loggers/logger';
 import { requestScopeContext } from 'app/utilities/request-scope-context';
 import { requestParamUtils } from 'app/utilities/request-param-utils';
-import { RequestHandler, Response } from 'express-serve-static-core';
+import { Request, RequestHandler, Response } from 'express-serve-static-core';
 
 /**
- * Helper to send a 403 error
+ * Helper to send a 403 error. It answers directly instead of going through the error middleware because its response
+ * body is not the standard error payload
+ * @param request the request
  * @param response the response
  * @param error the error to log
  */
-const onAuthorizationError = (response: Response, error: unknown): void => {
-	logger.error('Authorization error: %s', error);
+const onAuthorizationError = (request: Request, response: Response, error: unknown): void => {
+	logger.warn('API %s %s - Rejected Request: Authorization error: %s', request.method, request.originalUrl, error);
 
 	response
 		.status(403)
@@ -28,13 +30,13 @@ export const userResourceAuthorizationMiddleware: RequestHandler = (request, res
 	const currentUserId = requestScopeContext.currentUserId;
 
 	if(!userIdParam || !currentUserId) {
-		onAuthorizationError(response, 'userResourceAuthorizationMiddleware not configured correctly');
+		onAuthorizationError(request, response, 'userResourceAuthorizationMiddleware not configured correctly');
 		return;
 	}
 
 	// At the moment, a user can only access his/her own resources only
 	if(userIdParam !== currentUserId) {
-		onAuthorizationError(response, `Trying to access other user resources: requested is ${userIdParam} but current is ${currentUserId}`);
+		onAuthorizationError(request, response, `Trying to access other user resources: requested is ${userIdParam} but current is ${currentUserId}`);
 	}
 	else {
 		next();

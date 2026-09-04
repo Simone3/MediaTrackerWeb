@@ -1,0 +1,123 @@
+# §11 — Interface
+
+*[Index](README.md) · [← §10 Features](10-features.md)*
+
+The container/presentational split the app inherited, and the shared pieces that keep it from multiplying.
+
+---
+
+## 11.1 Containers
+
+`app/components/containers/**`. A container is a function component that:
+
+- selects the presentational component's **input** props out of Redux
+- builds its **output** props, the callbacks that dispatch back
+- renders that one component and almost nothing else
+- **throws early if required global context is missing**
+
+That last one is deliberate. A media-item container without `categoryGlobal.selectedCategory` cannot produce a correct screen, and failing at the boundary is easier to trace than rendering a half-empty one ([§15.1](15-invariants-and-pitfalls.md#151-category-context-is-required-for-most-media-flows)). What the user sees when one of those throws is [§11.5](#115-the-screen-error-boundary).
+
+The shape is the same in all of them, and the two hooks it is built on are in `app/redux/hooks.ts`:
+
+```tsx
+const selectInput = (state: State): XComponentInput => { /* ... */ };
+
+const buildOutput = (dispatch: Dispatch): XComponentOutput => { /* ... */ };
+
+export const XContainer = (): ReactElement => {
+	const input = useContainerInput(selectInput);
+	const output = useContainerOutput(buildOutput);
+
+	return <XComponent {...input} {...output} />;
+};
+```
+
+**`useContainerInput` compares its result shallowly and `useContainerOutput` builds the callbacks once per store**, which together are what keep a container from re-rendering on every action. Both matter: a selector returning a new object on each run would never compare equal, and a callback whose identity changed every render would defeat the prop comparisons the presentational components do in `componentDidUpdate` — and, in `ScreenContextGuardContainer`, would re-fire the effect that reports the missing context. A container that has to *derive* an object or an array, rather than return one already held in the state, therefore has to memoize it: `useCommonMediaItemFormInput` in `containers/media-item/details/form/media-item.ts` is the worked example, since it hands the form its own copy of the media item and of the restored draft.
+
+Containers take props of their own only where a parent has something to pass: `ErrorHandlerContainer` and `MediaItemUnsavedChangesGuardContainer` take their children, and `ScreenContextGuardContainer` takes the screen it guards.
+
+**There is no `connect` left in the app**, and `react-redux` is imported in only three places: `app/redux/hooks.ts`, the media-item form hook beside it, and `Provider` in `app/app.tsx`.
+
+## 11.2 Presentational components
+
+`app/components/presentational/**`. These own:
+
+- the markup
+- local dialog state
+- the `componentDidMount` / `componentDidUpdate` fetch triggers
+- the Formik forms
+- responsive behaviour
+
+Most are still class components. **That is not a backlog item** — the lifecycle-driven fetch pattern is what the port uses, and rewriting a working screen to hooks buys nothing on its own ([§1.2](01-architecture.md#12-it-is-a-port-and-it-still-reads-like-one)).
+
+## 11.3 Shared building blocks
+
+Reach for these before writing a screen-specific variant:
+
+| Component | What it is |
+| --- | --- |
+| `generic/authenticated-page-header` | The sticky top header of the authenticated shell. It also exports `AuthenticatedPageHeaderIconButtonComponent`, the icon-only action shaped like the home and settings shortcuts beside it: a header action that can be drawn takes that shape rather than a labelled pill, since the title is the first thing to lose room when the header narrows |
+| `generic/entity-management-screen` | The manage-and-pick screen used by groups and platforms |
+| `generic/entity-management-list` | The list inside it, used by groups, platforms and TV show seasons. Rows carry no inline buttons: each one owns a `...` control that opens `generic/responsive-action-menu` with the actions the screen supplies, the way the category list does |
+| `generic/entity-search-bar` | The client-side search field the group and platform screens put above their list. It only filters what is already in the store: there is no fetch behind it |
+| `generic/entity-details-frame` | The standard details shell |
+| `generic/responsive-action-menu` | Popover on desktop, bottom sheet on mobile |
+| `generic/browser-back-navigation-guard` | Dirty-form protection, wired to the media item flow by `MediaItemUnsavedChangesGuardContainer` ([§15.3](15-invariants-and-pitfalls.md#153-dirty-form-protection-is-browser-oriented)) |
+| `generic/error-boundary` | The React error boundary around every screen, mounted by `ScreenErrorBoundary` ([§11.5](#115-the-screen-error-boundary)) |
+| `generic/same-name-confirmation` | The duplicate-name dialog the sagas trigger |
+| `generic/confirm-dialog` | The generic confirmation |
+| `generic/pill-button` | |
+| `generic/input`, `generic/select`, `generic/textarea`, `generic/clearable-input` | The form controls |
+| `generic/field-error` | The inline validation message under a control, plus the two helpers that decide when it shows ([§11.6](#116-form-validation-feedback)) |
+| `generic/color-picker` | Fed by the config color presets ([§12.3](12-styling.md#123-colors-that-come-from-config)) |
+| `generic/pagination` | Previous/next page controls around a page picker, used by the media items list. The picker is a `generic/select` whose options each read the whole "Page 3 of 7", so it doubles as the position indicator and no sentence is split around a control ([§13.1](13-text-and-languages.md#131-every-user-facing-string-is-in-the-bundle)). Renders nothing when there is a single page ([§10.2](10-features.md#102-media-items-list)) |
+| `generic/responsive-header-button` | A header pill that keeps its descriptive label on a desktop and falls back to a short one on a phone — *Add movie* / *Add*, *Back to list* / *Back* |
+| `generic/media-switcher` | |
+
+**Category details is the one screen that predates `EntityDetailsFrameComponent`** and still uses its own header/form shell ([§10.1](10-features.md#101-categories)). It is the exception, not the pattern to copy.
+
+## 11.4 Responsive behaviour
+
+Layout responsiveness is CSS. Where behaviour has to change — not just appearance — use `MOBILE_LAYOUT_BREAKPOINT` from `app/utilities/layout.ts`. **Do not introduce a second hardcoded breakpoint**; two numbers that are supposed to agree eventually will not.
+
+`useIsMobileLayout()`, in the same module, is how a component reads it: it returns whether the viewport is at or below the breakpoint and keeps up with resizes for as long as the component is mounted. `ResponsiveHeaderButtonComponent` uses it to pick between its long and short label, and the stats year chart to pick the coordinate space it draws in ([§10.9](10-features.md#109-media-items-stats)). A class component that needs it gets it from a small function wrapper, the way the chart does.
+
+`ResponsiveActionMenuComponent` reads the constant directly instead, because it only follows the viewport while it is open: its listener is mounted with the one that closes it on Escape and comes down with the menu.
+
+The authenticated experience is a shared sticky top header over a full-bleed dark shell. Preserve that structure rather than reintroducing per-screen navigation chrome or a light-shell variant.
+
+## 11.5 The screen error boundary
+
+`generic/error-boundary`, mounted by `ScreenErrorBoundary` in `containers/navigation/app-navigator.tsx` between `BrowserRouter` and the authentication navigator ([§5.2](05-navigation.md#52-router-composition)).
+
+**It exists because a container throw is not a contained failure.** The containers of [§11.1](#111-containers) throw from their selector, which runs during render, and React unmounts the whole root on an uncaught render error: without a boundary the entire app disappears and the user is left on a blank page with only a console message. The boundary turns that into an error screen with a way back to the home screen.
+
+Two props carry everything it needs from the router:
+
+- **`resetKey`** is `useLocation().key`. The boundary clears its error whenever the key changes, so opening a new screen — including through the recovery button and through browser back — gets a fresh attempt at rendering. Without it the fallback would outlive the screen that caused it.
+- **`recover`** navigates to the media section, whose catch-all lands on the categories list ([§5.1](05-navigation.md#51-route-map)).
+
+**This is a safety net, not the answer to the cold-URL problem.** What keeps a directly opened route from reaching a screen it cannot render is the context guard ([§5.6](05-navigation.md#56-screens-that-cannot-be-opened-cold)); the boundary is what remains behind it, for the container throws that should now be unreachable from a URL. It also does not catch what is not a render error: saga failures still take the toast path of [§6.4](06-redux.md#64-error-handling-and-the-async-pattern).
+
+## 11.6 Form validation feedback
+
+Every form here is a Formik form over a yup schema, and the Save button is disabled while the form is invalid. **A disabled Save is not an explanation**, so a field that can actually fail also renders its message inline.
+
+Three pieces, all in `generic/field-error`:
+
+- `getVisibleFieldError(errors, touched, field)` returns the message only for a field Formik has marked touched. A form therefore opens clean instead of covered in errors for values nobody has typed
+- `buildFieldErrorInputProps(id, message)` returns the `aria-invalid` / `aria-describedby` pair to spread on the control. `aria-invalid` is what the stylesheet keys the red state off, so a control that skips it will validate without ever looking wrong ([§12.7](12-styling.md#127-the-invalid-control-state))
+- `FieldErrorComponent` renders the message as a `role='alert'` paragraph, or nothing
+
+**Touched is set on blur, which means the control needs both `name` and `onBlur={handleBlur}`.** Formik resolves `handleBlur` through `event.target.name`, and most fields in the media-item form drive Formik through `setFieldValue` rather than `handleChange`, so they carry no `name` unless one is added for this. A field wired to `FieldErrorComponent` without a `name` silently never shows a message.
+
+Two consequences worth keeping in mind:
+
+- **Every rule that a field displays needs a message from the bundle** ([§13.1](13-text-and-languages.md#131-every-user-facing-string-is-in-the-bundle)). A yup rule left with its default message would put developer text like `orderInGroup must be a positive number` on screen
+- **A rule enforced outside the schema cannot be explained.** The media-item form used to disable Save on a separate blank-name check, which no field could report; the check moved into the schema so the name field could show it. Keep new rules in the schema
+
+Only fields with a rule a user can actually trip are wired: the four name fields, the media item's order in group, and the season number and watched-episode count. The rest have nothing to say.
+
+---
+
+[← §10 Features](10-features.md) · [§12 Styling →](12-styling.md)

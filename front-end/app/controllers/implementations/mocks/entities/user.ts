@@ -33,7 +33,7 @@ export class UserMockedController extends MockControllerHelper implements UserCo
 		}
 		catch(error) {
 			await localStorage.removeValue(UserMockedController.LOCAL_STORAGE_KEY);
-			throw AppError.BACKEND_USER_CHECK_LOGIN_STATUS.withDetails(`Invalid stored mocked user payload: ${error}`);
+			throw AppError.BACKEND_USER_CHECK_LOGIN_STATUS.withDetails(`Invalid stored mocked user payload: ${String(error)}`);
 		}
 	}
 

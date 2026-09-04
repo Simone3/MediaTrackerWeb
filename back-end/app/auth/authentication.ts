@@ -2,7 +2,7 @@ import { logger } from 'app/loggers/logger';
 import { STATUS_ROUTE_PATH } from 'app/routes/misc';
 import { requestScopeContext } from 'app/utilities/request-scope-context';
 import { Request, RequestHandler, Response } from 'express-serve-static-core';
-import { auth } from 'firebase-admin';
+import { getAuth } from 'firebase-admin/auth';
 
 /**
  * Helper to extract the authorization header value from the request
@@ -21,12 +21,14 @@ const getAuthToken = (request: Request): string | undefined => {
 };
 
 /**
- * Helper to send a 401 error
+ * Helper to send a 401 error. It answers directly instead of going through the error middleware because its response
+ * body is not the standard error payload
+ * @param request the request
  * @param response the response
  * @param error the error to log
  */
-const onAuthenticationError = (response: Response, error: unknown): void => {
-	logger.error('Authentication error: %s', error);
+const onAuthenticationError = (request: Request, response: Response, error: unknown): void => {
+	logger.warn('API %s %s - Rejected Request: Authentication error: %s', request.method, request.originalUrl, error);
 
 	response
 		.status(401)
@@ -56,18 +58,18 @@ export const authenticationMiddleware: RequestHandler = (request, response, next
 
 	// Check auth header presence
 	if(!authToken) {
-		onAuthenticationError(response, 'Missing or invalid Authorization header');
+		onAuthenticationError(request, response, 'Missing or invalid Authorization header');
 		return;
 	}
 
 	// Verify token via Firebase
-	auth().verifyIdToken(authToken)
+	getAuth().verifyIdToken(authToken)
 		.then((userInfo) => {
 			// Save the user UID in the request-scoped global map
 			requestScopeContext.currentUserId = userInfo.uid;
 			next();
 		})
 		.catch((error) => {
-			onAuthenticationError(response, error);
+			onAuthenticationError(request, response, error);
 		});
 };

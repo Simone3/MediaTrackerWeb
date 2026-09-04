@@ -7,7 +7,7 @@ import { MovieInternal } from 'app/data/models/internal/media-items/movie';
 import chai from 'chai';
 import { callHelper } from 'helpers/api-caller-helper';
 import { setupTestDatabaseConnection } from 'helpers/database-handler-helper';
-import { getTestMovie, initTestUCGHelper, TestUCG } from 'helpers/entities-builder-helper';
+import { getTestMovie, getTestMovieInGroup, initTestUCGHelper, TestUCG } from 'helpers/entities-builder-helper';
 import { setupTestServer } from 'helpers/server-handler-helper';
 import { extract, randomName } from 'helpers/test-misc-helper';
 import { setupMovieExternalServicesMocks } from 'mocks/external-services-mocks';
@@ -88,6 +88,131 @@ describe('Movie API Tests', () => {
 			expect(extract(response.movies, 'name'), 'API did not return the correct movies').to.be.eql([ 'Zzz', 'Bbb', 'Aaa' ]);
 		});
 
+		it('Should return every movie and no pagination details if the request does not paginate', async() => {
+			for(const name of [ 'Aaa', 'Bbb', 'Ccc' ]) {
+				await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: name, importance: '100' }));
+			}
+
+			const response = await callHelper<FilterMoviesRequest, FilterMoviesResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/filter`, firstUCG.user, {
+				sortBy: [{
+					field: 'NAME',
+					ascending: true
+				}]
+			});
+			expect(response.movies, 'API did not return every movie').to.have.lengthOf(3);
+			expect(response.pagination, 'API returned pagination details for an unpaginated request').to.be.undefined;
+		});
+
+		it('Should paginate the filtered movies', async() => {
+			for(const name of [ 'Aaa', 'Bbb', 'Ccc', 'Ddd', 'Eee' ]) {
+				await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: name, importance: '100' }));
+			}
+
+			const sortBy: FilterMoviesRequest['sortBy'] = [{
+				field: 'NAME',
+				ascending: true
+			}];
+
+			const firstPage = await callHelper<FilterMoviesRequest, FilterMoviesResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/filter`, firstUCG.user, {
+				sortBy: sortBy,
+				pagination: {
+					offset: 0,
+					limit: 2
+				}
+			});
+			expect(extract(firstPage.movies, 'name'), 'API did not return the first page').to.be.eql([ 'Aaa', 'Bbb' ]);
+			expect(firstPage.pagination, 'API did not return the pagination details').not.to.be.undefined;
+			expect(firstPage.pagination?.totalCount, 'API did not return the total count').to.equal(5);
+
+			const lastPage = await callHelper<FilterMoviesRequest, FilterMoviesResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/filter`, firstUCG.user, {
+				sortBy: sortBy,
+				pagination: {
+					offset: 4,
+					limit: 2
+				}
+			});
+			expect(extract(lastPage.movies, 'name'), 'API did not return the last page').to.be.eql([ 'Eee' ]);
+			expect(lastPage.pagination?.totalCount, 'API did not return the total count').to.equal(5);
+		});
+
+		it('Should count only the movies matching the filter when paginating', async() => {
+			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Aaa', importance: '200' }));
+			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Bbb', importance: '100' }));
+			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Ccc', importance: '200' }));
+			await movieEntityController.saveMediaItem(getTestMovie(undefined, secondUCG, { name: 'Ddd', importance: '200' }));
+
+			const response = await callHelper<FilterMoviesRequest, FilterMoviesResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/filter`, firstUCG.user, {
+				filter: {
+					importanceLevels: [ '200' ]
+				},
+				pagination: {
+					offset: 0,
+					limit: 1
+				}
+			});
+			expect(response.movies, 'API did not return a single movie').to.have.lengthOf(1);
+			expect(response.pagination?.totalCount, 'API counted movies outside of the filter').to.equal(2);
+		});
+
+		it('Should return an empty page but the correct total count for an offset past the end', async() => {
+			for(const name of [ 'Aaa', 'Bbb' ]) {
+				await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: name, importance: '100' }));
+			}
+
+			const response = await callHelper<FilterMoviesRequest, FilterMoviesResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/filter`, firstUCG.user, {
+				pagination: {
+					offset: 50,
+					limit: 10
+				}
+			});
+			expect(response.movies, 'API did not return an empty page').to.have.lengthOf(0);
+			expect(response.pagination?.totalCount, 'API did not return the total count').to.equal(2);
+		});
+
+		it('Should not repeat or skip a movie across pages when the sort field has ties', async() => {
+			const names = [ 'Aaa', 'Bbb', 'Ccc', 'Ddd', 'Eee', 'Fff' ];
+			for(const name of names) {
+				await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: name, importance: '100' }));
+			}
+
+			// Every movie has the same importance, so only the ID tiebreaker keeps the pages disjoint
+			const paginatedNames: string[] = [];
+			for(let offset = 0; offset < names.length; offset += 2) {
+				const page = await callHelper<FilterMoviesRequest, FilterMoviesResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/filter`, firstUCG.user, {
+					sortBy: [{
+						field: 'IMPORTANCE',
+						ascending: true
+					}],
+					pagination: {
+						offset: offset,
+						limit: 2
+					}
+				});
+				paginatedNames.push(...extract(page.movies, 'name'));
+			}
+
+			expect(paginatedNames, 'API did not return every movie exactly once across the pages').to.have.members(names);
+		});
+
+		it('Should check for pagination validity', async() => {
+			const invalidPaginations = [
+				{ offset: -1, limit: 10 },
+				{ offset: 0, limit: 0 },
+				{ offset: 0, limit: 101 },
+				{ offset: 1.5, limit: 10 },
+				{ offset: 0 },
+				{ limit: 10 }
+			];
+
+			for(const invalidPagination of invalidPaginations) {
+				await callHelper<Record<string, unknown>, FilterMoviesResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/filter`, firstUCG.user, {
+					pagination: invalidPagination
+				}, {
+					expectedStatus: 500
+				});
+			}
+		});
+
 		it('Should search movies by term', async() => {
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Rtestrr', importance: '100' }));
 			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Bbb', importance: '200' }));
@@ -103,6 +228,23 @@ describe('Movie API Tests', () => {
 			});
 			expect(response.movies, 'API did not return the correct number of movies').to.have.lengthOf(2);
 			expect(extract(response.movies, 'name'), 'API did not return the correct movies').to.have.members([ 'testAaa', 'ZzTESTz' ]);
+		});
+
+		it('Should paginate the searched movies', async() => {
+			for(const name of [ 'testAaa', 'testBbb', 'testCcc' ]) {
+				await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: name, importance: '100' }));
+			}
+			await movieEntityController.saveMediaItem(getTestMovie(undefined, firstUCG, { name: 'Nope', importance: '100' }));
+
+			const response = await callHelper<SearchMoviesRequest, SearchMoviesResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/search`, firstUCG.user, {
+				searchTerm: 'test',
+				pagination: {
+					offset: 1,
+					limit: 1
+				}
+			});
+			expect(extract(response.movies, 'name'), 'API did not return the requested page of search results').to.be.eql([ 'testBbb' ]);
+			expect(response.pagination?.totalCount, 'API did not return the total count of search results').to.equal(3);
 		});
 
 		it('Should delete an existing movie', async() => {
@@ -135,6 +277,60 @@ describe('Movie API Tests', () => {
 			});
 		});
 
+		it('Should sort movies in a group by their order, decimals included', async() => {
+			await movieEntityController.saveMediaItem(getTestMovieInGroup(undefined, firstUCG, 3, { name: 'Third' }));
+			await movieEntityController.saveMediaItem(getTestMovieInGroup(undefined, firstUCG, 1, { name: 'First' }));
+			await movieEntityController.saveMediaItem(getTestMovieInGroup(undefined, firstUCG, 2.5, { name: 'Spinoff' }));
+			await movieEntityController.saveMediaItem(getTestMovieInGroup(undefined, firstUCG, 2, { name: 'Second' }));
+
+			const response = await callHelper<FilterMoviesRequest, FilterMoviesResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies/filter`, firstUCG.user, {
+				sortBy: [{
+					field: 'GROUP',
+					ascending: true
+				}]
+			});
+			expect(response.movies, 'API did not return the correct number of movies').to.have.lengthOf(4);
+			expect(extract(response.movies, 'name'), 'API did not sort the movies by their order in the group').to.be.eql([ 'First', 'Second', 'Spinoff', 'Third' ]);
+		});
+
+		it('Should save and then retrieve a decimal order in a group', async() => {
+			const name = randomName();
+			await callHelper<AddMovieRequest, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, firstUCG.user, {
+				newMovie: {
+					name: name,
+					importance: '100',
+					group: {
+						groupId: String(firstUCG.group),
+						orderInGroup: 2.5
+					}
+				}
+			});
+
+			const response = await callHelper<undefined, GetAllMoviesResponse>('GET', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, firstUCG.user);
+			expect(response.movies, 'API did not return the correct number of movies').to.have.lengthOf(1);
+			expect(response.movies[0].group, 'API did not return the movie group').not.to.be.undefined;
+			expect(response.movies[0].group?.orderInGroup, 'API did not return the decimal order in the group').to.equal(2.5);
+		});
+
+		it('Should check for order in group validity', async() => {
+			const invalidOrders = [ 2.55, 0, -1, 10000 ];
+
+			for(const invalidOrder of invalidOrders) {
+				await callHelper<AddMovieRequest, AddMediaItemResponse>('POST', `/users/${firstUCG.user}/categories/${firstUCG.category}/movies`, firstUCG.user, {
+					newMovie: {
+						name: randomName(),
+						importance: '100',
+						group: {
+							groupId: String(firstUCG.group),
+							orderInGroup: invalidOrder
+						}
+					}
+				}, {
+					expectedStatus: 500
+				});
+			}
+		});
+
 		it('Should search the movies catalog', async() => {
 			const response = await callHelper<undefined, SearchMovieCatalogResponse>('GET', `/catalog/movies/search/Mock Movie`, firstUCG.user);
 			
@@ -158,6 +354,23 @@ describe('Movie API Tests', () => {
 			const response = await callHelper<undefined, GetMovieFromCatalogResponse>('GET', `/catalog/movies/123`, firstUCG.user);
 			
 			expect(response.catalogMovie, 'API did not return the correct catalog details').to.be.eql(expectedResult);
+		});
+
+		it('Should skip the invalid parts of the movie catalog details', async() => {
+			const expectedResult: Required<CatalogMovie> = {
+				name: 'Malformed Movie',
+				description: 'This is some description.',
+				directors: [ 'Some Director' ],
+				durationMinutes: 91,
+				genres: [ 'Genre1', 'Genre2' ],
+				imageUrl: 'http://movie-images/malformed.jpg',
+				releaseDate: '2004-08-06T00:00:00.000Z',
+				catalogId: '456'
+			};
+
+			const response = await callHelper<undefined, GetMovieFromCatalogResponse>('GET', `/catalog/movies/456`, firstUCG.user);
+
+			expect(response.catalogMovie, 'API did not skip the invalid genre and crew member').to.be.eql(expectedResult);
 		});
 
 		it('Should save and then retrieve ALL fields', async() => {

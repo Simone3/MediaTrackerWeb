@@ -1,15 +1,10 @@
 import { config } from 'app/config/config';
 import { AppError } from 'app/data/models/error/error';
-import { PersistedEntityInternal } from 'app/data/models/internal/common';
-import { logger, performanceLogger } from 'app/loggers/logger';
-import { HydratedDocument, Model, QueryFilter, SortOrder, UpdateQuery } from 'mongoose';
-
-/**
- * Collation search options (for case insensitive ordering)
- */
-const COLLATION = {
-	locale: 'en'
-};
+import { PaginationInternal, PersistedEntityInternal } from 'app/data/models/internal/common';
+import { elapsedTime } from 'app/loggers/elapsed-time';
+import { logger } from 'app/loggers/logger';
+import { DATABASE_COLLATION } from 'app/schemas/common';
+import { HydratedDocument, Model, PipelineStage, QueryFilter, SortOrder, UpdateQuery } from 'mongoose';
 
 /**
  * Helper controller that contains util methods for database manipulation
@@ -31,16 +26,24 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @param conditions optional query conditions
 	 * @param sortBy optional sort conditions
 	 * @param populate list of 'joined' columns to populate
+	 * @param pagination optional pagination options. If omitted, EVERY matching element is returned: callers that
+	 * read a whole collection (e.g. the delete cascades) rely on this and must keep working untouched
 	 * @returns a promise that will eventually contain the list of all internal model representations of the persisted elements
 	 */
-	public find(conditions?: QueryFilter<TPersistedEntity>, sortBy?: Sortable<TPersistedEntity>, populate?: Populatable<TPersistedEntity>): Promise<TPersistedEntity[]> {
-		const startNs = process.hrtime.bigint();
+	public find(conditions?: QueryFilter<TPersistedEntity>, sortBy?: Sortable<TPersistedEntity>, populate?: Populatable<TPersistedEntity>, pagination?: PaginationInternal): Promise<TPersistedEntity[]> {
+		const startNs = elapsedTime.start();
 
 		return new Promise((resolve, reject): void => {
 			const query = this.databaseModel
 				.find(conditions ? conditions : {})
-				.collation(COLLATION)
+				.collation(DATABASE_COLLATION)
 				.sort(sortBy as Record<string, SortOrder> | undefined);
+
+			if(pagination) {
+				query
+					.skip(pagination.offset)
+					.limit(pagination.limit);
+			}
 
 			if(populate) {
 				for(const populateField in populate) {
@@ -52,7 +55,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 
 			query
 				.then((documents: HydratedDocument<TPersistedEntity>[]) => {
-					this.logPerformance('find', startNs);
+					this.logQuery('find', startNs, conditions);
 					resolve(documents);
 				})
 				.catch((error) => {
@@ -63,13 +66,72 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	}
 
 	/**
+	 * Helper to count the database elements of a model matching the given conditions, ignoring any pagination
+	 * @param conditions optional query conditions
+	 * @returns a promise that will eventually contain the number of matching elements
+	 */
+	public async count(conditions?: QueryFilter<TPersistedEntity>): Promise<number> {
+		const startNs = elapsedTime.start();
+
+		try {
+			const matchingElements = await this.databaseModel
+				.countDocuments(conditions ? conditions : {})
+				.collation(DATABASE_COLLATION);
+
+			this.logQuery('count', startNs, conditions);
+			return matchingElements;
+		}
+		catch(error) {
+			logger.error('Database count error: %s', error);
+			throw AppError.DATABASE_FIND.withDetails(error);
+		}
+	}
+
+	/**
+	 * Helper to run an aggregation pipeline on a model. Meant for the queries that must not load documents into the
+	 * application only to reduce them there: the stats aggregate returns a handful of numbers out of a whole category
+	 * @param pipeline the aggregation stages. NOTE that Mongoose does NOT cast an aggregation pipeline against the
+	 * schema, so any query condition inside it must first go through {@link castConditions}
+	 * @returns a promise that will eventually contain the aggregation result documents
+	 * @template TResult the shape of the result documents
+	 */
+	public async aggregate<TResult>(pipeline: PipelineStage[]): Promise<TResult[]> {
+		const startNs = elapsedTime.start();
+
+		try {
+			const results = await this.databaseModel
+				.aggregate<TResult>(pipeline)
+				.collation(DATABASE_COLLATION);
+
+			this.logQuery('aggregate', startNs, pipeline);
+			return results;
+		}
+		catch(error) {
+			logger.error('Database aggregate error: %s', error);
+			throw AppError.DATABASE_FIND.withDetails(error);
+		}
+	}
+
+	/**
+	 * Helper to cast query conditions against the model schema, i.e. to turn the ID strings the application works with
+	 * into the ObjectIds the database stores. Every other method here casts on its own: this is only needed by the
+	 * callers of {@link aggregate}, because Mongoose leaves an aggregation pipeline exactly as it was written and an
+	 * uncast condition on a reference field would silently match nothing
+	 * @param conditions the query conditions
+	 * @returns the same conditions, cast against the schema
+	 */
+	public castConditions(conditions: QueryFilter<TPersistedEntity>): QueryFilter<TPersistedEntity> {
+		return this.databaseModel.find().cast(this.databaseModel, conditions);
+	}
+
+	/**
 	 * Helper to get from the database a single element of a model. If more than one element matches the conditions, an error is thrown.
 	 * @param conditions optional query conditions
 	 * @param populate list of 'joined' columns to populate
 	 * @returns a promise that will eventually contain the internal model representation of the persisted element, or undefined if not found
 	 */
 	public findOne(conditions: QueryFilter<TPersistedEntity>, populate?: Populatable<TPersistedEntity>): Promise<TPersistedEntity | undefined> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 		
 		return new Promise((resolve, reject): void => {
 			this.find(conditions, undefined, populate)
@@ -78,7 +140,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 						reject(AppError.DATABASE_FIND.withDetails('findOne conditions matched more than one element'));
 					}
 					else {
-						this.logPerformance('findOne', startNs);
+						this.logQuery('findOne', startNs);
 
 						if(results.length === 0) {
 							resolve(undefined);
@@ -102,7 +164,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @returns the persisted entity, as a promise
 	 */
 	public checkUniquenessAndSave(internalModel: TPersistedEntity, emptyDocument: HydratedDocument<TPersistedEntity>, uniquenessConditions: QueryFilter<TPersistedEntity>): Promise<TPersistedEntity> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 		
 		return new Promise((resolve, reject): void => {
 			this.find(uniquenessConditions)
@@ -125,7 +187,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 					else {
 						this.save(internalModel, emptyDocument)
 							.then((saveResult) => {
-								this.logPerformance('checkUniquenessAndSave', startNs);
+								this.logQuery('checkUniquenessAndSave', startNs);
 								resolve(saveResult);
 							})
 							.catch((error) => {
@@ -148,7 +210,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @returns the promise that will eventually return the newly saved element
 	 */
 	public async save(internalModel: TPersistedEntity, emptyDocument: HydratedDocument<TPersistedEntity>): Promise<TPersistedEntity> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 	
 		// Manage IDs (save original autogenerated for inserts and make sure internalModel ID's is 'null' and not 'undefined' for Object.assign)
 		const autogeneratedId = emptyDocument._id;
@@ -170,7 +232,7 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 
 		const savedDocument = await document.save();
 		if(document === savedDocument) {
-			this.logPerformance('save', startNs);
+			this.logQuery('save', startNs);
 			return savedDocument;
 		}
 		else {
@@ -186,11 +248,11 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @returns the number of updated records, as a promise
 	 */
 	public async updateSelectiveMany(set: UpdateQuery<TPersistedEntity>, conditions?: QueryFilter<TPersistedEntity>): Promise<number> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 
 		const result = await this.databaseModel.updateMany(conditions ? conditions : {}, set);
 		if(result.acknowledged) {
-			this.logPerformance('updateSelectiveMany', startNs);
+			this.logQuery('updateSelectiveMany', startNs, conditions);
 			return result.modifiedCount;
 		}
 		else {
@@ -205,13 +267,13 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @returns a promise with the number of deleted elements
 	 */
 	public deleteById(id: string): Promise<number> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 		
 		return new Promise((resolve, reject): void => {
 			this.databaseModel.findOneAndDelete({ _id: id } as QueryFilter<TPersistedEntity>)
 				.then((deletedDocument) => {
 					if(deletedDocument) {
-						this.logPerformance('deleteById', startNs);
+						this.logQuery('deleteById', startNs, { _id: id });
 						resolve(1);
 					}
 					else {
@@ -232,12 +294,12 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	 * @returns a promise with the number of deleted elements
 	 */
 	public delete(conditions: QueryFilter<TPersistedEntity>): Promise<number> {
-		const startNs = process.hrtime.bigint();
+		const startNs = elapsedTime.start();
 		
 		return new Promise((resolve, reject): void => {
 			this.databaseModel.deleteMany(conditions)
 				.then((deletedDocumentsCount) => {
-					this.logPerformance('delete', startNs);
+					this.logQuery('delete', startNs, conditions);
 					resolve(deletedDocumentsCount && deletedDocumentsCount.deletedCount ? deletedDocumentsCount.deletedCount : 0);
 				})
 				.catch((error) => {
@@ -248,17 +310,19 @@ export class QueryHelper<TPersistedEntity extends PersistedEntityInternal> {
 	}
 
 	/**
-	 * Helper to log the query performance
+	 * Helper to log a query, with the time it took printed inline
 	 * @param queryMethod the method name
 	 * @param startNs the invocation start
+	 * @param conditions the query conditions, omitted by the methods that delegate to another one here, which logs them already
 	 */
-	private logPerformance(queryMethod: string, startNs: bigint): void {
-		if(config.log.performance.active) {
-			const endNs = process.hrtime.bigint();
-			const elapsedTimeNs = endNs - startNs;
-			const elapsedTimeMs = elapsedTimeNs / BigInt(1e6);
-			
-			performanceLogger.debug('Query %s on %s took %s ms [%s ns]', queryMethod, this.databaseModel.collection.name, elapsedTimeMs, elapsedTimeNs);
+	private logQuery(queryMethod: string, startNs: bigint, conditions?: unknown): void {
+		if(config.log.databaseQueries.active) {
+			if(conditions === undefined || !config.log.databaseQueries.includeConditions) {
+				logger.info('Query %s on %s took %s', queryMethod, this.databaseModel.collection.name, elapsedTime.since(startNs));
+			}
+			else {
+				logger.info('Query %s on %s with %s took %s', queryMethod, this.databaseModel.collection.name, conditions, elapsedTime.since(startNs));
+			}
 		}
 	}
 }

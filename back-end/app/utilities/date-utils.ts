@@ -97,6 +97,23 @@ class DateUtils {
 	}
 
 	/**
+	 * Helper to check whether a string is a time zone the runtime knows, i.e. an IANA identifier such as 'Europe/Rome'
+	 * or a UTC offset such as '+02:00'. There is no list to compare against: the only reliable check is asking the
+	 * internationalization API to build a formatter for it, which throws for anything it does not recognize
+	 * @param timeZone the candidate time zone
+	 * @returns true if the time zone is valid
+	 */
+	public isValidTimeZone(timeZone: string): boolean {
+		try {
+			Intl.DateTimeFormat(undefined, { timeZone: timeZone });
+			return true;
+		}
+		catch {
+			return false;
+		}
+	}
+
+	/**
 	 * Helper to parse UTC dates with a null check
 	 * @param dateStrings the optionally undefined date strings array
 	 * @returns undefined if dateStrings is undefined, the array of parsed dates otherwise

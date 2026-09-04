@@ -1,3 +1,6 @@
+import { Config } from 'app/config/type-config';
+import { PAGINATION_INTERNAL_MAX_LIMIT } from 'app/data/models/internal/common';
+
 describe('app config', () => {
 	const runtime = globalThis as {
 		__MEDIA_TRACKER_ENV__?: { [key: string]: string | undefined };
@@ -33,6 +36,18 @@ describe('app config', () => {
 		const { prodConfig } = require('app/config/properties/config-prod');
 
 		expect(config).toEqual(prodConfig);
+	});
+
+	it('keeps every environment media items page size within what the back end accepts', () => {
+		const { devConfig } = require('app/config/properties/config-dev');
+		const { prodConfig } = require('app/config/properties/config-prod');
+		const environmentConfigs: Config[] = [ devConfig, prodConfig ];
+
+		// Request validation is skipped in prod, so an oversized page would only be rejected at the server
+		for(const environmentConfig of environmentConfigs) {
+			expect(environmentConfig.ui.mediaItemsPageSize).toBeGreaterThan(0);
+			expect(environmentConfig.ui.mediaItemsPageSize).toBeLessThanOrEqual(PAGINATION_INTERNAL_MAX_LIMIT);
+		}
 	});
 
 	it('uses the runtime MEDIA_TRACKER_BACK_END_BASE_URL override in prod config', () => {

@@ -86,6 +86,9 @@ entityRouterBuilder.updateExisting({
 	}
 });
 
+// Setup 'stats' API
+entityRouterBuilder.stats();
+
 // Setup 'delete' API
 entityRouterBuilder.delete();
 

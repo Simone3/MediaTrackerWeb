@@ -101,19 +101,18 @@ export const testConfig: Config = {
 	log: {
 		level: 'off',
 		file: './test/build-test/log/media-tracker.log',
+		fileBackups: 14,
 		apisInputOutput: {
 			active: true,
-			excludeRequestBodyRegExp: [ '^/users/[^/]+/import/old-app$' ],
-			excludeResponseBodyRegExp: []
+			includeBodies: true
 		},
 		externalApisInputOutput: {
-			active: true
+			active: true,
+			includeBodies: true
 		},
 		databaseQueries: {
-			active: true
-		},
-		performance: {
-			active: true
+			active: true,
+			includeConditions: true
 		}
 	},
 	firebase: {
