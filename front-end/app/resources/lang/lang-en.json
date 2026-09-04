@@ -678,6 +678,7 @@
 		},
 		"buttons": {
 			"add": "Add",
+			"back": "Back",
 			"clear": "Clear",
 			"done": "Done",
 			"save": "Save",

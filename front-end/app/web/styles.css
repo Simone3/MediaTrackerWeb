@@ -426,6 +426,13 @@ input {
 	background: linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.04) 100%);
 }
 
+/* The icon actions are buttons and not links, so the element defaults have to go before the shared square styling above reads right */
+.authenticated-page-header-icon-button {
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+}
+
 @media (hover: hover) {
 	.authenticated-page-header-link:hover {
 		transform: translateY(-1px);
@@ -3808,11 +3815,39 @@ input {
 		justify-content: flex-start;
 	}
 
-	/* Both push to the right of a row that has the room for it, and take a line of their own when it does not */
-	.media-items-stats-filters-summary,
+	/* It pushes to the right of a row that has the room for it, and takes a line of its own when it does not */
 	.media-items-stats-section-side {
 		margin-left: 0;
 		width: 100%;
+	}
+
+	/*
+	 * The filter strip stacks rather than wraps. Wrapped, its second select starts where the label had pushed the first one to and
+	 * ends wherever its own longest option does: two controls that do the same job, at two widths and two left edges
+	 */
+	.media-items-stats-filters {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 12px;
+	}
+
+	.select-input.media-items-stats-filters-select {
+		flex: 1 1 auto;
+		min-width: 0;
+		max-width: none;
+	}
+
+	.media-items-stats-filters-clear {
+		justify-self: start;
+	}
+
+	.media-items-stats-filters-summary {
+		margin-left: 0;
+	}
+
+	/* The ring takes a line of its own once the key list wraps under it, and a line of its own is a line to be centred on */
+	.media-items-stats-donut {
+		margin-inline: auto;
 	}
 
 	.media-items-list-search {

@@ -1,11 +1,20 @@
-import { Component, CSSProperties, ReactNode } from 'react';
+import { Component, CSSProperties, ReactElement, ReactNode } from 'react';
 import { MediaItemsStatsYearInternal } from 'app/data/models/internal/media-items/media-item';
 import { i18n } from 'app/utilities/i18n';
+import { useIsMobileLayout } from 'app/utilities/layout';
 
 /**
- * The width of the chart viewBox. The SVG scales to the card, so this is a coordinate space and not a pixel size
+ * The width of the chart viewBox on a desktop card. The SVG scales to the card, so this is a coordinate space and not a pixel size
  */
-const CHART_WIDTH = 640;
+const CHART_DESKTOP_WIDTH = 640;
+
+/**
+ * The width of the chart viewBox on a mobile card. **It is the same drawing in a narrower coordinate space**, and the point of it is
+ * the text: the SVG scales to the card, so a 640-wide box on a phone renders every label at about half the size it was written at.
+ * Everything else in the chart is expressed in the same units, so the bar widths and the label thinning follow the narrower box on
+ * their own and keep agreeing with what actually fits
+ */
+const CHART_MOBILE_WIDTH = 360;
 
 /**
  * The height of the chart viewBox
@@ -44,10 +53,11 @@ const CHART_MIN_LABEL_SLOT = 34;
 const CHART_MIN_VALUE_SLOT = 24;
 
 /**
- * Presentational component that draws the completions of every year of the range as a bar chart, with a tooltip on the hovered bar
+ * Presentational component that draws the completions of every year of the range as a bar chart, with a tooltip on the hovered bar.
+ * It is wrapped by MediaItemsStatsYearChartComponent, which is what picks the coordinate space it draws in
  */
-export class MediaItemsStatsYearChartComponent extends Component<MediaItemsStatsYearChartComponentInput, MediaItemsStatsYearChartComponentState> {
-	public state: MediaItemsStatsYearChartComponentState = {
+class YearChartGraphComponent extends Component<YearChartGraphComponentInput, YearChartGraphComponentState> {
+	public state: YearChartGraphComponentState = {
 		hoveredIndex: undefined
 	};
 
@@ -57,7 +67,8 @@ export class MediaItemsStatsYearChartComponent extends Component<MediaItemsStats
 	public render(): ReactNode {
 		const {
 			series,
-			emptyMessage
+			emptyMessage,
+			chartWidth
 		} = this.props;
 
 		if(series.length === 0) {
@@ -73,7 +84,7 @@ export class MediaItemsStatsYearChartComponent extends Component<MediaItemsStats
 		const peakIndex = series.reduce((peak, year, index) => {
 			return year.count > series[peak].count ? index : peak;
 		}, 0);
-		const slot = CHART_WIDTH / series.length;
+		const slot = chartWidth / series.length;
 		const barWidth = Math.min(56, Math.max(8, slot - 16));
 
 		// Every year keeps its bar, but only some of them keep a written label once the bars get too narrow to hold one: the
@@ -86,14 +97,14 @@ export class MediaItemsStatsYearChartComponent extends Component<MediaItemsStats
 		return (
 			<div className={hoveredIndex === undefined ? 'media-items-stats-chart' : 'media-items-stats-chart media-items-stats-chart-hovering'}>
 				<svg
-					viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
+					viewBox={`0 0 ${chartWidth} ${CHART_HEIGHT}`}
 					role='img'
 					aria-label={i18n.t('mediaItem.stats.perYear.accessibility')}>
 					<line
 						className='media-items-stats-chart-axis'
 						x1={0}
 						y1={CHART_BASELINE}
-						x2={CHART_WIDTH}
+						x2={chartWidth}
 						y2={CHART_BASELINE}
 					/>
 					{series.map((year, index) => {
@@ -197,6 +208,23 @@ export class MediaItemsStatsYearChartComponent extends Component<MediaItemsStats
 }
 
 /**
+ * Presentational component that draws the completions per year, in the coordinate space the current layout calls for.
+ * The graph itself keeps its own hover state and stays a class component, so the breakpoint is read here and handed down
+ * @param props the input props
+ * @returns the component
+ */
+export const MediaItemsStatsYearChartComponent = (props: MediaItemsStatsYearChartComponentInput): ReactElement => {
+	const isMobileLayout = useIsMobileLayout();
+
+	return (
+		<YearChartGraphComponent
+			{...props}
+			chartWidth={isMobileLayout ? CHART_MOBILE_WIDTH : CHART_DESKTOP_WIDTH}
+		/>
+	);
+};
+
+/**
  * MediaItemsStatsYearChartComponent's input props
  */
 export type MediaItemsStatsYearChartComponentInput = {
@@ -211,6 +239,16 @@ export type MediaItemsStatsYearChartComponentInput = {
 	emptyMessage: string;
 };
 
-type MediaItemsStatsYearChartComponentState = {
+/**
+ * YearChartGraphComponent's input props
+ */
+type YearChartGraphComponentInput = MediaItemsStatsYearChartComponentInput & {
+	/**
+	 * The width of the viewBox the chart is drawn in
+	 */
+	chartWidth: number;
+};
+
+type YearChartGraphComponentState = {
 	hoveredIndex: number | undefined;
 };

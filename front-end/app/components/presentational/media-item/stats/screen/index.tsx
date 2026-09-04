@@ -2,6 +2,7 @@ import { Component, ReactNode } from 'react';
 import { AuthenticatedPageHeaderComponent } from 'app/components/presentational/generic/authenticated-page-header';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
+import { ResponsiveHeaderButtonComponent } from 'app/components/presentational/generic/responsive-header-button';
 import { MediaItemsStatsFiltersContainer } from 'app/components/containers/media-item/stats/filters';
 import { buildImportanceBoxes, buildStatusSegments, buildYearSeries } from 'app/components/presentational/media-item/stats/data/media-item';
 import { MediaItemsStatsImportanceBoxesComponent } from 'app/components/presentational/media-item/stats/importance-boxes';
@@ -54,13 +55,12 @@ export class MediaItemsStatsScreenComponent extends Component<MediaItemsStatsScr
 						title={i18n.t('mediaItem.stats.title', { category: category.name })}
 						subtitle={this.buildSubtitle()}
 						actions={
-							<PillButtonComponent
-								tone='secondary'
-								size='compact'
+							<ResponsiveHeaderButtonComponent
+								label={i18n.t('mediaItem.stats.back')}
+								mobileLabel={i18n.t('common.buttons.back')}
 								appearance='subtle'
-								onClick={back}>
-								{i18n.t('mediaItem.stats.back')}
-							</PillButtonComponent>
+								onClick={back}
+							/>
 						}
 					/>
 					<div className='media-items-stats-body'>

@@ -194,6 +194,8 @@ They share no bar, no percentage and no total, and the screen is laid out as two
 
 The whole aggregate is one `stats` call ([§9.4](09-data-layer.md#94-endpoint-patterns)), reached from the media items list header and left with `navigationService.back()` ([§5.4](05-navigation.md#54-saga-driven-navigation)). The slice fetches on mount and on update while its status is `REQUIRES_FETCH`, like the list screens.
 
+**The two headers pay for the screen in words.** The category name is the first thing a narrow header truncates, so the way in is an icon and the way out is a phrase that shortens: the list header carries an `AuthenticatedPageHeaderIconButtonComponent` rather than a labelled pill, and the back action is a `ResponsiveHeaderButtonComponent` reading *Back to list* on a desktop and *Back* on a phone ([§11.3](11-interface.md#113-shared-building-blocks)).
+
 ### The filters
 
 A single strip above the content, with a group select and an own platform select offering the same options as the media items list filter ([§10.2](#102-media-items-list)) — including the carried display names and the `unknown`/`deleted` fallbacks, since both screens share the option builders and the form-value conversions in `.../list/filter-form/data/media-item.ts`.
@@ -204,13 +206,17 @@ The strip shows **nothing else while both filters target everything** — no cle
 
 The groups and own platforms load exactly the way the filter modal loads them: only when their status is `REQUIRES_FETCH` or `FETCH_FAILED`, never blocking, with a small spinner beside the control while in flight.
 
+On a phone the strip **stacks into a single column instead of wrapping**: wrapped, its second select starts where the label pushed the first one to and ends wherever its own longest option does, so two controls doing the same job sit at two widths and two left edges.
+
 ### The three charts
 
 **Watched per year** is one bar per year from the first completion to the current one, **zeros included**: a year in which the user finished nothing is a fact about the history, and a gap in the sequence would silently redraw it as a shorter, busier one. The back end sends only the years that have something and the client fills the rest in `buildYearSeries`, so the payload stays proportional to the data rather than to the range. The card head carries the yearly average, which divides by the number of years shown and therefore counts the current, partial year as a whole one.
 
+**The chart is drawn in a narrower coordinate space on a phone**, 360 units wide instead of 640, and the reason is the text. The SVG scales to the card, so the wide box on a 320px card renders every year and every value at about half the size it was written at; the narrow one lands near 1:1. Nothing else about the drawing changes, because the bar widths and the label thinning below are all expressed in the same units and follow the box on their own. It is the one piece of the screen that reads `useIsMobileLayout()` ([§11.4](11-interface.md#114-responsive-behaviour)) rather than leaving the difference to the stylesheet.
+
 **A long history thins its own axis out.** Once the bars are too narrow to hold a year under them, only every *n*th year is written, counted back from the last one so that the year the chart ends at is always labelled and never lands on top of its neighbour; narrower still, only the tallest bar keeps its value. The hover tooltip names every year regardless, so nothing the chart was saying is lost.
 
-**The backlog by status** is a donut with a key. **Its segment order is load-bearing and must not be changed**: the active green and the redo teal are indistinguishable when adjacent, so the neutral grey of *Not started* and the orange of *Upcoming* sit between them. The green–orange pair that remains is still weak under deuteranopia, which is why every segment is also named and counted in the key and why the segments carry a gap.
+**The backlog by status** is a donut with a key, which sits beside the ring when the card is wide and wraps under it — with the ring then centred on the line it has to itself — when it is not. **Its segment order is load-bearing and must not be changed**: the active green and the redo teal are indistinguishable when adjacent, so the neutral grey of *Not started* and the orange of *Upcoming* sit between them. The green–orange pair that remains is still weak under deuteranopia, which is why every segment is also named and counted in the key and why the segments carry a gap.
 
 **The backlog by importance and platform** is four boxes, one per importance level, laid out **two by two or one per row, never three and one**. The layout is driven by a container query on the card rather than a viewport media query, so it follows the room the boxes actually have. **All the bars across all four boxes share one scale** — the largest single count anywhere in the panel — and that shared scale is the whole point: it is what makes the boxes comparable to each other instead of four unrelated charts. A platform with nothing left at a level is not listed, and the four levels are always all there, since dropping an empty one would say the level does not exist rather than that it is clear.
 

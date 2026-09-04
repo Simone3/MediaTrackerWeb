@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ResponsiveHeaderAddButtonComponent } from 'app/components/presentational/generic/responsive-header-add-button';
+import { ResponsiveHeaderButtonComponent } from 'app/components/presentational/generic/responsive-header-button';
 
-describe('ResponsiveHeaderAddButtonComponent', () => {
+describe('ResponsiveHeaderButtonComponent', () => {
 	const originalInnerWidth = window.innerWidth;
 
 	afterEach(() => {
@@ -22,7 +22,7 @@ describe('ResponsiveHeaderAddButtonComponent', () => {
 		const onClick = jest.fn();
 
 		render(
-			<ResponsiveHeaderAddButtonComponent
+			<ResponsiveHeaderButtonComponent
 				label='Add category'
 				mobileLabel='Add'
 				onClick={onClick}
@@ -44,7 +44,7 @@ describe('ResponsiveHeaderAddButtonComponent', () => {
 		const onClick = jest.fn();
 
 		render(
-			<ResponsiveHeaderAddButtonComponent
+			<ResponsiveHeaderButtonComponent
 				label='Add movie'
 				mobileLabel='Add'
 				onClick={onClick}

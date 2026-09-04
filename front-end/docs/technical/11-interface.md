@@ -56,7 +56,7 @@ Reach for these before writing a screen-specific variant:
 
 | Component | What it is |
 | --- | --- |
-| `generic/authenticated-page-header` | The sticky top header of the authenticated shell |
+| `generic/authenticated-page-header` | The sticky top header of the authenticated shell. It also exports `AuthenticatedPageHeaderIconButtonComponent`, the icon-only action shaped like the home and settings shortcuts beside it: a header action that can be drawn takes that shape rather than a labelled pill, since the title is the first thing to lose room when the header narrows |
 | `generic/entity-management-screen` | The manage-and-pick screen used by groups and platforms |
 | `generic/entity-management-list` | The list inside it, used by groups, platforms and TV show seasons. Rows carry no inline buttons: each one owns a `...` control that opens `generic/responsive-action-menu` with the actions the screen supplies, the way the category list does |
 | `generic/entity-search-bar` | The client-side search field the group and platform screens put above their list. It only filters what is already in the store: there is no fetch behind it |
@@ -71,7 +71,7 @@ Reach for these before writing a screen-specific variant:
 | `generic/field-error` | The inline validation message under a control, plus the two helpers that decide when it shows ([§11.6](#116-form-validation-feedback)) |
 | `generic/color-picker` | Fed by the config color presets ([§12.3](12-styling.md#123-colors-that-come-from-config)) |
 | `generic/pagination` | Previous/next page controls around a page picker, used by the media items list. The picker is a `generic/select` whose options each read the whole "Page 3 of 7", so it doubles as the position indicator and no sentence is split around a control ([§13.1](13-text-and-languages.md#131-every-user-facing-string-is-in-the-bundle)). Renders nothing when there is a single page ([§10.2](10-features.md#102-media-items-list)) |
-| `generic/responsive-header-add-button` | |
+| `generic/responsive-header-button` | A header pill that keeps its descriptive label on a desktop and falls back to a short one on a phone — *Add movie* / *Add*, *Back to list* / *Back* |
 | `generic/media-switcher` | |
 
 **Category details is the one screen that predates `EntityDetailsFrameComponent`** and still uses its own header/form shell ([§10.1](10-features.md#101-categories)). It is the exception, not the pattern to copy.
@@ -80,7 +80,9 @@ Reach for these before writing a screen-specific variant:
 
 Layout responsiveness is CSS. Where behaviour has to change — not just appearance — use `MOBILE_LAYOUT_BREAKPOINT` from `app/utilities/layout.ts`. **Do not introduce a second hardcoded breakpoint**; two numbers that are supposed to agree eventually will not.
 
-`ResponsiveActionMenuComponent` is currently the only shared component that switches behaviour on it.
+`useIsMobileLayout()`, in the same module, is how a component reads it: it returns whether the viewport is at or below the breakpoint and keeps up with resizes for as long as the component is mounted. `ResponsiveHeaderButtonComponent` uses it to pick between its long and short label, and the stats year chart to pick the coordinate space it draws in ([§10.9](10-features.md#109-media-items-stats)). A class component that needs it gets it from a small function wrapper, the way the chart does.
+
+`ResponsiveActionMenuComponent` reads the constant directly instead, because it only follows the viewport while it is open: its listener is mounted with the one that closes it on Escape and comes down with the menu.
 
 The authenticated experience is a shared sticky top header over a full-bleed dark shell. Preserve that structure rather than reintroducing per-screen navigation chrome or a light-shell variant.
 

@@ -1,11 +1,11 @@
 import { Component, CSSProperties, ReactNode } from 'react';
 import { MediaItemsListContainer } from 'app/components/containers/media-item/list/list';
-import { AuthenticatedPageHeaderComponent } from 'app/components/presentational/generic/authenticated-page-header';
+import { AuthenticatedPageHeaderComponent, AuthenticatedPageHeaderIconButtonComponent } from 'app/components/presentational/generic/authenticated-page-header';
 import { MediaItemFilterModalContainer } from 'app/components/containers/media-item/list/filter-modal';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
-import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
-import { ResponsiveHeaderAddButtonComponent } from 'app/components/presentational/generic/responsive-header-add-button';
+import { ResponsiveHeaderButtonComponent } from 'app/components/presentational/generic/responsive-header-button';
 import { CategoryInternal } from 'app/data/models/internal/category';
+import statsIcon from 'app/resources/images/ic_stats.svg';
 import { i18n } from 'app/utilities/i18n';
 
 /**
@@ -50,14 +50,12 @@ export class MediaItemsListScreenComponent extends Component<MediaItemsListScree
 						title={category.name}
 						subtitle={countLabel}
 						actions={<>
-							<PillButtonComponent
-								tone='secondary'
-								size='compact'
-								appearance='subtle'
-								onClick={openStats}>
-								{i18n.t('mediaItem.stats.open')}
-							</PillButtonComponent>
-							<ResponsiveHeaderAddButtonComponent
+							<AuthenticatedPageHeaderIconButtonComponent
+								icon={statsIcon}
+								label={i18n.t('mediaItem.stats.open')}
+								onClick={openStats}
+							/>
+							<ResponsiveHeaderButtonComponent
 								label={i18n.t(`mediaItem.list.add.${category.mediaType}`)}
 								mobileLabel={i18n.t('common.buttons.add')}
 								onClick={() => {

@@ -62,3 +62,29 @@ export type AuthenticatedPageHeaderComponentProps = {
 	showSettingsShortcut?: boolean;
 	subtitle?: string;
 };
+
+/**
+ * Icon-only action for the header actions slot, shaped like the home and settings shortcuts beside it.
+ * A header action that can be drawn takes this shape rather than a labelled pill: the title is the first thing to lose room when
+ * the header narrows, and every word an action spends is a word the category name does not get.
+ * @param props the input props
+ * @returns the component
+ */
+export const AuthenticatedPageHeaderIconButtonComponent = (props: AuthenticatedPageHeaderIconButtonComponentProps): ReactElement => {
+	return (
+		<button
+			type='button'
+			title={props.label}
+			aria-label={props.label}
+			className='authenticated-page-header-link authenticated-page-header-icon-button'
+			onClick={props.onClick}>
+			<img src={props.icon} alt='' aria-hidden='true' className='authenticated-page-header-link-icon' />
+		</button>
+	);
+};
+
+export type AuthenticatedPageHeaderIconButtonComponentProps = {
+	icon: string;
+	label: string;
+	onClick: () => void;
+};

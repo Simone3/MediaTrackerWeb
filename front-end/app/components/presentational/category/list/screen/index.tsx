@@ -2,7 +2,7 @@ import { Component, ReactNode } from 'react';
 import { CategoriesListContainer } from 'app/components/containers/category/list/list';
 import { AuthenticatedPageHeaderComponent } from 'app/components/presentational/generic/authenticated-page-header';
 import { LoadingIndicatorComponent } from 'app/components/presentational/generic/loading-indicator';
-import { ResponsiveHeaderAddButtonComponent } from 'app/components/presentational/generic/responsive-header-add-button';
+import { ResponsiveHeaderButtonComponent } from 'app/components/presentational/generic/responsive-header-button';
 import { i18n } from 'app/utilities/i18n';
 
 /**
@@ -44,7 +44,7 @@ export class CategoriesListScreenComponent extends Component<CategoriesListScree
 						subtitle={countLabel}
 						showSettingsShortcut={true}
 						actions={
-							<ResponsiveHeaderAddButtonComponent
+							<ResponsiveHeaderButtonComponent
 								label={i18n.t('category.list.add')}
 								mobileLabel={i18n.t('common.buttons.add')}
 								onClick={loadNewCategoryDetails}

@@ -90,7 +90,7 @@ Where everything lives. Generated folders — `node_modules/`, `coverage/`, buil
 | `utilities/screens.ts` | The `AppSections` and `AppScreens` identifiers |
 | `utilities/env.ts` | Resolves `MEDIA_TRACKER_APP_ENV` across the three sources ([§4.1](04-configuration.md#41-how-the-environment-is-resolved)) |
 | `utilities/i18n.ts` | Initializes `i18n-js` ([§13](13-text-and-languages.md)) |
-| `utilities/layout.ts` | `MOBILE_LAYOUT_BREAKPOINT`, the one breakpoint JS-driven responsive behaviour may use ([§11.4](11-interface.md#114-responsive-behaviour)) |
+| `utilities/layout.ts` | `MOBILE_LAYOUT_BREAKPOINT`, the one breakpoint JS-driven responsive behaviour may use, and the `useIsMobileLayout()` hook that reads it ([§11.4](11-interface.md#114-responsive-behaviour)) |
 | `utilities/parser-validator.ts` | The `class-transformer-validator` wrapper used on API payloads |
 | `utilities/error-hint.ts` | Turns a raw Firebase or back-end error into the user-facing hint an `AppError` carries ([§6.4](06-redux.md#64-error-handling-and-the-async-pattern)) |
 | `utilities/text-search.ts` | The accent- and case-insensitive matching behind the client-side list search bars ([§11.3](11-interface.md#113-shared-building-blocks)) |
