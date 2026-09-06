@@ -1,0 +1,23 @@
+front-end/app/components/presentational/media-item/details/form/view/media-item.tsx
+  s_fc6e112a7fd38c::t_48057657877c12 5,10,80-103,206-264,634,637-639
+front-end/docs/technical/10-features.md
+  s_fc6e112a7fd38c::t_e726741a3c6dc7 151
+front-end/tests/media-item-details.smoke.test.tsx
+  s_fc6e112a7fd38c::t_8c8af47295a924 706,764,796,801-840
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "b1ad39e4983c4c7b93b8eba43e5657343710e1dc",
+  "prompts": {},
+  "sessions": {
+    "s_fc6e112a7fd38c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3f047e40-9744-4742-84a9-c2fce4d3c7cf",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
