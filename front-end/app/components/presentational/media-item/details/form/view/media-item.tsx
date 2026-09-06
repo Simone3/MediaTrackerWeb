@@ -2,12 +2,12 @@ import { Component, KeyboardEvent, ReactNode, useEffect, useRef, useState } from
 import { FormikProps } from 'formik';
 import { ClearableInputComponent } from 'app/components/presentational/generic/clearable-input';
 import { buildFieldErrorInputProps, FieldErrorComponent, getVisibleFieldError } from 'app/components/presentational/generic/field-error';
-import { InputComponent } from 'app/components/presentational/generic/input';
+import { InputComponent, InputComponentProps } from 'app/components/presentational/generic/input';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { SelectComponent } from 'app/components/presentational/generic/select';
 import { TextareaComponent } from 'app/components/presentational/generic/textarea';
 import { config } from 'app/config/config';
-import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX, MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX_DECIMALS, MediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
+import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import downloadIcon from 'app/resources/images/ic_download.svg';
 import googleIcon from 'app/resources/images/ic_google.png';
 import defaultMediaItemImage from 'app/resources/images/im_media_item_form_default.svg';
@@ -23,12 +23,6 @@ export type MediaItemActionButton = {
 };
 
 type MediaItemDetailsSectionKey = 'basics' | 'profile' | 'collection' | 'progress';
-
-/**
- * The smallest order-in-group increment the form accepts, i.e. the smallest value the allowed number of
- * decimal digits can express. Also the field minimum, since the order must be greater than zero
- */
-const MEDIA_ITEM_ORDER_IN_GROUP_STEP = 10 ** -MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX_DECIMALS;
 
 /**
  * Converts optional Date to input string
@@ -81,6 +75,30 @@ export const inputValueToNumber = (value: string): number | undefined => {
 
 	const parsed = Number(value);
 	return Number.isNaN(parsed) ? undefined : parsed;
+};
+
+/**
+ * Matches a decimal value while it is being typed: digits with at most one decimal separator, which
+ * may be a comma because that is the only separator a mobile decimal keypad offers in many locales
+ */
+const DECIMAL_INPUT_VALUE_REGEX = /^\d*(?:[.,]\d*)?$/;
+
+/**
+ * Converts an optional number to a decimal input value
+ * @param value number
+ * @returns input value
+ */
+export const numberToDecimalInputValue = (value?: number): string => {
+	return value === undefined ? '' : String(value);
+};
+
+/**
+ * Converts a decimal input value to optional number, treating a comma as a decimal separator
+ * @param value input string
+ * @returns number or undefined
+ */
+export const decimalInputValueToNumber = (value: string): number | undefined => {
+	return inputValueToNumber(value.replace(',', '.'));
 };
 
 /**
@@ -180,6 +198,65 @@ export const InlineTextInputComponent = (props: InlineTextInputComponentProps): 
 				inputValueRef.current = nextInputValue;
 				setInputValue(nextInputValue);
 				onChange(inputValueToInlineText(nextInputValue));
+			}}
+		/>
+	);
+};
+
+type DecimalInputComponentProps = Omit<InputComponentProps, 'type' | 'inputMode' | 'value' | 'onChange'> & {
+	value?: number;
+	onChange: (newValue: number | undefined) => void;
+};
+
+/**
+ * Preserves raw typing for decimal fields while still syncing numeric values to Formik. It is a text
+ * input rather than a number input because a mobile decimal keypad types the locale decimal separator,
+ * and a number input drops the whole value when that separator is a comma
+ * @param props component props
+ * @returns the component
+ */
+export const DecimalInputComponent = (props: DecimalInputComponentProps): ReactNode => {
+	const {
+		value,
+		onChange,
+		...otherProps
+	} = props;
+	const [ inputValue, setInputValue ] = useState(() => {
+		return numberToDecimalInputValue(value);
+	});
+	const inputValueRef = useRef(inputValue);
+
+	useEffect(() => {
+		inputValueRef.current = inputValue;
+	}, [ inputValue ]);
+
+	useEffect(() => {
+		if(value === decimalInputValueToNumber(inputValueRef.current)) {
+			return;
+		}
+
+		const nextInputValue = numberToDecimalInputValue(value);
+
+		inputValueRef.current = nextInputValue;
+		setInputValue(nextInputValue);
+	}, [ value ]);
+
+	return (
+		<InputComponent
+			{...otherProps}
+			type='text'
+			inputMode='decimal'
+			value={inputValue}
+			onChange={(event) => {
+				const nextInputValue = event.target.value;
+
+				if(!DECIMAL_INPUT_VALUE_REGEX.test(nextInputValue)) {
+					return;
+				}
+
+				inputValueRef.current = nextInputValue;
+				setInputValue(nextInputValue);
+				onChange(decimalInputValueToNumber(nextInputValue));
 			}}
 		/>
 	);
@@ -554,17 +631,12 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<label className='media-item-details-label' htmlFor='media-item-order-in-group'>
 					{i18n.t('mediaItem.details.placeholders.orderInGroup')}
 				</label>
-				<InputComponent
+				<DecimalInputComponent
 					id='media-item-order-in-group'
 					name='orderInGroup'
-					type='number'
-					inputMode='decimal'
-					step={MEDIA_ITEM_ORDER_IN_GROUP_STEP}
-					min={MEDIA_ITEM_ORDER_IN_GROUP_STEP}
-					max={MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX}
-					value={this.numberToInputValue(mediaItem.orderInGroup)}
-					onChange={(event) => {
-						this.setFormField('orderInGroup', this.inputValueToNumber(event.target.value));
+					value={mediaItem.orderInGroup}
+					onChange={(newValue) => {
+						this.setFormField('orderInGroup', newValue);
 					}}
 					onBlur={this.props.handleBlur}
 					{...buildFieldErrorInputProps('media-item-order-in-group-error', orderInGroupError)}
