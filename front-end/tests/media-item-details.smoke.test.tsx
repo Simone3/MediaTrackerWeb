@@ -703,7 +703,7 @@ describe('MediaItemDetailsScreenContainer', () => {
 		await waitFor(() => {
 			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.group'))).toHaveTextContent('Updated group');
 			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.ownPlatform'))).toHaveTextContent('Kindle');
-			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.orderInGroup'))).toHaveValue(7);
+			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.orderInGroup'))).toHaveValue('7');
 			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.userComment'))).toHaveValue('Keep this draft');
 		});
 	});
@@ -761,7 +761,7 @@ describe('MediaItemDetailsScreenContainer', () => {
 
 		await waitFor(() => {
 			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.group'))).toHaveTextContent('Updated group');
-			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.orderInGroup'))).toHaveValue(null);
+			expect(screen.getByLabelText(i18n.t('mediaItem.details.placeholders.orderInGroup'))).toHaveValue('');
 		});
 
 		await waitFor(() => {
@@ -793,14 +793,51 @@ describe('MediaItemDetailsScreenContainer', () => {
 		const user = userEvent.setup();
 		const orderInput = screen.getByLabelText(i18n.t('mediaItem.details.placeholders.orderInGroup'));
 
-		expect(orderInput).toHaveAttribute('step', '0.1');
-		expect(orderInput).toHaveAttribute('min', '0.1');
-		expect(orderInput).toHaveAttribute('max', '9999');
+		expect(orderInput).toHaveAttribute('inputmode', 'decimal');
 
 		await user.clear(orderInput);
 		await user.type(orderInput, '2.5');
 
-		expect(orderInput).toHaveValue(2.5);
+		expect(orderInput).toHaveValue('2.5');
+
+		await user.click(screen.getByRole('button', { name: i18n.t('common.buttons.save') }));
+
+		expect(dispatchedActions).toContainEqual(expect.objectContaining({
+			type: SAVE_MEDIA_ITEM,
+			mediaItem: expect.objectContaining({
+				orderInGroup: 2.5
+			})
+		}));
+	});
+
+	test('saves an order in group typed with a comma, as a mobile decimal keypad types it', async() => {
+		const group: GroupInternal = {
+			id: 'group-id',
+			name: 'Dune saga'
+		};
+		const {
+			dispatchedActions
+		} = renderScreen({
+			mediaItemDetails: {
+				mediaItem: {
+					...DEFAULT_BOOK,
+					id: 'book-id',
+					name: 'Dune',
+					group: group,
+					orderInGroup: 2
+				}
+			},
+			groupGlobal: {
+				selectedGroup: group
+			}
+		});
+		const user = userEvent.setup();
+		const orderInput = screen.getByLabelText(i18n.t('mediaItem.details.placeholders.orderInGroup'));
+
+		await user.clear(orderInput);
+		await user.type(orderInput, '2,5');
+
+		expect(orderInput).toHaveValue('2,5');
 
 		await user.click(screen.getByRole('button', { name: i18n.t('common.buttons.save') }));
 

@@ -1,13 +1,14 @@
 import { Component, KeyboardEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import { FormikProps } from 'formik';
 import { ClearableInputComponent } from 'app/components/presentational/generic/clearable-input';
+import { DecimalInputComponent } from 'app/components/presentational/generic/decimal-input';
 import { buildFieldErrorInputProps, FieldErrorComponent, getVisibleFieldError } from 'app/components/presentational/generic/field-error';
 import { InputComponent } from 'app/components/presentational/generic/input';
 import { PillButtonComponent } from 'app/components/presentational/generic/pill-button';
 import { SelectComponent } from 'app/components/presentational/generic/select';
 import { TextareaComponent } from 'app/components/presentational/generic/textarea';
 import { config } from 'app/config/config';
-import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX, MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX_DECIMALS, MediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
+import { MEDIA_ITEM_IMPORTANCE_INTERNAL_VALUES, MediaItemInternal, SearchMediaItemCatalogResultInternal } from 'app/data/models/internal/media-items/media-item';
 import downloadIcon from 'app/resources/images/ic_download.svg';
 import googleIcon from 'app/resources/images/ic_google.png';
 import defaultMediaItemImage from 'app/resources/images/im_media_item_form_default.svg';
@@ -23,12 +24,6 @@ export type MediaItemActionButton = {
 };
 
 type MediaItemDetailsSectionKey = 'basics' | 'profile' | 'collection' | 'progress';
-
-/**
- * The smallest order-in-group increment the form accepts, i.e. the smallest value the allowed number of
- * decimal digits can express. Also the field minimum, since the order must be greater than zero
- */
-const MEDIA_ITEM_ORDER_IN_GROUP_STEP = 10 ** -MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX_DECIMALS;
 
 /**
  * Converts optional Date to input string
@@ -554,17 +549,12 @@ export class MediaItemFormViewComponent<TMediaItem extends MediaItemInternal = M
 				<label className='media-item-details-label' htmlFor='media-item-order-in-group'>
 					{i18n.t('mediaItem.details.placeholders.orderInGroup')}
 				</label>
-				<InputComponent
+				<DecimalInputComponent
 					id='media-item-order-in-group'
 					name='orderInGroup'
-					type='number'
-					inputMode='decimal'
-					step={MEDIA_ITEM_ORDER_IN_GROUP_STEP}
-					min={MEDIA_ITEM_ORDER_IN_GROUP_STEP}
-					max={MEDIA_ITEM_ORDER_IN_GROUP_INTERNAL_MAX}
-					value={this.numberToInputValue(mediaItem.orderInGroup)}
-					onChange={(event) => {
-						this.setFormField('orderInGroup', this.inputValueToNumber(event.target.value));
+					value={mediaItem.orderInGroup}
+					onChange={(newValue) => {
+						this.setFormField('orderInGroup', newValue);
 					}}
 					onBlur={this.props.handleBlur}
 					{...buildFieldErrorInputProps('media-item-order-in-group-error', orderInGroupError)}
