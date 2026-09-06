@@ -1,0 +1,27 @@
+front-end/CLAUDE.md
+  s_fc6e112a7fd38c::t_b2cbe8e28518d4 55
+front-end/app/components/presentational/generic/decimal-input/index.tsx
+  s_fc6e112a7fd38c::t_b602f3bb047d96 1-100
+front-end/app/components/presentational/media-item/details/form/view/media-item.tsx
+  s_fc6e112a7fd38c::t_d4e43c13ae8d57 4,6
+front-end/docs/technical/10-features.md
+  s_fc6e112a7fd38c::t_88fda3441ba370 151
+front-end/docs/technical/11-interface.md
+  s_fc6e112a7fd38c::t_4de9d5647d2fd5 70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "b600a548dc71cfe1c204aac336c58281874278d2",
+  "prompts": {},
+  "sessions": {
+    "s_fc6e112a7fd38c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3f047e40-9744-4742-84a9-c2fce4d3c7cf",
+        "model": "unknown"
+      },
+      "human_author": "Simone Graziussi <simone.graziussi@gmail.com>"
+    }
+  }
+}
